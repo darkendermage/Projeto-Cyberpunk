@@ -1,0 +1,31 @@
+{
+  "about": "Itens do 12 Days of Cutiemas que tinham ficado de fora do arquivo 12-days-of.json. Formato descrito no README (seção Dados).",
+  "source": "12 Days of Cutiemas",
+  "updates": {
+    "hello-cutie-sparkle-ize": {
+      "page": 6,
+      "notes": "Conferido com 12 Days of Cutiemas, p. 6. Tabela da p. 7. Deixado passar na primeira conferência. O livro classifica os 250eb como Premium.",
+      "priceCategory": "Premium",
+      "description": "Opção de Cybereye que ocupa 2 slots: uma lanterna (CP:R p. 353) no olho. Em par, o modo Shiitake-Me, com uma Ação, força um alvo com olhos (de carne ou cibernéticos) a até 25 m/yds a fazer Resist Torture/Drugs DV15 ou sofrer a Lesão Crítica Damaged Eye por 1 minuto. Anti-Dazzle e proteção parecida bloqueiam o efeito."
+    }
+  },
+  "additions": [
+    {
+      "tags": [],
+      "manufacturer": "Húsafell",
+      "slug": "husafell-hydraulic-underjack",
+      "name": "Húsafell Hydraulic Underjack",
+      "category": "gear",
+      "page": 7,
+      "price": 1000,
+      "description": "Camiseta com suporte hidráulico, à prova d'água, popular entre Eurosolos. Vestida, aumenta o BODY em 2, até no máximo 10, sem mudar HP nem Death Save. Não acumula com outros aumentos de BODY, como Grafted Muscle and Bone Lace ou Linear Frames.",
+      "attributes": {
+        "gearType": "Tool",
+        "gearClass": "Cyberware vestível",
+        "effect": "BODY +2 (máximo 10)."
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com 12 Days of Cutiemas, p. 7. Deixado passar na primeira conferência. Ausente do compêndio."
+    }
+  ]
+}

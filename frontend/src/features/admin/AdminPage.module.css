@@ -1,0 +1,124 @@
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 16px;
+  align-items: start;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 18px;
+}
+.card h2 {
+  font-size: 18px;
+}
+
+.small {
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.download {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 0 14px;
+  border: 1px solid var(--line-strong);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text-2);
+  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+}
+.download:hover {
+  color: var(--text);
+  border-color: var(--red-line);
+  background: var(--red-haze);
+}
+.download[aria-disabled='true'] {
+  opacity: 0.45;
+}
+
+.importResult {
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  font-size: 14px;
+}
+.importResult ul {
+  margin: 8px 0 0;
+  padding-left: 18px;
+  max-height: 240px;
+  overflow: auto;
+  color: var(--red-bright);
+}
+
+/* ------------------------------------------------------------ editor */
+
+.editor {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.editorHeader {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.editorHeader h2 {
+  font-size: 20px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px 16px;
+  margin: 0;
+  padding: 16px;
+  border: 1px solid var(--line);
+  min-width: 0;
+}
+.grid legend {
+  padding: 0 8px;
+  font-family: var(--font-display);
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--red);
+}
+
+.full {
+  grid-column: 1 / -1;
+}
+
+.setGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 0 12px;
+}
+
+.checkField {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 4px;
+}
+
+.formError {
+  color: var(--red-bright);
+  font-size: 13px;
+}
+
+.formActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}

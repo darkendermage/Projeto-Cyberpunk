@@ -1,0 +1,270 @@
+{
+  "about": "Conferido com o PDF No Place Like Home v1.0 (DLC de agosto de 2024, regras de quartel-general). A ficha da p. 8 lista as 12 melhorias que existem; Armory e Lookout não estão entre elas e saíram do catálogo. Formato descrito no README (seção Dados).",
+  "source": "No Place Like Home",
+  "updates": {
+    "garage-garagem-tatica": {
+      "name": "Garage",
+      "page": 3,
+      "price": null,
+      "priceCategory": null,
+      "priceNote": "40 IP de QG (Upgrade: +40 IP)",
+      "description": "Vem com um Compact Groundcar da equipe, que aceita Vehicle Upgrades mas não pode ser vendido nem receber a habilidade Moto. Se o carro for destruído sem conserto, a melhoria (e o Upgrade) se perde sem reembolso. Upgrade: com todos os veículos inteiros, um Nomad pode passar uma semana de downtime refazendo as escolhas da habilidade Moto, trocando upgrades ou veículos inteiros. Comprada com 40 IP de QG, que a equipe ganha junto com os IP do grupo ao fim de cada missão; cada melhoria só pode ser comprada uma vez por QG e recebe um Upgrade (também 40 IP). Perder o acesso ao QG suspende os benefícios.",
+      "tags": [
+        "IP de QG"
+      ],
+      "attributes": {
+        "upgradeType": "Garage",
+        "improvementPoints": 40,
+        "spaceRequired": null,
+        "requirements": null,
+        "benefits": "Melhoria: Vem com um Compact Groundcar da equipe, que aceita Vehicle Upgrades mas não pode ser vendido nem receber a habilidade Moto. Se o carro for destruído sem conserto, a melhoria (e o Upgrade) se perde sem reembolso. Upgrade: com todos os veículos inteiros, um Nomad pode passar uma semana de downtime refazendo as escolhas da habilidade Moto, trocando upgrades ou veículos inteiros."
+      },
+      "manufacturer": null,
+      "notes": "Conferido com No Place Like Home, p. 3. Corrigido: não custa eurodólares, só 40 IP de QG, e os benefícios eram inventados no compêndio."
+    },
+    "medical-bay-enfermaria": {
+      "name": "Medbay",
+      "page": 4,
+      "price": null,
+      "priceCategory": null,
+      "priceNote": "40 IP de QG (Upgrade: +40 IP)",
+      "description": "A equipe cura naturalmente como se tivesse BODY 2 pontos maior, e Medtechs usando a Medbay têm +2 em First Aid, Paramedic e Surgery. Upgrade: um Medtech pode usar Science (Chemistry) para melhorar, fabricar e inventar Street Drugs como um Tech com a habilidade Maker (CP:R p. 148), com a Expertise igual ao nível de Medical Tech. Comprada com 40 IP de QG, que a equipe ganha junto com os IP do grupo ao fim de cada missão; cada melhoria só pode ser comprada uma vez por QG e recebe um Upgrade (também 40 IP). Perder o acesso ao QG suspende os benefícios.",
+      "tags": [
+        "IP de QG"
+      ],
+      "attributes": {
+        "upgradeType": "Medical",
+        "improvementPoints": 40,
+        "spaceRequired": null,
+        "requirements": null,
+        "benefits": "Melhoria: A equipe cura naturalmente como se tivesse BODY 2 pontos maior, e Medtechs usando a Medbay têm +2 em First Aid, Paramedic e Surgery. Upgrade: um Medtech pode usar Science (Chemistry) para melhorar, fabricar e inventar Street Drugs como um Tech com a habilidade Maker (CP:R p. 148), com a Expertise igual ao nível de Medical Tech."
+      },
+      "manufacturer": null,
+      "notes": "Conferido com No Place Like Home, p. 4. Corrigido: não custa eurodólares, só 40 IP de QG, e os benefícios eram inventados no compêndio."
+    },
+    "workstation-bancada-de-tech": {
+      "name": "Workstation",
+      "page": 6,
+      "price": null,
+      "priceCategory": null,
+      "priceNote": "40 IP de QG (Upgrade: +40 IP)",
+      "description": "Um Membro de Equipe de um Exec (escolhido na compra) vira membro pleno da equipe: ganha IP quando o Exec ganha, recebe parte igual do pagamento e segue o Exec se ele mudar de empresa. Sem acesso à Workstation, deixa de ganhar IP e pagamento, mas mantém o que já ganhou. Upgrade: o Membro melhorado deixa de usar o sistema de Lealdade (CP:R p. 154) e só sai se o Exec o trair. Se a Workstation melhorada se perder, a equipe precisa restaurá-la antes de gastar IP de QG em outra coisa, ou ele vai embora. Comprada com 40 IP de QG, que a equipe ganha junto com os IP do grupo ao fim de cada missão; cada melhoria só pode ser comprada uma vez por QG e recebe um Upgrade (também 40 IP). Perder o acesso ao QG suspende os benefícios.",
+      "tags": [
+        "IP de QG"
+      ],
+      "attributes": {
+        "upgradeType": "Team",
+        "improvementPoints": 40,
+        "spaceRequired": null,
+        "requirements": "Exec",
+        "benefits": "Melhoria: Um Membro de Equipe de um Exec (escolhido na compra) vira membro pleno da equipe: ganha IP quando o Exec ganha, recebe parte igual do pagamento e segue o Exec se ele mudar de empresa. Sem acesso à Workstation, deixa de ganhar IP e pagamento, mas mantém o que já ganhou. Upgrade: o Membro melhorado deixa de usar o sistema de Lealdade (CP:R p. 154) e só sai se o Exec o trair. Se a Workstation melhorada se perder, a equipe precisa restaurá-la antes de gastar IP de QG em outra coisa, ou ele vai embora."
+      },
+      "manufacturer": null,
+      "notes": "Conferido com No Place Like Home, p. 6. Corrigido: não custa eurodólares, só 40 IP de QG, e os benefícios eram inventados no compêndio."
+    }
+  },
+  "additions": [
+    {
+      "slug": "evidence-wall",
+      "category": "hq-upgrades",
+      "manufacturer": null,
+      "name": "Evidence Wall",
+      "page": 3,
+      "price": null,
+      "priceCategory": null,
+      "priceNote": "40 IP de QG (Upgrade: +40 IP)",
+      "description": "Lawmen e Medias têm +2 em Composition, Criminology, Cryptography, Deduction, Education, Forgery, Library Search e Photograph/Film aplicados a investigações em andamento. Upgrade: o bônus dos Lawmen sobe para +3; o dos Medias fica em +2, mas a Credibilidade deles sobe 1 para a credibilidade das matérias feitas com a ajuda do quadro. Comprada com 40 IP de QG, que a equipe ganha junto com os IP do grupo ao fim de cada missão; cada melhoria só pode ser comprada uma vez por QG e recebe um Upgrade (também 40 IP). Perder o acesso ao QG suspende os benefícios.",
+      "tags": [
+        "IP de QG"
+      ],
+      "attributes": {
+        "upgradeType": "Investigation",
+        "improvementPoints": 40,
+        "spaceRequired": null,
+        "requirements": "Lawman ou Media",
+        "benefits": "Melhoria: Lawmen e Medias têm +2 em Composition, Criminology, Cryptography, Deduction, Education, Forgery, Library Search e Photograph/Film aplicados a investigações em andamento. Upgrade: o bônus dos Lawmen sobe para +3; o dos Medias fica em +2, mas a Credibilidade deles sobe 1 para a credibilidade das matérias feitas com a ajuda do quadro."
+      },
+      "notes": "Conferido com No Place Like Home, p. 3. Ausente do compêndio."
+    },
+    {
+      "slug": "lockup",
+      "category": "hq-upgrades",
+      "manufacturer": null,
+      "name": "Lockup",
+      "page": 3,
+      "price": null,
+      "priceCategory": null,
+      "priceNote": "40 IP de QG (Upgrade: +40 IP)",
+      "description": "Cela à prova de som para um prisioneiro, que só escapa com BODY 13 ou mais. Outros podem vir resgatá-lo. Upgrade: até três prisioneiros em celas separadas, e Lawmen têm +2 em Interrogation contra quem passou ao menos um dia preso. Comprada com 40 IP de QG, que a equipe ganha junto com os IP do grupo ao fim de cada missão; cada melhoria só pode ser comprada uma vez por QG e recebe um Upgrade (também 40 IP). Perder o acesso ao QG suspende os benefícios.",
+      "tags": [
+        "IP de QG"
+      ],
+      "attributes": {
+        "upgradeType": "Detention",
+        "improvementPoints": 40,
+        "spaceRequired": null,
+        "requirements": null,
+        "benefits": "Melhoria: Cela à prova de som para um prisioneiro, que só escapa com BODY 13 ou mais. Outros podem vir resgatá-lo. Upgrade: até três prisioneiros em celas separadas, e Lawmen têm +2 em Interrogation contra quem passou ao menos um dia preso."
+      },
+      "notes": "Conferido com No Place Like Home, p. 3. Ausente do compêndio."
+    },
+    {
+      "slug": "lounge",
+      "category": "hq-upgrades",
+      "manufacturer": null,
+      "name": "Lounge",
+      "page": 4,
+      "price": null,
+      "priceCategory": null,
+      "priceNote": "40 IP de QG (Upgrade: +40 IP)",
+      "description": "Em reuniões presenciais no Lounge, Fixers da equipe têm +2 em Bribery, Bureaucracy, Business, Conversation, Human Perception, Persuasion e Trading. Upgrade: Fixers e Medias têm +2 em todos os testes para marcar uma reunião presencial com Contatos e Clientes (Fixer) ou Acesso/Fontes (Media). Comprada com 40 IP de QG, que a equipe ganha junto com os IP do grupo ao fim de cada missão; cada melhoria só pode ser comprada uma vez por QG e recebe um Upgrade (também 40 IP). Perder o acesso ao QG suspende os benefícios.",
+      "tags": [
+        "IP de QG"
+      ],
+      "attributes": {
+        "upgradeType": "Social",
+        "improvementPoints": 40,
+        "spaceRequired": null,
+        "requirements": "Fixer ou Media",
+        "benefits": "Melhoria: Em reuniões presenciais no Lounge, Fixers da equipe têm +2 em Bribery, Bureaucracy, Business, Conversation, Human Perception, Persuasion e Trading. Upgrade: Fixers e Medias têm +2 em todos os testes para marcar uma reunião presencial com Contatos e Clientes (Fixer) ou Acesso/Fontes (Media)."
+      },
+      "notes": "Conferido com No Place Like Home, p. 4. Ausente do compêndio."
+    },
+    {
+      "slug": "morale-boost",
+      "category": "hq-upgrades",
+      "manufacturer": null,
+      "name": "Morale Boost",
+      "page": 4,
+      "price": null,
+      "priceCategory": null,
+      "priceNote": "40 IP de QG (Upgrade: +40 IP)",
+      "description": "Qualquer melhoria de lazer ou decoração (fliperama, sinuca, sauna, home theater, murais, horta...): o custo mensal de Lifestyle de cada membro cai 50eb. Upgrade: pode ser comprado até 10 vezes, cada um com um benefício da tabela da p. 5: recuperar Humanidade todo mês (1d6/2, depois 1d6, depois o maior de 2d6), curar como BODY +1, +1 de LUCK duas vezes (inclusive Membros de Equipe melhorados do Exec), vantagens em Trading e em Hustle, e um benefício criado com o Mestre. Comprada com 40 IP de QG, que a equipe ganha junto com os IP do grupo ao fim de cada missão; cada melhoria só pode ser comprada uma vez por QG e recebe um Upgrade (também 40 IP). Perder o acesso ao QG suspende os benefícios.",
+      "tags": [
+        "IP de QG"
+      ],
+      "attributes": {
+        "upgradeType": "Morale",
+        "improvementPoints": 40,
+        "spaceRequired": null,
+        "requirements": null,
+        "benefits": "Melhoria: Qualquer melhoria de lazer ou decoração (fliperama, sinuca, sauna, home theater, murais, horta...): o custo mensal de Lifestyle de cada membro cai 50eb. Upgrade: pode ser comprado até 10 vezes, cada um com um benefício da tabela da p. 5: recuperar Humanidade todo mês (1d6/2, depois 1d6, depois o maior de 2d6), curar como BODY +1, +1 de LUCK duas vezes (inclusive Membros de Equipe melhorados do Exec), vantagens em Trading e em Hustle, e um benefício criado com o Mestre."
+      },
+      "notes": "Conferido com No Place Like Home, p. 4. Ausente do compêndio."
+    },
+    {
+      "slug": "rent-reduction",
+      "category": "hq-upgrades",
+      "manufacturer": null,
+      "name": "Rent Reduction",
+      "page": 4,
+      "price": null,
+      "priceCategory": null,
+      "priceNote": "40 IP de QG (Upgrade: +40 IP)",
+      "description": "Quem mora no QG paga aluguel como se fosse uma categoria abaixo na tabela de imóveis (CP:R p. 378), pulando as linhas \"dado pela Corp\"; um quarto de Cube Hotel cai para 100eb por mês. Não vale para QG sem aluguel. Upgrade: cada Upgrade acrescenta uma cama (e talvez um cômodo) sem aumentar o aluguel, até dobrar o número original de camas; pode ser comprado mais de uma vez. Comprada com 40 IP de QG, que a equipe ganha junto com os IP do grupo ao fim de cada missão; cada melhoria só pode ser comprada uma vez por QG e recebe um Upgrade (também 40 IP). Perder o acesso ao QG suspende os benefícios.",
+      "tags": [
+        "IP de QG"
+      ],
+      "attributes": {
+        "upgradeType": "Living",
+        "improvementPoints": 40,
+        "spaceRequired": null,
+        "requirements": null,
+        "benefits": "Melhoria: Quem mora no QG paga aluguel como se fosse uma categoria abaixo na tabela de imóveis (CP:R p. 378), pulando as linhas \"dado pela Corp\"; um quarto de Cube Hotel cai para 100eb por mês. Não vale para QG sem aluguel. Upgrade: cada Upgrade acrescenta uma cama (e talvez um cômodo) sem aumentar o aluguel, até dobrar o número original de camas; pode ser comprado mais de uma vez."
+      },
+      "notes": "Conferido com No Place Like Home, p. 4. Ausente do compêndio."
+    },
+    {
+      "slug": "server-room",
+      "category": "hq-upgrades",
+      "manufacturer": null,
+      "name": "Server Room",
+      "page": 4,
+      "price": null,
+      "priceCategory": null,
+      "priceNote": "40 IP de QG (Upgrade: +40 IP)",
+      "description": "O QG ganha uma Arquitetura NET montada com o Home Security 2045 (CP:R p. 217) e 20.000eb, que não podem ser revendidos nem guardados. Upgrade: um Netrunner pode usar Electronics/Security Tech para melhorar, fabricar e inventar Cyberdecks, Hardware e Programas como um Tech com Maker, com a Expertise igual ao rank de Interface. Comprada com 40 IP de QG, que a equipe ganha junto com os IP do grupo ao fim de cada missão; cada melhoria só pode ser comprada uma vez por QG e recebe um Upgrade (também 40 IP). Perder o acesso ao QG suspende os benefícios.",
+      "tags": [
+        "IP de QG"
+      ],
+      "attributes": {
+        "upgradeType": "Server",
+        "improvementPoints": 40,
+        "spaceRequired": null,
+        "requirements": "Netrunner (para o Upgrade)",
+        "benefits": "Melhoria: O QG ganha uma Arquitetura NET montada com o Home Security 2045 (CP:R p. 217) e 20.000eb, que não podem ser revendidos nem guardados. Upgrade: um Netrunner pode usar Electronics/Security Tech para melhorar, fabricar e inventar Cyberdecks, Hardware e Programas como um Tech com Maker, com a Expertise igual ao rank de Interface."
+      },
+      "notes": "Conferido com No Place Like Home, p. 4. Ausente do compêndio."
+    },
+    {
+      "slug": "studio",
+      "category": "hq-upgrades",
+      "manufacturer": null,
+      "name": "Studio",
+      "page": 5,
+      "price": null,
+      "priceCategory": null,
+      "priceNote": "40 IP de QG (Upgrade: +40 IP)",
+      "description": "Dentro do Studio, um Rockerboy tem +2 em Acting, Composition, Play Instrument, Paint/Draw/Sculpt e Photograph/Film. Upgrade: o Rockerboy pode passar semanas de downtime refinando um projeto artístico, com +2 acumulado por semana nos testes, até concluir, desistir ou tirar 1 num dos testes (aí perde os bônus). Comprada com 40 IP de QG, que a equipe ganha junto com os IP do grupo ao fim de cada missão; cada melhoria só pode ser comprada uma vez por QG e recebe um Upgrade (também 40 IP). Perder o acesso ao QG suspende os benefícios.",
+      "tags": [
+        "IP de QG"
+      ],
+      "attributes": {
+        "upgradeType": "Studio",
+        "improvementPoints": 40,
+        "spaceRequired": null,
+        "requirements": "Rockerboy",
+        "benefits": "Melhoria: Dentro do Studio, um Rockerboy tem +2 em Acting, Composition, Play Instrument, Paint/Draw/Sculpt e Photograph/Film. Upgrade: o Rockerboy pode passar semanas de downtime refinando um projeto artístico, com +2 acumulado por semana nos testes, até concluir, desistir ou tirar 1 num dos testes (aí perde os bônus)."
+      },
+      "notes": "Conferido com No Place Like Home, p. 5. Ausente do compêndio."
+    },
+    {
+      "slug": "training-area",
+      "category": "hq-upgrades",
+      "manufacturer": null,
+      "name": "Training Area",
+      "page": 6,
+      "price": null,
+      "priceCategory": null,
+      "priceNote": "40 IP de QG (Upgrade: +40 IP)",
+      "description": "Com uma semana de downtime, um membro Pratica uma perícia (Athletics, Archery, Autofire, Brawling, Evasion, Handgun, Heavy Weapons, Martial Arts, Melee Weapon ou Shoulder Arms) e ganha +1 nela até a equipe receber IP de novo ou Praticar outra. Upgrade: Solos Praticam duas perícias diferentes ao mesmo tempo. Comprada com 40 IP de QG, que a equipe ganha junto com os IP do grupo ao fim de cada missão; cada melhoria só pode ser comprada uma vez por QG e recebe um Upgrade (também 40 IP). Perder o acesso ao QG suspende os benefícios.",
+      "tags": [
+        "IP de QG"
+      ],
+      "attributes": {
+        "upgradeType": "Training",
+        "improvementPoints": 40,
+        "spaceRequired": null,
+        "requirements": null,
+        "benefits": "Melhoria: Com uma semana de downtime, um membro Pratica uma perícia (Athletics, Archery, Autofire, Brawling, Evasion, Handgun, Heavy Weapons, Martial Arts, Melee Weapon ou Shoulder Arms) e ganha +1 nela até a equipe receber IP de novo ou Praticar outra. Upgrade: Solos Praticam duas perícias diferentes ao mesmo tempo."
+      },
+      "notes": "Conferido com No Place Like Home, p. 6. Ausente do compêndio."
+    },
+    {
+      "slug": "workshop",
+      "category": "hq-upgrades",
+      "manufacturer": null,
+      "name": "Workshop",
+      "page": 6,
+      "price": null,
+      "priceCategory": null,
+      "priceNote": "40 IP de QG (Upgrade: +40 IP)",
+      "description": "Quando um Tech usa as Expertises de Upgrade, Fabrication ou Invention do Maker na Workshop, o mesmo tempo conta também para um segundo projeto. Upgrade: o tempo conta para um terceiro projeto. Comprada com 40 IP de QG, que a equipe ganha junto com os IP do grupo ao fim de cada missão; cada melhoria só pode ser comprada uma vez por QG e recebe um Upgrade (também 40 IP). Perder o acesso ao QG suspende os benefícios.",
+      "tags": [
+        "IP de QG"
+      ],
+      "attributes": {
+        "upgradeType": "Workshop",
+        "improvementPoints": 40,
+        "spaceRequired": null,
+        "requirements": "Tech",
+        "benefits": "Melhoria: Quando um Tech usa as Expertises de Upgrade, Fabrication ou Invention do Maker na Workshop, o mesmo tempo conta também para um segundo projeto. Upgrade: o tempo conta para um terceiro projeto."
+      },
+      "notes": "Conferido com No Place Like Home, p. 6. Ausente do compêndio."
+    }
+  ],
+  "remove": [
+    "armory-armaria",
+    "lookout-posto-de-observacao"
+  ]
+}

@@ -1,0 +1,1208 @@
+{
+  "about": "Conferido com o PDF Interface RED Volume 5 (coletânea de DLCs; as armas, munições, drogas e ACPA vêm do bônus Solo of Fortune 2045). As armas do Toggle's Temple e os Agents já tinham sido conferidos nos PDFs avulsos. Formato descrito no README (seção Dados).",
+  "source": "Interface 5",
+  "updates": {
+    "arasaka-neo-rapid-assault-16": {
+      "page": 116,
+      "notes": "Conferido com Interface RED Volume 5, p. 116. O Solo of Fortune 2045 usa tabelas novas de alcance e de Autofire (p. 113); o tipo indicado entre parênteses é a linha da tabela.",
+      "description": "Escopeta de Qualidade Excelente (tabela de alcance Shotgun), 5d6, pente 16. Autofire (Machine Pistol 4) e modo Shotgun Shell. Vem com Drum Magazine e Shotgun Automatic Control Group instalados; 1 slot de acessório livre.",
+      "tags": [
+        "Qualidade Excelente",
+        "Autofire",
+        "Pente estendido"
+      ],
+      "attributes": {
+        "damage": "5d6",
+        "autofire": 4
+      }
+    },
+    "arasaka-takanami-smg": {
+      "page": 116,
+      "notes": "Conferido com Interface RED Volume 5, p. 116. Corrigido: Autofire 4. O Solo of Fortune 2045 usa tabelas novas de alcance e de Autofire (p. 113); o tipo indicado entre parênteses é a linha da tabela.",
+      "description": "SMG Pesada de Qualidade Excelente (tabela Subcompact SMG), 3d6, pente 50 com Extended Magazine instalado. Autofire (SMG 4) e Fogo de Supressão. Versão de calibre maior da Minami 10. 2 slots livres.",
+      "attributes": {
+        "autofire": 4,
+        "maxRange": 200
+      }
+    },
+    "metacorp-chaingun-victoria": {
+      "page": 116,
+      "notes": "Conferido com Interface RED Volume 5, p. 116. Corrigido: não tem tiro único (a perícia é Autofire). O Solo of Fortune 2045 usa tabelas novas de alcance e de Autofire (p. 113); o tipo indicado entre parênteses é a linha da tabela.",
+      "description": "Metralhadora de Qualidade Excelente (tabela Battle Rifle) alimentada por mochila, 100 tiros. Só dispara em Autofire (Machine Gun 5) e Fogo de Supressão, gastando 20 balas em vez de 10. Recarregar exige duas Ações. Exige BODY 12, a menos que esteja montada. Um Nomad pode recebê-la ao instalar o primeiro Vehicle Heavy Weapon Mount. 3 slots livres.",
+      "attributes": {
+        "skill": "Autofire",
+        "damage": "N/A (só Autofire)",
+        "damageDice": null,
+        "rof": 1
+      }
+    },
+    "midnight-arms-dawnmaker-amr": {
+      "page": 117,
+      "notes": "Conferido com Interface RED Volume 5, p. 117.",
+      "description": "Fuzil de precisão de Qualidade Excelente disparado com Heavy Weapons (tabela Anti-materiel Rifle), 6d6, 4 tiros. Vem com Infrared Nightvision Scope, Smartgun Link e Sniper Rifle Rechamber; nenhum slot livre.",
+      "tags": [
+        "Qualidade Excelente",
+        "Smartgun",
+        "Mira acoplada"
+      ]
+    },
+    "midnight-assault-hb": {
+      "page": 117,
+      "notes": "Conferido com Interface RED Volume 5, p. 117. O Solo of Fortune 2045 usa tabelas novas de alcance e de Autofire (p. 113); o tipo indicado entre parênteses é a linha da tabela.",
+      "name": "Midnight Arms Midnight Assault HB",
+      "manufacturer": "Midnight Arms",
+      "description": "Metralhadora disparada com Heavy Weapons (tabela Marksman Rifle), 5d6, 60 tiros, Autofire (Machine Gun 5) e Fogo de Supressão. Exige BODY 11, a menos que esteja montada ou o usuário deitado. Opção de Nomad para o Vehicle Heavy Weapon Mount. 3 slots livres.",
+      "attributes": {
+        "rof": 1
+      }
+    },
+    "militech-mk-27-lmg": {
+      "page": 117,
+      "notes": "Conferido com Interface RED Volume 5, p. 117. O Solo of Fortune 2045 usa tabelas novas de alcance e de Autofire (p. 113); o tipo indicado entre parênteses é a linha da tabela.",
+      "description": "Metralhadora leve disparada com Heavy Weapons (tabela Assault Rifle), 4d6, 80 tiros, Autofire (Machine Gun 4) e Fogo de Supressão. Recarregar exige duas Ações. Exige BODY 10, a menos que esteja montada ou o usuário deitado. 3 slots livres.",
+      "attributes": {
+        "rof": 1
+      }
+    },
+    "militech-mountain-goat": {
+      "page": 117,
+      "notes": "Conferido com Interface RED Volume 5, p. 117. O Solo of Fortune 2045 usa tabelas novas de alcance e de Autofire (p. 113); o tipo indicado entre parênteses é a linha da tabela.",
+      "name": "Militech Mountain Goat Rifle",
+      "description": "Fuzil de assalto de Qualidade Excelente (tabela Battle Rifle), 5d6, 25 tiros, Autofire (Assault Rifle 4) e Fogo de Supressão. Vem com Smartgun Link e Sniping Scope; nenhum slot livre.",
+      "tags": [
+        "Qualidade Excelente",
+        "Autofire",
+        "Smartgun",
+        "Mira acoplada"
+      ]
+    },
+    "techtronika-bmg-500-silver": {
+      "page": 118,
+      "notes": "Conferido com Interface RED Volume 5, p. 118. Corrigido: exige BODY 11. O Solo of Fortune 2045 usa tabelas novas de alcance e de Autofire (p. 113); o tipo indicado entre parênteses é a linha da tabela.",
+      "name": "Techtronika Russia BMG-500 (Silver Edition)",
+      "manufacturer": "Techtronika Russia",
+      "description": "Variante da BMG-500 criada por Aleksandr Petrov. Metralhadora disparada com Heavy Weapons (tabela Assault Rifle), 5d6, caixa de 500 tiros com assistente magnético, Autofire (Assault Rifle 5) e Fogo de Supressão. Exige BODY 11, a menos que esteja montada ou o usuário deitado. 3 slots livres.",
+      "attributes": {
+        "rof": 1,
+        "minBody": 11
+      }
+    },
+    "tsunami-arms-helix-citrus": {
+      "page": 118,
+      "notes": "Conferido com Interface RED Volume 5, p. 118. Corrigido: Qualidade Excelente, não é Exótica, exige BODY 11 e o alcance da tabela Carbine vai até 400 m. O Solo of Fortune 2045 usa tabelas novas de alcance e de Autofire (p. 113); o tipo indicado entre parênteses é a linha da tabela.",
+      "name": "Tsunami Arms Helix (Citrus Edition)",
+      "manufacturer": "Tsunami Arms",
+      "description": "Helix refeita por Koshiro Yuzu: metralhadora de Qualidade Excelente (tabela Carbine), 40 tiros, só dispara em Autofire (Machine Pistol 5) e Fogo de Supressão. Recarregar exige duas Ações. Exige BODY 11, a menos que esteja montada. 3 slots livres.",
+      "tags": [
+        "Qualidade Excelente",
+        "Autofire"
+      ],
+      "attributes": {
+        "skill": "Autofire",
+        "damage": "N/A (só Autofire)",
+        "damageDice": null,
+        "rof": 1,
+        "quality": "Excellent",
+        "exotic": false,
+        "minBody": 11,
+        "maxRange": 400
+      }
+    },
+    "scatter-ratter": {
+      "page": 118,
+      "notes": "Conferido com Interface RED Volume 5, p. 118. Corrigido: exige BODY 8 e o alcance da tabela SMG vai até 400 m. O preço de 2.552eb é o do livro. O Solo of Fortune 2045 usa tabelas novas de alcance e de Autofire (p. 113); o tipo indicado entre parênteses é a linha da tabela.",
+      "manufacturer": "BlueRaven",
+      "description": "Metralhadora de Baixa Qualidade criada por BlueRaven (tabela SMG), 4d6, ROF 2, 56 tiros, Autofire (SMG 5) e Fogo de Supressão. Não faz tiro único se usou Autofire no turno anterior; se fez tiro único no turno anterior, conta como Qualidade Excelente. Exige BODY 8, a menos que esteja montada. 3 slots livres.",
+      "attributes": {
+        "minBody": 8,
+        "maxRange": 400
+      }
+    },
+    "militech-big-boomer": {
+      "page": 123,
+      "notes": "Conferido com Interface RED Volume 5, p. 123. Corrigido: 28 tiros (não 14), Autofire 4 e alcance até 100 m. O livro classifica os 1.100eb como Expensive. O Solo of Fortune 2045 usa tabelas novas de alcance e de Autofire (p. 113); o tipo indicado entre parênteses é a linha da tabela.",
+      "description": "Pistola Muito Pesada de Qualidade Excelente com cano curto (tabela Snubnose Pistol), 4d6, 28 tiros com Drum Magazine e Pistol Autosear instalados: Autofire (Machine Pistol 4). 1 slot livre.",
+      "priceCategory": "Expensive",
+      "tags": [
+        "Qualidade Excelente",
+        "Autofire",
+        "Pente estendido"
+      ],
+      "attributes": {
+        "magazine": 28,
+        "autofire": 4,
+        "maxRange": 100
+      }
+    },
+    "hd-stickybomb-launcher": {
+      "page": 122,
+      "notes": "Conferido com Interface RED Volume 5, p. 122. Corrigido: não é Exótico. O livro não imprime a categoria de preço.",
+      "name": "Highland Defense Stickybomb Launcher",
+      "manufacturer": "Highland Defense",
+      "description": "Lança-granadas de uma mão, ROF 2, 8 tiros, que dispara Mini C9 Charges adesivas em vez de granadas. A carga que acerta é \"plantada\" com Demolitions pelas regras da Mini C9, mas só detona por controle remoto (uma Ação) depois de armada, 30 segundos após o disparo. Mover as cargas não as faz explodir. Incompatível com Ammunition Compatibility Internals e acessórios de alcance e capacidade.",
+      "tags": [],
+      "attributes": {
+        "damage": "Mini C9 (6d6 ou 4d6)",
+        "exotic": false
+      }
+    },
+    "burrowing-ammo": {
+      "page": 120,
+      "notes": "Conferido com Interface RED Volume 5, p. 120.",
+      "name": "Burrowing Ammunition",
+      "description": "Lesões Críticas causadas por ela não podem receber Quick Fix, a menos que o Quick Fix remova o efeito de vez; a DV de Quick Fix ou Treatment sobe 2. Flechas, balas, slugs e shells. Lote de 10."
+    },
+    "explosive-ammo": {
+      "page": 120,
+      "notes": "Conferido com Interface RED Volume 5, p. 120.",
+      "name": "Explosive Ammunition",
+      "description": "Ataques com -2 e sem Aimed Shot. Resultados 5 contam como 6 nos dados de dano, só para ver se há Lesão Crítica. Flechas, balas e slugs. Lote de 10."
+    },
+    "high-precision-ammo": {
+      "page": 120,
+      "notes": "Conferido com Interface RED Volume 5, p. 120. Corrigido: Combat Awareness 1+ também atende ao requisito.",
+      "name": "High Precision Ammunition",
+      "description": "Para quem tem perícia 7+ na arma ou Combat Awareness Rank 1+: +1 no tiro único ou +2 em Aimed Shot. Flechas, balas e slugs. Lote de 10.",
+      "attributes": {
+        "requirements": "Perícia 7+ na arma ou Combat Awareness 1+"
+      }
+    },
+    "high-velocity-ammo": {
+      "page": 120,
+      "notes": "Conferido com Interface RED Volume 5, p. 120.",
+      "name": "High Velocity Ammunition",
+      "description": "Quem tentar esquivar sofre -2. Só balas. Lote de 10."
+    },
+    "hyper-expansive-ammo": {
+      "page": 121,
+      "notes": "Conferido com Interface RED Volume 5, p. 121. O livro imprime \"100eb (Expensive)\".",
+      "name": "Hyper Expansive Ammunition",
+      "description": "Toda Lesão Crítica causada faz a vítima rolar de novo até tirar uma que ainda não tem e sofrer essa também, sem Dano Bônus. Flechas, balas, slugs e shells. Lote de 10."
+    },
+    "serrated-hollow-point": {
+      "page": 121,
+      "notes": "Conferido com Interface RED Volume 5, p. 121.",
+      "name": "Serrated Arrow/Hollow Point Ammunition",
+      "description": "Ao causar Foreign Object, a vítima rola de novo até tirar outra Lesão Crítica e sofre as duas; a segunda causa Dano Bônus. Flechas, balas e slugs. Lote de 10."
+    },
+    "tracer-ammunition": {
+      "page": 121,
+      "notes": "Conferido com Interface RED Volume 5, p. 121.",
+      "description": "Disparando em Autofire, +1 no teste. Só balas. Lote de 10."
+    },
+    "c9-charge": {
+      "page": 121,
+      "notes": "Conferido com Interface RED Volume 5, p. 121.",
+      "description": "Explosivo plástico plantado como Ação em qualquer superfície, com Demolitions DV17: sucesso causa 8d6, falha 5d6, explodindo como granada Armor-Piercing. Arma em 30 segundos; detona por controle remoto (1 milha, uma Ação) ou contagem regressiva (até uma semana). Desarmar exige Demolitions contra o resultado de quem plantou; falhar ou mover a carga a faz explodir.",
+      "attributes": {
+        "damage": "8d6 (5d6 se falhar)",
+        "resistDv": null,
+        "requirements": "Demolitions DV17",
+        "area": null
+      }
+    },
+    "c9-kill-switch": {
+      "page": 122,
+      "notes": "Conferido com Interface RED Volume 5, p. 122.",
+      "description": "Instalado junto com uma C9 num veículo com Security Upgrade, ACPA ou Linear Frame externo com Authorization Handshake Port, arma com Smartgun Link ou Cyberdeck com DNA Lock. Explode quando alguém não autorizado tenta usar o equipamento, destruindo-o se a C9 foi bem plantada (DV17). Desarma junto com a C9.",
+      "attributes": {
+        "area": null
+      }
+    },
+    "mini-c9-charge": {
+      "page": 122,
+      "notes": "Conferido com Interface RED Volume 5, p. 122. Corrigido: 6d6/4d6 (não 5d6). O livro imprime \"60eb (Premium)\".",
+      "description": "C9 menor: plantada com Demolitions DV17, causa 6d6 (4d6 se falhar), como granada Armor-Piercing. Mesmas regras de armar, detonar e desarmar da C9.",
+      "attributes": {
+        "damage": "6d6 (4d6 se falhar)",
+        "damageDice": 6,
+        "area": null,
+        "requirements": "Demolitions DV17"
+      }
+    },
+    "airburst": {
+      "page": 126,
+      "notes": "Conferido com Interface RED Volume 5, p. 126.",
+      "name": "Airburst Ammunition",
+      "description": "Munição de dispersão de gás para granadas e foguetes, carregada com 3 doses de uma Street Drug. Não causa dano: quem for atingido recebe uma dose em forma de gás. Nasal Filters, máscaras de gás e similares impedem o efeito.",
+      "attributes": {
+        "area": null,
+        "effect": "Aplica 1 dose da droga carregada"
+      }
+    },
+    "light-metalgear": {
+      "page": 123,
+      "notes": "Conferido com Interface RED Volume 5, p. 123.",
+      "description": "Metalgear® segmentado e mais leve: SP 16, penalidade -3 em REF, DEX e MOVE."
+    },
+    "hybrid-metalgear": {
+      "page": 123,
+      "notes": "Conferido com Interface RED Volume 5, p. 123. O preço de 2.552eb é o do livro.",
+      "description": "Metalgear® semissegmentado: SP 17, penalidade -3 em REF e -4 em DEX e MOVE."
+    },
+    "heavy-metalgear": {
+      "page": 123,
+      "notes": "Conferido com Interface RED Volume 5, p. 123.",
+      "description": "Metalgear® de placas máximas: SP 19, penalidade -4 em REF e -5 em DEX e MOVE."
+    },
+    "high-density-shield": {
+      "page": 99,
+      "notes": "Conferido com Interface RED Volume 5, p. 99. Reimpressão do 12 Days of REDmas.",
+      "name": "High-Density Bulletproof Shield",
+      "description": "Escudo com 15 HP. Não pode ser instalado num Popup Shield.",
+      "attributes": {
+        "protectedLocations": "Cobertura móvel (ocupa um braço)"
+      }
+    },
+    "implanted-linear-frame-omega": {
+      "page": 143,
+      "notes": "Conferido com Interface RED Volume 5, p. 143. Reimpressão (a origem é o Interface RED vol. 3).",
+      "name": "Implanted Linear Frame Ω (Omega)",
+      "description": "Endoesqueleto com músculos hidráulicos e myomar (Borgware). BODY passa a 16 (não sobe além disso), e isso altera HP e Death Save. Instalação em Hospital exige BODY 10 e três Grafted Muscle and Bone Lace. Conta como duas peças de Borgware para a Depressão de Humanidade Máxima.",
+      "attributes": {
+        "requirements": "BODY 10 e três Grafted Muscle and Bone Lace"
+      }
+    },
+    "arasaka-neo-standard": {
+      "page": 138,
+      "notes": "Conferido com Interface RED Volume 5, p. 138. Corrigido: -1 REF e -1 DEX.",
+      "name": "Arasaka Neo Standard",
+      "manufacturer": "Arasaka",
+      "price": 25100,
+      "priceCategory": "SuperLuxury",
+      "description": "ACPA de linha da Arasaka, reinventada após a 4ª Guerra Corporativa. 37 HP, SP 16, BODY 12, -1 REF, -1 DEX. Linear Frame Beta, casco Light Metalgear®. Armas embarcadas: Malorian Arms Sub-Flechette Gun e Tsunami Arms Type-18-S. Cyberware embarcado: Internal Agent e Targeting Scope.",
+      "attributes": {
+        "armorType": "PoweredArmor",
+        "sp": 16,
+        "hitPoints": 37,
+        "bodyValue": 12,
+        "refPenalty": 1,
+        "dexPenalty": 1,
+        "movePenalty": 0,
+        "protectedLocations": "Piloto inteiro (casco)",
+        "effect": "37 HP, SP 16, BODY 12, -1 REF, -1 DEX. Linear Frame Beta, casco Light Metalgear®. Armas embarcadas: Malorian Arms Sub-Flechette Gun e Tsunami Arms Type-18-S. Cyberware embarcado: Internal Agent e Targeting Scope."
+      }
+    },
+    "arasaka-shin-daioni": {
+      "page": 139,
+      "notes": "Conferido com Interface RED Volume 5, p. 139. Corrigido: o compêndio citava um \"trilho de mísseis\" que não existe.",
+      "name": "Arasaka Shin DaiOni",
+      "manufacturer": "Arasaka",
+      "price": 61350,
+      "priceCategory": "SuperLuxury",
+      "description": "O bicho-papão da Arasaka, que depende de um piloto muito habilidoso. 39 HP, SP 19, BODY 16, -1 MOVE. Linear Frame Omega, casco Heavy Metalgear®. Armas embarcadas: Arasaka Neo Rapid Assault 16 com Smartgun Link (+1 slot por Upgrade), Kendachi Mono-Three (x2), Midnight Arms Dawnmaker AMR com Sniper Scout Barrel, Tsunami Arms Type-18-S e Tsunami Arms Helix (Citrus Edition) com Smartgun Link. Cyberware embarcado: Jump Booster, Targeting Scope e TeleOptics.",
+      "attributes": {
+        "armorType": "PoweredArmor",
+        "sp": 19,
+        "hitPoints": 39,
+        "bodyValue": 16,
+        "refPenalty": 0,
+        "dexPenalty": 0,
+        "movePenalty": 1,
+        "protectedLocations": "Piloto inteiro (casco)",
+        "effect": "39 HP, SP 19, BODY 16, -1 MOVE. Linear Frame Omega, casco Heavy Metalgear®. Armas embarcadas: Arasaka Neo Rapid Assault 16 com Smartgun Link (+1 slot por Upgrade), Kendachi Mono-Three (x2), Midnight Arms Dawnmaker AMR com Sniper Scout Barrel, Tsunami Arms Type-18-S e Tsunami Arms Helix (Citrus Edition) com Smartgun Link. Cyberware embarcado: Jump Booster, Targeting Scope e TeleOptics."
+      }
+    },
+    "blueraven-sewer-rat": {
+      "page": 139,
+      "notes": "Conferido com Interface RED Volume 5, p. 139. Corrigido: o livro classifica como Very Expensive e há -1 REF, -1 DEX e -2 MOVE.",
+      "name": "BlueRaven \"Sewer Rat\"",
+      "manufacturer": "BlueRaven",
+      "price": 14104,
+      "priceCategory": "VeryExpensive",
+      "description": "ACPA caseira feita \"para caber em espaços e orçamentos apertados\", com peças locais. 23 HP, SP 4, BODY 10, -1 REF, -1 DEX, -2 MOVE. Linear Frame Salvaged, casco Salvaged. Armas embarcadas: Scatter Ratter (x2). Cyberware embarcado: Popup Shield (x2).",
+      "attributes": {
+        "armorType": "PoweredArmor",
+        "sp": 4,
+        "hitPoints": 23,
+        "bodyValue": 10,
+        "refPenalty": 1,
+        "dexPenalty": 1,
+        "movePenalty": 2,
+        "protectedLocations": "Piloto inteiro (casco)",
+        "effect": "23 HP, SP 4, BODY 10, -1 REF, -1 DEX, -2 MOVE. Linear Frame Salvaged, casco Salvaged. Armas embarcadas: Scatter Ratter (x2). Cyberware embarcado: Popup Shield (x2)."
+      }
+    },
+    "metacorp-nyx": {
+      "page": 140,
+      "notes": "Conferido com Interface RED Volume 5, p. 140.",
+      "name": "MetaCorp Nyx",
+      "manufacturer": "MetaCorp",
+      "price": 35400,
+      "priceCategory": "SuperLuxury",
+      "description": "Versão moderna da Nemesis Assault, muito rápida, para defender as cidades flutuantes da MetaCorp. 28 HP, SP 16, BODY 16, +3 MOVE, -1 DEX. Linear Frame Omega, casco Light Metalgear®. Armas embarcadas: Fuzil de precisão de Qualidade Excelente com Drum Magazine e Sniper Rifle Rechamber, e MetaCorp Chaingun \"Victoria\". Cyberware embarcado: Low Light/Infrared/UV, Radio Communicator e Web Foot.",
+      "attributes": {
+        "armorType": "PoweredArmor",
+        "sp": 16,
+        "hitPoints": 28,
+        "bodyValue": 16,
+        "refPenalty": 0,
+        "dexPenalty": 1,
+        "movePenalty": 0,
+        "protectedLocations": "Piloto inteiro (casco)",
+        "effect": "28 HP, SP 16, BODY 16, +3 MOVE, -1 DEX. Linear Frame Omega, casco Light Metalgear®. Armas embarcadas: Fuzil de precisão de Qualidade Excelente com Drum Magazine e Sniper Rifle Rechamber, e MetaCorp Chaingun \"Victoria\". Cyberware embarcado: Low Light/Infrared/UV, Radio Communicator e Web Foot."
+      }
+    },
+    "militech-commando": {
+      "page": 140,
+      "notes": "Conferido com Interface RED Volume 5, p. 140.",
+      "name": "Militech Commando",
+      "manufacturer": "Militech",
+      "price": 25274,
+      "priceCategory": "SuperLuxury",
+      "description": "O burro de carga das ACPA da Militech, usado em pequenos esquadrões de assalto. 30 HP, SP 17, BODY 14. Linear Frame Beta, casco Hybrid Metalgear®. Armas embarcadas: Militech MK.27 LMG e Militech Mountain Goat Rifle. Cyberware embarcado: Low Light/Infrared/UV, Radio Communicator e Scrambler/Descrambler.",
+      "attributes": {
+        "armorType": "PoweredArmor",
+        "sp": 17,
+        "hitPoints": 30,
+        "bodyValue": 14,
+        "refPenalty": 0,
+        "dexPenalty": 0,
+        "movePenalty": 0,
+        "protectedLocations": "Piloto inteiro (casco)",
+        "effect": "30 HP, SP 17, BODY 14. Linear Frame Beta, casco Hybrid Metalgear®. Armas embarcadas: Militech MK.27 LMG e Militech Mountain Goat Rifle. Cyberware embarcado: Low Light/Infrared/UV, Radio Communicator e Scrambler/Descrambler."
+      }
+    },
+    "zetatech-grasshopper": {
+      "page": 142,
+      "notes": "Conferido com Interface RED Volume 5, p. 142. Corrigido: o livro classifica como Luxury.",
+      "name": "Zetatech Grasshopper",
+      "manufacturer": "Zetatech",
+      "price": 12050,
+      "priceCategory": "Luxury",
+      "description": "A ACPA mais leve do mercado, a única que cabe no banco do passageiro de um veículo comum. 18 HP, SP 15, BODY 12. Linear Frame Sigma, casco Light Metalgear®. Armas embarcadas: Militech \"Big Boomer\". Cyberware embarcado: Interface Plugs e Skate Foot.",
+      "attributes": {
+        "armorType": "PoweredArmor",
+        "sp": 15,
+        "hitPoints": 18,
+        "bodyValue": 12,
+        "refPenalty": 0,
+        "dexPenalty": 0,
+        "movePenalty": 0,
+        "protectedLocations": "Piloto inteiro (casco)",
+        "effect": "18 HP, SP 15, BODY 12. Linear Frame Sigma, casco Light Metalgear®. Armas embarcadas: Militech \"Big Boomer\". Cyberware embarcado: Interface Plugs e Skate Foot."
+      }
+    },
+    "chipware-compartment": {
+      "page": 82,
+      "notes": "Conferido com Interface RED Volume 5, p. 82. Corrigido: instalação em Clinic, HL 3 (1d6), 3 slots e até quatro chips.",
+      "description": "Opção de Cybereye que esconde até quatro peças de chipware sem teste. Tirar uma é uma Ação: basta girar o olho na órbita. Ocupa 3 slots de opção.",
+      "attributes": {
+        "installLocation": "Clinic",
+        "requirements": "Clinic",
+        "humanityLoss": 3,
+        "humanityLossDice": "1d6",
+        "slotsRequired": 3,
+        "effect": "Esconde até 4 chipwares."
+      }
+    },
+    "combat-jaw": {
+      "page": 82,
+      "notes": "Conferido com Interface RED Volume 5, p. 82. Reimpressão (Black Chrome / Interface RED).",
+      "description": "Mandíbula hidráulica com duas fileiras de dentes reforçados: funciona como arma corpo a corpo Muito Pesada. Ocupa 2 slots de opção.",
+      "attributes": {
+        "bodyLocation": "Head",
+        "slotsRequired": 2
+      }
+    },
+    "quick-change-faceplate-mount": {
+      "page": 100,
+      "notes": "Conferido com Interface RED Volume 5, p. 100. Reimpressão do 12 Days of REDmas.",
+      "description": "Troca o rosto de carne por um encaixe de troca rápida: instalar ou tirar uma Faceplate é uma Ação. Vem com uma Faceplate personalizada; extras (inclusive Realskinn™ e Superchrome®) custam 100eb.",
+      "attributes": {
+        "bodyLocation": "Head"
+      }
+    },
+    "rocklin-quick-digits": {
+      "page": 100,
+      "notes": "Conferido com Interface RED Volume 5, p. 100. Reimpressão do 12 Days of REDmas. O livro classifica os 250eb como Premium.",
+      "name": "Rocklin Augmentics Quick Digits",
+      "manufacturer": "Rocklin Augmentics",
+      "priceCategory": "Premium",
+      "description": "Opção de Cyberarm (Cyberhand), pode ser o único cyberware de um braço de carne. Com duas ou mais, +1 em Conceal/Reveal Object, Contortionist (mãos), First Aid, Forgery, Language (Sign), Paramedic, Pick Lock e Pick Pocket.",
+      "attributes": {
+        "bodyLocation": "Hand"
+      }
+    },
+    "rocklin-skydrivers": {
+      "page": 100,
+      "notes": "Conferido com Interface RED Volume 5, p. 100. Corrigido: são instalados em par. Reimpressão do 12 Days of REDmas.",
+      "name": "Rocklin Augmentics Skydrivers",
+      "manufacturer": "Rocklin Augmentics",
+      "description": "Par de Cyberlegs, instalados juntos e contados como um item para custo e HL. Cada um tem 2 slots de opção e Jump Boosters fixos (sem HL nem slot). Depois de mover 4 m/yds no turno, ataques de Brawling ou Martial Arts com as pernas contra cobertura causam +3d6.",
+      "attributes": {
+        "requiresPair": true,
+        "slotsProvided": 2
+      }
+    },
+    "sycust-cyberspine": {
+      "page": 101,
+      "notes": "Conferido com Interface RED Volume 5, p. 101. Corrigido: ocupa 3 slots. Reimpressão do 12 Days of REDmas.",
+      "description": "Coluna militar de parede dupla. Imunidade ao efeito e ao Dano Bônus de Spinal Injury, +1 em Contortionist e blindagem contra EMP e Programas que não sejam Black ICE. Conta como orifício para um Cybersnake. Ocupa 3 slots de opção.",
+      "attributes": {
+        "slotsRequired": 3
+      }
+    },
+    "zetatech-cyberconductor": {
+      "page": 101,
+      "notes": "Conferido com Interface RED Volume 5, p. 101. O item do compêndio era a versão integrada; o aparelho externo foi incluído à parte. Reimpressão do 12 Days of REDmas.",
+      "name": "Zetatech CyberConductor, Integrated",
+      "description": "Versão Borgware do CyberConductor, só para Full Body Conversion (Internal Body, 3 slots). Liga ao aparelho os Cyberdecks instalados como cyberware no FBC, e trocar de deck não causa dano.",
+      "attributes": {
+        "slotsRequired": 3,
+        "requirements": "Full Body Conversion; Hospital"
+      }
+    }
+  },
+  "additions": [
+    {
+      "tags": [
+        "Qualidade Excelente",
+        "Smartgun",
+        "Mira acoplada"
+      ],
+      "manufacturer": "Tsunami Arms",
+      "slug": "tsunami-arms-deathwind-railgun",
+      "name": "Tsunami Arms \"Deathwind\" Railgun",
+      "category": "weapons",
+      "page": 119,
+      "price": 12000,
+      "description": "Fuzil de precisão de Qualidade Excelente disparado com Heavy Weapons (tabela Scout Rifle), 6d6, 30 tiros, com Smartgun Link (inseparável, exige 2 Interface Plugs ou Subdermal Grip), Sniper Rifle Rechamber e Sniper Scout Barrel. Não faz Aimed Shot. A cada terceiro tiro em 30 segundos, vira Baixa Qualidade até ser ventilado com uma Ação. O dano ignora armaduras com SP abaixo de 12. Recarregar exige duas Ações. Exige BODY 14 (ou 12 deitado).",
+      "attributes": {
+        "weaponClass": "SniperRifle",
+        "skill": "HeavyWeapons",
+        "damage": "6d6",
+        "damageDice": 6,
+        "rof": 1,
+        "magazine": 30,
+        "maxRange": 800,
+        "hands": 2,
+        "concealable": false,
+        "quality": "Excellent",
+        "exotic": false,
+        "minBody": 14,
+        "calibers": [
+          "Rifle"
+        ]
+      },
+      "priceCategory": "SuperLuxury",
+      "notes": "Conferido com Interface RED Volume 5, p. 119. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "slug": "arrowhypo-ammunition",
+      "name": "Arrowhypo Ammunition",
+      "category": "ammunition",
+      "page": 126,
+      "price": 100,
+      "priceNote": "Por unidade",
+      "description": "Flecha com airhypo na ponta, carregada com uma dose de Street Drug. Não causa dano: quem for atingido recebe a dose. Pode ser recuperada como uma flecha comum.",
+      "attributes": {
+        "kind": "Round",
+        "effectType": "Utility",
+        "calibers": [
+          "Arrow"
+        ],
+        "quantityPerPack": 1,
+        "effect": "Injeta 1 dose de droga"
+      },
+      "priceCategory": "Premium",
+      "notes": "Conferido com Interface RED Volume 5, p. 126. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "slug": "linear-frame-omega",
+      "name": "Linear Frame Ω (Omega)",
+      "category": "armor",
+      "page": 143,
+      "price": 10000,
+      "description": "Exoesqueleto externo motorizado. Conectado, o BODY passa a 16 (não sobe além disso) sem aumentar HP nem Death Save. Exige 3 Interface Plugs.",
+      "attributes": {
+        "armorType": "LinearFrame",
+        "bodyValue": 16,
+        "requirements": "3 Interface Plugs",
+        "effect": "BODY 16 enquanto conectado."
+      },
+      "priceCategory": "SuperLuxury",
+      "notes": "Conferido com Interface RED Volume 5, p. 143. Reimpressão (a origem é o Interface RED vol. 3); ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "slug": "roller-derby-padding",
+      "name": "Roller Derby Padding",
+      "category": "armor",
+      "page": 21,
+      "price": 50,
+      "description": "Proteção de roller derby nas cores do time, comprada separadamente para cabeça e corpo. SP7.",
+      "attributes": {
+        "armorType": "BodyArmor",
+        "sp": 7,
+        "refPenalty": 0,
+        "dexPenalty": 0,
+        "movePenalty": 0,
+        "protectedLocations": "Cabeça ou Corpo",
+        "effect": "SP7."
+      },
+      "priceCategory": "Costly",
+      "notes": "Conferido com Interface RED Volume 5, p. 21. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Arasaka",
+      "slug": "arasaka-neo-guardian",
+      "category": "armor",
+      "page": 138,
+      "name": "Arasaka Neo Guardian",
+      "price": 17900,
+      "priceCategory": "Luxury",
+      "description": "Guarda-costas de VIPs da Arasaka, revezado pela equipe ao longo do dia. 25 HP, SP 16, BODY 12, -1 DEX. Linear Frame Sigma, casco Light Metalgear®. Armas embarcadas: Arasaka Takanami SMG (x2), Malorian Arms Sub-Flechette Gun e Stun Baton. Cyberware embarcado: Internal Agent e Targeting Scope.",
+      "attributes": {
+        "armorType": "PoweredArmor",
+        "sp": 16,
+        "hitPoints": 25,
+        "bodyValue": 12,
+        "refPenalty": 0,
+        "dexPenalty": 1,
+        "movePenalty": 0,
+        "protectedLocations": "Piloto inteiro (casco)",
+        "effect": "25 HP, SP 16, BODY 12, -1 DEX. Linear Frame Sigma, casco Light Metalgear®. Armas embarcadas: Arasaka Takanami SMG (x2), Malorian Arms Sub-Flechette Gun e Stun Baton. Cyberware embarcado: Internal Agent e Targeting Scope."
+      },
+      "notes": "Conferido com Interface RED Volume 5, p. 138. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "SovOil",
+      "slug": "sovoil-bombardier",
+      "category": "armor",
+      "page": 141,
+      "name": "SovOil Bombardier",
+      "price": 32200,
+      "priceCategory": "SuperLuxury",
+      "description": "ACPA pesada de artilharia, originalmente da Russian Arms. 51 HP, SP 18, BODY 14, -1 REF, -1 DEX. Linear Frame Beta, casco Metalgear®. Armas embarcadas: Lança-foguetes de Qualidade Excelente com Drum Magazine e Long Tube (x4). Cyberware embarcado: nenhum.",
+      "attributes": {
+        "armorType": "PoweredArmor",
+        "sp": 18,
+        "hitPoints": 51,
+        "bodyValue": 14,
+        "refPenalty": 1,
+        "dexPenalty": 1,
+        "movePenalty": 0,
+        "protectedLocations": "Piloto inteiro (casco)",
+        "effect": "51 HP, SP 18, BODY 14, -1 REF, -1 DEX. Linear Frame Beta, casco Metalgear®. Armas embarcadas: Lança-foguetes de Qualidade Excelente com Drum Magazine e Long Tube (x4). Cyberware embarcado: nenhum."
+      },
+      "notes": "Conferido com Interface RED Volume 5, p. 141. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Tsunami Arms",
+      "slug": "tsunami-arms-magus",
+      "category": "armor",
+      "page": 141,
+      "name": "Tsunami Arms Magus",
+      "price": 26624,
+      "priceCategory": "SuperLuxury",
+      "description": "ACPA de franco-atirador construída em torno da Deathwind. 25 HP, SP 17, BODY 12, -1 MOVE. Linear Frame Sigma, casco Hybrid Metalgear®. Armas embarcadas: Tsunami Arms \"Deathwind\" Railgun. Cyberware embarcado: Grip Foot, Targeting Scope e TeleOptics.",
+      "attributes": {
+        "armorType": "PoweredArmor",
+        "sp": 17,
+        "hitPoints": 25,
+        "bodyValue": 12,
+        "refPenalty": 0,
+        "dexPenalty": 0,
+        "movePenalty": 1,
+        "protectedLocations": "Piloto inteiro (casco)",
+        "effect": "25 HP, SP 17, BODY 12, -1 MOVE. Linear Frame Sigma, casco Hybrid Metalgear®. Armas embarcadas: Tsunami Arms \"Deathwind\" Railgun. Cyberware embarcado: Grip Foot, Targeting Scope e TeleOptics."
+      },
+      "notes": "Conferido com Interface RED Volume 5, p. 141. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Zhirafa Technical Manufacturing",
+      "slug": "zhirafa-boris",
+      "category": "armor",
+      "page": 142,
+      "name": "Zhirafa Boris",
+      "price": 46900,
+      "priceCategory": "SuperLuxury",
+      "description": "Atualização da Boris dos anos 2020, ponto de reunião das forças neossoviéticas. 60 HP, SP 19, BODY 16, -1 REF, -1 DEX, -1 MOVE. Linear Frame Omega, casco Heavy Metalgear®. Armas embarcadas: Lança-foguetes de Qualidade Excelente com Extended Magazine e Smartgun Link (x4) e Techtronika Russia BMG-500 (Silver Edition). Cyberware embarcado: Targeting Scope.",
+      "attributes": {
+        "armorType": "PoweredArmor",
+        "sp": 19,
+        "hitPoints": 60,
+        "bodyValue": 16,
+        "refPenalty": 1,
+        "dexPenalty": 1,
+        "movePenalty": 1,
+        "protectedLocations": "Piloto inteiro (casco)",
+        "effect": "60 HP, SP 19, BODY 16, -1 REF, -1 DEX, -1 MOVE. Linear Frame Omega, casco Heavy Metalgear®. Armas embarcadas: Lança-foguetes de Qualidade Excelente com Extended Magazine e Smartgun Link (x4) e Techtronika Russia BMG-500 (Silver Edition). Cyberware embarcado: Targeting Scope."
+      },
+      "notes": "Conferido com Interface RED Volume 5, p. 142. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Netrunning"
+      ],
+      "manufacturer": "Zetatech",
+      "slug": "zetatech-cyberconductor-device",
+      "name": "Zetatech CyberConductor",
+      "category": "gear",
+      "page": 101,
+      "price": 1000,
+      "description": "Aparelho que recebe até três Cyberdecks. Conectado a uma Arquitetura, trocar de deck é uma Ação de Meat: todos os Programas ativos (inclusive Black ICE) desrezzam e o usuário sofre 3 de dano direto no HP. Instalar ou tirar um deck leva uma hora.",
+      "attributes": {
+        "gearType": "Electronics",
+        "gearClass": "Hardware de Cyberdeck",
+        "effect": "Alterna entre até 3 Cyberdecks."
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Interface RED Volume 5, p. 101. Reimpressão do 12 Days of REDmas; ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "slug": "fbc-chameleon-coating",
+      "name": "FBC Chameleon Coating",
+      "category": "cyberware",
+      "page": 82,
+      "price": 1000,
+      "description": "Só para Full Body Conversion. Depois de ficar parado 1 minuto, ativa (sem Ação) uma camuflagem contra todos os sentidos visuais, inclusive Low Light/Infrared/UV, a menos que o observador passe em Perception DV17. Desliga ao mover mais de 2 m/yds numa rodada. Uma segunda instalação reduz a espera para 30 segundos; a terceira, para 9 segundos.",
+      "attributes": {
+        "cyberwareType": "ExternalBody",
+        "bodyLocation": "Skin",
+        "installLocation": "Hospital",
+        "humanityLoss": 7,
+        "humanityLossDice": "2d6",
+        "foundational": false,
+        "requiresPair": false,
+        "requirements": "Full Body Conversion; Hospital",
+        "effect": "Camuflagem óptica parado (Perception DV17)."
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Interface RED Volume 5, p. 82. Reimpressão (Interface RED vol. 3); ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Wyzard Technologies",
+      "slug": "cyberdude-smart-glove",
+      "name": "CyberDude Smart Glove",
+      "category": "gear",
+      "page": 99,
+      "price": 750,
+      "description": "Luva sem dedos da Wyzard com Subdermal Grip e 2 slots de opção de Cyberarm ou Cyberlimb. Vestir ou tirar é uma Ação. Cyberware de dedo continua funcionando; as demais opções da mão por baixo ficam inacessíveis. Não pode ser ocultada.",
+      "attributes": {
+        "gearType": "Tool",
+        "effect": "Luva sem dedos da Wyzard com Subdermal Grip e 2 slots de opção de Cyberarm ou Cyberlimb. Vestir ou tirar é uma Ação. Cyberware de dedo continua funcionando; as demais opções da mão por baixo ficam inacessíveis. Não pode ser ocultada.",
+        "gearClass": "Cyberware vestível"
+      },
+      "priceCategory": "Expensive",
+      "notes": "Conferido com Interface RED Volume 5, p. 99. Reimpressão do 12 Days of REDmas; ausente do compêndio. O livro classifica os 750eb como Expensive."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "slug": "smart-ears",
+      "name": "Smart Ears",
+      "category": "gear",
+      "page": 100,
+      "price": 1000,
+      "description": "Orelhas impressas sob medida com Radio Scanner/Music Player fixo e 2 slots de opção de Cyberaudio. Instalar ou tirar uma opção leva uma hora. Só um par por vez.",
+      "attributes": {
+        "gearType": "Electronics",
+        "effect": "Orelhas impressas sob medida com Radio Scanner/Music Player fixo e 2 slots de opção de Cyberaudio. Instalar ou tirar uma opção leva uma hora. Só um par por vez.",
+        "gearClass": "Cyberware vestível"
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Interface RED Volume 5, p. 100. Reimpressão do 12 Days of REDmas; ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "slug": "roller-derby-skates",
+      "name": "Roller Derby Skates",
+      "category": "gear",
+      "page": 21,
+      "price": 50,
+      "description": "Patins de quatro rodas: +4 m/yds ao usar a Ação Correr. Calçar ou tirar é uma Ação. Opções de Cyberleg ficam inacessíveis enquanto calçados.",
+      "attributes": {
+        "gearType": "Lifestyle",
+        "effect": "Patins de quatro rodas: +4 m/yds ao usar a Ação Correr. Calçar ou tirar é uma Ação. Opções de Cyberleg ficam inacessíveis enquanto calçados."
+      },
+      "priceCategory": "Costly",
+      "notes": "Conferido com Interface RED Volume 5, p. 21. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "slug": "authorization-handshake-port",
+      "name": "Authorization Handshake Port",
+      "category": "gear",
+      "page": 122,
+      "price": 100,
+      "description": "Porta de acesso para ACPA ou Linear Frame externo: só aceita pilotos com credenciais nos Interface Plugs. Electronics/Security Tech DV17 libera 24 horas; DV24 desativa de vez.",
+      "attributes": {
+        "gearType": "Security",
+        "effect": "Porta de acesso para ACPA ou Linear Frame externo: só aceita pilotos com credenciais nos Interface Plugs. Electronics/Security Tech DV17 libera 24 horas; DV24 desativa de vez."
+      },
+      "priceCategory": "Premium",
+      "notes": "Conferido com Interface RED Volume 5, p. 122. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "slug": "thermal-decoy",
+      "name": "Thermal Decoy",
+      "category": "gear",
+      "page": 123,
+      "price": 100,
+      "description": "Boneco inflável montado como Ação que aparece como humano para armas Smart e Tech e em visão infravermelha. Entra na fila de Iniciativa; quem ele quer enganar faz Perception DV17 (-2 se depender só de Low Light/Infrared ou Radar/Sonar). Destruído ao sofrer dano.",
+      "attributes": {
+        "gearType": "Security",
+        "effect": "Boneco inflável montado como Ação que aparece como humano para armas Smart e Tech e em visão infravermelha. Entra na fila de Iniciativa; quem ele quer enganar faz Perception DV17 (-2 se depender só de Low Light/Infrared ou Radar/Sonar). Destruído ao sofrer dano."
+      },
+      "priceCategory": "Premium",
+      "notes": "Conferido com Interface RED Volume 5, p. 123. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "slug": "multihypo",
+      "name": "Multihypo",
+      "category": "gear",
+      "page": 126,
+      "price": 500,
+      "description": "Aplicador de quatro reservatórios (4 doses de 4 drogas, 16 no total). Como Ação, aplica uma dose de cada droga carregada num alvo voluntário. Não serve contra alvo consciente que resiste.",
+      "attributes": {
+        "gearType": "Medical",
+        "effect": "Aplicador de quatro reservatórios (4 doses de 4 drogas, 16 no total). Como Ação, aplica uma dose de cada droga carregada num alvo voluntário. Não serve contra alvo consciente que resiste."
+      },
+      "priceCategory": "Expensive",
+      "notes": "Conferido com Interface RED Volume 5, p. 126. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "slug": "ammunition-compatibility-internals",
+      "name": "Ammunition Compatibility Internals",
+      "category": "gear",
+      "page": 111,
+      "price": 100,
+      "description": "Permite disparar toda munição não-básica das categorias que a arma já disparava. Não ocupa slot, vale em armas Exóticas e não pode ser removido. Instalar exige Weaponstech DV17.",
+      "attributes": {
+        "gearType": "Tool",
+        "effect": "Permite disparar toda munição não-básica das categorias que a arma já disparava. Não ocupa slot, vale em armas Exóticas e não pode ser removido. Instalar exige Weaponstech DV17.",
+        "gearClass": "Acessório de arma"
+      },
+      "priceCategory": "Premium",
+      "notes": "Conferido com Interface RED Volume 5, p. 111. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "slug": "reinforced-string",
+      "name": "Reinforced String",
+      "category": "gear",
+      "page": 111,
+      "price": 250,
+      "description": "Arcos e bestas: +1d6 de dano (máximo 5d6) fora da Kyudo Stance; passa a exigir duas mãos. Não ocupa slot e não pode ser removido. Instalar exige Archery ou Weaponstech DV17.",
+      "attributes": {
+        "gearType": "Tool",
+        "effect": "Arcos e bestas: +1d6 de dano (máximo 5d6) fora da Kyudo Stance; passa a exigir duas mãos. Não ocupa slot e não pode ser removido. Instalar exige Archery ou Weaponstech DV17.",
+        "gearClass": "Acessório de arma"
+      },
+      "notes": "Conferido com Interface RED Volume 5, p. 111. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "slug": "sniper-rifle-rechamber",
+      "name": "Sniper Rifle Rechamber",
+      "category": "gear",
+      "page": 111,
+      "price": 300,
+      "description": "Fuzis de precisão: +1d6 de dano (máximo 6d6). Não ocupa slot, vale em Exóticas e não pode ser removido. Instalar exige Weaponstech DV17.",
+      "attributes": {
+        "gearType": "Tool",
+        "effect": "Fuzis de precisão: +1d6 de dano (máximo 6d6). Não ocupa slot, vale em Exóticas e não pode ser removido. Instalar exige Weaponstech DV17.",
+        "gearClass": "Acessório de arma"
+      },
+      "notes": "Conferido com Interface RED Volume 5, p. 111. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "slug": "compatibility-rail",
+      "name": "Compatibility Rail",
+      "category": "gear",
+      "page": 111,
+      "price": 50,
+      "description": "Armas Exóticas ganham um slot só para miras. Instalar exige Weaponstech DV17.",
+      "attributes": {
+        "gearType": "Tool",
+        "effect": "Armas Exóticas ganham um slot só para miras. Instalar exige Weaponstech DV17.",
+        "gearClass": "Acessório de arma"
+      },
+      "priceCategory": "Costly",
+      "notes": "Conferido com Interface RED Volume 5, p. 111. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "slug": "range-table-modification",
+      "name": "Range Table Modification",
+      "category": "gear",
+      "page": 112,
+      "price": 100,
+      "description": "Cano ou membro que troca a tabela de alcance da arma (snub, longo, carbine, battle, marksman, scout, anti-materiel, arco curto ou longo, tubo de mísseis...). Não ocupa slot e vale em Exóticas; só um por arma.",
+      "attributes": {
+        "gearType": "Tool",
+        "effect": "Cano ou membro que troca a tabela de alcance da arma (snub, longo, carbine, battle, marksman, scout, anti-materiel, arco curto ou longo, tubo de mísseis...). Não ocupa slot e vale em Exóticas; só um por arma.",
+        "gearClass": "Acessório de arma"
+      },
+      "priceCategory": "Premium",
+      "notes": "Conferido com Interface RED Volume 5, p. 112. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "slug": "pistol-autosear",
+      "name": "Pistol Autosear",
+      "category": "gear",
+      "page": 115,
+      "price": 100,
+      "description": "Pistolas ganham Autofire (Machine Pistol 3) e Fogo de Supressão, ou Machine Pistol 4 se forem de Qualidade Excelente ou já tiverem Autofire. Não ocupa slot e vale em Exóticas.",
+      "attributes": {
+        "gearType": "Tool",
+        "effect": "Pistolas ganham Autofire (Machine Pistol 3) e Fogo de Supressão, ou Machine Pistol 4 se forem de Qualidade Excelente ou já tiverem Autofire. Não ocupa slot e vale em Exóticas.",
+        "gearClass": "Acessório de arma"
+      },
+      "priceCategory": "Premium",
+      "notes": "Conferido com Interface RED Volume 5, p. 115. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "slug": "shotgun-automatic-control-group",
+      "name": "Shotgun Automatic Control Group",
+      "category": "gear",
+      "page": 115,
+      "price": 100,
+      "description": "Escopetas ganham Autofire (Machine Pistol 3, ou 4 se Excelentes ou já automáticas), gastando 4 slugs; com shells, podem gastar 4 cartuchos e atacar com Autofire (-3 para esquivar). Instalar exige Weaponstech DV17.",
+      "attributes": {
+        "gearType": "Tool",
+        "effect": "Escopetas ganham Autofire (Machine Pistol 3, ou 4 se Excelentes ou já automáticas), gastando 4 slugs; com shells, podem gastar 4 cartuchos e atacar com Autofire (-3 para esquivar). Instalar exige Weaponstech DV17.",
+        "gearClass": "Acessório de arma"
+      },
+      "priceCategory": "Premium",
+      "notes": "Conferido com Interface RED Volume 5, p. 115. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "slug": "smg-cyclic-internals",
+      "name": "SMG Cyclic Internals",
+      "category": "gear",
+      "page": 115,
+      "price": 100,
+      "description": "Armas com Autofire (SMG 3) passam a SMG 4 ou Machine Pistol 4. Não ocupa slot e vale em Exóticas. Instalar exige Weaponstech DV17.",
+      "attributes": {
+        "gearType": "Tool",
+        "effect": "Armas com Autofire (SMG 3) passam a SMG 4 ou Machine Pistol 4. Não ocupa slot e vale em Exóticas. Instalar exige Weaponstech DV17.",
+        "gearClass": "Acessório de arma"
+      },
+      "priceCategory": "Premium",
+      "notes": "Conferido com Interface RED Volume 5, p. 115. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Biotechnica",
+      "slug": "cyberpet-datarabbit",
+      "name": "Datarabbit™",
+      "category": "gear",
+      "page": 74,
+      "price": 1000,
+      "description": "Coelho geneticamente modificado que guarda memory chips num olho blindado contra EMP e foge para ser achado depois pelo rastreador implantado. Estilo de vida exigido: Generic Prepak. 2 slot(s) de cyberware.",
+      "attributes": {
+        "gearType": "Lifestyle",
+        "effect": "Coelho geneticamente modificado que guarda memory chips num olho blindado contra EMP e foge para ser achado depois pelo rastreador implantado. Estilo de vida exigido: Generic Prepak. 2 slot(s) de cyberware.",
+        "gearClass": "Cyberpet",
+        "requirements": "Estilo de vida Generic Prepak"
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Interface RED Volume 5, p. 74. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Biotechnica",
+      "slug": "cyberpet-forever-turtle",
+      "name": "Forever Turtle™",
+      "category": "gear",
+      "page": 75,
+      "price": 2000,
+      "description": "Tartaruga com Combat Jaw, casco de Subdermal Armor e Trauma Response Nanomatrix; recolhida no casco, não sofre Aimed Shot. Estilo de vida exigido: Good Prepak. 2 slot(s) de cyberware.",
+      "attributes": {
+        "gearType": "Lifestyle",
+        "effect": "Tartaruga com Combat Jaw, casco de Subdermal Armor e Trauma Response Nanomatrix; recolhida no casco, não sofre Aimed Shot. Estilo de vida exigido: Good Prepak. 2 slot(s) de cyberware.",
+        "gearClass": "Cyberpet",
+        "requirements": "Estilo de vida Good Prepak"
+      },
+      "notes": "Conferido com Interface RED Volume 5, p. 75. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Biotechnica",
+      "slug": "cyberpet-neon-newt",
+      "name": "Neon Newt™",
+      "category": "gear",
+      "page": 76,
+      "price": 2000,
+      "description": "Salamandra de bolso que vira lança-chamas biológico quando apertada. Estilo de vida exigido: Good Prepak. 1 slot(s) de cyberware.",
+      "attributes": {
+        "gearType": "Lifestyle",
+        "effect": "Salamandra de bolso que vira lança-chamas biológico quando apertada. Estilo de vida exigido: Good Prepak. 1 slot(s) de cyberware.",
+        "gearClass": "Cyberpet",
+        "requirements": "Estilo de vida Good Prepak"
+      },
+      "notes": "Conferido com Interface RED Volume 5, p. 76. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Biotechnica",
+      "slug": "cyberpet-obsidian-ocelot",
+      "name": "Obsidian Ocelot™",
+      "category": "gear",
+      "page": 77,
+      "price": 4000,
+      "description": "Felino de luxo, ornamento e predador furtivo. Estilo de vida exigido: Fresh Food. 3 slot(s) de cyberware.",
+      "attributes": {
+        "gearType": "Lifestyle",
+        "effect": "Felino de luxo, ornamento e predador furtivo. Estilo de vida exigido: Fresh Food. 3 slot(s) de cyberware.",
+        "gearClass": "Cyberpet",
+        "requirements": "Estilo de vida Fresh Food"
+      },
+      "notes": "Conferido com Interface RED Volume 5, p. 77. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Biotechnica",
+      "slug": "cyberpet-cyberboa",
+      "name": "Cyberboa™",
+      "category": "gear",
+      "page": 79,
+      "price": 4000,
+      "description": "Serpente vendida para busca e resgate, com o DNA das cobras mais perigosas do mundo. Estilo de vida exigido: Fresh Food. 3 slot(s) de cyberware.",
+      "attributes": {
+        "gearType": "Lifestyle",
+        "effect": "Serpente vendida para busca e resgate, com o DNA das cobras mais perigosas do mundo. Estilo de vida exigido: Fresh Food. 3 slot(s) de cyberware.",
+        "gearClass": "Cyberpet",
+        "requirements": "Estilo de vida Fresh Food"
+      },
+      "notes": "Conferido com Interface RED Volume 5, p. 79. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Biotechnica",
+      "slug": "cyberpet-cyberrat",
+      "name": "Cyberrat™",
+      "category": "gear",
+      "page": 80,
+      "price": 1000,
+      "description": "Rato venenoso com cyberware de vigilância e Skinweave, criado para espionagem corporativa. Estilo de vida exigido: Generic Prepak. 2 slot(s) de cyberware.",
+      "attributes": {
+        "gearType": "Lifestyle",
+        "effect": "Rato venenoso com cyberware de vigilância e Skinweave, criado para espionagem corporativa. Estilo de vida exigido: Generic Prepak. 2 slot(s) de cyberware.",
+        "gearClass": "Cyberpet",
+        "requirements": "Estilo de vida Generic Prepak"
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Interface RED Volume 5, p. 80. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Biotechnica",
+      "slug": "cyberpet-cyberwolf",
+      "name": "Cyberwolf™",
+      "category": "gear",
+      "page": 81,
+      "price": 4000,
+      "description": "Lobo caçador de matilha com mandíbula hidráulica. Estilo de vida exigido: Good Prepak. 3 slot(s) de cyberware.",
+      "attributes": {
+        "gearType": "Lifestyle",
+        "effect": "Lobo caçador de matilha com mandíbula hidráulica. Estilo de vida exigido: Good Prepak. 3 slot(s) de cyberware.",
+        "gearClass": "Cyberpet",
+        "requirements": "Estilo de vida Good Prepak"
+      },
+      "notes": "Conferido com Interface RED Volume 5, p. 81. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "slug": "anti-cerebral",
+      "name": "Anti-Cerebral",
+      "category": "drugs",
+      "page": 127,
+      "price": 60,
+      "priceCategory": "Costly",
+      "priceNote": "Por dose",
+      "description": "Neurotoxina de guerra que destrói o moral.",
+      "attributes": {
+        "classification": "Combat",
+        "resistDv": 17,
+        "duration": "Instantâneo",
+        "durationMinutes": null,
+        "primaryEffect": "O alvo perde 1d6 de Humanidade e rola imediatamente contra o efeito secundário.",
+        "sideEffects": "Efeito secundário (DV17): mais 1d6 de Perda de Humanidade. Não vicia."
+      },
+      "notes": "Conferido com Interface RED Volume 5, p. 127. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "slug": "deliriant",
+      "name": "Deliriant",
+      "category": "drugs",
+      "page": 127,
+      "price": 50,
+      "priceCategory": "Costly",
+      "priceNote": "Por dose",
+      "description": "Atropina pura em dose tóxica: desorientação e alucinações táteis.",
+      "attributes": {
+        "classification": "Combat",
+        "resistDv": 17,
+        "duration": "10 minutos",
+        "durationMinutes": 10,
+        "primaryEffect": "Resist Torture/Drugs DV17 ou sofre Damaged Ear, Damaged Eye e Torn Muscle pela duração, sem Dano Bônus. Quem tem Cybereyes não sofre Damaged Eye.",
+        "sideEffects": "Efeito secundário (DV17): não vicia; viciados em Blue Glass perdem 1d6 de Humanidade."
+      },
+      "notes": "Conferido com Interface RED Volume 5, p. 127. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "slug": "mindfire",
+      "name": "Mindfire",
+      "category": "drugs",
+      "page": 127,
+      "price": 50,
+      "priceCategory": "Costly",
+      "priceNote": "Por dose",
+      "description": "Escopolamina modificada que provoca enxaqueca extrema.",
+      "attributes": {
+        "classification": "Combat",
+        "resistDv": 15,
+        "duration": "1 minuto",
+        "durationMinutes": 1,
+        "primaryEffect": "Resist Torture/Drugs DV15; sem Pain Editor, quem falha sofre 1 de dano direto no HP no fim de cada turno (não abaixo de 1 HP).",
+        "sideEffects": "Efeito secundário (DV15): não vicia; quem falhou no primário e não tem Pain Editor perde 1d6 de Humanidade."
+      },
+      "notes": "Conferido com Interface RED Volume 5, p. 127. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "slug": "mortalis",
+      "name": "Mortalis",
+      "category": "drugs",
+      "page": 127,
+      "price": 250,
+      "priceCategory": "Expensive",
+      "priceNote": "Por dose",
+      "description": "Arma química que simula parada cardíaca, usada em assassinatos.",
+      "attributes": {
+        "classification": "Combat",
+        "resistDv": 21,
+        "duration": "9 segundos (3 rodadas)",
+        "durationMinutes": null,
+        "primaryEffect": "Quem não é FBC faz Resist Torture/Drugs DV21 ou sofre as penalidades de Mortally Wounded pela duração, sem Death Saves (com Enhanced Antibodies, só até o fim da rodada seguinte).",
+        "sideEffects": "Efeito secundário (DV13): não vicia; quem não é FBC faz um Death Save e, se falhar, sofre Brain Injury e Concussion sem Dano Bônus em vez de morrer."
+      },
+      "notes": "Conferido com Interface RED Volume 5, p. 127. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "slug": "rime",
+      "name": "Rime",
+      "category": "drugs",
+      "page": 128,
+      "price": 60,
+      "priceCategory": "Costly",
+      "priceNote": "Por dose",
+      "description": "Coquetel que provoca convulsões leves por horas; usado para punir prisioneiros.",
+      "attributes": {
+        "classification": "Combat",
+        "resistDv": 15,
+        "duration": "24 horas",
+        "durationMinutes": 1440,
+        "primaryEffect": "Sem Cyberspine, REF -2 (não abaixo de 6) e calafrios.",
+        "sideEffects": "Efeito secundário (DV15): não vicia; sem Cyberspine, perde 1d6 de Humanidade."
+      },
+      "notes": "Conferido com Interface RED Volume 5, p. 128. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "slug": "terrifier",
+      "name": "Terrifier",
+      "category": "drugs",
+      "page": 128,
+      "price": 40,
+      "priceCategory": "Everyday",
+      "priceNote": "Por dose",
+      "description": "Arma química que transforma o instinto de luta ou fuga em medo.",
+      "attributes": {
+        "classification": "Combat",
+        "resistDv": 15,
+        "duration": "24 horas",
+        "durationMinutes": 1440,
+        "primaryEffect": "Sem Speedware ou Berserk Implant, Resist Torture/Drugs DV15 ou -2 em todas as Ações contra quem viu no primeiro minuto. Berserker ou Prime Time encerram o efeito.",
+        "sideEffects": "Efeito secundário (DV17): não vicia; quem falhou no primário sofre o efeito de novo, com os mesmos medos."
+      },
+      "notes": "Conferido com Interface RED Volume 5, p. 128. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "slug": "red-lace",
+      "name": "Red Lace",
+      "category": "drugs",
+      "page": 128,
+      "price": 110,
+      "priceCategory": "Expensive",
+      "priceNote": "Por dose",
+      "description": "Companheira agressiva da Black Lace, rara pela dificuldade dos ingredientes.",
+      "attributes": {
+        "classification": "Combat",
+        "resistDv": 17,
+        "duration": "24 horas",
+        "durationMinutes": 1440,
+        "primaryEffect": "Quem não é viciado perde 1d6 de Humanidade. Em ataques de Melee Weapon, 5 conta como 6 para Lesão Crítica. Suspende a redução de REF do vício em Black Lace.",
+        "sideEffects": "Efeito secundário (DV17): vício. Viciado, comportamento impulsivo e DEX -2 fora do efeito primário."
+      },
+      "notes": "Conferido com Interface RED Volume 5, p. 128. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "slug": "white-lace",
+      "name": "White Lace",
+      "category": "drugs",
+      "page": 129,
+      "price": 20,
+      "priceCategory": "Everyday",
+      "priceNote": "Por dose",
+      "description": "Black Lace de rua, que virou droga de festa dos fãs de chromatic rock.",
+      "attributes": {
+        "classification": "Street",
+        "resistDv": 15,
+        "duration": "12 horas",
+        "durationMinutes": 720,
+        "primaryEffect": "Perde 1d6 de Humanidade (devolvida se o secundário não ocorrer). Quem não é viciado em Black Lace ignora Seriously Wounded; viciados em Black ou Red Lace suspendem as reduções de REF e DEX.",
+        "sideEffects": "Efeito secundário (DV15): a Humanidade não volta e o usuário fica viciado em Black Lace (REF -2 fora do efeito)."
+      },
+      "notes": "Conferido com Interface RED Volume 5, p. 129. Ausente do compêndio."
+    }
+  ]
+}

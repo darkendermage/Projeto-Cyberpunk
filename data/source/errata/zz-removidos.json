@@ -1,0 +1,7 @@
+{
+  "about": "Entradas do compêndio que não existem em nenhum livro oficial, retiradas a pedido do usuário. Aplicado por último. Formato descrito no README (seção Dados).",
+  "remove": [
+    "forgery-kit",
+    "security-tech-kit"
+  ]
+}

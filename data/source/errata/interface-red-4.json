@@ -1,0 +1,349 @@
+{
+  "about": "Conferido com o PDF Interface RED Volume 4 (coletânea de DLCs). Hornet's Pharmacy, Black Chrome+ e The Dreaded Punknaught já tinham sido conferidos ou não têm itens; o 12 Days of Gearmas tinha ficado sem aplicar. Formato descrito no README (seção Dados).",
+  "source": "Interface 4",
+  "updates": {
+    "stickball-stick": {
+      "page": 34,
+      "notes": "Conferido com Interface RED Volume 4, p. 34. Artigo Stickball.",
+      "description": "Bastão de lacrosse todo de metal com um eletroímã potente, com Tech Upgrade. Arma corpo a corpo Leve de uma mão, não ocultável. Dano que deixaria o alvo abaixo de 1 HP o deixa Inconsciente com 1 HP, e não causa Lesão Crítica. Numa partida de Stickball, o dano sobe 1d6 por bola de metal eletrificada carregada (até 3d6). Não aceita veneno nem Biotoxin.",
+      "tags": [
+        "Não-letal"
+      ]
+    },
+    "cyberscanner-integrated": {
+      "page": 66,
+      "notes": "Conferido com Interface RED Volume 4, p. 66. Reimpressão do 12 Days of Gearmas (deixado passar na conferência do PDF avulso).",
+      "name": "Cyberscanner, Integrated",
+      "description": "Opção de Cyberarm que ocupa 2 slots. Cyberscanner embutido no braço: lê o cyberware de um alvo parado a até 2 m/yds em 1 minuto e mostra num painel de LED no braço, no Chyron ou no Agent. Cyberware endurecido, com Tech Upgrade ou desconhecido faz o scanner dar erro."
+    },
+    "esporma-environment-suit": {
+      "page": 67,
+      "notes": "Conferido com Interface RED Volume 4, p. 67. Reimpressão do 12 Days of Gearmas (deixado passar na conferência do PDF avulso).",
+      "description": "Traje hermético contra gases tóxicos, armas biológicas e radiação. Diferente de outras armaduras, é uma peça só, sempre no corpo e na cabeça, com SP 8 em cada local, consertados juntos. Protege de radiação. O tanque de oxigênio dura 30 minutos e se recarrega do ar ambiente em 1 hora. A cada hora sem perder SP, nanomáquinas restauram 1 SP."
+    },
+    "hi-green-light-go-sniffer": {
+      "page": 67,
+      "notes": "Conferido com Interface RED Volume 4, p. 67. Reimpressão do 12 Days of Gearmas (deixado passar na conferência do PDF avulso).",
+      "name": "Hammered Industries Green Light Go Sniffer",
+      "manufacturer": "Hammered Industries",
+      "description": "Varinha que analisa uma dose de substância química, como um Pharmaceutical ou uma Street Drug, com uma Ação: luz verde se for pura segundo o banco de dados interno, vermelha se estiver batizada. Não diz o que é a substância."
+    },
+    "ion-cuffs": {
+      "page": 67,
+      "notes": "Conferido com Interface RED Volume 4, p. 67. Reimpressão do 12 Days of Gearmas (deixado passar na conferência do PDF avulso).",
+      "description": "Algemas usadas pela NCPD. Opções de cyberware não endurecidas num Cyberlimb não endurecido preso por elas ficam inoperantes até as algemas saírem. Quem tem BODY 13 ou mais quebra as algemas com facilidade."
+    },
+    "master-mechanic-tool-kit": {
+      "page": 67,
+      "notes": "Conferido com Interface RED Volume 4, p. 67. Reimpressão do 12 Days of Gearmas (deixado passar na conferência do PDF avulso).",
+      "name": "Master Mechanic's Tool Kit",
+      "description": "O kit de ferramentas definitivo: +4 em Basic Tech, Cybertech, Land/Sea/Air Vehicle Tech, Electronics/Security Tech e Weaponstech para qualquer uso da Especialidade Maker (CP:R p. 147). Pelo tamanho, conta como cobertura de Thick Steel e só é movido por quem tem BODY 10 ou mais, sem equipamento especial.",
+      "attributes": {
+        "skillBonus": "+4 nas perícias de Tech para Maker"
+      }
+    },
+    "zonda-metrocar": {
+      "page": 68,
+      "notes": "Conferido com Interface RED Volume 4, p. 68. Reimpressão do 12 Days of Gearmas (deixado passar na conferência do PDF avulso).",
+      "description": "O carro urbano clássico dos anos 2020 de volta: a Yang's Wheels, sob licença da Zonda, tirou os pedais da bicicleta fechada e pôs um motor. Carro compacto de 2 lugares, SDP 25, MOVE 10 em combate e 30 MPH (48 KPH). Nomad Access 1. Incompatível com Heavy Chassis e Seating Upgrade. Com o AV Engine Upgrade voa, mas com as mesmas velocidades, e não aceita Tech Upgrade de velocidade.",
+      "manufacturer": "Zonda",
+      "attributes": {
+        "includedUpgrades": "Nenhum. Nomad Access 1."
+      }
+    }
+  },
+  "additions": [
+    {
+      "tags": [],
+      "manufacturer": null,
+      "slug": "stickball-rubber-ammunition",
+      "name": "Stickball Sanctioned Rubber Ammunition",
+      "category": "ammunition",
+      "page": 34,
+      "price": 10,
+      "priceNote": "Pacote com 10",
+      "description": "Rubber Ammunition com Tech Upgrade para partidas de Stickball. Não causa Lesão Crítica, e dano que deixaria o alvo abaixo de 1 HP o deixa Inconsciente com 1 HP.",
+      "attributes": {
+        "kind": "Round",
+        "effectType": "NonLethal",
+        "calibers": [
+          "MediumPistol",
+          "HeavyPistol",
+          "VeryHeavyPistol",
+          "Rifle",
+          "Slug",
+          "Arrow"
+        ],
+        "quantityPerPack": 10,
+        "effect": "Não causa Lesão Crítica; nocauteia em vez de matar."
+      },
+      "priceCategory": "Cheap",
+      "notes": "Conferido com Interface RED Volume 4, p. 34. Artigo Stickball. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "furniture-creative-couture",
+      "name": "Mobília: Creative Couture",
+      "page": 51,
+      "price": 100,
+      "description": "Conjunto mínimo de móveis por cômodo de conapt ou studio: camas militares de segunda mão, mesa de bazar universitário e prateleiras de caixas de Kibble.",
+      "attributes": {
+        "gearType": "Lifestyle",
+        "effect": "Conjunto de móveis básico (por cômodo)."
+      },
+      "priceNote": "Por cômodo",
+      "priceCategory": "Premium",
+      "notes": "Conferido com Interface RED Volume 4, p. 51. Artigo Corporate Conapts & Studio Apartments. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "furniture-apartment-affability",
+      "name": "Mobília: Apartment Affability",
+      "page": 51,
+      "price": 500,
+      "description": "Móveis de montar com tudo que cada cômodo precisa. É o conjunto inicial da maioria dos conapts corporativos e studios; o senhorio não repõe o que quebrar e cobra se você vender.",
+      "attributes": {
+        "gearType": "Lifestyle",
+        "effect": "Conjunto de móveis padrão (por cômodo)."
+      },
+      "priceNote": "Por cômodo",
+      "priceCategory": "Expensive",
+      "notes": "Conferido com Interface RED Volume 4, p. 51. Artigo Corporate Conapts & Studio Apartments. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "furniture-desirous-decoration",
+      "name": "Mobília: Desirous Decoration",
+      "page": 51,
+      "price": 1000,
+      "description": "Cama com cabeceira, sofá de verdade, eletrodomésticos que não soltam faísca e algumas peças de arte de artistas locais, que podem até valorizar.",
+      "attributes": {
+        "gearType": "Lifestyle",
+        "effect": "Conjunto de móveis caprichado (por cômodo)."
+      },
+      "priceNote": "Por cômodo",
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Interface RED Volume 4, p. 51. Artigo Corporate Conapts & Studio Apartments. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Continental Brands",
+      "category": "gear",
+      "slug": "continental-brands-real-instant-coffee",
+      "name": "Continental Brands Real Instant Coffee™",
+      "page": 51,
+      "price": 100,
+      "description": "Tijolo a vácuo de 450 g de café instantâneo feito de grãos de verdade; rende até 24 xícaras.",
+      "attributes": {
+        "gearType": "Lifestyle",
+        "effect": "Café de verdade (24 xícaras)."
+      },
+      "priceCategory": "Premium",
+      "notes": "Conferido com Interface RED Volume 4, p. 51. Artigo Corporate Conapts & Studio Apartments. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Continental Brands",
+      "category": "gear",
+      "slug": "continental-brands-smartoven",
+      "name": "Continental Brands SmartOven",
+      "page": 51,
+      "price": 1000,
+      "description": "Forno robótico que cozinha Kibble com 20 perfis de sabor. Recarregado uma vez por mês com Kibble (incluído no estilo de vida Kibble); a recarga por um funcionário está incluída nos estilos de vida melhores. Não melhora o estilo de vida, só deixa a Kibble um pouco mais gostosa.",
+      "attributes": {
+        "gearType": "Lifestyle",
+        "effect": "Cozinha Kibble com sabores."
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Interface RED Volume 4, p. 51. Artigo Corporate Conapts & Studio Apartments. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "K-Tech",
+      "category": "gear",
+      "slug": "k-tech-soundproofing",
+      "name": "K-Tech All-Purpose Soundproofing Solution",
+      "page": 51,
+      "price": 1000,
+      "description": "Painéis acústicos quase invisíveis instalados nas paredes de um cômodo: ouvir através delas é impossível sem Amplified Hearing ou tecnologia parecida. Os técnicos sempre atrasam e esperam gorjeta de 20eb.",
+      "attributes": {
+        "gearType": "Lifestyle",
+        "effect": "Isolamento acústico do cômodo."
+      },
+      "priceNote": "Por cômodo",
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Interface RED Volume 4, p. 51. Artigo Corporate Conapts & Studio Apartments. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Kendachi",
+      "category": "gear",
+      "slug": "kendachi-pressuretech-shower-head",
+      "name": "Kendachi PressureTech Shower Head",
+      "page": 51,
+      "price": 500,
+      "description": "Chuveiro de jato d'água da Kendachi. No modo forte, causa 1 de dano a cada 20 minutos a quem estiver sem armadura (Skinweave, Subdermal Armor e afins protegem).",
+      "attributes": {
+        "gearType": "Lifestyle",
+        "effect": "Chuveiro de alta pressão."
+      },
+      "priceCategory": "Expensive",
+      "notes": "Conferido com Interface RED Volume 4, p. 51. Artigo Corporate Conapts & Studio Apartments. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Segotari",
+      "category": "gear",
+      "slug": "segotari-virtual-barbeque",
+      "name": "Virtual Barbeque by Segotari",
+      "page": 51,
+      "price": 500,
+      "description": "Videogame multijogador de churrasco com aulas virtuais. Não ensina a fazer churrasco de verdade, mas rende amizades entre Execs.",
+      "attributes": {
+        "gearType": "Lifestyle",
+        "effect": "Videogame."
+      },
+      "priceCategory": "Expensive",
+      "notes": "Conferido com Interface RED Volume 4, p. 51. Artigo Corporate Conapts & Studio Apartments. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Zhirafa",
+      "category": "gear",
+      "slug": "zhirafa-an7-3tr",
+      "name": "Zhirafa AN7-3TR",
+      "page": 51,
+      "price": 5000,
+      "description": "Drone faxineiro quadrúpede de 1 m de lado, criado para limpar canteiros de obra: aspirador, dois braços manipuladores, escova rotativa e jato de lavagem. Descansa numa base de carga com arquitetura NET própria (2 andares, Demon Imp).",
+      "attributes": {
+        "gearType": "Lifestyle",
+        "gearClass": "Drone",
+        "effect": "Drone de limpeza doméstica."
+      },
+      "priceCategory": "Luxury",
+      "notes": "Conferido com Interface RED Volume 4, p. 51. Artigo Corporate Conapts & Studio Apartments. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "cyberscanner",
+      "name": "Cyberscanner",
+      "page": 66,
+      "price": 1000,
+      "description": "Varinha de duas pontas que, por ressonância sônica e magnética, lista todo o cyberware de um alvo a até 2 m/yds. Leva 1 minuto, com o alvo parado. Uma única peça endurecida, com Tech Upgrade ou desconhecida faz o scanner dar erro.",
+      "attributes": {
+        "gearType": "Security",
+        "effect": "Lista o cyberware de um alvo a 2 m/yds."
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Interface RED Volume 4, p. 66. Reimpressão do 12 Days of Gearmas (deixado passar na conferência do PDF avulso). Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "DPI",
+      "category": "gear",
+      "slug": "dpi-smartsticks",
+      "name": "DPI Smartsticks",
+      "page": 66,
+      "price": 500,
+      "description": "Baquetas com retorno háptico, subwoofer e sintetizador que transformam qualquer superfície em bateria: +1 em Play Instrument (Drums). Não acumula com outros instrumentos que dão bônus.",
+      "attributes": {
+        "gearType": "Lifestyle",
+        "skillBonus": "+1 Play Instrument (Drums)",
+        "effect": "+1 em Play Instrument (Drums)."
+      },
+      "priceCategory": "Expensive",
+      "notes": "Conferido com Interface RED Volume 4, p. 66. Reimpressão do 12 Days of Gearmas (deixado passar na conferência do PDF avulso). Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Raven Microcybernetics",
+      "category": "gear",
+      "slug": "raven-cybercam-ex-1",
+      "name": "Cybercam EX-1",
+      "page": 66,
+      "price": 1000,
+      "description": "Câmera profissional de cabeça que grava, adiciona gráficos e transmite ao vivo no Data Pool. Quando um Media publica uma matéria transmitida por ela, a credibilidade sobe 1 (ex.: de 2 para 3 em 10), somando à de provas verificáveis.",
+      "attributes": {
+        "gearType": "Electronics",
+        "effect": "+1 na credibilidade das matérias do Media."
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Interface RED Volume 4, p. 66. Reimpressão do 12 Days of Gearmas (deixado passar na conferência do PDF avulso). Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Dynalar",
+      "category": "gear",
+      "slug": "dynalar-xtra-dex-smart-glove",
+      "name": "Dynalar Xtra-Dex Smart Glove",
+      "page": 67,
+      "price": 1000,
+      "description": "Luva com 2 slots para opções de Cyberarm ou Cyberlimb que conta como Modular Finger Cyberhand para até 5 Cyberfingers, embutidos nos dedos da luva. Funciona ligada por Interface Plugs; vestir ou tirar (incluindo ligar os plugs) é uma Ação. As opções do braço por baixo ficam inacessíveis. Não pode ser ocultada.",
+      "attributes": {
+        "gearType": "Tool",
+        "gearClass": "Cyberware vestível",
+        "requirements": "Interface Plugs",
+        "effect": "2 slots de opção e até 5 Cyberfingers numa luva."
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Interface RED Volume 4, p. 67. Reimpressão do 12 Days of Gearmas (deixado passar na conferência do PDF avulso). Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Telectronics",
+      "category": "gear",
+      "slug": "telectronics-minimag-speakers",
+      "name": "MiniMag Speakers by Telectronics",
+      "page": 68,
+      "price": 50,
+      "description": "Alto-falante magnético de 2,5 cm, em várias cores, ligado sem fio a um Agent a até 100 m/yds. Popular entre gangues de brincalhões.",
+      "attributes": {
+        "gearType": "Electronics",
+        "effect": "Alto-falante magnético sem fio."
+      },
+      "priceCategory": "Costly",
+      "notes": "Conferido com Interface RED Volume 4, p. 68. Reimpressão do 12 Days of Gearmas (deixado passar na conferência do PDF avulso). Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Optitech",
+      "category": "gear",
+      "slug": "optitech-magviewer",
+      "name": "Optitech MagViewer",
+      "page": 68,
+      "price": 500,
+      "description": "Binóculo que mostra detalhes a até 800 m/yds. Um teste complementar bem-sucedido com ele para ajudar um tiro único ou Aimed Shot contra alvo a 51 m/yds ou mais dá +1 a mais no ataque. Não acumula com Sniping Scope nem TeleOptics.",
+      "attributes": {
+        "gearType": "Tool",
+        "effect": "Binóculo de 800 m/yds; +1 extra em tiros longos."
+      },
+      "priceCategory": "Expensive",
+      "notes": "Conferido com Interface RED Volume 4, p. 68. Reimpressão do 12 Days of Gearmas (deixado passar na conferência do PDF avulso). Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "SkidRow Limited",
+      "slug": "skidrow-packshield",
+      "name": "SkidRow PackShield",
+      "category": "armor",
+      "page": 68,
+      "price": 100,
+      "description": "Mochila de Businesswear que vira um Bulletproof Shield (HP 10) ao apertar um botão. Só protege empunhada na mão; nas costas, serve só de mochila. Não cabe na Popup Shield.",
+      "attributes": {
+        "armorType": "Shield",
+        "shieldHp": 10,
+        "protectedLocations": "Cobertura móvel (ocupa 1 mão)"
+      },
+      "priceCategory": "Premium",
+      "notes": "Conferido com Interface RED Volume 4, p. 68. Reimpressão do 12 Days of Gearmas (deixado passar na conferência do PDF avulso). Ausente do compêndio."
+    }
+  ]
+}

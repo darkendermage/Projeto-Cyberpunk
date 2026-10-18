@@ -1,0 +1,247 @@
+{
+  "about": "Conferido com o PDF Going Quiet v1.1 (DLC de julho de 2025, seção Harry the Shrimp's Gear Guide). Formato descrito no README (seção Dados).",
+  "source": "Going Quiet",
+  "updates": {},
+  "additions": [
+    {
+      "tags": [],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "binary-compound",
+      "name": "Binary Compound",
+      "page": 5,
+      "price": 50,
+      "priceCategory": "Costly",
+      "description": "Tubo com dois bicos de químicos que, juntos, corroem qualquer coisa. Aplicar numa seção de 2 x 2 m/yds de cobertura leva 2 rodadas; depois causa 6d6 por rodada, passando para a camada seguinte, e fica inerte após 6 rodadas. O preço é por tubo.",
+      "attributes": {
+        "gearType": "Tool",
+        "effect": "6d6 por rodada em cobertura, por 6 rodadas."
+      },
+      "priceNote": "50eb por tubo",
+      "notes": "Conferido com Going Quiet, p. 5. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "branded-jumpsuit",
+      "name": "Branded Jumpsuit",
+      "page": 5,
+      "price": 50,
+      "priceCategory": "Premium",
+      "description": "Macacão ou uniforme idêntico ao de uma equipe (obras, limpeza, comida) de uma organização específica, para passar despercebido. O preço depende da segurança: baixa (loja de conveniência) 50eb; moderada (obra, hospital) 100eb; alta (Corporação pequena) 500eb; extrema (Megacorporação) 1.000eb.",
+      "attributes": {
+        "gearType": "Security",
+        "effect": "Disfarce de funcionário."
+      },
+      "priceNote": "50eb a 1.000eb, conforme a segurança",
+      "notes": "Conferido com Going Quiet, p. 5. O livro dá esta categoria de preço para disponibilidade, diferente da regra geral. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "concealment-sleeve",
+      "name": "Concealment Sleeve",
+      "page": 5,
+      "price": 500,
+      "priceCategory": "VeryExpensive",
+      "description": "Luva de Realskinn™ com emissores ultrafinos, ajustada por um Tech sobre um cybermembro: o membro aparece como biológico para scanners de cyberware. Cada uma serve só no membro para o qual foi feita.",
+      "attributes": {
+        "gearType": "Security",
+        "effect": "Esconde um cybermembro de scanners."
+      },
+      "notes": "Conferido com Going Quiet, p. 5. O livro dá esta categoria de preço para disponibilidade, diferente da regra geral. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "handprint-glove",
+      "name": "Handprint Glove",
+      "page": 6,
+      "price": 500,
+      "priceCategory": "VeryExpensive",
+      "description": "Luva de Realskinn™ com a impressão da mão (e digitais) de alguém, que engana scanners mas não deixa digitais. Feita sob encomenda por um Tech a partir da impressão fornecida.",
+      "attributes": {
+        "gearType": "Security",
+        "effect": "Engana scanners de mão."
+      },
+      "notes": "Conferido com Going Quiet, p. 6. O livro dá esta categoria de preço para disponibilidade, diferente da regra geral. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "handprint-scanner",
+      "name": "Handprint Scanner",
+      "page": 6,
+      "price": 20,
+      "priceCategory": "Everyday",
+      "description": "App. Para gravar a mão de alguém, fica em alcance corpo a corpo escaneando a palma por 3 rodadas (não precisam ser seguidas); cada rodada é uma Ação com Brawling DV13, automática se o alvo estiver imobilizado. Também lê marcas em superfícies lisas: uma marca completa basta; senão, cinco marcas parciais, cada uma com Criminology DV13.",
+      "attributes": {
+        "gearType": "Electronics",
+        "effect": "Grava impressões de mão para a Handprint Glove.",
+        "gearClass": "App",
+        "requirements": "Agent"
+      },
+      "notes": "Conferido com Going Quiet, p. 6. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "laser-microphone",
+      "name": "Laser Microphone",
+      "page": 6,
+      "price": 100,
+      "priceCategory": "Premium",
+      "description": "Aponta um laser para uma vidraça a até 300 m/yds e traduz as vibrações em som do cômodo. O feixe é invisível, salvo em névoa ou fumaça. Lê Thin Bulletproof Glass, mas não Thick.",
+      "attributes": {
+        "gearType": "Security",
+        "effect": "Escuta por vibração de vidro a 300 m/yds."
+      },
+      "notes": "Conferido com Going Quiet, p. 6. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Militech",
+      "category": "gear",
+      "slug": "militech-m97-ghostsuit",
+      "name": "Militech M97 Ghostsuit",
+      "page": 6,
+      "price": 5000,
+      "priceCategory": "Luxury",
+      "description": "Macacão com telas de cristal líquido e microcâmeras que copia o ambiente. Depois de ficar parado 1 minuto, ativa (sem Ação) uma camuflagem contra todos os sentidos visuais, inclusive Low Light/Infrared/UV, salvo Perception DV17. Desliga ao mover mais de 2 m/yds numa rodada.",
+      "attributes": {
+        "gearType": "Security",
+        "effect": "Camuflagem óptica parado (Perception DV17)."
+      },
+      "notes": "Conferido com Going Quiet, p. 6. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Biotechnica",
+      "category": "gear",
+      "slug": "nymph-perfume",
+      "name": "Nymph Perfume",
+      "page": 6,
+      "price": 500,
+      "priceCategory": "Expensive",
+      "description": "Eufórico leve em aerossol da Biotechnica. Uma borrifada dura 1 hora; quem passar 3 rodadas a até 6 m/yds faz Resist Torture/Drugs DV13 ou fica levemente confuso, com -2 em Human Perception por 1 hora (quem usa também é afetado). Nasal Filters ou máscara protegem. Conta como droga para Rapidetox. O frasco tem 50 borrifadas.",
+      "attributes": {
+        "gearType": "Security",
+        "effect": "-2 em Human Perception (DV13 para resistir)."
+      },
+      "priceNote": "500eb por frasco",
+      "notes": "Conferido com Going Quiet, p. 6. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "parabolic-microphone",
+      "name": "Parabolic Microphone",
+      "page": 7,
+      "price": 100,
+      "priceCategory": "Premium",
+      "description": "Amplifica o som de uma direção: ouve até 30 m/yds como se estivesse ao lado da fonte.",
+      "attributes": {
+        "gearType": "Security",
+        "effect": "Escuta direcional a 30 m/yds."
+      },
+      "notes": "Conferido com Going Quiet, p. 7. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "professional-disguise-kit",
+      "name": "Professional Disguise Kit",
+      "page": 7,
+      "price": 100,
+      "priceCategory": "Premium",
+      "description": "Maquiagem, enchimentos e próteses de Realskinn™: +2 em Personal Grooming para se passar por outra pessoa. Não muda a altura mais que alguns centímetros nem simula cyberware.",
+      "attributes": {
+        "gearType": "Tool",
+        "effect": "+2 em Personal Grooming para disfarce.",
+        "skillBonus": "+2 Personal Grooming (disfarce)"
+      },
+      "notes": "Conferido com Going Quiet, p. 7. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "retina-lens",
+      "name": "Retina Lens",
+      "page": 7,
+      "price": 500,
+      "priceCategory": "Expensive",
+      "description": "Sobrepõe um padrão de retina falso no olho para enganar scanners. Feita sob encomenda por um Tech a partir do padrão fornecido.",
+      "attributes": {
+        "gearType": "Security",
+        "effect": "Engana scanners de retina."
+      },
+      "notes": "Conferido com Going Quiet, p. 7. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "retina-scanner",
+      "name": "Retina Scanner",
+      "page": 7,
+      "price": 50,
+      "priceCategory": "Costly",
+      "description": "App. Para gravar a retina de alguém, fica em alcance corpo a corpo escaneando o olho por 5 rodadas (não precisam ser seguidas); cada rodada é uma Ação com Brawling DV13, automática se o alvo estiver imobilizado. Com Internal Agent, exige MicroVideo num Cybereye ou Smart Glasses.",
+      "attributes": {
+        "gearType": "Electronics",
+        "effect": "Grava padrões de retina para a Retina Lens.",
+        "gearClass": "App",
+        "requirements": "Agent"
+      },
+      "notes": "Conferido com Going Quiet, p. 7. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Zetatech",
+      "category": "gear",
+      "slug": "zetatech-tank-commander-headset",
+      "name": "Zetatech Tank Commander Headset",
+      "page": 7,
+      "price": 100,
+      "priceCategory": "Premium",
+      "description": "Microfone de garganta que capta subvocalização e fone com cancelamento de ruído, ligados sem fio a um Agent ou rádio. Ninguém percebe o som entrando ou saindo sem algum Amplified Hearing.",
+      "attributes": {
+        "gearType": "Electronics",
+        "effect": "Comunicação silenciosa."
+      },
+      "notes": "Conferido com Going Quiet, p. 7. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Raven Microcybernetics",
+      "slug": "translation-chip",
+      "name": "Translation Chip",
+      "category": "cyberware",
+      "page": 7,
+      "price": 1000,
+      "description": "Chipware. Exige Chyron. Palavras ouvidas ou lidas em outro idioma aparecem traduzidas no Chyron, como legenda em tempo real. A critério do Mestre, línguas mortas ou de grupos pequenos não são traduzidas, e gíria é acerto ou erro. Não permite falar outros idiomas.",
+      "attributes": {
+        "foundational": false,
+        "requiresPair": false,
+        "cyberwareType": "Neuralware",
+        "bodyLocation": "NervousSystem",
+        "installLocation": "Socket",
+        "humanityLoss": 7,
+        "humanityLossDice": "2d6",
+        "requiresItem": "chipware-socket",
+        "requirements": "Chipware Socket e Chyron",
+        "effect": "Legenda traduzida em tempo real no Chyron."
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Going Quiet, p. 7. Ausente do compêndio."
+    }
+  ]
+}

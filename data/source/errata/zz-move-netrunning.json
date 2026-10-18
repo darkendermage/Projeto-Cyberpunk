@@ -1,0 +1,687 @@
+{
+  "about": "Nova aba Netrunning: Cyberdecks, Programas, Black ICE e Hardware de Cyberdeck saem de Itens Avulsos pela chave \"move\". Atributos conferidos nos PDFs: Programas (Booster, Defender e Attacker com ATK/DEF/REZ) no Core p.203-204; Black ICE (PER/SPD/ATK/DEF/REZ) no Core p.206-207, ocupando 2 slots (p.204); slots dos Cyberdecks no Core p.196 (Poor 5, Standard 7, Excellent 9) e no Interface RED 3 p.39-40 (slots livres, só de Programa e só de Hardware); Hardware ocupa 1 slot salvo indicação (Core p.208; Interface RED 3 p.40-42). O Zetatech CyberConductor (Interface RED 5 p.101) não informa slots. Formato descrito no README (seção Dados).",
+  "move": {
+    "armor": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "Program",
+        "programClass": "Defender",
+        "atk": 0,
+        "def": 0,
+        "rez": 7,
+        "slotsRequired": 1,
+        "requirements": "Cyberdeck",
+        "effect": "Reduz todo dano de cérebro sofrido em 4 pontos."
+      }
+    },
+    "banhammer": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "Program",
+        "programClass": "AntiProgram",
+        "atk": 1,
+        "def": 0,
+        "rez": 0,
+        "slotsRequired": 1,
+        "requirements": "Cyberdeck",
+        "effect": "Causa 3d6 REZ contra programas comuns e 2d6 contra Black ICE."
+      }
+    },
+    "deckkrash": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "Program",
+        "programClass": "AntiPersonnel",
+        "atk": 0,
+        "def": 0,
+        "rez": 0,
+        "slotsRequired": 1,
+        "requirements": "Cyberdeck",
+        "effect": "Força o Netrunner inimigo a ser ejeto (Jack Out) sofrendo os acertos de Black ICE rezzed."
+      }
+    },
+    "eraser": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "Program",
+        "programClass": "Booster",
+        "atk": 0,
+        "def": 0,
+        "rez": 7,
+        "slotsRequired": 1,
+        "requirements": "Cyberdeck",
+        "effect": "Concede +2 em testes de Cloak."
+      }
+    },
+    "flak": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "Program",
+        "programClass": "Defender",
+        "atk": 0,
+        "def": 0,
+        "rez": 7,
+        "slotsRequired": 1,
+        "requirements": "Cyberdeck",
+        "effect": "Reduz o bônus de ataque de programas inimigos a 0."
+      }
+    },
+    "hellbolt": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "Program",
+        "programClass": "AntiPersonnel",
+        "atk": 2,
+        "def": 0,
+        "rez": 0,
+        "slotsRequired": 1,
+        "requirements": "Cyberdeck",
+        "effect": "Causa 2d6 de dano de cérebro e incendeia o Cyberdeck inimigo."
+      }
+    },
+    "poison-flatline": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "Program",
+        "programClass": "AntiPersonnel",
+        "atk": 0,
+        "def": 0,
+        "rez": 0,
+        "slotsRequired": 1,
+        "requirements": "Cyberdeck",
+        "effect": "Destrói 1 programa aleatório instalado no deck do alvo."
+      }
+    },
+    "see-ya": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "Program",
+        "programClass": "Booster",
+        "atk": 0,
+        "def": 0,
+        "rez": 7,
+        "slotsRequired": 1,
+        "requirements": "Cyberdeck",
+        "effect": "Concede +2 em testes de Pathfinder."
+      }
+    },
+    "shield": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "Program",
+        "programClass": "Defender",
+        "atk": 0,
+        "def": 0,
+        "rez": 7,
+        "slotsRequired": 1,
+        "requirements": "Cyberdeck",
+        "effect": "Absorve o primeiro ataque de dano de cérebro sofrido."
+      }
+    },
+    "speedy-gonzalvez": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "Program",
+        "programClass": "Booster",
+        "atk": 0,
+        "def": 0,
+        "rez": 7,
+        "slotsRequired": 1,
+        "requirements": "Cyberdeck",
+        "effect": "Aumenta a velocidade de movimento na rede em +2 SPEED."
+      }
+    },
+    "superglue": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "Program",
+        "programClass": "AntiPersonnel",
+        "atk": 2,
+        "def": 0,
+        "rez": 0,
+        "slotsRequired": 1,
+        "requirements": "Cyberdeck",
+        "effect": "Trava o Netrunner inimigo na rede por 1d6 turnos impedindo Jack Out seguro."
+      }
+    },
+    "sword": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "Program",
+        "programClass": "AntiProgram",
+        "atk": 1,
+        "def": 0,
+        "rez": 0,
+        "slotsRequired": 1,
+        "requirements": "Cyberdeck",
+        "effect": "Causa 3d6 REZ contra Black ICE inimigo."
+      }
+    },
+    "worm": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "Program",
+        "programClass": "Booster",
+        "atk": 0,
+        "def": 0,
+        "rez": 7,
+        "slotsRequired": 1,
+        "requirements": "Cyberdeck",
+        "effect": "Concede +2 em testes de Backdoor p/ quebrar senhas."
+      }
+    },
+    "asp": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "BlackIce",
+        "programClass": "AntiPersonnel",
+        "per": 4,
+        "spd": 6,
+        "atk": 2,
+        "def": 2,
+        "rez": 15,
+        "slotsRequired": 2,
+        "effect": "Destrói 1 programa aleatório no deck do alvo."
+      }
+    },
+    "dragon": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "BlackIce",
+        "programClass": "AntiProgram",
+        "per": 6,
+        "spd": 4,
+        "atk": 6,
+        "def": 6,
+        "rez": 30,
+        "slotsRequired": 2,
+        "effect": "Causa 6d6 REZ em programas (destrói se zerar)."
+      }
+    },
+    "giant": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "BlackIce",
+        "programClass": "AntiPersonnel",
+        "per": 2,
+        "spd": 2,
+        "atk": 8,
+        "def": 4,
+        "rez": 25,
+        "slotsRequired": 2,
+        "effect": "Causa 3d6 de dano de cérebro e força Jack Out violento."
+      }
+    },
+    "hellhound": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "BlackIce",
+        "programClass": "AntiPersonnel",
+        "per": 6,
+        "spd": 6,
+        "atk": 6,
+        "def": 2,
+        "rez": 20,
+        "slotsRequired": 2,
+        "effect": "Causa 2d6 de dano de cérebro e incendeia o Cyberdeck."
+      }
+    },
+    "killer": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "BlackIce",
+        "programClass": "AntiProgram",
+        "per": 4,
+        "spd": 8,
+        "atk": 6,
+        "def": 2,
+        "rez": 20,
+        "slotsRequired": 2,
+        "effect": "Causa 4d6 REZ em programas inimigos."
+      }
+    },
+    "kraken": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "BlackIce",
+        "programClass": "AntiPersonnel",
+        "per": 6,
+        "spd": 2,
+        "atk": 8,
+        "def": 4,
+        "rez": 30,
+        "slotsRequired": 2,
+        "effect": "3d6 no cérebro e prende o Netrunner até o fim do próximo turno."
+      }
+    },
+    "liche": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "BlackIce",
+        "programClass": "AntiPersonnel",
+        "per": 8,
+        "spd": 2,
+        "atk": 6,
+        "def": 2,
+        "rez": 25,
+        "slotsRequired": 2,
+        "effect": "Reduz os atributos INT, REF e DEX do Netrunner em 1d6 por 1 hora."
+      }
+    },
+    "raven": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "BlackIce",
+        "programClass": "AntiPersonnel",
+        "per": 6,
+        "spd": 4,
+        "atk": 4,
+        "def": 2,
+        "rez": 15,
+        "slotsRequired": 2,
+        "effect": "Destrói 1 programa Defender e causa 1d6 de dano de cérebro."
+      }
+    },
+    "sabertooth": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "BlackIce",
+        "programClass": "AntiProgram",
+        "per": 8,
+        "spd": 6,
+        "atk": 6,
+        "def": 2,
+        "rez": 25,
+        "slotsRequired": 2,
+        "effect": "Causa 6d6 REZ contra programas de combate."
+      }
+    },
+    "skunk": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "BlackIce",
+        "programClass": "AntiPersonnel",
+        "per": 2,
+        "spd": 4,
+        "atk": 4,
+        "def": 2,
+        "rez": 10,
+        "slotsRequired": 2,
+        "effect": "Impõe -2 de penalidade em testes de Slide."
+      }
+    },
+    "crunch-whistle": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "Hardware",
+        "slotsRequired": 1,
+        "requirements": "Cyberdeck e Breacher",
+        "effect": "Soma Interface ao hackear Agents. Bônus: +Interface em Electronics/Security Tech para hackear Agents."
+      }
+    },
+    "cyberdeck-poor": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "Cyberdeck",
+        "sharedSlots": 5,
+        "effect": "Plataforma modular barata com 5 slots para Programas e Hardware. Exige Interface Plugs e Neural Link."
+      }
+    },
+    "cyberdeck-standard": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "Cyberdeck",
+        "sharedSlots": 7,
+        "effect": "Plataforma modular com 7 slots para Programas e Hardware. Exige Interface Plugs e Neural Link."
+      }
+    },
+    "cyberdeck-excellent": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "Cyberdeck",
+        "sharedSlots": 9,
+        "effect": "Plataforma modular de ponta com 9 slots para Programas e Hardware. Exige Interface Plugs e Neural Link."
+      }
+    },
+    "nervescrub": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "Program",
+        "programClass": "AntiPersonnel",
+        "atk": 0,
+        "def": 0,
+        "rez": 0,
+        "slotsRequired": 1,
+        "requirements": "Cyberdeck",
+        "effect": "Attacker Anti-Pessoal (ATK 0). INT, REF e DEX do Netrunner inimigo caem 1d6 por 1 hora (mínimo 1). Efeito psicossomático, sem sequelas."
+      }
+    },
+    "vrizzbolt": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "Program",
+        "programClass": "AntiPersonnel",
+        "atk": 1,
+        "def": 0,
+        "rez": 0,
+        "slotsRequired": 1,
+        "requirements": "Cyberdeck",
+        "effect": "Attacker Anti-Pessoal (ATK 1). 1d6 direto no cérebro e -1 Ação de NET no próximo turno do alvo (mínimo 2)."
+      }
+    },
+    "scorpion-black-ice": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "BlackIce",
+        "programClass": "AntiPersonnel",
+        "per": 2,
+        "spd": 6,
+        "atk": 2,
+        "def": 2,
+        "rez": 15,
+        "slotsRequired": 2,
+        "requirements": "Cyberdeck",
+        "effect": "Black ICE Anti-Pessoal (PER 2, SPD 6, ATK 2, DEF 2, REZ 15). O MOVE do Netrunner inimigo cai 1d6 por 1 hora (mínimo 1)."
+      }
+    },
+    "wisp": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "BlackIce",
+        "programClass": "AntiPersonnel",
+        "per": 4,
+        "spd": 4,
+        "atk": 4,
+        "def": 2,
+        "rez": 15,
+        "slotsRequired": 2,
+        "requirements": "Cyberdeck",
+        "effect": "Black ICE Anti-Pessoal (PER 4, SPD 4, ATK 4, DEF 2, REZ 15). 1d6 direto no cérebro e -1 Ação de NET no próximo turno (mínimo 2)."
+      }
+    },
+    "backup-drive": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "Hardware",
+        "slotsRequired": 2,
+        "requirements": "Cyberdeck",
+        "effect": "Salva Programas (exceto Black ICE) destruídos no instante antes do fim. Como Ação de Meat, reinstala os salvos se houver slots. Ocupa 2 slots de Hardware."
+      }
+    },
+    "dna-lock": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "Hardware",
+        "slotsRequired": 2,
+        "requirements": "Cyberdeck",
+        "effect": "Trava o Cyberdeck por biometria; sem a chave, abrir exige Electronics/Security Tech DV17. Ocupa 2 slots de Hardware."
+      }
+    },
+    "hardened-circuitry": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "Hardware",
+        "slotsRequired": 1,
+        "requirements": "Cyberdeck",
+        "effect": "O Cyberdeck não é desativado nem destruído por EMP nem por efeitos de Programas que não sejam Black ICE."
+      }
+    },
+    "insulated-wiring": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "Hardware",
+        "slotsRequired": 1,
+        "requirements": "Cyberdeck",
+        "effect": "O Cyberdeck não pega fogo nem incendeia a roupa do usuário por efeito de Programa."
+      }
+    },
+    "krash-barrier": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "Hardware",
+        "slotsRequired": 2,
+        "requirements": "Cyberdeck",
+        "effect": "Imunidade a efeitos de Programa que forçam Jack Out, seguro ou não. Ocupa 2 slots de Hardware."
+      }
+    },
+    "range-upgrade": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "Hardware",
+        "slotsRequired": 1,
+        "requirements": "Cyberdeck",
+        "effect": "Conecta a um ponto de acesso a até 8 m."
+      }
+    },
+    "kirama-advanced-deck": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "Cyberdeck",
+        "sharedSlots": 5,
+        "effect": "5 slots para Programas ou Hardware. Todo Jack Out inseguro conta como seguro."
+      }
+    },
+    "kirama-entry-deck": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "Cyberdeck",
+        "programSlots": 5,
+        "effect": "5 slots só para Programas, no máximo um Attacker, um Defender, um Booster e um Black ICE. Todo Jack Out inseguro conta como seguro."
+      }
+    },
+    "kirama-training-deck": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "Cyberdeck",
+        "programSlots": 5,
+        "effect": "5 slots só para Programas. Só faz Jack In a até 2 m/yds de um ponto de acesso e cai se o usuário se afastar. Todo dano direto no cérebro é dobrado."
+      }
+    },
+    "microtech-assault": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "Cyberdeck",
+        "programSlots": 4,
+        "hardwareSlots": 5,
+        "effect": "4 slots só para Programas, que só aceitam Black ICE, e 5 slots só para Hardware."
+      }
+    },
+    "microtech-scout": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "Cyberdeck",
+        "sharedSlots": 5,
+        "effect": "5 slots para Programas ou Hardware. Logo após o Jack In, usa Pathfinder uma vez sem gastar Ação de NET."
+      }
+    },
+    "microtech-warrior": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "Cyberdeck",
+        "programSlots": 7,
+        "effect": "7 slots só para Programas. Logo após o Jack In, ativa um Programa Armor instalado sem gastar Ação de NET."
+      }
+    },
+    "raven-microcyb-hummingbird": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "Cyberdeck",
+        "hardwareSlots": 2,
+        "effect": "2 slots só para Hardware. Com ele, o usuário tem uma Ação de NET a mais por turno."
+      }
+    },
+    "raven-microcyb-kestrel-2": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "Cyberdeck",
+        "programSlots": 7,
+        "effect": "7 slots só para Programas. Logo após o Jack In, ativa até 2 Programas Speedy Gonzalvez instalados sem gastar Ação de NET."
+      }
+    },
+    "raven-microcyb-phoenix": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "Cyberdeck",
+        "sharedSlots": 6,
+        "effect": "6 slots para Programas ou Hardware. Ao fazer Jack Out seguro, todo Programa destruído no deck durante a corrida volta a funcionar."
+      }
+    },
+    "sgi-technologies-kerberos": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "Cyberdeck",
+        "programSlots": 6,
+        "hardwareSlots": 5,
+        "effect": "6 slots só para Programas, que só aceitam Black ICE Hellhound, e 5 slots só para Hardware."
+      }
+    },
+    "sgi-technologies-verdant-knight": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "Cyberdeck",
+        "programSlots": 9,
+        "effect": "9 slots só para Programas, que só aceitam Sword e Shield."
+      }
+    },
+    "sgi-technologies-warlocks-book": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "Cyberdeck",
+        "sharedSlots": 9,
+        "effect": "9 slots para Programas ou Hardware. Não aceita Programas Attacker nem Black ICE."
+      }
+    },
+    "zetatech-kaliya": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "Cyberdeck",
+        "sharedSlots": 6,
+        "programSlots": 3,
+        "effect": "3 slots só para Programas, que só aceitam Flak, e 6 slots para Programas ou Hardware. O único Defender permitido é Flak e o único Black ICE é Asp."
+      }
+    },
+    "zetatech-micromate": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "Cyberdeck",
+        "sharedSlots": 9,
+        "effect": "9 slots para Programas ou Hardware. Não aceita Programas Defender. Todo dano direto no cérebro é dobrado."
+      }
+    },
+    "zetatech-parraline-6000": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "Cyberdeck",
+        "programSlots": 3,
+        "hardwareSlots": 6,
+        "effect": "3 slots só para Programas e 6 slots só para Hardware."
+      }
+    },
+    "aerie": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "Hardware",
+        "slotsRequired": 2,
+        "requirements": "Cyberdeck",
+        "effect": "Cada Black ICE Raven instalada destrói, com seu efeito, um Programa Defender rezzado do Netrunner inimigo, escolhido ao acaso, em vez de só derezzá-lo."
+      }
+    },
+    "bushido-accelerator": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "Hardware",
+        "slotsRequired": 3,
+        "requirements": "Cyberdeck",
+        "effect": "Cada Bushido Accelerator instalado aumenta em 2 a Speed (SPD) de toda Black ICE Killer do deck."
+      }
+    },
+    "combat-recorder": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "Hardware",
+        "slotsRequired": 1,
+        "requirements": "Cyberdeck",
+        "effect": "Quando outro Netrunner falha um Death Save na mesma arquitetura, grava os últimos 5 minutos, apagando o que identifica o usuário. Cada gravação costuma valer 50eb, sem perguntas."
+      }
+    },
+    "defense-sequencer": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "Hardware",
+        "slotsRequired": 2,
+        "requirements": "Cyberdeck",
+        "effect": "Quando um Programa Armor ativo é derezzado ou destruído, rezza no início do próximo turno, sem Ação de NET, outro Armor do deck ainda não usado na corrida."
+      }
+    },
+    "feline-instinct": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "Hardware",
+        "slotsRequired": 2,
+        "requirements": "Cyberdeck",
+        "effect": "Sempre que uma Black ICE Sabertooth do deck destrói um Programa, o dano dela aumenta em 1d6 até o Jack Out."
+      }
+    },
+    "hangry-hangry-dragon": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "Hardware",
+        "slotsRequired": 1,
+        "requirements": "Cyberdeck",
+        "effect": "Sempre que uma Black ICE Dragon do deck destrói um Programa, o Rez dela volta ao máximo."
+      }
+    },
+    "perfume-shoppe": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "Hardware",
+        "slotsRequired": 2,
+        "requirements": "Cyberdeck",
+        "effect": "Black ICE Skunk ocupa 1 slot de Programa em vez de 2."
+      }
+    },
+    "smithy": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "Hardware",
+        "slotsRequired": 1,
+        "requirements": "Cyberdeck",
+        "effect": "Como Ação de Meat, converte todos os Programas Sword instalados em Banhammer e vice-versa."
+      }
+    },
+    "snaketrap": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "Hardware",
+        "slotsRequired": 1,
+        "requirements": "Cyberdeck",
+        "effect": "Impede o primeiro efeito de Black ICE ou Programa da corrida que destruiria um Programa ao acaso no deck. Mais de um não faz nada."
+      }
+    },
+    "swamp-mist": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "Hardware",
+        "slotsRequired": 2,
+        "requirements": "Cyberdeck",
+        "effect": "Black ICE Wisp do deck causa 2d6 em vez de 1d6, mas nenhuma outra Black ICE pode ser instalada."
+      }
+    },
+    "swifty-clean": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "Hardware",
+        "slotsRequired": 2,
+        "requirements": "Cyberdeck",
+        "effect": "Faz a habilidade Cloak duas vezes com uma só Ação de NET e fica com o melhor resultado, mas Cloak só pode ser usada uma vez por corrida."
+      }
+    },
+    "zetatech-cyberconductor-device": {
+      "category": "netrunning",
+      "attributes": {
+        "netType": "Hardware",
+        "effect": "Alterna entre até 3 Cyberdecks."
+      }
+    }
+  }
+}

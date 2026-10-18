@@ -1,0 +1,187 @@
+{
+  "about": "Conferido com o PDF Cyberware Enhancements (Mission Kit DLC #2, agosto de 2024). O PDF traz só os aprimoramentos; Gorilla Arm, Mantis Blade e Monowire em si estão no Edgerunners Mission Kit. Formato descrito no README (seção Dados).",
+  "source": "Cyberware Enhancements",
+  "updates": {},
+  "additions": [
+    {
+      "tags": [
+        "Cyberware"
+      ],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "gorilla-arm-hydraulic-ram",
+      "name": "Hydraulic Ram (Gorilla Arm)",
+      "page": 2,
+      "price": 1000,
+      "description": "Pistões que somam 3d6 ao dano base contra cobertura (só cobertura). Aprimoramento de cyberware: instalado ou removido por um Tech em 1 hora, sem teste e sem a habilidade Maker. Só um por peça de cyberware implantada, e não passa para outro tipo de cyberware.",
+      "attributes": {
+        "gearType": "Tool",
+        "gearClass": "Aprimoramento de cyberware",
+        "requirements": "Gorilla Arm",
+        "effect": "Pistões que somam 3d6 ao dano base contra cobertura (só cobertura)."
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Cyberware Enhancements (Mission Kit DLC #2), p. 2. O PDF dá os preços em \"$\". Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Cyberware"
+      ],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "gorilla-arm-pneumatic-actuation",
+      "name": "Pneumatic Actuation (Gorilla Arm)",
+      "page": 2,
+      "price": 1000,
+      "description": "Quando a arma causa Lesão Crítica, o dano extra dela aumenta em 5. Aprimoramento de cyberware: instalado ou removido por um Tech em 1 hora, sem teste e sem a habilidade Maker. Só um por peça de cyberware implantada, e não passa para outro tipo de cyberware.",
+      "attributes": {
+        "gearType": "Tool",
+        "gearClass": "Aprimoramento de cyberware",
+        "requirements": "Gorilla Arm",
+        "effect": "Quando a arma causa Lesão Crítica, o dano extra dela aumenta em 5."
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Cyberware Enhancements (Mission Kit DLC #2), p. 2. O PDF dá os preços em \"$\". Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Cyberware"
+      ],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "gorilla-arm-tungsten-reinforcement",
+      "name": "Tungsten Reinforcement (Gorilla Arm)",
+      "page": 2,
+      "price": 500,
+      "description": "Vira arma combinada: corpo a corpo Pesada de Qualidade Excelente (ROF 2, 3d6) ou Muito Pesada de Qualidade Excelente (ROF 1, 4d6), escolhida a cada ataque, sem Ação para trocar. Aprimoramento de cyberware: instalado ou removido por um Tech em 1 hora, sem teste e sem a habilidade Maker. Só um por peça de cyberware implantada, e não passa para outro tipo de cyberware.",
+      "attributes": {
+        "gearType": "Tool",
+        "gearClass": "Aprimoramento de cyberware",
+        "requirements": "Gorilla Arm",
+        "effect": "Vira arma combinada: corpo a corpo Pesada de Qualidade Excelente (ROF 2, 3d6) ou Muito Pesada de Qualidade Excelente (ROF 1, 4d6), escolhida a cada ataque, sem Ação para trocar."
+      },
+      "priceCategory": "Expensive",
+      "notes": "Conferido com Cyberware Enhancements (Mission Kit DLC #2), p. 2. O PDF dá os preços em \"$\". Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Cyberware"
+      ],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "mantis-blade-double-edged",
+      "name": "Double-Edged (Mantis Blade)",
+      "page": 3,
+      "price": 1000,
+      "description": "Quando a arma causa Lesão Crítica, rola duas vezes na tabela e escolhe a preferida. Aprimoramento de cyberware: instalado ou removido por um Tech em 1 hora, sem teste e sem a habilidade Maker. Só um por peça de cyberware implantada, e não passa para outro tipo de cyberware.",
+      "attributes": {
+        "gearType": "Tool",
+        "gearClass": "Aprimoramento de cyberware",
+        "requirements": "Mantis Blade",
+        "effect": "Quando a arma causa Lesão Crítica, rola duas vezes na tabela e escolhe a preferida."
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Cyberware Enhancements (Mission Kit DLC #2), p. 3. O PDF dá os preços em \"$\". Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Cyberware"
+      ],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "mantis-blade-monomolecular-edge",
+      "name": "Monomolecular Edge (Mantis Blade)",
+      "page": 3,
+      "price": 1000,
+      "description": "O dano ignora armaduras com SP abaixo de 7 (antes de dividir); SP 7 ou mais funciona normalmente. Aprimoramento de cyberware: instalado ou removido por um Tech em 1 hora, sem teste e sem a habilidade Maker. Só um por peça de cyberware implantada, e não passa para outro tipo de cyberware.",
+      "attributes": {
+        "gearType": "Tool",
+        "gearClass": "Aprimoramento de cyberware",
+        "requirements": "Mantis Blade",
+        "effect": "O dano ignora armaduras com SP abaixo de 7 (antes de dividir); SP 7 ou mais funciona normalmente."
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Cyberware Enhancements (Mission Kit DLC #2), p. 3. O PDF dá os preços em \"$\". Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Cyberware"
+      ],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "mantis-blade-streamlined",
+      "name": "Streamlined (Mantis Blade)",
+      "page": 3,
+      "price": 1000,
+      "description": "Com Speedware ativo, gastar ao menos 1 de Luck num ataque com a arma dá +1 extra no teste. Aprimoramento de cyberware: instalado ou removido por um Tech em 1 hora, sem teste e sem a habilidade Maker. Só um por peça de cyberware implantada, e não passa para outro tipo de cyberware.",
+      "attributes": {
+        "gearType": "Tool",
+        "gearClass": "Aprimoramento de cyberware",
+        "requirements": "Mantis Blade",
+        "effect": "Com Speedware ativo, gastar ao menos 1 de Luck num ataque com a arma dá +1 extra no teste."
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Cyberware Enhancements (Mission Kit DLC #2), p. 3. O PDF dá os preços em \"$\". Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Cyberware"
+      ],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "monowire-barbed-line",
+      "name": "Barbed Line (Monowire)",
+      "page": 3,
+      "price": 1000,
+      "description": "Quando a arma causa Lesão Crítica, rola três vezes na tabela e escolhe a preferida. Aprimoramento de cyberware: instalado ou removido por um Tech em 1 hora, sem teste e sem a habilidade Maker. Só um por peça de cyberware implantada, e não passa para outro tipo de cyberware.",
+      "attributes": {
+        "gearType": "Tool",
+        "gearClass": "Aprimoramento de cyberware",
+        "requirements": "Monowire",
+        "effect": "Quando a arma causa Lesão Crítica, rola três vezes na tabela e escolhe a preferida."
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Cyberware Enhancements (Mission Kit DLC #2), p. 3. O PDF dá os preços em \"$\". Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Cyberware"
+      ],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "monowire-electroshock",
+      "name": "Electroshock (Monowire)",
+      "page": 3,
+      "price": 500,
+      "description": "Vira taser: se o dano deixaria o alvo abaixo de 1 HP, o usuário pode deixá-lo Inconsciente com 1 HP. Aprimoramento de cyberware: instalado ou removido por um Tech em 1 hora, sem teste e sem a habilidade Maker. Só um por peça de cyberware implantada, e não passa para outro tipo de cyberware.",
+      "attributes": {
+        "gearType": "Tool",
+        "gearClass": "Aprimoramento de cyberware",
+        "requirements": "Monowire",
+        "effect": "Vira taser: se o dano deixaria o alvo abaixo de 1 HP, o usuário pode deixá-lo Inconsciente com 1 HP."
+      },
+      "priceCategory": "Expensive",
+      "notes": "Conferido com Cyberware Enhancements (Mission Kit DLC #2), p. 3. O PDF dá os preços em \"$\". Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Cyberware"
+      ],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "monowire-thermal-bladed",
+      "name": "Thermal-Bladed (Monowire)",
+      "page": 3,
+      "price": 1000,
+      "description": "Sempre que a arma ablata armadura, ablata 1 SP a mais. Aprimoramento de cyberware: instalado ou removido por um Tech em 1 hora, sem teste e sem a habilidade Maker. Só um por peça de cyberware implantada, e não passa para outro tipo de cyberware.",
+      "attributes": {
+        "gearType": "Tool",
+        "gearClass": "Aprimoramento de cyberware",
+        "requirements": "Monowire",
+        "effect": "Sempre que a arma ablata armadura, ablata 1 SP a mais."
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Cyberware Enhancements (Mission Kit DLC #2), p. 3. O PDF dá os preços em \"$\". Ausente do compêndio."
+    }
+  ]
+}

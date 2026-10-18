@@ -1,0 +1,61 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <ApplicationIcon>NightCityItemDB.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <!--
+    Desktop single-file build: dotnet publish -r win-x64 -p:DesktopBundle=true
+    Bundles .NET, the DLLs, the frontend (frontend/dist), the seed catalog and the configuration
+    into NightCityItemDB.exe. Use deploy/desktop/publicar.ps1, which builds the frontend first.
+  -->
+  <PropertyGroup Condition="'$(DesktopBundle)' == 'true'">
+    <PublishSingleFile>true</PublishSingleFile>
+    <SelfContained>true</SelfContained>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+    <EnableSingleFileAnalyzer>false</EnableSingleFileAnalyzer>
+    <DebugType>none</DebugType>
+    <IsTransformWebConfigDisabled>true</IsTransformWebConfigDisabled>
+    <AssemblyName>NightCityItemDB</AssemblyName>
+    <Product>Night City Item Database</Product>
+    <BundleClientDir Condition="'$(BundleClientDir)' == ''">$(MSBuildThisFileDirectory)..\..\..\frontend\dist\</BundleClientDir>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(DesktopBundle)' == 'true'">
+    <EmbeddedResource Include="$(BundleClientDir)**\*" LogicalName="bundle/wwwroot/%(RecursiveDir)%(Filename)%(Extension)" />
+    <EmbeddedResource Include="..\..\..\data\seed\*.json" LogicalName="bundle/seed/%(Filename)%(Extension)" />
+    <EmbeddedResource Include="appsettings.json" LogicalName="bundle/appsettings.json" />
+    <EmbeddedResource Include="..\..\..\deploy\desktop\appsettings.Desktop.json" LogicalName="bundle/appsettings.Desktop.json" />
+    <Content Update="appsettings*.json" CopyToPublishDirectory="Never" />
+    <Content Update="..\..\..\data\seed\*.json" CopyToPublishDirectory="Never" />
+  </ItemGroup>
+
+  <Target Name="CheckDesktopBundle" BeforeTargets="Build" Condition="'$(DesktopBundle)' == 'true'">
+    <Error Condition="!Exists('$(BundleClientDir)index.html')" Text="Frontend não encontrado em $(BundleClientDir). Rode 'npm run build' em frontend antes." />
+  </Target>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.11.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.11">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Seed catalog (import format) shipped next to the binaries. -->
+    <Content Include="..\..\..\data\seed\*.json" Link="Seed\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CyberpunkDb.Infrastructure\CyberpunkDb.Infrastructure.csproj" />
+    <ProjectReference Include="..\CyberpunkDb.Application\CyberpunkDb.Application.csproj" />
+    <ProjectReference Include="..\CyberpunkDb.Migrations.Sqlite\CyberpunkDb.Migrations.Sqlite.csproj" />
+  </ItemGroup>
+
+</Project>

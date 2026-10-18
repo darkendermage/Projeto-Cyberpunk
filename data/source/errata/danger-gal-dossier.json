@@ -1,0 +1,69 @@
+{
+  "about": "Conferido com o PDF Danger Gal Dossier (capítulo New Gear, p. 143-148, que reimprime itens de DLCs, Micro Chrome e Interface RED 1 e 2). Formato descrito no README (seção Dados).",
+  "source": "Danger Gal Dossier",
+  "updates": {
+    "micro-cutie-sanroo": {
+      "page": 145,
+      "notes": "Conferido com Danger Gal Dossier, p. 145. Reimpressão do Micro Chrome (o compêndio citava o Black Chrome, que não tem a arma). Corrigido: pente 10 (não 12).",
+      "name": "Sanroo Hello Cutie MicroCutie",
+      "source": "Danger Gal Dossier",
+      "description": "Pistola Média Exótica de Qualidade Excelente, pente 10. Com uma Ação, liga ou desliga o Hypurrburst™: nele, a arma fica ROF 1, ronrona e causa 4d6, mas gasta todas as balas do pente num disparo. Desliga sozinho com menos de 4 balas e não faz Aimed Shot.",
+      "attributes": {
+        "magazine": 10
+      }
+    }
+  },
+  "additions": [
+    {
+      "tags": [],
+      "manufacturer": "Rocklin Augmentics",
+      "category": "gear",
+      "slug": "rocklin-mercurius-cyberchair",
+      "name": "Mercurius Cyberchair",
+      "page": 147,
+      "price": 100,
+      "description": "Cadeira de rodas motorizada esportiva, versão de consumo da usada pelo time de Murderball de Night City. Pilotada por Interface Plug ou com uma mão no painel. O MOVE do piloto vira 5 (menos penalidades de armadura), com todas as formas de movimento e escadas sem penalidade. Ataques contra a cadeira atingem o piloto, que não pode ser tirado dela consciente. Lesões Críticas que reduzem MOVE afetam a cadeira. Imune a EMP e a Programas que não sejam Black ICE.",
+      "attributes": {
+        "gearType": "Medical",
+        "effect": "MOVE 5 com todas as formas de movimento."
+      },
+      "priceCategory": "Premium",
+      "notes": "Conferido com Danger Gal Dossier, p. 147. Reimpressão do DLC Cyberchairs. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "the-observer",
+      "name": "The Observer",
+      "page": 148,
+      "price": 1000,
+      "description": "Drone de quatro rotores do tamanho de uma caixa do Jumpstart Kit, ligado a um Agent, sem arquitetura NET. MOVE 6, 15 HP, câmera de observação. Neutralizar: Electronics/Security Tech DV17 em 5 minutos a até 6 m/yds; aí a última hora gravada pode ser vista e o drone religado a outro Agent. Modos: Standby, Auto (orbita a 6 m/yds do Agent gravando e obedece comandos de voz simples) e Controle Direto (como a habilidade Control, usando as perícias do usuário; não esquiva de tiros). Para se passar de 6 m/yds do Agent. 48 horas de bateria, 1 hora para recarregar.",
+      "attributes": {
+        "gearType": "Electronics",
+        "gearClass": "Drone",
+        "requirements": "Agent",
+        "effect": "Drone de gravação que segue o usuário."
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Danger Gal Dossier, p. 148. Reimpressão do Interface RED Volume 1. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "smart-lens",
+      "name": "Smart Lens",
+      "page": 148,
+      "price": 500,
+      "description": "Lente de contato ou monóculo com 1 slot para uma opção de Cybereye. Instalar a opção custa o mesmo que num Cybereye; opções que exigem par não servem. Uma por olho.",
+      "attributes": {
+        "gearType": "Electronics",
+        "gearClass": "Cyberware vestível",
+        "effect": "1 slot de opção de Cybereye."
+      },
+      "priceCategory": "Expensive",
+      "notes": "Conferido com Danger Gal Dossier, p. 148. Reimpressão do Micro Chrome. Ausente do compêndio."
+    }
+  ]
+}

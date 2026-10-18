@@ -1,0 +1,25 @@
+{
+  "about": "Opções de Cyberarm do Core Book que tinham ficado de fora do core-book.json. Formato descrito no README (seção Dados).",
+  "source": "Core Book",
+  "updates": {
+    "cyberdeck-integrated": {
+      "page": 364,
+      "notes": "Conferido com Core Book, p. 364. No livro, o nome é só \"Cyberdeck\", na tabela de opções de Cyberarm.",
+      "name": "Cyberdeck (opção de Cyberarm)",
+      "description": "Opção de Cyberarm que ocupa 3 slots. Instala de vez um Cyberdeck fornecido pelo usuário no braço; ele ganha 1 slot extra para Programas ou Hardware e nunca é perdido. Desinstalar destrói o deck (os Programas e Hardware se recuperam). Ainda exige Interface Plugs e Neural Link."
+    },
+    "medscanner-integrated": {
+      "page": 365,
+      "notes": "Conferido com Core Book, p. 365. No livro, o nome é só \"Medscanner\", na tabela de opções de Cyberarm.",
+      "name": "Medscanner (opção de Cyberarm)",
+      "description": "Opção de Cyberarm que ocupa 2 slots. Medscanner no braço que diagnostica ferimentos e doenças: +2 em First Aid e Paramedic. Mais de uma instalação não dá benefício extra."
+    },
+    "techscanner-integrated": {
+      "page": 366,
+      "notes": "Conferido com Core Book, p. 366. No livro, o nome é só \"Techscanner\", na tabela de opções de Cyberarm.",
+      "name": "Techscanner (opção de Cyberarm)",
+      "description": "Opção de Cyberarm que ocupa 2 slots. Techscanner no braço que diagnostica máquinas e eletrônicos: +2 em várias perícias de TECH."
+    }
+  },
+  "additions": []
+}

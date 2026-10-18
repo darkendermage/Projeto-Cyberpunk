@@ -1,0 +1,532 @@
+{
+  "about": "Categoria \"Upgrades de Armas\": acessórios do Core Book (p. 343-344), do Interface RED 5 (Solo of Fortune 2045, Toggle's Temple e 12 Days of REDmas), os Rebuilds do Edgerunners Mission Kit e os Tech Upgrades de arma do Invented Tech Upgrades. Os que já existiam em Itens Avulsos mudam de categoria pela chave \"move\". Formato descrito no README (seção Dados).",
+  "move": {
+    "stun-bayonet": {
+      "tags": [],
+      "attributes": {
+        "attachmentType": "Bayonet",
+        "slotsRequired": 1,
+        "exoticAllowed": false,
+        "eligibleWeapons": "Armas de longo alcance não Exóticas disparadas com Shoulder Arms",
+        "installation": null,
+        "effect": "Empunhada, a arma também serve como Stun Baton (CP:R p. 349)."
+      },
+      "category": "weapon-attachments"
+    },
+    "airhypo-bayonet": {
+      "tags": [],
+      "attributes": {
+        "attachmentType": "Bayonet",
+        "slotsRequired": 1,
+        "exoticAllowed": false,
+        "eligibleWeapons": "Armas de longo alcance não Exóticas disparadas com Shoulder Arms",
+        "installation": null,
+        "effect": "No acerto corpo a corpo, injeta a dose carregada em vez de causar dano; recarregar é uma Ação."
+      },
+      "category": "weapon-attachments"
+    },
+    "grapple-gun-underbarrel": {
+      "tags": [],
+      "attributes": {
+        "attachmentType": "Underbarrel",
+        "slotsRequired": 1,
+        "exoticAllowed": false,
+        "eligibleWeapons": "Bestas não Exóticas e armas não Exóticas de Shoulder Arms",
+        "installation": null,
+        "effect": "A arma também funciona como Grapple Gun (CP:R p. 353), sem atacar nesse modo."
+      },
+      "category": "weapon-attachments"
+    },
+    "silencer": {
+      "tags": [],
+      "attributes": {
+        "attachmentType": "Muzzle",
+        "slotsRequired": 1,
+        "exoticAllowed": false,
+        "eligibleWeapons": "Armas de longo alcance não Exóticas e não explosivas, exceto arcos e bestas",
+        "installation": null,
+        "effect": "O disparo só é ouvido com um teste de Perception (DV do Mestre); o impacto ainda é percebido."
+      },
+      "category": "weapon-attachments"
+    },
+    "power-rebuild": {
+      "tags": [],
+      "attributes": {
+        "attachmentType": "Rebuild",
+        "slotsRequired": 2,
+        "exoticAllowed": true,
+        "eligibleWeapons": "Armas de longo alcance não Exóticas (Exóticas: 1 slot, se houver)",
+        "installation": "1 hora; um Rebuild por arma",
+        "effect": "Vira Power Weapon: Lesões Críticas com +5 de dano extra e tiros ricocheteados com -4."
+      },
+      "category": "weapon-attachments"
+    },
+    "smart-rebuild": {
+      "tags": [],
+      "attributes": {
+        "attachmentType": "Rebuild",
+        "slotsRequired": 2,
+        "exoticAllowed": true,
+        "eligibleWeapons": "Armas de longo alcance não Exóticas sem Smartgun Link (Exóticas: 1 slot, se houver)",
+        "installation": "1 hora; um Rebuild por arma",
+        "effect": "Vira Smart Weapon: exige Interface Plug ou Subdermal Grip, +1 no ataque e aceita Improved Smart Ammunition."
+      },
+      "category": "weapon-attachments"
+    },
+    "tech-rebuild": {
+      "tags": [],
+      "attributes": {
+        "attachmentType": "Rebuild",
+        "slotsRequired": 2,
+        "exoticAllowed": true,
+        "eligibleWeapons": "Armas de longo alcance não Exóticas, exceto Lança-Granadas e Lança-Foguetes (Exóticas: 1 slot, se houver)",
+        "installation": "1 hora; um Rebuild por arma",
+        "effect": "Vira Tech Weapon: carregada com a Ação de Movimento, atravessa Thin Cover e ignora metade do SP."
+      },
+      "category": "weapon-attachments"
+    },
+    "ammunition-compatibility-internals": {
+      "attributes": {
+        "attachmentType": "Internals",
+        "slotsRequired": 0,
+        "exoticAllowed": true,
+        "eligibleWeapons": "Armas que disparam balas ou cartuchos, exceto lança-chamas",
+        "installation": "Weaponstech DV17; não pode ser removido",
+        "effect": "Dispara toda munição Non-Basic das categorias que a arma já disparava."
+      },
+      "category": "weapon-attachments"
+    },
+    "reinforced-string": {
+      "attributes": {
+        "attachmentType": "Internals",
+        "slotsRequired": 0,
+        "exoticAllowed": true,
+        "eligibleWeapons": "Arcos e bestas",
+        "installation": "Archery ou Weaponstech DV17; não pode ser removido",
+        "effect": "+1d6 de dano (máximo 5d6) fora da Kyudo Stance; passa a exigir duas mãos."
+      },
+      "category": "weapon-attachments"
+    },
+    "sniper-rifle-rechamber": {
+      "attributes": {
+        "attachmentType": "Internals",
+        "slotsRequired": 0,
+        "exoticAllowed": true,
+        "eligibleWeapons": "Rifles de Precisão",
+        "installation": "Weaponstech DV17; não pode ser removido",
+        "effect": "+1d6 de dano (máximo 6d6)."
+      },
+      "category": "weapon-attachments"
+    },
+    "compatibility-rail": {
+      "attributes": {
+        "attachmentType": "Scope",
+        "slotsRequired": 0,
+        "exoticAllowed": true,
+        "eligibleWeapons": "Armas de longo alcance Exóticas",
+        "installation": "Weaponstech DV17",
+        "effect": "A arma ganha um slot de acessório só para miras."
+      },
+      "category": "weapon-attachments"
+    },
+    "range-table-modification": {
+      "attributes": {
+        "attachmentType": "Barrel",
+        "slotsRequired": 0,
+        "exoticAllowed": true,
+        "eligibleWeapons": "Todas as armas de longo alcance (o tipo depende da categoria)",
+        "installation": "Sem teste; só uma por arma",
+        "effect": "Troca a tabela de alcance da arma (snub, cano longo, carbine, battle, marksman, scout, anti-materiel, arco curto ou longo, tubo de mísseis...)."
+      },
+      "category": "weapon-attachments"
+    },
+    "pistol-autosear": {
+      "attributes": {
+        "attachmentType": "Internals",
+        "slotsRequired": 0,
+        "exoticAllowed": true,
+        "eligibleWeapons": "Todas as pistolas",
+        "installation": "Sem teste; só um por arma",
+        "effect": "Ganha Autofire (Machine Pistol 3) e Fogo de Supressão; Machine Pistol 4 se for Excelente ou já tiver Autofire."
+      },
+      "category": "weapon-attachments"
+    },
+    "shotgun-automatic-control-group": {
+      "attributes": {
+        "attachmentType": "Internals",
+        "slotsRequired": 0,
+        "exoticAllowed": true,
+        "eligibleWeapons": "Escopetas que disparam slugs ou cartuchos",
+        "installation": "Weaponstech DV17",
+        "effect": "Autofire (Machine Pistol 3 ou 4) gastando 4 slugs; com cartuchos, pode gastar 4 e atacar com Autofire (-3 para esquivar)."
+      },
+      "category": "weapon-attachments"
+    },
+    "smg-cyclic-internals": {
+      "attributes": {
+        "attachmentType": "Internals",
+        "slotsRequired": 0,
+        "exoticAllowed": true,
+        "eligibleWeapons": "Armas com Autofire (SMG 3)",
+        "installation": "Weaponstech DV17",
+        "effect": "Troca o Autofire (SMG 3) por SMG 4 ou Machine Pistol 4."
+      },
+      "category": "weapon-attachments"
+    }
+  },
+  "updates": {
+    "arasaka-acid": {
+      "attributes": {
+        "gearClass": "Fluido para arma"
+      }
+    },
+    "arasaka-fire": {
+      "attributes": {
+        "gearClass": "Fluido para arma"
+      }
+    },
+    "arasaka-wound-salt": {
+      "attributes": {
+        "gearClass": "Fluido para arma"
+      }
+    }
+  },
+  "additions": [
+    {
+      "slug": "bayonet",
+      "name": "Bayonet",
+      "category": "weapon-attachments",
+      "source": "Core Book",
+      "page": 343,
+      "price": 100,
+      "priceCategory": "Premium",
+      "manufacturer": null,
+      "tags": [],
+      "description": "Empunhada, a arma também pode ser usada como arma corpo a corpo Leve. Com ela, a arma não pode ser escondida sob a roupa.",
+      "attributes": {
+        "attachmentType": "Bayonet",
+        "slotsRequired": 1,
+        "exoticAllowed": false,
+        "eligibleWeapons": "Armas de longo alcance não Exóticas disparadas com Shoulder Arms",
+        "installation": null,
+        "effect": "A arma também vale como arma corpo a corpo Leve; deixa de ser ocultável."
+      },
+      "notes": "Conferido com Core Book, p. 343 (Weapon Attachments). Ausente do compêndio."
+    },
+    {
+      "slug": "drum-magazine",
+      "name": "Drum Magazine",
+      "category": "weapon-attachments",
+      "source": "Core Book",
+      "page": 343,
+      "price": 500,
+      "priceCategory": "Expensive",
+      "manufacturer": null,
+      "tags": [],
+      "description": "A arma passa a comportar o número de tiros da coluna \"tambor\" da tabela de pentes. Só um pente por arma, e com ele a arma não pode ser escondida sob a roupa. Pentes (padrão / estendido / tambor): Pistola Média 12/18/36; Pesada e Muito Pesada 8/14/28; SMG 30/40/50; SMG Pesada 40/50/60; Escopeta 4/8/16; Rifle de Assalto 25/35/45; Rifle de Precisão 4/8/12; Lança-Granadas 2/4/6; Lança-Foguetes 1/2/3.",
+      "attributes": {
+        "attachmentType": "Magazine",
+        "slotsRequired": 1,
+        "exoticAllowed": false,
+        "eligibleWeapons": "Armas de longo alcance não Exóticas, exceto arcos e bestas",
+        "installation": null,
+        "effect": "Pente de tambor (ver tabela de pentes); deixa de ser ocultável."
+      },
+      "notes": "Conferido com Core Book, p. 343 (Weapon Attachments). Ausente do compêndio."
+    },
+    {
+      "slug": "extended-magazine",
+      "name": "Extended Magazine",
+      "category": "weapon-attachments",
+      "source": "Core Book",
+      "page": 343,
+      "price": 100,
+      "priceCategory": "Premium",
+      "manufacturer": null,
+      "tags": [],
+      "description": "A arma passa a comportar o número de tiros da coluna \"estendido\" da tabela de pentes. Só um pente por arma, e com ele a arma não pode ser escondida sob a roupa. Pentes (padrão / estendido / tambor): Pistola Média 12/18/36; Pesada e Muito Pesada 8/14/28; SMG 30/40/50; SMG Pesada 40/50/60; Escopeta 4/8/16; Rifle de Assalto 25/35/45; Rifle de Precisão 4/8/12; Lança-Granadas 2/4/6; Lança-Foguetes 1/2/3.",
+      "attributes": {
+        "attachmentType": "Magazine",
+        "slotsRequired": 1,
+        "exoticAllowed": false,
+        "eligibleWeapons": "Armas de longo alcance não Exóticas, exceto arcos e bestas",
+        "installation": null,
+        "effect": "Pente estendido (ver tabela de pentes); deixa de ser ocultável."
+      },
+      "notes": "Conferido com Core Book, p. 343 (Weapon Attachments). Ausente do compêndio."
+    },
+    {
+      "slug": "grenade-launcher-underbarrel",
+      "name": "Grenade Launcher Underbarrel",
+      "category": "weapon-attachments",
+      "source": "Core Book",
+      "page": 343,
+      "price": 500,
+      "priceCategory": "Expensive",
+      "manufacturer": null,
+      "tags": [],
+      "description": "Empunhada com as duas mãos, a arma também funciona como Lança-Granadas com 1 granada no pente. Ocupa 2 slots e deixa a arma não ocultável.",
+      "attributes": {
+        "attachmentType": "Underbarrel",
+        "slotsRequired": 2,
+        "exoticAllowed": false,
+        "eligibleWeapons": "Armas de longo alcance não Exóticas disparadas com Shoulder Arms",
+        "installation": null,
+        "effect": "Lança-Granadas de 1 tiro sob o cano."
+      },
+      "notes": "Conferido com Core Book, p. 343 (Weapon Attachments). Ausente do compêndio."
+    },
+    {
+      "slug": "infrared-nightvision-scope",
+      "name": "Infrared Nightvision Scope",
+      "category": "weapon-attachments",
+      "source": "Core Book",
+      "page": 343,
+      "price": 500,
+      "priceCategory": "Expensive",
+      "manufacturer": null,
+      "tags": [],
+      "description": "Zera as penalidades por atirar em alvo encoberto por escuridão, fumaça, neblina etc. Pela mira, distingue carne quente de metal frio, mas não mais que isso (nem a marca de um Cyberarm, nem o que há dentro dele).",
+      "attributes": {
+        "attachmentType": "Scope",
+        "slotsRequired": 1,
+        "exoticAllowed": false,
+        "eligibleWeapons": "Todas as armas de longo alcance não Exóticas",
+        "installation": null,
+        "effect": "Zera penalidades por escuridão, fumaça e neblina."
+      },
+      "notes": "Conferido com Core Book, p. 343 (Weapon Attachments). Ausente do compêndio."
+    },
+    {
+      "slug": "shotgun-underbarrel",
+      "name": "Shotgun Underbarrel",
+      "category": "weapon-attachments",
+      "source": "Core Book",
+      "page": 343,
+      "price": 500,
+      "priceCategory": "Expensive",
+      "manufacturer": null,
+      "tags": [],
+      "description": "Empunhada com as duas mãos, a arma também funciona como Escopeta com 2 tiros no pente. Ocupa 2 slots e deixa a arma não ocultável.",
+      "attributes": {
+        "attachmentType": "Underbarrel",
+        "slotsRequired": 2,
+        "exoticAllowed": false,
+        "eligibleWeapons": "Armas de longo alcance não Exóticas disparadas com Shoulder Arms",
+        "installation": null,
+        "effect": "Escopeta de 2 tiros sob o cano."
+      },
+      "notes": "Conferido com Core Book, p. 343 (Weapon Attachments). Ausente do compêndio."
+    },
+    {
+      "slug": "smartgun-link",
+      "name": "Smartgun Link",
+      "category": "weapon-attachments",
+      "source": "Core Book",
+      "page": 344,
+      "price": 500,
+      "priceCategory": "Expensive",
+      "manufacturer": null,
+      "tags": [],
+      "description": "Transforma a arma em Smartgun: ligada por Interface Plugs ou Subdermal Grip (ambos exigem Neural Link), dá +1 nos ataques à distância. Instalar ou remover leva 1 hora. Ligar os plugs pode fazer parte de sacar a arma, e ser desarmado só desconecta os cabos. Ocupa 2 slots.",
+      "attributes": {
+        "attachmentType": "SmartLink",
+        "slotsRequired": 2,
+        "exoticAllowed": false,
+        "eligibleWeapons": "Todas as armas de longo alcance não Exóticas",
+        "installation": "1 hora",
+        "effect": "+1 nos ataques à distância, ligada por Interface Plugs ou Subdermal Grip."
+      },
+      "notes": "Conferido com Core Book, p. 344 (Weapon Attachments). Ausente do compêndio."
+    },
+    {
+      "slug": "sniping-scope",
+      "name": "Sniping Scope",
+      "category": "weapon-attachments",
+      "source": "Core Book",
+      "page": 344,
+      "price": 100,
+      "priceCategory": "Premium",
+      "manufacturer": null,
+      "tags": [],
+      "description": "Pela mira, vê detalhes a até 800 m/yds. Contra alvos a 51 m/yds ou mais, tiros únicos e Aimed Shots têm +1. Não acumula com TeleOptics.",
+      "attributes": {
+        "attachmentType": "Scope",
+        "slotsRequired": 1,
+        "exoticAllowed": false,
+        "eligibleWeapons": "Todas as armas de longo alcance não Exóticas",
+        "installation": null,
+        "effect": "+1 em tiro único ou Aimed Shot contra alvos a 51 m/yds ou mais."
+      },
+      "notes": "Conferido com Core Book, p. 344 (Weapon Attachments). Ausente do compêndio."
+    },
+    {
+      "slug": "combined-underbarrel",
+      "name": "Combined Underbarrel",
+      "category": "weapon-attachments",
+      "source": "Invented Tech Upgrades",
+      "page": 6,
+      "price": 500,
+      "priceCategory": "Expensive",
+      "priceNote": "Custo #2; Custo #1: o acessório componente mais caro",
+      "manufacturer": null,
+      "tags": [
+        "Tech Upgrade"
+      ],
+      "description": "Combina dois acessórios sob o cano num único item, que ocupa os slots do componente que ocupa mais. A cada uso, escolhe-se qual função usar; a munição de cada uma é comprada e carregada à parte. Os dois acessórios são adquiridos separadamente antes. Tech Upgrade inventado (Maker). Custo #1: materiais iguais ao preço do item melhorado. Custo #2 (o preço listado): materiais da invenção. Um Tech de NPC costuma cobrar 50% de (Custo #1 + Custo #2) de mão de obra.",
+      "attributes": {
+        "attachmentType": "TechUpgrade",
+        "slotsRequired": 0,
+        "exoticAllowed": true,
+        "eligibleWeapons": "Armas que aceitem os dois acessórios sob o cano",
+        "installation": "Upgrade DV21 (Maker); oferecido por Jack Sawyer",
+        "effect": "Junta dois acessórios sob o cano num só, ocupando os slots do maior."
+      },
+      "notes": "Conferido com Invented Tech Upgrades v1.1, p. 6. Ausente do compêndio."
+    },
+    {
+      "slug": "counterweight-system",
+      "name": "Counterweight System",
+      "category": "weapon-attachments",
+      "source": "Invented Tech Upgrades",
+      "page": 6,
+      "price": 500,
+      "priceCategory": "Expensive",
+      "priceNote": "Custo #2; Custo #1: o preço da arma",
+      "manufacturer": null,
+      "tags": [
+        "Tech Upgrade"
+      ],
+      "description": "Sistema de contrapeso que reduz em 3 qualquer exigência de BODY para empunhar ou usar a arma e suas funções. Tech Upgrade inventado (Maker). Custo #1: materiais iguais ao preço do item melhorado. Custo #2 (o preço listado): materiais da invenção. Um Tech de NPC costuma cobrar 50% de (Custo #1 + Custo #2) de mão de obra.",
+      "attributes": {
+        "attachmentType": "TechUpgrade",
+        "slotsRequired": 0,
+        "exoticAllowed": true,
+        "eligibleWeapons": "Qualquer arma",
+        "installation": "Upgrade DV21 (Maker); oferecido por Jack Sawyer",
+        "effect": "Reduz em 3 qualquer exigência de BODY da arma ou de suas funções."
+      },
+      "notes": "Conferido com Invented Tech Upgrades v1.1, p. 6. Ausente do compêndio."
+    },
+    {
+      "slug": "optimized-popup",
+      "name": "Optimized Popup",
+      "category": "weapon-attachments",
+      "source": "Invented Tech Upgrades",
+      "page": 6,
+      "price": 1000,
+      "priceCategory": "VeryExpensive",
+      "priceNote": "Custo #2; Custo #1: o preço do Cyberarm",
+      "manufacturer": null,
+      "tags": [
+        "Tech Upgrade"
+      ],
+      "description": "Reconstrói um Cyberarm para aceitar uma arma popup de longo alcance sem gastar slots de opção. A arma é comprada à parte, mantém sua Perda de Humanidade e só aceita, dos acessórios que ocupam slot, o Smartgun Link. Não vale em equipamentos equivalentes a cyberware, como a Battleglove. Tech Upgrade inventado (Maker). Custo #1: materiais iguais ao preço do item melhorado. Custo #2 (o preço listado): materiais da invenção. Um Tech de NPC costuma cobrar 50% de (Custo #1 + Custo #2) de mão de obra.",
+      "attributes": {
+        "attachmentType": "TechUpgrade",
+        "slotsRequired": 0,
+        "exoticAllowed": true,
+        "eligibleWeapons": "Cyberarm (uma arma popup de longo alcance)",
+        "installation": "Upgrade DV24 (Maker); oferecido por Jack Sawyer",
+        "effect": "Uma arma popup de longo alcance no Cyberarm não ocupa slots de opção."
+      },
+      "notes": "Conferido com Invented Tech Upgrades v1.1, p. 6. Ausente do compêndio."
+    },
+    {
+      "slug": "experimental-load",
+      "name": "Experimental Load",
+      "category": "weapon-attachments",
+      "source": "Invented Tech Upgrades",
+      "page": 7,
+      "price": 500,
+      "priceCategory": "Expensive",
+      "priceNote": "Custo #2; Custo #1: a munição componente mais cara",
+      "manufacturer": null,
+      "tags": [
+        "Tech Upgrade"
+      ],
+      "description": "Combina dois tipos de munição não-smart e não explosiva num só: o alvo atingido sofre os efeitos das duas, mas o ataque tem -4. A arma precisa disparar as duas munições. Não vale para granadas e foguetes. O custo é por pacote de 10. Tech Upgrade inventado (Maker). Custo #1: materiais iguais ao preço do item melhorado. Custo #2 (o preço listado): materiais da invenção. Um Tech de NPC costuma cobrar 50% de (Custo #1 + Custo #2) de mão de obra.",
+      "attributes": {
+        "attachmentType": "TechUpgrade",
+        "slotsRequired": 0,
+        "exoticAllowed": true,
+        "eligibleWeapons": "Munição não-smart e não explosiva (por pacote de 10)",
+        "installation": "Upgrade DV21 (Maker); oferecido por Never Naughty Nedd",
+        "effect": "Une duas munições: o alvo sofre os dois efeitos, mas o ataque tem -4."
+      },
+      "notes": "Conferido com Invented Tech Upgrades v1.1, p. 7. Ausente do compêndio."
+    },
+    {
+      "slug": "stun-bunny",
+      "name": "Stun Bunny",
+      "category": "weapon-attachments",
+      "source": "Invented Tech Upgrades",
+      "page": 7,
+      "price": 1000,
+      "priceCategory": "VeryExpensive",
+      "priceNote": "Custo #2; Custo #1: o preço da arma",
+      "manufacturer": null,
+      "tags": [
+        "Tech Upgrade"
+      ],
+      "description": "Além do uso normal, a arma de fogo também funciona como Microwaver (CP:R p. 348) ou Stun Gun (CP:R p. 349), com a perícia da arma e a tabela de alcance de pistolas. Os dois modos usam a mesma bateria de 8 cargas (recarrega em 1 hora); baterias extras custam 50eb. Tech Upgrade inventado (Maker). Custo #1: materiais iguais ao preço do item melhorado. Custo #2 (o preço listado): materiais da invenção. Um Tech de NPC costuma cobrar 50% de (Custo #1 + Custo #2) de mão de obra.",
+      "attributes": {
+        "attachmentType": "TechUpgrade",
+        "slotsRequired": 0,
+        "exoticAllowed": true,
+        "eligibleWeapons": "Armas de fogo",
+        "installation": "Upgrade DV21 (Maker); oferecido por Never Naughty Nedd",
+        "effect": "A arma também funciona como Microwaver ou Stun Gun (bateria de 8 cargas)."
+      },
+      "notes": "Conferido com Invented Tech Upgrades v1.1, p. 7. Ausente do compêndio."
+    },
+    {
+      "slug": "vorpal-coating",
+      "name": "Vorpal Coating",
+      "category": "weapon-attachments",
+      "source": "Invented Tech Upgrades",
+      "page": 8,
+      "price": 1000,
+      "priceCategory": "VeryExpensive",
+      "priceNote": "Custo #2; Custo #1: o preço da arma",
+      "manufacturer": null,
+      "tags": [
+        "Tech Upgrade"
+      ],
+      "description": "Revestimento inspirado na Arasaka Weeping Reaver: quando a arma causa uma Lesão Crítica aleatória, o usuário rola duas vezes na tabela e escolhe o resultado. Tech Upgrade inventado (Maker). Custo #1: materiais iguais ao preço do item melhorado. Custo #2 (o preço listado): materiais da invenção. Um Tech de NPC costuma cobrar 50% de (Custo #1 + Custo #2) de mão de obra.",
+      "attributes": {
+        "attachmentType": "TechUpgrade",
+        "slotsRequired": 0,
+        "exoticAllowed": true,
+        "eligibleWeapons": "Armas corpo a corpo com lâmina",
+        "installation": "Upgrade DV24 (Maker); oferecido por Never Naughty Nedd",
+        "effect": "Lesões Críticas aleatórias rolam duas vezes e o usuário escolhe."
+      },
+      "notes": "Conferido com Invented Tech Upgrades v1.1, p. 8. Ausente do compêndio."
+    },
+    {
+      "slug": "shredding-ax",
+      "name": "Shredding Ax",
+      "category": "weapon-attachments",
+      "source": "Invented Tech Upgrades",
+      "page": 9,
+      "price": 100,
+      "priceCategory": "Premium",
+      "priceNote": "Custo #2; Custo #1: o preço do instrumento",
+      "manufacturer": null,
+      "tags": [
+        "Tech Upgrade"
+      ],
+      "description": "Reforça um instrumento e lhe dá um gume: ele passa a ser também arma corpo a corpo Pesada, ou Muito Pesada se for uma KillStrom Power Chord (DLC Hope Reborn+). Tech Upgrade inventado (Maker). Custo #1: materiais iguais ao preço do item melhorado. Custo #2 (o preço listado): materiais da invenção. Um Tech de NPC costuma cobrar 50% de (Custo #1 + Custo #2) de mão de obra.",
+      "attributes": {
+        "attachmentType": "TechUpgrade",
+        "slotsRequired": 0,
+        "exoticAllowed": true,
+        "eligibleWeapons": "Guitarra elétrica, keytar ou instrumento parecido",
+        "installation": "Upgrade DV17 (Maker); oferecido por Tweak",
+        "effect": "O instrumento vira também arma corpo a corpo Pesada (Muito Pesada na KillStrom Power Chord)."
+      },
+      "notes": "Conferido com Invented Tech Upgrades v1.1, p. 9. Ausente do compêndio."
+    }
+  ]
+}

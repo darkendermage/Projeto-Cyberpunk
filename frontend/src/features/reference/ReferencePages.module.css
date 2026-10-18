@@ -1,0 +1,148 @@
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 16px;
+}
+
+.card {
+  padding: 16px 18px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.015);
+}
+.card h2 {
+  font-size: 16px;
+  margin-bottom: 12px;
+}
+
+.summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 8px;
+}
+.summaryItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  color: var(--text-2);
+}
+.summaryItem svg {
+  color: var(--red);
+}
+.summaryItem strong {
+  margin-left: auto;
+  font-family: var(--font-display);
+  color: var(--text);
+}
+.summaryItem:hover {
+  border-color: var(--red-line);
+  background: var(--red-haze);
+}
+
+.search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 420px;
+  padding: 0 12px;
+  border: 1px solid var(--line-strong);
+  color: var(--text-muted);
+}
+.search input {
+  flex: 1;
+  border: 0 !important;
+  background: none !important;
+  box-shadow: none !important;
+}
+
+.glossary {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 10px;
+  margin: 0;
+}
+.glossary > div {
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-left: 2px solid var(--red);
+}
+.glossary dt {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--text);
+}
+.glossary dd {
+  margin: 4px 0 0;
+  color: var(--text-2);
+  font-size: 14.5px;
+}
+
+@media (max-width: 720px) {
+  .glossary {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ------------------------------------------------------------ range and critical injury tables */
+
+.toolbar {
+  margin: 10px 0 12px;
+}
+
+.subTitle {
+  margin: 14px 0 8px;
+  font-family: var(--font-display);
+  font-size: 13px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+
+.dvTable th small {
+  color: var(--text-faint);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  text-transform: none;
+}
+.dvTable td,
+.dvTable th {
+  text-align: center;
+  white-space: nowrap;
+}
+.dvTable td:first-child,
+.dvTable th:first-child {
+  text-align: left;
+}
+
+.dv {
+  font-family: var(--font-mono);
+  color: var(--text);
+}
+
+.highlightRow td {
+  background: var(--red-haze);
+  color: var(--text);
+}
+
+.injuryName {
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.critGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 8px;
+}
+
+.notes {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 8px 0;
+  padding-left: 18px;
+  font-size: 14px;
+  color: var(--text-2);
+}

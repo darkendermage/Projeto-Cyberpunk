@@ -1,0 +1,1762 @@
+{
+  "about": "Conferido com o PDF Interface RED Volume 3 (coletânea de DLCs: Must Have Cyberware Deals, Midnight with the Upload, Elflines Online the TCG, Spinning Your Wheels, 12 Days of Cybermas e o artigo exclusivo Going Metal). O Woodchipper's Garage já tinha sido conferido no PDF avulso. Formato descrito no README (seção Dados).",
+  "source": "Interface 3",
+  "updates": {
+    "appetite-controller": {
+      "page": 46,
+      "notes": "Conferido com Interface RED Volume 3, p. 46. Artigo Must Have Cyberware Deals; também no Interface RED 2, p. 72.",
+      "description": "Cyberware de Corpo Interno. Exige Biomonitor. Controla e ignora a fome com um botão no Biomonitor, o que evita a perda de Humanidade pelo estresse ambiental de longo prazo da fome (CP:R p. 231). A inanição continua: depois de 7 dias sem comer, o usuário rola Death Save no início de cada dia, com +1 cumulativo por dia.",
+      "attributes": {
+        "requirements": "Biomonitor; Hospital"
+      }
+    },
+    "cyberpillow": {
+      "page": 46,
+      "notes": "Conferido com Interface RED Volume 3, p. 46. Artigo Must Have Cyberware Deals.",
+      "description": "Opção de Cyberarm. Travesseiro CapsuleCo que sai do braço. Não dá nenhum benefício além de facilitar cochilar em qualquer lugar; instalar mais de um só facilita um pouco mais."
+    },
+    "external-vidscreen": {
+      "page": 46,
+      "notes": "Conferido com Interface RED Volume 3, p. 46. Artigo Must Have Cyberware Deals.",
+      "description": "Cyberware de Corpo Externo. Painel Nu-Tek Touch TV flexível, do tamanho do livro básico, instalado sob a pele em qualquer parte do corpo. Vira uma tela usada por um Agent ligado ou por um Memory Chip no Chipware Socket."
+    },
+    "holo-projector-palm": {
+      "page": 47,
+      "notes": "Conferido com Interface RED Volume 3, p. 47. Artigo Must Have Cyberware Deals.",
+      "description": "Opção de Cyberarm. Projetor holográfico na palma que exibe uma projeção, possivelmente interativa, do tamanho de uma lata de refrigerante quando ligado a um Agent. Pode ser o único cyberware num braço de carne.",
+      "attributes": {
+        "requiresItem": null,
+        "requirements": "Cyberarm, ou sozinho num braço de carne; Clinic"
+      }
+    },
+    "neutongue": {
+      "page": 47,
+      "notes": "Conferido com Interface RED Volume 3, p. 47. Artigo Must Have Cyberware Deals; também no Interface RED 2, p. 73.",
+      "description": "Cyberware de Corpo Interno. Língua cibernética que altera o paladar: com um Agent ligado, adiciona tempero virtual à comida. Pode ser desligada a qualquer momento, sem Ação, eliminando o paladar."
+    },
+    "perfectfit-cyberfoot": {
+      "page": 48,
+      "notes": "Conferido com Interface RED Volume 3, p. 48. Artigo Must Have Cyberware Deals.",
+      "description": "Opção de Cyberleg. Como Ação, muda o tamanho do pé entre o Euro 0 e o US 37AA, com salto hidráulico e apoio ajustável. Em par, zera qualquer penalidade por calçado inadequado fora de situações de moda. Pode ser o único cyberware numa perna de carne.",
+      "attributes": {
+        "requiresItem": null,
+        "requirements": "Cyberleg, ou sozinho numa perna de carne; Clinic"
+      }
+    },
+    "personalpak-kibblewarmer": {
+      "page": 48,
+      "notes": "Conferido com Interface RED Volume 3, p. 48. Artigo Must Have Cyberware Deals.",
+      "description": "Opção de Cyberarm. Pequeno forno rotativo no antebraço, do tamanho de um cilindro de Kibble PersonalPak, que o deixa tostado no ponto."
+    },
+    "pursuit-security-shredder": {
+      "page": 48,
+      "notes": "Conferido com Interface RED Volume 3, p. 48. Artigo Must Have Cyberware Deals.",
+      "name": "Pursuit Security Inc. Personal Shredder",
+      "description": "Opção de Cyberarm. Fragmentadora comercial de corte cruzado escondida no braço, com reservatório interno para as tiras."
+    },
+    "sponsored-covering": {
+      "page": 48,
+      "notes": "Conferido com Interface RED Volume 3, p. 48. Artigo Must Have Cyberware Deals.",
+      "description": "Opção de Cyberlimb que não ocupa slot. Cobre o membro com um anúncio iluminado. Se o usuário cumprir o contrato com o patrocinador (bom comportamento, eventos e o membro à mostra parte do dia, verificado por sensores), recebe 20eb no dia 1º de cada mês. Em geral o próprio usuário paga a instalação, e patrocinadores já tentaram retomar o braço inteiro de quem quebrou o contrato.",
+      "attributes": {
+        "requirements": "Cyberarm ou Cyberleg (não ocupa slot); Mall"
+      }
+    },
+    "duel-caster": {
+      "page": 73,
+      "notes": "Conferido com Interface RED Volume 3, p. 73. Artigo Elflines Online the TCG. Corrigido: 1d6 (não 2d6), ROF 3/2, 26 cartas (não 12) e não é ocultável.",
+      "source": "Interface 3",
+      "description": "Porta-baralho de plástico com gatilho e volantes que arremessam cartas de Elflines Online the TCG. Pistola Média Exótica: ROF 3 se for a única arma disparada na rodada (quebra a regra de no máximo dois ataques por Ação), senão ROF 2. Causa 1d6 e não pode ser ocultada. Carrega 26 cartas, que podem ser recuperadas. Com baralho comum (5eb), age como arma de Baixa Qualidade.",
+      "tags": [
+        "Exótica"
+      ],
+      "attributes": {
+        "damage": "1d6",
+        "damageDice": 1,
+        "rof": 3,
+        "magazine": 26,
+        "concealable": false,
+        "calibers": [
+          "Special"
+        ]
+      }
+    },
+    "sword-of-arvish": {
+      "page": 73,
+      "notes": "Conferido com Interface RED Volume 3, p. 73. Artigo Elflines Online the TCG. Corrigido: é Exótica e de Baixa Qualidade.",
+      "source": "Interface 3",
+      "description": "Réplica de metal da espada do Herói de Elflines Online. Arma corpo a corpo Pesada Exótica de uma mão e Baixa Qualidade: num 1 crítico, em vez de emperrar, o usuário sofre a Lesão Crítica Crushed Fingers na mão que a empunha.",
+      "tags": [
+        "Exótica",
+        "Baixa Qualidade"
+      ],
+      "attributes": {
+        "quality": "Poor",
+        "exotic": true
+      }
+    },
+    "bicycle": {
+      "page": 77,
+      "notes": "Conferido com Interface RED Volume 3, p. 77. Artigo Spinning Your Wheels. Velocidade registrada é a da faixa mais alta (BODY 8+).",
+      "description": "Veículo de 1 lugar, SDP 15, pilotado com Athletics e consertado com Basic Tech; não pode ser controlado por Interface Plugs nem pela habilidade Moto. A velocidade depende do BODY do ciclista: até 3 = MOVE 8 (12 MPH); 4 a 7 = MOVE 10 (20 MPH); 8+ = MOVE 15 (30 MPH). BODY 11+ exige Reinforced Frame. Batidas causam 3d6, e o ciclista sofre Whiplash e cai. Viagens longas podem exigir teste de Endurance.",
+      "attributes": {
+        "speedMove": 15,
+        "topSpeedMph": 30,
+        "seats": 1,
+        "sdp": 15,
+        "includedUpgrades": "Nenhum. Velocidade conforme o BODY do ciclista."
+      }
+    },
+    "deathtrance": {
+      "page": 85,
+      "notes": "Conferido com Interface RED Volume 3, p. 85. Reimpressão do 12 Days of Cybermas (deixado passar na conferência do PDF avulso).",
+      "description": "Neuralware. Ativado com uma Ação, reduz batimentos, respiração e sinais vitais a um ritmo quase imperceptível: o usuário parece morto e tem -4 em todas as Ações. Enquanto finge estar morto, só é percebido vivo com Medical Tech DV17 ou Criminology, Deduction ou Perception DV21. Sai do estado a qualquer momento sem Ação. O uso repetido pode deixar a pele pálida de vez."
+    },
+    "cybermatrix-gang-jazzler": {
+      "page": 85,
+      "notes": "Conferido com Interface RED Volume 3, p. 85. Reimpressão do 12 Days of Cybermas (deixado passar na conferência do PDF avulso).",
+      "description": "Opção de Cyberarm. Agulha-eletrodo escondida no braço sem teste. Ao aplicar um Choke num Grapple, em vez de causar dano, o usuário gasta toda a bateria (50eb, recarrega em 1 hora) e o alvo faz Resist Torture/Drugs DV13 ou fica Inconsciente por um minuto, seja qual for seu HP. Pode ser o único cyberware num braço de carne.",
+      "attributes": {
+        "requiresItem": null,
+        "requirements": "Cyberarm, ou sozinho num braço de carne; Clinic"
+      }
+    },
+    "cyclops-int-bug-eye": {
+      "page": 85,
+      "notes": "Conferido com Interface RED Volume 3, p. 85. Reimpressão do 12 Days of Cybermas (deixado passar na conferência do PDF avulso).",
+      "name": "Cyclops International Bug Eye",
+      "manufacturer": "Cyclops International",
+      "description": "Borgware. Cybereye gigante que lembra um olho de inseto, em vários acabamentos. Tem 5 slots para opções de Cybereye."
+    },
+    "kiroshi-monovision": {
+      "page": 85,
+      "notes": "Conferido com Interface RED Volume 3, p. 85. Reimpressão do 12 Days of Cybermas (deixado passar na conferência do PDF avulso). Também no artigo Going Metal, p. 109.",
+      "description": "Borgware. Visor que substitui os dois olhos por uma única óptica panorâmica. Não pode ser instalado num MultiOptic Mount. Tem 3 slots para opções de Cybereye, que sempre contam como pareadas. Se for a única fonte de visão, a Lesão Crítica Lost Eye tem o efeito dobrado, inclusive a penalidade no Death Save."
+    },
+    "kiroshi-optishield": {
+      "page": 86,
+      "notes": "Conferido com Interface RED Volume 3, p. 86. Reimpressão do 12 Days of Cybermas (deixado passar na conferência do PDF avulso).",
+      "description": "Cyberware de Corpo Externo. Óculos espelhados Anti-Dazzle retráteis na sobrancelha, estendidos ou recolhidos com uma Ação. Estendidos, deixam o usuário imune a cegueira e outros efeitos de clarões, como os de Flashbang."
+    },
+    "psiberstuff-watch-man": {
+      "page": 86,
+      "notes": "Conferido com Interface RED Volume 3, p. 86. Reimpressão do 12 Days of Cybermas (deixado passar na conferência do PDF avulso).",
+      "description": "Opção de Cyberarm. Agent completo com tela flip-up (CP:R p. 352) embutido no braço, com pseudo-IA."
+    },
+    "poser-chip": {
+      "page": 86,
+      "notes": "Conferido com Interface RED Volume 3, p. 86. Reimpressão do 12 Days of Cybermas (deixado passar na conferência do PDF avulso).",
+      "description": "Chipware. Faz o usuário copiar, sem perceber, a voz, os tiques e a linguagem corporal da persona gravada: +4 em Acting para imitá-la, ou +5 se não resistir e o jogador interpretar. Chips de famosos (centenas de horas de vídeo público) custam 500eb; de pessoas comuns (ao menos 10 horas de vídeo), 1.000eb."
+    },
+    "sycust-fleshweave": {
+      "page": 87,
+      "notes": "Conferido com Interface RED Volume 3, p. 87. Reimpressão do 12 Days of Cybermas (deixado passar na conferência do PDF avulso).",
+      "description": "Cyberware de Corpo Externo (Skinweave). Corpo e cabeça com SP 7; vale o maior SP de cada local, e ablação atinge todas as fontes daquele local. Depois de 10 minutos sem esforço, os nanobots restauram o SP total do corpo e da cabeça."
+    },
+    "romanova-cyberlegs": {
+      "page": 87,
+      "notes": "Conferido com Interface RED Volume 3, p. 87. Reimpressão do 12 Days of Cybermas (deixado passar na conferência do PDF avulso).",
+      "name": "Wyzard Technologies Romanova Cyberlegs",
+      "manufacturer": "Wyzard Technologies",
+      "description": "Par de Cyberlegs instalado junto, que conta como um item só para custo e Humanidade, mas não para Lesões Críticas e conserto. Cada perna tem 3 slots para opções de Cyberleg ou Cyberlimb e vem com um Talon Foot (CP:R p. 367) no salto, sem HL e sem ocupar slot, que não pode ser removido sem destruir a perna. O salto é uma arma e pode ser envenenado.",
+      "attributes": {
+        "foundational": true,
+        "slotsProvided": 3,
+        "requiresPair": true,
+        "requirements": "Hospital (par)",
+        "effect": "Par de Cyberlegs com Talon Foot embutido no salto."
+      }
+    },
+    "biosystem": {
+      "page": 104,
+      "notes": "Conferido com Interface RED Volume 3, p. 104. Artigo Going Metal.",
+      "description": "Borgware. Biopod com o cérebro (e \"partes escolhidas\"), computadores e baterias; todo cyberware anterior é removido. Endurecido contra EMP e imune a radiação. Mantém Skills, INT, COOL, TECH, WILL, LUCK e EMP; BODY, HP e Death Save vêm do corpo FBC. Sair dele à força ou ficar mais de um minuto fora após remoção cirúrgica mata. Fora de um corpo, é Cobertura (25 HP), mas um golpe direto mata o cérebro; dentro de um corpo, não pode ser alvo. Instalar num corpo leva 4 horas e Cybertech ou Surgery DV17, repetível sem penalidade. Precisa de Glucose-Rich Brain Solution (100eb) uma vez por mês.",
+      "attributes": {
+        "requirements": "Hospital",
+        "effect": "Abriga o cérebro para um corpo FBC."
+      }
+    },
+    "dragoon-plating": {
+      "page": 105,
+      "notes": "Conferido com Interface RED Volume 3, p. 105. Artigo Going Metal.",
+      "description": "Borgware de Corpo Externo. Exige BODY 16 ou ser FBC. Corpo e cabeça com SP 15 e penalidade de armadura de -2 em REF, DEX e MOVE. Como Ação, ejeta as placas, e com outra Ação chama de volta pelo sistema magnético um conjunto a até 6 m/yds. Nanomáquinas restauram 1 SP no fim de cada dia sem perder SP. Conjuntos extras custam 1.000eb; desenho personalizado, +100eb.",
+      "attributes": {
+        "requirements": "BODY 16 ou Full Body Conversion; Hospital",
+        "effect": "SP 15 no corpo e na cabeça (-2 REF/DEX/MOVE)."
+      }
+    },
+    "heavy-subdermal-plating": {
+      "page": 107,
+      "notes": "Conferido com Interface RED Volume 3, p. 107. Artigo Going Metal. Corrigido: SP 13 (o compêndio falava em SP 15 ou 18, que são as Dragoon Plating).",
+      "description": "Borgware de Corpo Externo (Subdermal Armor). Exige BODY 10 ou ser FBC. Corpo e cabeça com SP 13 e penalidade de -2 em REF, DEX e MOVE, anulada com BODY 14+ ou num FBC. Nanomáquinas restauram 1 SP no corpo e na cabeça a cada dia completo de cura natural.",
+      "attributes": {
+        "requirements": "BODY 10 ou Full Body Conversion; Hospital",
+        "effect": "SP 13 no corpo e na cabeça."
+      }
+    },
+    "prehensile-cyberfoot": {
+      "page": 108,
+      "notes": "Conferido com Interface RED Volume 3, p. 108. Artigo Going Metal.",
+      "description": "Opção de Cyberleg. Como Ação, a perna passa a funcionar como Cyberarm e o pé vira mão; outra Ação desfaz. Transformada, dá -4 em MOVE (mínimo 1), exceto em gravidade zero."
+    },
+    "zero-gravity-thrusters": {
+      "page": 108,
+      "notes": "Conferido com Interface RED Volume 3, p. 108. Artigo Going Metal.",
+      "description": "Opção de Cyberleg que ocupa 2 slots e exige as duas Cyberlegs (instalado em par). Em uso, anula toda penalidade de movimento em gravidade zero. Os tanques de combustível custam 100eb e duram 24 horas de uso.",
+      "attributes": {
+        "slotsRequired": 2
+      }
+    },
+    "co2-grenade": {
+      "page": 105,
+      "notes": "Conferido com Interface RED Volume 3, p. 105. Artigo Going Metal.",
+      "description": "Munição de granada, lançada ou arremessada. Não causa dano: apaga todo fogo na área da explosão (CP:R p. 174). Qualquer arma que dispare Smoke Grenade também dispara CO2."
+    }
+  },
+  "additions": [
+    {
+      "tags": [],
+      "manufacturer": null,
+      "slug": "kill-display",
+      "name": "Kill Display",
+      "category": "fashionware",
+      "page": 47,
+      "price": 100,
+      "description": "Placar luminoso de mortes sob a pele, estilo Edgerunner dos anos 2020. O número é autodeclarado pelo Agent, até 999. Conta como uma instalação de Light Tattoo para o bônus de Wardrobe & Style com três instalações (CP:R p. 358).",
+      "attributes": {
+        "fashionType": "Display",
+        "bodyArea": "Skin",
+        "installLocation": "Mall",
+        "humanityLoss": 0,
+        "visualEffect": "Letras luminosas sob a pele com \"KILLS:\" e um número (até 999), informado pelo Agent.",
+        "functionalEffect": "Conta como uma instalação de Light Tattoo para o bônus de +2 em Wardrobe & Style."
+      },
+      "priceCategory": "Premium",
+      "notes": "Conferido com Interface RED Volume 3, p. 47. Artigo Must Have Cyberware Deals. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "slug": "leads-turn-on-show-off-nails",
+      "name": "Lead's Turn-On-Show-Off Nails",
+      "category": "fashionware",
+      "page": 47,
+      "price": 100,
+      "description": "Jogo de 10 unhas iluminadas programáveis, com canetas de luz para criar desenhos; presets podem ser baixados do CitiNet pelo Agent. Conta como uma instalação de Light Tattoo para o bônus de Wardrobe & Style. Serve em mãos de carne e cibernéticas.",
+      "attributes": {
+        "fashionType": "Display",
+        "bodyArea": "Hand",
+        "installLocation": "Mall",
+        "humanityLoss": 0,
+        "visualEffect": "10 unhas iluminadas programáveis, com canetas de luz e presets baixados do CitiNet.",
+        "functionalEffect": "Conta como uma instalação de Light Tattoo para o bônus de +2 em Wardrobe & Style."
+      },
+      "priceCategory": "Premium",
+      "notes": "Conferido com Interface RED Volume 3, p. 47. Artigo Must Have Cyberware Deals. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "slug": "mood-eye",
+      "name": "Mood Eye",
+      "category": "fashionware",
+      "page": 47,
+      "price": 100,
+      "description": "Lentes de cor que mudam com o humor, lido por varredura cerebral do Neural Link: vermelho raiva, azul tristeza, amarelo medo, rosa excitação, verde ciúme, cinza morte. Fingir uma emoção bem o bastante para trocar a cor é Acting DV21. Pode ser desligado sem Ação. Exige Neural Link.",
+      "attributes": {
+        "fashionType": "Eyes",
+        "bodyArea": "Eyes",
+        "installLocation": "Mall",
+        "humanityLoss": 0,
+        "visualEffect": "Lentes implantadas que mudam a cor dos olhos conforme o humor lido pelo Neural Link (vermelho raiva, azul tristeza, amarelo medo, rosa excitação, verde ciúme, cinza morte).",
+        "functionalEffect": "Fingir uma emoção para mudar a cor exige Acting DV21. Pode ser desligado sem Ação. Exige Neural Link."
+      },
+      "priceCategory": "Premium",
+      "notes": "Conferido com Interface RED Volume 3, p. 47. Artigo Must Have Cyberware Deals. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Netrunning"
+      ],
+      "manufacturer": "Kirama",
+      "category": "gear",
+      "slug": "kirama-advanced-deck",
+      "name": "Kirama Advanced Deck",
+      "page": 39,
+      "price": 500,
+      "description": "O topo da linha Kirama. 5 slots para Programas ou Hardware. Todo Jack Out inseguro conta como seguro. Pode ser instalado num Bodyweight Suit ou num Cyberarm; os slots extras seguem as mesmas restrições.",
+      "attributes": {
+        "gearType": "Electronics",
+        "gearClass": "Cyberdeck",
+        "effect": "5 slots para Programas ou Hardware. Todo Jack Out inseguro conta como seguro."
+      },
+      "priceCategory": "Expensive",
+      "notes": "Conferido com Interface RED Volume 3, p. 39. Artigo Midnight with the Upload. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Netrunning"
+      ],
+      "manufacturer": "Kirama",
+      "category": "gear",
+      "slug": "kirama-entry-deck",
+      "name": "Kirama Entry Deck",
+      "page": 39,
+      "price": 100,
+      "description": "A aposta segura de quem tem pouco dinheiro. 5 slots só para Programas, no máximo um Attacker, um Defender, um Booster e um Black ICE. Todo Jack Out inseguro conta como seguro. Pode ser instalado num Bodyweight Suit ou num Cyberarm; os slots extras seguem as mesmas restrições.",
+      "attributes": {
+        "gearType": "Electronics",
+        "gearClass": "Cyberdeck",
+        "effect": "5 slots só para Programas, no máximo um Attacker, um Defender, um Booster e um Black ICE. Todo Jack Out inseguro conta como seguro."
+      },
+      "priceCategory": "Premium",
+      "notes": "Conferido com Interface RED Volume 3, p. 39. Artigo Midnight with the Upload. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Netrunning"
+      ],
+      "manufacturer": "Kirama",
+      "category": "gear",
+      "slug": "kirama-training-deck",
+      "name": "Kirama Training Deck",
+      "page": 39,
+      "price": 20,
+      "description": "O primeiro Cyberdeck de todo Netrunner. 5 slots só para Programas. Só faz Jack In a até 2 m/yds de um ponto de acesso e cai se o usuário se afastar. Todo dano direto no cérebro é dobrado. Pode ser instalado num Bodyweight Suit ou num Cyberarm; os slots extras seguem as mesmas restrições.",
+      "attributes": {
+        "gearType": "Electronics",
+        "gearClass": "Cyberdeck",
+        "effect": "5 slots só para Programas. Só faz Jack In a até 2 m/yds de um ponto de acesso e cai se o usuário se afastar. Todo dano direto no cérebro é dobrado."
+      },
+      "priceCategory": "Everyday",
+      "notes": "Conferido com Interface RED Volume 3, p. 39. Artigo Midnight with the Upload. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Netrunning"
+      ],
+      "manufacturer": "Microtech",
+      "category": "gear",
+      "slug": "microtech-assault",
+      "name": "Microtech Assault",
+      "page": 39,
+      "price": 500,
+      "description": "Restritivo, mas um paraíso para quem se adapta. 4 slots só para Programas, que só aceitam Black ICE, e 5 slots só para Hardware. Pode ser instalado num Bodyweight Suit ou num Cyberarm; os slots extras seguem as mesmas restrições.",
+      "attributes": {
+        "gearType": "Electronics",
+        "gearClass": "Cyberdeck",
+        "effect": "4 slots só para Programas, que só aceitam Black ICE, e 5 slots só para Hardware."
+      },
+      "priceCategory": "Expensive",
+      "notes": "Conferido com Interface RED Volume 3, p. 39. Artigo Midnight with the Upload. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Netrunning"
+      ],
+      "manufacturer": "Microtech",
+      "category": "gear",
+      "slug": "microtech-scout",
+      "name": "Microtech Scout",
+      "page": 39,
+      "price": 500,
+      "description": "Popular como deck reserva. 5 slots para Programas ou Hardware. Logo após o Jack In, usa Pathfinder uma vez sem gastar Ação de NET. Pode ser instalado num Bodyweight Suit ou num Cyberarm; os slots extras seguem as mesmas restrições.",
+      "attributes": {
+        "gearType": "Electronics",
+        "gearClass": "Cyberdeck",
+        "effect": "5 slots para Programas ou Hardware. Logo após o Jack In, usa Pathfinder uma vez sem gastar Ação de NET."
+      },
+      "priceCategory": "Expensive",
+      "notes": "Conferido com Interface RED Volume 3, p. 39. Artigo Midnight with the Upload. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Netrunning"
+      ],
+      "manufacturer": "Microtech",
+      "category": "gear",
+      "slug": "microtech-warrior",
+      "name": "Microtech Warrior",
+      "page": 39,
+      "price": 1000,
+      "description": "Agressivo: entrar, matar e sair. 7 slots só para Programas. Logo após o Jack In, ativa um Programa Armor instalado sem gastar Ação de NET. Pode ser instalado num Bodyweight Suit ou num Cyberarm; os slots extras seguem as mesmas restrições.",
+      "attributes": {
+        "gearType": "Electronics",
+        "gearClass": "Cyberdeck",
+        "effect": "7 slots só para Programas. Logo após o Jack In, ativa um Programa Armor instalado sem gastar Ação de NET."
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Interface RED Volume 3, p. 39. Artigo Midnight with the Upload. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Netrunning"
+      ],
+      "manufacturer": "Raven Microcybernetics",
+      "category": "gear",
+      "slug": "raven-microcyb-hummingbird",
+      "name": "Raven Microcyb Hummingbird",
+      "page": 39,
+      "price": 1000,
+      "description": "Para quem confia só nas próprias habilidades. 2 slots só para Hardware. Com ele, o usuário tem uma Ação de NET a mais por turno. Pode ser instalado num Bodyweight Suit ou num Cyberarm; os slots extras seguem as mesmas restrições.",
+      "attributes": {
+        "gearType": "Electronics",
+        "gearClass": "Cyberdeck",
+        "effect": "2 slots só para Hardware. Com ele, o usuário tem uma Ação de NET a mais por turno."
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Interface RED Volume 3, p. 39. Artigo Midnight with the Upload. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Netrunning"
+      ],
+      "manufacturer": "Raven Microcybernetics",
+      "category": "gear",
+      "slug": "raven-microcyb-kestrel-2",
+      "name": "Raven Microcyb Kestrel 2",
+      "page": 39,
+      "price": 1000,
+      "description": "Um dos mais vendidos da Raven Microcybernetics. 7 slots só para Programas. Logo após o Jack In, ativa até 2 Programas Speedy Gonzalvez instalados sem gastar Ação de NET. Pode ser instalado num Bodyweight Suit ou num Cyberarm; os slots extras seguem as mesmas restrições.",
+      "attributes": {
+        "gearType": "Electronics",
+        "gearClass": "Cyberdeck",
+        "effect": "7 slots só para Programas. Logo após o Jack In, ativa até 2 Programas Speedy Gonzalvez instalados sem gastar Ação de NET."
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Interface RED Volume 3, p. 39. Artigo Midnight with the Upload. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Netrunning"
+      ],
+      "manufacturer": "Raven Microcybernetics",
+      "category": "gear",
+      "slug": "raven-microcyb-phoenix",
+      "name": "Raven Microcyb Phoenix",
+      "page": 40,
+      "price": 1000,
+      "description": "Economiza em Black ICE destruído. 6 slots para Programas ou Hardware. Ao fazer Jack Out seguro, todo Programa destruído no deck durante a corrida volta a funcionar. Pode ser instalado num Bodyweight Suit ou num Cyberarm; os slots extras seguem as mesmas restrições.",
+      "attributes": {
+        "gearType": "Electronics",
+        "gearClass": "Cyberdeck",
+        "effect": "6 slots para Programas ou Hardware. Ao fazer Jack Out seguro, todo Programa destruído no deck durante a corrida volta a funcionar."
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Interface RED Volume 3, p. 40. Artigo Midnight with the Upload. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Netrunning"
+      ],
+      "manufacturer": "SGI Technologies",
+      "category": "gear",
+      "slug": "sgi-technologies-kerberos",
+      "name": "SGI Technologies Kerberos",
+      "page": 40,
+      "price": 1000,
+      "description": "Poder bruto em forma de Cyberdeck. 6 slots só para Programas, que só aceitam Black ICE Hellhound, e 5 slots só para Hardware. Pode ser instalado num Bodyweight Suit ou num Cyberarm; os slots extras seguem as mesmas restrições.",
+      "attributes": {
+        "gearType": "Electronics",
+        "gearClass": "Cyberdeck",
+        "effect": "6 slots só para Programas, que só aceitam Black ICE Hellhound, e 5 slots só para Hardware."
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Interface RED Volume 3, p. 40. Artigo Midnight with the Upload. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Netrunning"
+      ],
+      "manufacturer": "SGI Technologies",
+      "category": "gear",
+      "slug": "sgi-technologies-verdant-knight",
+      "name": "SGI Technologies Verdant Knight",
+      "page": 40,
+      "price": 500,
+      "description": "O antigo Green Knight, contra arquiteturas cheias de Black ICE anti-programa. 9 slots só para Programas, que só aceitam Sword e Shield. Pode ser instalado num Bodyweight Suit ou num Cyberarm; os slots extras seguem as mesmas restrições.",
+      "attributes": {
+        "gearType": "Electronics",
+        "gearClass": "Cyberdeck",
+        "effect": "9 slots só para Programas, que só aceitam Sword e Shield."
+      },
+      "priceCategory": "Expensive",
+      "notes": "Conferido com Interface RED Volume 3, p. 40. Artigo Midnight with the Upload. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Netrunning"
+      ],
+      "manufacturer": "SGI Technologies",
+      "category": "gear",
+      "slug": "sgi-technologies-warlocks-book",
+      "name": "SGI Technologies Warlock's Book",
+      "page": 40,
+      "price": 500,
+      "description": "O antigo Wizard's Book, para quem só quer atravessar arquiteturas. 9 slots para Programas ou Hardware. Não aceita Programas Attacker nem Black ICE. Pode ser instalado num Bodyweight Suit ou num Cyberarm; os slots extras seguem as mesmas restrições.",
+      "attributes": {
+        "gearType": "Electronics",
+        "gearClass": "Cyberdeck",
+        "effect": "9 slots para Programas ou Hardware. Não aceita Programas Attacker nem Black ICE."
+      },
+      "priceCategory": "Expensive",
+      "notes": "Conferido com Interface RED Volume 3, p. 40. Artigo Midnight with the Upload. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Netrunning"
+      ],
+      "manufacturer": "Zetatech",
+      "category": "gear",
+      "slug": "zetatech-kaliya",
+      "name": "Zetatech Kaliya",
+      "page": 40,
+      "price": 500,
+      "description": "Barato, em forma de cilindro segmentado como uma cobra. 3 slots só para Programas, que só aceitam Flak, e 6 slots para Programas ou Hardware. O único Defender permitido é Flak e o único Black ICE é Asp. Pode ser instalado num Bodyweight Suit ou num Cyberarm; os slots extras seguem as mesmas restrições.",
+      "attributes": {
+        "gearType": "Electronics",
+        "gearClass": "Cyberdeck",
+        "effect": "3 slots só para Programas, que só aceitam Flak, e 6 slots para Programas ou Hardware. O único Defender permitido é Flak e o único Black ICE é Asp."
+      },
+      "priceCategory": "Expensive",
+      "notes": "Conferido com Interface RED Volume 3, p. 40. Artigo Midnight with the Upload. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Netrunning"
+      ],
+      "manufacturer": "Zetatech",
+      "category": "gear",
+      "slug": "zetatech-micromate",
+      "name": "Zetatech MicroMate",
+      "page": 40,
+      "price": 500,
+      "description": "Portátil, dizem que à custa de recursos de segurança. 9 slots para Programas ou Hardware. Não aceita Programas Defender. Todo dano direto no cérebro é dobrado. Pode ser instalado num Bodyweight Suit ou num Cyberarm; os slots extras seguem as mesmas restrições.",
+      "attributes": {
+        "gearType": "Electronics",
+        "gearClass": "Cyberdeck",
+        "effect": "9 slots para Programas ou Hardware. Não aceita Programas Defender. Todo dano direto no cérebro é dobrado."
+      },
+      "priceCategory": "Expensive",
+      "notes": "Conferido com Interface RED Volume 3, p. 40. Artigo Midnight with the Upload. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Netrunning"
+      ],
+      "manufacturer": "Zetatech",
+      "category": "gear",
+      "slug": "zetatech-parraline-6000",
+      "name": "Zetatech Parraline 6000",
+      "page": 40,
+      "price": 500,
+      "description": "O carro-chefe da Zetatech, para obcecados por Hardware. 3 slots só para Programas e 6 slots só para Hardware. Pode ser instalado num Bodyweight Suit ou num Cyberarm; os slots extras seguem as mesmas restrições.",
+      "attributes": {
+        "gearType": "Electronics",
+        "gearClass": "Cyberdeck",
+        "effect": "3 slots só para Programas e 6 slots só para Hardware."
+      },
+      "priceCategory": "Expensive",
+      "notes": "Conferido com Interface RED Volume 3, p. 40. Artigo Midnight with the Upload. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Netrunning"
+      ],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "aerie",
+      "name": "Aerie",
+      "page": 40,
+      "price": 500,
+      "description": "Cada Black ICE Raven instalada destrói, com seu efeito, um Programa Defender rezzado do Netrunner inimigo, escolhido ao acaso, em vez de só derezzá-lo. Ocupa 2 slots de Hardware.",
+      "attributes": {
+        "gearType": "Electronics",
+        "gearClass": "Hardware de Cyberdeck",
+        "requirements": "Cyberdeck",
+        "effect": "Cada Black ICE Raven instalada destrói, com seu efeito, um Programa Defender rezzado do Netrunner inimigo, escolhido ao acaso, em vez de só derezzá-lo."
+      },
+      "priceCategory": "Expensive",
+      "notes": "Conferido com Interface RED Volume 3, p. 40. Artigo Midnight with the Upload. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Netrunning"
+      ],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "bushido-accelerator",
+      "name": "Bushido Accelerator",
+      "page": 41,
+      "price": 500,
+      "description": "Cada Bushido Accelerator instalado aumenta em 2 a Speed (SPD) de toda Black ICE Killer do deck. Ocupa 3 slots de Hardware.",
+      "attributes": {
+        "gearType": "Electronics",
+        "gearClass": "Hardware de Cyberdeck",
+        "requirements": "Cyberdeck",
+        "effect": "Cada Bushido Accelerator instalado aumenta em 2 a Speed (SPD) de toda Black ICE Killer do deck."
+      },
+      "priceCategory": "Expensive",
+      "notes": "Conferido com Interface RED Volume 3, p. 41. Artigo Midnight with the Upload. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Netrunning"
+      ],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "combat-recorder",
+      "name": "Combat Recorder",
+      "page": 41,
+      "price": 500,
+      "description": "Quando outro Netrunner falha um Death Save na mesma arquitetura, grava os últimos 5 minutos, apagando o que identifica o usuário. Cada gravação costuma valer 50eb, sem perguntas.",
+      "attributes": {
+        "gearType": "Electronics",
+        "gearClass": "Hardware de Cyberdeck",
+        "requirements": "Cyberdeck",
+        "effect": "Quando outro Netrunner falha um Death Save na mesma arquitetura, grava os últimos 5 minutos, apagando o que identifica o usuário. Cada gravação costuma valer 50eb, sem perguntas."
+      },
+      "priceCategory": "Expensive",
+      "notes": "Conferido com Interface RED Volume 3, p. 41. Artigo Midnight with the Upload. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Netrunning"
+      ],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "defense-sequencer",
+      "name": "Defense Sequencer",
+      "page": 41,
+      "price": 500,
+      "description": "Quando um Programa Armor ativo é derezzado ou destruído, rezza no início do próximo turno, sem Ação de NET, outro Armor do deck ainda não usado na corrida. Ocupa 2 slots de Hardware.",
+      "attributes": {
+        "gearType": "Electronics",
+        "gearClass": "Hardware de Cyberdeck",
+        "requirements": "Cyberdeck",
+        "effect": "Quando um Programa Armor ativo é derezzado ou destruído, rezza no início do próximo turno, sem Ação de NET, outro Armor do deck ainda não usado na corrida."
+      },
+      "priceCategory": "Expensive",
+      "notes": "Conferido com Interface RED Volume 3, p. 41. Artigo Midnight with the Upload. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Netrunning"
+      ],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "feline-instinct",
+      "name": "Feline Instinct",
+      "page": 41,
+      "price": 500,
+      "description": "Sempre que uma Black ICE Sabertooth do deck destrói um Programa, o dano dela aumenta em 1d6 até o Jack Out. Ocupa 2 slots de Hardware.",
+      "attributes": {
+        "gearType": "Electronics",
+        "gearClass": "Hardware de Cyberdeck",
+        "requirements": "Cyberdeck",
+        "effect": "Sempre que uma Black ICE Sabertooth do deck destrói um Programa, o dano dela aumenta em 1d6 até o Jack Out."
+      },
+      "priceCategory": "Expensive",
+      "notes": "Conferido com Interface RED Volume 3, p. 41. Artigo Midnight with the Upload. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Netrunning"
+      ],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "hangry-hangry-dragon",
+      "name": "Hangry Hangry Dragon",
+      "page": 41,
+      "price": 500,
+      "description": "Sempre que uma Black ICE Dragon do deck destrói um Programa, o Rez dela volta ao máximo.",
+      "attributes": {
+        "gearType": "Electronics",
+        "gearClass": "Hardware de Cyberdeck",
+        "requirements": "Cyberdeck",
+        "effect": "Sempre que uma Black ICE Dragon do deck destrói um Programa, o Rez dela volta ao máximo."
+      },
+      "priceCategory": "Expensive",
+      "notes": "Conferido com Interface RED Volume 3, p. 41. Artigo Midnight with the Upload. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Netrunning"
+      ],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "perfume-shoppe",
+      "name": "Perfume Shoppe",
+      "page": 41,
+      "price": 500,
+      "description": "Black ICE Skunk ocupa 1 slot de Programa em vez de 2. Ocupa 2 slots de Hardware.",
+      "attributes": {
+        "gearType": "Electronics",
+        "gearClass": "Hardware de Cyberdeck",
+        "requirements": "Cyberdeck",
+        "effect": "Black ICE Skunk ocupa 1 slot de Programa em vez de 2."
+      },
+      "priceCategory": "Expensive",
+      "notes": "Conferido com Interface RED Volume 3, p. 41. Artigo Midnight with the Upload. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Netrunning"
+      ],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "smithy",
+      "name": "Smithy",
+      "page": 41,
+      "price": 500,
+      "description": "Como Ação de Meat, converte todos os Programas Sword instalados em Banhammer e vice-versa.",
+      "attributes": {
+        "gearType": "Electronics",
+        "gearClass": "Hardware de Cyberdeck",
+        "requirements": "Cyberdeck",
+        "effect": "Como Ação de Meat, converte todos os Programas Sword instalados em Banhammer e vice-versa."
+      },
+      "priceCategory": "Expensive",
+      "notes": "Conferido com Interface RED Volume 3, p. 41. Artigo Midnight with the Upload. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Netrunning"
+      ],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "snaketrap",
+      "name": "Snaketrap",
+      "page": 41,
+      "price": 500,
+      "description": "Impede o primeiro efeito de Black ICE ou Programa da corrida que destruiria um Programa ao acaso no deck. Mais de um não faz nada.",
+      "attributes": {
+        "gearType": "Electronics",
+        "gearClass": "Hardware de Cyberdeck",
+        "requirements": "Cyberdeck",
+        "effect": "Impede o primeiro efeito de Black ICE ou Programa da corrida que destruiria um Programa ao acaso no deck. Mais de um não faz nada."
+      },
+      "priceCategory": "Expensive",
+      "notes": "Conferido com Interface RED Volume 3, p. 41. Artigo Midnight with the Upload. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Netrunning"
+      ],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "swamp-mist",
+      "name": "Swamp Mist",
+      "page": 42,
+      "price": 500,
+      "description": "Black ICE Wisp do deck causa 2d6 em vez de 1d6, mas nenhuma outra Black ICE pode ser instalada. Ocupa 2 slots de Hardware.",
+      "attributes": {
+        "gearType": "Electronics",
+        "gearClass": "Hardware de Cyberdeck",
+        "requirements": "Cyberdeck",
+        "effect": "Black ICE Wisp do deck causa 2d6 em vez de 1d6, mas nenhuma outra Black ICE pode ser instalada."
+      },
+      "priceCategory": "Expensive",
+      "notes": "Conferido com Interface RED Volume 3, p. 42. Artigo Midnight with the Upload. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Netrunning"
+      ],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "swifty-clean",
+      "name": "Swifty Clean",
+      "page": 42,
+      "price": 500,
+      "description": "Faz a habilidade Cloak duas vezes com uma só Ação de NET e fica com o melhor resultado, mas Cloak só pode ser usada uma vez por corrida. Ocupa 2 slots de Hardware.",
+      "attributes": {
+        "gearType": "Electronics",
+        "gearClass": "Hardware de Cyberdeck",
+        "requirements": "Cyberdeck",
+        "effect": "Faz a habilidade Cloak duas vezes com uma só Ação de NET e fica com o melhor resultado, mas Cloak só pode ser usada uma vez por corrida."
+      },
+      "priceCategory": "Expensive",
+      "notes": "Conferido com Interface RED Volume 3, p. 42. Artigo Midnight with the Upload. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Exótica",
+        "Baixa Qualidade"
+      ],
+      "manufacturer": null,
+      "slug": "scarlet-blackbow",
+      "name": "Scarlet Blackbow",
+      "category": "weapons",
+      "page": 73,
+      "price": 50,
+      "description": "Réplica de cosplay do arco de Elflines Online que funciona e toca sons do jogo. Arco Exótico de Baixa Qualidade, com aljava de 6 Rubber Arrows. Num 1 crítico, ele se destrói e a bateria eletrocuta o usuário com 6d6 (armadura reduz normalmente).",
+      "attributes": {
+        "weaponClass": "Bow",
+        "skill": "Archery",
+        "damage": "4d6",
+        "damageDice": 4,
+        "rof": 1,
+        "maxRange": 200,
+        "hands": 2,
+        "concealable": false,
+        "quality": "Poor",
+        "exotic": true,
+        "calibers": [
+          "Arrow"
+        ]
+      },
+      "priceCategory": "Costly",
+      "notes": "Conferido com Interface RED Volume 3, p. 73. Artigo Elflines Online the TCG. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Veículo",
+        "Bicicleta"
+      ],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "bicycle-bottle-dynamo",
+      "name": "Bottle Dynamo",
+      "page": 78,
+      "price": 20,
+      "description": "Dínamo nas rodas que carrega uma bateria (como as de Microwaver) com uma hora de pedalada.",
+      "attributes": {
+        "gearType": "VehicleUpgrade",
+        "gearClass": "Upgrade de bicicleta",
+        "requirements": "Bicicleta",
+        "effect": "Dínamo nas rodas que carrega uma bateria (como as de Microwaver) com uma hora de pedalada."
+      },
+      "priceCategory": "Everyday",
+      "notes": "Conferido com Interface RED Volume 3, p. 78. Artigo Spinning Your Wheels (Yang's Wheels). Cada bicicleta só recebe um de cada upgrade. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Veículo",
+        "Bicicleta"
+      ],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "bicycle-bulletproof-glass",
+      "name": "Bulletproof Glass (bicicleta)",
+      "page": 78,
+      "price": 50,
+      "description": "Troca as janelas plásticas do triciclo por vidro: cobertura fina com 7 HP.",
+      "attributes": {
+        "gearType": "VehicleUpgrade",
+        "gearClass": "Upgrade de bicicleta",
+        "requirements": "Bicicleta com Enclosure",
+        "effect": "Troca as janelas plásticas do triciclo por vidro: cobertura fina com 7 HP."
+      },
+      "priceCategory": "Costly",
+      "notes": "Conferido com Interface RED Volume 3, p. 78. Artigo Spinning Your Wheels (Yang's Wheels). Cada bicicleta só recebe um de cada upgrade. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Veículo",
+        "Bicicleta"
+      ],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "bicycle-cycle-armor",
+      "name": "Cycle Armor",
+      "page": 78,
+      "price": 100,
+      "description": "Placas e reforços: a bicicleta passa a ter SP 7, que se estende às paredes do Enclosure.",
+      "attributes": {
+        "gearType": "VehicleUpgrade",
+        "gearClass": "Upgrade de bicicleta",
+        "requirements": "Bicicleta com Reinforced Frame",
+        "effect": "Placas e reforços: a bicicleta passa a ter SP 7, que se estende às paredes do Enclosure."
+      },
+      "priceCategory": "Premium",
+      "notes": "Conferido com Interface RED Volume 3, p. 78. Artigo Spinning Your Wheels (Yang's Wheels). Cada bicicleta só recebe um de cada upgrade. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Veículo",
+        "Bicicleta"
+      ],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "bicycle-electric-pedal-assist",
+      "name": "Electric Pedal Assist",
+      "page": 78,
+      "price": 100,
+      "description": "Motor que sobe a velocidade narrativa para a faixa de BODY seguinte (ou +5 MPH na mais alta) e dá +4 em Endurance contra o cansaço de longas pedaladas.",
+      "attributes": {
+        "gearType": "VehicleUpgrade",
+        "gearClass": "Upgrade de bicicleta",
+        "requirements": "Bicicleta",
+        "effect": "Motor que sobe a velocidade narrativa para a faixa de BODY seguinte (ou +5 MPH na mais alta) e dá +4 em Endurance contra o cansaço de longas pedaladas."
+      },
+      "priceCategory": "Premium",
+      "notes": "Conferido com Interface RED Volume 3, p. 78. Artigo Spinning Your Wheels (Yang's Wheels). Cada bicicleta só recebe um de cada upgrade. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Veículo",
+        "Bicicleta"
+      ],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "bicycle-enclosure",
+      "name": "Enclosure",
+      "page": 78,
+      "price": 100,
+      "description": "Vira triciclo, com estrutura e paredes de fibra de vidro e plástico contra o tempo. Incompatível com Folding Frame.",
+      "attributes": {
+        "gearType": "VehicleUpgrade",
+        "gearClass": "Upgrade de bicicleta",
+        "requirements": "Bicicleta",
+        "effect": "Vira triciclo, com estrutura e paredes de fibra de vidro e plástico contra o tempo. Incompatível com Folding Frame."
+      },
+      "priceCategory": "Premium",
+      "notes": "Conferido com Interface RED Volume 3, p. 78. Artigo Spinning Your Wheels (Yang's Wheels). Cada bicicleta só recebe um de cada upgrade. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Veículo",
+        "Bicicleta"
+      ],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "bicycle-extended-seat",
+      "name": "Extended Seat",
+      "page": 78,
+      "price": 20,
+      "description": "Banco alongado que leva um passageiro (2 lugares).",
+      "attributes": {
+        "gearType": "VehicleUpgrade",
+        "gearClass": "Upgrade de bicicleta",
+        "requirements": "Bicicleta",
+        "effect": "Banco alongado que leva um passageiro (2 lugares)."
+      },
+      "priceCategory": "Everyday",
+      "notes": "Conferido com Interface RED Volume 3, p. 78. Artigo Spinning Your Wheels (Yang's Wheels). Cada bicicleta só recebe um de cada upgrade. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Veículo",
+        "Bicicleta"
+      ],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "bicycle-folding-frame",
+      "name": "Folding Frame",
+      "page": 78,
+      "price": 100,
+      "description": "Dobra até o tamanho de uma pasta grande. Incompatível com Enclosure, Reinforced Frame e Smuggling Compartment.",
+      "attributes": {
+        "gearType": "VehicleUpgrade",
+        "gearClass": "Upgrade de bicicleta",
+        "requirements": "Bicicleta",
+        "effect": "Dobra até o tamanho de uma pasta grande. Incompatível com Enclosure, Reinforced Frame e Smuggling Compartment."
+      },
+      "priceCategory": "Premium",
+      "notes": "Conferido com Interface RED Volume 3, p. 78. Artigo Spinning Your Wheels (Yang's Wheels). Cada bicicleta só recebe um de cada upgrade. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Veículo",
+        "Bicicleta"
+      ],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "bicycle-gun-mount",
+      "name": "Gun Mount",
+      "page": 78,
+      "price": 100,
+      "description": "Suporte no guidão para Rifle de Assalto, SMG Pesada ou Escopeta, com gatilho na manopla. Dispara sem mão livre, só para a frente; não recarrega em movimento. Prender ou soltar a arma é uma Ação.",
+      "attributes": {
+        "gearType": "VehicleUpgrade",
+        "gearClass": "Upgrade de bicicleta",
+        "requirements": "Bicicleta",
+        "effect": "Suporte no guidão para Rifle de Assalto, SMG Pesada ou Escopeta, com gatilho na manopla. Dispara sem mão livre, só para a frente; não recarrega em movimento. Prender ou soltar a arma é uma Ação."
+      },
+      "priceCategory": "Premium",
+      "notes": "Conferido com Interface RED Volume 3, p. 78. Artigo Spinning Your Wheels (Yang's Wheels). Cada bicicleta só recebe um de cada upgrade. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Veículo",
+        "Bicicleta"
+      ],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "bicycle-neon-lighting",
+      "name": "Neon Lighting",
+      "page": 79,
+      "price": 20,
+      "description": "Neon de fibra óptica no quadro e nas rodas. Conta como uma instalação de Light Tattoo para o bônus de Wardrobe & Style enquanto o ciclista estiver na bicicleta ou perto dela.",
+      "attributes": {
+        "gearType": "VehicleUpgrade",
+        "gearClass": "Upgrade de bicicleta",
+        "requirements": "Bicicleta",
+        "effect": "Neon de fibra óptica no quadro e nas rodas. Conta como uma instalação de Light Tattoo para o bônus de Wardrobe & Style enquanto o ciclista estiver na bicicleta ou perto dela."
+      },
+      "priceCategory": "Everyday",
+      "notes": "Conferido com Interface RED Volume 3, p. 79. Artigo Spinning Your Wheels (Yang's Wheels). Cada bicicleta só recebe um de cada upgrade. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Veículo",
+        "Bicicleta"
+      ],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "bicycle-reinforced-frame",
+      "name": "Reinforced Frame",
+      "page": 79,
+      "price": 100,
+      "description": "Reforço do quadro: +5 SDP e permite ciclistas com BODY 11+. Incompatível com Folding Frame.",
+      "attributes": {
+        "gearType": "VehicleUpgrade",
+        "gearClass": "Upgrade de bicicleta",
+        "requirements": "Bicicleta",
+        "effect": "Reforço do quadro: +5 SDP e permite ciclistas com BODY 11+. Incompatível com Folding Frame."
+      },
+      "priceCategory": "Premium",
+      "notes": "Conferido com Interface RED Volume 3, p. 79. Artigo Spinning Your Wheels (Yang's Wheels). Cada bicicleta só recebe um de cada upgrade. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Veículo",
+        "Bicicleta"
+      ],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "bicycle-security-system",
+      "name": "Security System",
+      "page": 79,
+      "price": 500,
+      "description": "Eletrifica a bicicleta por um app: quem a agarrar faz Resist Torture/Drugs DV13 ou solta na hora. Tem nano-VIN, e a Yang's Wheels devolve ou reconstrói de graça se a bicicleta roubada aparecer por lá.",
+      "attributes": {
+        "gearType": "VehicleUpgrade",
+        "gearClass": "Upgrade de bicicleta",
+        "requirements": "Bicicleta",
+        "effect": "Eletrifica a bicicleta por um app: quem a agarrar faz Resist Torture/Drugs DV13 ou solta na hora. Tem nano-VIN, e a Yang's Wheels devolve ou reconstrói de graça se a bicicleta roubada aparecer por lá."
+      },
+      "priceCategory": "Expensive",
+      "notes": "Conferido com Interface RED Volume 3, p. 79. Artigo Spinning Your Wheels (Yang's Wheels). Cada bicicleta só recebe um de cada upgrade. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Veículo",
+        "Bicicleta"
+      ],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "bicycle-smuggling-compartment",
+      "name": "Smuggling Compartment",
+      "page": 79,
+      "price": 50,
+      "description": "Compartimento de 2,5 x 15 cm escondido no quadro (Conceal/Reveal Object DV17). Incompatível com Folding Frame.",
+      "attributes": {
+        "gearType": "VehicleUpgrade",
+        "gearClass": "Upgrade de bicicleta",
+        "requirements": "Bicicleta",
+        "effect": "Compartimento de 2,5 x 15 cm escondido no quadro (Conceal/Reveal Object DV17). Incompatível com Folding Frame."
+      },
+      "priceCategory": "Costly",
+      "notes": "Conferido com Interface RED Volume 3, p. 79. Artigo Spinning Your Wheels (Yang's Wheels). Cada bicicleta só recebe um de cada upgrade. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Veículo",
+        "Bicicleta"
+      ],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "bicycle-stunt-frame",
+      "name": "Stunt Frame",
+      "page": 79,
+      "price": 100,
+      "description": "Bicicleta mais leve e ágil: +2 em Athletics para manobras.",
+      "attributes": {
+        "gearType": "VehicleUpgrade",
+        "gearClass": "Upgrade de bicicleta",
+        "requirements": "Bicicleta",
+        "effect": "Bicicleta mais leve e ágil: +2 em Athletics para manobras."
+      },
+      "priceCategory": "Premium",
+      "notes": "Conferido com Interface RED Volume 3, p. 79. Artigo Spinning Your Wheels (Yang's Wheels). Cada bicicleta só recebe um de cada upgrade. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Veículo",
+        "Bicicleta"
+      ],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "bicycle-trailer",
+      "name": "Trailer",
+      "page": 79,
+      "price": 50,
+      "description": "Reboque de 1,5 x 0,46 m, preso ou solto com uma Ação. Precisa ser solto antes de dobrar uma Folding Frame.",
+      "attributes": {
+        "gearType": "VehicleUpgrade",
+        "gearClass": "Upgrade de bicicleta",
+        "requirements": "Bicicleta",
+        "effect": "Reboque de 1,5 x 0,46 m, preso ou solto com uma Ação. Precisa ser solto antes de dobrar uma Folding Frame."
+      },
+      "priceCategory": "Costly",
+      "notes": "Conferido com Interface RED Volume 3, p. 79. Artigo Spinning Your Wheels (Yang's Wheels). Cada bicicleta só recebe um de cada upgrade. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Yang's Wheels",
+      "category": "gear",
+      "slug": "inline-skates",
+      "name": "Inline Skates",
+      "page": 79,
+      "price": 50,
+      "description": "Patins em linha: +4 m/yds ao usar a Ação Correr. Calçar ou tirar é uma Ação, e opções de perna ficam inacessíveis enquanto calçados. Tarefas de equilíbrio podem contar como Tarefa Complexa (-2).",
+      "attributes": {
+        "gearType": "Lifestyle",
+        "effect": "Patins em linha: +4 m/yds ao usar a Ação Correr. Calçar ou tirar é uma Ação, e opções de perna ficam inacessíveis enquanto calçados. Tarefas de equilíbrio podem contar como Tarefa Complexa (-2)."
+      },
+      "priceCategory": "Costly",
+      "notes": "Conferido com Interface RED Volume 3, p. 79. Artigo Spinning Your Wheels. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Yang's Wheels",
+      "category": "gear",
+      "slug": "skateboard",
+      "name": "Skateboard",
+      "page": 79,
+      "price": 50,
+      "description": "Skate: +4 m/yds ao usar a Ação Correr em terreno plano ou em descida, além das manobras. Tarefas de equilíbrio podem contar como Tarefa Complexa (-2).",
+      "attributes": {
+        "gearType": "Lifestyle",
+        "effect": "Skate: +4 m/yds ao usar a Ação Correr em terreno plano ou em descida, além das manobras. Tarefas de equilíbrio podem contar como Tarefa Complexa (-2)."
+      },
+      "priceCategory": "Costly",
+      "notes": "Conferido com Interface RED Volume 3, p. 79. Artigo Spinning Your Wheels. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Raven Microcybernetics",
+      "slug": "raven-microcybernetics-microwaldo",
+      "name": "Raven Microcybernetics MicroWaldo",
+      "category": "cyberware",
+      "page": 87,
+      "price": 1000,
+      "description": "Opção de Cyberarm e de Neuralware. Oito sondas articuladas ligadas ao pulso e ao cérebro: um Medtech com MicroWaldo tem +1 em Surgery.",
+      "attributes": {
+        "foundational": false,
+        "requiresPair": false,
+        "cyberwareType": "LimbOption",
+        "bodyLocation": "Arm",
+        "installLocation": "Clinic",
+        "humanityLoss": 7,
+        "humanityLossDice": "2d6",
+        "requiresItem": "cyberarm",
+        "requirements": "Cyberarm e Neural Link; Clinic",
+        "effect": "+1 em Surgery."
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Interface RED Volume 3, p. 87. Reimpressão do 12 Days of Cybermas (deixado passar na conferência do PDF avulso). Também no artigo Going Metal, p. 109. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Pacote",
+        "FBC"
+      ],
+      "manufacturer": "Cybermatrix",
+      "slug": "cybermatrix-copernicus",
+      "name": "Cybermatrix Inc. Copernicus",
+      "category": "cyberware",
+      "page": 96,
+      "price": 17300,
+      "priceCategory": "VeryExpensive",
+      "description": "Corpo para exploração e construção no espaço. Pacote de corpo completo construído em torno de um Internal Linear Frame, onde se instala um Biosystem (comprado à parte). Cyberarm, Cyberaudio Suite, Cybereye, Cyberleg, Cyberskull, Internal Linear Frame e Neural Link num corpo FBC não causam HL. O usuário pode ficar com a HL média em vez de rolar. O BODY, o HP e o Death Save vêm do corpo. Sem HL: Cyberarm x2, Cyberaudio Suite, Kiroshi MonoVision, Cyberleg x2, Cyberskull, Neural Link, Internal Linear Frame Sigma. Com HL: Anti-Dazzle, FBC EMP Coating x2, Grapple Hand x2, Internal Hydraulics Upgrade, Prehensile Cyberfoot x2, Radar/Sonar Implant, Radio Communicator, Toolhand x2, Zero Gravity Thrusters x2.",
+      "attributes": {
+        "foundational": false,
+        "requiresPair": false,
+        "cyberwareType": "Borgware",
+        "bodyLocation": "FullBody",
+        "installLocation": "Hospital",
+        "humanityLoss": 52,
+        "humanityLossDice": "[2d6/2]+15d6",
+        "requiresItem": "biosystem",
+        "requirements": "Biosystem; Hospital",
+        "effect": "Corpo FBC. Com HL: Anti-Dazzle, FBC EMP Coating x2, Grapple Hand x2, Internal Hydraulics Upgrade, Prehensile Cyberfoot x2, Radar/Sonar Implant, Radio Communicator, Toolhand x2, Zero Gravity Thrusters x2."
+      },
+      "notes": "Conferido com Interface RED Volume 3, p. 96. Artigo Going Metal. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Pacote",
+        "FBC"
+      ],
+      "manufacturer": "Dynalar",
+      "slug": "dynalar-aquarius",
+      "name": "Dynalar Aquarius",
+      "category": "cyberware",
+      "page": 96,
+      "price": 13000,
+      "priceCategory": "VeryExpensive",
+      "description": "Corpo para mergulho e vida submarina. Pacote de corpo completo construído em torno de um Internal Linear Frame, onde se instala um Biosystem (comprado à parte). Cyberarm, Cyberaudio Suite, Cybereye, Cyberleg, Cyberskull, Internal Linear Frame e Neural Link num corpo FBC não causam HL. O usuário pode ficar com a HL média em vez de rolar. O BODY, o HP e o Death Save vêm do corpo. Sem HL: Cyberarm x2, Cyberaudio Suite, Cybereye x2, Cyberleg x2, Cyberskull, Neural Link, Internal Linear Frame Sigma. Com HL: Low Light/Infrared/UV x2, Radar Detector, Radio Communicator, Radar/Sonar Implant, Subdermal Armor, Web Foot x2.",
+      "attributes": {
+        "foundational": false,
+        "requiresPair": false,
+        "cyberwareType": "Borgware",
+        "bodyLocation": "FullBody",
+        "installLocation": "Hospital",
+        "humanityLoss": 37,
+        "humanityLossDice": "[2d6/2]+10d6",
+        "requiresItem": "biosystem",
+        "requirements": "Biosystem; Hospital",
+        "effect": "Corpo FBC. Com HL: Low Light/Infrared/UV x2, Radar Detector, Radio Communicator, Radar/Sonar Implant, Subdermal Armor, Web Foot x2."
+      },
+      "notes": "Conferido com Interface RED Volume 3, p. 96. Artigo Going Metal. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Pacote",
+        "FBC"
+      ],
+      "manufacturer": "Dynalar",
+      "slug": "dynalar-brimstone",
+      "name": "Dynalar Brimstone",
+      "category": "cyberware",
+      "page": 96,
+      "price": 17600,
+      "priceCategory": "VeryExpensive",
+      "description": "Bombeiro à prova de fogo, que lança granadas de CO2. Pacote de corpo completo construído em torno de um Internal Linear Frame, onde se instala um Biosystem (comprado à parte). Cyberarm, Cyberaudio Suite, Cybereye, Cyberleg, Cyberskull, Internal Linear Frame e Neural Link num corpo FBC não causam HL. O usuário pode ficar com a HL média em vez de rolar. O BODY, o HP e o Death Save vêm do corpo. Sem HL: Cyberarm x2, Cyberaudio Suite, Cybereye x2, Cyberleg x2, Cyberskull, Neural Link, Internal Linear Frame Sigma. Com HL: Amplified Hearing, FBC Brimstone Coating, Heavy Subdermal Plating, Low Light/Infrared/UV x2, Radar/Sonar Implant, Radio Communicator, Popup Grenade Launcher x2 com Tech Upgrade (+1 de capacidade).",
+      "attributes": {
+        "foundational": false,
+        "requiresPair": false,
+        "cyberwareType": "Borgware",
+        "bodyLocation": "FullBody",
+        "installLocation": "Hospital",
+        "humanityLoss": 53,
+        "humanityLossDice": "[1d6/2]+15d6",
+        "requiresItem": "biosystem",
+        "requirements": "Biosystem; Hospital",
+        "effect": "Corpo FBC. Com HL: Amplified Hearing, FBC Brimstone Coating, Heavy Subdermal Plating, Low Light/Infrared/UV x2, Radar/Sonar Implant, Radio Communicator, Popup Grenade Launcher x2 com Tech Upgrade (+1 de capacidade)."
+      },
+      "notes": "Conferido com Interface RED Volume 3, p. 96. Artigo Going Metal. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Pacote",
+        "FBC"
+      ],
+      "manufacturer": "Militech",
+      "slug": "militech-dragoon-revised",
+      "name": "Militech Dragoon Revised War Platform",
+      "category": "cyberware",
+      "page": 98,
+      "price": 35000,
+      "priceCategory": "SuperLuxury",
+      "description": "Revisão do FBC militar que venceu a 4ª Guerra Corporativa; o pacote de armas é vendido à parte. Pacote de corpo completo construído em torno de um Internal Linear Frame, onde se instala um Biosystem (comprado à parte). Cyberarm, Cyberaudio Suite, Cybereye, Cyberleg, Cyberskull, Internal Linear Frame e Neural Link num corpo FBC não causam HL. O usuário pode ficar com a HL média em vez de rolar. O BODY, o HP e o Death Save vêm do corpo. Sem HL: Cyberarm x2, Cyberaudio Suite, Cybereye x2, Cyberleg x2, Cyberskull, Neural Link, Internal Linear Frame Omega. Com HL: Anti-Dazzle x2, Chyron, Dragoon Plating, FBC EMP Coating x2, Internal Agent, Low Light/Infrared/UV x2, Reinforced Cyberlimb Upgrade x4, Subdermal Grip x2, Internal Hydraulics Upgrade Tuned.",
+      "attributes": {
+        "foundational": false,
+        "requiresPair": false,
+        "cyberwareType": "Borgware",
+        "bodyLocation": "FullBody",
+        "installLocation": "Hospital",
+        "humanityLoss": 64,
+        "humanityLossDice": "[3d6/2]+18d6",
+        "requiresItem": "biosystem",
+        "requirements": "Biosystem; Hospital",
+        "effect": "Corpo FBC. Com HL: Anti-Dazzle x2, Chyron, Dragoon Plating, FBC EMP Coating x2, Internal Agent, Low Light/Infrared/UV x2, Reinforced Cyberlimb Upgrade x4, Subdermal Grip x2, Internal Hydraulics Upgrade Tuned."
+      },
+      "notes": "Conferido com Interface RED Volume 3, p. 98. Artigo Going Metal. A tabela da p. 110 chama de \"Revised Warfighting Platform\". Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Pacote",
+        "FBC"
+      ],
+      "manufacturer": "Militech",
+      "slug": "militech-eclipse",
+      "name": "Militech Eclipse",
+      "category": "cyberware",
+      "page": 98,
+      "price": 29200,
+      "priceCategory": "Luxury",
+      "description": "O \"ninja Borg\" cuja existência a Militech nega. Pacote de corpo completo construído em torno de um Internal Linear Frame, onde se instala um Biosystem (comprado à parte). Cyberarm, Cyberaudio Suite, Cybereye, Cyberleg, Cyberskull, Internal Linear Frame e Neural Link num corpo FBC não causam HL. O usuário pode ficar com a HL média em vez de rolar. O BODY, o HP e o Death Save vêm do corpo. Sem HL: Cyberarm x2, Cyberaudio Suite, Kiroshi MonoVision, Cyberleg x2, Cyberskull, Neural Link, Internal Linear Frame Beta. Com HL: Amplified Hearing, FBC Chameleon Coating x3, Grip Foot x2, Low Light/Infrared/UV, Radio Communicator, Scrambler/Descrambler, Subdermal Armor, Subdermal Pocket x2, Popup Melee Weapon (Kendachi Mono-Three) com Tech Upgrade para arma grande, Internal Hydraulics Upgrade Tuned.",
+      "attributes": {
+        "foundational": false,
+        "requiresPair": false,
+        "cyberwareType": "Borgware",
+        "bodyLocation": "FullBody",
+        "installLocation": "Hospital",
+        "humanityLoss": 67,
+        "humanityLossDice": "[2d6/2]+19d6",
+        "requiresItem": "biosystem",
+        "requirements": "Biosystem; Hospital",
+        "effect": "Corpo FBC. Com HL: Amplified Hearing, FBC Chameleon Coating x3, Grip Foot x2, Low Light/Infrared/UV, Radio Communicator, Scrambler/Descrambler, Subdermal Armor, Subdermal Pocket x2, Popup Melee Weapon (Kendachi Mono-Three) com Tech Upgrade para arma grande, Internal Hydraulics Upgrade Tuned."
+      },
+      "notes": "Conferido com Interface RED Volume 3, p. 98. Artigo Going Metal. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Pacote",
+        "FBC"
+      ],
+      "manufacturer": "Militech",
+      "slug": "militech-enforcer",
+      "name": "Militech Enforcer",
+      "category": "cyberware",
+      "page": 100,
+      "price": 16800,
+      "priceCategory": "VeryExpensive",
+      "description": "Corpo policial, comum na MAX-TAC. Pacote de corpo completo construído em torno de um Internal Linear Frame, onde se instala um Biosystem (comprado à parte). Cyberarm, Cyberaudio Suite, Cybereye, Cyberleg, Cyberskull, Internal Linear Frame e Neural Link num corpo FBC não causam HL. O usuário pode ficar com a HL média em vez de rolar. O BODY, o HP e o Death Save vêm do corpo. Sem HL: Cyberarm x2, Cyberaudio Suite, Kiroshi MonoVision, Cyberleg x2, Cyberskull, Neural Link, Internal Linear Frame Sigma. Com HL: Anti-Dazzle, Audio Recorder, Heavy Subdermal Plating, Hidden Holster, Low Light/Infrared/UV, Popup Grenade Launcher, Popup Melee Weapon (Stun Baton), Radio Communicator, Subdermal Grip, Targeting Scope, Voice Stress Analyzer.",
+      "attributes": {
+        "foundational": false,
+        "requiresPair": false,
+        "cyberwareType": "Borgware",
+        "bodyLocation": "FullBody",
+        "installLocation": "Hospital",
+        "humanityLoss": 53,
+        "humanityLossDice": "[3d6/2]+13d6",
+        "requiresItem": "biosystem",
+        "requirements": "Biosystem; Hospital",
+        "effect": "Corpo FBC. Com HL: Anti-Dazzle, Audio Recorder, Heavy Subdermal Plating, Hidden Holster, Low Light/Infrared/UV, Popup Grenade Launcher, Popup Melee Weapon (Stun Baton), Radio Communicator, Subdermal Grip, Targeting Scope, Voice Stress Analyzer."
+      },
+      "notes": "Conferido com Interface RED Volume 3, p. 100. Artigo Going Metal. Divergência no livro: o exemplo da p. 94-95 usa HL média 55 e total de 27.700eb com o Biosystem (o corpo sairia 17.700eb). Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Pacote",
+        "FBC"
+      ],
+      "manufacturer": "Militech",
+      "slug": "militech-spyder-2",
+      "name": "Militech Spyder 2.0",
+      "category": "cyberware",
+      "page": 100,
+      "price": 24900,
+      "priceCategory": "Luxury",
+      "description": "Borg de espionagem de quatro braços. Pacote de corpo completo construído em torno de um Internal Linear Frame, onde se instala um Biosystem (comprado à parte). Cyberarm, Cyberaudio Suite, Cybereye, Cyberleg, Cyberskull, Internal Linear Frame e Neural Link num corpo FBC não causam HL. O usuário pode ficar com a HL média em vez de rolar. O BODY, o HP e o Death Save vêm do corpo. Sem HL: Cyberarm x4, Cyberaudio Suite, Kiroshi MonoVision, Cyberleg x2, Cyberskull, Neural Link, Internal Linear Frame Beta. Com HL: Amplified Hearing, Artificial Shoulder Mount, Chipware Socket, FBC Chameleon Coating, Grapple Hand x4, Grip Foot x2, Image Enhance, Internal Agent, Low Light/Infrared/UV, MicroVideo, Tactile Boost, TeleOptics, Internal Hydraulics Upgrade Tuned.",
+      "attributes": {
+        "foundational": false,
+        "requiresPair": false,
+        "cyberwareType": "Borgware",
+        "bodyLocation": "FullBody",
+        "installLocation": "Hospital",
+        "humanityLoss": 73,
+        "humanityLossDice": "[1d6/2]+22d6",
+        "requiresItem": "biosystem",
+        "requirements": "Biosystem; Hospital",
+        "effect": "Corpo FBC. Com HL: Amplified Hearing, Artificial Shoulder Mount, Chipware Socket, FBC Chameleon Coating, Grapple Hand x4, Grip Foot x2, Image Enhance, Internal Agent, Low Light/Infrared/UV, MicroVideo, Tactile Boost, TeleOptics, Internal Hydraulics Upgrade Tuned."
+      },
+      "notes": "Conferido com Interface RED Volume 3, p. 100. Artigo Going Metal. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Pacote",
+        "FBC"
+      ],
+      "manufacturer": "Moore Technologies",
+      "slug": "moore-tech-sheol",
+      "name": "Moore Tech Sheol",
+      "category": "cyberware",
+      "page": 100,
+      "price": 19600,
+      "priceCategory": "VeryExpensive",
+      "description": "Corpo para operações em ambientes tóxicos e perigosos. Pacote de corpo completo construído em torno de um Internal Linear Frame, onde se instala um Biosystem (comprado à parte). Cyberarm, Cyberaudio Suite, Cybereye, Cyberleg, Cyberskull, Internal Linear Frame e Neural Link num corpo FBC não causam HL. O usuário pode ficar com a HL média em vez de rolar. O BODY, o HP e o Death Save vêm do corpo. Sem HL: Cyberarm x2, Cyberaudio Suite, Cybereye x2, Cyberleg x2, Cyberskull, Neural Link, Internal Linear Frame Beta. Com HL: Chemical Analyzer, Chipware Socket, Chyron, Heavy Subdermal Plating, Internal Agent, Radiation Detector.",
+      "attributes": {
+        "foundational": false,
+        "requiresPair": false,
+        "cyberwareType": "Borgware",
+        "bodyLocation": "FullBody",
+        "installLocation": "Hospital",
+        "humanityLoss": 32,
+        "humanityLossDice": "[1d6/2]+9d6",
+        "requiresItem": "biosystem",
+        "requirements": "Biosystem; Hospital",
+        "effect": "Corpo FBC. Com HL: Chemical Analyzer, Chipware Socket, Chyron, Heavy Subdermal Plating, Internal Agent, Radiation Detector."
+      },
+      "notes": "Conferido com Interface RED Volume 3, p. 100. Artigo Going Metal. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Pacote",
+        "FBC"
+      ],
+      "manufacturer": "NovelTech",
+      "slug": "noveltech-samson",
+      "name": "NovelTech Samson",
+      "category": "cyberware",
+      "page": 102,
+      "price": 20500,
+      "priceCategory": "Luxury",
+      "description": "Borg industrial de construção, robusto e feio. Pacote de corpo completo construído em torno de um Internal Linear Frame, onde se instala um Biosystem (comprado à parte). Cyberarm, Cyberaudio Suite, Cybereye, Cyberleg, Cyberskull, Internal Linear Frame e Neural Link num corpo FBC não causam HL. O usuário pode ficar com a HL média em vez de rolar. O BODY, o HP e o Death Save vêm do corpo. Sem HL: Cyberarm x2, Cyberaudio Suite, Cybereye x2, Cyberleg x2, Cyberskull, Neural Link, Internal Linear Frame Omega. Com HL: Anti-Dazzle x2, Chyron, Internal Agent, Radiation Detector, Subdermal Armor, Techscanner, Toolhand x2.",
+      "attributes": {
+        "foundational": false,
+        "requiresPair": false,
+        "cyberwareType": "Borgware",
+        "bodyLocation": "FullBody",
+        "installLocation": "Hospital",
+        "humanityLoss": 39,
+        "humanityLossDice": "[3d6/2]+10d6",
+        "requiresItem": "biosystem",
+        "requirements": "Biosystem; Hospital",
+        "effect": "Corpo FBC. Com HL: Anti-Dazzle x2, Chyron, Internal Agent, Radiation Detector, Subdermal Armor, Techscanner, Toolhand x2."
+      },
+      "notes": "Conferido com Interface RED Volume 3, p. 102. Artigo Going Metal. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Pacote",
+        "FBC"
+      ],
+      "manufacturer": "Raven Microcybernetics",
+      "slug": "raven-microcyb-gemini",
+      "name": "Raven Microcyb Gemini",
+      "category": "cyberware",
+      "page": 102,
+      "price": 10200,
+      "priceCategory": "Expensive",
+      "description": "O FBC mais vendido: parece um humano comum. Pacote de corpo completo construído em torno de um Internal Linear Frame, onde se instala um Biosystem (comprado à parte). Cyberarm, Cyberaudio Suite, Cybereye, Cyberleg, Cyberskull, Internal Linear Frame e Neural Link num corpo FBC não causam HL. O usuário pode ficar com a HL média em vez de rolar. O BODY, o HP e o Death Save vêm do corpo. Sem HL: Cyberarm x2, Cyberaudio Suite, Cybereye x2, Cyberleg x2, Cyberskull, Neural Link, FBC Gemini Sculpt, Internal Linear Frame Sigma, Techhair, Shift Tacts. Com HL: Mr. Studd™ ou Midnight Lady™ Sexual Implant, Skin Weave.",
+      "attributes": {
+        "foundational": false,
+        "requiresPair": false,
+        "cyberwareType": "Borgware",
+        "bodyLocation": "FullBody",
+        "installLocation": "Hospital",
+        "humanityLoss": 14,
+        "humanityLossDice": "4d6",
+        "requiresItem": "biosystem",
+        "requirements": "Biosystem; Hospital",
+        "effect": "Corpo FBC. Com HL: Mr. Studd™ ou Midnight Lady™ Sexual Implant, Skin Weave."
+      },
+      "notes": "Conferido com Interface RED Volume 3, p. 102. Artigo Going Metal. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Pacote",
+        "FBC"
+      ],
+      "manufacturer": "Raven Microcybernetics",
+      "slug": "raven-microcyb-wiseman",
+      "name": "Raven Microcyb Wiseman",
+      "category": "cyberware",
+      "page": 103,
+      "price": 27480,
+      "priceCategory": "Luxury",
+      "description": "Corpo de Netrunner para defender arquiteturas. Pacote de corpo completo construído em torno de um Internal Linear Frame, onde se instala um Biosystem (comprado à parte). Cyberarm, Cyberaudio Suite, Cybereye, Cyberleg, Cyberskull, Internal Linear Frame e Neural Link num corpo FBC não causam HL. O usuário pode ficar com a HL média em vez de rolar. O BODY, o HP e o Death Save vêm do corpo. Sem HL: Cyberarm x2, Cyberaudio Suite, Cybereye x2, Cyberleg x2, Cyberskull, Neural Link, Internal Linear Frame Sigma. Com HL: Chyron, Cyberdeck (opção de Cyberarm) x4, FBC Integrated Bodyweight Coating x3, Internal Agent, Integrated Cyberdeck Upgrade x4, Virtuality x2. Vem com 4 Cyberdecks carregados (2 Excellent Quality, um Microtech Warrior e um Kestrel 2 com Tech Upgrade) e Hardware no Bodyweight Coating.",
+      "attributes": {
+        "foundational": false,
+        "requiresPair": false,
+        "cyberwareType": "Borgware",
+        "bodyLocation": "FullBody",
+        "installLocation": "Hospital",
+        "humanityLoss": 70,
+        "humanityLossDice": "[3d6/2]+19d6",
+        "requiresItem": "biosystem",
+        "requirements": "Biosystem; Hospital",
+        "effect": "Corpo FBC. Com HL: Chyron, Cyberdeck (opção de Cyberarm) x4, FBC Integrated Bodyweight Coating x3, Internal Agent, Integrated Cyberdeck Upgrade x4, Virtuality x2. Vem com 4 Cyberdecks carregados (2 Excellent Quality, um Microtech Warrior e um Kestrel 2 com Tech Upgrade) e Hardware no Bodyweight Coating."
+      },
+      "notes": "Conferido com Interface RED Volume 3, p. 103. Artigo Going Metal. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Pacote",
+        "FBC"
+      ],
+      "manufacturer": "Rocklin Augmentics",
+      "slug": "rocklin-augmentics-alpha-class",
+      "name": "Rocklin Augmentics Alpha Class",
+      "category": "cyberware",
+      "page": 103,
+      "price": 9900,
+      "priceCategory": "Expensive",
+      "description": "O Borg de entrada clássico, antes fabricado pela IEC. Pacote de corpo completo construído em torno de um Internal Linear Frame, onde se instala um Biosystem (comprado à parte). Cyberarm, Cyberaudio Suite, Cybereye, Cyberleg, Cyberskull, Internal Linear Frame e Neural Link num corpo FBC não causam HL. O usuário pode ficar com a HL média em vez de rolar. O BODY, o HP e o Death Save vêm do corpo. Sem HL: Cyberarm x2, Cyberaudio Suite, Cybereye x2, Cyberleg x2, Cyberskull, Neural Link, Internal Linear Frame Sigma. Com HL: Interface Plugs, Subdermal Armor.",
+      "attributes": {
+        "foundational": false,
+        "requiresPair": false,
+        "cyberwareType": "Borgware",
+        "bodyLocation": "FullBody",
+        "installLocation": "Hospital",
+        "humanityLoss": 21,
+        "humanityLossDice": "6d6",
+        "requiresItem": "biosystem",
+        "requirements": "Biosystem; Hospital",
+        "effect": "Corpo FBC. Com HL: Interface Plugs, Subdermal Armor."
+      },
+      "notes": "Conferido com Interface RED Volume 3, p. 103. Artigo Going Metal. Pelo valor seria Luxury, mas o livro manda tratar como Expensive para disponibilidade. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Pacote",
+        "FBC"
+      ],
+      "manufacturer": "Trauma Team",
+      "slug": "trauma-team-kildare",
+      "name": "Trauma Team Kildare",
+      "category": "cyberware",
+      "page": 104,
+      "price": 12200,
+      "priceCategory": "VeryExpensive",
+      "description": "Cirurgião incansável da Trauma Team. Pacote de corpo completo construído em torno de um Internal Linear Frame, onde se instala um Biosystem (comprado à parte). Cyberarm, Cyberaudio Suite, Cybereye, Cyberleg, Cyberskull, Internal Linear Frame e Neural Link num corpo FBC não causam HL. O usuário pode ficar com a HL média em vez de rolar. O BODY, o HP e o Death Save vêm do corpo. Sem HL: Cyberarm x2, Cyberaudio Suite, Kiroshi MonoVision, Cyberleg x2, Cyberskull, Neural Link, Internal Linear Frame Sigma. Com HL: Amplified Hearing, Chyron, Image Enhance, Low Light/Infrared/UV, Medscanner, MicroOptics, Radio Communicator, Raven Microcybernetics MicroWaldo, Toolhand com Tech Upgrade (Airhypo instalado), Techscanner.",
+      "attributes": {
+        "foundational": false,
+        "requiresPair": false,
+        "cyberwareType": "Borgware",
+        "bodyLocation": "FullBody",
+        "installLocation": "Hospital",
+        "humanityLoss": 39,
+        "humanityLossDice": "[3d6/2]+10d6",
+        "requiresItem": "biosystem",
+        "requirements": "Biosystem; Hospital",
+        "effect": "Corpo FBC. Com HL: Amplified Hearing, Chyron, Image Enhance, Low Light/Infrared/UV, Medscanner, MicroOptics, Radio Communicator, Raven Microcybernetics MicroWaldo, Toolhand com Tech Upgrade (Airhypo instalado), Techscanner."
+      },
+      "notes": "Conferido com Interface RED Volume 3, p. 104. Artigo Going Metal. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "FBC"
+      ],
+      "manufacturer": null,
+      "slug": "cyberskull",
+      "name": "Cyberskull",
+      "category": "cyberware",
+      "page": 105,
+      "price": 5000,
+      "description": "Cyberware de Corpo Interno que ocupa 3 slots de opção. A cabeça deixa de ser ponto fraco (dano dobrado) em Aimed Shots e afins, e o usuário fica imune ao efeito e ao dano extra das Lesões Críticas Cracked Skull e Broken Jaw. Vem com um Faceplate personalizado; outros, inclusive com Realskinn™ ou SuperChrome®, custam 100eb.",
+      "attributes": {
+        "foundational": false,
+        "requiresPair": false,
+        "cyberwareType": "InternalBody",
+        "bodyLocation": "Head",
+        "installLocation": "Hospital",
+        "humanityLoss": 14,
+        "humanityLossDice": "4d6",
+        "requirements": "Hospital",
+        "effect": "Cabeça blindada: sem dano dobrado na cabeça."
+      },
+      "priceCategory": "Luxury",
+      "notes": "Conferido com Interface RED Volume 3, p. 105. Artigo Going Metal. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "FBC"
+      ],
+      "manufacturer": null,
+      "slug": "dragoon-plating-metalgear",
+      "name": "Dragoon Plating, Metalgear",
+      "category": "cyberware",
+      "page": 105,
+      "price": 15000,
+      "description": "Borgware de Corpo Externo. Exige BODY 16 ou ser FBC. Corpo e cabeça com SP 18 e penalidade de -3 em REF, DEX e MOVE. Ejeta e chama as placas magneticamente como a Dragoon Plating, com restauração de 1 SP por dia sem perder SP. Conjuntos extras custam 5.000eb; desenho personalizado, +100eb.",
+      "attributes": {
+        "foundational": false,
+        "requiresPair": false,
+        "cyberwareType": "Borgware",
+        "bodyLocation": "FullBody",
+        "installLocation": "Hospital",
+        "humanityLoss": 14,
+        "humanityLossDice": "4d6",
+        "requirements": "BODY 16 ou Full Body Conversion; Hospital",
+        "effect": "SP 18 no corpo e na cabeça (-3 REF/DEX/MOVE)."
+      },
+      "priceCategory": "SuperLuxury",
+      "notes": "Conferido com Interface RED Volume 3, p. 105. Artigo Going Metal. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "FBC"
+      ],
+      "manufacturer": null,
+      "slug": "fbc-brimstone-coating",
+      "name": "FBC Brimstone Coating",
+      "category": "cyberware",
+      "page": 106,
+      "price": 1000,
+      "description": "Cyberware de Corpo Externo, só para FBC. Revestimento cerâmico da Dynalar com a Fire Brand: imune a dano de fogo (inclusive munição incendiária e lança-chamas) e não pega fogo (CP:R p. 180).",
+      "attributes": {
+        "foundational": false,
+        "requiresPair": false,
+        "cyberwareType": "ExternalBody",
+        "bodyLocation": "Skin",
+        "installLocation": "Hospital",
+        "humanityLoss": 7,
+        "humanityLossDice": "2d6",
+        "requirements": "Full Body Conversion; Hospital",
+        "effect": "Imunidade a fogo."
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Interface RED Volume 3, p. 106. Artigo Going Metal. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "FBC"
+      ],
+      "manufacturer": null,
+      "slug": "fbc-emp-coating",
+      "name": "FBC EMP Coating",
+      "category": "cyberware",
+      "page": 106,
+      "price": 1000,
+      "description": "Cyberware de Corpo Externo, só para FBC. Revestimento de nanomáquinas sacrificial: quando um efeito de EMP inutilizaria uma ou mais peças de cyberware, inutiliza uma instalação do revestimento no lugar. Várias instalações dão camadas extras.",
+      "attributes": {
+        "foundational": false,
+        "requiresPair": false,
+        "cyberwareType": "ExternalBody",
+        "bodyLocation": "Skin",
+        "installLocation": "Hospital",
+        "humanityLoss": 7,
+        "humanityLossDice": "2d6",
+        "requirements": "Full Body Conversion; Hospital",
+        "effect": "Absorve um efeito de EMP por instalação."
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Interface RED Volume 3, p. 106. Artigo Going Metal. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "FBC"
+      ],
+      "manufacturer": null,
+      "slug": "fbc-gemini-sculpt",
+      "name": "FBC Gemini Sculpt",
+      "category": "cyberware",
+      "page": 106,
+      "price": 1000,
+      "description": "Cyberware de Corpo Externo, só para FBC. Remodela o corpo em forma humana coberta de Realskin™: é impossível perceber que não é biológico sem infravermelho (aparece frio como metal). Não cabe em FBCs com Internal Linear Frame Omega ou BODY 16+.",
+      "attributes": {
+        "foundational": false,
+        "requiresPair": false,
+        "cyberwareType": "ExternalBody",
+        "bodyLocation": "Skin",
+        "installLocation": "Hospital",
+        "humanityLoss": 0,
+        "humanityLossDice": null,
+        "requirements": "Full Body Conversion; Hospital",
+        "effect": "Aparência humana indistinguível a olho nu."
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Interface RED Volume 3, p. 106. Artigo Going Metal. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "FBC"
+      ],
+      "manufacturer": null,
+      "slug": "fbc-integrated-bodyweight-coating",
+      "name": "FBC Integrated Bodyweight Coating",
+      "category": "cyberware",
+      "page": 107,
+      "price": 1000,
+      "description": "Cyberware de Corpo Externo, só para FBC. Dá 2 slots só de Hardware compartilhados por todos os Cyberdecks integrados ao cyberware, que passam a se conectar sem Interface Plugs (ainda se usa um deck por vez). Cada instalação extra dá +2 slots. Não acumula com Bodyweight Suit.",
+      "attributes": {
+        "foundational": false,
+        "requiresPair": false,
+        "cyberwareType": "ExternalBody",
+        "bodyLocation": "Skin",
+        "installLocation": "Hospital",
+        "humanityLoss": 7,
+        "humanityLossDice": "2d6",
+        "requirements": "Full Body Conversion; Hospital",
+        "effect": "2 slots de Hardware compartilhados entre decks integrados."
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Interface RED Volume 3, p. 107. Artigo Going Metal. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "FBC"
+      ],
+      "manufacturer": null,
+      "slug": "internal-hydraulics-upgrade",
+      "name": "Internal Hydraulics Upgrade",
+      "category": "cyberware",
+      "page": 107,
+      "price": 1000,
+      "description": "Cyberware de Corpo Interno, só para FBC com Internal Linear Frame. REF, DEX e MOVE ficam em 4, se não forem maiores; ainda podem cair por penalidade de armadura, Lesão Crítica etc.",
+      "attributes": {
+        "foundational": false,
+        "requiresPair": false,
+        "cyberwareType": "InternalBody",
+        "bodyLocation": "FullBody",
+        "installLocation": "Hospital",
+        "humanityLoss": 3,
+        "humanityLossDice": "1d6",
+        "requirements": "Full Body Conversion com Internal Linear Frame; Hospital",
+        "effect": "REF, DEX e MOVE no mínimo 4."
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Interface RED Volume 3, p. 107. Artigo Going Metal. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "FBC"
+      ],
+      "manufacturer": null,
+      "slug": "internal-hydraulics-upgrade-tuned",
+      "name": "Internal Hydraulics Upgrade, Tuned",
+      "category": "cyberware",
+      "page": 107,
+      "price": 5000,
+      "description": "Cyberware de Corpo Interno, só para FBC com Internal Linear Frame. REF, DEX e MOVE ficam em 6, se não forem maiores; ainda podem cair por penalidade de armadura, Lesão Crítica etc.",
+      "attributes": {
+        "foundational": false,
+        "requiresPair": false,
+        "cyberwareType": "InternalBody",
+        "bodyLocation": "FullBody",
+        "installLocation": "Hospital",
+        "humanityLoss": 3,
+        "humanityLossDice": "1d6",
+        "requirements": "Full Body Conversion com Internal Linear Frame; Hospital",
+        "effect": "REF, DEX e MOVE no mínimo 6."
+      },
+      "priceCategory": "Luxury",
+      "notes": "Conferido com Interface RED Volume 3, p. 107. Artigo Going Metal. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "FBC"
+      ],
+      "manufacturer": null,
+      "slug": "internal-hydraulics-upgrade-perfected",
+      "name": "Internal Hydraulics Upgrade, Perfected",
+      "category": "cyberware",
+      "page": 108,
+      "price": 20000,
+      "description": "Cyberware de Corpo Interno, só para FBC com Internal Linear Frame. REF, DEX e MOVE ficam em 8, se não forem maiores; ainda podem cair por penalidade de armadura, Lesão Crítica etc.",
+      "attributes": {
+        "foundational": false,
+        "requiresPair": false,
+        "cyberwareType": "InternalBody",
+        "bodyLocation": "FullBody",
+        "installLocation": "Hospital",
+        "humanityLoss": 3,
+        "humanityLossDice": "1d6",
+        "requirements": "Full Body Conversion com Internal Linear Frame; Hospital",
+        "effect": "REF, DEX e MOVE no mínimo 8."
+      },
+      "priceCategory": "SuperLuxury",
+      "notes": "Conferido com Interface RED Volume 3, p. 108. Artigo Going Metal. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "slug": "reinforced-cyberlimb-upgrade",
+      "name": "Reinforced Cyberlimb Upgrade",
+      "category": "cyberware",
+      "page": 109,
+      "price": 1000,
+      "description": "Opção de Cyberlimb. Redundância hidráulica que mantém o membro funcionando sob esforço extremo: imune à Lesão Crítica Broken Leg (se Cyberleg) ou Broken Arm (se Cyberarm).",
+      "attributes": {
+        "foundational": false,
+        "requiresPair": false,
+        "cyberwareType": "LimbOption",
+        "bodyLocation": "Arm",
+        "installLocation": "Clinic",
+        "humanityLoss": 3,
+        "humanityLossDice": "1d6",
+        "requirements": "Cyberarm ou Cyberleg; Clinic",
+        "effect": "Imune a Broken Arm/Broken Leg."
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Interface RED Volume 3, p. 109. Artigo Going Metal. Ausente do compêndio."
+    }
+  ]
+}

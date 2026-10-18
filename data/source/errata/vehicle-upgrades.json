@@ -1,0 +1,425 @@
+{
+  "about": "Categoria \"Upgrades Veiculares\": os upgrades de veículo do Core Book e do 12 Days of Vehiclemas, os cômodos de veículo, os upgrades de bicicleta do Interface RED 3 e o Petrochem Nitro Ultra9 do Black Chrome saem de Itens Avulsos pela chave \"move\". Formato descrito no README (seção Dados).",
+  "move": {
+    "armored-chassis": {
+      "category": "vehicle-upgrades",
+      "tags": [],
+      "attributes": {
+        "upgradeType": "Vehicle",
+        "motoRank": 5,
+        "eligibleVehicles": "Todos os veículos",
+        "effect": "Envolve o veículo em blindagem pesada (SP 13)."
+      }
+    },
+    "bulletproof-glass": {
+      "category": "vehicle-upgrades",
+      "tags": [],
+      "attributes": {
+        "upgradeType": "Vehicle",
+        "motoRank": 1,
+        "eligibleVehicles": "Todos os veículos",
+        "effect": "Vidros blindados com 15 HP independentes."
+      }
+    },
+    "heavy-chassis": {
+      "category": "vehicle-upgrades",
+      "tags": [],
+      "attributes": {
+        "upgradeType": "Vehicle",
+        "motoRank": 1,
+        "eligibleVehicles": "Todos, exceto motos, jetskis e girocópteros",
+        "effect": "Reforço estrutural que aumenta os Hit Points (SDP) do veículo em +20 HP."
+      }
+    },
+    "nos-nitro": {
+      "category": "vehicle-upgrades",
+      "tags": [],
+      "attributes": {
+        "upgradeType": "Vehicle",
+        "motoRank": 1,
+        "eligibleVehicles": "Todos os veículos",
+        "effect": "Injeção de nitrometano. Concede +10 MOVE por 1 turno (3 usos por tanque)."
+      }
+    },
+    "onboard-weapon-mount": {
+      "category": "vehicle-upgrades",
+      "tags": [],
+      "attributes": {
+        "upgradeType": "Vehicle",
+        "motoRank": 5,
+        "eligibleVehicles": "Heavy Chassis; todos, exceto motos, jetskis e girocópteros",
+        "effect": "Suporte montado para acoplar metralhadoras ou lançadores no veículo."
+      }
+    },
+    "seating-upgrade": {
+      "category": "vehicle-upgrades",
+      "tags": [],
+      "attributes": {
+        "upgradeType": "Vehicle",
+        "motoRank": 1,
+        "eligibleVehicles": "Todos, exceto motos, jetskis e girocópteros",
+        "effect": "Aumenta a capacidade de passageiros do veículo."
+      }
+    },
+    "aerozep-selfsealing-gasbag": {
+      "category": "vehicle-upgrades",
+      "tags": [],
+      "attributes": {
+        "upgradeType": "Vehicle",
+        "motoRank": 7,
+        "eligibleVehicles": "Aerozep",
+        "effect": "Pontos fracos não podem ser alvo de Aimed Shot."
+      }
+    },
+    "hangar-vehicle-upgrade": {
+      "category": "vehicle-upgrades",
+      "tags": [],
+      "attributes": {
+        "upgradeType": "Vehicle",
+        "motoRank": 7,
+        "eligibleVehicles": "Aerozep ou Iate",
+        "effect": "Guarda um veículo a bordo."
+      }
+    },
+    "reinforced-hull-tires": {
+      "category": "vehicle-upgrades",
+      "tags": [],
+      "attributes": {
+        "upgradeType": "Vehicle",
+        "motoRank": 1,
+        "eligibleVehicles": "Veículos terrestres e aquáticos",
+        "effect": "Pontos fracos não podem ser alvo de Aimed Shot."
+      }
+    },
+    "sealed-environment": {
+      "category": "vehicle-upgrades",
+      "tags": [],
+      "attributes": {
+        "upgradeType": "Vehicle",
+        "motoRank": 1,
+        "eligibleVehicles": "Todos os veículos",
+        "effect": "Proteção contra gás e aerossóis."
+      }
+    },
+    "submersible-upgrade": {
+      "category": "vehicle-upgrades",
+      "tags": [],
+      "attributes": {
+        "upgradeType": "Vehicle",
+        "motoRank": 5,
+        "eligibleVehicles": "Terrestres e aquáticos, exceto motos e jetskis",
+        "effect": "Navegação submersa."
+      }
+    },
+    "titanic-hull": {
+      "category": "vehicle-upgrades",
+      "tags": [],
+      "attributes": {
+        "upgradeType": "Vehicle",
+        "motoRank": 7,
+        "eligibleVehicles": "Aerozep ou Iate",
+        "effect": "+100 a +380 SDP conforme os cômodos."
+      }
+    },
+    "luxury-vehicle-room": {
+      "category": "vehicle-upgrades",
+      "tags": [],
+      "attributes": {
+        "upgradeType": "Room",
+        "motoRank": null,
+        "eligibleVehicles": "Veículo com cômodos",
+        "effect": "Cômodo de luxo (estético)."
+      }
+    },
+    "complex-vehicle-room": {
+      "category": "vehicle-upgrades",
+      "tags": [],
+      "attributes": {
+        "upgradeType": "Room",
+        "motoRank": null,
+        "eligibleVehicles": "Veículo com cômodos",
+        "effect": "Cômodo grande e multiuso com o triplo de assentos."
+      }
+    },
+    "petrochem-nitro-ultra9": {
+      "category": "vehicle-upgrades",
+      "tags": [],
+      "attributes": {
+        "upgradeType": "Consumable",
+        "motoRank": null,
+        "eligibleVehicles": null,
+        "effect": "Deixa o carro mais rápido e mais explosivo."
+      }
+    },
+    "communications-center": {
+      "category": "vehicle-upgrades",
+      "tags": [],
+      "attributes": {
+        "upgradeType": "Vehicle",
+        "motoRank": 1,
+        "eligibleVehicles": "Todos os veículos",
+        "effect": "Console com Agent de bordo e equipamentos removíveis: 6 Radio Communicators, 6 Scrambler/Descramblers, Radio Scanner/Music Player, Homing Tracer com 6 rastreadores e Audio Recorder."
+      }
+    },
+    "onboard-flamethrower": {
+      "category": "vehicle-upgrades",
+      "tags": [],
+      "attributes": {
+        "upgradeType": "Vehicle",
+        "motoRank": 1,
+        "eligibleVehicles": "Todos os veículos",
+        "effect": "Lança-chamas montado na frente, lateral ou traseira, disparado pelo motorista com a Ação. Não recarrega em movimento nem aceita acessórios. Pode ser instalado várias vezes."
+      }
+    },
+    "onboard-machine-gun": {
+      "category": "vehicle-upgrades",
+      "tags": [],
+      "attributes": {
+        "upgradeType": "Vehicle",
+        "motoRank": 1,
+        "eligibleVehicles": "Todos os veículos",
+        "effect": "Fuzil de assalto de 30 tiros, só Autofire, montado na frente e disparado pelo motorista com a Ação. Não recarrega em movimento nem aceita acessórios. Pode ser instalado várias vezes."
+      }
+    },
+    "security-upgrade": {
+      "category": "vehicle-upgrades",
+      "tags": [],
+      "attributes": {
+        "upgradeType": "Vehicle",
+        "motoRank": 5,
+        "eligibleVehicles": "Todos os veículos",
+        "effect": "Fechaduras biométricas (Electronics/Security Tech DV17 para abrir sem a chave); quem falhar perto do veículo leva choque de Stun Baton. Inclui camuflagem: parado, só é visto com Perception DV17."
+      }
+    },
+    "smuggling-upgrade": {
+      "category": "vehicle-upgrades",
+      "tags": [],
+      "attributes": {
+        "upgradeType": "Vehicle",
+        "motoRank": 1,
+        "eligibleVehicles": "Todos, exceto motos, jetskis e girocópteros",
+        "effect": "Dois Hidden Holsters (motorista e um passageiro) e um compartimento secreto grande, achado só com Conceal/Reveal Object DV17. Pode ser instalado várias vezes."
+      }
+    },
+    "onboard-rocket-pod": {
+      "category": "vehicle-upgrades",
+      "tags": [],
+      "attributes": {
+        "upgradeType": "Vehicle",
+        "motoRank": 5,
+        "eligibleVehicles": "Heavy Chassis; todos, exceto motos, jetskis e girocópteros",
+        "effect": "Lança-foguetes com tambor de 3 foguetes montado na frente, disparado pelo motorista com a Ação. Não recarrega em movimento."
+      }
+    },
+    "onboard-melee-weapon": {
+      "category": "vehicle-upgrades",
+      "tags": [],
+      "attributes": {
+        "upgradeType": "Vehicle",
+        "motoRank": 1,
+        "eligibleVehicles": "Veículos terrestres e aquáticos",
+        "effect": "Arma corpo a corpo Muito Pesada montada no exterior, usada pelo motorista com a Ação. Pode ser instalada várias vezes."
+      }
+    },
+    "hover-upgrade": {
+      "category": "vehicle-upgrades",
+      "tags": [],
+      "attributes": {
+        "upgradeType": "Vehicle",
+        "motoRank": 5,
+        "eligibleVehicles": "Veículos terrestres",
+        "effect": "Ventiladores na base permitem andar sobre a água na velocidade de um Cabin Cruiser."
+      }
+    },
+    "av-4-engine-upgrade": {
+      "category": "vehicle-upgrades",
+      "tags": [],
+      "attributes": {
+        "upgradeType": "Vehicle",
+        "motoRank": 7,
+        "eligibleVehicles": "Veículos terrestres",
+        "effect": "Motor de empuxo vetorado: o veículo voa como um AV-4 e é pilotado com Pilot Air Vehicle no ar."
+      }
+    },
+    "combat-plow": {
+      "category": "vehicle-upgrades",
+      "tags": [],
+      "attributes": {
+        "upgradeType": "Vehicle",
+        "motoRank": 1,
+        "eligibleVehicles": "Terrestres e aquáticos, exceto motos e jetskis",
+        "effect": "Abalroar com a frente não danifica o veículo nem causa Whiplash aos ocupantes. Com NOS no turno, o dano do abalroamento sobe 2d6."
+      }
+    },
+    "enhanced-interface-plug-integration": {
+      "category": "vehicle-upgrades",
+      "tags": [],
+      "attributes": {
+        "upgradeType": "Vehicle",
+        "motoRank": 5,
+        "eligibleVehicles": "Motos",
+        "effect": "Dirigindo por Interface Plugs com REF 8+, você pode esquivar de ataques contra você, o passageiro ou a moto usando Evasion, como a pé."
+      }
+    },
+    "deployable-spike-strip": {
+      "category": "vehicle-upgrades",
+      "tags": [],
+      "attributes": {
+        "upgradeType": "Vehicle",
+        "motoRank": 1,
+        "eligibleVehicles": "Carros",
+        "effect": "O motorista solta uma faixa de pregos como Ação: veículos com pneus logo atrás fazem Drive Land Vehicle DV17 ou sofrem 4d6 no ponto fraco. Reposição: 10eb."
+      }
+    },
+    "housing-capacity-upgrade": {
+      "category": "vehicle-upgrades",
+      "tags": [],
+      "attributes": {
+        "upgradeType": "Vehicle",
+        "motoRank": 1,
+        "eligibleVehicles": "Aerozep, AV-4, Cabin Cruiser, carros e iate",
+        "effect": "Em carro ou AV-4, adiciona cama, banheiro, chuveiro e cozinha (vira um Kombi). Em Cabin Cruiser, iate ou aerozep, adiciona um cômodo. Em carros compactos e esportivos exige Heavy Chassis."
+      }
+    },
+    "bicycle-bottle-dynamo": {
+      "category": "vehicle-upgrades",
+      "tags": [],
+      "attributes": {
+        "upgradeType": "Bicycle",
+        "motoRank": null,
+        "eligibleVehicles": "Bicicleta",
+        "effect": "Dínamo nas rodas que carrega uma bateria (como as de Microwaver) com uma hora de pedalada."
+      }
+    },
+    "bicycle-bulletproof-glass": {
+      "category": "vehicle-upgrades",
+      "tags": [],
+      "attributes": {
+        "upgradeType": "Bicycle",
+        "motoRank": null,
+        "eligibleVehicles": "Bicicleta com Enclosure",
+        "effect": "Troca as janelas plásticas do triciclo por vidro: cobertura fina com 7 HP."
+      }
+    },
+    "bicycle-cycle-armor": {
+      "category": "vehicle-upgrades",
+      "tags": [],
+      "attributes": {
+        "upgradeType": "Bicycle",
+        "motoRank": null,
+        "eligibleVehicles": "Bicicleta com Reinforced Frame",
+        "effect": "Placas e reforços: a bicicleta passa a ter SP 7, que se estende às paredes do Enclosure."
+      }
+    },
+    "bicycle-electric-pedal-assist": {
+      "category": "vehicle-upgrades",
+      "tags": [],
+      "attributes": {
+        "upgradeType": "Bicycle",
+        "motoRank": null,
+        "eligibleVehicles": "Bicicleta",
+        "effect": "Motor que sobe a velocidade narrativa para a faixa de BODY seguinte (ou +5 MPH na mais alta) e dá +4 em Endurance contra o cansaço de longas pedaladas."
+      }
+    },
+    "bicycle-enclosure": {
+      "category": "vehicle-upgrades",
+      "tags": [],
+      "attributes": {
+        "upgradeType": "Bicycle",
+        "motoRank": null,
+        "eligibleVehicles": "Bicicleta",
+        "effect": "Vira triciclo, com estrutura e paredes de fibra de vidro e plástico contra o tempo. Incompatível com Folding Frame."
+      }
+    },
+    "bicycle-extended-seat": {
+      "category": "vehicle-upgrades",
+      "tags": [],
+      "attributes": {
+        "upgradeType": "Bicycle",
+        "motoRank": null,
+        "eligibleVehicles": "Bicicleta",
+        "effect": "Banco alongado que leva um passageiro (2 lugares)."
+      }
+    },
+    "bicycle-folding-frame": {
+      "category": "vehicle-upgrades",
+      "tags": [],
+      "attributes": {
+        "upgradeType": "Bicycle",
+        "motoRank": null,
+        "eligibleVehicles": "Bicicleta",
+        "effect": "Dobra até o tamanho de uma pasta grande. Incompatível com Enclosure, Reinforced Frame e Smuggling Compartment."
+      }
+    },
+    "bicycle-gun-mount": {
+      "category": "vehicle-upgrades",
+      "tags": [],
+      "attributes": {
+        "upgradeType": "Bicycle",
+        "motoRank": null,
+        "eligibleVehicles": "Bicicleta",
+        "effect": "Suporte no guidão para Rifle de Assalto, SMG Pesada ou Escopeta, com gatilho na manopla. Dispara sem mão livre, só para a frente; não recarrega em movimento. Prender ou soltar a arma é uma Ação."
+      }
+    },
+    "bicycle-neon-lighting": {
+      "category": "vehicle-upgrades",
+      "tags": [],
+      "attributes": {
+        "upgradeType": "Bicycle",
+        "motoRank": null,
+        "eligibleVehicles": "Bicicleta",
+        "effect": "Neon de fibra óptica no quadro e nas rodas. Conta como uma instalação de Light Tattoo para o bônus de Wardrobe & Style enquanto o ciclista estiver na bicicleta ou perto dela."
+      }
+    },
+    "bicycle-reinforced-frame": {
+      "category": "vehicle-upgrades",
+      "tags": [],
+      "attributes": {
+        "upgradeType": "Bicycle",
+        "motoRank": null,
+        "eligibleVehicles": "Bicicleta",
+        "effect": "Reforço do quadro: +5 SDP e permite ciclistas com BODY 11+. Incompatível com Folding Frame."
+      }
+    },
+    "bicycle-security-system": {
+      "category": "vehicle-upgrades",
+      "tags": [],
+      "attributes": {
+        "upgradeType": "Bicycle",
+        "motoRank": null,
+        "eligibleVehicles": "Bicicleta",
+        "effect": "Eletrifica a bicicleta por um app: quem a agarrar faz Resist Torture/Drugs DV13 ou solta na hora. Tem nano-VIN, e a Yang's Wheels devolve ou reconstrói de graça se a bicicleta roubada aparecer por lá."
+      }
+    },
+    "bicycle-smuggling-compartment": {
+      "category": "vehicle-upgrades",
+      "tags": [],
+      "attributes": {
+        "upgradeType": "Bicycle",
+        "motoRank": null,
+        "eligibleVehicles": "Bicicleta",
+        "effect": "Compartimento de 2,5 x 15 cm escondido no quadro (Conceal/Reveal Object DV17). Incompatível com Folding Frame."
+      }
+    },
+    "bicycle-stunt-frame": {
+      "category": "vehicle-upgrades",
+      "tags": [],
+      "attributes": {
+        "upgradeType": "Bicycle",
+        "motoRank": null,
+        "eligibleVehicles": "Bicicleta",
+        "effect": "Bicicleta mais leve e ágil: +2 em Athletics para manobras."
+      }
+    },
+    "bicycle-trailer": {
+      "category": "vehicle-upgrades",
+      "tags": [],
+      "attributes": {
+        "upgradeType": "Bicycle",
+        "motoRank": null,
+        "eligibleVehicles": "Bicicleta",
+        "effect": "Reboque de 1,5 x 0,46 m, preso ou solto com uma Ação. Precisa ser solto antes de dobrar uma Folding Frame."
+      }
+    }
+  }
+}

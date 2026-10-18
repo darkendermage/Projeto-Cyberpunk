@@ -1,0 +1,338 @@
+{
+  "about": "Conferido com os PDFs oficiais 12 Days of Gunmas v1.3, Cybermas, Gearmas v1.01, REDmas e Cutiemas. Formato descrito no README (seção Dados).",
+  "updates": {
+    "captain-cuddlefish-snag-em": {
+      "name": "Captain Cuddlefish Ultra Snag-Em",
+      "manufacturer": "Sanroo",
+      "source": "12 Days of Cutiemas",
+      "page": 3,
+      "description": "Pelúcia do herói do anime que dispara uma corrente de aço adesiva. Arma corpo a corpo Leve Exótica de uma mão que ataca a até 10 m/yds (5 quadrados). No Aimed Shot contra item segurado (CP:R p. 170) a penalidade é -6 em vez de -8, não precisa causar dano e o item vai para a mão do usuário. Não pode ser instalada em cyberware. Roupinhas extras custam 20eb (Everyday) ou 50eb (Costly).",
+      "notes": "Conferido com 12 Days of Cutiemas, p. 3 e tabela da p. 8. O compêndio descrevia uma garra telescópica.",
+      "attributes": { "maxRange": 10 }
+    },
+    "hello-cutie-chromatic-rave": {
+      "name": "Hello Cutie Chromatic Rave Grenade",
+      "source": "12 Days of Cutiemas",
+      "page": 3,
+      "description": "Granada de arremesso (Athletics); não pode ser carregada em lança-granadas. Gruda na superfície e faz um show de luz e som por 2 rodadas: quem começar o turno na área de 10 m x 10 m faz Concentração DV13 ou sofre -2 em todos os testes até o fim do turno. No início da 3ª rodada explode como uma Smoke Grenade (CP:R p. 347), com glitter. Um Memory Chip inserido toca a sua música e é destruído na explosão.",
+      "notes": "Conferido com 12 Days of Cutiemas, p. 3 e tabela da p. 7.",
+      "attributes": { "effect": "Show de luz e som (Concentração DV13 ou -2) e depois fumaça" }
+    },
+    "hello-cutie-gun-gun-friend-friend": {
+      "source": "12 Days of Cutiemas",
+      "page": 4,
+      "description": "Fuzil de assalto de Qualidade Excelente. Como Ação, instala ou remove uma arma de fogo de uma mão (mesmo não ocultável), que fica oculta na estrutura sem teste e é sacada ou guardada sem Ação. Com ela levantada, o gatilho dispara a arma instalada; acessórios e recarga de cada arma são separados. Autofire (x4) e Fogo de Supressão. 2 slots de acessório.",
+      "notes": "Conferido com 12 Days of Cutiemas, p. 4 e tabela da p. 8. O compêndio listava uma Pistola Pesada Exótica de 3d6.",
+      "tags": ["Qualidade Excelente", "Autofire"],
+      "attributes": {
+        "weaponClass": "AssaultRifle", "skill": "ShoulderArms", "damage": "5d6", "damageDice": 5, "rof": 1, "autofire": 4,
+        "magazine": 25, "maxRange": 800, "hands": 2, "concealable": false, "quality": "Excellent", "exotic": false, "calibers": ["Rifle"]
+      }
+    },
+    "hello-cutie-hypurr-hammer": {
+      "source": "12 Days of Cutiemas",
+      "page": 4,
+      "description": "Arma corpo a corpo Muito Pesada de duas mãos que não divide a SP pela metade. Com BODY 9 ou mais causa 5d6 (em vez de 4d6) e, ao causar Lesão Crítica, rola duas vezes na tabela e escolhe. Com BODY 8 ou menos, um alto-falante escondido insulta o usuário depois de cada ataque.",
+      "notes": "Conferido com 12 Days of Cutiemas, p. 4 e tabela da p. 8. O bônus de dano exige BODY 9+, não 8+, e a arma não é exótica.",
+      "tags": [],
+      "attributes": { "exotic": false, "minBody": null }
+    },
+    "hello-cutie-janus-hex": {
+      "source": "12 Days of Cutiemas",
+      "page": 5,
+      "description": "Pistola Muito Pesada de Qualidade Excelente, 2 tiros, que dispara Heavy Scent Balls irritantes (1d6). Alvo com olhos orgânicos atingido faz Resist Torture/Drugs DV15 ou sofre -3 em ataques à distância, corpo a corpo e Percepção visual (-1 se passar), por 1 hora ou até lavar os olhos por 10 minutos. Não acumula com Damaged Eye. Incompatível com acessórios de pente. 2 slots de acessório.",
+      "notes": "Conferido com 12 Days of Cutiemas, p. 4-5 e tabela da p. 8. O texto da arma diz que ela pode ser ocultada; a tabela resumo marca NO.",
+      "tags": ["Qualidade Excelente"],
+      "attributes": { "damage": "1d6", "magazine": 2, "concealable": true, "exotic": false }
+    },
+    "hello-cutie-modball-gun": {
+      "source": "12 Days of Cutiemas",
+      "page": 5,
+      "description": "Revólver (Pistola Média) de 5 tiros que só dispara ModBalls. Aceita até 5 tipos misturados e você escolhe qual disparar a cada tiro. Incompatível com acessórios de pente. Com o ModBall Construction Kit (100eb, Premium), qualquer pessoa fabrica ModBalls como um Tech com Fabrication Expertise 2 (1 hora por ModBall). 1 slot de acessório.",
+      "notes": "Conferido com 12 Days of Cutiemas, p. 5 e tabela da p. 8. Pente de 5 tiros (o compêndio herdava 12 da classe) e a arma não é exótica.",
+      "tags": ["Revólver"],
+      "attributes": { "damage": "Varia (ModBall)", "magazine": 5, "exotic": false }
+    },
+    "hello-cutie-my-friend-ocelot": {
+      "name": "Hello Cutie My Friend The Ocelot",
+      "source": "12 Days of Cutiemas",
+      "page": 6,
+      "description": "Escopeta de Qualidade Excelente com 12 tiros que só dispara Shotgun Slugs. Autofire (x4) usando a tabela de DV de Autofire das SMGs (CP:R p. 173), gastando 4 slugs por rajada em vez de 10. Só recarrega com a chave biométrica: acariciar a arma (uma Ação) destrava a câmara por 9 segundos. Incompatível com acessórios de pente. 1 slot de acessório.",
+      "notes": "Conferido com 12 Days of Cutiemas, p. 6 e tabela da p. 8. Não é exótica e não aceita Shotgun Shells.",
+      "tags": ["Qualidade Excelente", "Autofire"],
+      "attributes": { "damage": "5d6", "rof": 1, "autofire": 4, "exotic": false, "calibers": ["Slug"] }
+    },
+    "hello-cutie-thundercat-bat": {
+      "source": "12 Days of Cutiemas",
+      "page": 6,
+      "description": "Stun Baton (CP:R p. 349) de duas mãos e Qualidade Excelente. Quem for atingido faz Resist Torture/Drugs DV15 ou sofre a Lesão Crítica Damaged Ear, sem o dano bônus. O próprio usuário faz o mesmo teste a cada acerto se estiver sem proteção auditiva.",
+      "notes": "Conferido com 12 Days of Cutiemas, p. 6 e tabela da p. 8. A arma não é exótica.",
+      "tags": ["Qualidade Excelente"],
+      "attributes": { "damage": "2d6", "exotic": false }
+    },
+    "hello-cutie-mono-paw": {
+      "source": "12 Days of Cutiemas",
+      "page": 6,
+      "description": "Garras retráteis com ponta de monofilamento, feitas pela Kendachi em parceria com a Sanroo. Opção de Cyberarm: arma corpo a corpo Média de Qualidade Excelente, 1d6, ocultável sem teste. O dano ignora totalmente armaduras com SP abaixo de 11. Enquanto ativa, a mão desse braço não segura nada.",
+      "notes": "Conferido com 12 Days of Cutiemas, p. 6 e tabela da p. 7."
+    },
+    "chainripp": {
+      "source": "12 Days of Cybermas",
+      "page": 3,
+      "description": "Motosserra retrátil no pulso. Opção de Cyberarm com uma arma corpo a corpo Muito Pesada de uma mão, sacada e guardada sem Ação; levantada, a mão desse braço não segura nada. Como Ação, é acelerada e vira arma Exótica Muito Pesada de Qualidade Excelente até ser guardada ou desacelerada (outra Ação). Ocupa 4 slots de opção.",
+      "notes": "Conferido com 12 Days of Cybermas, p. 3 e tabela da p. 8."
+    },
+    "blitzkrieg-arc-thrower": {
+      "name": "Radline Blitzkrieg Arc-Thrower Cyberarm",
+      "manufacturer": "Radline",
+      "source": "12 Days of Cybermas",
+      "page": 4,
+      "description": "Cyberarm sem mão: não precisa ser par, tem 0 slots de opção e não segura nada. É uma Shotgun Exótica de Baixa Qualidade de uma mão, disparada com Heavy Weapons, que só usa o modo Shotgun Shell, causando 4d6 em vez de 3d6. Não usa munição: cada disparo gasta 1 das 32 cargas da BatteryBrick MagnaSlot (100eb, inclusa; recarrega em 1 hora), e trocar a bateria é uma Ação mesmo sem mão livre. Não causa Lesão Crítica nem ablata armadura; dano que levaria o alvo abaixo de 1 HP o deixa Inconsciente com 1 HP.",
+      "notes": "Conferido com 12 Days of Cybermas, p. 4-5 e tabela da p. 8. O fabricante real é a Radine Laboratories (Suécia); 'Radline' veio de um erro de impressão e pegou."
+    },
+    "ce-thermal-dagger": {
+      "name": "Centurion Essentials Thermal Dagger",
+      "manufacturer": "Centurion Essentials",
+      "source": "12 Days of REDmas",
+      "page": 2,
+      "description": "Arma corpo a corpo Média Exótica de Qualidade Excelente, ocultável. Quem ou o que for atingido fica Strongly On Fire (CP:R p. 180). Gravar o nome na lâmina custa +10eb.",
+      "notes": "Conferido com 12 Days of REDmas, p. 2 e tabela da p. 8. O compêndio citava Interface 5 como fonte.",
+      "attributes": { "damage": "2d6" }
+    },
+    "nat-s-long-barreled-pistol": {
+      "source": "12 Days of REDmas",
+      "page": 3,
+      "description": "Pistola Muito Pesada de Qualidade Excelente com tabela de alcance própria. DV por distância: 0-6 m 14 · 7-12 m 13 · 13-25 m 14 · 26-50 m 20 · 51-100 m 25 · 101-200 m 28 · 201-400 m 30 · 401-800 m N/A. 3 slots de acessório.",
+      "notes": "Conferido com 12 Days of REDmas, p. 3 e tabela da p. 8. O compêndio citava Interface 5 como fonte. Alcance máximo de 400 m pela tabela própria.",
+      "attributes": { "maxRange": 400 }
+    },
+    "ps-e-tack-rapid-responder": {
+      "name": "Pursuit Security E-TACK Rapid Responder",
+      "manufacturer": "Pursuit Security",
+      "source": "12 Days of REDmas",
+      "page": 3,
+      "description": "Pistola Média de Baixa Qualidade com Pente Estendido instalado e Stun Bayonet fixa (pode ser usada como Stun Baton, CP:R p. 349). Modo burst opcional: gasta 3 balas por disparo, causa dano de Pistola Pesada (3d6) e trata munição que não seja perfurante como Armor-Piercing. O modo desliga com menos de 3 balas no pente. 1 slot de acessório.",
+      "notes": "Conferido com 12 Days of REDmas, p. 3-4 e tabela da p. 8. O compêndio citava Interface 5 e um pente de 12 tiros; com o Pente Estendido são 18. A Stun Bayonet avulsa custa 100eb (Premium) e serve em armas não exóticas de Shoulder Arms.",
+      "tags": ["Baixa Qualidade", "Pente estendido", "Acessório acoplado"],
+      "attributes": { "magazine": 18 }
+    },
+    "arasaka-waa-bullpup": {
+      "name": "Arasaka WAA Bullpup Assault Weapon",
+      "page": 3,
+      "description": "Fuzil de assalto bullpup Exótico, padrão dos soldados da Arasaka nos anos 2020, com 30 tiros e Smartgun Link. Mesmo sendo Exótico, aceita munição não-básica. Autofire (4) e Fogo de Supressão.",
+      "notes": "Conferido com 12 Days of Gunmas, p. 3 e tabela da p. 7. A arma é Exótica de qualidade padrão; o compêndio a listava como Qualidade Excelente.",
+      "tags": ["Exótica", "Smartgun", "Autofire"],
+      "attributes": { "quality": "Standard", "exotic": true }
+    },
+    "con-arms-multi-ammo-pistol": {
+      "name": "Constitutional Arms Multiple Ammunition Pistol",
+      "page": 3,
+      "description": "Revólver (Pistola Muito Pesada Exótica) de 5 tiros. Aceita até cinco tipos diferentes de munição de Pistola Muito Pesada misturados, e você escolhe qual disparar a cada tiro.",
+      "notes": "Conferido com 12 Days of Gunmas, p. 3 e tabela da p. 7.",
+      "tags": ["Exótica", "Revólver"]
+    },
+    "imi-chainknife": {
+      "page": 3,
+      "description": "Faca-motosserra israelense. Arma corpo a corpo Média Exótica de uma mão com ROF 1. Como Ação, é acelerada e vira arma Muito Pesada Exótica de Qualidade Excelente (4d6) até ser largada, guardada ou desacelerada (outra Ação).",
+      "notes": "Conferido com 12 Days of Gunmas, p. 3 e tabela da p. 7. A arma é Exótica.",
+      "tags": ["Exótica", "Arma combinada"],
+      "attributes": { "exotic": true }
+    },
+    "kendachi-dragon": {
+      "name": "Kendachi Dragon Flamethrower",
+      "page": 3,
+      "description": "Lança-chamas de uma mão, disparado com Heavy Weapons. Funciona como uma Shotgun Exótica de 2 tiros que só dispara Incendiary Shotgun Shells (mesmo custo). Alvo em chamas sofre 4 de dano direto no HP no fim de cada turno até gastar uma Ação para se apagar; substitui fogo mais fraco e não acumula. Não causa Lesão Crítica nem permite Aimed Shot.",
+      "notes": "Conferido com 12 Days of Gunmas, p. 3-4 e tabela da p. 7. A tabela lista o dano como N/A; o valor é o de uma Shotgun Shell incendiária.",
+      "attributes": { "damage": "3d6 (Shell incendiária)", "calibers": ["ShotgunShell"] }
+    },
+    "magnum-opus-hellbringer": {
+      "page": 4,
+      "description": "Revólver (Pistola Muito Pesada Exótica) de 3 tiros que causa 5d6. Nas mãos de quem tem BODY abaixo de 10, emperra depois de cada tiro; desemperrar exige uma Ação.",
+      "notes": "Conferido com 12 Days of Gunmas, p. 4 e tabela da p. 7.",
+      "tags": ["Exótica", "Revólver"]
+    },
+    "malorian-sub-flechette-gun": {
+      "name": "Malorian Arms Sub-Flechette Gun",
+      "page": 4,
+      "description": "SMG Pesada Exótica de Qualidade Excelente com 25 tiros, Smartgun Link e Autofire (4). Só dispara a própria munição perfurante de flechette, que ablata 4 de SP em vez de 1 e custa o mesmo que munição Armor-Piercing.",
+      "notes": "Conferido com 12 Days of Gunmas, p. 4 e tabela da p. 7. Usa munição própria, por isso a munição compatível é 'Especial'.",
+      "attributes": { "calibers": ["Special"] }
+    },
+    "militech-crusher": {
+      "page": 4,
+      "description": "Escopeta do tamanho de uma pistola, edição de 2020. Pistola Muito Pesada Exótica com 6 tiros que só dispara Shotgun Shells básicas.",
+      "notes": "Conferido com 12 Days of Gunmas, p. 4-5 e tabela da p. 7. A tabela lista o dano como N/A (depende da munição); o compêndio dava 3d6/5d6 e incluía slugs, que a arma não dispara.",
+      "attributes": { "damage": "3d6 (Shotgun Shell)", "calibers": ["ShotgunShell"] }
+    },
+    "mustang-arms-ars-5-smg": {
+      "name": "Mustang Arms ARS-5 Submachine Gun",
+      "page": 5,
+      "description": "SMG Pesada Exótica com 40 tiros, Smartgun Link, Infrared Nightvision Scope e Sniping Scope. Autofire (3) e Fogo de Supressão.",
+      "notes": "Conferido com 12 Days of Gunmas, p. 5 e tabela da p. 7. A arma é Exótica.",
+      "tags": ["Exótica", "Smartgun", "Autofire", "Mira acoplada"],
+      "attributes": { "exotic": true }
+    },
+    "nova-757-cityhunter": {
+      "name": "Nova Model 757 Cityhunter",
+      "page": 5,
+      "description": "Revólver Exótico (Pistola Pesada) com 18 tiros e Smartgun Link que dispara trounds sem estojo. Mesmo sendo Exótico, aceita Smart Ammunition. A munição só serve nesta arma e é vendida em lotes de 18 pelo preço de 10 balas comuns.",
+      "notes": "Conferido com 12 Days of Gunmas, p. 5 e tabela da p. 7. Usa munição própria, por isso a munição compatível é 'Especial'.",
+      "tags": ["Exótica", "Smartgun", "Revólver"],
+      "attributes": { "calibers": ["Special"] }
+    },
+    "stolbovoy-st-5": {
+      "name": "Stolbovoy ST-5 Assault Rifle",
+      "page": 6,
+      "description": "Fuzil de assalto Exótico de Baixa Qualidade com 20 tiros. Emperrado, o disparo ainda tem 50% de chance de funcionar e limpa a pane; se perder a moeda, a Ação é gasta mas a pane é limpa. Mesmo sendo Exótico, aceita munição não-básica. Autofire (4) e Fogo de Supressão.",
+      "notes": "Conferido com 12 Days of Gunmas, p. 6 e tabela da p. 7. A arma é Exótica.",
+      "tags": ["Baixa Qualidade", "Exótica", "Autofire"],
+      "attributes": { "exotic": true }
+    },
+    "teen-dreem": {
+      "page": 6,
+      "description": "SMG Exótica de Baixa Qualidade com 10 tiros. Pode usar Autofire e Fogo de Supressão com pelo menos 2 balas, e ambos esvaziam o pente. Depois de qualquer um dos dois, o cano derrete e a arma é destruída sem conserto.",
+      "notes": "Conferido com 12 Days of Gunmas, p. 6 e tabela da p. 7. ROF 1, como toda SMG (o compêndio dizia 2).",
+      "attributes": { "rof": 1 }
+    }
+  },
+  "additions": [
+    {
+      "slug": "hello-cutie-fisher-kitty",
+      "name": "Hello Cutie Fisher Kitty",
+      "category": "weapons",
+      "manufacturer": "Sanroo",
+      "description": "Lança-arpões antiblindados com carcaça de gatinho, projetado por ex-armeiros da SlamDance. Pistola Pesada Exótica de 4 tiros disparada com Archery, alcance máximo de 50 m/yds. Os mini-arpões causam 2d6, não causam Lesão Crítica e ficam presos no alvo mesmo sem penetrar a armadura. Remover um arpão custa uma Ação; afastar-se mais de 50 m arranca todos. Recarregar recolhe os arpões. Como Ação, eletrifica os cabos: 2d6 direto no HP de quem tem 2 arpões presos, ou 3d6 com 3 ou mais. Incompatível com acessórios de pente.",
+      "notes": "Conferido com 12 Days of Cutiemas, p. 3-4 e tabela da p. 8. Ausente do compêndio.",
+      "price": 500,
+      "priceCategory": "Expensive",
+      "source": "12 Days of Cutiemas",
+      "page": 3,
+      "tags": ["Exótica"],
+      "attributes": {
+        "weaponClass": "HeavyPistol", "skill": "Archery", "damage": "2d6", "damageDice": 2, "rof": 2, "magazine": 4,
+        "maxRange": 50, "hands": 1, "concealable": true, "quality": "Standard", "exotic": true, "calibers": ["Special"]
+      }
+    },
+    {
+      "slug": "nomad-pneumatic-bolt-gun",
+      "name": "Nomad Pneumatic Bolt Gun",
+      "category": "weapons",
+      "manufacturer": null,
+      "description": "Arma de ar comprimido dos Nômades com quatro canos giratórios e compressor na coronha. Fuzil de precisão Exótico de 8 tiros que causa 4d6 e dispara flechas em vez de balas. Mesmo sendo Exótico, aceita munição não-básica.",
+      "notes": "Conferido com 12 Days of Gunmas, p. 5 e tabela da p. 7. Ausente do compêndio.",
+      "price": 500,
+      "priceCategory": "Expensive",
+      "source": "12 Days of Gunmas",
+      "page": 5,
+      "tags": ["Exótica"],
+      "attributes": {
+        "weaponClass": "SniperRifle", "skill": "ShoulderArms", "damage": "4d6", "damageDice": 4, "rof": 1, "magazine": 8,
+        "maxRange": 800, "hands": 2, "concealable": false, "quality": "Standard", "exotic": true, "calibers": ["Arrow"]
+      }
+    },
+    {
+      "slug": "janus-hex-heavy-scent-ball",
+      "name": "Janus Hex Heavy Scent Ball",
+      "category": "ammunition",
+      "manufacturer": "Sanroo",
+      "description": "Munição própria da Hello Cutie Janus Hex, marcada com o rosto de um dos quatro membros do grupo Take Your Best Shot. Causa 1d6 e irrita os olhos (Resist Torture/Drugs DV15 ou -3 em ataques e Percepção visual). Mais de trinta aromas disponíveis. Só pode ser modificada ou fabricada por um Tech com Maker Rank 6 ou mais.",
+      "notes": "Conferido com 12 Days of Cutiemas, p. 5. O livro diz 'packs of 4, costing 20eb (Costly) each'.",
+      "price": 20,
+      "priceNote": "Pacote com 4 unidades",
+      "priceCategory": "Costly",
+      "source": "12 Days of Cutiemas",
+      "page": 5,
+      "tags": [],
+      "attributes": {
+        "kind": "Round", "effectType": "Control", "calibers": ["Special"], "quantityPerPack": 4, "damage": "1d6", "damageDice": 1,
+        "resistDv": 15, "requirements": "Somente Hello Cutie Janus Hex", "effect": "Irritante ocular: -3 em ataques e Percepção visual por 1 hora (DV15)"
+      }
+    },
+    {
+      "slug": "modball-dazzle-dazzle",
+      "name": "ModBall Dazzle Dazzle",
+      "category": "ammunition",
+      "manufacturer": "Sanroo",
+      "description": "Funciona como Flashbang Ammunition (CP:R p. 346), mas só contra o alvo atingido. Também incendeia um alvo coberto por Splashie ModBall. Fabricação: 9eb, DV13.",
+      "notes": "Conferido com 12 Days of Cutiemas, p. 5.",
+      "price": 10,
+      "priceNote": "Por ModBall",
+      "priceCategory": "Cheap",
+      "source": "12 Days of Cutiemas",
+      "page": 5,
+      "tags": [],
+      "attributes": { "kind": "Round", "effectType": "Control", "calibers": ["Special"], "quantityPerPack": 1, "requirements": "Somente Hello Cutie ModBall Gun", "effect": "Flashbang de alvo único" }
+    },
+    {
+      "slug": "modball-mega-ouchie",
+      "name": "ModBall Mega Ouchie",
+      "category": "ammunition",
+      "manufacturer": "Sanroo",
+      "description": "Funciona como Biotoxin Ammunition (CP:R p. 345). Fabricação: 19eb, DV15.",
+      "notes": "Conferido com 12 Days of Cutiemas, p. 5.",
+      "price": 20,
+      "priceNote": "Por ModBall",
+      "priceCategory": "Everyday",
+      "source": "12 Days of Cutiemas",
+      "page": 5,
+      "tags": [],
+      "attributes": { "kind": "Round", "effectType": "Toxin", "calibers": ["Special"], "quantityPerPack": 1, "resistDv": 15, "requirements": "Somente Hello Cutie ModBall Gun", "effect": "Biotoxina" }
+    },
+    {
+      "slug": "modball-ouchie",
+      "name": "ModBall Ouchie",
+      "category": "ammunition",
+      "manufacturer": "Sanroo",
+      "description": "Funciona como Poison Ammunition (CP:R p. 346). Fabricação: 9eb, DV13.",
+      "notes": "Conferido com 12 Days of Cutiemas, p. 5.",
+      "price": 10,
+      "priceNote": "Por ModBall",
+      "priceCategory": "Cheap",
+      "source": "12 Days of Cutiemas",
+      "page": 5,
+      "tags": [],
+      "attributes": { "kind": "Round", "effectType": "Toxin", "calibers": ["Special"], "quantityPerPack": 1, "resistDv": 13, "requirements": "Somente Hello Cutie ModBall Gun", "effect": "Veneno" }
+    },
+    {
+      "slug": "modball-slippy",
+      "name": "ModBall Slippy",
+      "category": "ammunition",
+      "manufacturer": "Sanroo",
+      "description": "Lubrificante escorregadio. No alvo, não causa dano e dá +1 em Contortionist e em Brawling para evitar ou escapar de agarrão. No chão, cobre 2 m x 2 m (1 quadrado): quem ficar ou passar faz Athletics DV13 ou cai Prone. Não acumula; sai com 5 minutos de lavagem e seca em 1 hora. Fabricação: 4eb, DV9.",
+      "notes": "Conferido com 12 Days of Cutiemas, p. 5. Preço 'Dirt Cheap', categoria que o catálogo não tem.",
+      "price": 5,
+      "priceNote": "Por ModBall (Dirt Cheap)",
+      "source": "12 Days of Cutiemas",
+      "page": 5,
+      "tags": [],
+      "attributes": { "kind": "Round", "effectType": "Utility", "calibers": ["Special"], "quantityPerPack": 1, "area": "2m x 2m", "resistDv": 13, "requirements": "Somente Hello Cutie ModBall Gun", "effect": "Superfície escorregadia (Athletics DV13 ou Prone)" }
+    },
+    {
+      "slug": "modball-splashie",
+      "name": "ModBall Splashie",
+      "category": "ammunition",
+      "manufacturer": "Sanroo",
+      "description": "Tinta altamente inflamável, sem dano. Se o alvo coberto for exposto a uma fonte de ignição, pega fogo e sofre 2 de dano direto no HP no fim de cada turno até gastar uma Ação para se apagar. Não acumula; sai com 5 minutos de lavagem. Fabricação: 4eb, DV9.",
+      "notes": "Conferido com 12 Days of Cutiemas, p. 5-6. Preço 'Dirt Cheap', categoria que o catálogo não tem.",
+      "price": 5,
+      "priceNote": "Por ModBall (Dirt Cheap)",
+      "source": "12 Days of Cutiemas",
+      "page": 6,
+      "tags": [],
+      "attributes": { "kind": "Round", "effectType": "Incendiary", "calibers": ["Special"], "quantityPerPack": 1, "requirements": "Somente Hello Cutie ModBall Gun", "effect": "Tinta inflamável (2 de dano por turno em chamas)" }
+    },
+    {
+      "slug": "stun-bayonet",
+      "name": "Stun Bayonet",
+      "category": "gear",
+      "manufacturer": "Pursuit Security",
+      "description": "Baioneta de choque. A arma em que está instalada pode ser usada como um Stun Baton (CP:R p. 349).",
+      "notes": "Conferido com 12 Days of REDmas, junto à Pursuit Security E-TACK Rapid Responder, que vem com ela.",
+      "price": 100,
+      "priceCategory": "Premium",
+      "source": "12 Days of REDmas",
+      "tags": ["Acessório de arma"],
+      "attributes": { "gearType": "Tool", "gearClass": "Acessório de arma", "requirements": "Armas não exóticas de Shoulder Arms", "effect": "A arma funciona como Stun Baton." }
+    }
+  ]
+}

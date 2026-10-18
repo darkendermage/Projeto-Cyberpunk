@@ -1,0 +1,595 @@
+{
+  "about": "Conferido com o PDF Interface RED Volume 2 (coletânea de DLCs). As armas do 12 Days of Gunmas já tinham sido conferidas no PDF avulso. Formato descrito no README (seção Dados).",
+  "source": "Interface 2",
+  "updates": {
+    "demonique": {
+      "page": 67,
+      "notes": "Conferido com Interface RED Volume 2, p. 67.",
+      "price": 2100,
+      "priceCategory": "VeryExpensive",
+      "tags": [
+        "Pacote",
+        "Minor Bioexotic"
+      ],
+      "description": "Demônio com cascos e cauda; substituiu o pacote Playbeing em 2042. Minor Bioexotic da Biotechnica: um mês no The Zoo, com Exotic Bodysculpting e: Combat Tail, Cyberaudio Suite com Voice Stress Analyzer, 2 Cyberlegs, Neural Link e Subdermal Armor. A HL do pacote já vem reduzida pela terapia e vale com todas as peças instaladas; cyberware que o personagem já tem reduz a HL em 2 por peça (4 por Borgware). Quem não completa o mês rola a HL de cada peça normalmente.",
+      "attributes": {
+        "installLocation": "Unknown",
+        "humanityLoss": 14,
+        "humanityLossDice": null,
+        "requirements": "Pacote de 31 dias no The Zoo (Biotechnica)",
+        "effect": "Combat Tail, Cyberaudio Suite com Voice Stress Analyzer, 2 Cyberlegs, Neural Link e Subdermal Armor"
+      }
+    },
+    "embrace-rodentia": {
+      "page": 67,
+      "notes": "Conferido com Interface RED Volume 2, p. 67.",
+      "price": 2100,
+      "priceCategory": "VeryExpensive",
+      "tags": [
+        "Pacote",
+        "Minor Bioexotic"
+      ],
+      "description": "Roedor (rato, esquilo, furão, vison...). Minor Bioexotic da Biotechnica: um mês no The Zoo, com Exotic Bodysculpting e: Cyberaudio Suite com Amplified Hearing, 2 Cybereyes com Low Light/Infrared/UV e Sensor Array. A HL do pacote já vem reduzida pela terapia e vale com todas as peças instaladas; cyberware que o personagem já tem reduz a HL em 2 por peça (4 por Borgware). Quem não completa o mês rola a HL de cada peça normalmente.",
+      "attributes": {
+        "installLocation": "Unknown",
+        "humanityLoss": 16,
+        "humanityLossDice": null,
+        "requirements": "Pacote de 31 dias no The Zoo (Biotechnica)",
+        "effect": "Cyberaudio Suite com Amplified Hearing, 2 Cybereyes com Low Light/Infrared/UV e Sensor Array"
+      }
+    },
+    "katnip": {
+      "page": 68,
+      "notes": "Conferido com Interface RED Volume 2, p. 68. Corrigido o conteúdo: não tem Combat Jaw nem Amplified Hearing.",
+      "price": 2200,
+      "priceCategory": "VeryExpensive",
+      "tags": [
+        "Pacote",
+        "Minor Bioexotic"
+      ],
+      "description": "O clássico gato, pacote mais vendido há 25 anos. Minor Bioexotic da Biotechnica: um mês no The Zoo, com Exotic Bodysculpting e: 2 Cybereyes com Low Light/Infrared/UV, 2 Cyberlegs, Grafted Muscle and Bone Lace e 2 Scratchers. A HL do pacote já vem reduzida pela terapia e vale com todas as peças instaladas; cyberware que o personagem já tem reduz a HL em 2 por peça (4 por Borgware). Quem não completa o mês rola a HL de cada peça normalmente.",
+      "attributes": {
+        "installLocation": "Unknown",
+        "humanityLoss": 18,
+        "humanityLossDice": null,
+        "requirements": "Pacote de 31 dias no The Zoo (Biotechnica)",
+        "effect": "2 Cybereyes com Low Light/Infrared/UV, 2 Cyberlegs, Grafted Muscle and Bone Lace e 2 Scratchers"
+      }
+    },
+    "lagoform": {
+      "page": 68,
+      "notes": "Conferido com Interface RED Volume 2, p. 68.",
+      "price": 2100,
+      "priceCategory": "VeryExpensive",
+      "tags": [
+        "Pacote",
+        "Minor Bioexotic"
+      ],
+      "description": "Coelho, com Jump Boosters da Rocklin Augmentics. Minor Bioexotic da Biotechnica: um mês no The Zoo, com Exotic Bodysculpting e: Cyberaudio Suite com Amplified Hearing, 2 Cyberlegs com 2 Jump Boosters e Sensor Array. A HL do pacote já vem reduzida pela terapia e vale com todas as peças instaladas; cyberware que o personagem já tem reduz a HL em 2 por peça (4 por Borgware). Quem não completa o mês rola a HL de cada peça normalmente.",
+      "attributes": {
+        "installLocation": "Unknown",
+        "humanityLoss": 16,
+        "humanityLossDice": null,
+        "requirements": "Pacote de 31 dias no The Zoo (Biotechnica)",
+        "effect": "Cyberaudio Suite com Amplified Hearing, 2 Cyberlegs com 2 Jump Boosters e Sensor Array"
+      }
+    },
+    "lupaform": {
+      "page": 68,
+      "notes": "Conferido com Interface RED Volume 2, p. 68. Corrigido: o pacote não dá BODY +2.",
+      "price": 2200,
+      "priceCategory": "VeryExpensive",
+      "tags": [
+        "Pacote",
+        "Minor Bioexotic"
+      ],
+      "description": "Cão ou lobo, o pacote mais personalizável. Minor Bioexotic da Biotechnica: um mês no The Zoo, com Exotic Bodysculpting e: Chipware Socket com Olfactory Boost fixo, Combat Jaw, Cyberaudio Suite com Amplified Hearing, 2 Cybereyes com Low Light/Infrared/UV e Neural Link. A HL do pacote já vem reduzida pela terapia e vale com todas as peças instaladas; cyberware que o personagem já tem reduz a HL em 2 por peça (4 por Borgware). Quem não completa o mês rola a HL de cada peça normalmente.",
+      "attributes": {
+        "installLocation": "Unknown",
+        "humanityLoss": 20,
+        "humanityLossDice": null,
+        "requirements": "Pacote de 31 dias no The Zoo (Biotechnica)",
+        "effect": "Chipware Socket com Olfactory Boost fixo, Combat Jaw, Cyberaudio Suite com Amplified Hearing, 2 Cybereyes com Low Light/Infrared/UV e Neural Link"
+      }
+    },
+    "serpentize-yourself": {
+      "page": 68,
+      "notes": "Conferido com Interface RED Volume 2, p. 68.",
+      "price": 2100,
+      "priceCategory": "VeryExpensive",
+      "tags": [
+        "Pacote",
+        "Minor Bioexotic"
+      ],
+      "description": "Serpente, com língua bífida. Minor Bioexotic da Biotechnica: um mês no The Zoo, com Exotic Bodysculpting e: Chipware Socket com Olfactory Boost fixo, 2 Cybereyes com Low Light/Infrared/UV, Neural Link e Vampyres. A HL do pacote já vem reduzida pela terapia e vale com todas as peças instaladas; cyberware que o personagem já tem reduz a HL em 2 por peça (4 por Borgware). Quem não completa o mês rola a HL de cada peça normalmente.",
+      "attributes": {
+        "installLocation": "Unknown",
+        "humanityLoss": 16,
+        "humanityLossDice": null,
+        "requirements": "Pacote de 31 dias no The Zoo (Biotechnica)",
+        "effect": "Chipware Socket com Olfactory Boost fixo, 2 Cybereyes com Low Light/Infrared/UV, Neural Link e Vampyres"
+      }
+    },
+    "aquaform": {
+      "page": 69,
+      "notes": "Conferido com Interface RED Volume 2, p. 69. Corrigido: o pacote não dá SP 7. Para disponibilidade, o livro manda tratar pela categoria indicada, não pelo valor em eb.",
+      "price": 4500,
+      "priceCategory": "VeryExpensive",
+      "tags": [
+        "Pacote",
+        "Major Bioexotic"
+      ],
+      "description": "Tubarão (ou foca, golfinho, orca). Major Bioexotic da Biotechnica: um mês no The Zoo, com Exotic Bodysculpting e: Combat Jaw, 2 Cybereyes com Low Light/Infrared/UV, 2 Cyberlegs com 2 Web Foot, Gills e Radar/Sonar Implant. A HL do pacote já vem reduzida pela terapia e vale com todas as peças instaladas; cyberware que o personagem já tem reduz a HL em 2 por peça (4 por Borgware). Quem não completa o mês rola a HL de cada peça normalmente.",
+      "attributes": {
+        "installLocation": "Unknown",
+        "humanityLoss": 22,
+        "humanityLossDice": null,
+        "requirements": "Pacote de 31 dias no The Zoo (Biotechnica)",
+        "effect": "Combat Jaw, 2 Cybereyes com Low Light/Infrared/UV, 2 Cyberlegs com 2 Web Foot, Gills e Radar/Sonar Implant"
+      }
+    },
+    "bigkatt": {
+      "page": 69,
+      "notes": "Conferido com Interface RED Volume 2, p. 69. Corrigido: o pacote não dá BODY +2 (são duas Grafted Muscle and Bone Lace).",
+      "price": 7000,
+      "priceCategory": "Luxury",
+      "tags": [
+        "Pacote",
+        "Major Bioexotic"
+      ],
+      "description": "Felino grande (leão, tigre, puma, guepardo...). Major Bioexotic da Biotechnica: um mês no The Zoo, com Exotic Bodysculpting e: Combat Jaw, 2 Cybereyes com Low Light/Infrared/UV, 2 Cyberlegs com 2 Grip Foot e 2 Jump Boosters, 2 Grafted Muscle and Bone Lace, Neural Link com Reflex Co-Processor e Sandevistan, e 2 Wolvers. A HL do pacote já vem reduzida pela terapia e vale com todas as peças instaladas; cyberware que o personagem já tem reduz a HL em 2 por peça (4 por Borgware). Quem não completa o mês rola a HL de cada peça normalmente.",
+      "attributes": {
+        "installLocation": "Unknown",
+        "humanityLoss": 36,
+        "humanityLossDice": null,
+        "requirements": "Pacote de 31 dias no The Zoo (Biotechnica)",
+        "effect": "Combat Jaw, 2 Cybereyes com Low Light/Infrared/UV, 2 Cyberlegs com 2 Grip Foot e 2 Jump Boosters, 2 Grafted Muscle and Bone Lace, Neural Link com Reflex Co-Processor e Sandevistan, e 2 Wolvers"
+      }
+    },
+    "bughouse": {
+      "page": 69,
+      "notes": "Conferido com Interface RED Volume 2, p. 69. Corrigido: custa 6.600eb (o compêndio dizia 6.000).",
+      "price": 6600,
+      "priceCategory": "Luxury",
+      "tags": [
+        "Pacote",
+        "Major Bioexotic"
+      ],
+      "description": "Inseto humanoide. Major Bioexotic da Biotechnica: um mês no The Zoo, com Exotic Bodysculpting e: Combat Jaw, 2 Cyberarms com 2 Extra-Jointed Cyberlimb Upgrades, 6 Cybereyes com 2 Image Enhance, 2 Low Light/Infrared/UV e MicroOptics, 2 Cyberlegs com 2 Extra-Jointed Cyberlimb Upgrades e 2 Jump Boosters, e MultiOptic Mount. A HL do pacote já vem reduzida pela terapia e vale com todas as peças instaladas; cyberware que o personagem já tem reduz a HL em 2 por peça (4 por Borgware). Quem não completa o mês rola a HL de cada peça normalmente.",
+      "attributes": {
+        "installLocation": "Unknown",
+        "humanityLoss": 48,
+        "humanityLossDice": null,
+        "requirements": "Pacote de 31 dias no The Zoo (Biotechnica)",
+        "effect": "Combat Jaw, 2 Cyberarms com 2 Extra-Jointed Cyberlimb Upgrades, 6 Cybereyes com 2 Image Enhance, 2 Low Light/Infrared/UV e MicroOptics, 2 Cyberlegs com 2 Extra-Jointed Cyberlimb Upgrades e 2 Jump Boosters, e MultiOptic Mount"
+      }
+    },
+    "combat-tail": {
+      "page": 72,
+      "notes": "Conferido com Interface RED Volume 2, p. 72.",
+      "description": "Cyberware de Corpo Externo que ocupa 2 slots de opção. A coluna é estendida até um módulo de cauda armado. Funciona como arma corpo a corpo Pesada. A critério do Mestre, pode fazer outra tarefa com -4, e nesse momento não serve de arma.",
+      "attributes": {
+        "slotsRequired": 2,
+        "requirements": "Neural Link; Hospital",
+        "effect": "Cauda armada (Heavy Melee Weapon)."
+      }
+    },
+    "firebreather": {
+      "page": 73,
+      "notes": "Conferido com Interface RED Volume 2, p. 73.",
+      "description": "Cyberware de Corpo Interno que ocupa 2 slots de opção. Escopeta exótica na garganta, disparada ao abrir a boca e estender a língua. Não aceita acessórios de arma e só carrega um Incendiary Shell. Boca, nariz e garganta são reconstruídos para não engolir fogo. Fica oculta sem teste.",
+      "attributes": {
+        "slotsRequired": 2,
+        "effect": "Escopeta exótica na garganta (1 Incendiary Shell)."
+      }
+    },
+    "militech-tactical-umbrella": {
+      "page": 20,
+      "notes": "Conferido com Interface RED Volume 2, p. 20. Artigo Night City Weather. Corrigido: as duas armas são exóticas, e a parte corpo a corpo é de Qualidade Excelente.",
+      "source": "Interface 2",
+      "description": "Da linha Armed Executive da Militech. Protege de Acid Rain e Blood Rain como um guarda-chuva comum e é duas armas: corpo a corpo Pesada Exótica de Qualidade Excelente e Pistola Pesada Exótica de Baixa Qualidade, que aceita munição Basic e Non-Basic. O pente tem 2 balas e recarrega como uma Pistola Pesada.",
+      "tags": [
+        "Arma combinada",
+        "Exótica",
+        "Baixa Qualidade"
+      ],
+      "attributes": {
+        "exotic": true
+      }
+    }
+  },
+  "additions": [
+    {
+      "tags": [
+        "Pacote",
+        "Major Bioexotic"
+      ],
+      "manufacturer": "Biotechnica",
+      "slug": "neuhuman",
+      "name": "NeuHuman™",
+      "category": "cyberware",
+      "page": 70,
+      "price": 4000,
+      "priceCategory": "VeryExpensive",
+      "description": "Humano \"aperfeiçoado\", popular entre guarda-costas. Major Bioexotic da Biotechnica: um mês no The Zoo, com Exotic Bodysculpting e: Appetite Controller, Biomonitor, Chipware Socket com Pain Editor fixo, 2 Cybereyes com 2 Anti-Dazzle e Chyron, Cyberaudio Suite com Level Damper e Internal Agent, Enhanced Antibodies, Heuristic Health Monitor, Nasal Filters, Neural Link com Reflex Co-Processor, NeuTongue e Toxin Binders (o Bodysculpting é o comum, não o Exotic). A HL do pacote já vem reduzida pela terapia; cyberware já instalado reduz a HL em 2 por peça (4 por Borgware).",
+      "attributes": {
+        "foundational": false,
+        "requiresPair": false,
+        "cyberwareType": "Bioexotic",
+        "bodyLocation": "FullBody",
+        "installLocation": "Unknown",
+        "humanityLoss": 32,
+        "requirements": "Pacote de 31 dias no The Zoo (Biotechnica)",
+        "effect": "Appetite Controller, Biomonitor, Chipware Socket com Pain Editor fixo, 2 Cybereyes com 2 Anti-Dazzle e Chyron, Cyberaudio Suite com Level Damper e Internal Agent, Enhanced Antibodies, Heuristic Health Monitor, Nasal Filters, Neural Link com Reflex Co-Processor, NeuTongue e Toxin Binders (o Bodysculpting é o comum, não o Exotic)"
+      },
+      "notes": "Conferido com Interface RED Volume 2, p. 70. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Pacote",
+        "Major Bioexotic"
+      ],
+      "manufacturer": "Biotechnica",
+      "slug": "ursaform",
+      "name": "UrsaForm®",
+      "category": "cyberware",
+      "page": 70,
+      "price": 8200,
+      "priceCategory": "Luxury",
+      "description": "Urso. Inclui avaliação psicológica; efeitos colaterais podem causar breves surtos de ciberpsicose. A Biotechnica só instala o Linear Frame Sigma com BODY 4 ou mais. Major Bioexotic da Biotechnica: um mês no The Zoo, com Exotic Bodysculpting e: 2 Chipware Sockets (Pain Editor e Olfactory Boost fixos), Combat Jaw, 2 Cyberarms com 2 Wolvers, Cyberaudio Suite com Amplified Hearing, 2 Cybereyes com Low Light/Infrared/UV, 2 Cyberlegs com 2 Grip Foot, Grafted Muscle and Bone Lace, Implanted Linear Frame Sigma e Neural Link. A HL do pacote já vem reduzida pela terapia; cyberware já instalado reduz a HL em 2 por peça (4 por Borgware).",
+      "attributes": {
+        "foundational": false,
+        "requiresPair": false,
+        "cyberwareType": "Bioexotic",
+        "bodyLocation": "FullBody",
+        "installLocation": "Unknown",
+        "humanityLoss": 52,
+        "requirements": "Pacote de 31 dias no The Zoo (Biotechnica)",
+        "effect": "2 Chipware Sockets (Pain Editor e Olfactory Boost fixos), Combat Jaw, 2 Cyberarms com 2 Wolvers, Cyberaudio Suite com Amplified Hearing, 2 Cybereyes com Low Light/Infrared/UV, 2 Cyberlegs com 2 Grip Foot, Grafted Muscle and Bone Lace, Implanted Linear Frame Sigma e Neural Link"
+      },
+      "notes": "Conferido com Interface RED Volume 2, p. 70. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Pacote",
+        "FantaForm"
+      ],
+      "manufacturer": "Biotechnica",
+      "slug": "draconic-fantaform",
+      "name": "Draconic FantaForm™",
+      "category": "cyberware",
+      "page": 71,
+      "price": 11000,
+      "priceCategory": "SuperLuxury",
+      "description": "Dragão que cospe fogo, com um LARP no covil da montanha. A Biotechnica só instala o Linear Frame Beta com BODY 4 ou mais. FantaForm da Biotechnica: um mês no The Zoo, com Exotic Bodysculpting e: Combat Jaw, Combat Tail, 2 Cyberarms, 2 Cybereyes, 2 Cyberlegs, Firebreather, 2 Grafted Muscle and Bone Lace, Implanted Linear Frame Beta, Neural Link, Subdermal Armor e 2 Wolvers. A HL do pacote já vem reduzida pela terapia; cyberware já instalado reduz a HL em 2 por peça (4 por Borgware).",
+      "attributes": {
+        "foundational": false,
+        "requiresPair": false,
+        "cyberwareType": "Bioexotic",
+        "bodyLocation": "FullBody",
+        "installLocation": "Unknown",
+        "humanityLoss": 34,
+        "requirements": "Pacote de 31 dias no The Zoo (Biotechnica)",
+        "effect": "Combat Jaw, Combat Tail, 2 Cyberarms, 2 Cybereyes, 2 Cyberlegs, Firebreather, 2 Grafted Muscle and Bone Lace, Implanted Linear Frame Beta, Neural Link, Subdermal Armor e 2 Wolvers"
+      },
+      "notes": "Conferido com Interface RED Volume 2, p. 71. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Pacote",
+        "FantaForm"
+      ],
+      "manufacturer": "Biotechnica",
+      "slug": "dwarvish-fantaform",
+      "name": "Dwarvish FantaForm™",
+      "category": "cyberware",
+      "page": 71,
+      "price": 2100,
+      "priceCategory": "VeryExpensive",
+      "description": "Anão, com trilha de LARP pelas Blue Mountains. FantaForm da Biotechnica: um mês no The Zoo, com Exotic Bodysculpting e: 2 Cybereyes com Low Light/Infrared/UV, Grafted Muscle and Bone Lace e Toxin Binders. A HL do pacote já vem reduzida pela terapia; cyberware já instalado reduz a HL em 2 por peça (4 por Borgware).",
+      "attributes": {
+        "foundational": false,
+        "requiresPair": false,
+        "cyberwareType": "Bioexotic",
+        "bodyLocation": "FullBody",
+        "installLocation": "Unknown",
+        "humanityLoss": 12,
+        "requirements": "Pacote de 31 dias no The Zoo (Biotechnica)",
+        "effect": "2 Cybereyes com Low Light/Infrared/UV, Grafted Muscle and Bone Lace e Toxin Binders"
+      },
+      "notes": "Conferido com Interface RED Volume 2, p. 71. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Pacote",
+        "FantaForm"
+      ],
+      "manufacturer": "Biotechnica",
+      "slug": "elvish-fantaform",
+      "name": "Elvish FantaForm™",
+      "category": "cyberware",
+      "page": 71,
+      "price": 2100,
+      "priceCategory": "VeryExpensive",
+      "description": "Elfo de Elflines Online, com LARP na floresta. FantaForm da Biotechnica: um mês no The Zoo, com Exotic Bodysculpting e: Cyberaudio Suite com Amplified Hearing e 2 Cybereyes com 2 Image Enhance e Low Light/Infrared/UV. A HL do pacote já vem reduzida pela terapia; cyberware já instalado reduz a HL em 2 por peça (4 por Borgware).",
+      "attributes": {
+        "foundational": false,
+        "requiresPair": false,
+        "cyberwareType": "Bioexotic",
+        "bodyLocation": "FullBody",
+        "installLocation": "Unknown",
+        "humanityLoss": 16,
+        "requirements": "Pacote de 31 dias no The Zoo (Biotechnica)",
+        "effect": "Cyberaudio Suite com Amplified Hearing e 2 Cybereyes com 2 Image Enhance e Low Light/Infrared/UV"
+      },
+      "notes": "Conferido com Interface RED Volume 2, p. 71. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Pacote",
+        "FantaForm"
+      ],
+      "manufacturer": "Biotechnica",
+      "slug": "merish-fantaform",
+      "name": "Merish FantaForm™",
+      "category": "cyberware",
+      "page": 71,
+      "price": 3600,
+      "priceCategory": "VeryExpensive",
+      "description": "Sereia, com um mês no LARPlantis submerso da costa do Oregon. FantaForm da Biotechnica: um mês no The Zoo, com Exotic Bodysculpting e: Chipware Socket com Tactile Boost fixo, 2 Cybereyes com Low Light/Infrared/UV, 2 Cyberlegs com 2 Web Foot, Gills e Neural Link. A HL do pacote já vem reduzida pela terapia; cyberware já instalado reduz a HL em 2 por peça (4 por Borgware).",
+      "attributes": {
+        "foundational": false,
+        "requiresPair": false,
+        "cyberwareType": "Bioexotic",
+        "bodyLocation": "FullBody",
+        "installLocation": "Unknown",
+        "humanityLoss": 24,
+        "requirements": "Pacote de 31 dias no The Zoo (Biotechnica)",
+        "effect": "Chipware Socket com Tactile Boost fixo, 2 Cybereyes com Low Light/Infrared/UV, 2 Cyberlegs com 2 Web Foot, Gills e Neural Link"
+      },
+      "notes": "Conferido com Interface RED Volume 2, p. 71. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Pacote",
+        "FantaForm"
+      ],
+      "manufacturer": "Biotechnica",
+      "slug": "ogrish-fantaform",
+      "name": "Ogrish FantaForm™",
+      "category": "cyberware",
+      "page": 72,
+      "price": 4000,
+      "priceCategory": "VeryExpensive",
+      "description": "Ogro, treinado por um Operative da Militech. FantaForm da Biotechnica: um mês no The Zoo, com Exotic Bodysculpting e: Chipware Socket com Pain Editor fixo, Enhanced Antibodies, Grafted Muscle and Bone Lace, Neural Link e Subdermal Armor. A HL do pacote já vem reduzida pela terapia; cyberware já instalado reduz a HL em 2 por peça (4 por Borgware).",
+      "attributes": {
+        "foundational": false,
+        "requiresPair": false,
+        "cyberwareType": "Bioexotic",
+        "bodyLocation": "FullBody",
+        "installLocation": "Unknown",
+        "humanityLoss": 12,
+        "requirements": "Pacote de 31 dias no The Zoo (Biotechnica)",
+        "effect": "Chipware Socket com Pain Editor fixo, Enhanced Antibodies, Grafted Muscle and Bone Lace, Neural Link e Subdermal Armor"
+      },
+      "notes": "Conferido com Interface RED Volume 2, p. 72. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Pacote",
+        "FantaForm"
+      ],
+      "manufacturer": "Biotechnica",
+      "slug": "orcish-fantaform",
+      "name": "Orcish FantaForm™",
+      "category": "cyberware",
+      "page": 72,
+      "price": 2500,
+      "priceCategory": "VeryExpensive",
+      "description": "Orc, forjado num LARP de campanha militar. FantaForm da Biotechnica: um mês no The Zoo, com Exotic Bodysculpting e: 2 Cybereyes com Low Light/Infrared/UV, Grafted Muscle and Bone Lace e Skin Weave. A HL do pacote já vem reduzida pela terapia; cyberware já instalado reduz a HL em 2 por peça (4 por Borgware).",
+      "attributes": {
+        "foundational": false,
+        "requiresPair": false,
+        "cyberwareType": "Bioexotic",
+        "bodyLocation": "FullBody",
+        "installLocation": "Unknown",
+        "humanityLoss": 12,
+        "requirements": "Pacote de 31 dias no The Zoo (Biotechnica)",
+        "effect": "2 Cybereyes com Low Light/Infrared/UV, Grafted Muscle and Bone Lace e Skin Weave"
+      },
+      "notes": "Conferido com Interface RED Volume 2, p. 72. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "umbrella",
+      "name": "Umbrella",
+      "page": 20,
+      "price": 10,
+      "description": "Guarda-chuva feito para o clima de Night City. Debaixo dele, Acid Rain não ablata a armadura e o portador tem +2 em Resist Torture/Drugs contra Blood Rain. A mão que o segura não segura mais nada.",
+      "attributes": {
+        "gearType": "Survival",
+        "effect": "Anula Acid Rain; +2 contra Blood Rain."
+      },
+      "priceCategory": "Cheap",
+      "notes": "Conferido com Interface RED Volume 2, p. 20. Artigo Night City Weather. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "cold-weather-jacket-lining",
+      "name": "Cold-Weather Jacket Lining",
+      "page": 20,
+      "price": 500,
+      "description": "Forro isolante aplicado numa jaqueta (CP:R p. 356). Protege de frio extremo e conta como equipamento adequado contra Exposure (CP:R p. 181).",
+      "attributes": {
+        "gearType": "Survival",
+        "effect": "Proteção contra frio extremo."
+      },
+      "priceCategory": "Expensive",
+      "notes": "Conferido com Interface RED Volume 2, p. 20. Artigo Night City Weather. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "hot-weather-jacket-lining",
+      "name": "Hot-Weather Jacket Lining",
+      "page": 20,
+      "price": 500,
+      "description": "Forro aplicado numa jaqueta que absorve suor e ventila calor com um pequeno ventilador. Protege de calor extremo, conta contra Exposure e reduz em 1 a penalidade de armadura extra por calor ou Heat Wave.",
+      "attributes": {
+        "gearType": "Survival",
+        "effect": "Proteção contra calor; -1 na penalidade de armadura por calor."
+      },
+      "priceCategory": "Expensive",
+      "notes": "Conferido com Interface RED Volume 2, p. 20. Artigo Night City Weather. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "waterproof-jacket-lining",
+      "name": "Waterproof Jacket Lining",
+      "page": 20,
+      "price": 500,
+      "description": "Forro tratado quimicamente, aplicado numa jaqueta. Anula a ablação de armadura por Acid Rain e dá +2 em Resist Torture/Drugs contra Blood Rain. Não mantém seco se o portador ficar submerso.",
+      "attributes": {
+        "gearType": "Survival",
+        "effect": "Anula Acid Rain; +2 contra Blood Rain."
+      },
+      "priceCategory": "Expensive",
+      "notes": "Conferido com Interface RED Volume 2, p. 20. Artigo Night City Weather. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "furniture-second-hand-special",
+      "name": "Mobília: Second-hand Special",
+      "page": 37,
+      "price": 50,
+      "description": "Conjunto mínimo de móveis para um Cargo Container: catre, mesa dobrável, \"cômoda\" de caixas plásticas e uma poltrona manchada.",
+      "attributes": {
+        "gearType": "Lifestyle",
+        "effect": "Conjunto de móveis básico."
+      },
+      "priceCategory": "Costly",
+      "notes": "Conferido com Interface RED Volume 2, p. 37. Artigo Cargo Containers & Cube Hotels. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "furniture-cargo-container-chic",
+      "name": "Mobília: Cargo Container Chic",
+      "page": 37,
+      "price": 100,
+      "description": "Cama de solteiro, cômoda plástica, mesa com prateleira e poltrona com um pouco de estofado. É o conjunto inicial da maioria dos Cargo Containers, mas o senhorio não repõe o que quebrar.",
+      "attributes": {
+        "gearType": "Lifestyle",
+        "effect": "Conjunto de móveis padrão."
+      },
+      "priceCategory": "Premium",
+      "notes": "Conferido com Interface RED Volume 2, p. 37. Artigo Cargo Containers & Cube Hotels. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "furniture-a-touch-of-luxury",
+      "name": "Mobília: A Touch of Luxury",
+      "page": 37,
+      "price": 500,
+      "description": "Cama com molas, cômoda e mesa que quase parecem madeira, poltrona confortável e arte nas paredes. Chama a atenção das gangues locais.",
+      "attributes": {
+        "gearType": "Lifestyle",
+        "effect": "Conjunto de móveis caprichado."
+      },
+      "priceCategory": "Expensive",
+      "notes": "Conferido com Interface RED Volume 2, p. 37. Artigo Cargo Containers & Cube Hotels. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "continental-brands-koff-popper",
+      "name": "Continental Brands Koff Popper",
+      "page": 37,
+      "price": 50,
+      "description": "Garrafa térmica que transforma uma Koff Pop e água em 237 ml de algo parecido com café, cheio de cafeína. As Koff Pops custam 10eb (Cheap) o pacote com 10 nos mercados Oasis e vêm incluídas no estilo de vida Kibble; a garrafa, não.",
+      "attributes": {
+        "gearType": "Lifestyle",
+        "effect": "Prepara \"café\" de pastilha."
+      },
+      "priceCategory": "Costly",
+      "notes": "Conferido com Interface RED Volume 2, p. 37. Artigo Cargo Containers & Cube Hotels. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "fire-safe",
+      "name": "Fire Safe",
+      "page": 37,
+      "price": 100,
+      "description": "Cofre portátil à prova de fogo, de uns 30 cm de lado, com alça. Conta como Thick Steel (50 HP). Abrir a fechadura mecânica exige Pick Lock DV15.",
+      "attributes": {
+        "gearType": "Lifestyle",
+        "effect": "Cofre portátil (50 HP, Pick Lock DV15)."
+      },
+      "priceCategory": "Premium",
+      "notes": "Conferido com Interface RED Volume 2, p. 37. Artigo Cargo Containers & Cube Hotels. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "hidden-compartment",
+      "name": "Hidden Compartment",
+      "page": 37,
+      "price": 100,
+      "description": "Compartimento de 15 x 30 x 7,5 cm escondido na cama, na mesa ou na cômoda. Encontrá-lo exige Conceal/Reveal Object DV15.",
+      "attributes": {
+        "gearType": "Lifestyle",
+        "effect": "Esconderijo (DV15 para achar)."
+      },
+      "priceCategory": "Premium",
+      "notes": "Conferido com Interface RED Volume 2, p. 37. Artigo Cargo Containers & Cube Hotels. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "smart-vanity",
+      "name": "Smart Vanity",
+      "page": 37,
+      "price": 500,
+      "description": "Penteadeira com gavetas e espelho digital iluminado que sincroniza com o Agent e mostra em tempo real como ficariam outros visuais e penteados.",
+      "attributes": {
+        "gearType": "Lifestyle",
+        "effect": "Penteadeira com espelho digital."
+      },
+      "priceCategory": "Expensive",
+      "notes": "Conferido com Interface RED Volume 2, p. 37. Artigo Cargo Containers & Cube Hotels. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "wall-art",
+      "name": "Wall Art",
+      "page": 37,
+      "price": 20,
+      "description": "Pôster impresso numa moldura plástica barata, de Monet a cachorros jogando pôquer. Tudo custa o mesmo.",
+      "attributes": {
+        "gearType": "Lifestyle",
+        "effect": "Decoração."
+      },
+      "priceCategory": "Everyday",
+      "notes": "Conferido com Interface RED Volume 2, p. 37. Artigo Cargo Containers & Cube Hotels. Ausente do compêndio."
+    }
+  ]
+}

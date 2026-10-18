@@ -1,0 +1,49 @@
+{
+  "about": "Conferido com o PDF oficial Segotari Power v1.11 (outubro de 2025). O PDF não traz armas; aqui estão só os consoles e jogos com preço (p. 12). Formato descrito no README (seção Dados).",
+  "source": "Segotari Power",
+  "additions": [
+    {
+      "slug": "segotari-rush-used", "name": "Segotari RUSH (usado)", "category": "gear", "manufacturer": "Segotari",
+      "description": "Primeiro console de virtualidade doméstica, lançado em 2018 e vendido por 22 anos. Volumoso, mas aguentável com um bom travesseiro de pescoço.",
+      "notes": "Conferido com Segotari Power, p. 4 e tabela da p. 12.", "price": 100, "priceCategory": "Premium", "page": 12, "tags": [],
+      "attributes": { "gearType": "Lifestyle", "gearClass": "Videogame", "effect": "Console de virtualidade." }
+    },
+    {
+      "slug": "segotari-rush-revolution", "name": "Segotari RUSH Revolution", "category": "gear", "manufacturer": "Segotari",
+      "description": "Console novo da Segotari, com braindance interativo: os jogos transmitem toque e cheiro, mas sem dor nem a carga emocional do braindance comum.",
+      "notes": "Conferido com Segotari Power, p. 10 e tabela da p. 12.", "price": 500, "priceCategory": "Expensive", "page": 12, "tags": [],
+      "attributes": { "gearType": "Lifestyle", "gearClass": "Videogame", "effect": "Console de braindance interativo." }
+    },
+    {
+      "slug": "segotari-vricade-cabinet", "name": "Segotari VRIcade Cabinet", "category": "gear", "manufacturer": "Segotari",
+      "description": "Gabinete de fliperama de virtualidade, de 2014: mostra tudo, mas sem sensação de toque.",
+      "notes": "Conferido com Segotari Power, p. 2 e tabela da p. 12. A tabela imprime '1,000eb (Expensive)'; 1.000eb corresponde a Very Expensive.",
+      "price": 1000, "priceCategory": "VeryExpensive", "page": 12, "tags": [],
+      "attributes": { "gearType": "Lifestyle", "gearClass": "Videogame", "effect": "Fliperama de virtualidade." }
+    },
+    {
+      "slug": "segotari-rush-revolution-game", "name": "Jogo de RUSH Revolution", "category": "gear", "manufacturer": "Segotari",
+      "description": "Preço médio de um jogo de RUSH Revolution. O preço de cada jogo pode variar; se outro livro der outro preço, vale o do livro.",
+      "notes": "Conferido com Segotari Power, tabela da p. 12.", "price": 50, "priceNote": "Preço médio", "priceCategory": "Costly", "page": 12, "tags": [],
+      "attributes": { "gearType": "Lifestyle", "gearClass": "Videogame", "requirements": "Segotari RUSH Revolution", "effect": "Jogo." }
+    },
+    {
+      "slug": "segotari-agent-game", "name": "Jogo de Segotari Agent", "category": "gear", "manufacturer": "Segotari",
+      "description": "Preço médio de um jogo da marca Segotari Agent, que roda em qualquer Agent. O preço de cada jogo pode variar.",
+      "notes": "Conferido com Segotari Power, tabela da p. 12.", "price": 20, "priceNote": "Preço médio", "priceCategory": "Everyday", "page": 12, "tags": [],
+      "attributes": { "gearType": "Lifestyle", "gearClass": "Videogame", "requirements": "Agent", "effect": "Jogo." }
+    },
+    {
+      "slug": "segotari-mindgames-chip", "name": "Chip Segotari Mindgames", "category": "gear", "manufacturer": "Segotari",
+      "description": "Chipware de 2020 que transforma o neural link num console portátil. Cópias piratas voltaram a aparecer nas feiras. Preço médio; cada jogo pode variar.",
+      "notes": "Conferido com Segotari Power, p. 8 e tabela da p. 12.", "price": 50, "priceNote": "Preço médio", "priceCategory": "Costly", "page": 12, "tags": [],
+      "attributes": { "gearType": "Lifestyle", "gearClass": "Videogame", "requirements": "Neural Link", "effect": "Jogo em chip." }
+    },
+    {
+      "slug": "segotari-rush-game-used", "name": "Jogo de RUSH (usado)", "category": "gear", "manufacturer": "Segotari",
+      "description": "Preço médio de um jogo usado do RUSH original. O preço de cada jogo pode variar.",
+      "notes": "Conferido com Segotari Power, tabela da p. 12.", "price": 20, "priceNote": "Preço médio", "priceCategory": "Everyday", "page": 12, "tags": [],
+      "attributes": { "gearType": "Lifestyle", "gearClass": "Videogame", "requirements": "Segotari RUSH", "effect": "Jogo." }
+    }
+  ]
+}

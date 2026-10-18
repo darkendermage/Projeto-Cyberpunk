@@ -1,0 +1,39 @@
+NIGHT CITY ITEM DATABASE — versão para Windows
+===============================================
+Catálogo de itens de Cyberpunk 2020 / RED: armas, munições, cyberware, armaduras,
+drogas, veículos e mais, com filtros, favoritos, listas e comparação.
+
+COMO USAR
+1. Extraia o .zip numa pasta (não rode de dentro do zip).
+2. Dê dois cliques em NightCityItemDB.exe.
+   Se o Windows mostrar "O Windows protegeu o computador", clique em
+   "Mais informações" > "Executar assim mesmo" (o programa não é assinado).
+3. O navegador abre sozinho em http://localhost:5090.
+   Na primeira vez o catálogo é importado, o que leva alguns segundos.
+4. Para encerrar, feche a janela preta que abriu junto.
+
+Não precisa instalar nada: o .NET já vai junto no executável.
+Se você clicar no .exe com o programa já aberto, ele só abre o navegador de novo.
+
+ONDE FICAM OS DADOS
+Tudo fica salvo neste computador, em:
+  %LOCALAPPDATA%\NightCityItemDB\catalogo.db
+(cole esse caminho na barra de endereço do Explorador de Arquivos para abrir a pasta)
+
+Essa pasta fica FORA da pasta do programa: pode apagar o .exe antigo e usar um novo
+à vontade, seus favoritos, listas e itens cadastrados continuam lá.
+Quando uma versão nova muda o banco, o programa guarda antes uma cópia
+(catalogo-backup-DATA.db, as 3 mais recentes) na mesma pasta.
+Quando uma versão nova traz o catálogo atualizado, ele é reimportado sozinho,
+sem mexer em favoritos e listas. Itens do catálogo editados por você podem voltar
+ao valor do catálogo novo; itens que você cadastrou não são afetados.
+Para levar seus dados para outro PC, copie essa pasta.
+
+SOBRE OS DADOS
+Os itens vêm de um compêndio que ainda não foi conferido com os livros oficiais,
+e cada ficha avisa isso. Registros marcados como DEMO são só exemplos.
+
+CONFIGURAÇÃO (opcional)
+Para mudar a porta ou a pasta dos dados, crie um appsettings.Desktop.json ao lado
+do .exe, por exemplo:
+  { "Urls": "http://localhost:5091" }

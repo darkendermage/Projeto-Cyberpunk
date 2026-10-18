@@ -1,0 +1,1303 @@
+{
+  "about": "Conferido com o PDF oficial Toggle's Temple v1.1 (junho de 2024). Formato descrito no README (seção Dados).",
+  "source": "Toggle's Temple",
+  "updates": {
+    "dai-lung-streetmaster": {
+      "name": "Dai Lung Streetmaster",
+      "page": 3,
+      "description": "Arma de Pobre Qualidade (Poor Quality). Entra em pane no d10=1. 3 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 3 e tabela das p. 20-25. O compêndio citava Core Book como fonte.",
+      "tags": [
+        "Baixa Qualidade"
+      ],
+      "attributes": {
+        "quality": "Poor",
+        "rof": 2,
+        "hands": 1,
+        "concealable": true,
+        "exotic": false,
+        "magazine": 12
+      }
+    },
+    "faisal-s-escape-plan": {
+      "name": "Faisal's Escape Plan",
+      "page": 3,
+      "description": "Pistola Média de Baixa Qualidade. Puxar a aba (sem Ação) a transforma numa Smoke Grenade, que precisa ser arremessada até o fim do turno; na explosão, os acessórios e a munição restante são destruídos sem conserto. 3 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 3 e tabela das p. 20-25. Corrigido: qualidade Padrão → Baixa. O compêndio citava Interface 5 como fonte.",
+      "tags": [
+        "Baixa Qualidade",
+        "Descartável"
+      ],
+      "attributes": {
+        "quality": "Poor",
+        "rof": 2,
+        "hands": 1,
+        "concealable": true,
+        "exotic": false,
+        "magazine": 12
+      }
+    },
+    "federated-arms-x-9mm": {
+      "name": "Federated Arms X-9mm",
+      "page": 3,
+      "description": "Pistola média de serviço padrão. 3 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 3 e tabela das p. 20-25. O compêndio citava Core Book como fonte.",
+      "tags": [],
+      "attributes": {
+        "quality": "Standard",
+        "rof": 2,
+        "hands": 1,
+        "concealable": true,
+        "exotic": false,
+        "magazine": 12
+      }
+    },
+    "militech-avenger": {
+      "name": "Militech Avenger",
+      "page": 4,
+      "description": "Qualidade Excelente (+1 nas rolagens de ataque). 3 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 4 e tabela das p. 20-25. O compêndio citava Core Book como fonte.",
+      "tags": [
+        "Qualidade Excelente"
+      ],
+      "attributes": {
+        "quality": "Excellent",
+        "rof": 2,
+        "hands": 1,
+        "concealable": true,
+        "exotic": false,
+        "magazine": 12
+      }
+    },
+    "nomad-357-magnum": {
+      "name": "Nomad .357 Magnum",
+      "page": 4,
+      "description": "Pente estendido de 18 tiros artesanal. 2 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 4 e tabela das p. 20-25. O compêndio citava Interface 5 como fonte.",
+      "tags": [
+        "Pente estendido"
+      ],
+      "attributes": {
+        "quality": "Standard",
+        "rof": 2,
+        "hands": 1,
+        "concealable": false,
+        "exotic": false,
+        "magazine": 18
+      }
+    },
+    "towa-type-12-police-pistol": {
+      "name": "Towa Type-12 Police Pistol",
+      "page": 4,
+      "description": "Revólver (Pistola Média) de Qualidade Excelente com 6 tiros e Smartgun Link instalado. Incompatível com acessórios de pente. 1 slot de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 4 e tabela das p. 20-25. O compêndio citava Interface 5 como fonte.",
+      "tags": [
+        "Qualidade Excelente",
+        "Smartgun"
+      ],
+      "attributes": {
+        "quality": "Excellent",
+        "rof": 2,
+        "hands": 1,
+        "concealable": true,
+        "exotic": false,
+        "magazine": 6
+      }
+    },
+    "dai-lung-magnum": {
+      "name": "Dai Lung Magnum",
+      "page": 4,
+      "description": "Poor Quality (trava no d10=1). 3 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 4 e tabela das p. 20-25. O compêndio citava Core Book como fonte.",
+      "tags": [
+        "Baixa Qualidade"
+      ],
+      "attributes": {
+        "quality": "Poor",
+        "rof": 2,
+        "hands": 1,
+        "concealable": true,
+        "exotic": false,
+        "magazine": 8
+      }
+    },
+    "gunmart-midnight-defender": {
+      "name": "GunMart Midnight Defender",
+      "page": 4,
+      "description": "Poor Quality. Acompanha Mira Térmica/Infravermelha integrada. 2 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 4 e tabela das p. 20-25. O compêndio citava Interface 5 como fonte.",
+      "tags": [
+        "Baixa Qualidade",
+        "Mira acoplada"
+      ],
+      "attributes": {
+        "quality": "Poor",
+        "rof": 2,
+        "hands": 1,
+        "concealable": true,
+        "exotic": false,
+        "magazine": 8
+      }
+    },
+    "militech-sheriff": {
+      "name": "Militech Sheriff",
+      "page": 4,
+      "description": "Revólver (Pistola Pesada) de Qualidade Excelente com 6 tiros. Incompatível com acessórios de pente. 3 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 4 e tabela das p. 20-25. O compêndio citava Interface 5 como fonte.",
+      "tags": [
+        "Qualidade Excelente",
+        "Revólver"
+      ],
+      "attributes": {
+        "quality": "Excellent",
+        "rof": 2,
+        "hands": 1,
+        "concealable": true,
+        "exotic": false,
+        "magazine": 6
+      }
+    },
+    "mustang-arms-mark-ii": {
+      "name": "Mustang Arms Mark II",
+      "page": 4,
+      "description": "Qualidade Excelente (+1 no ataque) com Pente Estendido de 14 tiros. 2 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 4 e tabela das p. 20-25. O compêndio citava Interface 5 como fonte.",
+      "tags": [
+        "Qualidade Excelente",
+        "Pente estendido"
+      ],
+      "attributes": {
+        "quality": "Excellent",
+        "rof": 2,
+        "hands": 1,
+        "concealable": false,
+        "exotic": false,
+        "magazine": 14
+      }
+    },
+    "mustang-arms-mark-iii": {
+      "name": "Mustang Arms Mark III",
+      "page": 4,
+      "description": "Pistola Pesada de Padrão Superior. 3 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 4 e tabela das p. 20-25. O compêndio citava Core Book como fonte.",
+      "tags": [],
+      "attributes": {
+        "quality": "Standard",
+        "rof": 2,
+        "hands": 1,
+        "concealable": true,
+        "exotic": false,
+        "magazine": 8
+      }
+    },
+    "nova-cityhunter-x": {
+      "name": "Nova Cityhunter X",
+      "page": 5,
+      "description": "Qualidade Excelente (+1 no ataque). 3 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 5 e tabela das p. 20-25. O compêndio citava Core Book como fonte.",
+      "tags": [
+        "Qualidade Excelente"
+      ],
+      "attributes": {
+        "quality": "Excellent",
+        "rof": 2,
+        "hands": 1,
+        "concealable": true,
+        "exotic": false,
+        "magazine": 8
+      }
+    },
+    "faisal-s-convenience": {
+      "name": "Faisal's Convenience",
+      "page": 5,
+      "description": "Pistola Muito Pesada descartável, vendida em vendits e já carregada com um \"sabor\" de munição. É ativada puxando uma aba (sem Ação) e não pode ser recarregada; tentar extrair a munição destrói a arma e a munição. Não aceita Upgrade de Tech, mas aceita acessórios que não sejam de pente. Incompatível com acessórios de pente. 3 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 5 e tabela das p. 20-25. O compêndio citava Interface 5 como fonte.",
+      "tags": [
+        "Descartável"
+      ],
+      "attributes": {
+        "quality": "Standard",
+        "rof": 1,
+        "hands": 1,
+        "concealable": false,
+        "exotic": false,
+        "magazine": 8
+      },
+      "priceNote": "20eb (Basic/Rubber) ou 50eb (AP, Expansive, Incendiary)"
+    },
+    "fed-arms-super-chief-plus": {
+      "name": "Federated Arms Super Chief Plus",
+      "page": 5,
+      "description": "Poor Quality (trava no d10=1). 3 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 5 e tabela das p. 20-25. O compêndio citava Core Book como fonte.",
+      "tags": [
+        "Baixa Qualidade"
+      ],
+      "attributes": {
+        "quality": "Poor",
+        "rof": 1,
+        "hands": 1,
+        "concealable": false,
+        "exotic": false,
+        "magazine": 8
+      }
+    },
+    "militech-boomer-buster": {
+      "name": "Militech Boomer Buster",
+      "page": 5,
+      "description": "Qualidade Excelente (+1 nas rolagens de ataque). 3 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 5 e tabela das p. 20-25. O compêndio citava Core Book como fonte.",
+      "tags": [
+        "Qualidade Excelente"
+      ],
+      "attributes": {
+        "quality": "Excellent",
+        "rof": 1,
+        "hands": 1,
+        "concealable": false,
+        "exotic": false,
+        "magazine": 8
+      }
+    },
+    "nomad-big-gulp": {
+      "name": "Nomad Big Gulp",
+      "page": 5,
+      "description": "Pistola Muito Pesada de cano duplo e Qualidade Excelente, 2 tiros. Cada cano pode ter um tipo de munição, e você escolhe qual disparar. Incompatível com acessórios de pente. 3 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 5 e tabela das p. 20-25. O compêndio citava Interface 5 como fonte.",
+      "tags": [
+        "Qualidade Excelente"
+      ],
+      "attributes": {
+        "quality": "Excellent",
+        "rof": 1,
+        "hands": 1,
+        "concealable": false,
+        "exotic": false,
+        "magazine": 2
+      }
+    },
+    "sternmeyer-p-35": {
+      "name": "Sternmeyer P-35",
+      "page": 6,
+      "description": "Pistola militar europeia padrão. 3 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 6 e tabela das p. 20-25. O compêndio citava Core Book como fonte.",
+      "tags": [],
+      "attributes": {
+        "quality": "Standard",
+        "rof": 1,
+        "hands": 1,
+        "concealable": false,
+        "exotic": false,
+        "magazine": 8
+      }
+    },
+    "sternmeyer-p-35-covert": {
+      "name": "Sternmeyer P-35 Covert",
+      "page": 6,
+      "description": "Versão com Silenciador/Supressor integrado de fábrica. 2 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 6 e tabela das p. 20-25. O compêndio citava Interface 5 como fonte.",
+      "tags": [
+        "Silenciada"
+      ],
+      "attributes": {
+        "quality": "Standard",
+        "rof": 1,
+        "hands": 1,
+        "concealable": false,
+        "exotic": false,
+        "magazine": 8
+      }
+    },
+    "arasaka-minami-10": {
+      "name": "Arasaka Minami 10",
+      "page": 6,
+      "description": "Qualidade Excelente (+1 no ataque). 3 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 6 e tabela das p. 20-25. Corrigido: ROF 2 → 1. O compêndio citava Core Book como fonte.",
+      "tags": [
+        "Qualidade Excelente",
+        "Autofire"
+      ],
+      "attributes": {
+        "quality": "Excellent",
+        "rof": 1,
+        "hands": 1,
+        "concealable": true,
+        "exotic": false,
+        "magazine": 30
+      }
+    },
+    "arasaka-minami-10-p-m-s": {
+      "name": "Arasaka Minami 10 P/M/S",
+      "page": 6,
+      "description": "Qualidade Excelente (+1) com Silenciador integrado. 2 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 6 e tabela das p. 20-25. Corrigido: ROF 2 → 1. O compêndio citava Interface 5 como fonte.",
+      "tags": [
+        "Qualidade Excelente",
+        "Silenciada",
+        "Autofire"
+      ],
+      "attributes": {
+        "quality": "Excellent",
+        "rof": 1,
+        "hands": 1,
+        "concealable": true,
+        "exotic": false,
+        "magazine": 30
+      }
+    },
+    "dai-lung-cybermag-20": {
+      "name": "Dai Lung Cybermag 20",
+      "page": 6,
+      "description": "Poor Quality com Pente Tambor de 50 tiros instalado. 2 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 6 e tabela das p. 20-25. Corrigido: ROF 2 → 1; não é ocultável. O compêndio citava Interface 5 como fonte.",
+      "tags": [
+        "Baixa Qualidade",
+        "Autofire",
+        "Pente estendido"
+      ],
+      "attributes": {
+        "quality": "Poor",
+        "rof": 1,
+        "hands": 1,
+        "concealable": false,
+        "exotic": false,
+        "magazine": 50
+      }
+    },
+    "fed-arms-tech-assault-iii": {
+      "name": "Federated Arms Tech-Assault III",
+      "page": 6,
+      "description": "Poor Quality (modelo famoso por travar e esquentar). 3 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 6 e tabela das p. 20-25. Corrigido: ROF 2 → 1. O compêndio citava Core Book como fonte.",
+      "tags": [
+        "Baixa Qualidade",
+        "Autofire"
+      ],
+      "attributes": {
+        "quality": "Poor",
+        "rof": 1,
+        "hands": 1,
+        "concealable": true,
+        "exotic": false,
+        "magazine": 30
+      }
+    },
+    "militech-mini-gat": {
+      "name": "Militech Mini-Gat",
+      "page": 7,
+      "description": "Submetralhadora de 5 canos rotativos. 3 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 7 e tabela das p. 20-25. Corrigido: ROF 2 → 1. O compêndio citava Core Book como fonte.",
+      "tags": [
+        "Autofire"
+      ],
+      "attributes": {
+        "quality": "Standard",
+        "rof": 1,
+        "hands": 1,
+        "concealable": true,
+        "exotic": false,
+        "magazine": 30
+      }
+    },
+    "mustang-arms-rodeo": {
+      "name": "Mustang Arms Rodeo",
+      "page": 7,
+      "description": "SMG de Baixa Qualidade que causa 3d6 no tiro único. No Autofire, além do teste normal, faz um teste de Handgun DV15 (sem Ação); se falhar, o multiplicador cai de x3 para x2 nesse ataque. 3 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 7 e tabela das p. 20-25. Corrigido: ROF 2 → 1; a regra do Autofire estava invertida. O compêndio citava Interface 5 como fonte.",
+      "tags": [
+        "Baixa Qualidade",
+        "Autofire"
+      ],
+      "attributes": {
+        "quality": "Poor",
+        "rof": 1,
+        "hands": 1,
+        "concealable": true,
+        "exotic": false,
+        "magazine": 30,
+        "damage": "3d6 (tiro único)"
+      }
+    },
+    "chadran-arms-city-reaper": {
+      "name": "Chadran Arms City Reaper",
+      "page": 7,
+      "description": "Poor Quality (trava no d10=1). 3 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 7 e tabela das p. 20-25. O compêndio citava Core Book como fonte.",
+      "tags": [
+        "Baixa Qualidade",
+        "Autofire"
+      ],
+      "attributes": {
+        "quality": "Poor",
+        "rof": 1,
+        "hands": 1,
+        "concealable": false,
+        "exotic": false,
+        "magazine": 40
+      }
+    },
+    "imi-uz-2045-pro": {
+      "name": "IMI UZ 2045 Pro",
+      "page": 7,
+      "description": "Acompanha Smartgun Link integrado de fábrica. 1 slot de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 7 e tabela das p. 20-25. O compêndio citava Interface 5 como fonte.",
+      "tags": [
+        "Smartgun",
+        "Autofire"
+      ],
+      "attributes": {
+        "quality": "Standard",
+        "rof": 1,
+        "hands": 1,
+        "concealable": false,
+        "exotic": false,
+        "magazine": 40
+      }
+    },
+    "militech-viper": {
+      "name": "Militech Viper",
+      "page": 7,
+      "description": "Qualidade Excelente (+1 nas rolagens de ataque). 3 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 7 e tabela das p. 20-25. O compêndio citava Core Book como fonte.",
+      "tags": [
+        "Qualidade Excelente",
+        "Autofire"
+      ],
+      "attributes": {
+        "quality": "Excellent",
+        "rof": 1,
+        "hands": 1,
+        "concealable": false,
+        "exotic": false,
+        "magazine": 40
+      }
+    },
+    "sternmeyer-smg-21": {
+      "name": "Sternmeyer SMG-21",
+      "page": 7,
+      "description": "Submetralhadora tática europeia padrão. 3 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 7 e tabela das p. 20-25. O compêndio citava Core Book como fonte.",
+      "tags": [
+        "Autofire"
+      ],
+      "attributes": {
+        "quality": "Standard",
+        "rof": 1,
+        "hands": 1,
+        "concealable": false,
+        "exotic": false,
+        "magazine": 40
+      }
+    },
+    "sanroo-hidden-cougar": {
+      "name": "Sanroo Hello Cutie Hidden Cougar",
+      "page": 7,
+      "description": "SMG Pesada estilo revólver de Qualidade Excelente, réplica da arma da heroína Yuki (Public Security Agency Sisters). 11 tiros, ocultável. Incompatível com acessórios de pente. 3 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 7 e tabela das p. 20-25. O compêndio citava Interface 5 como fonte.",
+      "tags": [
+        "Qualidade Excelente",
+        "Autofire"
+      ],
+      "attributes": {
+        "quality": "Excellent",
+        "rof": 1,
+        "hands": 1,
+        "concealable": true,
+        "exotic": false,
+        "magazine": 11
+      }
+    },
+    "sanroo-happy-dancer": {
+      "name": "Sanroo Hello Cutie Happy Dancer",
+      "page": 7,
+      "description": "Qualidade Excelente (+1). Toca sons de videogame a cada disparo. 3 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 7 e tabela das p. 20-25. O compêndio citava Interface 5 como fonte.",
+      "tags": [
+        "Qualidade Excelente",
+        "Autofire"
+      ],
+      "attributes": {
+        "quality": "Excellent",
+        "rof": 1,
+        "hands": 1,
+        "concealable": false,
+        "exotic": false,
+        "magazine": 40
+      }
+    },
+    "arasaka-rapid-assault": {
+      "name": "Arasaka Rapid Assault",
+      "page": 8,
+      "description": "Espingarda semiautomática padrão. 3 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 8 e tabela das p. 20-25. O compêndio citava Core Book como fonte.",
+      "tags": [],
+      "attributes": {
+        "quality": "Standard",
+        "rof": 1,
+        "hands": 2,
+        "concealable": false,
+        "exotic": false,
+        "magazine": 4
+      }
+    },
+    "faisal-s-onlychance": {
+      "name": "Faisal's OnlyChance",
+      "page": 8,
+      "description": "Escopeta descartável de Baixa Qualidade, já carregada com um \"sabor\" de munição (slug ou shell, com as restrições normais). Não pode ser recarregada; tentar extrair a munição destrói a arma e a munição. Não aceita Upgrade de Tech, mas aceita acessórios que não sejam de pente. Incompatível com acessórios de pente. 3 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 8 e tabela das p. 20-25. Corrigido: não é exótica. O compêndio citava Interface 5 como fonte.",
+      "tags": [
+        "Baixa Qualidade",
+        "Descartável"
+      ],
+      "attributes": {
+        "quality": "Poor",
+        "rof": 1,
+        "hands": 2,
+        "concealable": false,
+        "exotic": false,
+        "magazine": 4
+      },
+      "priceNote": "20eb (Basic/Rubber) ou 50eb (AP, Expansive, Incendiary)"
+    },
+    "gunmart-home-defender": {
+      "name": "GunMart Home Defender",
+      "page": 8,
+      "description": "Poor Quality (trava no d10=1). 3 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 8 e tabela das p. 20-25. O compêndio citava Core Book como fonte.",
+      "tags": [
+        "Baixa Qualidade"
+      ],
+      "attributes": {
+        "quality": "Poor",
+        "rof": 1,
+        "hands": 2,
+        "concealable": false,
+        "exotic": false,
+        "magazine": 4
+      }
+    },
+    "militech-bulldog": {
+      "name": "Militech Bulldog",
+      "page": 8,
+      "description": "Qualidade Excelente (+1 nas rolagens de ataque). 3 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 8 e tabela das p. 20-25. O compêndio citava Core Book como fonte. O texto da p. 8 dá 1.000eb (Very Expensive); a tabela da p. 22 dá 600eb (Expensive). Mantido o valor do texto.",
+      "tags": [
+        "Qualidade Excelente"
+      ],
+      "attributes": {
+        "quality": "Excellent",
+        "rof": 1,
+        "hands": 2,
+        "concealable": false,
+        "exotic": false,
+        "magazine": 4
+      }
+    },
+    "mustang-arms-deathstalker": {
+      "name": "Mustang Arms Deathstalker",
+      "page": 8,
+      "description": "Acompanha Airhypo Bayonet acoplada na ponta. 2 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 8 e tabela das p. 20-25. O compêndio citava Interface 5 como fonte.",
+      "tags": [
+        "Acessório acoplado"
+      ],
+      "attributes": {
+        "quality": "Standard",
+        "rof": 1,
+        "hands": 2,
+        "concealable": false,
+        "exotic": false,
+        "magazine": 4
+      }
+    },
+    "slamdance-electromag": {
+      "name": "SlamDance ElectroMag",
+      "page": 9,
+      "description": "Escopeta que dispara Magnetic Basic ou Magnetic Incendiary Shotgun Shells, compradas para ela pelo mesmo preço das comuns. A cada ataque, você escolhe se a munição age como Slug ou como Shell. 2 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 9 e tabela das p. 20-25. Corrigido: usa munição própria. O compêndio citava Interface 5 como fonte.",
+      "tags": [],
+      "attributes": {
+        "quality": "Standard",
+        "rof": 1,
+        "hands": 2,
+        "concealable": false,
+        "exotic": false,
+        "magazine": 4,
+        "calibers": [
+          "Special"
+        ]
+      }
+    },
+    "chadran-arms-jungle-reaper": {
+      "name": "Chadran Arms Jungle Reaper",
+      "page": 9,
+      "description": "Poor Quality (trava no d10=1). 3 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 9 e tabela das p. 20-25. O compêndio citava Core Book como fonte.",
+      "tags": [
+        "Baixa Qualidade",
+        "Autofire"
+      ],
+      "attributes": {
+        "quality": "Poor",
+        "rof": 1,
+        "hands": 2,
+        "concealable": false,
+        "exotic": false,
+        "magazine": 25
+      }
+    },
+    "darra-polytechnic-binary": {
+      "name": "Darra Polytechnic Binary",
+      "page": 9,
+      "description": "Acompanha Lança-Granadas de cano inferior (Underbarrel) instalado. 1 slot de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 9 e tabela das p. 20-25. O compêndio citava Interface 5 como fonte.",
+      "tags": [
+        "Autofire",
+        "Acessório acoplado"
+      ],
+      "attributes": {
+        "quality": "Standard",
+        "rof": 1,
+        "hands": 2,
+        "concealable": false,
+        "exotic": false,
+        "magazine": 25
+      }
+    },
+    "militech-dragon": {
+      "name": "Militech Dragon",
+      "page": 9,
+      "description": "Qualidade Excelente (+1 nas rolagens de ataque). 3 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 9 e tabela das p. 20-25. O compêndio citava Core Book como fonte.",
+      "tags": [
+        "Qualidade Excelente",
+        "Autofire"
+      ],
+      "attributes": {
+        "quality": "Excellent",
+        "rof": 1,
+        "hands": 2,
+        "concealable": false,
+        "exotic": false,
+        "magazine": 25
+      }
+    },
+    "militech-ronin": {
+      "name": "Militech Ronin",
+      "page": 9,
+      "description": "Fuzil de assalto padrão das forças armadas americanas. 3 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 9 e tabela das p. 20-25. O compêndio citava Core Book como fonte.",
+      "tags": [
+        "Autofire"
+      ],
+      "attributes": {
+        "quality": "Standard",
+        "rof": 1,
+        "hands": 2,
+        "concealable": false,
+        "exotic": false,
+        "magazine": 25
+      }
+    },
+    "militech-ronin-hyperlight": {
+      "name": "Militech Ronin Hyperlight Assault",
+      "page": 9,
+      "description": "Qualidade Excelente (+1). Dano reduzido para 4d6 em troca de pente de 35t. 2 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 9 e tabela das p. 20-25. O compêndio citava Interface 5 como fonte.",
+      "tags": [
+        "Qualidade Excelente",
+        "Autofire"
+      ],
+      "attributes": {
+        "quality": "Excellent",
+        "rof": 1,
+        "hands": 2,
+        "concealable": false,
+        "exotic": false,
+        "magazine": 35,
+        "damage": "4d6 (tiro único)"
+      }
+    },
+    "sternmeyer-m-95a4": {
+      "name": "Sternmeyer M-95A4 Assault Weapon",
+      "page": 10,
+      "description": "Qualidade Excelente (+1) c/ Pente Tambor (45t) e Sniping Scope. 1 slot de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 10 e tabela das p. 20-25. O compêndio citava Interface 5 como fonte.",
+      "tags": [
+        "Qualidade Excelente",
+        "Autofire",
+        "Mira acoplada",
+        "Pente estendido"
+      ],
+      "attributes": {
+        "quality": "Excellent",
+        "rof": 1,
+        "hands": 2,
+        "concealable": false,
+        "exotic": false,
+        "magazine": 45
+      }
+    },
+    "arasaka-wss-sniper-system": {
+      "name": "Arasaka WSS Sniper System",
+      "page": 10,
+      "description": "Qualidade Excelente (+1 nas rolagens de ataque). 3 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 10 e tabela das p. 20-25. O compêndio citava Interface 5 como fonte.",
+      "tags": [
+        "Qualidade Excelente"
+      ],
+      "attributes": {
+        "quality": "Excellent",
+        "rof": 1,
+        "hands": 2,
+        "concealable": false,
+        "exotic": false,
+        "magazine": 4
+      }
+    },
+    "everest-kodiak-hunter": {
+      "name": "Everest VentureWare Kodiak Hunter",
+      "page": 10,
+      "description": "Fuzil de precisão de ferrolho, Qualidade Excelente, 3 tiros. Entre um tiro e outro é preciso gastar uma Ação para manobrar o ferrolho. Incompatível com acessórios de pente. 3 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 10 e tabela das p. 20-25. O compêndio citava Interface 5 como fonte.",
+      "tags": [
+        "Qualidade Excelente"
+      ],
+      "attributes": {
+        "quality": "Excellent",
+        "rof": 1,
+        "hands": 2,
+        "concealable": false,
+        "exotic": false,
+        "magazine": 3
+      }
+    },
+    "gunmart-snipe-starr": {
+      "name": "GunMart Snipe-Starr",
+      "page": 10,
+      "description": "Poor Quality (trava no d10=1). 3 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 10 e tabela das p. 20-25. O compêndio citava Core Book como fonte.",
+      "tags": [
+        "Baixa Qualidade"
+      ],
+      "attributes": {
+        "quality": "Poor",
+        "rof": 1,
+        "hands": 2,
+        "concealable": false,
+        "exotic": false,
+        "magazine": 4
+      }
+    },
+    "militech-ninja-sniper": {
+      "name": "Militech Ninja Sniper",
+      "page": 10,
+      "description": "Acompanha Silenciador/Supressor integrado de fábrica. 2 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 10 e tabela das p. 20-25. O compêndio citava Interface 5 como fonte.",
+      "tags": [
+        "Silenciada"
+      ],
+      "attributes": {
+        "quality": "Standard",
+        "rof": 1,
+        "hands": 2,
+        "concealable": false,
+        "exotic": false,
+        "magazine": 4
+      }
+    },
+    "nomad-long-rifle": {
+      "name": "Nomad Long Rifle",
+      "page": 10,
+      "description": "Fuzil de precisão artesanal nômade. 3 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 10 e tabela das p. 20-25. O compêndio citava Core Book como fonte.",
+      "tags": [],
+      "attributes": {
+        "quality": "Standard",
+        "rof": 1,
+        "hands": 2,
+        "concealable": false,
+        "exotic": false,
+        "magazine": 4
+      }
+    },
+    "arasaka-origami": {
+      "name": "Arasaka Origami",
+      "page": 10,
+      "description": "Arco recurvo de mola que dobra e desdobra sem gastar Ação. Ocultável quando dobrado. 3 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 10 e tabela das p. 20-25. O compêndio citava Interface 5 como fonte.",
+      "tags": [],
+      "attributes": {
+        "quality": "Standard",
+        "rof": 1,
+        "hands": 2,
+        "concealable": true,
+        "exotic": false
+      }
+    },
+    "eagletech-bearcat": {
+      "name": "Eagletech Bearcat",
+      "page": 11,
+      "description": "Arco recurvo de fibra de carbono. Qualidade Excelente (+1). 3 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 11 e tabela das p. 20-25. O compêndio citava Core Book como fonte.",
+      "tags": [
+        "Qualidade Excelente"
+      ],
+      "attributes": {
+        "quality": "Excellent",
+        "rof": 1,
+        "hands": 2,
+        "concealable": false,
+        "exotic": false
+      }
+    },
+    "eagletech-tigercat": {
+      "name": "Eagletech Tigercat",
+      "page": 11,
+      "description": "Arco composto de Qualidade Excelente com Smartgun Link. 1 slot de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 11 e tabela das p. 20-25. O compêndio citava Interface 5 como fonte.",
+      "tags": [
+        "Qualidade Excelente",
+        "Smartgun"
+      ],
+      "attributes": {
+        "quality": "Excellent",
+        "rof": 1,
+        "hands": 2,
+        "concealable": false,
+        "exotic": false
+      }
+    },
+    "eagletech-tomcat": {
+      "name": "Eagletech Tomcat",
+      "page": 11,
+      "description": "Arco composto profissional padrão. 3 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 11 e tabela das p. 20-25. O compêndio citava Core Book como fonte.",
+      "tags": [],
+      "attributes": {
+        "quality": "Standard",
+        "rof": 1,
+        "hands": 2,
+        "concealable": false,
+        "exotic": false
+      }
+    },
+    "gunmart-hawk-s-eye": {
+      "name": "GunMart Hawk's Eye",
+      "page": 11,
+      "description": "Cópia de Baixa Qualidade do Arasaka Origami. Dobra e desdobra sem gastar Ação e é ocultável quando dobrado. 3 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 11 e tabela das p. 20-25. O compêndio citava Interface 5 como fonte. O texto da arma diz que ela é ocultável dobrada; a tabela da p. 24 marca NO.",
+      "tags": [
+        "Baixa Qualidade"
+      ],
+      "attributes": {
+        "quality": "Poor",
+        "rof": 1,
+        "hands": 2,
+        "concealable": true,
+        "exotic": false
+      }
+    },
+    "gunmart-sherwood": {
+      "name": "GunMart Sherwood",
+      "page": 11,
+      "description": "Poor Quality. Arco de fibra de vidro barato. 3 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 11 e tabela das p. 20-25. O compêndio citava Core Book como fonte.",
+      "tags": [
+        "Baixa Qualidade"
+      ],
+      "attributes": {
+        "quality": "Poor",
+        "rof": 1,
+        "hands": 2,
+        "concealable": false,
+        "exotic": false
+      }
+    },
+    "eagletech-arbelest": {
+      "name": "Eagletech Arbelest",
+      "page": 11,
+      "description": "Qualidade Excelente (+1) com Smartgun Link instalado. 1 slot de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 11 e tabela das p. 20-25. O compêndio citava Interface 5 como fonte.",
+      "tags": [
+        "Qualidade Excelente",
+        "Smartgun"
+      ],
+      "attributes": {
+        "quality": "Excellent",
+        "rof": 1,
+        "hands": 2,
+        "concealable": false,
+        "exotic": false
+      }
+    },
+    "eagletech-scorpion": {
+      "name": "Eagletech Scorpion",
+      "page": 11,
+      "description": "Besteira pesada com manivela. Qualidade Excelente (+1). 3 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 11 e tabela das p. 20-25. O compêndio citava Core Book como fonte.",
+      "tags": [
+        "Qualidade Excelente"
+      ],
+      "attributes": {
+        "quality": "Excellent",
+        "rof": 1,
+        "hands": 2,
+        "concealable": false,
+        "exotic": false
+      }
+    },
+    "eagletech-stryker": {
+      "name": "Eagletech Stryker",
+      "page": 11,
+      "description": "Besteira esportiva padrão. 3 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 11 e tabela das p. 20-25. O compêndio citava Core Book como fonte.",
+      "tags": [],
+      "attributes": {
+        "quality": "Standard",
+        "rof": 1,
+        "hands": 2,
+        "concealable": false,
+        "exotic": false
+      }
+    },
+    "everest-mountaineer": {
+      "name": "Everest VentureWare Mountaineer",
+      "page": 11,
+      "description": "Acompanha Lança-Gancho (Grapple Gun Underbarrel) integrado. 2 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 11 e tabela das p. 20-25. O compêndio citava Interface 5 como fonte.",
+      "tags": [
+        "Acessório acoplado"
+      ],
+      "attributes": {
+        "quality": "Standard",
+        "rof": 1,
+        "hands": 2,
+        "concealable": false,
+        "exotic": false
+      }
+    },
+    "gunmart-hunter": {
+      "name": "GunMart Hunter",
+      "page": 12,
+      "description": "Poor Quality (trava/rompe corda no d10=1). 3 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 12 e tabela das p. 20-25. O compêndio citava Core Book como fonte.",
+      "tags": [
+        "Baixa Qualidade"
+      ],
+      "attributes": {
+        "quality": "Poor",
+        "rof": 1,
+        "hands": 2,
+        "concealable": false,
+        "exotic": false
+      }
+    },
+    "gunmart-midnight-hunter": {
+      "name": "GunMart Midnight Hunter",
+      "page": 12,
+      "description": "Poor Quality com Mira Noturna Infravermelha instalada. 2 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 12 e tabela das p. 20-25. O compêndio citava Interface 5 como fonte.",
+      "tags": [
+        "Baixa Qualidade",
+        "Mira acoplada"
+      ],
+      "attributes": {
+        "quality": "Poor",
+        "rof": 1,
+        "hands": 2,
+        "concealable": false,
+        "exotic": false
+      }
+    },
+    "gunmart-porta-morta": {
+      "name": "GunMart Porta-Morta",
+      "page": 12,
+      "description": "Poor Quality com Pente Tambor de 6 granadas. 2 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 12 e tabela das p. 20-25. O compêndio citava Interface 5 como fonte.",
+      "tags": [
+        "Baixa Qualidade",
+        "Pente estendido"
+      ],
+      "attributes": {
+        "quality": "Poor",
+        "rof": 1,
+        "hands": 2,
+        "concealable": false,
+        "exotic": false,
+        "magazine": 6
+      }
+    },
+    "militech-mini-grenade": {
+      "name": "Militech Mini-Grenade",
+      "page": 12,
+      "description": "Lança-granadas tático padrão. 3 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 12 e tabela das p. 20-25. O compêndio citava Core Book como fonte.",
+      "tags": [],
+      "attributes": {
+        "quality": "Standard",
+        "rof": 1,
+        "hands": 2,
+        "concealable": false,
+        "exotic": false,
+        "magazine": 2
+      }
+    },
+    "towa-type-g": {
+      "name": "Towa Manufacturing Type-G",
+      "page": 12,
+      "description": "Poor Quality (trava no d10=1). 3 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 12 e tabela das p. 20-25. O compêndio citava Core Book como fonte.",
+      "tags": [
+        "Baixa Qualidade"
+      ],
+      "attributes": {
+        "quality": "Poor",
+        "rof": 1,
+        "hands": 2,
+        "concealable": false,
+        "exotic": false,
+        "magazine": 2
+      }
+    },
+    "towa-type-g2": {
+      "name": "Towa Manufacturing Type-G*2",
+      "page": 12,
+      "description": "Lança-granadas que leva dois tipos de munição; você escolhe qual disparar. Incompatível com acessórios de pente. 3 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 12 e tabela das p. 20-25. Corrigido: não aceita pente estendido. O compêndio citava Interface 5 como fonte.",
+      "tags": [],
+      "attributes": {
+        "quality": "Standard",
+        "rof": 1,
+        "hands": 2,
+        "concealable": false,
+        "exotic": false,
+        "magazine": 2
+      }
+    },
+    "tsunami-arms-type-18": {
+      "name": "Tsunami Arms Type-18",
+      "page": 13,
+      "description": "Qualidade Excelente (+1 nas rolagens de ataque). 3 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 13 e tabela das p. 20-25. O compêndio citava Core Book como fonte.",
+      "tags": [
+        "Qualidade Excelente"
+      ],
+      "attributes": {
+        "quality": "Excellent",
+        "rof": 1,
+        "hands": 2,
+        "concealable": false,
+        "exotic": false,
+        "magazine": 2
+      }
+    },
+    "tsunami-arms-type-18-s": {
+      "name": "Tsunami Arms Type-18-S",
+      "page": 13,
+      "description": "Qualidade Excelente com Smartgun Link integrado de fábrica. 1 slot de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 13 e tabela das p. 20-25. O compêndio citava Interface 5 como fonte.",
+      "tags": [
+        "Qualidade Excelente",
+        "Smartgun"
+      ],
+      "attributes": {
+        "quality": "Excellent",
+        "rof": 1,
+        "hands": 2,
+        "concealable": false,
+        "exotic": false,
+        "magazine": 2
+      }
+    },
+    "metacorp-hela-smart": {
+      "name": "MetaCorp Hela Smart Launcher",
+      "page": 13,
+      "description": "Acompanha Smartgun Link integrado de fábrica. 1 slot de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 13 e tabela das p. 20-25. O compêndio citava Interface 5 como fonte.",
+      "tags": [
+        "Smartgun"
+      ],
+      "attributes": {
+        "quality": "Standard",
+        "rof": 1,
+        "hands": 2,
+        "concealable": false,
+        "exotic": false,
+        "magazine": 1
+      }
+    },
+    "militech-hotshot-l-atgm": {
+      "name": "Militech Hotshot L-ATGM",
+      "page": 13,
+      "description": "Qualidade Excelente (+1 nas rolagens de ataque). 3 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 13 e tabela das p. 20-25. O compêndio citava Core Book como fonte.",
+      "tags": [
+        "Qualidade Excelente"
+      ],
+      "attributes": {
+        "quality": "Excellent",
+        "rof": 1,
+        "hands": 2,
+        "concealable": false,
+        "exotic": false,
+        "magazine": 1
+      }
+    },
+    "militech-starshot-l-atgm-n": {
+      "name": "Militech Starshot L-ATGM-N",
+      "page": 13,
+      "description": "Qualidade Excelente com Mira Noturna Infravermelha instalada. 2 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 13 e tabela das p. 20-25. O compêndio citava Interface 5 como fonte.",
+      "tags": [
+        "Qualidade Excelente",
+        "Mira acoplada"
+      ],
+      "attributes": {
+        "quality": "Excellent",
+        "rof": 1,
+        "hands": 2,
+        "concealable": false,
+        "exotic": false,
+        "magazine": 1
+      }
+    },
+    "militech-urban": {
+      "name": "Militech Urban",
+      "page": 13,
+      "description": "Lança-foguetes urbano portátil padrão. 3 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 13 e tabela das p. 20-25. O compêndio citava Core Book como fonte.",
+      "tags": [],
+      "attributes": {
+        "quality": "Standard",
+        "rof": 1,
+        "hands": 2,
+        "concealable": false,
+        "exotic": false,
+        "magazine": 1
+      }
+    },
+    "towa-type-r": {
+      "name": "Towa Manufacturing Type-R",
+      "page": 13,
+      "description": "Poor Quality (trava no d10=1). 3 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 13 e tabela das p. 20-25. O compêndio citava Core Book como fonte.",
+      "tags": [
+        "Baixa Qualidade"
+      ],
+      "attributes": {
+        "quality": "Poor",
+        "rof": 1,
+        "hands": 2,
+        "concealable": false,
+        "exotic": false,
+        "magazine": 1
+      }
+    },
+    "towa-type-r2": {
+      "name": "Towa Manufacturing Type-R*2",
+      "page": 14,
+      "description": "Lança-foguetes com 2 tiros que leva dois tipos de munição; você escolhe qual disparar. Recarregar exige 2 Ações, em dois turnos. Incompatível com acessórios de pente. 3 slots de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 14 e tabela das p. 20-25. O compêndio citava Interface 5 como fonte.",
+      "tags": [],
+      "attributes": {
+        "quality": "Standard",
+        "rof": 1,
+        "hands": 2,
+        "concealable": false,
+        "exotic": false,
+        "magazine": 2
+      }
+    }
+  },
+  "additions": [
+    {
+      "slug": "towa-type-00-kai",
+      "name": "Towa Type-00-Kai",
+      "category": "weapons",
+      "manufacturer": "Towa",
+      "description": "Fuzil de precisão de Qualidade Excelente feito sob contrato para as Forças de Autodefesa do Japão, com Smartgun Link instalado. 1 slot de acessório.",
+      "notes": "Conferido com Toggle's Temple, p. 10 e tabela da p. 23. Ausente do compêndio.",
+      "price": 1500,
+      "priceCategory": "VeryExpensive",
+      "page": 10,
+      "tags": [
+        "Qualidade Excelente",
+        "Smartgun"
+      ],
+      "attributes": {
+        "weaponClass": "SniperRifle",
+        "skill": "ShoulderArms",
+        "damage": "5d6",
+        "damageDice": 5,
+        "rof": 1,
+        "magazine": 4,
+        "maxRange": 800,
+        "hands": 2,
+        "concealable": false,
+        "quality": "Excellent",
+        "exotic": false,
+        "calibers": [
+          "Rifle"
+        ]
+      }
+    },
+    {
+      "slug": "airhypo-bayonet",
+      "name": "Airhypo Bayonet",
+      "category": "gear",
+      "description": "Baioneta que, em vez de causar dano no acerto corpo a corpo, injeta com ar comprimido uma dose da substância carregada. Se o ataque falhar, a dose não se perde. O reservatório leva 1 dose de uma substância; recarregar custa uma Ação.",
+      "notes": "Conferido com Toggle's Temple, p. 14.",
+      "price": 100,
+      "priceCategory": "Premium",
+      "page": 14,
+      "tags": [
+        "Acessório de arma"
+      ],
+      "attributes": {
+        "gearType": "Tool",
+        "gearClass": "Acessório de arma",
+        "requirements": "Armas de longo alcance não exóticas de Shoulder Arms",
+        "effect": "Injeta uma dose de droga ou toxina no acerto corpo a corpo."
+      }
+    },
+    {
+      "slug": "grapple-gun-underbarrel",
+      "name": "Grapple Gun Underbarrel",
+      "category": "gear",
+      "description": "Lança-gancho montado sob o cano. A arma pode ser usada como Grapple Gun (CP:R p. 353), mas não faz ataques enquanto estiver sendo usada assim.",
+      "notes": "Conferido com Toggle's Temple, p. 14.",
+      "price": 100,
+      "priceCategory": "Premium",
+      "page": 14,
+      "tags": [
+        "Acessório de arma"
+      ],
+      "attributes": {
+        "gearType": "Tool",
+        "gearClass": "Acessório de arma",
+        "requirements": "Bestas não exóticas e armas não exóticas de Shoulder Arms",
+        "effect": "Funciona como Grapple Gun."
+      }
+    },
+    {
+      "slug": "silencer",
+      "name": "Silencer",
+      "category": "gear",
+      "description": "Combina abafamento e cancelamento de ruído para deixar o disparo quase inaudível sem perder potência. Ouvir o tiro exige um teste de Perception com DV definida pelo Mestre (tamanho da arma, distância e ruído ambiente). Não esconde o impacto da bala.",
+      "notes": "Conferido com Toggle's Temple, p. 14. O PDF lista 100eb sem categoria; pelo valor, Premium.",
+      "price": 100,
+      "priceCategory": "Premium",
+      "page": 14,
+      "tags": [
+        "Acessório de arma"
+      ],
+      "attributes": {
+        "gearType": "Tool",
+        "gearClass": "Acessório de arma",
+        "requirements": "Armas de longo alcance não exóticas e não explosivas, exceto arcos e bestas",
+        "effect": "Disparo só é ouvido com teste de Perception."
+      }
+    }
+  ]
+}

@@ -1,0 +1,452 @@
+{
+  "about": "Parâmetros de construção de NPCs. Cada valor traz 'source' (livro e página conferidos no PDF) ou 'complementary: true' quando é uma regra adotada pela aplicação, sem valor oficial. Siglas: CP:R = Cyberpunk RED Core Rulebook v1.25; DGD = Danger Gal Dossier; IR5 = Interface RED Volume 5. O DGD (p.150) chama os templates de 'guidelines, not hard rules': a aplicação trata orçamentos e máximos como erros que o Mestre pode justificar com uma exceção.",
+  "version": 1,
+  "books": {
+    "CP:R": "Cyberpunk RED Core Rulebook (v1.25)",
+    "DGD": "Danger Gal Dossier",
+    "IR5": "Interface RED Volume 5"
+  },
+
+  "stats": {
+    "keys": ["INT", "REF", "DEX", "TECH", "COOL", "WILL", "MOVE", "BODY", "EMP"],
+    "armorPenalized": ["REF", "DEX", "MOVE"],
+    "min": { "value": 2, "source": "DGD p.151 (Step Four: no STAT lower than 2, other than EMP)" },
+    "empMin": { "value": 0, "source": "DGD p.151-152 (EMP pode cair abaixo de 2; Boss Hardened pode chegar a EMP 0)" },
+    "absoluteMax": { "value": 8, "source": "DGD p.151 (no STAT higher than 8, other than BODY with the right Cyberware)" },
+    "inputMax": { "value": 20, "complementary": true, "note": "Limite técnico de entrada. Valores acima disso são rejeitados como dado inválido." },
+    "luck": { "value": "fora do orçamento", "source": "DGD p.152 (NPCs rarely possess a LUCK pool). Conferido: Hardened Mook da DGD p.53 soma 39 = 33 + 6 nos 9 STATs, sem LUCK." }
+  },
+
+  "derived": {
+    "hpBase": { "value": 10, "source": "CP:R p.79 (HP = 10 + 5 x média de BODY e WILL, arredondada para cima)" },
+    "hpPerAverage": { "value": 5, "source": "CP:R p.79" },
+    "seriouslyWounded": { "value": "metade do HP, arredondada para cima", "source": "CP:R p.79" },
+    "deathSave": { "value": "igual a BODY", "source": "CP:R p.79" },
+    "implantedLinearFrame": { "value": "BODY do frame vale para HP e Death Save", "source": "CP:R p.367 (Implanted Linear Frame); o Linear Frame externo não muda HP (CP:R p.354)" },
+    "skillBase": { "value": "STAT + nível da perícia; só a penalidade de armadura é aplicada", "source": "DGD p.7 (Skill Bases)" },
+    "armorPenalty": { "value": "a maior penalidade entre as armaduras vestidas", "complementary": true, "note": "O catálogo guarda penalidades separadas para REF, DEX e MOVE; vale a maior de cada uma." },
+    "armorLayering": { "value": "SP de cada local = maior SP entre armadura vestida e cyberware de proteção", "complementary": true, "note": "Uma armadura por local; Subdermal Armor e Skin Weave não somam com a armadura vestida." }
+  },
+
+  "skillCost": {
+    "doubleCost": { "value": 2, "source": "CP:R p.81 (perícias marcadas com x2 custam 2 pontos por nível)" },
+    "appliesToNpcBudget": { "value": true, "complementary": true, "note": "O DGD não diz como o x2 entra no orçamento de perícia; a aplicação usa o custo do Core." },
+    "maxLevelInput": { "value": 10, "source": "DGD p.152 (max Skill LVL of 10 em todos os templates)" }
+  },
+
+  "templates": [
+    {
+      "level": "Mook",
+      "label": "Mook",
+      "summary": { "value": "Abaixo da média de um Edgerunner. Pode-se usar um Mook por Edgerunner.", "source": "DGD p.150; CP:R p.399" },
+      "statPoints": { "value": 33, "source": "DGD p.152" },
+      "maxStat": { "value": 6, "source": "DGD p.152" },
+      "skillPoints": { "value": 30, "source": "DGD p.152" },
+      "maxSkill": { "value": 10, "source": "DGD p.152" },
+      "suggestedHp": { "value": { "min": 20, "max": 35 }, "source": "DGD p.152 (Suggested HP)" },
+      "suggestedSp": { "value": { "min": 4, "max": 7 }, "source": "DGD p.152 (Suggested SP)" },
+      "combatSkillBase": { "value": { "min": 10, "max": 12 }, "source": "DGD p.152 (Important Combat Skills Base)" },
+      "nonCombatSkillBase": { "value": { "min": 8, "max": 10 }, "source": "DGD p.152 (Important Non-Combat Skills Base)" },
+      "gearBudget": { "value": 300, "source": "DGD p.152" },
+      "cyberwareBudget": { "value": 500, "source": "DGD p.152" },
+      "weaponQuality": { "value": "PoorOnly", "source": "DGD p.152 (Gear Budget: 300eb. Poor Quality Weapons)" },
+      "roleRank": { "value": { "rank": 2, "presence": "Optional" }, "source": "DGD p.150 (usually only have a Role Rank of 2, if they have one at all)" },
+      "hardened": {
+        "statPoints": { "value": 6, "source": "DGD p.152 (To Harden: +6 STAT points)" },
+        "maxStat": { "value": 7, "source": "DGD p.152 (max STAT of 7)" },
+        "gearBudget": { "value": 200, "source": "DGD p.152 (+200eb for Gear)" },
+        "cyberwareBudget": { "value": 500, "source": "DGD p.152 (+500eb for Cyberware)" },
+        "roleRank": { "value": { "rank": 2, "presence": "Might" }, "source": "DGD p.152 (Might have Role Ability Rank 2)" }
+      }
+    },
+    {
+      "level": "Lieutenant",
+      "label": "Lieutenant",
+      "summary": { "value": "Igual ou um pouco acima de um Edgerunner. Um Lieutenant para cada dois Edgerunners.", "source": "DGD p.150; CP:R p.399" },
+      "statPoints": { "value": 44, "source": "DGD p.152" },
+      "maxStat": { "value": 8, "source": "DGD p.152" },
+      "skillPoints": { "value": 60, "source": "DGD p.152" },
+      "maxSkill": { "value": 10, "source": "DGD p.152" },
+      "suggestedHp": { "value": { "min": 30, "max": 40 }, "source": "DGD p.152 (Suggested HP)" },
+      "suggestedSp": { "value": { "min": 11, "max": 13 }, "source": "DGD p.152 (Suggested SP)" },
+      "combatSkillBase": { "value": { "min": 13, "max": 14 }, "source": "DGD p.152 (Important Combat Skills Base)" },
+      "nonCombatSkillBase": { "value": { "min": 10, "max": 12 }, "source": "DGD p.152 (Important Non-Combat Skills Base)" },
+      "gearBudget": { "value": 700, "source": "DGD p.152" },
+      "cyberwareBudget": { "value": 1000, "source": "DGD p.152" },
+      "weaponQuality": { "value": "NoExcellent", "source": "DGD p.152 (No Excellent Quality Weapons)" },
+      "roleRank": { "value": { "rank": 4, "presence": "Might" }, "source": "DGD p.152 (Might have a Role Ability Rank 4)" },
+      "hardened": {
+        "statPoints": { "value": 4, "source": "DGD p.152 (To Harden: +4 STAT points)" },
+        "maxStat": null,
+        "gearBudget": { "value": 300, "source": "DGD p.152 (+300eb for Gear)" },
+        "cyberwareBudget": { "value": 500, "source": "DGD p.152 (+500eb for Cyberware)" },
+        "roleRank": { "value": { "rank": 4, "presence": "Likely" }, "source": "DGD p.152 (Likely has Role Ability Rank 4)" }
+      }
+    },
+    {
+      "level": "MiniBoss",
+      "label": "Mini-Boss",
+      "summary": { "value": "O melhor da oposição antes do antagonista principal. Conta como três Edgerunners.", "source": "DGD p.150; CP:R p.400" },
+      "statPoints": { "value": 52, "source": "DGD p.152" },
+      "maxStat": { "value": 8, "source": "DGD p.152" },
+      "skillPoints": { "value": 90, "source": "DGD p.152" },
+      "maxSkill": { "value": 10, "source": "DGD p.152" },
+      "suggestedHp": { "value": { "min": 35, "max": 50 }, "source": "DGD p.152 (Suggested HP)" },
+      "suggestedSp": { "value": { "min": 11, "max": 15 }, "source": "DGD p.152 (Suggested SP)" },
+      "combatSkillBase": { "value": { "min": 14, "max": 16 }, "source": "DGD p.152 (Important Combat Skills Base)" },
+      "nonCombatSkillBase": { "value": { "min": 13, "max": 14 }, "source": "DGD p.152 (Important Non-Combat Skills Base)" },
+      "gearBudget": { "value": 1200, "source": "DGD p.152" },
+      "cyberwareBudget": { "value": 2000, "source": "DGD p.152" },
+      "weaponQuality": { "value": "Any", "source": "DGD p.152 (sem restrição de qualidade)" },
+      "roleRank": { "value": { "rank": 4, "presence": "Has" }, "source": "DGD p.152 (Has Role Ability Rank 4)" },
+      "hardened": {
+        "statPoints": { "value": 2, "source": "DGD p.152 (To Harden: +2 STAT points)" },
+        "maxStat": null,
+        "gearBudget": { "value": 800, "source": "DGD p.152 (+800eb for Gear)" },
+        "cyberwareBudget": { "value": 1200, "source": "DGD p.152 (+1,200eb for Cyberware)" },
+        "roleRank": { "value": { "rank": 6, "presence": "Might" }, "source": "DGD p.152 (Might have Role Ability Rank 6)" }
+      }
+    },
+    {
+      "level": "Boss",
+      "label": "Boss",
+      "summary": { "value": "O vilão final, capaz de enfrentar uma Crew inteira. Use com moderação.", "source": "DGD p.150" },
+      "statPoints": { "value": 57, "source": "DGD p.152" },
+      "maxStat": { "value": 8, "source": "DGD p.152" },
+      "skillPoints": { "value": 120, "source": "DGD p.152" },
+      "maxSkill": { "value": 10, "source": "DGD p.152" },
+      "suggestedHp": { "value": { "min": 45, "max": 50 }, "source": "DGD p.152 (Suggested HP)" },
+      "suggestedSp": { "value": { "min": 11, "max": 18 }, "source": "DGD p.152 (Suggested SP)" },
+      "combatSkillBase": { "value": { "min": 16, "max": 16 }, "source": "DGD p.152 (Important Combat Skills Base: 16)" },
+      "nonCombatSkillBase": { "value": { "min": 14, "max": 16 }, "source": "DGD p.152 (Important Non-Combat Skills Base)" },
+      "gearBudget": { "value": 3300, "source": "DGD p.152" },
+      "cyberwareBudget": { "value": 10000, "source": "DGD p.152" },
+      "weaponQuality": { "value": "Any", "source": "DGD p.152 (sem restrição de qualidade)" },
+      "roleRank": { "value": { "rank": 6, "presence": "Has" }, "source": "DGD p.152 (Has Role Ability Rank 6)" },
+      "hardened": {
+        "statPoints": { "value": 5, "source": "DGD p.152 (To Harden: +5 STAT points)" },
+        "maxStat": null,
+        "gearBudget": { "value": 5000, "source": "DGD p.152 (+5,000eb for Gear)" },
+        "cyberwareBudget": { "value": null, "unlimited": true, "source": "DGD p.152 (Unlimited Cyberware budget; likely cyberpsycho with Empathy 0 if they have more than 30 pieces)" },
+        "roleRank": { "value": { "rank": 8, "presence": "Might" }, "source": "DGD p.152 (Might have Role Ability Rank 8)" }
+      }
+    }
+  ],
+
+  "hardenedGuidance": [
+    { "value": "Hardened NPCs não deveriam ter itens Poor Quality, exceto Mooks.", "source": "IR5 p.106 (Hot Tip)" },
+    { "value": "Mini-Bosses e Bosses Hardened são para desafios especiais ou Crews totalmente otimizadas para combate.", "source": "DGD p.151 (Step Two)" }
+  ],
+
+  "rolePresence": {
+    "Optional": { "label": "talvez (Rank baixo, se tiver)", "probability": 0.25, "complementary": true },
+    "Might": { "label": "pode ter", "probability": 0.5, "complementary": true },
+    "Likely": { "label": "provavelmente tem", "probability": 0.8, "complementary": true },
+    "Has": { "label": "tem", "probability": 1.0, "complementary": true }
+  },
+
+  "roles": ["Rockerboy", "Solo", "Netrunner", "Tech", "Medtech", "Media", "Exec", "Lawman", "Fixer", "Nomad"],
+
+  "empGuideline": {
+    "piecesPerPoint": { "value": 5, "source": "DGD p.152 (drop the NPC's Empathy down by 1 for every five pieces of Cyberware; guideline, not a rule)" }
+  },
+
+  "freeSkills": {
+    "source": "DGD p.151 (Step Three). Esses níveis não saem do orçamento de perícia.",
+    "entries": [
+      { "skill": "language", "specialization": "@native", "level": 4 },
+      { "skill": "athletics", "level": 2 },
+      { "skill": "brawling", "level": 2 },
+      { "skill": "concentration", "level": 2 },
+      { "skill": "conversation", "level": 2 },
+      { "skill": "education", "level": 2 },
+      { "skill": "evasion", "level": 2 },
+      { "skill": "first-aid", "level": 2 },
+      { "skill": "human-perception", "level": 2 },
+      { "skill": "language", "specialization": "Streetslang", "level": 2 },
+      { "skill": "local-expert", "specialization": "@home", "level": 2 },
+      { "skill": "perception", "level": 2 },
+      { "skill": "persuasion", "level": 2 },
+      { "skill": "stealth", "level": 2 }
+    ]
+  },
+
+  "skills": [
+    { "id": "concentration", "name": "Concentration", "stat": "WILL", "category": "Awareness", "page": 82 },
+    { "id": "conceal-reveal-object", "name": "Conceal/Reveal Object", "stat": "INT", "category": "Awareness", "page": 82 },
+    { "id": "lip-reading", "name": "Lip Reading", "stat": "INT", "category": "Awareness", "page": 82 },
+    { "id": "perception", "name": "Perception", "stat": "INT", "category": "Awareness", "page": 82 },
+    { "id": "tracking", "name": "Tracking", "stat": "INT", "category": "Awareness", "page": 82 },
+    { "id": "athletics", "name": "Athletics", "stat": "DEX", "category": "Body", "page": 82 },
+    { "id": "contortionist", "name": "Contortionist", "stat": "DEX", "category": "Body", "page": 82 },
+    { "id": "dance", "name": "Dance", "stat": "DEX", "category": "Body", "page": 82 },
+    { "id": "endurance", "name": "Endurance", "stat": "WILL", "category": "Body", "page": 82 },
+    { "id": "resist-torture-drugs", "name": "Resist Torture/Drugs", "stat": "WILL", "category": "Body", "page": 82 },
+    { "id": "stealth", "name": "Stealth", "stat": "DEX", "category": "Body", "page": 82 },
+    { "id": "drive-land-vehicle", "name": "Drive Land Vehicle", "stat": "REF", "category": "Control", "page": 82 },
+    { "id": "pilot-air-vehicle", "name": "Pilot Air Vehicle", "stat": "REF", "category": "Control", "doubleCost": true, "page": 82 },
+    { "id": "pilot-sea-vehicle", "name": "Pilot Sea Vehicle", "stat": "REF", "category": "Control", "page": 82 },
+    { "id": "riding", "name": "Riding", "stat": "REF", "category": "Control", "page": 82 },
+    { "id": "accounting", "name": "Accounting", "stat": "INT", "category": "Education", "page": 82 },
+    { "id": "animal-handling", "name": "Animal Handling", "stat": "INT", "category": "Education", "page": 82 },
+    { "id": "bureaucracy", "name": "Bureaucracy", "stat": "INT", "category": "Education", "page": 82 },
+    { "id": "business", "name": "Business", "stat": "INT", "category": "Education", "page": 82 },
+    { "id": "composition", "name": "Composition", "stat": "INT", "category": "Education", "page": 82 },
+    { "id": "criminology", "name": "Criminology", "stat": "INT", "category": "Education", "page": 82 },
+    { "id": "cryptography", "name": "Cryptography", "stat": "INT", "category": "Education", "page": 83 },
+    { "id": "deduction", "name": "Deduction", "stat": "INT", "category": "Education", "page": 83 },
+    { "id": "education", "name": "Education", "stat": "INT", "category": "Education", "page": 83 },
+    { "id": "gamble", "name": "Gamble", "stat": "INT", "category": "Education", "page": 83 },
+    { "id": "language", "name": "Language", "stat": "INT", "category": "Education", "specialized": true, "page": 83 },
+    { "id": "library-search", "name": "Library Search", "stat": "INT", "category": "Education", "page": 83 },
+    { "id": "local-expert", "name": "Local Expert", "stat": "INT", "category": "Education", "specialized": true, "page": 83 },
+    { "id": "science", "name": "Science", "stat": "INT", "category": "Education", "specialized": true, "page": 83 },
+    { "id": "tactics", "name": "Tactics", "stat": "INT", "category": "Education", "page": 83 },
+    { "id": "wilderness-survival", "name": "Wilderness Survival", "stat": "INT", "category": "Education", "page": 83 },
+    { "id": "brawling", "name": "Brawling", "stat": "DEX", "category": "Fighting", "combat": true, "page": 83 },
+    { "id": "evasion", "name": "Evasion", "stat": "DEX", "category": "Fighting", "combat": true, "page": 83 },
+    { "id": "martial-arts", "name": "Martial Arts", "stat": "DEX", "category": "Fighting", "combat": true, "doubleCost": true, "specialized": true, "page": 83 },
+    { "id": "melee-weapon", "name": "Melee Weapon", "stat": "DEX", "category": "Fighting", "combat": true, "page": 83 },
+    { "id": "acting", "name": "Acting", "stat": "COOL", "category": "Performance", "page": 83 },
+    { "id": "play-instrument", "name": "Play Instrument", "stat": "TECH", "category": "Performance", "specialized": true, "page": 83 },
+    { "id": "archery", "name": "Archery", "stat": "REF", "category": "Ranged Weapon", "combat": true, "page": 83 },
+    { "id": "autofire", "name": "Autofire", "stat": "REF", "category": "Ranged Weapon", "combat": true, "doubleCost": true, "page": 83 },
+    { "id": "handgun", "name": "Handgun", "stat": "REF", "category": "Ranged Weapon", "combat": true, "page": 84 },
+    { "id": "heavy-weapons", "name": "Heavy Weapons", "stat": "REF", "category": "Ranged Weapon", "combat": true, "doubleCost": true, "page": 84 },
+    { "id": "shoulder-arms", "name": "Shoulder Arms", "stat": "REF", "category": "Ranged Weapon", "combat": true, "page": 84 },
+    { "id": "bribery", "name": "Bribery", "stat": "COOL", "category": "Social", "page": 84 },
+    { "id": "conversation", "name": "Conversation", "stat": "EMP", "category": "Social", "page": 84 },
+    { "id": "human-perception", "name": "Human Perception", "stat": "EMP", "category": "Social", "page": 84 },
+    { "id": "interrogation", "name": "Interrogation", "stat": "COOL", "category": "Social", "page": 84 },
+    { "id": "persuasion", "name": "Persuasion", "stat": "COOL", "category": "Social", "page": 84 },
+    { "id": "personal-grooming", "name": "Personal Grooming", "stat": "COOL", "category": "Social", "page": 84 },
+    { "id": "streetwise", "name": "Streetwise", "stat": "COOL", "category": "Social", "page": 84 },
+    { "id": "trading", "name": "Trading", "stat": "COOL", "category": "Social", "page": 84 },
+    { "id": "wardrobe-style", "name": "Wardrobe & Style", "stat": "COOL", "category": "Social", "page": 84 },
+    { "id": "air-vehicle-tech", "name": "Air Vehicle Tech", "stat": "TECH", "category": "Technique", "page": 84 },
+    { "id": "basic-tech", "name": "Basic Tech", "stat": "TECH", "category": "Technique", "page": 84 },
+    { "id": "cybertech", "name": "Cybertech", "stat": "TECH", "category": "Technique", "page": 84 },
+    { "id": "demolitions", "name": "Demolitions", "stat": "TECH", "category": "Technique", "doubleCost": true, "page": 84 },
+    { "id": "electronics-security-tech", "name": "Electronics/Security Tech", "stat": "TECH", "category": "Technique", "doubleCost": true, "page": 84 },
+    { "id": "first-aid", "name": "First Aid", "stat": "TECH", "category": "Technique", "page": 84 },
+    { "id": "forgery", "name": "Forgery", "stat": "TECH", "category": "Technique", "page": 84 },
+    { "id": "land-vehicle-tech", "name": "Land Vehicle Tech", "stat": "TECH", "category": "Technique", "page": 84 },
+    { "id": "paint-draw-sculpt", "name": "Paint/Draw/Sculpt", "stat": "TECH", "category": "Technique", "page": 84 },
+    { "id": "paramedic", "name": "Paramedic", "stat": "TECH", "category": "Technique", "doubleCost": true, "page": 85 },
+    { "id": "photography-film", "name": "Photography/Film", "stat": "TECH", "category": "Technique", "page": 85 },
+    { "id": "pick-lock", "name": "Pick Lock", "stat": "TECH", "category": "Technique", "page": 85 },
+    { "id": "pick-pocket", "name": "Pick Pocket", "stat": "TECH", "category": "Technique", "page": 85 },
+    { "id": "sea-vehicle-tech", "name": "Sea Vehicle Tech", "stat": "TECH", "category": "Technique", "page": 85 },
+    { "id": "weaponstech", "name": "Weaponstech", "stat": "TECH", "category": "Technique", "page": 85 }
+  ],
+
+  "weaponSkillMap": {
+    "Handgun": "handgun",
+    "ShoulderArms": "shoulder-arms",
+    "HeavyWeapons": "heavy-weapons",
+    "Archery": "archery",
+    "MeleeWeapon": "melee-weapon",
+    "PilotAirVehicle": "pilot-air-vehicle",
+    "Autofire": "autofire",
+    "Athletics": "athletics"
+  },
+
+  "weaponQualityPricing": {
+    "source": "CP:R p.342 (Weapons of Excellent or Poor Quality)",
+    "rows": [
+      { "standard": 50, "poor": 20, "excellent": 100 },
+      { "standard": 100, "poor": 50, "excellent": 500 },
+      { "standard": 500, "poor": 100, "excellent": 1000 }
+    ],
+    "exoticRule": { "value": "Armas exóticas são sempre de qualidade padrão, salvo indicação na descrição.", "source": "CP:R p.342" }
+  },
+
+  "armor": {
+    "oneArmorPerLocation": { "value": true, "complementary": true, "note": "Cada armadura vestida protege um local (corpo ou cabeça); cada local é comprado à parte, como nos blocos do DGD (Kevlar no corpo e na cabeça)." },
+    "cyberwareStoppingPower": [
+      { "slug": "subdermal-armor", "sp": 11, "source": "CP:R p.358 (SP 11 no corpo e na cabeça)" },
+      { "slug": "skin-weave", "sp": 7, "source": "CP:R p.359 (SP 7 no corpo e na cabeça)" }
+    ]
+  },
+
+  "cyberware": {
+    "optionSlotDefault": { "value": 1, "source": "CP:R p.111 (Unless otherwise marked, most cyberware options require one slot)" },
+    "installCostIncluded": { "value": true, "source": "CP:R p.110 (Installation surgery is always included at no extra charge)" },
+    "stackingNote": { "value": "Benefícios de várias instalações da mesma peça não se somam, salvo indicação.", "source": "CP:R p.111" },
+    "pools": [
+      { "key": "internal", "label": "Internal Cyberware", "cyberwareTypes": ["InternalBody"], "slots": 7, "source": "CP:R p.111 (7 Option Slots worth of cyberware)" },
+      { "key": "external", "label": "External Cyberware", "cyberwareTypes": ["ExternalBody"], "slots": 7, "source": "CP:R p.111" },
+      { "key": "fashionware", "label": "Fashionware", "cyberwareTypes": ["Fashionware"], "slots": 7, "source": "CP:R p.111" }
+    ],
+    "capacity": [
+      { "label": "Olhos (Cybereyes e montagens ópticas)", "bodyLocation": "Eyes", "foundationalOnly": true, "max": 2, "complementary": true, "note": "Dois olhos. Montagens Borgware de olho também contam." },
+      { "label": "Cyberaudio Suite", "bodyLocation": "Ears", "foundationalOnly": true, "max": 1, "source": "CP:R p.113 (Cannot install more than 1)" },
+      { "label": "Cyberarms", "bodyLocation": "Arm", "cyberwareTypes": ["Cyberlimb"], "foundationalOnly": true, "max": 2, "complementary": true, "note": "Dois braços." },
+      { "label": "Cyberhands", "bodyLocation": "Arm", "cyberwareTypes": ["LimbOption"], "foundationalOnly": true, "max": 2, "complementary": true, "note": "Duas mãos." },
+      { "label": "Cyberlegs", "bodyLocation": "Leg", "cyberwareTypes": ["Cyberlimb"], "foundationalOnly": true, "max": 2, "complementary": true, "note": "Duas pernas." },
+      { "label": "Neural Link", "slugs": ["neural-link"], "max": 1, "complementary": true, "note": "Um único sistema nervoso artificial." }
+    ],
+    "exclusiveGroups": [
+      { "label": "Speedware", "slugs": ["kerenzikov", "sandevistan"], "max": 1, "source": "CP:R p.112 e p.359 (Only 1 piece of Speedware can be installed at a time)" }
+    ],
+    "overrides": [
+      { "slug": "chipware-socket", "slotsRequired": 1, "slotsProvided": 1, "source": "CP:R p.359 (Neuralware Option; a single socket that allows installation of a single piece of Chipware)", "note": "O catálogo registra 0 slot; a regra do Core prevalece." }
+    ],
+    "autoPickExcludesFreeTextRequirements": { "value": true, "complementary": true, "note": "Na geração automática, peças com pré-requisitos só em texto livre (ex.: 'Full Body Conversion', 'BODY 10') não são escolhidas sozinhas, porque o sistema não consegue verificá-los." }
+  },
+
+  "generator": {
+    "maxAttempts": { "value": 25, "complementary": true },
+    "cyberwareSpendRange": { "value": { "min": 0.35, "max": 0.8 }, "complementary": true, "note": "O DGD (p.152) incentiva não gastar todo o orçamento de cyberware." },
+    "unlimitedCyberwareReference": { "value": 20000, "complementary": true, "note": "Referência de gasto para o Boss Hardened, cujo orçamento de cyberware é ilimitado (DGD p.152)." },
+    "secondaryWeaponChance": { "value": 0.7, "complementary": true },
+    "gearSpendFloor": { "value": 0.6, "complementary": true, "note": "Fração mínima do orçamento de equipamento que o gerador tenta usar." },
+    "coreBookWeight": { "value": 3, "complementary": true },
+    "exoticWeaponWeight": { "value": 0.3, "complementary": true },
+    "languages": ["English", "Spanish", "Japanese", "Mandarin", "Cantonese", "Korean", "Russian", "Arabic", "Hindi", "Tagalog", "French", "German", "Haitian Creole", "Portuguese"],
+    "homes": ["Watson", "Little China", "Kabuki", "Heywood", "The Glen", "Vista del Rey", "Pacifica", "Santo Domingo", "Rancho Coronado", "Japantown", "Northside", "Little Europe", "The Old Combat Zone", "South Night City", "Badlands"],
+    "handles": ["Razor", "Glitch", "Static", "Brick", "Vex", "Kilo", "Neon", "Rook", "Spook", "Tank", "Viper", "Chrome", "Patch", "Mono", "Dice", "Wrench", "Ghost", "Spike", "Jinx", "Cutter", "Moth", "Rivet", "Sable", "Torch", "Hex", "Dozer", "Fuse", "Lynx", "Ratchet", "Smoke", "Echo", "Krait", "Bolt", "Pike", "Zero", "Shiv", "Grit", "Halo", "Nix", "Crash"]
+  },
+
+  "profiles": [
+    {
+      "id": "street-gunslinger",
+      "label": "Pistoleiro de rua",
+      "description": "Atira primeiro e pergunta depois. Pistola na mão, rua na cabeça.",
+      "role": "Solo",
+      "statWeights": { "REF": 5, "DEX": 3, "COOL": 2.5, "BODY": 2, "WILL": 2, "MOVE": 2, "INT": 1.5, "TECH": 1, "EMP": 1 },
+      "keyCombatSkills": ["handgun", "evasion"],
+      "keyNonCombatSkills": ["streetwise", "perception"],
+      "secondarySkills": { "brawling": 2, "athletics": 2, "stealth": 2, "conceal-reveal-object": 1.5, "interrogation": 1, "persuasion": 1, "drive-land-vehicle": 1.5, "melee-weapon": 1.5, "wardrobe-style": 1 },
+      "weapons": {
+        "primary": { "skills": ["Handgun"], "classes": ["HeavyPistol", "VeryHeavyPistol", "MediumPistol", "Smg"] },
+        "secondary": { "skills": ["MeleeWeapon"], "classes": ["LightMelee", "MediumMelee"] }
+      },
+      "armorStyle": "Light",
+      "cyberware": { "neural-link": 2, "kerenzikov": 3, "cybereye": 2, "targeting-scope": 3, "low-light-infrared-uv": 1.5, "hidden-holster": 2, "chemskin": 1, "techhair": 1, "light-tattoo": 1, "subdermal-pocket": 1 },
+      "gear": { "agent": 2, "disposable-cellphone": 1, "flashlight": 0.5 }
+    },
+    {
+      "id": "sniper",
+      "label": "Atirador de elite",
+      "description": "Paciência, ótica e um rifle de precisão. Acerta de longe e some.",
+      "role": "Solo",
+      "statWeights": { "REF": 5, "INT": 3, "COOL": 3, "DEX": 2, "WILL": 2.5, "MOVE": 1.5, "BODY": 1.5, "TECH": 1, "EMP": 0.5 },
+      "keyCombatSkills": ["shoulder-arms", "evasion"],
+      "keyNonCombatSkills": ["perception", "stealth"],
+      "secondarySkills": { "concentration": 2, "tracking": 2, "athletics": 1.5, "handgun": 2, "endurance": 1.5, "tactics": 1.5, "conceal-reveal-object": 1, "wilderness-survival": 1 },
+      "weapons": {
+        "primary": { "skills": ["ShoulderArms"], "classes": ["SniperRifle", "AssaultRifle"] },
+        "secondary": { "skills": ["Handgun"], "classes": ["MediumPistol", "HeavyPistol"] }
+      },
+      "armorStyle": "Light",
+      "cyberware": { "cybereye": 3, "teleoptics": 4, "targeting-scope": 3, "image-enhance": 2, "low-light-infrared-uv": 2, "neural-link": 1.5, "kerenzikov": 1.5, "cyberaudio-suite": 1, "amplified-hearing": 1.5 },
+      "gear": { "binoculars": 1.5, "agent": 1.5, "rope-60m": 0.5 }
+    },
+    {
+      "id": "netrunner",
+      "label": "Netrunner",
+      "description": "Invade a Arquitetura enquanto os outros trocam tiros. Frágil fora da NET.",
+      "role": "Netrunner",
+      "statWeights": { "INT": 4, "REF": 3, "TECH": 3, "DEX": 2, "COOL": 2, "WILL": 2, "BODY": 1, "MOVE": 1, "EMP": 1 },
+      "keyCombatSkills": ["handgun", "evasion"],
+      "keyNonCombatSkills": ["electronics-security-tech", "basic-tech"],
+      "secondarySkills": { "cryptography": 2, "library-search": 2, "education": 1.5, "perception": 1.5, "stealth": 1.5, "conceal-reveal-object": 1, "concentration": 1.5, "cybertech": 1 },
+      "weapons": {
+        "primary": { "skills": ["Handgun"], "classes": ["MediumPistol", "HeavyPistol", "VeryHeavyPistol"] },
+        "secondary": null
+      },
+      "armorStyle": "Light",
+      "cyberware": { "neural-link": 6, "interface-plugs": 6, "chipware-socket": 1.5, "pain-editor": 1, "cybereye": 1.5, "virtuality": 2, "biomonitor": 1 },
+      "gear": { "cyberdeck-poor": 3, "cyberdeck-standard": 4, "cyberdeck-excellent": 2, "agent": 2, "sword": 1, "armor": 1, "worm": 0.5, "see-ya": 0.5 },
+      "signatureGear": ["cyberdeck-poor", "cyberdeck-standard", "cyberdeck-excellent"],
+      "signatureCyberware": ["interface-plugs"]
+    },
+    {
+      "id": "melee-solo",
+      "label": "Solo corpo a corpo",
+      "description": "Lâminas, punhos cromados e reflexos acelerados. Fecha a distância e corta.",
+      "role": "Solo",
+      "statWeights": { "DEX": 5, "BODY": 4, "WILL": 3, "MOVE": 3, "REF": 2, "COOL": 2, "INT": 1, "TECH": 0.5, "EMP": 0.5 },
+      "keyCombatSkills": ["melee-weapon", "evasion"],
+      "keyNonCombatSkills": ["athletics", "endurance"],
+      "secondarySkills": { "brawling": 3, "stealth": 2, "resist-torture-drugs": 1.5, "perception": 1.5, "interrogation": 1, "contortionist": 1, "handgun": 1 },
+      "weapons": {
+        "primary": { "skills": ["MeleeWeapon"], "classes": ["MediumMelee", "HeavyMelee", "VeryHeavyMelee", "LightMelee"] },
+        "secondary": { "skills": ["Handgun"], "classes": ["MediumPistol", "HeavyPistol"] }
+      },
+      "armorStyle": "Medium",
+      "cyberware": { "cyberarm": 3, "wolvers": 3, "rippers": 2, "big-knucks": 2, "slice-n-dice": 2, "popup-melee-weapon": 2, "grafted-muscle-and-bone-lace": 2, "neural-link": 2, "kerenzikov": 2, "sandevistan": 2, "subdermal-armor": 2, "skin-weave": 1.5, "cyberleg": 1, "jump-booster": 1 },
+      "gear": { "agent": 1 }
+    },
+    {
+      "id": "corporate-bodyguard",
+      "label": "Guarda-costas corporativo",
+      "description": "Terno sob medida, armadura por baixo e olhos que não piscam.",
+      "role": "Solo",
+      "statWeights": { "REF": 4, "BODY": 3, "WILL": 3, "DEX": 3, "COOL": 3, "INT": 2, "MOVE": 1.5, "EMP": 1, "TECH": 0.5 },
+      "keyCombatSkills": ["handgun", "evasion"],
+      "keyNonCombatSkills": ["perception", "human-perception"],
+      "secondarySkills": { "brawling": 2, "shoulder-arms": 1.5, "athletics": 1.5, "first-aid": 1.5, "wardrobe-style": 1.5, "tactics": 1, "drive-land-vehicle": 1.5, "conceal-reveal-object": 1 },
+      "weapons": {
+        "primary": { "skills": ["Handgun"], "classes": ["HeavyPistol", "VeryHeavyPistol", "HeavySmg", "Smg"] },
+        "secondary": { "skills": ["MeleeWeapon"], "classes": ["LightMelee", "MediumMelee"] }
+      },
+      "armorStyle": "Medium",
+      "cyberware": { "cybereye": 2, "targeting-scope": 2, "image-enhance": 1.5, "cyberaudio-suite": 2, "voice-stress-analyzer": 1.5, "radio-communicator": 2, "subdermal-armor": 2.5, "skin-weave": 2, "biomonitor": 1.5, "neural-link": 1.5, "kerenzikov": 2 },
+      "gear": { "agent": 2, "bulletproof-shield": 1.5, "radio-communicator-gear": 1, "handcuffs": 0.5 }
+    },
+    {
+      "id": "technician",
+      "label": "Técnico especializado",
+      "description": "Conserta, sabota e improvisa. Prefere a bancada, mas sabe se defender.",
+      "role": "Tech",
+      "statWeights": { "TECH": 5, "INT": 3, "REF": 2.5, "DEX": 2, "COOL": 2, "WILL": 2, "BODY": 1.5, "MOVE": 1, "EMP": 1 },
+      "keyCombatSkills": ["shoulder-arms", "evasion"],
+      "keyNonCombatSkills": ["basic-tech", "weaponstech"],
+      "secondarySkills": { "electronics-security-tech": 2, "land-vehicle-tech": 1.5, "cybertech": 1.5, "first-aid": 1, "demolitions": 1, "education": 1.5, "handgun": 1.5 },
+      "weapons": {
+        "primary": { "skills": ["ShoulderArms", "Handgun"], "classes": ["Shotgun", "AssaultRifle", "HeavyPistol"] },
+        "secondary": { "skills": ["MeleeWeapon"], "classes": ["LightMelee", "MediumMelee"] }
+      },
+      "armorStyle": "Light",
+      "cyberware": { "cyberarm": 2.5, "tool-hand": 3, "techscanner-integrated": 2.5, "cybereye": 2, "microoptics": 3, "neural-link": 1.5, "interface-plugs": 1.5 },
+      "gear": { "tech-bag": 4, "techtool": 2, "flashlight": 1, "duct-tape": 1, "agent": 1 },
+      "signatureGear": ["tech-bag", "techtool"]
+    },
+    {
+      "id": "gang-fighter",
+      "label": "Gangue de combate",
+      "description": "Cores da gangue, cromo chamativo e coragem química. Briga em bando.",
+      "role": "Solo",
+      "statWeights": { "REF": 4, "BODY": 3, "DEX": 3, "COOL": 3, "WILL": 2, "MOVE": 2, "INT": 1, "TECH": 1, "EMP": 1 },
+      "keyCombatSkills": ["handgun", "melee-weapon"],
+      "keyNonCombatSkills": ["streetwise", "athletics"],
+      "secondarySkills": { "evasion": 2.5, "brawling": 2, "stealth": 1.5, "interrogation": 1, "drive-land-vehicle": 1.5, "gamble": 1, "wardrobe-style": 1, "autofire": 1 },
+      "weapons": {
+        "primary": { "skills": ["Handgun"], "classes": ["Smg", "HeavySmg", "MediumPistol", "HeavyPistol"] },
+        "secondary": { "skills": ["MeleeWeapon"], "classes": ["LightMelee", "MediumMelee", "HeavyMelee"] }
+      },
+      "armorStyle": "Light",
+      "cyberware": { "cyberarm": 2, "big-knucks": 3, "scratchers": 3, "chemskin": 2, "techhair": 2, "light-tattoo": 2, "emp-threading": 2, "cybereye": 1, "color-shift": 1.5, "hidden-holster": 1, "subdermal-pocket": 1.5 },
+      "gear": { "disposable-cellphone": 1.5, "agent": 1 }
+    },
+    {
+      "id": "corporate-enforcer",
+      "label": "Executor corporativo",
+      "description": "Equipamento militar, implantes de combate e ordens claras. Fortemente equipado.",
+      "role": "Solo",
+      "statWeights": { "REF": 4, "BODY": 4, "WILL": 3, "DEX": 3, "COOL": 2, "INT": 2, "MOVE": 1.5, "TECH": 1, "EMP": 0.5 },
+      "keyCombatSkills": ["shoulder-arms", "evasion"],
+      "keyNonCombatSkills": ["tactics", "perception"],
+      "secondarySkills": { "handgun": 2, "heavy-weapons": 1, "autofire": 1.5, "athletics": 1.5, "first-aid": 1, "brawling": 1.5, "endurance": 1.5, "resist-torture-drugs": 1 },
+      "weapons": {
+        "primary": { "skills": ["ShoulderArms"], "classes": ["AssaultRifle", "Shotgun"] },
+        "secondary": { "skills": ["Handgun"], "classes": ["HeavyPistol", "VeryHeavyPistol"] }
+      },
+      "armorStyle": "Heavy",
+      "cyberware": { "neural-link": 2, "sandevistan": 2.5, "kerenzikov": 2, "cybereye": 2, "targeting-scope": 2.5, "low-light-infrared-uv": 2, "cyberaudio-suite": 1.5, "radio-communicator": 2, "subdermal-armor": 2.5, "grafted-muscle-and-bone-lace": 2, "cyberarm": 1, "popup-ranged-weapon": 1.5, "toxin-binders": 1, "nasal-filters": 1 },
+      "gear": { "agent": 1.5, "radio-communicator-gear": 1.5, "flashbang-grenade": 1, "teargas-grenade": 0.5 }
+    }
+  ]
+}

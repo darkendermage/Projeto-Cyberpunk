@@ -1,0 +1,27 @@
+{
+  "about": "Conferido com o PDF Tales of the RED: Street Stories v1.2. Formato descrito no README (seção Dados).",
+  "source": "Tales of the RED",
+  "updates": {
+    "scrambler": {
+      "page": 110,
+      "notes": "Conferido com Tales of the RED: Street Stories, p. 110. Aventura com Biodrones (equipamento da p. 110).",
+      "description": "Protótipo de Faisal feito com dados da Major Stiles, inútil contra qualquer coisa que não seja Biodrone. Pistola Muito Pesada Exótica: em vez de dano, um acerto desliga o Biodrone, que cai, se debate e morre. A fonte interna dá 8 tiros e não pode ser trocada. Biodrone+ e Biodrone DJ não são afetados."
+    },
+    "militech-growler": {
+      "page": 71,
+      "notes": "Conferido com Tales of the RED: Street Stories, p. 71. Aventura Drummer and the Whale. Corrigido: o livro não dá dano nem fala em quatro canos; o efeito é a Brain Injury. O pente segue o Rocket Launcher do Core (1).",
+      "description": "Arma experimental de controle de multidões da Militech, testada no submarino SS MacDonnelson. Lança-Foguetes Exótico: toda criatura com cérebro orgânico na área da explosão faz Resist Torture/Drugs DV19 ou sofre a Lesão Crítica Brain Injury (CP:R p. 221). Recarregar exige 2 Ações, em 2 turnos. Exige BODY 11, a menos que esteja montado.",
+      "tags": [
+        "Exótica"
+      ],
+      "attributes": {
+        "damage": "Especial (Brain Injury, DV19)",
+        "damageDice": null,
+        "magazine": 1,
+        "exotic": true,
+        "minBody": 11
+      }
+    }
+  },
+  "additions": []
+}

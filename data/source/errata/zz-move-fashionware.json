@@ -1,0 +1,148 @@
+{
+  "about": "Fashionware deixa de ser uma aba própria: no Core (p.111) é uma categoria de cyberware, com 7 Option Slots sem peça base. Os itens passam para Cyberware pela chave \"move\", com o tipo de cyberware \"Fashionware\"; efeito visual e funcional viram o campo \"effect\", e pré-requisitos citados no texto do livro (Biomonitor, Neural Link) vão para \"requirements\". Formato descrito no README (seção Dados).",
+  "move": {
+    "heuristic-health-monitor": {
+      "category": "cyberware",
+      "attributes": {
+        "cyberwareType": "Fashionware",
+        "bodyLocation": "Skin",
+        "installLocation": "Clinic",
+        "humanityLoss": 0,
+        "foundational": false,
+        "requiresPair": false,
+        "requirements": "Biomonitor; Clinic",
+        "effect": "Mostra seus indicadores de saúde."
+      }
+    },
+    "biomonitor": {
+      "category": "cyberware",
+      "attributes": {
+        "cyberwareType": "Fashionware",
+        "bodyLocation": "Skin",
+        "installLocation": "Mall",
+        "humanityLoss": 0,
+        "foundational": false,
+        "requiresPair": false,
+        "requirements": "Mall",
+        "effect": "Implante subdérmico com leitura em LED de pulso, temperatura, respiração, glicemia etc. Pode se ligar ao Agent para acompanhar a saúde."
+      }
+    },
+    "chemskin": {
+      "category": "cyberware",
+      "attributes": {
+        "cyberwareType": "Fashionware",
+        "bodyLocation": "Skin",
+        "installLocation": "Mall",
+        "humanityLoss": 0,
+        "foundational": false,
+        "requiresPair": false,
+        "requirements": "Mall",
+        "effect": "Corantes e pigmentos que mudam a cor da pele de forma permanente, opcionalmente sensíveis à temperatura ou a hormônios. Com Techhair, +2 em Personal Grooming (uma vez só)."
+      }
+    },
+    "emp-threading": {
+      "category": "cyberware",
+      "attributes": {
+        "cyberwareType": "Fashionware",
+        "bodyLocation": "Skin",
+        "installLocation": "Mall",
+        "humanityLoss": 0,
+        "foundational": false,
+        "requiresPair": false,
+        "requirements": "Mall",
+        "effect": "Linhas prateadas em padrão de circuito. Muitos acham que protegem contra EMP e radiação, mas não há prova disso."
+      }
+    },
+    "light-tattoo": {
+      "category": "cyberware",
+      "attributes": {
+        "cyberwareType": "Fashionware",
+        "bodyLocation": "Skin",
+        "installLocation": "Mall",
+        "humanityLoss": 0,
+        "foundational": false,
+        "requiresPair": false,
+        "requirements": "Mall",
+        "effect": "Adesivos subdérmicos que projetam tatuagens coloridas sob a pele. Peças maiores exigem mais instalações. Com 3 ou mais instalações, +2 em Wardrobe & Style (uma vez só)."
+      }
+    },
+    "shift-tacts": {
+      "category": "cyberware",
+      "attributes": {
+        "cyberwareType": "Fashionware",
+        "bodyLocation": "Eyes",
+        "installLocation": "Mall",
+        "humanityLoss": 0,
+        "foundational": false,
+        "requiresPair": false,
+        "requirements": "Mall",
+        "effect": "Lentes implantadas que mudam de cor; uma escolha de cor e padrão, desativável sem Ação."
+      }
+    },
+    "skinwatch": {
+      "category": "cyberware",
+      "attributes": {
+        "cyberwareType": "Fashionware",
+        "bodyLocation": "Skin",
+        "installLocation": "Mall",
+        "humanityLoss": 0,
+        "foundational": false,
+        "requiresPair": false,
+        "requirements": "Mall",
+        "effect": "Implante subdérmico com relógio e data em LED visíveis pela pele."
+      }
+    },
+    "techhair": {
+      "category": "cyberware",
+      "attributes": {
+        "cyberwareType": "Fashionware",
+        "bodyLocation": "Hair",
+        "installLocation": "Mall",
+        "humanityLoss": 0,
+        "foundational": false,
+        "requiresPair": false,
+        "requirements": "Mall",
+        "effect": "Cabelo artificial que emite luz colorida, opcionalmente sensível à temperatura, motorizado ou reativo a hormônios. Com Chemskin, +2 em Personal Grooming (uma vez só)."
+      }
+    },
+    "kill-display": {
+      "category": "cyberware",
+      "attributes": {
+        "cyberwareType": "Fashionware",
+        "bodyLocation": "Skin",
+        "installLocation": "Mall",
+        "humanityLoss": 0,
+        "foundational": false,
+        "requiresPair": false,
+        "requirements": "Mall",
+        "effect": "Letras luminosas sob a pele com \"KILLS:\" e um número (até 999), informado pelo Agent. Conta como uma instalação de Light Tattoo para o bônus de +2 em Wardrobe & Style."
+      }
+    },
+    "leads-turn-on-show-off-nails": {
+      "category": "cyberware",
+      "attributes": {
+        "cyberwareType": "Fashionware",
+        "bodyLocation": "Hand",
+        "installLocation": "Mall",
+        "humanityLoss": 0,
+        "foundational": false,
+        "requiresPair": false,
+        "requirements": "Mall",
+        "effect": "10 unhas iluminadas programáveis, com canetas de luz e presets baixados do CitiNet. Conta como uma instalação de Light Tattoo para o bônus de +2 em Wardrobe & Style."
+      }
+    },
+    "mood-eye": {
+      "category": "cyberware",
+      "attributes": {
+        "cyberwareType": "Fashionware",
+        "bodyLocation": "Eyes",
+        "installLocation": "Mall",
+        "humanityLoss": 0,
+        "foundational": false,
+        "requiresPair": false,
+        "requirements": "Neural Link; Mall",
+        "effect": "Lentes implantadas que mudam a cor dos olhos conforme o humor lido pelo Neural Link (vermelho raiva, azul tristeza, amarelo medo, rosa excitação, verde ciúme, cinza morte). Fingir uma emoção para mudar a cor exige Acting DV21. Pode ser desligado sem Ação. Exige Neural Link."
+      }
+    }
+  }
+}

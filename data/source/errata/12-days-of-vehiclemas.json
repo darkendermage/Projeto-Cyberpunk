@@ -1,0 +1,277 @@
+{
+  "about": "Conferido com o PDF oficial The 12 Days of Vehiclemas v1.00 (dezembro de 2025). Nenhum destes itens estava no compêndio. Formato descrito no README (seção Dados).",
+  "source": "12 Days of Vehiclemas",
+  "additions": [
+    {
+      "slug": "americar-armadillo",
+      "name": "AmeriCar Armadillo",
+      "category": "vehicles",
+      "manufacturer": "AmeriCar",
+      "description": "O trailer mais seguro e resistente já produzido, relançado sem mudanças pela AmeriCar. Preferido por nômades que vivem na estrada e por executivos acampando. Compact Groundcar com upgrades de fábrica.",
+      "notes": "Conferido com 12 Days of Vehiclemas, p. 3. Nomad Access 6.",
+      "price": 41000,
+      "priceCategory": "SuperLuxury",
+      "page": 3,
+      "tags": ["Nomad Access 6"],
+      "attributes": {
+        "vehicleType": "Car", "speedMove": 20, "topSpeedMph": 100, "seats": 6, "sdp": 70, "armorSp": 13,
+        "includedUpgrades": "Armored Chassis, Bulletproof Glass (x2), Heavy Chassis, Housing Upgrade, Reinforced Tires e Seating Upgrade."
+      }
+    },
+    {
+      "slug": "new-american-motors-ambunaught-m2",
+      "name": "New American Motors Ambunaught m2",
+      "category": "vehicles",
+      "manufacturer": "New American Motors",
+      "description": "Ambulância blindada de décadas atrás, base da frota da REO Meatwagon. Compact Groundcar de 2 lugares. O compartimento médico tem 4 leitos e 2 assentos para paramédicos e vem com Cryopumps (x2), Medscanner, Medtech Bag, Tech Bag e Techscanner.",
+      "notes": "Conferido com 12 Days of Vehiclemas, p. 4. Nomad Access 7.",
+      "price": 56000,
+      "priceCategory": "SuperLuxury",
+      "page": 4,
+      "tags": ["Nomad Access 7"],
+      "attributes": {
+        "vehicleType": "Car", "speedMove": 20, "topSpeedMph": 100, "seats": 2, "sdp": 70, "armorSp": 13,
+        "includedUpgrades": "Armored Chassis, Bulletproof Glass, Heavy Chassis, Hover Upgrade, Reinforced Tires e Sealed Environment."
+      }
+    },
+    {
+      "slug": "tetracorp-america-luxus-15",
+      "name": "TetraCorp America Luxus 15",
+      "category": "vehicles",
+      "manufacturer": "TetraCorp America",
+      "description": "Limusine corporativa blindada e selada contra gás. Compact Groundcar de 8 lugares com um Hammered Industries Drink Master 3000 de bordo (máquina de coquetéis do Black Chrome).",
+      "notes": "Conferido com 12 Days of Vehiclemas, p. 5. Nomad Access 6. O Security Upgrade dela não tem a função de camuflagem.",
+      "price": 45000,
+      "priceCategory": "SuperLuxury",
+      "page": 5,
+      "tags": ["Nomad Access 6"],
+      "attributes": {
+        "vehicleType": "Car", "speedMove": 20, "topSpeedMph": 100, "seats": 8, "sdp": 50, "armorSp": 13,
+        "includedUpgrades": "Armored Chassis, Bulletproof Glass (x2), Sealed Environment e Security Upgrade (sem camuflagem)."
+      }
+    },
+    {
+      "slug": "zonda-r400-trail",
+      "name": "Zonda R400 Trail",
+      "category": "vehicles",
+      "manufacturer": "Zonda",
+      "description": "A moto mais básica que existe, para quem quer fugir do transporte público. Roadbike de 1 lugar, incompatível com Seating Upgrade. Com AV Engine Upgrade pode voar, mas mantém as mesmas velocidades. Não aceita Upgrade de Tech para aumentar velocidade.",
+      "notes": "Conferido com 12 Days of Vehiclemas, p. 6. Nomad Access 1.",
+      "price": 850,
+      "priceCategory": "Expensive",
+      "page": 6,
+      "tags": ["Nomad Access 1"],
+      "attributes": { "vehicleType": "Motorcycle", "speedMove": 10, "topSpeedMph": 30, "seats": 1, "sdp": 16 }
+    },
+    {
+      "slug": "dayton-m405-adzep",
+      "name": "Dayton M405 AdZep",
+      "category": "vehicles",
+      "manufacturer": "Dayton Aeronautics",
+      "description": "Outdoor voador com telões de alta resolução. Aerozep de um único cômodo.",
+      "notes": "Conferido com 12 Days of Vehiclemas, p. 7. Nomad Access 5.",
+      "price": 26000,
+      "priceCategory": "SuperLuxury",
+      "page": 7,
+      "tags": ["Nomad Access 5"],
+      "attributes": {
+        "vehicleType": "Aerozep", "speedMove": 15, "topSpeedMph": 60, "seats": 2, "sdp": 35,
+        "includedUpgrades": "Communications Center."
+      }
+    },
+    {
+      "slug": "dayton-sky-queen",
+      "name": "Dayton Sky Queen",
+      "category": "vehicles",
+      "manufacturer": "Dayton Aeronautics",
+      "description": "Aerozep de luxo para viagens transcontinentais. Tem 50 cômodos, 26 de luxo e 14 complexos (bares, restaurantes, centro de convenções, boate, academia, decks, ponte, porão de carga e alojamentos). Os dois hangares levam uma TetraCorp America Luxus 15 com AV-4 Engine Upgrade e um Helicóptero com Armored Chassis, Bulletproof Glass x2, Heavy Chassis, NOS, Onboard Machine Gun, Onboard Rocket Pod e Vehicle Heavy Weapon Mount (Rhinemetall EMG-86 Railgun). Pode virar QG de facção pelas regras do No Place Like Home sem mudar o preço.",
+      "notes": "Conferido com 12 Days of Vehiclemas, p. 8-9. Nomad Access: N/A.",
+      "price": 4961000,
+      "priceCategory": "SuperLuxury",
+      "page": 8,
+      "tags": [],
+      "attributes": {
+        "vehicleType": "Aerozep", "speedMove": 20, "topSpeedMph": 100, "seats": 216, "sdp": 500, "armorSp": 13,
+        "includedUpgrades": "Aerozep Selfsealing Gasbag, Armored Chassis, Bulletproof Glass (x2), Communications Center, Hangar (x2), Heavy Chassis, Onboard Rocket Pod (x4), Sealed Environment, Titanic Hull e Vehicle Heavy Weapon Mount (x2) com Rhinemetall EMG-86 Railgun (x2)."
+      }
+    },
+    {
+      "slug": "militech-f-152-autocopter",
+      "name": "Militech F-152 Autocopter",
+      "category": "vehicles",
+      "manufacturer": "Militech",
+      "description": "Pequeno helicóptero de combate de cabine aberta, usado por polícias e mercenários. Por causa da cabine aberta, é incompatível com Bulletproof Glass, Seating Upgrade, Sealed Environment e Security Upgrade.",
+      "notes": "Conferido com 12 Days of Vehiclemas, p. 10. Nomad Access 4.",
+      "price": 31000,
+      "priceCategory": "SuperLuxury",
+      "page": 10,
+      "tags": ["Nomad Access 4"],
+      "attributes": {
+        "vehicleType": "Helicopter", "speedMove": 40, "topSpeedMph": 200, "seats": 1, "sdp": 35,
+        "includedUpgrades": "Onboard Machine Gun."
+      }
+    },
+    {
+      "slug": "vmw-aerojeep",
+      "name": "VMW Aerojeep",
+      "category": "vehicles",
+      "manufacturer": "VMW",
+      "description": "Utilitário militar europeu, lento mas confiável. Compact Groundcar com motor AV-4: no chão anda a 20 MOVE (100 MPH), no ar a 40 MOVE (200 MPH). Por ter cabine aberta, é incompatível com Bulletproof Glass, Sealed Environment e Security Upgrade.",
+      "notes": "Conferido com 12 Days of Vehiclemas, p. 11. Nomad Access 6. As velocidades do catálogo são as de voo.",
+      "price": 44000,
+      "priceCategory": "SuperLuxury",
+      "page": 11,
+      "tags": ["Nomad Access 6"],
+      "attributes": {
+        "vehicleType": "Aerodyne", "speedMove": 40, "topSpeedMph": 200, "seats": 6, "sdp": 70,
+        "includedUpgrades": "AV-4 Engine Upgrade, Heavy Chassis, Seating Upgrade e Vehicle Heavy Weapon Mount (vazio na compra)."
+      }
+    },
+    {
+      "slug": "hydrosubsidium-bimac",
+      "name": "Hydrosubsidium Bimac",
+      "category": "vehicles",
+      "manufacturer": "Hydrosubsidium Inc.",
+      "description": "Jetski de propulsão magnética com dois lugares em tandem, adaptado para operações secretas: o sistema de segurança esconde o veículo depois que a equipe desembarca.",
+      "notes": "Conferido com 12 Days of Vehiclemas, p. 12. Nomad Access 4.",
+      "price": 32000,
+      "priceCategory": "SuperLuxury",
+      "page": 12,
+      "tags": ["Nomad Access 4"],
+      "attributes": {
+        "vehicleType": "Boat", "speedMove": 20, "topSpeedMph": 60, "seats": 2, "sdp": 35,
+        "includedUpgrades": "Enhanced Interface Plug Integration, NOS, Onboard Machine Gun e Security Upgrade."
+      }
+    },
+    {
+      "slug": "highland-defense-ullapool-raider",
+      "name": "Highland Defense Ullapool Raider",
+      "category": "vehicles",
+      "manufacturer": "Highland Defense Co.",
+      "description": "Lancha leve e rápida para operações costeiras e em rios, inspirada nos barcos piratas escoceses dos anos 2020. Speedboat de 5 lugares, incompatível com Sealed Environment, Bulletproof Glass, Heavy Chassis e Submersible Upgrade.",
+      "notes": "Conferido com 12 Days of Vehiclemas, p. 13. Nomad Access 6.",
+      "price": 32000,
+      "priceCategory": "SuperLuxury",
+      "page": 13,
+      "tags": ["Nomad Access 6"],
+      "attributes": {
+        "vehicleType": "Boat", "speedMove": 20, "topSpeedMph": 60, "seats": 5, "sdp": 35, "armorSp": 13,
+        "includedUpgrades": "Armored Chassis e Onboard Rocket Pod."
+      }
+    },
+    {
+      "slug": "thelas-triaina-patrol-boat",
+      "name": "Thelas Tríaina Patrol Boat",
+      "category": "vehicles",
+      "manufacturer": "Thelas Nation",
+      "description": "Barco de patrulha dos Fuzileiros Thelas no porto de Night City, uma versão moderna do Pibber. Continua flutuando mesmo furado, tem estações blindadas e seladas e casco reforçado para abalroar. Os barcos de caça a minas costumam adicionar um lançador de torpedos (Onboard Rocket Pod). Speedboat incompatível com Submersible Upgrade.",
+      "notes": "Conferido com 12 Days of Vehiclemas, p. 14. Nomad Access 6.",
+      "price": 42000,
+      "priceCategory": "SuperLuxury",
+      "page": 14,
+      "tags": ["Nomad Access 6"],
+      "attributes": {
+        "vehicleType": "Boat", "speedMove": 20, "topSpeedMph": 60, "seats": 6, "sdp": 50, "armorSp": 13,
+        "includedUpgrades": "Armored Chassis, Bulletproof Glass, Combat Plow, Onboard Machine Gun (x2), Reinforced Hull, Sealed Environment e Seating Upgrade."
+      }
+    },
+    {
+      "slug": "zetatech-moray",
+      "name": "Zetatech Moray",
+      "category": "vehicles",
+      "manufacturer": "Zetatech",
+      "description": "Submarino de combate moderno para exploração e missões a até 300 m/yds de profundidade, com lançador de torpedos (Onboard Rocket Pod) e tanque de NOS. Speedboat com as mesmas velocidades na superfície e submerso.",
+      "notes": "Conferido com 12 Days of Vehiclemas, p. 15. Nomad Access 6.",
+      "price": 42000,
+      "priceCategory": "SuperLuxury",
+      "page": 15,
+      "tags": ["Nomad Access 6"],
+      "attributes": {
+        "vehicleType": "Boat", "speedMove": 20, "topSpeedMph": 60, "seats": 4, "sdp": 70,
+        "includedUpgrades": "Heavy Chassis, NOS, Onboard Rocket Pod e Submersible Upgrade."
+      }
+    },
+    {
+      "slug": "aerozep-selfsealing-gasbag",
+      "name": "Aerozep Selfsealing Gasbag",
+      "category": "gear",
+      "description": "Reforça os pontos fracos do veículo para que não possam ser alvo de Aimed Shot.",
+      "notes": "Conferido com 12 Days of Vehiclemas, p. 16. Upgrade de veículo Nomad, sem preço avulso no PDF.",
+      "page": 16,
+      "tags": ["Veículo"],
+      "attributes": { "gearType": "VehicleUpgrade", "gearClass": "Moto Rank 7", "requirements": "Aerozep", "effect": "Pontos fracos não podem ser alvo de Aimed Shot." }
+    },
+    {
+      "slug": "hangar-vehicle-upgrade",
+      "name": "Hangar",
+      "category": "gear",
+      "description": "Vaga segura para um veículo que não seja iate nem aerozep: um hangar fechado, uma plataforma de pouso ou um sistema de turco. Passageiros com acesso entram e saem do veículo estacionado sem gastar Ação. Pode ser instalado várias vezes.",
+      "notes": "Conferido com 12 Days of Vehiclemas, p. 16. Upgrade de veículo Nomad, sem preço avulso no PDF.",
+      "page": 16,
+      "tags": ["Veículo"],
+      "attributes": { "gearType": "VehicleUpgrade", "gearClass": "Moto Rank 7", "requirements": "Aerozep ou Iate", "effect": "Guarda um veículo a bordo." }
+    },
+    {
+      "slug": "reinforced-hull-tires",
+      "name": "Reinforced Hull/Tires",
+      "category": "gear",
+      "description": "Reforça os pontos fracos do veículo para que não possam ser alvo de Aimed Shot.",
+      "notes": "Conferido com 12 Days of Vehiclemas, p. 16. Upgrade de veículo Nomad, sem preço avulso no PDF.",
+      "page": 16,
+      "tags": ["Veículo"],
+      "attributes": { "gearType": "VehicleUpgrade", "gearClass": "Moto Rank 1", "requirements": "Veículos terrestres e aquáticos", "effect": "Pontos fracos não podem ser alvo de Aimed Shot." }
+    },
+    {
+      "slug": "sealed-environment",
+      "name": "Sealed Environment",
+      "category": "gear",
+      "description": "Veda o veículo: quem está dentro fica protegido de gases tóxicos, fumaça e ataques aerossóis vindos de fora. Se alguma janela for destruída, o benefício se perde até o conserto.",
+      "notes": "Conferido com 12 Days of Vehiclemas, p. 16. Upgrade de veículo Nomad, sem preço avulso no PDF.",
+      "page": 16,
+      "tags": ["Veículo"],
+      "attributes": { "gearType": "VehicleUpgrade", "gearClass": "Moto Rank 1", "requirements": "Todos os veículos", "effect": "Proteção contra gás e aerossóis." }
+    },
+    {
+      "slug": "submersible-upgrade",
+      "name": "Submersible Upgrade",
+      "category": "gear",
+      "description": "Impermeabiliza o veículo e adiciona um motor submarino: ele anda debaixo d'água na velocidade de uma Speedboat e é pilotado com Pilot Sea Vehicle enquanto submerso.",
+      "notes": "Conferido com 12 Days of Vehiclemas, p. 16. Upgrade de veículo Nomad, sem preço avulso no PDF.",
+      "page": 16,
+      "tags": ["Veículo"],
+      "attributes": { "gearType": "VehicleUpgrade", "gearClass": "Moto Rank 5", "requirements": "Terrestres e aquáticos, exceto motos e jetskis", "effect": "Navegação submersa." }
+    },
+    {
+      "slug": "titanic-hull",
+      "name": "Titanic Hull",
+      "category": "gear",
+      "description": "Aumenta o SDP do veículo conforme o número de cômodos: 1 a 4 cômodos +100 SDP; 5 a 8 +180; 9 a 12 +250; 13 ou mais +380.",
+      "notes": "Conferido com 12 Days of Vehiclemas, p. 16. Upgrade de veículo Nomad, sem preço avulso no PDF.",
+      "page": 16,
+      "tags": ["Veículo"],
+      "attributes": { "gearType": "VehicleUpgrade", "gearClass": "Moto Rank 7", "requirements": "Aerozep ou Iate", "effect": "+100 a +380 SDP conforme os cômodos." }
+    },
+    {
+      "slug": "luxury-vehicle-room",
+      "name": "Luxury Vehicle Room",
+      "category": "gear",
+      "description": "Na construção de um veículo com cômodos, qualquer cômodo pode virar Cômodo de Luxo pelo dobro do custo. Muda só a aparência: é digno de um rei, CEO ou diplomata, e todo mundo percebe. Se for alugado, o Mestre decide a categoria de moradia. O Housing Capacity Nomad Upgrade em Moto Rank 5 ou mais (5.000eb avulso) pode transformar um cômodo existente em Luxo em vez de adicionar um novo. Pode ser instalado várias vezes.",
+      "notes": "Conferido com 12 Days of Vehiclemas, p. 16.",
+      "priceNote": "Dobro do custo do cômodo",
+      "page": 16,
+      "tags": ["Veículo"],
+      "attributes": { "gearType": "VehicleUpgrade", "gearClass": "Cômodo de veículo", "requirements": "Veículo com cômodos", "effect": "Cômodo de luxo (estético)." }
+    },
+    {
+      "slug": "complex-vehicle-room",
+      "name": "Complex Vehicle Room",
+      "category": "gear",
+      "description": "Variante grande de cômodo, pelo triplo do custo de um cômodo base ou de luxo. Serve a vários usos (restaurante, deck de recreação, prisão, boliche, porão de carga, alojamento, refeitório, arena de laser tag) e adiciona o triplo de assentos de um cômodo comum (6 em Aerozeps e Cabin Cruisers, 12 em Iates). O Housing Capacity Nomad Upgrade em Moto Rank 7 ou mais (5.000eb avulso) pode transformar um cômodo existente em Complexo. Pode ser instalado várias vezes.",
+      "notes": "Conferido com 12 Days of Vehiclemas, p. 16.",
+      "priceNote": "Triplo do custo do cômodo",
+      "page": 16,
+      "tags": ["Veículo"],
+      "attributes": { "gearType": "VehicleUpgrade", "gearClass": "Cômodo de veículo", "requirements": "Veículo com cômodos", "effect": "Cômodo grande e multiuso com o triplo de assentos." }
+    }
+  ]
+}

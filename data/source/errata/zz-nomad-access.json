@@ -1,0 +1,285 @@
+{
+  "about": "Rank de Moto do Nomad para obter cada veículo pelo Family Motorpool. Core p.162: Rank 1 a 4 (Compact Groundcar, Gyrocopter, Jetski, Roadbike), 5 a 6 (Helicopter, High Performance Groundcar, Speedboat), 7 a 8 (AV-4, Cabin Cruiser, Superbike), 9 a 10 (Aerozep, AV-9, Super Groundcar, Yacht); vale o menor rank da faixa. Black Chrome (regra Nomad Access, p.9), 12 Days of Vehiclemas e Interface RED 4 (p.68) trazem o valor na página de cada veículo. Ficam sem rank: Bicycle (Interface RED 3 p.77: não pode ser obtida nem melhorada pelo Moto), Tanson JetBoy Hoverboard (Black Chrome: Nomad Access N/A) e Dayton Sky Queen (12 Days of Vehiclemas: Nomad Access N/A).",
+  "updates": {
+    "compact-groundcar": {
+      "attributes": {
+        "motoRank": 1
+      }
+    },
+    "gyrocopter": {
+      "attributes": {
+        "motoRank": 1
+      }
+    },
+    "jetski": {
+      "attributes": {
+        "motoRank": 1
+      }
+    },
+    "roadbike-moto": {
+      "attributes": {
+        "motoRank": 1
+      }
+    },
+    "helicopter": {
+      "attributes": {
+        "motoRank": 5
+      }
+    },
+    "high-perf-groundcar": {
+      "attributes": {
+        "motoRank": 5
+      }
+    },
+    "speedboat": {
+      "attributes": {
+        "motoRank": 5
+      }
+    },
+    "av-4-aerodyne": {
+      "attributes": {
+        "motoRank": 7
+      }
+    },
+    "cabin-cruiser": {
+      "attributes": {
+        "motoRank": 7
+      }
+    },
+    "superbike": {
+      "attributes": {
+        "motoRank": 7
+      }
+    },
+    "aerozep": {
+      "attributes": {
+        "motoRank": 9
+      }
+    },
+    "av-9-super-aerodyne": {
+      "attributes": {
+        "motoRank": 9
+      }
+    },
+    "super-groundcar": {
+      "attributes": {
+        "motoRank": 9
+      }
+    },
+    "yacht": {
+      "attributes": {
+        "motoRank": 9
+      }
+    },
+    "dayton-sh-45-patroller": {
+      "attributes": {
+        "motoRank": 2
+      }
+    },
+    "dayton-sh-45-patroller-law": {
+      "attributes": {
+        "motoRank": 4
+      }
+    },
+    "dayton-tdt-004": {
+      "attributes": {
+        "motoRank": 7
+      }
+    },
+    "tanson-bellhop": {
+      "attributes": {
+        "motoRank": 1
+      }
+    },
+    "zetatech-aerovox-av-4": {
+      "attributes": {
+        "motoRank": 8
+      }
+    },
+    "zetatech-aerocop": {
+      "attributes": {
+        "motoRank": 10
+      }
+    },
+    "zetatech-destination": {
+      "attributes": {
+        "motoRank": 6
+      }
+    },
+    "zetatech-herakles": {
+      "attributes": {
+        "motoRank": 10
+      }
+    },
+    "americar-econocompact": {
+      "attributes": {
+        "motoRank": 1
+      }
+    },
+    "americar-family-star-van": {
+      "attributes": {
+        "motoRank": 2
+      }
+    },
+    "diego-motors-chupacabra": {
+      "attributes": {
+        "motoRank": 4
+      }
+    },
+    "diego-motors-range-trike": {
+      "attributes": {
+        "motoRank": 4
+      }
+    },
+    "the-grundy": {
+      "attributes": {
+        "motoRank": 4
+      }
+    },
+    "harvey-100-americar": {
+      "attributes": {
+        "motoRank": 1
+      }
+    },
+    "the-harriet-100": {
+      "attributes": {
+        "motoRank": 2
+      }
+    },
+    "the-harveymerc": {
+      "attributes": {
+        "motoRank": 4
+      }
+    },
+    "highway-master-artemis": {
+      "attributes": {
+        "motoRank": 5
+      }
+    },
+    "kaukaz-volkhov": {
+      "attributes": {
+        "motoRank": 7
+      }
+    },
+    "makigai-ebi": {
+      "attributes": {
+        "motoRank": 1
+      }
+    },
+    "militech-gorgon-security-van": {
+      "attributes": {
+        "motoRank": 4
+      }
+    },
+    "the-zacatzontli-pickup-truck": {
+      "attributes": {
+        "motoRank": 4
+      }
+    },
+    "the-paladin-500": {
+      "attributes": {
+        "motoRank": 8
+      }
+    },
+    "quadra-thunder-x": {
+      "attributes": {
+        "motoRank": 8
+      }
+    },
+    "street-king-combat": {
+      "attributes": {
+        "motoRank": 10
+      }
+    },
+    "tetracorp-america-megahauler": {
+      "attributes": {
+        "motoRank": 10
+      }
+    },
+    "tetracorp-america-badger-corporate-bus": {
+      "attributes": {
+        "motoRank": 6
+      }
+    },
+    "yangs-wheels-rickshaw": {
+      "attributes": {
+        "motoRank": 2
+      }
+    },
+    "zonda-molly-1k": {
+      "attributes": {
+        "motoRank": 1
+      }
+    },
+    "zonda-parallax-cybercycle": {
+      "attributes": {
+        "motoRank": 8
+      }
+    },
+    "zonda-sliver": {
+      "attributes": {
+        "motoRank": 4
+      }
+    },
+    "americar-armadillo": {
+      "attributes": {
+        "motoRank": 6
+      }
+    },
+    "new-american-motors-ambunaught-m2": {
+      "attributes": {
+        "motoRank": 7
+      }
+    },
+    "tetracorp-america-luxus-15": {
+      "attributes": {
+        "motoRank": 6
+      }
+    },
+    "zonda-r400-trail": {
+      "attributes": {
+        "motoRank": 1
+      }
+    },
+    "dayton-m405-adzep": {
+      "attributes": {
+        "motoRank": 5
+      }
+    },
+    "militech-f-152-autocopter": {
+      "attributes": {
+        "motoRank": 4
+      }
+    },
+    "vmw-aerojeep": {
+      "attributes": {
+        "motoRank": 6
+      }
+    },
+    "hydrosubsidium-bimac": {
+      "attributes": {
+        "motoRank": 4
+      }
+    },
+    "highland-defense-ullapool-raider": {
+      "attributes": {
+        "motoRank": 6
+      }
+    },
+    "thelas-triaina-patrol-boat": {
+      "attributes": {
+        "motoRank": 6
+      }
+    },
+    "zetatech-moray": {
+      "attributes": {
+        "motoRank": 6
+      }
+    },
+    "zonda-metrocar": {
+      "attributes": {
+        "motoRank": 1
+      }
+    }
+  }
+}

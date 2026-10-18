@@ -1,0 +1,3965 @@
+{
+  "about": "Conferido com o PDF oficial Cyberpunk RED Core Rulebook (v1.25). Os registros de demonstração de Fashionware e roupas foram substituídos pelos do livro. Formato descrito no README (seção Dados).",
+  "source": "Core Book",
+  "updates": {
+    "light-melee-weapon": {
+      "page": 340,
+      "notes": "Conferido com Core Book, p. 340.",
+      "description": "Arma corpo a corpo leve: faca de combate, tomahawk. 1d6, ROF 2, ocultável. O número de mãos depende da arma."
+    },
+    "medium-melee-weapon": {
+      "page": 340,
+      "notes": "Conferido com Core Book, p. 340.",
+      "description": "Arma corpo a corpo média: taco de beisebol, pé de cabra, machete. 2d6, ROF 2. O número de mãos depende da arma."
+    },
+    "heavy-melee-weapon": {
+      "page": 340,
+      "notes": "Conferido com Core Book, p. 340.",
+      "description": "Arma corpo a corpo pesada: cano de chumbo, espada, taco com pregos. 3d6, ROF 2. O número de mãos depende da arma."
+    },
+    "very-heavy-melee-weapon": {
+      "page": 340,
+      "notes": "Conferido com Core Book, p. 340.",
+      "description": "Arma corpo a corpo muito pesada: motosserra, marreta, pás de helicóptero, naginata. 4d6, ROF 1. O número de mãos depende da arma."
+    },
+    "medium-pistol": {
+      "page": 341,
+      "notes": "Conferido com Core Book, p. 341.",
+      "description": "Pistola Média genérica. 2d6, pente 12, ROF 2, uma mão, ocultável."
+    },
+    "heavy-pistol": {
+      "page": 341,
+      "notes": "Conferido com Core Book, p. 341.",
+      "description": "Pistola Pesada genérica. 3d6, pente 8, ROF 2, uma mão, ocultável."
+    },
+    "very-heavy-pistol": {
+      "page": 341,
+      "notes": "Conferido com Core Book, p. 341.",
+      "description": "Pistola Muito Pesada genérica. 4d6, pente 8, ROF 1, uma mão, não ocultável."
+    },
+    "smg-padrao": {
+      "page": 341,
+      "notes": "Conferido com Core Book, p. 341. Corrigido: ROF 2 → 1.",
+      "description": "SMG genérica. 2d6, pente 30, ROF 1, uma mão, ocultável. Autofire (3) e Fogo de Supressão.",
+      "attributes": {
+        "rof": 1
+      }
+    },
+    "heavy-smg-padrao": {
+      "page": 341,
+      "notes": "Conferido com Core Book, p. 341. Corrigido: não é ocultável.",
+      "description": "SMG Pesada genérica. 3d6, pente 40, ROF 1, uma mão, não ocultável. Autofire (3) e Fogo de Supressão.",
+      "attributes": {
+        "concealable": false
+      }
+    },
+    "shotgun-padrao": {
+      "page": 341,
+      "notes": "Conferido com Core Book, p. 341.",
+      "description": "Escopeta genérica. Slug 5d6, pente 4, ROF 1, duas mãos. Modo alternativo: Shotgun Shell (3d6 em cone)."
+    },
+    "assault-rifle-padrao": {
+      "page": 341,
+      "notes": "Conferido com Core Book, p. 341.",
+      "description": "Fuzil de assalto genérico. 5d6, pente 25, ROF 1, duas mãos. Autofire (4) e Fogo de Supressão."
+    },
+    "sniper-rifle-padrao": {
+      "page": 341,
+      "notes": "Conferido com Core Book, p. 341.",
+      "description": "Fuzil de precisão genérico. 5d6, pente 4, ROF 1, duas mãos."
+    },
+    "grenade-launcher-padrao": {
+      "page": 341,
+      "notes": "Conferido com Core Book, p. 341.",
+      "description": "Lança-granadas genérico, disparado com Heavy Weapons. 6d6 explosivo, pente 2, ROF 1, duas mãos.",
+      "attributes": {
+        "damage": "6d6"
+      }
+    },
+    "rocket-launcher-padrao": {
+      "page": 341,
+      "notes": "Conferido com Core Book, p. 341.",
+      "description": "Lança-foguetes genérico, disparado com Heavy Weapons. 8d6 explosivo, pente 1, ROF 1, duas mãos.",
+      "attributes": {
+        "damage": "8d6"
+      }
+    },
+    "air-pistol": {
+      "page": 347,
+      "notes": "Conferido com Core Book, p. 347. Corrigido: a arma não causa dano.",
+      "description": "Pistola Média Exótica que dispara bolas de tinta e não causa dano. Com bolas de ácido, cada acerto reduz em 1 a SP da armadura no local atingido, ainda sem dano. Não causa Lesão Crítica. A munição custa o mesmo que a de Pistola Média, mesmo com ácido.",
+      "attributes": {
+        "damage": "Sem dano (tinta ou ácido)",
+        "damageDice": null
+      }
+    },
+    "con-arms-hurricane-assault": {
+      "page": 348,
+      "notes": "Conferido com Core Book, p. 348. O tambor de 16 é o pente da própria arma, não um acessório.",
+      "name": "Constitution Arms Hurricane Assault Weapon",
+      "description": "Escopeta Exótica com ROF 2 e tambor de 16 tiros. Não faz Aimed Shot. Recarregar exige duas Ações, em dois turnos. Disparar exige BODY 11 ou mais, a menos que esteja montada.",
+      "tags": [
+        "Exótica"
+      ]
+    },
+    "dartgun-weapons": {
+      "page": 348,
+      "notes": "Conferido com Core Book, p. 348.",
+      "description": "Pistola Muito Pesada Exótica que só carrega munição não-básica de flecha. Ao contrário de outras armas de flecha, tem pente de 8 e recarrega como uma Pistola Muito Pesada.",
+      "attributes": {
+        "damage": "4d6"
+      }
+    },
+    "flamethrower": {
+      "page": 348,
+      "notes": "Conferido com Core Book, p. 348. Corrigido: não dispara slugs.",
+      "description": "Escopeta Exótica disparada com Heavy Weapons que só dispara Incendiary Shotgun Shells (mesmo custo). Alvo em chamas sofre 4 de dano direto no HP no fim de cada turno até gastar uma Ação para se apagar; substitui fogo mais fraco. Não causa Lesão Crítica nem faz Aimed Shot.",
+      "attributes": {
+        "damage": "3d6 (Shell incendiária)",
+        "calibers": [
+          "ShotgunShell"
+        ]
+      }
+    },
+    "kendachi-mono-three": {
+      "page": 348,
+      "notes": "Conferido com Core Book, p. 348. Corrigido: Qualidade Excelente.",
+      "description": "Katana de cristal orbital de Qualidade Excelente, Exótica, Muito Pesada, de duas mãos. Com a chave biométrica correta, a lâmina vibra e o dano ignora armaduras com SP abaixo de 11. Sem a chave, é só uma arma Muito Pesada Exótica de Qualidade Excelente. Pode ganhar laser colorido no punho sem custo.",
+      "tags": [
+        "Qualidade Excelente",
+        "Exótica",
+        "Monofilamento"
+      ],
+      "attributes": {
+        "quality": "Excellent"
+      }
+    },
+    "malorian-arms-3516": {
+      "page": 348,
+      "notes": "Conferido com Core Book, p. 348. Corrigido: o livro não exige BODY mínimo.",
+      "description": "Pistola Muito Pesada Exótica de Qualidade Excelente que causa 5d6, com Smartgun Link instalado de forma permanente: só funciona conectada por Interface Plugs ou Subdermal Grip. Raríssima.",
+      "attributes": {
+        "minBody": null
+      }
+    },
+    "microwaver": {
+      "page": 348,
+      "notes": "Conferido com Core Book, p. 348.",
+      "description": "Pistola Muito Pesada Exótica. Em vez de dano, o alvo atingido faz Cybertech DV15; se falhar, o Mestre escolhe duas peças de cyberware ou eletrônicos que ficam inoperantes por 1 minuto. Usa bateria recarregável (1 hora) de 8 disparos; bateria extra custa 50eb.",
+      "attributes": {
+        "damage": "Sem dano (Cybertech DV15)"
+      }
+    },
+    "militech-cowboy-u-56": {
+      "page": 349,
+      "notes": "Conferido com Core Book, p. 349.",
+      "name": "Militech \"Cowboy\" U-56 Grenade Launcher",
+      "description": "Lança-granadas Exótico com ROF 2 e pente de 4 granadas. Mesmo Exótico, dispara todo tipo de granada. Recarregar exige duas Ações, em dois turnos. Exige BODY 11 ou mais, a menos que esteja montado.",
+      "attributes": {
+        "damage": "6d6"
+      }
+    },
+    "rhinemetall-emg-86-railgun": {
+      "page": 349,
+      "notes": "Conferido com Core Book, p. 349. Corrigido: ignora SP abaixo de 11 (não \"11 ou menos\") e exige BODY 11.",
+      "description": "Fuzil de assalto Exótico disparado com Heavy Weapons, sem Autofire nem Aimed Shot, com 4 tiros. O dano ignora armaduras com SP abaixo de 11. Recarregar exige duas Ações, em dois turnos. Exige BODY 11 ou mais, a menos que esteja montado.",
+      "attributes": {
+        "damage": "5d6",
+        "minBody": 11
+      }
+    },
+    "shrieker": {
+      "page": 349,
+      "notes": "Conferido com Core Book, p. 349.",
+      "description": "Pistola Muito Pesada Exótica. Quem dispara sem proteção auditiva sofre Damaged Ear. Em vez de dano, o alvo atingido faz Resist Torture/Drugs DV15 ou sofre Damaged Ear. Bateria recarregável (1 hora) de 8 disparos; extra custa 50eb.",
+      "attributes": {
+        "damage": "Sem dano (Damaged Ear)"
+      }
+    },
+    "stun-baton": {
+      "page": 349,
+      "notes": "Conferido com Core Book, p. 349.",
+      "description": "Arma corpo a corpo Média Exótica de uma mão. Dano que levaria o alvo abaixo de 1 HP o deixa Inconsciente com 1 HP. Não causa Lesão Crítica nem ablata armadura.",
+      "attributes": {
+        "damage": "2d6"
+      }
+    },
+    "stun-gun": {
+      "page": 349,
+      "notes": "Conferido com Core Book, p. 349.",
+      "description": "Pistola Pesada Exótica. Dano que levaria o alvo abaixo de 1 HP o deixa Inconsciente com 1 HP. Não causa Lesão Crítica nem ablata armadura. Bateria recarregável (1 hora) de 8 disparos; extra custa 50eb."
+    },
+    "tsunami-arms-helix": {
+      "page": 349,
+      "notes": "Conferido com Core Book, p. 349. Corrigido: é um fuzil de assalto Exótico (não metralhadora) e usa a perícia Autofire.",
+      "description": "Fuzil de assalto Exótico disparado só com a perícia Autofire: não faz tiro único nem Aimed Shot. Tem 40 balas e gasta 20 por ataque. No acerto, rola 2d6 e multiplica pela diferença com que superou a DV, até 5. Recarregar exige duas Ações. Exige BODY 11 ou mais, a menos que esteja montado.",
+      "attributes": {
+        "weaponClass": "AssaultRifle",
+        "skill": "Autofire",
+        "damage": "2d6 x margem (até 5)",
+        "autofire": 5
+      }
+    },
+    "basic-ammo": {
+      "page": 345,
+      "notes": "Conferido com Core Book, p. 345. Corrigido: também existe para Shotgun Shells.",
+      "description": "Munição padrão, sem efeitos especiais. Existe para todos os tipos, exceto granadas e foguetes. Vendida em lotes de 10.",
+      "attributes": {
+        "calibers": [
+          "MediumPistol",
+          "HeavyPistol",
+          "VeryHeavyPistol",
+          "Rifle",
+          "Slug",
+          "ShotgunShell",
+          "Arrow"
+        ]
+      }
+    },
+    "armor-piercing-ap": {
+      "page": 345,
+      "notes": "Conferido com Core Book, p. 345. Corrigido: também existe para foguetes.",
+      "description": "Ablata 2 de SP em vez de 1. Existe para todos os tipos, exceto Shotgun Shells. Para granadas e foguetes, é a munição básica.",
+      "attributes": {
+        "calibers": [
+          "MediumPistol",
+          "HeavyPistol",
+          "VeryHeavyPistol",
+          "Rifle",
+          "Slug",
+          "Arrow",
+          "Grenade",
+          "Rocket"
+        ]
+      }
+    },
+    "biotoxin-ammo": {
+      "page": 345,
+      "notes": "Conferido com Core Book, p. 345."
+    },
+    "emp-ammunition": {
+      "page": 345,
+      "notes": "Conferido com Core Book, p. 345."
+    },
+    "expansive-dum-dum": {
+      "page": 345,
+      "notes": "Conferido com Core Book, p. 345.",
+      "name": "Expansive Ammunition"
+    },
+    "flashbang-ammo": {
+      "page": 346,
+      "notes": "Conferido com Core Book, p. 346."
+    },
+    "incendiary-ammo": {
+      "page": 346,
+      "notes": "Conferido com Core Book, p. 346.",
+      "description": "Ao causar dano através da armadura, incendeia o alvo: 2 de dano direto no HP no fim de cada turno até ele gastar uma Ação para se apagar. Não acumula."
+    },
+    "poison-ammo": {
+      "page": 346,
+      "notes": "Conferido com Core Book, p. 346."
+    },
+    "rubber-ammo-nao-letal": {
+      "page": 346,
+      "notes": "Conferido com Core Book, p. 346. Corrigido: o alvo fica com 1 HP, não Inconsciente.",
+      "description": "Não causa Lesão Crítica nem ablata armadura. Dano que levaria um alvo com mais de 1 HP abaixo de 0 o deixa com 1 HP."
+    },
+    "sleep-ammunition": {
+      "page": 346,
+      "notes": "Conferido com Core Book, p. 346."
+    },
+    "smart-ammunition": {
+      "page": 346,
+      "notes": "Conferido com Core Book, p. 346.",
+      "description": "Exige o cyberware Targeting Scope (sem ele, a arma não dispara). Ao errar um tiro único por 4 ou menos, o tiro tem uma segunda chance: rola de novo contra a mesma DV somando 10 ao d10 em vez dos bônus normais (LUCK ainda vale).",
+      "attributes": {
+        "calibers": [
+          "MediumPistol",
+          "HeavyPistol",
+          "VeryHeavyPistol",
+          "Rifle",
+          "Slug",
+          "Arrow",
+          "Rocket"
+        ],
+        "requirements": "Targeting Scope"
+      }
+    },
+    "smoke-ammunition": {
+      "page": 347,
+      "notes": "Conferido com Core Book, p. 347."
+    },
+    "teargas-ammunition": {
+      "page": 347,
+      "notes": "Conferido com Core Book, p. 347."
+    },
+    "armor-piercing-grenade": {
+      "page": 345,
+      "notes": "Conferido com Core Book, p. 345. No livro, granadas são munição comprada por unidade; AP é a munição básica de granada."
+    },
+    "biotoxin-grenade": {
+      "page": 345,
+      "notes": "Conferido com Core Book, p. 345. No livro, granadas são munição comprada por unidade; AP é a munição básica de granada."
+    },
+    "emp-grenade": {
+      "page": 345,
+      "notes": "Conferido com Core Book, p. 345. No livro, granadas são munição comprada por unidade; AP é a munição básica de granada."
+    },
+    "flashbang-grenade": {
+      "page": 345,
+      "notes": "Conferido com Core Book, p. 345. No livro, granadas são munição comprada por unidade; AP é a munição básica de granada."
+    },
+    "incendiary-grenade": {
+      "page": 345,
+      "notes": "Conferido com Core Book, p. 345. No livro, granadas são munição comprada por unidade; AP é a munição básica de granada."
+    },
+    "poison-grenade": {
+      "page": 345,
+      "notes": "Conferido com Core Book, p. 345. No livro, granadas são munição comprada por unidade; AP é a munição básica de granada."
+    },
+    "sleep-grenade": {
+      "page": 345,
+      "notes": "Conferido com Core Book, p. 345. No livro, granadas são munição comprada por unidade; AP é a munição básica de granada."
+    },
+    "smoke-grenade": {
+      "page": 345,
+      "notes": "Conferido com Core Book, p. 345. No livro, granadas são munição comprada por unidade; AP é a munição básica de granada."
+    },
+    "teargas-grenade": {
+      "page": 345,
+      "notes": "Conferido com Core Book, p. 345. No livro, granadas são munição comprada por unidade; AP é a munição básica de granada."
+    },
+    "leathers": {
+      "page": 350,
+      "notes": "Conferido com Core Book, p. 350."
+    },
+    "kevlar": {
+      "page": 350,
+      "notes": "Conferido com Core Book, p. 350."
+    },
+    "light-armorjack": {
+      "page": 350,
+      "notes": "Conferido com Core Book, p. 350."
+    },
+    "bodyweight-suit": {
+      "page": 350,
+      "notes": "Conferido com Core Book, p. 350."
+    },
+    "flak-armor": {
+      "page": 350,
+      "notes": "Conferido com Core Book, p. 350."
+    },
+    "metalgear-padrao": {
+      "page": 350,
+      "notes": "Conferido com Core Book, p. 350."
+    },
+    "bulletproof-shield": {
+      "page": 350,
+      "notes": "Conferido com Core Book, p. 350."
+    },
+    "medium-armorjack": {
+      "page": 350,
+      "notes": "Conferido com Core Book, p. 350. Removida a \"regra da casa\" de BODY 8+, que não existe no livro.",
+      "description": "Armorjack mais pesado, com placas de plástico sólido e malha de Kevlar® mais grossa. SP 12, penalidade -2 em REF, DEX e MOVE."
+    },
+    "heavy-armorjack": {
+      "page": 350,
+      "notes": "Conferido com Core Book, p. 350. Removida a \"regra da casa\" de BODY 8+, que não existe no livro.",
+      "description": "O Armorjack mais grosso, com Kevlar® denso e camadas de plástico e malha. SP 13, penalidade -2 em REF, DEX e MOVE."
+    },
+    "implanted-linear-frame-sigma": {
+      "page": 367,
+      "notes": "Conferido com Core Book, p. 367.",
+      "name": "Implanted Linear Frame Σ (Sigma)",
+      "description": "Esqueleto reforçado com músculos hidráulicos e myomar (Borgware). BODY passa a 12 (não sobe além disso), e isso altera HP e Death Save. A instalação exige BODY 6 e Grafted Muscle and Bone Lace.",
+      "attributes": {
+        "requirements": "BODY 6 e Grafted Muscle and Bone Lace"
+      }
+    },
+    "implanted-linear-frame-beta": {
+      "page": 367,
+      "notes": "Conferido com Core Book, p. 367.",
+      "name": "Implanted Linear Frame β (Beta)",
+      "description": "Esqueleto muito reforçado com mais músculos hidráulicos e myomar (Borgware). BODY passa a 14 (não sobe além disso), e isso altera HP e Death Save. A instalação exige BODY 8 e duas Grafted Muscle and Bone Lace.",
+      "attributes": {
+        "requirements": "BODY 8 e duas Grafted Muscle and Bone Lace"
+      }
+    },
+    "agent": {
+      "page": 352,
+      "notes": "Conferido com Core Book, p. 352.",
+      "description": "Smartphone com IA autoadaptativa: chamadas, Data Pool, agenda, gravação no Memory Chip, ligação com cyberware e eletrodomésticos. Dá +2 em Library Search e +2 em Wardrobe & Style (só usando as roupas que ele sugere). Vários Agents não somam.",
+      "attributes": {
+        "skillBonus": "+2 em Library Search e Wardrobe & Style"
+      }
+    },
+    "airhypo": {
+      "page": 352,
+      "notes": "Conferido com Core Book, p. 352.",
+      "description": "Aplica uma dose de droga com ar comprimido: uma Ação em alvo voluntário, ou um ataque corpo a corpo em alvo resistente (no acerto, aplica a dose em vez de causar dano). Recarregar não é uma Ação."
+    },
+    "anti-smog-breathing-mask": {
+      "page": 352,
+      "notes": "Conferido com Core Book, p. 352.",
+      "description": "Filtra toxinas e fumaça: imunidade a gases tóxicos e tudo que precise ser inalado."
+    },
+    "auto-ear-protectors": {
+      "page": 352,
+      "notes": "Conferido com Core Book, p. 352.",
+      "name": "Auto Level Dampening Ear Protectors",
+      "description": "Protetores auriculares compactos: imunidade a surdez e efeitos de sons perigosamente altos, como os de uma flashbang."
+    },
+    "binoculars": {
+      "page": 352,
+      "notes": "Conferido com Core Book, p. 352.",
+      "description": "Dobram ou triplicam o tamanho do que se vê."
+    },
+    "braindance-viewer": {
+      "page": 352,
+      "notes": "Conferido com Core Book, p. 352.",
+      "description": "Reproduz braindances: gravações de uma experiência vista pelos olhos do ator, com todos os sentidos e emoções."
+    },
+    "bug-detector-gear": {
+      "page": 352,
+      "notes": "Conferido com Core Book, p. 352.",
+      "description": "Apita a até 2 m/yds de um grampo, escuta ou outro dispositivo de escuta."
+    },
+    "carryall": {
+      "page": 352,
+      "notes": "Conferido com Core Book, p. 352.",
+      "description": "Bolsas de náilon ripstop de vários tamanhos, de transversal a sacola quase do tamanho de uma pessoa."
+    },
+    "chemical-analyzer-gear": {
+      "page": 352,
+      "notes": "Conferido com Core Book, p. 352.",
+      "description": "Testa uma substância como Ação e identifica sua composição química exata a partir de um grande banco de amostras."
+    },
+    "computer": {
+      "page": 352,
+      "notes": "Conferido com Core Book, p. 352.",
+      "description": "Notebook ou desktop, usado para escrever e navegar no Data Pool."
+    },
+    "cryopump": {
+      "page": 353,
+      "notes": "Conferido com Core Book, p. 353.",
+      "description": "Maleta com saco de estase. Como Ação, coloca um alvo voluntário ou inconsciente em estase: ele não faz Death Save por até uma semana enquanto o saco tiver HP (cobertura de 15 HP). Permite cirurgia e estabilização dentro do saco. 1 carga; recarga custa 50eb. Só Medtechs operam."
+    },
+    "cryotank": {
+      "page": 353,
+      "notes": "Conferido com Core Book, p. 353.",
+      "description": "Tanque para um adulto. Com Medical Tech DV13, mantém a pessoa em estase pelo tempo que for preciso, curando no dobro da taxa normal (cobertura de 30 HP). Só Medtechs operam."
+    },
+    "disposable-cellphone": {
+      "page": 353,
+      "notes": "Conferido com Core Book, p. 353.",
+      "name": "Disposable Cell Phone",
+      "description": "Celular descartável. Boa escolha para quem não quer ser rastreado."
+    },
+    "duct-tape": {
+      "page": 353,
+      "notes": "Conferido com Core Book, p. 353.",
+      "description": "Fita adesiva de várias cores, opcionalmente brilhante no escuro (mesmo sem exposição à luz)."
+    },
+    "flashlight": {
+      "page": 353,
+      "notes": "Conferido com Core Book, p. 353.",
+      "description": "Lanterna recarregável com facho de 100 m/yds, dura até 10 horas por carga."
+    },
+    "grapple-gun": {
+      "page": 353,
+      "notes": "Conferido com Core Book, p. 353.",
+      "description": "Como Ação, dispara um gancho a foguete que se prende a cobertura \"grossa\" a até 30 m/yds. A linha aguenta o dobro do peso do usuário e tem 10 HP. Escalar por ela anula a penalidade de movimento, e recolher a linha não é Ação. Não serve como arma nem para Agarrar."
+    },
+    "handcuffs": {
+      "page": 353,
+      "notes": "Conferido com Core Book, p. 353.",
+      "description": "Algemas. Fáceis de quebrar com BODY acima de 10."
+    },
+    "homing-tracer-gear": {
+      "page": 354,
+      "notes": "Conferido com Core Book, p. 354.",
+      "name": "Homing Tracer",
+      "description": "Segue um rastreador vinculado a até 1 milha. Vem com um rastreador do tamanho de um botão; extras custam 50eb."
+    },
+    "inflatable-bed-sleep-bag": {
+      "page": 354,
+      "notes": "Conferido com Core Book, p. 354."
+    },
+    "lock-picking-set": {
+      "page": 354,
+      "notes": "Conferido com Core Book, p. 354.",
+      "description": "Bolsinha de ferramentas para abrir fechaduras mecânicas."
+    },
+    "medscanner": {
+      "page": 354,
+      "notes": "Conferido com Core Book, p. 354.",
+      "description": "Scanner com sondas que diagnostica ferimentos e doenças. Dá +2 em First Aid e Paramedic. Não acumula consigo mesmo."
+    },
+    "medtech-bag": {
+      "page": 354,
+      "notes": "Conferido com Core Book, p. 354.",
+      "description": "Kit médico com grampeadores dérmicos, spray de pele, bisturis estéreis: tudo para salvar vidas com sua perícia."
+    },
+    "memory-chips": {
+      "page": 354,
+      "notes": "Conferido com Core Book, p. 354."
+    },
+    "personal-carepak": {
+      "page": 354,
+      "notes": "Conferido com Core Book, p. 354."
+    },
+    "pocket-amplifier": {
+      "page": 354,
+      "notes": "Conferido com Core Book, p. 354.",
+      "description": "Amplificador recarregável do tamanho de um livro: som a até 100 m/yds por 6 horas, para dois instrumentos."
+    },
+    "road-flare": {
+      "page": 354,
+      "notes": "Conferido com Core Book, p. 354.",
+      "description": "Ilumina 100 m/yds por 1 hora. Várias cores. Uso único."
+    },
+    "rope-60m": {
+      "page": 354,
+      "notes": "Conferido com Core Book, p. 354.",
+      "description": "Corda de náilon de 60 m/yds; aguenta até 360 kg (800 lb)."
+    },
+    "scrambler-descrambler-gear": {
+      "page": 354,
+      "notes": "Conferido com Core Book, p. 354.",
+      "description": "Embaralha comunicações para que só sejam entendidas com um descrambler, que vem incluso."
+    },
+    "smart-glasses": {
+      "page": 354,
+      "notes": "Conferido com Core Book, p. 354.",
+      "description": "Óculos com 2 slots de opção de Cybereye; opções instaladas contam como pareadas e custam como uma instalação. Só um par por vez."
+    },
+    "tech-bag": {
+      "page": 354,
+      "notes": "Conferido com Core Book, p. 354.",
+      "description": "Bolsa de ferramentas para eletrônicos e máquinas: Techtool, fita, fios, parafusos, módulos de reparo, maçarico, pés de cabra e martelo."
+    },
+    "techscanner": {
+      "page": 355,
+      "notes": "Conferido com Core Book, p. 355.",
+      "description": "Scanner de diagnóstico de máquinas e eletrônicos. Dá +2 em Basic Tech, Cybertech, Land/Sea/Air Vehicle Tech, Electronics/Security Tech e Weaponstech. Não acumula consigo mesmo.",
+      "attributes": {
+        "skillBonus": "+2 em Basic Tech, Cybertech, Vehicle Techs, Electronics/Security Tech e Weaponstech"
+      }
+    },
+    "techtool": {
+      "page": 355,
+      "notes": "Conferido com Core Book, p. 355."
+    },
+    "tent-camping-equipment": {
+      "page": 355,
+      "notes": "Conferido com Core Book, p. 355."
+    },
+    "video-camera": {
+      "page": 355,
+      "notes": "Conferido com Core Book, p. 355.",
+      "description": "Na mão, grava até 12 horas de vídeo e áudio num Memory Chip."
+    },
+    "virtuality-goggles": {
+      "page": 355,
+      "notes": "Conferido com Core Book, p. 355.",
+      "description": "Projeta imagens do ciberespaço sobre a visão do mundo. Muito recomendado para Netrunners."
+    },
+    "black-lace": {
+      "page": 357,
+      "notes": "Conferido com Core Book, p. 357. Corrigido: DV17 (não 15) e efeitos.",
+      "description": "Droga de combate que faz ignorar ferimentos.",
+      "attributes": {
+        "classification": "Combat",
+        "resistDv": 17,
+        "duration": "24 horas",
+        "durationMinutes": 1440,
+        "humanityLoss": 7,
+        "addictionRisk": null,
+        "primaryEffect": "Por 24 horas, ignora os efeitos do Wound State Seriously Wounded. Ao tomar, perde 2d6 de Humanidade, devolvida se o efeito secundário não ocorrer.",
+        "sideEffects": "Efeito secundário (DV17): a Humanidade perdida não volta e o usuário fica viciado. Viciado, o REF cai 2 fora do efeito primário."
+      }
+    },
+    "blue-glass": {
+      "page": 357,
+      "notes": "Conferido com Core Book, p. 357.",
+      "description": "Alucinógeno.",
+      "attributes": {
+        "classification": "Street",
+        "resistDv": 15,
+        "duration": "4 horas",
+        "durationMinutes": 240,
+        "primaryEffect": "Por 4 horas, o Mestre avisa quando o usuário \"apaga\": alucina e perde a Ação naquele turno.",
+        "sideEffects": "Efeito secundário (DV15): vício. Viciado, \"apaga\" de vez em quando (em geral 1 vez por hora) e o efeito primário passa a evitar os apagões."
+      }
+    },
+    "smash": {
+      "page": 358,
+      "notes": "Conferido com Core Book, p. 358. Corrigido: DV15, duração de 4 horas e bônus de +2 em seis perícias.",
+      "description": "Amarela, espumante e vendida em lata em todo lugar.",
+      "attributes": {
+        "classification": "Street",
+        "resistDv": 15,
+        "duration": "4 horas",
+        "durationMinutes": 240,
+        "primaryEffect": "Por 4 horas, euforia: +2 em Dance, Contortionist, Conversation, Human Perception, Persuasion e Acting.",
+        "sideEffects": "Efeito secundário (DV15): vício. Viciado, -2 nessas mesmas perícias e fissura pela droga."
+      }
+    },
+    "synthcoke": {
+      "page": 358,
+      "notes": "Conferido com Core Book, p. 358.",
+      "description": "Estimulante que acelera os reflexos e causa paranoia.",
+      "attributes": {
+        "classification": "Combat",
+        "resistDv": 15,
+        "duration": "4 horas",
+        "durationMinutes": 240,
+        "primaryEffect": "Por 4 horas, REF +1 (pode passar de 8). O usuário fica propenso a paranoia.",
+        "sideEffects": "Efeito secundário (DV15): vício. Viciado, REF -2 fora do efeito primário e fissura pela droga."
+      }
+    },
+    "neural-link": {
+      "page": 359,
+      "notes": "Conferido com Core Book, p. 359. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "braindance-recorder": {
+      "page": 359,
+      "notes": "Conferido com Core Book, p. 359. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "chipware-socket": {
+      "page": 359,
+      "notes": "Conferido com Core Book, p. 359. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "interface-plugs": {
+      "page": 359,
+      "notes": "Conferido com Core Book, p. 359. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "kerenzikov": {
+      "page": 359,
+      "notes": "Conferido com Core Book, p. 359. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "sandevistan": {
+      "page": 359,
+      "notes": "Conferido com Core Book, p. 359. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "chemical-analyzer": {
+      "page": 359,
+      "notes": "Conferido com Core Book, p. 359. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "olfactory-boost": {
+      "page": 359,
+      "notes": "Conferido com Core Book, p. 359. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "pain-editor": {
+      "page": 360,
+      "notes": "Conferido com Core Book, p. 360. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "skill-chip": {
+      "page": 358,
+      "notes": "Conferido com Core Book, p. 358. Preço, instalação, HL e slots conferidos. Corrigido: preço 500eb → 1000eb.",
+      "price": 1000,
+      "priceCategory": "VeryExpensive"
+    },
+    "tactile-boost": {
+      "page": 360,
+      "notes": "Conferido com Core Book, p. 360. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "cybereye": {
+      "page": 360,
+      "notes": "Conferido com Core Book, p. 360. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "anti-dazzle": {
+      "page": 360,
+      "notes": "Conferido com Core Book, p. 360. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "chyron": {
+      "page": 360,
+      "notes": "Conferido com Core Book, p. 360. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "color-shift": {
+      "page": 358,
+      "notes": "Conferido com Core Book, p. 358. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "dartgun": {
+      "page": 360,
+      "notes": "Conferido com Core Book, p. 360. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "image-enhance": {
+      "page": 360,
+      "notes": "Conferido com Core Book, p. 360. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "low-light-infrared-uv": {
+      "page": 360,
+      "notes": "Conferido com Core Book, p. 360. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "microoptics": {
+      "page": 361,
+      "notes": "Conferido com Core Book, p. 361. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "microvideo": {
+      "page": 361,
+      "notes": "Conferido com Core Book, p. 361. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "radiation-detector": {
+      "page": 361,
+      "notes": "Conferido com Core Book, p. 361. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "targeting-scope": {
+      "page": 361,
+      "notes": "Conferido com Core Book, p. 361. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "teleoptics": {
+      "page": 361,
+      "notes": "Conferido com Core Book, p. 361. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "virtuality": {
+      "page": 361,
+      "notes": "Conferido com Core Book, p. 361. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "cyberaudio-suite": {
+      "page": 361,
+      "notes": "Conferido com Core Book, p. 361. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "amplified-hearing": {
+      "page": 361,
+      "notes": "Conferido com Core Book, p. 361. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "audio-recorder": {
+      "page": 361,
+      "notes": "Conferido com Core Book, p. 361. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "bug-detector": {
+      "page": 361,
+      "notes": "Conferido com Core Book, p. 361. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "homing-tracer": {
+      "page": 361,
+      "notes": "Conferido com Core Book, p. 361. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "internal-agent": {
+      "page": 362,
+      "notes": "Conferido com Core Book, p. 362. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "level-damper": {
+      "page": 362,
+      "notes": "Conferido com Core Book, p. 362. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "radio-communicator": {
+      "page": 362,
+      "notes": "Conferido com Core Book, p. 362. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "radio-scanner-music-player": {
+      "page": 362,
+      "notes": "Conferido com Core Book, p. 362. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "radar-detector": {
+      "page": 362,
+      "notes": "Conferido com Core Book, p. 362. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "scrambler-descrambler": {
+      "page": 362,
+      "notes": "Conferido com Core Book, p. 362. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "voice-stress-analyzer": {
+      "page": 362,
+      "notes": "Conferido com Core Book, p. 362. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "audiovox": {
+      "page": 362,
+      "notes": "Conferido com Core Book, p. 362. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "contraceptive-implant": {
+      "page": 362,
+      "notes": "Conferido com Core Book, p. 362. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "enhanced-antibodies": {
+      "page": 362,
+      "notes": "Conferido com Core Book, p. 362. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "cybersnake": {
+      "page": 363,
+      "notes": "Conferido com Core Book, p. 363. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "gills": {
+      "page": 363,
+      "notes": "Conferido com Core Book, p. 363. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "grafted-muscle-and-bone-lace": {
+      "page": 363,
+      "notes": "Conferido com Core Book, p. 363. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "independent-air-supply": {
+      "page": 363,
+      "notes": "Conferido com Core Book, p. 363. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "nasal-filters": {
+      "page": 363,
+      "notes": "Conferido com Core Book, p. 363. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "radar-sonar-implant": {
+      "page": 363,
+      "notes": "Conferido com Core Book, p. 363. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "toxin-binders": {
+      "page": 363,
+      "notes": "Conferido com Core Book, p. 363. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "vampyres": {
+      "page": 363,
+      "notes": "Conferido com Core Book, p. 363. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "hidden-holster": {
+      "page": 364,
+      "notes": "Conferido com Core Book, p. 364. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "skin-weave": {
+      "page": 359,
+      "notes": "Conferido com Core Book, p. 359. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "subdermal-armor": {
+      "page": 358,
+      "notes": "Conferido com Core Book, p. 358. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "subdermal-pocket": {
+      "page": 358,
+      "notes": "Conferido com Core Book, p. 358. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "cyberarm": {
+      "page": 364,
+      "notes": "Conferido com Core Book, p. 364. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "big-knucks": {
+      "page": 364,
+      "notes": "Conferido com Core Book, p. 364. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "grapple-hand": {
+      "page": 365,
+      "notes": "Conferido com Core Book, p. 365. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "popup-grenade-launcher": {
+      "page": 365,
+      "notes": "Conferido com Core Book, p. 365. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "popup-melee-weapon": {
+      "page": 365,
+      "notes": "Conferido com Core Book, p. 365. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "popup-shield": {
+      "page": 365,
+      "notes": "Conferido com Core Book, p. 365. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "popup-ranged-weapon": {
+      "page": 365,
+      "notes": "Conferido com Core Book, p. 365. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "quick-change-mount": {
+      "page": 365,
+      "notes": "Conferido com Core Book, p. 365. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "rippers": {
+      "page": 365,
+      "notes": "Conferido com Core Book, p. 365. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "scratchers": {
+      "page": 366,
+      "notes": "Conferido com Core Book, p. 366. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "shoulder-cam": {
+      "page": 366,
+      "notes": "Conferido com Core Book, p. 366. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "slice-n-dice": {
+      "page": 366,
+      "notes": "Conferido com Core Book, p. 366. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "subdermal-grip": {
+      "page": 358,
+      "notes": "Conferido com Core Book, p. 358. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "tool-hand": {
+      "page": 366,
+      "notes": "Conferido com Core Book, p. 366. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "wolvers": {
+      "page": 366,
+      "notes": "Conferido com Core Book, p. 366. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "cyberleg": {
+      "page": 364,
+      "notes": "Conferido com Core Book, p. 364. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "grip-foot": {
+      "page": 359,
+      "notes": "Conferido com Core Book, p. 359. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "jump-booster": {
+      "page": 366,
+      "notes": "Conferido com Core Book, p. 366. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "skate-foot": {
+      "page": 366,
+      "notes": "Conferido com Core Book, p. 366. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "talon-foot": {
+      "page": 367,
+      "notes": "Conferido com Core Book, p. 367. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "web-foot": {
+      "page": 367,
+      "notes": "Conferido com Core Book, p. 367. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "hardened-shielding": {
+      "page": 367,
+      "notes": "Conferido com Core Book, p. 367. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "artificial-shoulder-mount": {
+      "page": 367,
+      "notes": "Conferido com Core Book, p. 367. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "multioptic-mount": {
+      "page": 367,
+      "notes": "Conferido com Core Book, p. 367. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "sensor-array": {
+      "page": 367,
+      "notes": "Conferido com Core Book, p. 367. Preço, instalação, HL e slots conferidos; a descrição é um resumo do compêndio."
+    },
+    "midnight-lady-mr-studd": {
+      "page": 363,
+      "notes": "Conferido com Core Book, p. 363. Preço, instalação e HL conferidos. No livro são dois implantes com os mesmos números.",
+      "name": "Midnight Lady™ / Mr. Studd™ Sexual Implant"
+    },
+    "eraser": {
+      "page": 368,
+      "notes": "Conferido com Core Book, p. 368."
+    },
+    "see-ya": {
+      "page": 368,
+      "notes": "Conferido com Core Book, p. 368."
+    },
+    "speedy-gonzalvez": {
+      "page": 368,
+      "notes": "Conferido com Core Book, p. 368."
+    },
+    "worm": {
+      "page": 368,
+      "notes": "Conferido com Core Book, p. 368."
+    },
+    "armor": {
+      "page": 369,
+      "notes": "Conferido com Core Book, p. 369."
+    },
+    "flak": {
+      "page": 369,
+      "notes": "Conferido com Core Book, p. 369."
+    },
+    "shield": {
+      "page": 369,
+      "notes": "Conferido com Core Book, p. 369."
+    },
+    "banhammer": {
+      "page": 369,
+      "notes": "Conferido com Core Book, p. 369."
+    },
+    "sword": {
+      "page": 369,
+      "notes": "Conferido com Core Book, p. 369."
+    },
+    "deckkrash": {
+      "page": 369,
+      "notes": "Conferido com Core Book, p. 369."
+    },
+    "hellbolt": {
+      "page": 369,
+      "notes": "Conferido com Core Book, p. 369."
+    },
+    "poison-flatline": {
+      "page": 370,
+      "notes": "Conferido com Core Book, p. 370."
+    },
+    "superglue": {
+      "page": 370,
+      "notes": "Conferido com Core Book, p. 370."
+    },
+    "asp": {
+      "page": 370,
+      "notes": "Conferido com Core Book, p. 370."
+    },
+    "giant": {
+      "page": 370,
+      "notes": "Conferido com Core Book, p. 370."
+    },
+    "hellhound": {
+      "page": 370,
+      "notes": "Conferido com Core Book, p. 370."
+    },
+    "kraken": {
+      "page": 370,
+      "notes": "Conferido com Core Book, p. 370.",
+      "description": "Anti-Pessoal (PER 6, SPD 2, ATK 8, DEF 4, REZ 30). Causa 3d6 direto no cérebro; até o fim do próximo turno do Netrunner, ele não avança na Arquitetura nem faz Jack Out seguro.",
+      "attributes": {
+        "effect": "3d6 no cérebro e prende o Netrunner até o fim do próximo turno."
+      }
+    },
+    "liche": {
+      "page": 371,
+      "notes": "Conferido com Core Book, p. 371."
+    },
+    "raven": {
+      "page": 371,
+      "notes": "Conferido com Core Book, p. 371."
+    },
+    "skunk": {
+      "page": 371,
+      "notes": "Conferido com Core Book, p. 371."
+    },
+    "dragon": {
+      "page": 371,
+      "notes": "Conferido com Core Book, p. 371."
+    },
+    "killer": {
+      "page": 371,
+      "notes": "Conferido com Core Book, p. 371."
+    },
+    "sabertooth": {
+      "page": 371,
+      "notes": "Conferido com Core Book, p. 371."
+    },
+    "roadbike-moto": {
+      "page": 190,
+      "notes": "Conferido com Core Book, p. 190. Corrigido: 20 MOVE (não 35).",
+      "name": "Roadbike",
+      "description": "Moto comum movida a CHOOH2.",
+      "attributes": {
+        "speedMove": 20,
+        "includedUpgrades": null
+      }
+    },
+    "compact-groundcar": {
+      "page": 190,
+      "notes": "Conferido com Core Book, p. 190.",
+      "description": "Carro comum movido a CHOOH2.",
+      "attributes": {
+        "includedUpgrades": null
+      }
+    },
+    "high-perf-groundcar": {
+      "page": 190,
+      "notes": "Conferido com Core Book, p. 190.",
+      "name": "High Performance Groundcar",
+      "description": "Esportivo movido a CHOOH2.",
+      "attributes": {
+        "includedUpgrades": null
+      }
+    },
+    "armored-chassis": {
+      "page": 163,
+      "notes": "Conferido com Core Book, p. 163.",
+      "description": "Blinda o veículo com SP13. Não afeta os vidros.",
+      "attributes": {
+        "gearClass": "Moto Rank 5",
+        "requirements": "Todos os veículos"
+      }
+    },
+    "bulletproof-glass": {
+      "page": 163,
+      "notes": "Conferido com Core Book, p. 163.",
+      "description": "Os vidros viram cobertura: Thin Bulletproof Glass (15 HP). Instalado de novo, vira Thick (30 HP). Cada janela sofre dano separadamente.",
+      "attributes": {
+        "gearClass": "Moto Rank 1",
+        "requirements": "Todos os veículos"
+      }
+    },
+    "nos-nitro": {
+      "page": 163,
+      "notes": "Conferido com Core Book, p. 163. Corrigido: o compêndio dizia +10 MOVE por 3 usos.",
+      "name": "NOS",
+      "description": "Com a Ação, ganha uma Ação de Movimento extra dirigindo. Cada tanque funciona uma vez por dia e se recarrega sozinho. Cada instalação extra adiciona um tanque.",
+      "attributes": {
+        "gearClass": "Moto Rank 1",
+        "requirements": "Todos os veículos"
+      }
+    },
+    "seating-upgrade": {
+      "page": 163,
+      "notes": "Conferido com Core Book, p. 163.",
+      "description": "Adiciona dois lugares (podem ser um sidecar). Os assentos podem virar assentos ejetáveis. Pode ser instalado várias vezes, exceto em motos, jetskis e girocópteros.",
+      "attributes": {
+        "gearClass": "Moto Rank 1",
+        "requirements": "Todos, exceto motos, jetskis e girocópteros"
+      }
+    },
+    "heavy-chassis": {
+      "page": 164,
+      "notes": "Conferido com Core Book, p. 164.",
+      "description": "Adiciona 20 SDP (não afeta os vidros) e permite rebocar até 10 toneladas. Pré-requisito de upgrades pesados.",
+      "attributes": {
+        "gearClass": "Moto Rank 1",
+        "requirements": "Todos, exceto motos, jetskis e girocópteros"
+      }
+    },
+    "onboard-weapon-mount": {
+      "page": 164,
+      "notes": "Conferido com Core Book, p. 164.",
+      "name": "Vehicle Heavy Weapon Mount",
+      "description": "Transforma um assento num suporte giratório para qualquer arma de longo alcance de duas mãos, disparada e recarregada por um passageiro com a Ação. Retirar ou recolocar a arma é uma Ação. Exige Heavy Chassis.",
+      "attributes": {
+        "gearClass": "Moto Rank 5",
+        "requirements": "Heavy Chassis; todos, exceto motos, jetskis e girocópteros"
+      }
+    }
+  },
+  "additions": [
+    {
+      "tags": [],
+      "slug": "battleglove",
+      "name": "Battleglove",
+      "category": "gear",
+      "page": 347,
+      "price": 1000,
+      "description": "Luva pesada que cobre a mão e o antebraço, listada entre as armas Exóticas. Tem 3 slots de opção de Cyberarm ou Cyberlimb, acessíveis quando vestida. Vestir ou tirar é uma Ação. Instalar uma opção custa o mesmo que num Cyberarm. Opções do braço por baixo ficam inacessíveis. Não pode ser ocultada.",
+      "attributes": {
+        "gearType": "Tool",
+        "gearClass": "Arma exótica",
+        "effect": "3 slots de opção de Cyberarm."
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Core Book, p. 347."
+    },
+    {
+      "tags": [],
+      "slug": "linear-frame-sigma",
+      "name": "Linear Frame Σ (Sigma)",
+      "category": "armor",
+      "page": 354,
+      "price": 1000,
+      "description": "Exoesqueleto externo motorizado. Conectado, o BODY do usuário passa a 12 (não sobe acima disso) sem aumentar HP nem Death Save. Exige 1 Interface Plugs.",
+      "attributes": {
+        "armorType": "LinearFrame",
+        "bodyValue": 12,
+        "requirements": "1 Interface Plugs",
+        "effect": "BODY 12 enquanto conectado."
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Core Book, p. 354."
+    },
+    {
+      "tags": [],
+      "slug": "linear-frame-beta",
+      "name": "Linear Frame β (Beta)",
+      "category": "armor",
+      "page": 354,
+      "price": 5000,
+      "description": "Exoesqueleto externo motorizado. Conectado, o BODY do usuário passa a 14 (não sobe acima disso) sem aumentar HP nem Death Save. Exige 2 Interface Plugs.",
+      "attributes": {
+        "armorType": "LinearFrame",
+        "bodyValue": 14,
+        "requirements": "2 Interface Plugs",
+        "effect": "BODY 14 enquanto conectado."
+      },
+      "priceCategory": "Luxury",
+      "notes": "Conferido com Core Book, p. 354."
+    },
+    {
+      "tags": [],
+      "slug": "audio-recorder-gear",
+      "name": "Audio Recorder",
+      "category": "gear",
+      "page": 352,
+      "price": 100,
+      "description": "Grava até 24 horas de áudio num Memory Chip.",
+      "attributes": {
+        "gearType": "Electronics",
+        "effect": "Grava até 24 horas de áudio num Memory Chip."
+      },
+      "priceCategory": "Premium",
+      "notes": "Conferido com Core Book, p. 352."
+    },
+    {
+      "tags": [],
+      "slug": "cyberdeck-poor",
+      "name": "Cyberdeck (Poor Quality)",
+      "category": "gear",
+      "page": 353,
+      "price": 100,
+      "description": "Plataforma modular barata com 5 slots para Programas e Hardware. Exige Interface Plugs e Neural Link.",
+      "attributes": {
+        "gearType": "Electronics",
+        "effect": "Plataforma modular barata com 5 slots para Programas e Hardware. Exige Interface Plugs e Neural Link.",
+        "gearClass": "Cyberdeck"
+      },
+      "priceCategory": "Premium",
+      "notes": "Conferido com Core Book, p. 353."
+    },
+    {
+      "tags": [],
+      "slug": "cyberdeck-standard",
+      "name": "Cyberdeck (Standard Quality)",
+      "category": "gear",
+      "page": 353,
+      "price": 500,
+      "description": "Plataforma modular com 7 slots para Programas e Hardware. Exige Interface Plugs e Neural Link.",
+      "attributes": {
+        "gearType": "Electronics",
+        "effect": "Plataforma modular com 7 slots para Programas e Hardware. Exige Interface Plugs e Neural Link.",
+        "gearClass": "Cyberdeck"
+      },
+      "priceCategory": "Expensive",
+      "notes": "Conferido com Core Book, p. 353."
+    },
+    {
+      "tags": [],
+      "slug": "cyberdeck-excellent",
+      "name": "Cyberdeck (Excellent Quality)",
+      "category": "gear",
+      "page": 353,
+      "price": 1000,
+      "description": "Plataforma modular de ponta com 9 slots para Programas e Hardware. Exige Interface Plugs e Neural Link.",
+      "attributes": {
+        "gearType": "Electronics",
+        "effect": "Plataforma modular de ponta com 9 slots para Programas e Hardware. Exige Interface Plugs e Neural Link.",
+        "gearClass": "Cyberdeck"
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Core Book, p. 353."
+    },
+    {
+      "tags": [],
+      "slug": "drum-synthesizer",
+      "name": "Drum Synthesizer",
+      "category": "gear",
+      "page": 353,
+      "price": 500,
+      "description": "Pads ligados a um processador que simula quase qualquer bateria. Precisa de amplificação.",
+      "attributes": {
+        "gearType": "Lifestyle",
+        "effect": "Pads ligados a um processador que simula quase qualquer bateria. Precisa de amplificação."
+      },
+      "priceCategory": "Expensive",
+      "notes": "Conferido com Core Book, p. 353."
+    },
+    {
+      "tags": [],
+      "slug": "electric-guitar",
+      "name": "Electric Guitar or another Instrument",
+      "category": "gear",
+      "page": 353,
+      "price": 500,
+      "description": "Guitarra elétrica ou outro instrumento. Instrumentos eletrônicos precisam de amplificador.",
+      "attributes": {
+        "gearType": "Lifestyle",
+        "effect": "Guitarra elétrica ou outro instrumento. Instrumentos eletrônicos precisam de amplificador."
+      },
+      "priceCategory": "Expensive",
+      "notes": "Conferido com Core Book, p. 353."
+    },
+    {
+      "tags": [],
+      "slug": "food-stick",
+      "name": "Food Stick",
+      "category": "gear",
+      "page": 353,
+      "price": 10,
+      "description": "Barra de comida seca em vários sabores (horríveis). Uma refeição.",
+      "attributes": {
+        "gearType": "Survival",
+        "effect": "Barra de comida seca em vários sabores (horríveis). Uma refeição."
+      },
+      "priceCategory": "Cheap",
+      "notes": "Conferido com Core Book, p. 353."
+    },
+    {
+      "tags": [],
+      "slug": "glow-paint",
+      "name": "Glow Paint",
+      "category": "gear",
+      "page": 353,
+      "price": 20,
+      "description": "Tinta spray que brilha no escuro, para marcar lugares, arte ou pichação.",
+      "attributes": {
+        "gearType": "Tool",
+        "effect": "Tinta spray que brilha no escuro, para marcar lugares, arte ou pichação."
+      },
+      "priceCategory": "Everyday",
+      "notes": "Conferido com Core Book, p. 353."
+    },
+    {
+      "tags": [],
+      "slug": "glow-stick",
+      "name": "Glow Stick",
+      "category": "gear",
+      "page": 353,
+      "price": 10,
+      "description": "Bastão de luz que ilumina 4 m/yds por até 10 horas. Uso único.",
+      "attributes": {
+        "gearType": "Survival",
+        "effect": "Bastão de luz que ilumina 4 m/yds por até 10 horas. Uso único."
+      },
+      "priceCategory": "Cheap",
+      "notes": "Conferido com Core Book, p. 353."
+    },
+    {
+      "tags": [],
+      "slug": "kibble-pack",
+      "name": "Kibble Pack",
+      "category": "gear",
+      "page": 354,
+      "price": 10,
+      "description": "Pacote de cereal seco tipo ração. Uma refeição.",
+      "attributes": {
+        "gearType": "Survival",
+        "effect": "Pacote de cereal seco tipo ração. Uma refeição."
+      },
+      "priceCategory": "Cheap",
+      "notes": "Conferido com Core Book, p. 354."
+    },
+    {
+      "tags": [],
+      "slug": "mre",
+      "name": "MRE",
+      "category": "gear",
+      "page": 354,
+      "price": 10,
+      "description": "Refeição autoaquecida: adicione água e, em 2 minutos, uma refeição quente.",
+      "attributes": {
+        "gearType": "Survival",
+        "effect": "Refeição autoaquecida: adicione água e, em 2 minutos, uma refeição quente."
+      },
+      "priceCategory": "Cheap",
+      "notes": "Conferido com Core Book, p. 354."
+    },
+    {
+      "tags": [],
+      "slug": "radar-detector-gear",
+      "name": "Radar Detector",
+      "category": "gear",
+      "page": 354,
+      "price": 500,
+      "description": "Apita se houver um feixe de radar ativo a até 100 m/yds.",
+      "attributes": {
+        "gearType": "Electronics",
+        "effect": "Apita se houver um feixe de radar ativo a até 100 m/yds."
+      },
+      "priceCategory": "Expensive",
+      "notes": "Conferido com Core Book, p. 354."
+    },
+    {
+      "tags": [],
+      "slug": "radio-communicator-gear",
+      "name": "Radio Communicator",
+      "category": "gear",
+      "page": 354,
+      "price": 100,
+      "description": "Fone para comunicação por rádio, alcance de 1 milha.",
+      "attributes": {
+        "gearType": "Electronics",
+        "effect": "Fone para comunicação por rádio, alcance de 1 milha."
+      },
+      "priceCategory": "Premium",
+      "notes": "Conferido com Core Book, p. 354."
+    },
+    {
+      "tags": [],
+      "slug": "radio-scanner-music-player-gear",
+      "name": "Radio Scanner/Music Player",
+      "category": "gear",
+      "page": 354,
+      "price": 50,
+      "description": "Toca música do Data Pool ou de um Memory Chip e varre bandas de rádio em uso a até 1 milha.",
+      "attributes": {
+        "gearType": "Electronics",
+        "effect": "Toca música do Data Pool ou de um Memory Chip e varre bandas de rádio em uso a até 1 milha."
+      },
+      "priceCategory": "Costly",
+      "notes": "Conferido com Core Book, p. 354."
+    },
+    {
+      "tags": [],
+      "slug": "vial-of-biotoxin",
+      "name": "Vial of Biotoxin",
+      "category": "gear",
+      "page": 355,
+      "price": 500,
+      "description": "Como Ação, cobre uma arma corpo a corpo Leve por 30 minutos: em vez do dano, quem for atingido faz Resist Torture/Drugs DV15 ou sofre 3d6 direto no HP.",
+      "attributes": {
+        "gearType": "Medical",
+        "effect": "Como Ação, cobre uma arma corpo a corpo Leve por 30 minutos: em vez do dano, quem for atingido faz Resist Torture/Drugs DV15 ou sofre 3d6 direto no HP."
+      },
+      "priceCategory": "Expensive",
+      "notes": "Conferido com Core Book, p. 355."
+    },
+    {
+      "tags": [],
+      "slug": "vial-of-poison",
+      "name": "Vial of Poison",
+      "category": "gear",
+      "page": 355,
+      "price": 100,
+      "description": "Como Ação, cobre uma arma corpo a corpo Leve por 30 minutos: em vez do dano, quem for atingido faz Resist Torture/Drugs DV13 ou sofre 2d6 direto no HP.",
+      "attributes": {
+        "gearType": "Medical",
+        "effect": "Como Ação, cobre uma arma corpo a corpo Leve por 30 minutos: em vez do dano, quem for atingido faz Resist Torture/Drugs DV13 ou sofre 2d6 direto no HP."
+      },
+      "priceCategory": "Premium",
+      "notes": "Conferido com Core Book, p. 355."
+    },
+    {
+      "tags": [],
+      "slug": "boost",
+      "name": "Boost",
+      "category": "drugs",
+      "page": 357,
+      "price": 50,
+      "priceNote": "Por dose",
+      "description": "Droga que aumenta a inteligência.",
+      "attributes": {
+        "classification": "Street",
+        "resistDv": 17,
+        "duration": "24 horas",
+        "durationMinutes": 1440,
+        "primaryEffect": "Por 24 horas, INT +2 (pode passar de 8).",
+        "sideEffects": "Efeito secundário (DV17): vício. Viciado, INT -2."
+      },
+      "priceCategory": "Costly",
+      "notes": "Conferido com Core Book, p. 357."
+    },
+    {
+      "tags": [],
+      "slug": "memory-chip-chipware",
+      "name": "Memory Chip (Chipware)",
+      "category": "cyberware",
+      "page": 359,
+      "price": 10,
+      "description": "Chipware padrão de armazenamento. Num Chipware Socket, o cyberware do usuário grava e lê dados nele.",
+      "attributes": {
+        "cyberwareType": "Neuralware",
+        "bodyLocation": "NervousSystem",
+        "installLocation": "Socket",
+        "humanityLoss": 0,
+        "humanityLossDice": null,
+        "foundational": false,
+        "requiresPair": false,
+        "requirements": "Chipware Socket",
+        "effect": "Chipware padrão de armazenamento. Num Chipware Socket, o cyberware do usuário grava e lê dados nele.",
+        "requiresItem": "chipware-socket"
+      },
+      "priceCategory": "Cheap",
+      "notes": "Conferido com Core Book, p. 359."
+    },
+    {
+      "tags": [],
+      "slug": "standard-hand",
+      "name": "Standard Hand",
+      "category": "cyberware",
+      "page": 364,
+      "price": 100,
+      "description": "Parece uma mão normal. Num braço de carne, não conta como peça de cyberware do braço. Não ocupa slot de opção. Todo Cyberarm já vem com uma.",
+      "attributes": {
+        "cyberwareType": "LimbOption",
+        "bodyLocation": "Hand",
+        "installLocation": "Clinic",
+        "humanityLoss": 2,
+        "humanityLossDice": "1d6/2",
+        "foundational": false,
+        "requiresPair": false,
+        "requirements": "Clinic",
+        "effect": "Parece uma mão normal. Num braço de carne, não conta como peça de cyberware do braço. Não ocupa slot de opção. Todo Cyberarm já vem com uma.",
+        "requiresItem": "cyberarm",
+        "slotsRequired": 0
+      },
+      "priceCategory": "Premium",
+      "notes": "Conferido com Core Book, p. 364."
+    },
+    {
+      "tags": [],
+      "slug": "standard-foot",
+      "name": "Standard Foot",
+      "category": "cyberware",
+      "page": 366,
+      "price": 100,
+      "description": "Parece um pé normal. Não ocupa slot de opção. Todo Cyberleg já vem com um.",
+      "attributes": {
+        "cyberwareType": "LimbOption",
+        "bodyLocation": "Leg",
+        "installLocation": "Clinic",
+        "humanityLoss": 2,
+        "humanityLossDice": "1d6/2",
+        "foundational": false,
+        "requiresPair": false,
+        "requirements": "Clinic",
+        "effect": "Parece um pé normal. Não ocupa slot de opção. Todo Cyberleg já vem com um.",
+        "requiresItem": "cyberleg",
+        "slotsRequired": 0
+      },
+      "priceCategory": "Premium",
+      "notes": "Conferido com Core Book, p. 366."
+    },
+    {
+      "tags": [],
+      "slug": "plastic-covering",
+      "name": "Plastic Covering",
+      "category": "cyberware",
+      "page": 366,
+      "price": 100,
+      "description": "Revestimento plástico para Cyberlimb, em qualquer cor ou padrão. Não ocupa slot de opção.",
+      "attributes": {
+        "cyberwareType": "LimbOption",
+        "bodyLocation": "Arm",
+        "installLocation": "Mall",
+        "humanityLoss": 0,
+        "humanityLossDice": null,
+        "foundational": false,
+        "requiresPair": false,
+        "requirements": "Mall",
+        "effect": "Revestimento plástico para Cyberlimb, em qualquer cor ou padrão. Não ocupa slot de opção.",
+        "slotsRequired": 0
+      },
+      "priceCategory": "Premium",
+      "notes": "Conferido com Core Book, p. 366."
+    },
+    {
+      "tags": [],
+      "slug": "realskinn-covering",
+      "name": "Realskinn™ Covering",
+      "category": "cyberware",
+      "page": 366,
+      "price": 500,
+      "description": "Revestimento de pele artificial para Cyberlimb, indistinguível de pele natural. Não ocupa slot de opção.",
+      "attributes": {
+        "cyberwareType": "LimbOption",
+        "bodyLocation": "Arm",
+        "installLocation": "Mall",
+        "humanityLoss": 0,
+        "humanityLossDice": null,
+        "foundational": false,
+        "requiresPair": false,
+        "requirements": "Mall",
+        "effect": "Revestimento de pele artificial para Cyberlimb, indistinguível de pele natural. Não ocupa slot de opção.",
+        "slotsRequired": 0
+      },
+      "priceCategory": "Expensive",
+      "notes": "Conferido com Core Book, p. 366."
+    },
+    {
+      "tags": [],
+      "slug": "superchrome-covering",
+      "name": "Superchrome® Covering",
+      "category": "cyberware",
+      "page": 366,
+      "price": 1000,
+      "description": "Revestimento cromado espelhado para Cyberlimb. Dá +2 em Wardrobe & Style (só uma vez). Não ocupa slot de opção.",
+      "attributes": {
+        "cyberwareType": "LimbOption",
+        "bodyLocation": "Arm",
+        "installLocation": "Mall",
+        "humanityLoss": 0,
+        "humanityLossDice": null,
+        "foundational": false,
+        "requiresPair": false,
+        "requirements": "Mall",
+        "effect": "Revestimento cromado espelhado para Cyberlimb. Dá +2 em Wardrobe & Style (só uma vez). Não ocupa slot de opção.",
+        "slotsRequired": 0
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Core Book, p. 366."
+    },
+    {
+      "slug": "biomonitor",
+      "name": "Biomonitor",
+      "category": "fashionware",
+      "manufacturer": null,
+      "page": 358,
+      "price": 100,
+      "priceCategory": "Premium",
+      "description": "Implante subdérmico com leitura em LED de pulso, temperatura, respiração, glicemia etc. Pode se ligar ao Agent para acompanhar a saúde.",
+      "notes": "Conferido com Core Book, p. 358. Substitui o registro de demonstração de mesmo nome.",
+      "tags": [],
+      "attributes": {
+        "fashionType": "Display",
+        "bodyArea": "Skin",
+        "installLocation": "Mall",
+        "humanityLoss": 0,
+        "visualEffect": "Implante subdérmico com leitura em LED de pulso, temperatura, respiração, glicemia etc.",
+        "functionalEffect": "Pode se ligar ao Agent para acompanhar a saúde."
+      }
+    },
+    {
+      "slug": "chemskin",
+      "name": "Chemskin",
+      "category": "fashionware",
+      "manufacturer": null,
+      "page": 358,
+      "price": 100,
+      "priceCategory": "Premium",
+      "description": "Corantes e pigmentos que mudam a cor da pele de forma permanente, opcionalmente sensíveis à temperatura ou a hormônios. Com Techhair, +2 em Personal Grooming (uma vez só).",
+      "notes": "Conferido com Core Book, p. 358. Substitui o registro de demonstração de mesmo nome.",
+      "tags": [],
+      "attributes": {
+        "fashionType": "Skin",
+        "bodyArea": "Skin",
+        "installLocation": "Mall",
+        "humanityLoss": 0,
+        "visualEffect": "Corantes e pigmentos que mudam a cor da pele de forma permanente, opcionalmente sensíveis à temperatura ou a hormônios.",
+        "functionalEffect": "Com Techhair, +2 em Personal Grooming (uma vez só)."
+      }
+    },
+    {
+      "slug": "emp-threading",
+      "name": "EMP Threading",
+      "category": "fashionware",
+      "manufacturer": null,
+      "page": 358,
+      "price": 10,
+      "priceCategory": "Cheap",
+      "description": "Linhas prateadas em padrão de circuito. Muitos acham que protegem contra EMP e radiação, mas não há prova disso.",
+      "notes": "Conferido com Core Book, p. 358. Substitui o registro de demonstração de mesmo nome.",
+      "tags": [],
+      "attributes": {
+        "fashionType": "Skin",
+        "bodyArea": "Skin",
+        "installLocation": "Mall",
+        "humanityLoss": 0,
+        "visualEffect": "Linhas prateadas em padrão de circuito. Muitos acham que protegem contra EMP e radiação, mas não há prova disso.",
+        "functionalEffect": null
+      }
+    },
+    {
+      "slug": "light-tattoo",
+      "name": "Light Tattoo",
+      "category": "fashionware",
+      "manufacturer": null,
+      "page": 358,
+      "price": 100,
+      "priceCategory": "Premium",
+      "description": "Adesivos subdérmicos que projetam tatuagens coloridas sob a pele. Peças maiores exigem mais instalações. Com 3 ou mais instalações, +2 em Wardrobe & Style (uma vez só).",
+      "notes": "Conferido com Core Book, p. 358. Substitui o registro de demonstração de mesmo nome.",
+      "tags": [],
+      "attributes": {
+        "fashionType": "Skin",
+        "bodyArea": "Skin",
+        "installLocation": "Mall",
+        "humanityLoss": 0,
+        "visualEffect": "Adesivos subdérmicos que projetam tatuagens coloridas sob a pele. Peças maiores exigem mais instalações.",
+        "functionalEffect": "Com 3 ou mais instalações, +2 em Wardrobe & Style (uma vez só)."
+      }
+    },
+    {
+      "slug": "shift-tacts",
+      "name": "Shift Tacts",
+      "category": "fashionware",
+      "manufacturer": null,
+      "page": 358,
+      "price": 100,
+      "priceCategory": "Premium",
+      "description": "Lentes implantadas que mudam de cor; uma escolha de cor e padrão, desativável sem Ação.",
+      "notes": "Conferido com Core Book, p. 358. Substitui o registro de demonstração de mesmo nome.",
+      "tags": [],
+      "attributes": {
+        "fashionType": "Eyes",
+        "bodyArea": "Eyes",
+        "installLocation": "Mall",
+        "humanityLoss": 0,
+        "visualEffect": "Lentes implantadas que mudam de cor; uma escolha de cor e padrão, desativável sem Ação.",
+        "functionalEffect": null
+      }
+    },
+    {
+      "slug": "skinwatch",
+      "name": "Skinwatch",
+      "category": "fashionware",
+      "manufacturer": null,
+      "page": 358,
+      "price": 100,
+      "priceCategory": "Premium",
+      "description": "Implante subdérmico com relógio e data em LED visíveis pela pele.",
+      "notes": "Conferido com Core Book, p. 358. Substitui o registro de demonstração de mesmo nome.",
+      "tags": [],
+      "attributes": {
+        "fashionType": "Display",
+        "bodyArea": "Skin",
+        "installLocation": "Mall",
+        "humanityLoss": 0,
+        "visualEffect": "Implante subdérmico com relógio e data em LED visíveis pela pele.",
+        "functionalEffect": null
+      }
+    },
+    {
+      "slug": "techhair",
+      "name": "Techhair",
+      "category": "fashionware",
+      "manufacturer": null,
+      "page": 358,
+      "price": 100,
+      "priceCategory": "Premium",
+      "description": "Cabelo artificial que emite luz colorida, opcionalmente sensível à temperatura, motorizado ou reativo a hormônios. Com Chemskin, +2 em Personal Grooming (uma vez só).",
+      "notes": "Conferido com Core Book, p. 358. Substitui o registro de demonstração de mesmo nome.",
+      "tags": [],
+      "attributes": {
+        "fashionType": "Hair",
+        "bodyArea": "Hair",
+        "installLocation": "Mall",
+        "humanityLoss": 0,
+        "visualEffect": "Cabelo artificial que emite luz colorida, opcionalmente sensível à temperatura, motorizado ou reativo a hormônios.",
+        "functionalEffect": "Com Chemskin, +2 em Personal Grooming (uma vez só)."
+      }
+    },
+    {
+      "slug": "roupa-bag-lady-chic-bottoms",
+      "name": "Parte de baixo Bag Lady Chic",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 20,
+      "priceCategory": "Everyday",
+      "description": "Bottoms no estilo Bag Lady Chic (Homeless, Ragged, Vagrant). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Bottom",
+        "clothingStyle": "BagLadyChic",
+        "effect": "Estilo Bag Lady Chic: Homeless, Ragged, Vagrant."
+      }
+    },
+    {
+      "slug": "roupa-bag-lady-chic-top",
+      "name": "Parte de cima Bag Lady Chic",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 10,
+      "priceCategory": "Cheap",
+      "description": "Top no estilo Bag Lady Chic (Homeless, Ragged, Vagrant). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Top",
+        "clothingStyle": "BagLadyChic",
+        "effect": "Estilo Bag Lady Chic: Homeless, Ragged, Vagrant."
+      }
+    },
+    {
+      "slug": "roupa-bag-lady-chic-jacket",
+      "name": "Jaqueta Bag Lady Chic",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 20,
+      "priceCategory": "Everyday",
+      "description": "Jacket no estilo Bag Lady Chic (Homeless, Ragged, Vagrant). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Jacket",
+        "clothingStyle": "BagLadyChic",
+        "effect": "Estilo Bag Lady Chic: Homeless, Ragged, Vagrant."
+      }
+    },
+    {
+      "slug": "roupa-bag-lady-chic-footwear",
+      "name": "Calçado Bag Lady Chic",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 20,
+      "priceCategory": "Everyday",
+      "description": "Footwear no estilo Bag Lady Chic (Homeless, Ragged, Vagrant). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Footwear",
+        "clothingStyle": "BagLadyChic",
+        "effect": "Estilo Bag Lady Chic: Homeless, Ragged, Vagrant."
+      }
+    },
+    {
+      "slug": "roupa-bag-lady-chic-jewelry",
+      "name": "Joias Bag Lady Chic",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 20,
+      "priceCategory": "Everyday",
+      "description": "Jewelry no estilo Bag Lady Chic (Homeless, Ragged, Vagrant). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Jewelry",
+        "clothingStyle": "BagLadyChic",
+        "effect": "Estilo Bag Lady Chic: Homeless, Ragged, Vagrant."
+      }
+    },
+    {
+      "slug": "roupa-bag-lady-chic-mirrorshades",
+      "name": "Óculos espelhados Bag Lady Chic",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 20,
+      "priceCategory": "Everyday",
+      "description": "Mirrorshades no estilo Bag Lady Chic (Homeless, Ragged, Vagrant). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Eyewear",
+        "clothingStyle": "BagLadyChic",
+        "effect": "Estilo Bag Lady Chic: Homeless, Ragged, Vagrant."
+      }
+    },
+    {
+      "slug": "roupa-bag-lady-chic-glasses",
+      "name": "Óculos Bag Lady Chic",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 10,
+      "priceCategory": "Cheap",
+      "description": "Glasses no estilo Bag Lady Chic (Homeless, Ragged, Vagrant). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Eyewear",
+        "clothingStyle": "BagLadyChic",
+        "effect": "Estilo Bag Lady Chic: Homeless, Ragged, Vagrant."
+      }
+    },
+    {
+      "slug": "roupa-bag-lady-chic-contact-lenses",
+      "name": "Lentes de contato Bag Lady Chic",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 10,
+      "priceCategory": "Cheap",
+      "description": "Contact Lenses no estilo Bag Lady Chic (Homeless, Ragged, Vagrant). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Eyewear",
+        "clothingStyle": "BagLadyChic",
+        "effect": "Estilo Bag Lady Chic: Homeless, Ragged, Vagrant."
+      }
+    },
+    {
+      "slug": "roupa-bag-lady-chic-hats",
+      "name": "Chapéu Bag Lady Chic",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 10,
+      "priceCategory": "Cheap",
+      "description": "Hats no estilo Bag Lady Chic (Homeless, Ragged, Vagrant). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Headwear",
+        "clothingStyle": "BagLadyChic",
+        "effect": "Estilo Bag Lady Chic: Homeless, Ragged, Vagrant."
+      }
+    },
+    {
+      "slug": "roupa-gang-colors-bottoms",
+      "name": "Parte de baixo Gang Colors",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 50,
+      "priceCategory": "Costly",
+      "description": "Bottoms no estilo Gang Colors (Dangerous, Violent, Rebellious). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Bottom",
+        "clothingStyle": "GangColors",
+        "effect": "Estilo Gang Colors: Dangerous, Violent, Rebellious."
+      }
+    },
+    {
+      "slug": "roupa-gang-colors-top",
+      "name": "Parte de cima Gang Colors",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 20,
+      "priceCategory": "Everyday",
+      "description": "Top no estilo Gang Colors (Dangerous, Violent, Rebellious). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Top",
+        "clothingStyle": "GangColors",
+        "effect": "Estilo Gang Colors: Dangerous, Violent, Rebellious."
+      }
+    },
+    {
+      "slug": "roupa-gang-colors-jacket",
+      "name": "Jaqueta Gang Colors",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 50,
+      "priceCategory": "Costly",
+      "description": "Jacket no estilo Gang Colors (Dangerous, Violent, Rebellious). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Jacket",
+        "clothingStyle": "GangColors",
+        "effect": "Estilo Gang Colors: Dangerous, Violent, Rebellious."
+      }
+    },
+    {
+      "slug": "roupa-gang-colors-footwear",
+      "name": "Calçado Gang Colors",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 20,
+      "priceCategory": "Everyday",
+      "description": "Footwear no estilo Gang Colors (Dangerous, Violent, Rebellious). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Footwear",
+        "clothingStyle": "GangColors",
+        "effect": "Estilo Gang Colors: Dangerous, Violent, Rebellious."
+      }
+    },
+    {
+      "slug": "roupa-gang-colors-jewelry",
+      "name": "Joias Gang Colors",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 50,
+      "priceCategory": "Costly",
+      "description": "Jewelry no estilo Gang Colors (Dangerous, Violent, Rebellious). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Jewelry",
+        "clothingStyle": "GangColors",
+        "effect": "Estilo Gang Colors: Dangerous, Violent, Rebellious."
+      }
+    },
+    {
+      "slug": "roupa-gang-colors-mirrorshades",
+      "name": "Óculos espelhados Gang Colors",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 20,
+      "priceCategory": "Everyday",
+      "description": "Mirrorshades no estilo Gang Colors (Dangerous, Violent, Rebellious). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Eyewear",
+        "clothingStyle": "GangColors",
+        "effect": "Estilo Gang Colors: Dangerous, Violent, Rebellious."
+      }
+    },
+    {
+      "slug": "roupa-gang-colors-glasses",
+      "name": "Óculos Gang Colors",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 20,
+      "priceCategory": "Everyday",
+      "description": "Glasses no estilo Gang Colors (Dangerous, Violent, Rebellious). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Eyewear",
+        "clothingStyle": "GangColors",
+        "effect": "Estilo Gang Colors: Dangerous, Violent, Rebellious."
+      }
+    },
+    {
+      "slug": "roupa-gang-colors-contact-lenses",
+      "name": "Lentes de contato Gang Colors",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 10,
+      "priceCategory": "Cheap",
+      "description": "Contact Lenses no estilo Gang Colors (Dangerous, Violent, Rebellious). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Eyewear",
+        "clothingStyle": "GangColors",
+        "effect": "Estilo Gang Colors: Dangerous, Violent, Rebellious."
+      }
+    },
+    {
+      "slug": "roupa-gang-colors-hats",
+      "name": "Chapéu Gang Colors",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 10,
+      "priceCategory": "Cheap",
+      "description": "Hats no estilo Gang Colors (Dangerous, Violent, Rebellious). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Headwear",
+        "clothingStyle": "GangColors",
+        "effect": "Estilo Gang Colors: Dangerous, Violent, Rebellious."
+      }
+    },
+    {
+      "slug": "roupa-generic-chic-bottoms",
+      "name": "Parte de baixo Generic Chic",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 50,
+      "priceCategory": "Costly",
+      "description": "Bottoms no estilo Generic Chic (Standard, Colorful, Modular). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Bottom",
+        "clothingStyle": "GenericChic",
+        "effect": "Estilo Generic Chic: Standard, Colorful, Modular."
+      }
+    },
+    {
+      "slug": "roupa-generic-chic-top",
+      "name": "Parte de cima Generic Chic",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 20,
+      "priceCategory": "Everyday",
+      "description": "Top no estilo Generic Chic (Standard, Colorful, Modular). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Top",
+        "clothingStyle": "GenericChic",
+        "effect": "Estilo Generic Chic: Standard, Colorful, Modular."
+      }
+    },
+    {
+      "slug": "roupa-generic-chic-jacket",
+      "name": "Jaqueta Generic Chic",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 50,
+      "priceCategory": "Costly",
+      "description": "Jacket no estilo Generic Chic (Standard, Colorful, Modular). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Jacket",
+        "clothingStyle": "GenericChic",
+        "effect": "Estilo Generic Chic: Standard, Colorful, Modular."
+      }
+    },
+    {
+      "slug": "roupa-generic-chic-footwear",
+      "name": "Calçado Generic Chic",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 20,
+      "priceCategory": "Everyday",
+      "description": "Footwear no estilo Generic Chic (Standard, Colorful, Modular). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Footwear",
+        "clothingStyle": "GenericChic",
+        "effect": "Estilo Generic Chic: Standard, Colorful, Modular."
+      }
+    },
+    {
+      "slug": "roupa-generic-chic-jewelry",
+      "name": "Joias Generic Chic",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 50,
+      "priceCategory": "Costly",
+      "description": "Jewelry no estilo Generic Chic (Standard, Colorful, Modular). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Jewelry",
+        "clothingStyle": "GenericChic",
+        "effect": "Estilo Generic Chic: Standard, Colorful, Modular."
+      }
+    },
+    {
+      "slug": "roupa-generic-chic-mirrorshades",
+      "name": "Óculos espelhados Generic Chic",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 20,
+      "priceCategory": "Everyday",
+      "description": "Mirrorshades no estilo Generic Chic (Standard, Colorful, Modular). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Eyewear",
+        "clothingStyle": "GenericChic",
+        "effect": "Estilo Generic Chic: Standard, Colorful, Modular."
+      }
+    },
+    {
+      "slug": "roupa-generic-chic-glasses",
+      "name": "Óculos Generic Chic",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 20,
+      "priceCategory": "Everyday",
+      "description": "Glasses no estilo Generic Chic (Standard, Colorful, Modular). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Eyewear",
+        "clothingStyle": "GenericChic",
+        "effect": "Estilo Generic Chic: Standard, Colorful, Modular."
+      }
+    },
+    {
+      "slug": "roupa-generic-chic-contact-lenses",
+      "name": "Lentes de contato Generic Chic",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 10,
+      "priceCategory": "Cheap",
+      "description": "Contact Lenses no estilo Generic Chic (Standard, Colorful, Modular). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Eyewear",
+        "clothingStyle": "GenericChic",
+        "effect": "Estilo Generic Chic: Standard, Colorful, Modular."
+      }
+    },
+    {
+      "slug": "roupa-generic-chic-hats",
+      "name": "Chapéu Generic Chic",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 10,
+      "priceCategory": "Cheap",
+      "description": "Hats no estilo Generic Chic (Standard, Colorful, Modular). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Headwear",
+        "clothingStyle": "GenericChic",
+        "effect": "Estilo Generic Chic: Standard, Colorful, Modular."
+      }
+    },
+    {
+      "slug": "roupa-bohemian-bottoms",
+      "name": "Parte de baixo Bohemian",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 50,
+      "priceCategory": "Costly",
+      "description": "Bottoms no estilo Bohemian (Folksy, Retro, Free Spirited). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Bottom",
+        "clothingStyle": "Bohemian",
+        "effect": "Estilo Bohemian: Folksy, Retro, Free Spirited."
+      }
+    },
+    {
+      "slug": "roupa-bohemian-top",
+      "name": "Parte de cima Bohemian",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 20,
+      "priceCategory": "Everyday",
+      "description": "Top no estilo Bohemian (Folksy, Retro, Free Spirited). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Top",
+        "clothingStyle": "Bohemian",
+        "effect": "Estilo Bohemian: Folksy, Retro, Free Spirited."
+      }
+    },
+    {
+      "slug": "roupa-bohemian-jacket",
+      "name": "Jaqueta Bohemian",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 50,
+      "priceCategory": "Costly",
+      "description": "Jacket no estilo Bohemian (Folksy, Retro, Free Spirited). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Jacket",
+        "clothingStyle": "Bohemian",
+        "effect": "Estilo Bohemian: Folksy, Retro, Free Spirited."
+      }
+    },
+    {
+      "slug": "roupa-bohemian-footwear",
+      "name": "Calçado Bohemian",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 50,
+      "priceCategory": "Costly",
+      "description": "Footwear no estilo Bohemian (Folksy, Retro, Free Spirited). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Footwear",
+        "clothingStyle": "Bohemian",
+        "effect": "Estilo Bohemian: Folksy, Retro, Free Spirited."
+      }
+    },
+    {
+      "slug": "roupa-bohemian-jewelry",
+      "name": "Joias Bohemian",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 100,
+      "priceCategory": "Premium",
+      "description": "Jewelry no estilo Bohemian (Folksy, Retro, Free Spirited). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Jewelry",
+        "clothingStyle": "Bohemian",
+        "effect": "Estilo Bohemian: Folksy, Retro, Free Spirited."
+      }
+    },
+    {
+      "slug": "roupa-bohemian-mirrorshades",
+      "name": "Óculos espelhados Bohemian",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 50,
+      "priceCategory": "Costly",
+      "description": "Mirrorshades no estilo Bohemian (Folksy, Retro, Free Spirited). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Eyewear",
+        "clothingStyle": "Bohemian",
+        "effect": "Estilo Bohemian: Folksy, Retro, Free Spirited."
+      }
+    },
+    {
+      "slug": "roupa-bohemian-glasses",
+      "name": "Óculos Bohemian",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 50,
+      "priceCategory": "Costly",
+      "description": "Glasses no estilo Bohemian (Folksy, Retro, Free Spirited). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Eyewear",
+        "clothingStyle": "Bohemian",
+        "effect": "Estilo Bohemian: Folksy, Retro, Free Spirited."
+      }
+    },
+    {
+      "slug": "roupa-bohemian-contact-lenses",
+      "name": "Lentes de contato Bohemian",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 10,
+      "priceCategory": "Cheap",
+      "description": "Contact Lenses no estilo Bohemian (Folksy, Retro, Free Spirited). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Eyewear",
+        "clothingStyle": "Bohemian",
+        "effect": "Estilo Bohemian: Folksy, Retro, Free Spirited."
+      }
+    },
+    {
+      "slug": "roupa-bohemian-hats",
+      "name": "Chapéu Bohemian",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 10,
+      "priceCategory": "Cheap",
+      "description": "Hats no estilo Bohemian (Folksy, Retro, Free Spirited). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Headwear",
+        "clothingStyle": "Bohemian",
+        "effect": "Estilo Bohemian: Folksy, Retro, Free Spirited."
+      }
+    },
+    {
+      "slug": "roupa-leisurewear-bottoms",
+      "name": "Parte de baixo Leisurewear",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 100,
+      "priceCategory": "Premium",
+      "description": "Bottoms no estilo Leisurewear (Comfort, Agility, Athleticism). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Bottom",
+        "clothingStyle": "Leisurewear",
+        "effect": "Estilo Leisurewear: Comfort, Agility, Athleticism."
+      }
+    },
+    {
+      "slug": "roupa-leisurewear-top",
+      "name": "Parte de cima Leisurewear",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 20,
+      "priceCategory": "Everyday",
+      "description": "Top no estilo Leisurewear (Comfort, Agility, Athleticism). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Top",
+        "clothingStyle": "Leisurewear",
+        "effect": "Estilo Leisurewear: Comfort, Agility, Athleticism."
+      }
+    },
+    {
+      "slug": "roupa-leisurewear-jacket",
+      "name": "Jaqueta Leisurewear",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 100,
+      "priceCategory": "Premium",
+      "description": "Jacket no estilo Leisurewear (Comfort, Agility, Athleticism). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Jacket",
+        "clothingStyle": "Leisurewear",
+        "effect": "Estilo Leisurewear: Comfort, Agility, Athleticism."
+      }
+    },
+    {
+      "slug": "roupa-leisurewear-footwear",
+      "name": "Calçado Leisurewear",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 50,
+      "priceCategory": "Costly",
+      "description": "Footwear no estilo Leisurewear (Comfort, Agility, Athleticism). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Footwear",
+        "clothingStyle": "Leisurewear",
+        "effect": "Estilo Leisurewear: Comfort, Agility, Athleticism."
+      }
+    },
+    {
+      "slug": "roupa-leisurewear-jewelry",
+      "name": "Joias Leisurewear",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 100,
+      "priceCategory": "Premium",
+      "description": "Jewelry no estilo Leisurewear (Comfort, Agility, Athleticism). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Jewelry",
+        "clothingStyle": "Leisurewear",
+        "effect": "Estilo Leisurewear: Comfort, Agility, Athleticism."
+      }
+    },
+    {
+      "slug": "roupa-leisurewear-mirrorshades",
+      "name": "Óculos espelhados Leisurewear",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 50,
+      "priceCategory": "Costly",
+      "description": "Mirrorshades no estilo Leisurewear (Comfort, Agility, Athleticism). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Eyewear",
+        "clothingStyle": "Leisurewear",
+        "effect": "Estilo Leisurewear: Comfort, Agility, Athleticism."
+      }
+    },
+    {
+      "slug": "roupa-leisurewear-glasses",
+      "name": "Óculos Leisurewear",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 50,
+      "priceCategory": "Costly",
+      "description": "Glasses no estilo Leisurewear (Comfort, Agility, Athleticism). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Eyewear",
+        "clothingStyle": "Leisurewear",
+        "effect": "Estilo Leisurewear: Comfort, Agility, Athleticism."
+      }
+    },
+    {
+      "slug": "roupa-leisurewear-contact-lenses",
+      "name": "Lentes de contato Leisurewear",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 20,
+      "priceCategory": "Everyday",
+      "description": "Contact Lenses no estilo Leisurewear (Comfort, Agility, Athleticism). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Eyewear",
+        "clothingStyle": "Leisurewear",
+        "effect": "Estilo Leisurewear: Comfort, Agility, Athleticism."
+      }
+    },
+    {
+      "slug": "roupa-leisurewear-hats",
+      "name": "Chapéu Leisurewear",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 50,
+      "priceCategory": "Costly",
+      "description": "Hats no estilo Leisurewear (Comfort, Agility, Athleticism). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Headwear",
+        "clothingStyle": "Leisurewear",
+        "effect": "Estilo Leisurewear: Comfort, Agility, Athleticism."
+      }
+    },
+    {
+      "slug": "roupa-nomad-leathers-bottoms",
+      "name": "Parte de baixo Nomad Leathers",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 100,
+      "priceCategory": "Premium",
+      "description": "Bottoms no estilo Nomad Leathers (Western, Rugged, Tribal). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Bottom",
+        "clothingStyle": "NomadLeathers",
+        "effect": "Estilo Nomad Leathers: Western, Rugged, Tribal."
+      }
+    },
+    {
+      "slug": "roupa-nomad-leathers-top",
+      "name": "Parte de cima Nomad Leathers",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 20,
+      "priceCategory": "Everyday",
+      "description": "Top no estilo Nomad Leathers (Western, Rugged, Tribal). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Top",
+        "clothingStyle": "NomadLeathers",
+        "effect": "Estilo Nomad Leathers: Western, Rugged, Tribal."
+      }
+    },
+    {
+      "slug": "roupa-nomad-leathers-jacket",
+      "name": "Jaqueta Nomad Leathers",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 100,
+      "priceCategory": "Premium",
+      "description": "Jacket no estilo Nomad Leathers (Western, Rugged, Tribal). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Jacket",
+        "clothingStyle": "NomadLeathers",
+        "effect": "Estilo Nomad Leathers: Western, Rugged, Tribal."
+      }
+    },
+    {
+      "slug": "roupa-nomad-leathers-footwear",
+      "name": "Calçado Nomad Leathers",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 100,
+      "priceCategory": "Premium",
+      "description": "Footwear no estilo Nomad Leathers (Western, Rugged, Tribal). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Footwear",
+        "clothingStyle": "NomadLeathers",
+        "effect": "Estilo Nomad Leathers: Western, Rugged, Tribal."
+      }
+    },
+    {
+      "slug": "roupa-nomad-leathers-jewelry",
+      "name": "Joias Nomad Leathers",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 100,
+      "priceCategory": "Premium",
+      "description": "Jewelry no estilo Nomad Leathers (Western, Rugged, Tribal). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Jewelry",
+        "clothingStyle": "NomadLeathers",
+        "effect": "Estilo Nomad Leathers: Western, Rugged, Tribal."
+      }
+    },
+    {
+      "slug": "roupa-nomad-leathers-mirrorshades",
+      "name": "Óculos espelhados Nomad Leathers",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 50,
+      "priceCategory": "Costly",
+      "description": "Mirrorshades no estilo Nomad Leathers (Western, Rugged, Tribal). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Eyewear",
+        "clothingStyle": "NomadLeathers",
+        "effect": "Estilo Nomad Leathers: Western, Rugged, Tribal."
+      }
+    },
+    {
+      "slug": "roupa-nomad-leathers-glasses",
+      "name": "Óculos Nomad Leathers",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 50,
+      "priceCategory": "Costly",
+      "description": "Glasses no estilo Nomad Leathers (Western, Rugged, Tribal). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Eyewear",
+        "clothingStyle": "NomadLeathers",
+        "effect": "Estilo Nomad Leathers: Western, Rugged, Tribal."
+      }
+    },
+    {
+      "slug": "roupa-nomad-leathers-contact-lenses",
+      "name": "Lentes de contato Nomad Leathers",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 20,
+      "priceCategory": "Everyday",
+      "description": "Contact Lenses no estilo Nomad Leathers (Western, Rugged, Tribal). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Eyewear",
+        "clothingStyle": "NomadLeathers",
+        "effect": "Estilo Nomad Leathers: Western, Rugged, Tribal."
+      }
+    },
+    {
+      "slug": "roupa-nomad-leathers-hats",
+      "name": "Chapéu Nomad Leathers",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 100,
+      "priceCategory": "Premium",
+      "description": "Hats no estilo Nomad Leathers (Western, Rugged, Tribal). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Headwear",
+        "clothingStyle": "NomadLeathers",
+        "effect": "Estilo Nomad Leathers: Western, Rugged, Tribal."
+      }
+    },
+    {
+      "slug": "roupa-asia-pop-bottoms",
+      "name": "Parte de baixo Asia Pop",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 100,
+      "priceCategory": "Premium",
+      "description": "Bottoms no estilo Asia Pop (Bright, Costume-like, Youthful). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Bottom",
+        "clothingStyle": "AsiaPop",
+        "effect": "Estilo Asia Pop: Bright, Costume-like, Youthful."
+      }
+    },
+    {
+      "slug": "roupa-asia-pop-top",
+      "name": "Parte de cima Asia Pop",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 20,
+      "priceCategory": "Everyday",
+      "description": "Top no estilo Asia Pop (Bright, Costume-like, Youthful). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Top",
+        "clothingStyle": "AsiaPop",
+        "effect": "Estilo Asia Pop: Bright, Costume-like, Youthful."
+      }
+    },
+    {
+      "slug": "roupa-asia-pop-jacket",
+      "name": "Jaqueta Asia Pop",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 100,
+      "priceCategory": "Premium",
+      "description": "Jacket no estilo Asia Pop (Bright, Costume-like, Youthful). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Jacket",
+        "clothingStyle": "AsiaPop",
+        "effect": "Estilo Asia Pop: Bright, Costume-like, Youthful."
+      }
+    },
+    {
+      "slug": "roupa-asia-pop-footwear",
+      "name": "Calçado Asia Pop",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 100,
+      "priceCategory": "Premium",
+      "description": "Footwear no estilo Asia Pop (Bright, Costume-like, Youthful). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Footwear",
+        "clothingStyle": "AsiaPop",
+        "effect": "Estilo Asia Pop: Bright, Costume-like, Youthful."
+      }
+    },
+    {
+      "slug": "roupa-asia-pop-jewelry",
+      "name": "Joias Asia Pop",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 100,
+      "priceCategory": "Premium",
+      "description": "Jewelry no estilo Asia Pop (Bright, Costume-like, Youthful). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Jewelry",
+        "clothingStyle": "AsiaPop",
+        "effect": "Estilo Asia Pop: Bright, Costume-like, Youthful."
+      }
+    },
+    {
+      "slug": "roupa-asia-pop-mirrorshades",
+      "name": "Óculos espelhados Asia Pop",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 100,
+      "priceCategory": "Premium",
+      "description": "Mirrorshades no estilo Asia Pop (Bright, Costume-like, Youthful). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Eyewear",
+        "clothingStyle": "AsiaPop",
+        "effect": "Estilo Asia Pop: Bright, Costume-like, Youthful."
+      }
+    },
+    {
+      "slug": "roupa-asia-pop-glasses",
+      "name": "Óculos Asia Pop",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 100,
+      "priceCategory": "Premium",
+      "description": "Glasses no estilo Asia Pop (Bright, Costume-like, Youthful). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Eyewear",
+        "clothingStyle": "AsiaPop",
+        "effect": "Estilo Asia Pop: Bright, Costume-like, Youthful."
+      }
+    },
+    {
+      "slug": "roupa-asia-pop-contact-lenses",
+      "name": "Lentes de contato Asia Pop",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 100,
+      "priceCategory": "Premium",
+      "description": "Contact Lenses no estilo Asia Pop (Bright, Costume-like, Youthful). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Eyewear",
+        "clothingStyle": "AsiaPop",
+        "effect": "Estilo Asia Pop: Bright, Costume-like, Youthful."
+      }
+    },
+    {
+      "slug": "roupa-asia-pop-hats",
+      "name": "Chapéu Asia Pop",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 100,
+      "priceCategory": "Premium",
+      "description": "Hats no estilo Asia Pop (Bright, Costume-like, Youthful). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Headwear",
+        "clothingStyle": "AsiaPop",
+        "effect": "Estilo Asia Pop: Bright, Costume-like, Youthful."
+      }
+    },
+    {
+      "slug": "roupa-urban-flash-bottoms",
+      "name": "Parte de baixo Urban Flash",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 100,
+      "priceCategory": "Premium",
+      "description": "Bottoms no estilo Urban Flash (Flashy, Technological, Streetwear). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Bottom",
+        "clothingStyle": "UrbanFlash",
+        "effect": "Estilo Urban Flash: Flashy, Technological, Streetwear."
+      }
+    },
+    {
+      "slug": "roupa-urban-flash-top",
+      "name": "Parte de cima Urban Flash",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 20,
+      "priceCategory": "Everyday",
+      "description": "Top no estilo Urban Flash (Flashy, Technological, Streetwear). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Top",
+        "clothingStyle": "UrbanFlash",
+        "effect": "Estilo Urban Flash: Flashy, Technological, Streetwear."
+      }
+    },
+    {
+      "slug": "roupa-urban-flash-jacket",
+      "name": "Jaqueta Urban Flash",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 100,
+      "priceCategory": "Premium",
+      "description": "Jacket no estilo Urban Flash (Flashy, Technological, Streetwear). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Jacket",
+        "clothingStyle": "UrbanFlash",
+        "effect": "Estilo Urban Flash: Flashy, Technological, Streetwear."
+      }
+    },
+    {
+      "slug": "roupa-urban-flash-footwear",
+      "name": "Calçado Urban Flash",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 100,
+      "priceCategory": "Premium",
+      "description": "Footwear no estilo Urban Flash (Flashy, Technological, Streetwear). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Footwear",
+        "clothingStyle": "UrbanFlash",
+        "effect": "Estilo Urban Flash: Flashy, Technological, Streetwear."
+      }
+    },
+    {
+      "slug": "roupa-urban-flash-jewelry",
+      "name": "Joias Urban Flash",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 100,
+      "priceCategory": "Premium",
+      "description": "Jewelry no estilo Urban Flash (Flashy, Technological, Streetwear). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Jewelry",
+        "clothingStyle": "UrbanFlash",
+        "effect": "Estilo Urban Flash: Flashy, Technological, Streetwear."
+      }
+    },
+    {
+      "slug": "roupa-urban-flash-mirrorshades",
+      "name": "Óculos espelhados Urban Flash",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 100,
+      "priceCategory": "Premium",
+      "description": "Mirrorshades no estilo Urban Flash (Flashy, Technological, Streetwear). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Eyewear",
+        "clothingStyle": "UrbanFlash",
+        "effect": "Estilo Urban Flash: Flashy, Technological, Streetwear."
+      }
+    },
+    {
+      "slug": "roupa-urban-flash-glasses",
+      "name": "Óculos Urban Flash",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 100,
+      "priceCategory": "Premium",
+      "description": "Glasses no estilo Urban Flash (Flashy, Technological, Streetwear). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Eyewear",
+        "clothingStyle": "UrbanFlash",
+        "effect": "Estilo Urban Flash: Flashy, Technological, Streetwear."
+      }
+    },
+    {
+      "slug": "roupa-urban-flash-contact-lenses",
+      "name": "Lentes de contato Urban Flash",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 100,
+      "priceCategory": "Premium",
+      "description": "Contact Lenses no estilo Urban Flash (Flashy, Technological, Streetwear). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Eyewear",
+        "clothingStyle": "UrbanFlash",
+        "effect": "Estilo Urban Flash: Flashy, Technological, Streetwear."
+      }
+    },
+    {
+      "slug": "roupa-urban-flash-hats",
+      "name": "Chapéu Urban Flash",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 100,
+      "priceCategory": "Premium",
+      "description": "Hats no estilo Urban Flash (Flashy, Technological, Streetwear). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Headwear",
+        "clothingStyle": "UrbanFlash",
+        "effect": "Estilo Urban Flash: Flashy, Technological, Streetwear."
+      }
+    },
+    {
+      "slug": "roupa-businesswear-bottoms",
+      "name": "Parte de baixo Businesswear",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 500,
+      "priceCategory": "Expensive",
+      "description": "Bottoms no estilo Businesswear (Leadership, Presence, Authority). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Bottom",
+        "clothingStyle": "Businesswear",
+        "effect": "Estilo Businesswear: Leadership, Presence, Authority."
+      }
+    },
+    {
+      "slug": "roupa-businesswear-top",
+      "name": "Parte de cima Businesswear",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 50,
+      "priceCategory": "Costly",
+      "description": "Top no estilo Businesswear (Leadership, Presence, Authority). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Top",
+        "clothingStyle": "Businesswear",
+        "effect": "Estilo Businesswear: Leadership, Presence, Authority."
+      }
+    },
+    {
+      "slug": "roupa-businesswear-jacket",
+      "name": "Jaqueta Businesswear",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 500,
+      "priceCategory": "Expensive",
+      "description": "Jacket no estilo Businesswear (Leadership, Presence, Authority). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Jacket",
+        "clothingStyle": "Businesswear",
+        "effect": "Estilo Businesswear: Leadership, Presence, Authority."
+      }
+    },
+    {
+      "slug": "roupa-businesswear-footwear",
+      "name": "Calçado Businesswear",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 500,
+      "priceCategory": "Expensive",
+      "description": "Footwear no estilo Businesswear (Leadership, Presence, Authority). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Footwear",
+        "clothingStyle": "Businesswear",
+        "effect": "Estilo Businesswear: Leadership, Presence, Authority."
+      }
+    },
+    {
+      "slug": "roupa-businesswear-jewelry",
+      "name": "Joias Businesswear",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 5000,
+      "priceCategory": "Luxury",
+      "description": "Jewelry no estilo Businesswear (Leadership, Presence, Authority). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Jewelry",
+        "clothingStyle": "Businesswear",
+        "effect": "Estilo Businesswear: Leadership, Presence, Authority."
+      }
+    },
+    {
+      "slug": "roupa-businesswear-mirrorshades",
+      "name": "Óculos espelhados Businesswear",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 500,
+      "priceCategory": "Expensive",
+      "description": "Mirrorshades no estilo Businesswear (Leadership, Presence, Authority). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Eyewear",
+        "clothingStyle": "Businesswear",
+        "effect": "Estilo Businesswear: Leadership, Presence, Authority."
+      }
+    },
+    {
+      "slug": "roupa-businesswear-glasses",
+      "name": "Óculos Businesswear",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 500,
+      "priceCategory": "Expensive",
+      "description": "Glasses no estilo Businesswear (Leadership, Presence, Authority). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Eyewear",
+        "clothingStyle": "Businesswear",
+        "effect": "Estilo Businesswear: Leadership, Presence, Authority."
+      }
+    },
+    {
+      "slug": "roupa-businesswear-contact-lenses",
+      "name": "Lentes de contato Businesswear",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 100,
+      "priceCategory": "Premium",
+      "description": "Contact Lenses no estilo Businesswear (Leadership, Presence, Authority). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Eyewear",
+        "clothingStyle": "Businesswear",
+        "effect": "Estilo Businesswear: Leadership, Presence, Authority."
+      }
+    },
+    {
+      "slug": "roupa-businesswear-hats",
+      "name": "Chapéu Businesswear",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 500,
+      "priceCategory": "Expensive",
+      "description": "Hats no estilo Businesswear (Leadership, Presence, Authority). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Headwear",
+        "clothingStyle": "Businesswear",
+        "effect": "Estilo Businesswear: Leadership, Presence, Authority."
+      }
+    },
+    {
+      "slug": "roupa-high-fashion-bottoms",
+      "name": "Parte de baixo High Fashion",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 1000,
+      "priceCategory": "VeryExpensive",
+      "description": "Bottoms no estilo High Fashion (Exclusive, Designer, Couture). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Bottom",
+        "clothingStyle": "HighFashion",
+        "effect": "Estilo High Fashion: Exclusive, Designer, Couture."
+      }
+    },
+    {
+      "slug": "roupa-high-fashion-top",
+      "name": "Parte de cima High Fashion",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 500,
+      "priceCategory": "Expensive",
+      "description": "Top no estilo High Fashion (Exclusive, Designer, Couture). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Top",
+        "clothingStyle": "HighFashion",
+        "effect": "Estilo High Fashion: Exclusive, Designer, Couture."
+      }
+    },
+    {
+      "slug": "roupa-high-fashion-jacket",
+      "name": "Jaqueta High Fashion",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 1000,
+      "priceCategory": "VeryExpensive",
+      "description": "Jacket no estilo High Fashion (Exclusive, Designer, Couture). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Jacket",
+        "clothingStyle": "HighFashion",
+        "effect": "Estilo High Fashion: Exclusive, Designer, Couture."
+      }
+    },
+    {
+      "slug": "roupa-high-fashion-footwear",
+      "name": "Calçado High Fashion",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 5000,
+      "priceCategory": "Luxury",
+      "description": "Footwear no estilo High Fashion (Exclusive, Designer, Couture). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Footwear",
+        "clothingStyle": "HighFashion",
+        "effect": "Estilo High Fashion: Exclusive, Designer, Couture."
+      }
+    },
+    {
+      "slug": "roupa-high-fashion-jewelry",
+      "name": "Joias High Fashion",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 50000,
+      "priceCategory": "Luxury",
+      "description": "Jewelry no estilo High Fashion (Exclusive, Designer, Couture). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro. O livro imprime \"50,000eb (Luxury)\".",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Jewelry",
+        "clothingStyle": "HighFashion",
+        "effect": "Estilo High Fashion: Exclusive, Designer, Couture."
+      }
+    },
+    {
+      "slug": "roupa-high-fashion-mirrorshades",
+      "name": "Óculos espelhados High Fashion",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 1000,
+      "priceCategory": "VeryExpensive",
+      "description": "Mirrorshades no estilo High Fashion (Exclusive, Designer, Couture). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Eyewear",
+        "clothingStyle": "HighFashion",
+        "effect": "Estilo High Fashion: Exclusive, Designer, Couture."
+      }
+    },
+    {
+      "slug": "roupa-high-fashion-glasses",
+      "name": "Óculos High Fashion",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 1000,
+      "priceCategory": "VeryExpensive",
+      "description": "Glasses no estilo High Fashion (Exclusive, Designer, Couture). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Eyewear",
+        "clothingStyle": "HighFashion",
+        "effect": "Estilo High Fashion: Exclusive, Designer, Couture."
+      }
+    },
+    {
+      "slug": "roupa-high-fashion-contact-lenses",
+      "name": "Lentes de contato High Fashion",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 1000,
+      "priceCategory": "VeryExpensive",
+      "description": "Contact Lenses no estilo High Fashion (Exclusive, Designer, Couture). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Eyewear",
+        "clothingStyle": "HighFashion",
+        "effect": "Estilo High Fashion: Exclusive, Designer, Couture."
+      }
+    },
+    {
+      "slug": "roupa-high-fashion-hats",
+      "name": "Chapéu High Fashion",
+      "category": "armor",
+      "manufacturer": null,
+      "page": 356,
+      "price": 5000,
+      "priceCategory": "Luxury",
+      "description": "Hats no estilo High Fashion (Exclusive, Designer, Couture). Roupa comum, sem SP.",
+      "notes": "Conferido com Core Book, p. 356. Tabela de moda do livro.",
+      "tags": [],
+      "attributes": {
+        "armorType": "Clothing",
+        "clothingSlot": "Headwear",
+        "clothingStyle": "HighFashion",
+        "effect": "Estilo High Fashion: Exclusive, Designer, Couture."
+      }
+    },
+    {
+      "tags": [
+        "Netrunning"
+      ],
+      "slug": "nervescrub",
+      "name": "Nervescrub",
+      "category": "gear",
+      "page": 369,
+      "price": 100,
+      "description": "Attacker Anti-Pessoal (ATK 0). INT, REF e DEX do Netrunner inimigo caem 1d6 por 1 hora (mínimo 1). Efeito psicossomático, sem sequelas.",
+      "attributes": {
+        "gearType": "Program",
+        "gearClass": "Attacker",
+        "requirements": "Cyberdeck",
+        "effect": "Attacker Anti-Pessoal (ATK 0). INT, REF e DEX do Netrunner inimigo caem 1d6 por 1 hora (mínimo 1). Efeito psicossomático, sem sequelas."
+      },
+      "priceCategory": "Premium",
+      "notes": "Conferido com Core Book, p. 369."
+    },
+    {
+      "tags": [
+        "Netrunning"
+      ],
+      "slug": "vrizzbolt",
+      "name": "Vrizzbolt",
+      "category": "gear",
+      "page": 370,
+      "price": 50,
+      "description": "Attacker Anti-Pessoal (ATK 1). 1d6 direto no cérebro e -1 Ação de NET no próximo turno do alvo (mínimo 2).",
+      "attributes": {
+        "gearType": "Program",
+        "gearClass": "Attacker",
+        "requirements": "Cyberdeck",
+        "effect": "Attacker Anti-Pessoal (ATK 1). 1d6 direto no cérebro e -1 Ação de NET no próximo turno do alvo (mínimo 2)."
+      },
+      "priceCategory": "Costly",
+      "notes": "Conferido com Core Book, p. 370."
+    },
+    {
+      "tags": [
+        "Netrunning"
+      ],
+      "slug": "scorpion-black-ice",
+      "name": "Scorpion",
+      "category": "gear",
+      "page": 371,
+      "price": 100,
+      "description": "Black ICE Anti-Pessoal (PER 2, SPD 6, ATK 2, DEF 2, REZ 15). O MOVE do Netrunner inimigo cai 1d6 por 1 hora (mínimo 1).",
+      "attributes": {
+        "gearType": "BlackIce",
+        "gearClass": "Anti-Pessoal",
+        "requirements": "Cyberdeck",
+        "effect": "Black ICE Anti-Pessoal (PER 2, SPD 6, ATK 2, DEF 2, REZ 15). O MOVE do Netrunner inimigo cai 1d6 por 1 hora (mínimo 1)."
+      },
+      "priceCategory": "Premium",
+      "notes": "Conferido com Core Book, p. 371."
+    },
+    {
+      "tags": [
+        "Netrunning"
+      ],
+      "slug": "wisp",
+      "name": "Wisp",
+      "category": "gear",
+      "page": 371,
+      "price": 50,
+      "description": "Black ICE Anti-Pessoal (PER 4, SPD 4, ATK 4, DEF 2, REZ 15). 1d6 direto no cérebro e -1 Ação de NET no próximo turno (mínimo 2).",
+      "attributes": {
+        "gearType": "BlackIce",
+        "gearClass": "Anti-Pessoal",
+        "requirements": "Cyberdeck",
+        "effect": "Black ICE Anti-Pessoal (PER 4, SPD 4, ATK 4, DEF 2, REZ 15). 1d6 direto no cérebro e -1 Ação de NET no próximo turno (mínimo 2)."
+      },
+      "priceCategory": "Costly",
+      "notes": "Conferido com Core Book, p. 371."
+    },
+    {
+      "tags": [
+        "Netrunning"
+      ],
+      "slug": "backup-drive",
+      "name": "Backup Drive",
+      "category": "gear",
+      "page": 368,
+      "price": 100,
+      "description": "Salva Programas (exceto Black ICE) destruídos no instante antes do fim. Como Ação de Meat, reinstala os salvos se houver slots. Ocupa 2 slots de Hardware.",
+      "attributes": {
+        "gearType": "Electronics",
+        "gearClass": "Hardware de Cyberdeck",
+        "requirements": "Cyberdeck",
+        "effect": "Salva Programas (exceto Black ICE) destruídos no instante antes do fim. Como Ação de Meat, reinstala os salvos se houver slots. Ocupa 2 slots de Hardware."
+      },
+      "priceCategory": "Premium",
+      "notes": "Conferido com Core Book, p. 368."
+    },
+    {
+      "tags": [
+        "Netrunning"
+      ],
+      "slug": "dna-lock",
+      "name": "DNA Lock",
+      "category": "gear",
+      "page": 368,
+      "price": 100,
+      "description": "Trava o Cyberdeck por biometria; sem a chave, abrir exige Electronics/Security Tech DV17. Ocupa 2 slots de Hardware.",
+      "attributes": {
+        "gearType": "Electronics",
+        "gearClass": "Hardware de Cyberdeck",
+        "requirements": "Cyberdeck",
+        "effect": "Trava o Cyberdeck por biometria; sem a chave, abrir exige Electronics/Security Tech DV17. Ocupa 2 slots de Hardware."
+      },
+      "priceCategory": "Premium",
+      "notes": "Conferido com Core Book, p. 368."
+    },
+    {
+      "tags": [
+        "Netrunning"
+      ],
+      "slug": "hardened-circuitry",
+      "name": "Hardened Circuitry",
+      "category": "gear",
+      "page": 368,
+      "price": 100,
+      "description": "O Cyberdeck não é desativado nem destruído por EMP nem por efeitos de Programas que não sejam Black ICE.",
+      "attributes": {
+        "gearType": "Electronics",
+        "gearClass": "Hardware de Cyberdeck",
+        "requirements": "Cyberdeck",
+        "effect": "O Cyberdeck não é desativado nem destruído por EMP nem por efeitos de Programas que não sejam Black ICE."
+      },
+      "priceCategory": "Premium",
+      "notes": "Conferido com Core Book, p. 368."
+    },
+    {
+      "tags": [
+        "Netrunning"
+      ],
+      "slug": "insulated-wiring",
+      "name": "Insulated Wiring",
+      "category": "gear",
+      "page": 368,
+      "price": 100,
+      "description": "O Cyberdeck não pega fogo nem incendeia a roupa do usuário por efeito de Programa.",
+      "attributes": {
+        "gearType": "Electronics",
+        "gearClass": "Hardware de Cyberdeck",
+        "requirements": "Cyberdeck",
+        "effect": "O Cyberdeck não pega fogo nem incendeia a roupa do usuário por efeito de Programa."
+      },
+      "priceCategory": "Premium",
+      "notes": "Conferido com Core Book, p. 368."
+    },
+    {
+      "tags": [
+        "Netrunning"
+      ],
+      "slug": "krash-barrier",
+      "name": "KRASH Barrier",
+      "category": "gear",
+      "page": 368,
+      "price": 100,
+      "description": "Imunidade a efeitos de Programa que forçam Jack Out, seguro ou não. Ocupa 2 slots de Hardware.",
+      "attributes": {
+        "gearType": "Electronics",
+        "gearClass": "Hardware de Cyberdeck",
+        "requirements": "Cyberdeck",
+        "effect": "Imunidade a efeitos de Programa que forçam Jack Out, seguro ou não. Ocupa 2 slots de Hardware."
+      },
+      "priceCategory": "Premium",
+      "notes": "Conferido com Core Book, p. 368."
+    },
+    {
+      "tags": [
+        "Netrunning"
+      ],
+      "slug": "range-upgrade",
+      "name": "Range Upgrade",
+      "category": "gear",
+      "page": 368,
+      "price": 100,
+      "description": "Conecta a um ponto de acesso a até 8 m.",
+      "attributes": {
+        "gearType": "Electronics",
+        "gearClass": "Hardware de Cyberdeck",
+        "requirements": "Cyberdeck",
+        "effect": "Conecta a um ponto de acesso a até 8 m."
+      },
+      "priceCategory": "Premium",
+      "notes": "Conferido com Core Book, p. 368."
+    },
+    {
+      "tags": [],
+      "slug": "superbike",
+      "name": "Superbike",
+      "category": "vehicles",
+      "page": 190,
+      "price": 100000,
+      "description": "Moto exótica movida a CHOOH2, capaz de velocidades extremas.",
+      "attributes": {
+        "vehicleType": "Motorcycle",
+        "speedMove": 60,
+        "topSpeedMph": 300,
+        "seats": 2,
+        "sdp": 35
+      },
+      "priceCategory": "SuperLuxury",
+      "notes": "Conferido com Core Book, p. 190."
+    },
+    {
+      "tags": [],
+      "slug": "super-groundcar",
+      "name": "Super Groundcar",
+      "category": "vehicles",
+      "page": 190,
+      "price": 100000,
+      "description": "Esportivo exótico movido a CHOOH2, capaz de velocidades extremas.",
+      "attributes": {
+        "vehicleType": "SportsCar",
+        "speedMove": 60,
+        "topSpeedMph": 300,
+        "seats": 2,
+        "sdp": 50
+      },
+      "priceCategory": "SuperLuxury",
+      "notes": "Conferido com Core Book, p. 190."
+    },
+    {
+      "tags": [],
+      "slug": "jetski",
+      "name": "Jetski",
+      "category": "vehicles",
+      "page": 190,
+      "price": 20000,
+      "description": "Jetski comum movido a CHOOH2.",
+      "attributes": {
+        "vehicleType": "Boat",
+        "speedMove": 20,
+        "topSpeedMph": 60,
+        "seats": 2,
+        "sdp": 35
+      },
+      "priceCategory": "SuperLuxury",
+      "notes": "Conferido com Core Book, p. 190."
+    },
+    {
+      "tags": [],
+      "slug": "speedboat",
+      "name": "Speedboat",
+      "category": "vehicles",
+      "page": 190,
+      "price": 30000,
+      "description": "Lancha movida a CHOOH2.",
+      "attributes": {
+        "vehicleType": "Boat",
+        "speedMove": 20,
+        "topSpeedMph": 60,
+        "seats": 4,
+        "sdp": 50
+      },
+      "priceCategory": "SuperLuxury",
+      "notes": "Conferido com Core Book, p. 190."
+    },
+    {
+      "tags": [],
+      "slug": "cabin-cruiser",
+      "name": "Cabin Cruiser",
+      "category": "vehicles",
+      "page": 190,
+      "price": 60000,
+      "priceNote": "30.000eb por cômodo (mínimo 2)",
+      "description": "Barco de luxo com cômodos personalizados (2 lugares por cômodo, mínimo de dois cômodos abaixo do convés).",
+      "attributes": {
+        "vehicleType": "Boat",
+        "speedMove": 10,
+        "topSpeedMph": 15,
+        "seats": 4,
+        "sdp": 60
+      },
+      "priceCategory": "SuperLuxury",
+      "notes": "Conferido com Core Book, p. 190."
+    },
+    {
+      "tags": [],
+      "slug": "yacht",
+      "name": "Yacht",
+      "category": "vehicles",
+      "page": 190,
+      "price": 200000,
+      "priceNote": "50.000eb por cômodo (mínimo 4)",
+      "description": "Iate de luxo com cômodos personalizados para anfitrião e convidados (4 lugares por cômodo, mínimo de quatro cômodos).",
+      "attributes": {
+        "vehicleType": "Boat",
+        "speedMove": 10,
+        "topSpeedMph": 15,
+        "seats": 16,
+        "sdp": 100
+      },
+      "priceCategory": "SuperLuxury",
+      "notes": "Conferido com Core Book, p. 190."
+    },
+    {
+      "tags": [],
+      "slug": "gyrocopter",
+      "name": "Gyrocopter",
+      "category": "vehicles",
+      "page": 191,
+      "price": 20000,
+      "description": "Pequeno rotor movido a CHOOH2, querido pelos entusiastas de voo.",
+      "attributes": {
+        "vehicleType": "Gyrocopter",
+        "speedMove": 20,
+        "topSpeedMph": 100,
+        "seats": 2,
+        "sdp": 35
+      },
+      "priceCategory": "SuperLuxury",
+      "notes": "Conferido com Core Book, p. 191."
+    },
+    {
+      "tags": [],
+      "slug": "helicopter",
+      "name": "Helicopter",
+      "category": "vehicles",
+      "page": 191,
+      "price": 40000,
+      "description": "Helicóptero completo movido a CHOOH2.",
+      "attributes": {
+        "vehicleType": "Helicopter",
+        "speedMove": 40,
+        "topSpeedMph": 200,
+        "seats": 4,
+        "sdp": 60
+      },
+      "priceCategory": "SuperLuxury",
+      "notes": "Conferido com Core Book, p. 191."
+    },
+    {
+      "tags": [],
+      "slug": "av-4-aerodyne",
+      "name": "AV-4 Multipurpose Aerodyne",
+      "category": "vehicles",
+      "page": 191,
+      "price": 50000,
+      "description": "Veículo voador de motor de empuxo vertical movido a CHOOH2.",
+      "attributes": {
+        "vehicleType": "Aerodyne",
+        "speedMove": 40,
+        "topSpeedMph": 200,
+        "seats": 6,
+        "sdp": 100
+      },
+      "priceCategory": "SuperLuxury",
+      "notes": "Conferido com Core Book, p. 191."
+    },
+    {
+      "tags": [],
+      "slug": "av-9-super-aerodyne",
+      "name": "AV-9 Super Aerodyne",
+      "category": "vehicles",
+      "page": 191,
+      "price": 100000,
+      "description": "Aeródino exótico de empuxo vertical, capaz de velocidades extremas.",
+      "attributes": {
+        "vehicleType": "Aerodyne",
+        "speedMove": 60,
+        "topSpeedMph": 300,
+        "seats": 2,
+        "sdp": 60
+      },
+      "priceCategory": "SuperLuxury",
+      "notes": "Conferido com Core Book, p. 191."
+    },
+    {
+      "tags": [],
+      "slug": "aerozep",
+      "name": "Aerozep",
+      "category": "vehicles",
+      "page": 191,
+      "price": 60000,
+      "priceNote": "30.000eb por cômodo (mínimo 2)",
+      "description": "Dirigível de carga moderno, de tamanho variável, com cômodos personalizados (2 lugares por cômodo, mínimo de dois cômodos).",
+      "attributes": {
+        "vehicleType": "Aerozep",
+        "speedMove": 20,
+        "topSpeedMph": 100,
+        "seats": 4,
+        "sdp": 100
+      },
+      "priceCategory": "SuperLuxury",
+      "notes": "Conferido com Core Book, p. 191."
+    },
+    {
+      "tags": [
+        "Veículo"
+      ],
+      "slug": "communications-center",
+      "name": "Communications Center",
+      "category": "gear",
+      "page": 163,
+      "price": 1000,
+      "description": "Console com Agent de bordo e equipamentos removíveis: 6 Radio Communicators, 6 Scrambler/Descramblers, Radio Scanner/Music Player, Homing Tracer com 6 rastreadores e Audio Recorder.",
+      "attributes": {
+        "gearType": "VehicleUpgrade",
+        "gearClass": "Moto Rank 1",
+        "requirements": "Todos os veículos",
+        "effect": "Console com Agent de bordo e equipamentos removíveis: 6 Radio Communicators, 6 Scrambler/Descramblers, Radio Scanner/Music Player, Homing Tracer com 6 rastreadores e Audio Recorder."
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Core Book, p. 163. Upgrade Nomad; no mercado custa Very Expensive no Moto Rank 1 e Luxury nos demais."
+    },
+    {
+      "tags": [
+        "Veículo"
+      ],
+      "slug": "onboard-flamethrower",
+      "name": "Onboard Flamethrower",
+      "category": "gear",
+      "page": 163,
+      "price": 1000,
+      "description": "Lança-chamas montado na frente, lateral ou traseira, disparado pelo motorista com a Ação. Não recarrega em movimento nem aceita acessórios. Pode ser instalado várias vezes.",
+      "attributes": {
+        "gearType": "VehicleUpgrade",
+        "gearClass": "Moto Rank 1",
+        "requirements": "Todos os veículos",
+        "effect": "Lança-chamas montado na frente, lateral ou traseira, disparado pelo motorista com a Ação. Não recarrega em movimento nem aceita acessórios. Pode ser instalado várias vezes."
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Core Book, p. 163. Upgrade Nomad; no mercado custa Very Expensive no Moto Rank 1 e Luxury nos demais."
+    },
+    {
+      "tags": [
+        "Veículo"
+      ],
+      "slug": "onboard-machine-gun",
+      "name": "Onboard Machine Gun",
+      "category": "gear",
+      "page": 163,
+      "price": 1000,
+      "description": "Fuzil de assalto de 30 tiros, só Autofire, montado na frente e disparado pelo motorista com a Ação. Não recarrega em movimento nem aceita acessórios. Pode ser instalado várias vezes.",
+      "attributes": {
+        "gearType": "VehicleUpgrade",
+        "gearClass": "Moto Rank 1",
+        "requirements": "Todos os veículos",
+        "effect": "Fuzil de assalto de 30 tiros, só Autofire, montado na frente e disparado pelo motorista com a Ação. Não recarrega em movimento nem aceita acessórios. Pode ser instalado várias vezes."
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Core Book, p. 163. Upgrade Nomad; no mercado custa Very Expensive no Moto Rank 1 e Luxury nos demais."
+    },
+    {
+      "tags": [
+        "Veículo"
+      ],
+      "slug": "security-upgrade",
+      "name": "Security Upgrade",
+      "category": "gear",
+      "page": 163,
+      "price": 5000,
+      "description": "Fechaduras biométricas (Electronics/Security Tech DV17 para abrir sem a chave); quem falhar perto do veículo leva choque de Stun Baton. Inclui camuflagem: parado, só é visto com Perception DV17.",
+      "attributes": {
+        "gearType": "VehicleUpgrade",
+        "gearClass": "Moto Rank 5",
+        "requirements": "Todos os veículos",
+        "effect": "Fechaduras biométricas (Electronics/Security Tech DV17 para abrir sem a chave); quem falhar perto do veículo leva choque de Stun Baton. Inclui camuflagem: parado, só é visto com Perception DV17."
+      },
+      "priceCategory": "Luxury",
+      "notes": "Conferido com Core Book, p. 163. Upgrade Nomad; no mercado custa Very Expensive no Moto Rank 1 e Luxury nos demais."
+    },
+    {
+      "tags": [
+        "Veículo"
+      ],
+      "slug": "smuggling-upgrade",
+      "name": "Smuggling Upgrade",
+      "category": "gear",
+      "page": 163,
+      "price": 1000,
+      "description": "Dois Hidden Holsters (motorista e um passageiro) e um compartimento secreto grande, achado só com Conceal/Reveal Object DV17. Pode ser instalado várias vezes.",
+      "attributes": {
+        "gearType": "VehicleUpgrade",
+        "gearClass": "Moto Rank 1",
+        "requirements": "Todos, exceto motos, jetskis e girocópteros",
+        "effect": "Dois Hidden Holsters (motorista e um passageiro) e um compartimento secreto grande, achado só com Conceal/Reveal Object DV17. Pode ser instalado várias vezes."
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Core Book, p. 163. Upgrade Nomad; no mercado custa Very Expensive no Moto Rank 1 e Luxury nos demais."
+    },
+    {
+      "tags": [
+        "Veículo"
+      ],
+      "slug": "onboard-rocket-pod",
+      "name": "Onboard Rocket Pod",
+      "category": "gear",
+      "page": 164,
+      "price": 5000,
+      "description": "Lança-foguetes com tambor de 3 foguetes montado na frente, disparado pelo motorista com a Ação. Não recarrega em movimento.",
+      "attributes": {
+        "gearType": "VehicleUpgrade",
+        "gearClass": "Moto Rank 5",
+        "requirements": "Heavy Chassis; todos, exceto motos, jetskis e girocópteros",
+        "effect": "Lança-foguetes com tambor de 3 foguetes montado na frente, disparado pelo motorista com a Ação. Não recarrega em movimento."
+      },
+      "priceCategory": "Luxury",
+      "notes": "Conferido com Core Book, p. 164. Upgrade Nomad; no mercado custa Very Expensive no Moto Rank 1 e Luxury nos demais."
+    },
+    {
+      "tags": [
+        "Veículo"
+      ],
+      "slug": "onboard-melee-weapon",
+      "name": "Onboard Melee Weapon",
+      "category": "gear",
+      "page": 164,
+      "price": 1000,
+      "description": "Arma corpo a corpo Muito Pesada montada no exterior, usada pelo motorista com a Ação. Pode ser instalada várias vezes.",
+      "attributes": {
+        "gearType": "VehicleUpgrade",
+        "gearClass": "Moto Rank 1",
+        "requirements": "Veículos terrestres e aquáticos",
+        "effect": "Arma corpo a corpo Muito Pesada montada no exterior, usada pelo motorista com a Ação. Pode ser instalada várias vezes."
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Core Book, p. 164. Upgrade Nomad; no mercado custa Very Expensive no Moto Rank 1 e Luxury nos demais."
+    },
+    {
+      "tags": [
+        "Veículo"
+      ],
+      "slug": "hover-upgrade",
+      "name": "Hover Upgrade",
+      "category": "gear",
+      "page": 164,
+      "price": 5000,
+      "description": "Ventiladores na base permitem andar sobre a água na velocidade de um Cabin Cruiser.",
+      "attributes": {
+        "gearType": "VehicleUpgrade",
+        "gearClass": "Moto Rank 5",
+        "requirements": "Veículos terrestres",
+        "effect": "Ventiladores na base permitem andar sobre a água na velocidade de um Cabin Cruiser."
+      },
+      "priceCategory": "Luxury",
+      "notes": "Conferido com Core Book, p. 164. Upgrade Nomad; no mercado custa Very Expensive no Moto Rank 1 e Luxury nos demais."
+    },
+    {
+      "tags": [
+        "Veículo"
+      ],
+      "slug": "av-4-engine-upgrade",
+      "name": "AV-4 Engine Upgrade",
+      "category": "gear",
+      "page": 164,
+      "price": 5000,
+      "description": "Motor de empuxo vetorado: o veículo voa como um AV-4 e é pilotado com Pilot Air Vehicle no ar.",
+      "attributes": {
+        "gearType": "VehicleUpgrade",
+        "gearClass": "Moto Rank 7",
+        "requirements": "Veículos terrestres",
+        "effect": "Motor de empuxo vetorado: o veículo voa como um AV-4 e é pilotado com Pilot Air Vehicle no ar."
+      },
+      "priceCategory": "Luxury",
+      "notes": "Conferido com Core Book, p. 164. Upgrade Nomad; no mercado custa Very Expensive no Moto Rank 1 e Luxury nos demais."
+    },
+    {
+      "tags": [
+        "Veículo"
+      ],
+      "slug": "combat-plow",
+      "name": "Combat Plow",
+      "category": "gear",
+      "page": 164,
+      "price": 1000,
+      "description": "Abalroar com a frente não danifica o veículo nem causa Whiplash aos ocupantes. Com NOS no turno, o dano do abalroamento sobe 2d6.",
+      "attributes": {
+        "gearType": "VehicleUpgrade",
+        "gearClass": "Moto Rank 1",
+        "requirements": "Terrestres e aquáticos, exceto motos e jetskis",
+        "effect": "Abalroar com a frente não danifica o veículo nem causa Whiplash aos ocupantes. Com NOS no turno, o dano do abalroamento sobe 2d6."
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Core Book, p. 164. Upgrade Nomad; no mercado custa Very Expensive no Moto Rank 1 e Luxury nos demais."
+    },
+    {
+      "tags": [
+        "Veículo"
+      ],
+      "slug": "enhanced-interface-plug-integration",
+      "name": "Enhanced Interface Plug Integration",
+      "category": "gear",
+      "page": 165,
+      "price": 5000,
+      "description": "Dirigindo por Interface Plugs com REF 8+, você pode esquivar de ataques contra você, o passageiro ou a moto usando Evasion, como a pé.",
+      "attributes": {
+        "gearType": "VehicleUpgrade",
+        "gearClass": "Moto Rank 5",
+        "requirements": "Motos",
+        "effect": "Dirigindo por Interface Plugs com REF 8+, você pode esquivar de ataques contra você, o passageiro ou a moto usando Evasion, como a pé."
+      },
+      "priceCategory": "Luxury",
+      "notes": "Conferido com Core Book, p. 165. Upgrade Nomad; no mercado custa Very Expensive no Moto Rank 1 e Luxury nos demais."
+    },
+    {
+      "tags": [
+        "Veículo"
+      ],
+      "slug": "deployable-spike-strip",
+      "name": "Deployable Spike Strip",
+      "category": "gear",
+      "page": 165,
+      "price": 1000,
+      "description": "O motorista solta uma faixa de pregos como Ação: veículos com pneus logo atrás fazem Drive Land Vehicle DV17 ou sofrem 4d6 no ponto fraco. Reposição: 10eb.",
+      "attributes": {
+        "gearType": "VehicleUpgrade",
+        "gearClass": "Moto Rank 1",
+        "requirements": "Carros",
+        "effect": "O motorista solta uma faixa de pregos como Ação: veículos com pneus logo atrás fazem Drive Land Vehicle DV17 ou sofrem 4d6 no ponto fraco. Reposição: 10eb."
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Core Book, p. 165. Upgrade Nomad; no mercado custa Very Expensive no Moto Rank 1 e Luxury nos demais."
+    },
+    {
+      "tags": [
+        "Veículo"
+      ],
+      "slug": "housing-capacity-upgrade",
+      "name": "Housing Capacity",
+      "category": "gear",
+      "page": 165,
+      "price": 1000,
+      "description": "Em carro ou AV-4, adiciona cama, banheiro, chuveiro e cozinha (vira um Kombi). Em Cabin Cruiser, iate ou aerozep, adiciona um cômodo. Em carros compactos e esportivos exige Heavy Chassis.",
+      "attributes": {
+        "gearType": "VehicleUpgrade",
+        "gearClass": "Moto Rank 1",
+        "requirements": "Aerozep, AV-4, Cabin Cruiser, carros e iate",
+        "effect": "Em carro ou AV-4, adiciona cama, banheiro, chuveiro e cozinha (vira um Kombi). Em Cabin Cruiser, iate ou aerozep, adiciona um cômodo. Em carros compactos e esportivos exige Heavy Chassis."
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Core Book, p. 165. Upgrade Nomad; no mercado custa Very Expensive no Moto Rank 1 e Luxury nos demais."
+    }
+  ]
+}

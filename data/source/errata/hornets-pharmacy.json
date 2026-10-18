@@ -1,0 +1,111 @@
+{
+  "about": "Conferido com o PDF oficial Hornet's Pharmacy v1.11 (janeiro de 2023). Sedative e Veritas ficaram de fora: são fármacos de Medtech, sem preço de venda. Formato descrito no README (seção Dados).",
+  "source": "Hornet's Pharmacy",
+  "updates": {
+    "berserker": {
+      "page": 2,
+      "description": "Droga de combate que mantém o corpo de pé sob castigo. Deixa o usuário muito agressivo.",
+      "notes": "Conferido com Hornet's Pharmacy, p. 2.",
+      "attributes": {
+        "duration": "10 minutos", "durationMinutes": 10, "humanityLoss": 2,
+        "primaryEffect": "Por 10 minutos: Lesões Críticas não causam Dano Bônus; penalidades a STATs e Ações por estar Seriously ou Mortally Wounded caem pela metade; penalidades a Ações por perder um Facedown caem pela metade. O usuário fica muito agressivo.",
+        "sideEffects": "Efeito secundário (DV17): 2 de Perda de Humanidade e vício. Viciado, a penalidade base de Death Save aumenta em 1 permanentemente."
+      }
+    },
+    "prime-time": {
+      "page": 3,
+      "description": "Versão de Hornet da antiga droga de combate da Militech: reprime as emoções para negociar a frio.",
+      "notes": "Conferido com Hornet's Pharmacy, p. 3. O compêndio falava em +2 em negociações e depressão profunda; o PDF dá +2 em COOL e WILL.",
+      "attributes": {
+        "duration": "4 horas", "durationMinutes": 240, "humanityLoss": 1,
+        "primaryEffect": "Por 4 horas: +2 em COOL e WILL (o aumento de WILL não aumenta o HP). Ao tomar, o usuário perde 4d6 de Humanidade, devolvida quando o efeito acaba (não desce abaixo de 0). As emoções ficam reprimidas.",
+        "sideEffects": "Efeito secundário (DV17): 1 de Perda de Humanidade e vício. Viciado, o COOL cai 2 pontos sempre que não estiver sob o efeito primário."
+      }
+    },
+    "sixgun": {
+      "page": 3,
+      "description": "Droga de Netrunner para atravessar arquiteturas cheias de Black ICE.",
+      "notes": "Conferido com Hornet's Pharmacy, p. 3. O compêndio não mencionava a perda de MOVE e REF nem a Ação de NET extra.",
+      "attributes": {
+        "duration": "4 horas", "durationMinutes": 240,
+        "primaryEffect": "Por 4 horas: MOVE e REF caem 2 (mínimo 1); +2 de Speed enquanto conectado; Jack Out inseguro que não seja causado por programa conta como seguro; uma vez por turno, pode perder 1 de Humanidade para ganhar 1 Ação de NET extra.",
+        "sideEffects": "Efeito secundário (DV17): vício. Viciado, -2 de Speed enquanto conectado, a menos que esteja sob o efeito primário."
+      }
+    },
+    "timewarp": {
+      "page": 3,
+      "description": "Estimulante para ser o mais rápido no saque.",
+      "notes": "Conferido com Hornet's Pharmacy, p. 3.",
+      "attributes": {
+        "duration": "1 minuto", "durationMinutes": 1,
+        "primaryEffect": "Por 1 minuto: +3 em toda rolagem de Iniciativa. Se tomado com o usuário já na fila de Iniciativa, a Iniciativa atual sobe 3.",
+        "sideEffects": "Efeito secundário (DV17): vício. Viciado, -2 em toda rolagem de Iniciativa, a menos que esteja sob o efeito primário."
+      }
+    },
+    "bodyweight-autoinjector": {
+      "manufacturer": "Bodyweight",
+      "page": 5,
+      "description": "Reservatório subdérmico para 1 dose de Street Drug, carregado com uma Ação. Injetar custa uma Ação. Com Biomonitor, pode ser programado para injetar sozinho ao rolar Iniciativa, ao sofrer Lesão Crítica ou ao entrar num Wound State escolhido.",
+      "notes": "Conferido com Hornet's Pharmacy, p. 5.",
+      "attributes": { "effect": "Injeta 1 dose de Street Drug sob comando ou por gatilho do Biomonitor." }
+    },
+    "pursuit-security-gas-jet": {
+      "name": "Pursuit Security Inc. Gas Jet",
+      "page": 5,
+      "description": "Lançador de aerossol carregado com 3 doses de Street Drug ou 3 frascos de Poison ou Biotoxin, ocultável sem teste. Funciona como uma Escopeta Exótica de uma mão com 1 tiro, só no modo Shotgun Shell: em vez de dano, aplica a substância a todo alvo vulnerável atingido pelo cone. Nasal Filters e similares anulam o ataque. Cada disparo exige o lançador totalmente carregado e o esvazia. Requer Cyberarm e ocupa 2 slots de opção.",
+      "notes": "Conferido com Hornet's Pharmacy, p. 5.",
+      "attributes": { "effect": "Escopeta Exótica de aerossol: aplica droga ou toxina no cone (Shotgun Shell)." }
+    }
+  },
+  "additions": [
+    {
+      "slug": "suzumebachi-assassin-drone",
+      "name": "Suzumebachi Assassin Drone",
+      "category": "gear",
+      "manufacturer": "Arasaka",
+      "description": "Drone insetoide voador do tamanho de um livro de bolso, feito para assassinatos. Gatilho padrão: quando a câmera reconhece um rosto carregado no perfil, ataca até o alvo aparecer frio no infravermelho ou acabar a munição, e então foge para ser recolhido. 6 MOVE, SP 7, 10 HP. Neutralizar: Electronics/Security Tech DV17, 5 minutos. Equipado com câmera de observação (Low Light/Infrared/UV), Dartgun com 8 flechas de Biotoxin e Airhypo. Alcance: o perímetro do prédio, se ligado à arquitetura NET dele, ou 50 m/yds de uma arquitetura NET portátil.",
+      "notes": "Conferido com Hornet's Pharmacy, p. 5.",
+      "price": 5000,
+      "priceCategory": "Luxury",
+      "page": 5,
+      "tags": [],
+      "attributes": { "gearType": "Security", "gearClass": "Drone", "requirements": "Arquitetura NET (do prédio ou portátil)", "effect": "Drone assassino com Dartgun de Biotoxin e Airhypo." }
+    },
+    {
+      "slug": "delaying-compound",
+      "name": "Delaying Compound",
+      "category": "gear",
+      "description": "Misturado a um frasco de Poison ou Biotoxin com uma Ação, atrasa o efeito em 1 minuto ou 1 hora (à escolha) depois que o alvo ingere, absorve ou recebe a substância. Aplicações múltiplas não acumulam.",
+      "notes": "Conferido com Hornet's Pharmacy, p. 4.",
+      "price": 50,
+      "priceCategory": "Costly",
+      "page": 4,
+      "tags": [],
+      "attributes": { "gearType": "Medical", "gearClass": "Aditivo para veneno", "requirements": "Frasco de Poison ou Biotoxin", "effect": "Atrasa o efeito em 1 minuto ou 1 hora." }
+    },
+    {
+      "slug": "distilling-compound",
+      "name": "Distilling Compound",
+      "category": "gear",
+      "description": "Misturado a um frasco de Poison ou Biotoxin com uma Ação, aumenta em 2 a DV de Resist Torture/Drugs. Aplicações múltiplas não acumulam.",
+      "notes": "Conferido com Hornet's Pharmacy, p. 4.",
+      "price": 100,
+      "priceCategory": "Premium",
+      "page": 4,
+      "tags": [],
+      "attributes": { "gearType": "Medical", "gearClass": "Aditivo para veneno", "requirements": "Frasco de Poison ou Biotoxin", "effect": "+2 na DV de Resist Torture/Drugs." }
+    },
+    {
+      "slug": "osmosis-compound",
+      "name": "Osmosis Compound",
+      "category": "gear",
+      "description": "Misturado a um frasco de Poison ou Biotoxin com uma Ação, faz a substância agir pela pele. Pode ser passada numa superfície de até 2 pés quadrados; a primeira pessoa que tocar nela com uma parte orgânica do corpo é afetada. Dura até 1 hora e sai com água. Perceber exige Perception DV17. Aplicações múltiplas não acumulam.",
+      "notes": "Conferido com Hornet's Pharmacy, p. 4.",
+      "price": 50,
+      "priceCategory": "Costly",
+      "page": 4,
+      "tags": [],
+      "attributes": { "gearType": "Medical", "gearClass": "Aditivo para veneno", "requirements": "Frasco de Poison ou Biotoxin", "effect": "Veneno de contato numa superfície por até 1 hora." }
+    }
+  ]
+}

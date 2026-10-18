@@ -1,0 +1,119 @@
+{
+  "about": "Conferido com o PDF oficial Black Chrome+ v1.21. Formato descrito no README (seção Dados).",
+  "source": "Black Chrome+",
+  "updates": {
+    "big-dreem": {
+      "page": 3,
+      "description": "SMG Exótica que só faz Autofire (3) e só carrega tijolos próprios de 30 balas básicas (20eb cada). Depois de disparada, continua em Autofire nos dois turnos seguintes do usuário, mesmo largada ou com o usuário morto; sem uma Ação para mirar, conta com base de Autofire 10 e o Mestre escolhe os alvos. Volumosa demais para ser ocultada.",
+      "notes": "Conferido com Black Chrome+, p. 3 e tabela da p. 6. Corrigido: usa a perícia Autofire e não é ocultável.",
+      "attributes": { "skill": "Autofire", "rof": 1, "concealable": false, "calibers": ["Special"] }
+    },
+    "everest-sportmaster": {
+      "name": "Everest VentureWare SportMaster",
+      "manufacturer": "Everest VentureWare",
+      "page": 3,
+      "description": "Fuzil de assalto sem Autofire nem Fogo de Supressão que só carrega munição Small Game (25 tiros).",
+      "notes": "Conferido com Black Chrome+, p. 3 e tabela da p. 6. O compêndio citava Black Chrome como fonte."
+    },
+    "everest-survivalmaster": {
+      "name": "Everest VentureWare SurvivalMaster",
+      "manufacturer": "Everest VentureWare",
+      "page": 3,
+      "description": "Fuzil de assalto Exótico sem Autofire nem Fogo de Supressão, com pente interno de 5 tiros. Não aceita Upgrade de Tech. Desmontado (1 minuto), cabe na própria coronha e fica ocultável; montar leva mais 1 minuto.",
+      "notes": "Conferido com Black Chrome+, p. 3 e tabela da p. 6. Corrigido: é Exótico. O texto dá pente de 5; a tabela da p. 6 imprime 25.",
+      "tags": ["Exótica"],
+      "attributes": { "exotic": true }
+    },
+    "sanroo-1truluv": {
+      "name": "Sanroo Hello Cutie 1TruLuv",
+      "manufacturer": "Sanroo",
+      "page": 4,
+      "description": "Fuzil de precisão Exótico com Agent dobrável e Sniping Scope e Infrared Nightvision Scope embutidos. Mesmo Exótico, aceita munição não-básica. O Agent traz uma pseudo-IA namorada: depois de 10 mortes com o mesmo usuário, a arma passa a agir como Qualidade Excelente, mas pode desligar o bônus se for maltratada.",
+      "notes": "Conferido com Black Chrome+, p. 4 e tabela da p. 6. Corrigido: é de Qualidade Padrão até criar vínculo (10 mortes).",
+      "tags": ["Exótica", "Mira acoplada"],
+      "attributes": { "quality": "Standard" }
+    },
+    "molotov-cocktail": {
+      "page": 4,
+      "description": "Granada Incendiária artesanal arremessada com Athletics, 5d6. Não vai em lança-granadas. Se o portador sofrer dano que atravesse a armadura, cada Molotov que carrega tem 50% de chance de se perder; nesse caso não explode, mas deixa o portador Deadly On Fire e destrói os demais.",
+      "notes": "Conferido com Black Chrome+, p. 4 e tabela da p. 6.",
+      "attributes": { "effectType": "Incendiary", "calibers": [] }
+    },
+    "ww1-rifle-pistol-conversion": {
+      "name": "Timeless WW1 Rifle to Pistol Conversion",
+      "page": 4,
+      "description": "Pistola Muito Pesada de Baixa Qualidade com 5 tiros, incompatível com acessórios de pente. Entre um tiro e outro, é preciso uma Ação para manobrar o ferrolho.",
+      "notes": "Conferido com Black Chrome+, p. 4 e tabela da p. 6."
+    },
+    "junk-ammunition": {
+      "page": 3,
+      "description": "Contra alvos com SP 1 ou mais, o tiro único causa 1d6 a menos (mínimo 1d6) e o Autofire da arma cai 1 (mínimo 3). Serve em qualquer arma que use munição básica. Vendida em lotes de 50.",
+      "notes": "Conferido com Black Chrome+, p. 3 e tabela da p. 6."
+    },
+    "small-game-ammo": {
+      "page": 3,
+      "description": "O tiro único causa 2d6 a menos (mínimo 1d6) e o Autofire da arma cai 1 (mínimo 3). Só balas. Vendida em lotes de 100.",
+      "notes": "Conferido com Black Chrome+, p. 3 e tabela da p. 6."
+    }
+  },
+  "additions": [
+    {
+      "slug": "bullet-to-slug-adapter-casings",
+      "name": "Bullet to Slug Adapter Casings",
+      "category": "ammunition",
+      "manufacturer": null,
+      "description": "Estojos de metal reutilizáveis que convertem qualquer bala em slug de escopeta. Carregar 10 com o gabarito incluso é uma Ação; à mão, uma Ação por estojo.",
+      "notes": "Conferido com Black Chrome+, p. 3.",
+      "price": 100,
+      "priceNote": "Caixa com 10",
+      "priceCategory": "Premium",
+      "page": 3,
+      "tags": [],
+      "attributes": { "kind": "Accessory", "effectType": "Utility", "calibers": ["Slug"], "quantityPerPack": 10, "effect": "Converte balas em slugs." }
+    },
+    {
+      "slug": "solo-of-fortune-bodypillow",
+      "name": "Solo of Fortune Bodypillow",
+      "category": "gear",
+      "manufacturer": null,
+      "description": "Travesseiro de corpo com Solos famosos dos anos 2020, como Morgan Blackhand, Boa Boa Weyland e Adam Smasher. O do Adam Smasher é tão grande que tira uma vaga da moradia.",
+      "notes": "Conferido com Black Chrome+, p. 5.",
+      "price": 100,
+      "priceCategory": "Premium",
+      "page": 5,
+      "tags": [],
+      "attributes": { "gearType": "Lifestyle", "effect": "Item de colecionador." }
+    },
+    {
+      "slug": "scavenged-armor",
+      "name": "Scavenged Armor",
+      "category": "armor",
+      "manufacturer": null,
+      "description": "Armadura de sucata feita por Judie, comprada separadamente para cabeça ou corpo, SP11. Depois de ablatada, a SP não pode ser restaurada; com SP 0, cai do usuário.",
+      "notes": "Conferido com Black Chrome+, p. 4 e tabela da p. 6.",
+      "price": 50,
+      "priceCategory": "Costly",
+      "page": 4,
+      "tags": [],
+      "attributes": { "armorType": "BodyArmor", "sp": 11, "refPenalty": 0, "dexPenalty": 0, "movePenalty": 0, "protectedLocations": "Cabeça ou Corpo", "effect": "SP não pode ser restaurada." }
+    },
+    {
+      "slug": "piranha-smash",
+      "name": "Piranha Smash",
+      "category": "drugs",
+      "manufacturer": null,
+      "description": "Smash melhorado por um Tech para viciar menos, com sabor de limão. Só os Piranhas vendem, e não para quem eles acham otário.",
+      "notes": "Conferido com Black Chrome+, p. 4-5 e tabela da p. 6.",
+      "price": 10,
+      "priceNote": "Por dose",
+      "priceCategory": "Cheap",
+      "page": 5,
+      "tags": [],
+      "attributes": {
+        "classification": "Street", "resistDv": 9, "duration": "4 horas", "durationMinutes": 240,
+        "primaryEffect": "Por 4 horas, euforia: +2 em Dance, Contortionist, Conversation, Human Perception, Persuasion e Acting.",
+        "sideEffects": "Efeito secundário (DV9): vício em Smash, com -2 nessas mesmas perícias e fissura pela droga."
+      }
+    }
+  ]
+}

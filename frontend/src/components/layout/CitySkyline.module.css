@@ -1,0 +1,17 @@
+.skyline {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+html[data-motion='on'] .flicker {
+  animation: flicker 7s infinite;
+}
+html[data-motion='on'] .flickerSlow {
+  animation: flicker 11s infinite 2s;
+}
+html[data-motion='on'] .blink {
+  animation: flicker 3s infinite;
+}

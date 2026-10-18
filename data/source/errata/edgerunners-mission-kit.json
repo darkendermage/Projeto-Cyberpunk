@@ -1,0 +1,530 @@
+{
+  "about": "Conferido com o PDF Cyberpunk: Edgerunners Mission Kit (seção Edgerunners Armory, p. 30-36, e cartas de equipamento). As regras são para o Cyberpunk RED completo (citam CP:R). Formato descrito no README (seção Dados).",
+  "source": "Edgerunners Mission Kit",
+  "updates": {
+    "arasaka-hjke-11-yukimura": {
+      "page": 31,
+      "notes": "Conferido com Cyberpunk: Edgerunners Mission Kit, p. 31. O PDF dá os preços em \"$\". Corrigido: 3d6 com ROF 1 (o compêndio dava 2d6 com ROF 2).",
+      "description": "SMG Exótica com Rebuild Smart. Em tiro único causa 3d6 e gasta 3 balas por ataque; com menos de 3, dispara o resto e causa 2d6. Autofire (x3) com a perícia Autofire. Rebuild Smart: exige Interface Plugs ou Subdermal Grip, dá +1 no ataque e aceita Improved Smart Ammunition.",
+      "tags": [
+        "Exótica",
+        "Rebuild Smart",
+        "Autofire"
+      ],
+      "attributes": {
+        "damage": "3d6",
+        "damageDice": 3,
+        "rof": 1,
+        "exotic": true
+      }
+    },
+    "arasaka-hjsh-18-masamune": {
+      "page": 32,
+      "notes": "Conferido com Cyberpunk: Edgerunners Mission Kit, p. 32. O PDF dá os preços em \"$\". Corrigido: pente de 24 (não 25).",
+      "description": "Rifle de Assalto Exótico com Rebuild Power. Pente próprio de 24. Em tiro único causa 5d6 e gasta 3 balas; com menos de 3, esvazia o pente e causa 4d6. Autofire (x4). Rebuild Power: a Lesão Crítica causada por ela tem +5 de dano extra, e o usuário pode ricochetear tiros em cobertura com -4 para acertar alvos fora da linha de visão.",
+      "tags": [
+        "Exótica",
+        "Rebuild Power",
+        "Autofire"
+      ],
+      "attributes": {
+        "magazine": 24,
+        "exotic": true
+      }
+    },
+    "arasaka-tki-20-shingen": {
+      "page": 32,
+      "notes": "Conferido com Cyberpunk: Edgerunners Mission Kit, p. 32. O PDF dá os preços em \"$\". Corrigido: Autofire x4 (não x3), pente de 30 (não 40) e duas mãos.",
+      "description": "SMG Pesada Exótica de duas mãos com Rebuild Smart. Pente próprio de 30. Em tiro único causa 3d6 e gasta 3 balas; com menos de 3, esvazia o pente e causa 2d6. Autofire (x4). Rebuild Smart: exige Interface Plugs ou Subdermal Grip, dá +1 no ataque e aceita Improved Smart Ammunition.",
+      "tags": [
+        "Exótica",
+        "Rebuild Smart",
+        "Autofire"
+      ],
+      "attributes": {
+        "autofire": 4,
+        "magazine": 30,
+        "hands": 2,
+        "exotic": true
+      }
+    },
+    "budget-arms-carnage": {
+      "page": 32,
+      "notes": "Conferido com Cyberpunk: Edgerunners Mission Kit, p. 32. O PDF dá os preços em \"$\". Corrigido: 5 tiros (não 4) e Baixa Qualidade. O BODY 10 não é obrigatório: abaixo dele, o disparo causa Torn Muscle.",
+      "description": "Escopeta de Baixa Qualidade com Rebuild Power, 5 tiros. Slug 5d6 ou Shotgun Shell 3d6. Quem dispara sem BODY 10 sofre a Lesão Crítica Torn Muscle, se ainda não a tiver. Rebuild Power: a Lesão Crítica causada por ela tem +5 de dano extra, e o usuário pode ricochetear tiros em cobertura com -4 para acertar alvos fora da linha de visão.",
+      "tags": [
+        "Baixa Qualidade",
+        "Rebuild Power"
+      ],
+      "attributes": {
+        "magazine": 5,
+        "quality": "Poor",
+        "minBody": 10
+      }
+    },
+    "constitutional-arms-unity": {
+      "page": 32,
+      "notes": "Conferido com Cyberpunk: Edgerunners Mission Kit, p. 32. O PDF dá os preços em \"$\". Corrigido: 12 tiros (não 8).",
+      "description": "Pistola Pesada Exótica com Rebuild Power, 12 tiros. Num Aimed Shot, o dano sobe para 4d6. Rebuild Power: a Lesão Crítica causada por ela tem +5 de dano extra, e o usuário pode ricochetear tiros em cobertura com -4 para acertar alvos fora da linha de visão.",
+      "tags": [
+        "Exótica",
+        "Rebuild Power"
+      ],
+      "attributes": {
+        "magazine": 12,
+        "exotic": true
+      }
+    },
+    "kang-tao-l-69-zhuo": {
+      "page": 32,
+      "notes": "Conferido com Cyberpunk: Edgerunners Mission Kit, p. 32. O PDF dá os preços em \"$\". Corrigido: 4d6 em área com 32 cartuchos (o compêndio dava 5d6 e pente 8).",
+      "description": "Escopeta Exótica com Rebuild Smart e oito carregadores sob o cano: 32 cartuchos, só Improved Smart Shotgun Shell. Cada ataque gasta 8 cartuchos e causa 4d6 em vez de 3d6; com menos de 8, não dispara. Não dispara slugs. Rebuild Smart: exige Interface Plugs ou Subdermal Grip, dá +1 no ataque e aceita Improved Smart Ammunition.",
+      "tags": [
+        "Exótica",
+        "Rebuild Smart"
+      ],
+      "attributes": {
+        "damage": "4d6 (Shotgun Shell)",
+        "damageDice": 4,
+        "magazine": 32,
+        "exotic": true,
+        "calibers": [
+          "ShotgunShell"
+        ]
+      }
+    },
+    "militech-crusher-207x": {
+      "page": 32,
+      "notes": "Conferido com Cyberpunk: Edgerunners Mission Kit, p. 32. O PDF dá os preços em \"$\". Corrigido: 12 tiros (não 8) e só Shotgun Shell.",
+      "name": "Militech Crusher (circa 207X)",
+      "description": "Versão atualizada da Crusher de 2020. Pistola Muito Pesada Exótica com Rebuild Power, 12 tiros, só Shotgun Shell (3d6 em área). Rebuild Power: a Lesão Crítica causada por ela tem +5 de dano extra, e o usuário pode ricochetear tiros em cobertura com -4 para acertar alvos fora da linha de visão.",
+      "tags": [
+        "Exótica",
+        "Rebuild Power"
+      ],
+      "attributes": {
+        "damage": "3d6 (Shotgun Shell)",
+        "magazine": 12,
+        "calibers": [
+          "ShotgunShell"
+        ]
+      }
+    },
+    "militech-m-10af-lexington": {
+      "page": 32,
+      "notes": "Conferido com Cyberpunk: Edgerunners Mission Kit, p. 32. O PDF dá os preços em \"$\". Corrigido: 21 tiros (não 8) e não é de Qualidade Excelente.",
+      "description": "Pistola preferida da polícia de Night City desde 2030. Pistola Pesada Exótica com Rebuild Power, 21 tiros, ocultável. Rebuild Power: a Lesão Crítica causada por ela tem +5 de dano extra, e o usuário pode ricochetear tiros em cobertura com -4 para acertar alvos fora da linha de visão.",
+      "tags": [
+        "Exótica",
+        "Rebuild Power"
+      ],
+      "attributes": {
+        "magazine": 21,
+        "quality": "Standard",
+        "exotic": true
+      }
+    },
+    "militech-m-76e-omaha": {
+      "page": 33,
+      "notes": "Conferido com Cyberpunk: Edgerunners Mission Kit, p. 33. O PDF dá os preços em \"$\". Corrigido: 9 tiros (não 8).",
+      "description": "Pistola Pesada Exótica com Rebuild Tech e trilho eletromagnético, 9 tiros, ocultável. Carregada, fica assim até o fim do turno em que dispara, mantém ROF 2 e gasta até 3 balas por ataque (com menos, esvazia o pente). Rebuild Tech: mira que vê contornos através de Thin Cover; sacrificando a Ação de Movimento, carrega a arma (dura 20 rodadas ou até o disparo), e o próximo ataque é ROF 1, atravessa Thin Cover e ignora metade do SP do alvo.",
+      "tags": [
+        "Exótica",
+        "Rebuild Tech"
+      ],
+      "attributes": {
+        "magazine": 9,
+        "exotic": true
+      }
+    },
+    "rostovic-db-2-satara": {
+      "page": 33,
+      "notes": "Conferido com Cyberpunk: Edgerunners Mission Kit, p. 33. O PDF dá os preços em \"$\". O livro grafa \"Rostovi DB-2 Satara Shotgun\".",
+      "description": "Escopeta Exótica de cano duplo com Rebuild Tech: 2 tiros, um por cano, cada um com sua munição. Aceita munição Non-Basic mesmo sendo Exótica. Slug 5d6 ou Shotgun Shell 3d6. Rebuild Tech: mira que vê contornos através de Thin Cover; sacrificando a Ação de Movimento, carrega a arma (dura 20 rodadas ou até o disparo), e o próximo ataque é ROF 1, atravessa Thin Cover e ignora metade do SP do alvo.",
+      "tags": [
+        "Exótica",
+        "Rebuild Tech"
+      ],
+      "attributes": {
+        "exotic": true
+      }
+    },
+    "techtronika-rt-46-burya": {
+      "page": 33,
+      "notes": "Conferido com Cyberpunk: Edgerunners Mission Kit, p. 33. O PDF dá os preços em \"$\". Corrigido: 4 tiros (não 8); o livro não diz que é revólver.",
+      "description": "Pistola eletromagnética NeoSoviética. Pistola Muito Pesada Exótica com Rebuild Tech, 4 tiros, 4d6. Carrega sem gastar a Ação de Movimento. Quem dispara sem Grafted Muscle and Bone Lace ou Cyberarm sofre a Lesão Crítica Broken Arm, se ainda não a tiver. Rebuild Tech: mira que vê contornos através de Thin Cover; sacrificando a Ação de Movimento, carrega a arma (dura 20 rodadas ou até o disparo), e o próximo ataque é ROF 1, atravessa Thin Cover e ignora metade do SP do alvo.",
+      "tags": [
+        "Exótica",
+        "Rebuild Tech"
+      ],
+      "attributes": {
+        "magazine": 4,
+        "exotic": true
+      }
+    },
+    "techtronika-spt32-grad": {
+      "page": 33,
+      "notes": "Conferido com Cyberpunk: Edgerunners Mission Kit, p. 33. O PDF dá os preços em \"$\". Corrigido: Qualidade Excelente e Exótico.",
+      "description": "Rifle de Precisão Exótico de Qualidade Excelente com Rebuild Power, 4 tiros. Aceita munição Non-Basic mesmo sendo Exótico. Depois de cada disparo, exige uma Ação para manejar o ferrolho. Rebuild Power: a Lesão Crítica causada por ela tem +5 de dano extra, e o usuário pode ricochetear tiros em cobertura com -4 para acertar alvos fora da linha de visão.",
+      "tags": [
+        "Exótica",
+        "Qualidade Excelente",
+        "Rebuild Power"
+      ],
+      "attributes": {
+        "quality": "Excellent",
+        "exotic": true
+      }
+    },
+    "tsunami-arms-nekomata": {
+      "page": 34,
+      "notes": "Conferido com Cyberpunk: Edgerunners Mission Kit, p. 34. O PDF dá os preços em \"$\".",
+      "description": "Rifle de Precisão eletromagnético com Rebuild Tech, 4 tiros, 5d6. Carregado, a mira vê contornos e o tiro atravessa Thin e Thick Cover. Rebuild Tech: mira que vê contornos através de Thin Cover; sacrificando a Ação de Movimento, carrega a arma (dura 20 rodadas ou até o disparo), e o próximo ataque é ROF 1, atravessa Thin Cover e ignora metade do SP do alvo.",
+      "tags": [
+        "Rebuild Tech"
+      ],
+      "attributes": {
+        "damage": "5d6"
+      }
+    },
+    "gorilla-arm": {
+      "page": 35,
+      "notes": "Conferido com Cyberpunk: Edgerunners Mission Kit, p. 35. Corrigido: instalação em Hospital (não Clinic).",
+      "description": "Opção de Cyberarm que ocupa 2 slots. O punho é uma arma corpo a corpo Pesada de Qualidade Excelente, e a mão empunha armas como se o usuário tivesse BODY 11. Com dois, um em cada Cyberarm, também força portas, move Thick Cover, faz Choke e Slam como BODY 11.",
+      "attributes": {
+        "installLocation": "Hospital",
+        "slotsRequired": 2,
+        "requirements": "Cyberarm; Hospital",
+        "effect": "Punho Heavy Melee EQ; empunha armas como BODY 11."
+      }
+    },
+    "mantis-blade": {
+      "page": 35,
+      "notes": "Conferido com Cyberpunk: Edgerunners Mission Kit, p. 35. Corrigido: instalação em Hospital (não Clinic).",
+      "description": "Opção de Cyberarm que ocupa 2 slots. Lâmina de uma mão, arma corpo a corpo Pesada de Qualidade Excelente, ocultável sem teste, sacada e guardada sem Ação; levantada, a mão desse braço não segura nada. Com duas, em Cyberarms diferentes, anula a penalidade de movimento ao escalar.",
+      "attributes": {
+        "installLocation": "Hospital",
+        "slotsRequired": 2,
+        "requirements": "Cyberarm; Hospital",
+        "effect": "Lâmina retrátil Heavy Melee EQ."
+      }
+    },
+    "monowire": {
+      "page": 35,
+      "notes": "Conferido com Cyberpunk: Edgerunners Mission Kit, p. 35. Corrigido: HL 7 (2d6), não 14.",
+      "description": "Opção de Cyberarm. Chicote de monofilamento ocultável sem teste: arma corpo a corpo Pesada Exótica de uma mão que ataca a até 6 m/yds. Quando causa Lesão Crítica, o atacante rola duas vezes na tabela e escolhe.",
+      "attributes": {
+        "humanityLoss": 7,
+        "humanityLossDice": "2d6",
+        "requirements": "Cyberarm; Clinic",
+        "effect": "Chicote Heavy Melee Exótico com alcance de 6 m/yds."
+      }
+    }
+  },
+  "additions": [
+    {
+      "tags": [],
+      "manufacturer": null,
+      "slug": "berserk-implant",
+      "name": "Berserk Implant",
+      "category": "cyberware",
+      "page": 34,
+      "price": 1000,
+      "description": "Opção de Neuralware que regula hormônios. Ativado com uma Ação, o usuário ignora os efeitos de Seriously e Mortally Wounded por 60 segundos (20 rodadas), mas Mortally Wounded ainda faz Death Saves. Depois, só pode ser ativado de novo em 1 hora.",
+      "attributes": {
+        "foundational": false,
+        "requiresPair": false,
+        "installLocation": "Clinic",
+        "humanityLoss": 7,
+        "humanityLossDice": "2d6",
+        "cyberwareType": "Neuralware",
+        "bodyLocation": "NervousSystem",
+        "slotsRequired": 1,
+        "requiresItem": "neural-link",
+        "requirements": "Neural Link; Clinic",
+        "effect": "Ignora Seriously e Mortally Wounded por 20 rodadas."
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Cyberpunk: Edgerunners Mission Kit, p. 34. O PDF dá os preços em \"$\". Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "slug": "davids-experimental-sandevistan",
+      "name": "David's Experimental Sandevistan",
+      "category": "cyberware",
+      "page": 34,
+      "price": 250000,
+      "description": "Opção de Neuralware, Borgware e Speedware que ocupa 2 slots. Há poucos no mundo. Cada ativação, sem Ação, causa 2d6 de Perda de Humanidade. No início do combate, o usuário vai direto ao topo da Iniciativa; durante o combate, passa ao topo da fila; no próprio turno, ganha uma Ação de Movimento ou outra Ação extra. Com Humanidade negativa, ativá-lo causa dano direto no HP igual à HL, e o personagem entra em Ciberpsicose Extrema. Só uma Speedware por vez.",
+      "attributes": {
+        "foundational": false,
+        "requiresPair": false,
+        "installLocation": "Hospital",
+        "humanityLoss": 14,
+        "humanityLossDice": "4d6",
+        "cyberwareType": "Neuralware",
+        "bodyLocation": "NervousSystem",
+        "slotsRequired": 2,
+        "requiresItem": "neural-link",
+        "requirements": "Neural Link (2 slots); Hospital",
+        "effect": "Vai ao topo da Iniciativa e ganha uma Ação extra; 2d6 de HL por ativação."
+      },
+      "priceCategory": "SuperLuxury",
+      "notes": "Conferido com Cyberpunk: Edgerunners Mission Kit, p. 34. O PDF dá os preços em \"$\". Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "slug": "ex-disk",
+      "name": "Ex-Disk",
+      "category": "cyberware",
+      "page": 35,
+      "price": 1000,
+      "description": "Neuralware que amplia a capacidade de Netrunning. Cada instalação dá 1 slot só de Hardware, que conta como instalado no Cyberdeck ligado ao Neuroport Cyberdeck Port. Com dois ou mais, o usuário ganha uma Ação de NET extra por turno quando ligado fisicamente a um ponto de acesso pelo Personal Link (Interface Plug).",
+      "attributes": {
+        "foundational": false,
+        "requiresPair": false,
+        "installLocation": "Hospital",
+        "humanityLoss": 3,
+        "humanityLossDice": "1d6",
+        "cyberwareType": "Neuralware",
+        "bodyLocation": "NervousSystem",
+        "requiresItem": "neuroport-cyberdeck-port",
+        "requirements": "Neuroport Cyberdeck Port; Hospital",
+        "effect": "1 slot só de Hardware para o deck no Neuroport."
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Cyberpunk: Edgerunners Mission Kit, p. 35. O PDF dá os preços em \"$\". Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "slug": "neuroport",
+      "name": "Neuroport",
+      "category": "cyberware",
+      "page": 35,
+      "price": 1000,
+      "description": "Pacote de controle de cyberware dos anos 2070, instalado até em crianças. Inclui Neural Link com 5 slots de Neuralware livres, Holophone, Biomonitor, Virtu (Virtuality), HUD (Chyron), dois Shard Slots (Chipware Sockets) e Personal Link (Interface Plug); nenhum deles exige outro cyberware nem ocupa slot.",
+      "attributes": {
+        "foundational": true,
+        "requiresPair": false,
+        "installLocation": "Hospital",
+        "humanityLoss": 7,
+        "humanityLossDice": "2d6",
+        "cyberwareType": "Neuralware",
+        "bodyLocation": "NervousSystem",
+        "slotsProvided": 5,
+        "requirements": "Hospital",
+        "effect": "Neural Link (5 slots), Holophone, Biomonitor, Virtuality, Chyron, 2 Chipware Sockets e Interface Plug."
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Cyberpunk: Edgerunners Mission Kit, p. 35. O PDF dá os preços em \"$\". Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "slug": "neuroport-cyberdeck-port",
+      "name": "Neuroport Cyberdeck Port",
+      "category": "cyberware",
+      "page": 36,
+      "price": 100,
+      "description": "Neuralware. Porta na nuca onde se encaixa um Cyberdeck compatível (com uma Ação); esses decks não aceitam Hardware próprio, mas usam o do Bodyweight Suit. O alcance do deck sobe para 20 m/yds em arquiteturas NET normais e 50 m/yds para Neuroports; paredes ainda bloqueiam. Só uma por usuário; o deck é vendido à parte.",
+      "attributes": {
+        "foundational": false,
+        "requiresPair": false,
+        "installLocation": "Hospital",
+        "humanityLoss": 3,
+        "humanityLossDice": "1d6",
+        "cyberwareType": "Neuralware",
+        "bodyLocation": "NervousSystem",
+        "requiresItem": "neuroport",
+        "requirements": "Neuroport; Hospital",
+        "effect": "Encaixe de Cyberdeck na nuca; alcance de 20 m/yds (50 com Neuroports)."
+      },
+      "priceCategory": "Premium",
+      "notes": "Conferido com Cyberpunk: Edgerunners Mission Kit, p. 36. O PDF dá os preços em \"$\". Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "slug": "projectile-launch-system",
+      "name": "Projectile Launch System",
+      "category": "cyberware",
+      "page": 36,
+      "price": 1000,
+      "description": "Opção de Cyberarm e Borgware que ocupa 2 slots. Lança-Foguetes ou Lança-Granadas de uma mão com um projétil no pente, conforme o que estiver carregado. Só aceita o acessório Smart Rebuild. Ocultável sem teste, sacado e guardado sem Ação; levantado, a mão desse braço não segura nada.",
+      "attributes": {
+        "foundational": false,
+        "requiresPair": false,
+        "installLocation": "Clinic",
+        "humanityLoss": 14,
+        "humanityLossDice": "4d6",
+        "cyberwareType": "LimbOption",
+        "bodyLocation": "Arm",
+        "slotsRequired": 2,
+        "requiresItem": "cyberarm",
+        "requirements": "Cyberarm; Clinic",
+        "effect": "Lança-foguetes/granadas de um tiro no braço."
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Cyberpunk: Edgerunners Mission Kit, p. 36. O PDF dá os preços em \"$\". Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "slug": "self-ice",
+      "name": "Self-ICE",
+      "category": "cyberware",
+      "page": 36,
+      "price": 500,
+      "description": "Neuralware contra Quickhacks. Cada instalação (até 3) põe um Passwall no Neuroport, e o DV de todos eles sobe: DV6 com uma, DV8 com duas, DV10 com três.",
+      "attributes": {
+        "foundational": false,
+        "requiresPair": false,
+        "installLocation": "Hospital",
+        "humanityLoss": 3,
+        "humanityLossDice": "1d6",
+        "cyberwareType": "Neuralware",
+        "bodyLocation": "NervousSystem",
+        "requiresItem": "neuroport",
+        "requirements": "Neuroport; Hospital",
+        "effect": "Um Passwall a mais no Neuroport (DV6/8/10)."
+      },
+      "priceCategory": "Expensive",
+      "notes": "Conferido com Cyberpunk: Edgerunners Mission Kit, p. 36. O PDF dá os preços em \"$\". Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Acessório de arma"
+      ],
+      "manufacturer": null,
+      "slug": "power-rebuild",
+      "name": "Power Rebuild",
+      "category": "gear",
+      "page": 30,
+      "price": 1000,
+      "description": "Rebuild: ocupa 2 slots de acessório (1 numa arma Exótica, se houver slot) e leva 1 hora para instalar ou remover; só um por arma. Transforma a arma em Power Weapon. A Lesão Crítica causada por ela tem +5 de dano extra. Pode ricochetear tiros em superfícies para acertar alvos fora da linha de visão, com -4 (ou só a penalidade do Aimed Shot); um Shotgun Shell ricocheteado abre o leque a partir de uma superfície a até 6 m/yds.",
+      "attributes": {
+        "gearType": "Tool",
+        "gearClass": "Acessório de arma",
+        "requirements": "Armas de longo alcance não Exóticas",
+        "effect": "A Lesão Crítica causada por ela tem +5 de dano extra. Pode ricochetear tiros em superfícies para acertar alvos fora da linha de visão, com -4 (ou só a penalidade do Aimed Shot); um Shotgun Shell ricocheteado abre o leque a partir de uma superfície a até 6 m/yds."
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Cyberpunk: Edgerunners Mission Kit, p. 30. O PDF dá os preços em \"$\". Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Acessório de arma"
+      ],
+      "manufacturer": null,
+      "slug": "smart-rebuild",
+      "name": "Smart Rebuild",
+      "category": "gear",
+      "page": 30,
+      "price": 1000,
+      "description": "Rebuild: ocupa 2 slots de acessório (1 numa arma Exótica, se houver slot) e leva 1 hora para instalar ou remover; só um por arma. Transforma a arma em Smart Weapon. Exige Interface Plug ou Subdermal Grip; +1 nos ataques à distância e pode usar Improved Smart Ammunition.",
+      "attributes": {
+        "gearType": "Tool",
+        "gearClass": "Acessório de arma",
+        "requirements": "Armas de longo alcance não Exóticas sem Smartgun Link",
+        "effect": "Exige Interface Plug ou Subdermal Grip; +1 nos ataques à distância e pode usar Improved Smart Ammunition."
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Cyberpunk: Edgerunners Mission Kit, p. 30. O PDF dá os preços em \"$\". Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Acessório de arma"
+      ],
+      "manufacturer": null,
+      "slug": "tech-rebuild",
+      "name": "Tech Rebuild",
+      "category": "gear",
+      "page": 30,
+      "price": 1000,
+      "description": "Rebuild: ocupa 2 slots de acessório (1 numa arma Exótica, se houver slot) e leva 1 hora para instalar ou remover; só um por arma. Transforma a arma em Tech Weapon. Mira que vê contornos através de Thin Cover. Sacrificando a Ação de Movimento, carrega a arma por até 20 rodadas: o próximo ataque não explosivo é ROF 1, atravessa Thin Cover sem danificá-la e ignora metade do SP do alvo.",
+      "attributes": {
+        "gearType": "Tool",
+        "gearClass": "Acessório de arma",
+        "requirements": "Armas de longo alcance não Exóticas, exceto Lança-Granadas e Lança-Foguetes",
+        "effect": "Mira que vê contornos através de Thin Cover. Sacrificando a Ação de Movimento, carrega a arma por até 20 rodadas: o próximo ataque não explosivo é ROF 1, atravessa Thin Cover sem danificá-la e ignora metade do SP do alvo."
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Cyberpunk: Edgerunners Mission Kit, p. 30. O PDF dá os preços em \"$\". Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "slug": "improved-smart-ammunition",
+      "name": "Improved Smart Ammunition",
+      "category": "ammunition",
+      "page": 31,
+      "price": 50,
+      "priceNote": "50eb por 10 flechas, balas, slugs ou cartuchos",
+      "description": "Só funciona em Smart Weapons (não em armas com Smartgun Link). O usuário ignora penalidades por escuridão, fumaça, neblina ou outra obstrução visual. Ao errar um ataque à distância por 5 ou menos, pode tentar de novo na hora, somando 14 ao d10 (mais LUCK) em vez de STAT + perícia; as penalidades do primeiro tiro continuam.",
+      "attributes": {
+        "kind": "Round",
+        "effectType": "Accuracy",
+        "calibers": [
+          "MediumPistol",
+          "HeavyPistol",
+          "VeryHeavyPistol",
+          "Rifle",
+          "Slug",
+          "ShotgunShell",
+          "Arrow"
+        ],
+        "quantityPerPack": 10,
+        "requirements": "Smart Weapon (Smart Rebuild)",
+        "effect": "Ignora obstrução visual; segunda chance ao errar por 5 ou menos."
+      },
+      "priceCategory": "Costly",
+      "notes": "Conferido com Cyberpunk: Edgerunners Mission Kit, p. 31. O PDF dá os preços em \"$\". Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "slug": "improved-smart-ammunition-explosive",
+      "name": "Improved Smart Ammunition (Granada/Foguete)",
+      "category": "ammunition",
+      "page": 31,
+      "price": 500,
+      "priceNote": "500eb por granada ou foguete",
+      "description": "Só funciona em Smart Weapons (não em armas com Smartgun Link). O usuário ignora penalidades por escuridão, fumaça, neblina ou outra obstrução visual. Ao errar um ataque à distância por 5 ou menos, pode tentar de novo na hora, somando 14 ao d10 (mais LUCK) em vez de STAT + perícia; as penalidades do primeiro tiro continuam.",
+      "attributes": {
+        "kind": "Explosive",
+        "effectType": "Accuracy",
+        "calibers": [
+          "Grenade",
+          "Rocket"
+        ],
+        "quantityPerPack": 1,
+        "requirements": "Smart Weapon (Smart Rebuild)",
+        "effect": "Ignora obstrução visual; segunda chance ao errar por 5 ou menos."
+      },
+      "priceCategory": "Expensive",
+      "notes": "Conferido com Cyberpunk: Edgerunners Mission Kit, p. 31. O PDF dá os preços em \"$\". Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "slug": "immunoblockers",
+      "name": "Immunoblockers",
+      "category": "drugs",
+      "page": 30,
+      "price": 100,
+      "priceNote": "Por dose",
+      "description": "Coquetel de imunobloqueadores e antipsicóticos usado contra a ciberpsicose. Não vicia: o efeito secundário é o que se evita.",
+      "attributes": {
+        "classification": "Street",
+        "resistDv": 21,
+        "primaryEffect": "Recupera 2d6 de Humanidade, sem passar do máximo permitido pela terapia (CP:R p. 229). Dura um mês, mas pode acabar antes num momento de estresse, a critério do Mestre.",
+        "sideEffects": "Efeito secundário (DV21): perde a Humanidade ganha e tem -2 em tudo por 20 rodadas, com alucinações. Se não injetar 2 doses (uma Ação) nesse prazo, sofre 4d6 de Perda de Humanidade (sem reduzir o máximo). Se ficar negativo, entra em Ciberpsicose Extrema e pode ganhar +2 nos testes enquanto durar.",
+        "duration": "1 mês"
+      },
+      "priceCategory": "Premium",
+      "notes": "Conferido com Cyberpunk: Edgerunners Mission Kit, p. 30. O PDF dá os preços em \"$\". Ausente do compêndio."
+    }
+  ]
+}

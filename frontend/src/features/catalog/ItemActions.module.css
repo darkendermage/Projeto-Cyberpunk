@@ -1,0 +1,126 @@
+.action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border: 1px solid var(--line-strong);
+  color: var(--text-2);
+  transition: color var(--t-fast), border-color var(--t-fast), background var(--t-fast), box-shadow var(--t-fast);
+}
+.action:hover {
+  color: var(--text);
+  border-color: var(--red-line);
+}
+
+.overlay {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  background: rgba(5, 6, 7, 0.78);
+  border-radius: 2px;
+}
+
+.inline {
+  min-height: 36px;
+  padding: 0 14px;
+  background: rgba(255, 255, 255, 0.02);
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 600;
+  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+}
+
+.starOn {
+  color: var(--amber);
+  border-color: rgba(255, 207, 58, 0.55);
+}
+.starOn:hover {
+  color: var(--amber);
+}
+
+.compareOn {
+  color: #fff;
+  background: var(--red-strong);
+  border-color: var(--red);
+  box-shadow: var(--glow-sm);
+}
+
+.menuWrap {
+  position: relative;
+}
+
+.menu {
+  position: absolute;
+  z-index: 50;
+  top: calc(100% + 6px);
+  left: 0;
+  width: 260px;
+  padding: 8px;
+  background: var(--panel-solid);
+  border: 1px solid var(--red-line);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+  animation: fade-in var(--t-fast) var(--ease);
+}
+.menu > button {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 8px 10px;
+  background: none;
+  border: 0;
+  text-align: left;
+  color: var(--text-2);
+}
+.menu > button:hover {
+  background: var(--red-haze);
+  color: var(--text);
+}
+.menuTitle {
+  padding: 4px 10px 6px;
+  font-family: var(--font-display);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+.menuEmpty {
+  padding: 6px 10px;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+.menuCount {
+  font-family: var(--font-mono);
+  color: var(--text-faint);
+}
+.newList {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+  padding-top: 8px;
+  border-top: 1px solid var(--line);
+}
+.newList input {
+  flex: 1;
+  min-width: 0;
+  height: 32px;
+}
+.newList button {
+  width: 32px;
+  display: grid;
+  place-items: center;
+  background: var(--red-strong);
+  border: 0;
+  color: #fff;
+}
+.newList button:disabled {
+  opacity: 0.4;
+}
+.menuLink {
+  display: block;
+  padding: 8px 10px 2px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+.menuLink:hover {
+  color: var(--red-bright);
+}

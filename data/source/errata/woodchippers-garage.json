@@ -1,0 +1,112 @@
+{
+  "about": "Conferido com o PDF oficial Woodchipper's Garage v1.01 (2022). O compêndio citava Interface 3 como fonte destas armas. Formato descrito no README (seção Dados).",
+  "source": "Woodchipper's Garage",
+  "updates": {
+    "biotechnica-enviro-launcher": {
+      "page": 3,
+      "description": "Lança-foguetes Exótico de um único disparo. Depois de disparar, como Ação, girar a alça quebra um frasco de enzima reativa que decompõe a arma inteira em uma hora.",
+      "notes": "Conferido com Woodchipper's Garage, p. 3 e tabela da p. 6. A arma se decompõe com enzima; o compêndio dizia que ela era incinerada."
+    },
+    "budgetarms-triple-threat": {
+      "page": 3,
+      "description": "Lança-foguetes Exótico de Baixa Qualidade com 2 tiros e um Lança-Granadas Underbarrel Exótico de Baixa Qualidade integrado, que não pode ser removido. Mesmo sendo Exótico, dispara munição de foguete e de granada não-básica.",
+      "notes": "Conferido com Woodchipper's Garage, p. 3 e tabela da p. 6. A arma é Exótica (o compêndio não marcava). O texto da p. 3 chama a arma de 'Triple Treat'; a tabela, de 'Triple Threat'.",
+      "tags": ["Baixa Qualidade", "Exótica", "Acessório acoplado", "Arma combinada"],
+      "attributes": { "exotic": true }
+    },
+    "flare-gun": {
+      "page": 3,
+      "description": "Lança-granadas Exótico de uma mão com 1 tiro. Volumoso demais para Pop-up Cyberware. Além de qualquer munição de granada, dispara road flares (CP:R p. 351) pela tabela de alcance de Lança-Granadas: no ar não explodem nem causam dano, mas são vistas a até 3 milhas; ao cair, funcionam como road flare comum.",
+      "notes": "Conferido com Woodchipper's Garage, p. 3 e tabela da p. 6."
+    },
+    "midnight-arms-sdf-45": {
+      "page": 3,
+      "description": "Lança-foguetes Exótico com alcance máximo de 400 m/yds e pente de 4 foguetes Armor-Piercing. Cada ataque dispara dois foguetes de uma vez, e em vez do teste de Heavy Weapons o Mestre escolhe onde cada um cai: dois pontos a até 50 m/yds do alvo e a pelo menos 10 m/yds um do outro. Esquivar da explosão é Evasion DV15, só para quem já poderia esquivar de balas, e o sucesso tira o defensor da área. Nenhum Upgrade de Tech remove a escolha do Mestre.",
+      "notes": "Conferido com Woodchipper's Garage, p. 3 e tabela da p. 6. Alcance máximo de 400 m (o compêndio usava os 800 m padrão de lança-foguetes). A tabela imprime o preço como '1,00eb'; o texto confirma 1.000eb.",
+      "attributes": { "maxRange": 400 }
+    },
+    "militech-aegis": {
+      "page": 4,
+      "description": "Escopeta Exótica de Baixa Qualidade disparada com Heavy Weapons, só no modo Shotgun Shell, causando 4d6 em vez de 3d6. Não usa munição: cada disparo gasta 1 das 8 cargas da bateria (recarrega em 1 hora). Não causa Lesão Crítica nem ablata armadura; dano que levaria o alvo abaixo de 1 HP o deixa Inconsciente com 1 HP.",
+      "notes": "Conferido com Woodchipper's Garage, p. 4 e tabela da p. 6.",
+      "attributes": { "damage": "4d6 (menos que letal)" }
+    },
+    "militech-archimedes": {
+      "page": 4,
+      "description": "Lança-foguetes Exótico de Qualidade Excelente disparado com Pilot Air Vehicle em vez de Heavy Weapons. Só dispara Smart Rockets e não funciona se o usuário não tiver o cyberware Targeting Scope. Cada compra vem com um Smart Rocket.",
+      "notes": "Conferido com Woodchipper's Garage, p. 4 e tabela da p. 6."
+    },
+    "nomad-air-cannon": {
+      "page": 4,
+      "description": "Canhão de ar que lança líquido. Funciona como uma Escopeta Exótica de 1 tiro no modo Shotgun Shell, mas em vez de dano cobre de líquido todo alvo atingido pelo cone (geralmente tinta ou água). Com ácido, toda armadura de quem for coberto perde 1 SP (10eb por disparo, Cheap). Também aceita Poison ou Biotoxin, 3 frascos por disparo: quem for coberto faz Resist Torture/Drugs como se atingido por essa munição (CP:R p. 345-346).",
+      "notes": "Conferido com Woodchipper's Garage, p. 4 e tabela da p. 6.",
+      "attributes": { "damage": "N/A (líquido)" }
+    },
+    "pursuit-security-tearjerker": {
+      "name": "Pursuit Security Inc. TearJerker",
+      "page": 4,
+      "description": "Lança-granadas Exótico de Qualidade Excelente com 3 tiros. Mesmo sendo Exótico, só dispara munição Smoke ou Teargas.",
+      "notes": "Conferido com Woodchipper's Garage, p. 4 e tabela da p. 6.",
+      "attributes": { "damage": "N/A (Smoke ou Teargas)" }
+    },
+    "slamdance-ballistic-harpoon": {
+      "page": 5,
+      "description": "Arma corpo a corpo Muito Pesada Exótica de duas mãos. O arpão também pode ser disparado do suporte balístico com Heavy Weapons, pela tabela de alcance de Arcos e Bestas, e continua ignorando metade da armadura do defensor. Depois de disparado, qualquer pessoa pode usá-lo como arma corpo a corpo Muito Pesada Exótica; recuperado, volta ao suporte com uma Ação.",
+      "notes": "Conferido com Woodchipper's Garage, p. 5 e tabela da p. 6. O livro classifica como arma corpo a corpo Muito Pesada Exótica (o compêndio a listava como Besta não exótica). O alcance máximo é o da tabela de Arcos e Bestas, usada no disparo.",
+      "tags": ["Exótica", "Arma combinada"],
+      "attributes": {
+        "weaponClass": "VeryHeavyMelee", "skill": "MeleeWeapon", "damage": "4d6", "autofire": null, "magazine": null,
+        "maxRange": 200, "exotic": true, "calibers": []
+      }
+    },
+    "sternmeyer-m-02-heavy": {
+      "name": "Sternmeyer M-02 Heavy Rifle",
+      "page": 5,
+      "description": "Fuzil de assalto Exótico sem Autofire nem Fogo de Supressão, disparado com Heavy Weapons, com 80 tiros. Só dispara a própria munição tround: um tambor de 80 tiros Armor-Piercing custa 500eb (Expensive).",
+      "notes": "Conferido com Woodchipper's Garage, p. 5 e tabela da p. 6. O pente de 80 é o padrão da arma, não um pente estendido. Usa munição própria, por isso a munição compatível é 'Especial'.",
+      "tags": ["Exótica"],
+      "attributes": { "damage": "5d6", "calibers": ["Special"] }
+    },
+    "towa-pocket-launcher": {
+      "page": 5,
+      "description": "Lança-foguetes Exótico de Baixa Qualidade e telescópico: descarregado, pode ser ocultado.",
+      "notes": "Conferido com Woodchipper's Garage, p. 5 e tabela da p. 6. A tabela lista também 'Smartgun Link' e 'Unique Ammo', que o texto da arma não menciona; não foram incluídos."
+    },
+    "urbantech-burst-flamethrower": {
+      "page": 5,
+      "description": "Escopeta Exótica disparada com Heavy Weapons que só dispara Incendiary Shotgun Shells (mesmo custo). Alvo em chamas sofre 4 de dano direto no HP no fim de cada turno até gastar uma Ação para se apagar; substitui fogo mais fraco. Não causa Lesão Crítica nem permite Aimed Shot. Modo alternativo: gastando toda a munição restante, dispara uma bola de fogo com Heavy Weapons que explode como uma Incendiary Grenade, pela tabela de alcance de Lança-Granadas, e quem dispara fica imediatamente Deadly On Fire.",
+      "notes": "Conferido com Woodchipper's Garage, p. 5 e tabela da p. 6. Usa Heavy Weapons (o compêndio dizia Shoulder Arms) e não dispara slugs.",
+      "attributes": { "skill": "HeavyWeapons", "damage": "3d6 (Shell incendiária)", "calibers": ["ShotgunShell"] }
+    }
+  },
+  "additions": [
+    {
+      "slug": "sternmeyer-m-02-tround-drum",
+      "name": "Sternmeyer M-02 Tround Drum",
+      "category": "ammunition",
+      "manufacturer": "Sternmeyer",
+      "description": "Tambor de 80 trounds Armor-Piercing, a única munição que o Sternmeyer M-02 Heavy Rifle dispara.",
+      "notes": "Conferido com Woodchipper's Garage, p. 5.",
+      "price": 500,
+      "priceNote": "Tambor com 80 tiros",
+      "priceCategory": "Expensive",
+      "page": 5,
+      "tags": [],
+      "attributes": { "kind": "Round", "effectType": "ArmorPiercing", "calibers": ["Special"], "quantityPerPack": 80, "requirements": "Somente Sternmeyer M-02 Heavy Rifle", "effect": "Perfurante (AP)" }
+    },
+    {
+      "slug": "nomad-air-cannon-acid",
+      "name": "Ácido para Nomad Air Cannon",
+      "category": "ammunition",
+      "manufacturer": null,
+      "description": "Carga de ácido para o Nomad Air Cannon. Toda armadura usada por um alvo coberto perde 1 SP.",
+      "notes": "Conferido com Woodchipper's Garage, p. 4.",
+      "price": 10,
+      "priceNote": "Por disparo",
+      "priceCategory": "Cheap",
+      "page": 4,
+      "tags": [],
+      "attributes": { "kind": "Round", "effectType": "Utility", "calibers": ["Special"], "quantityPerPack": 1, "requirements": "Somente Nomad Air Cannon", "effect": "-1 SP em toda armadura do alvo coberto" }
+    }
+  ]
+}

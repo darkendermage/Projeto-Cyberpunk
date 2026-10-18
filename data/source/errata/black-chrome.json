@@ -1,0 +1,2427 @@
+{
+  "about": "Conferido com o PDF oficial Black Chrome v1.1. A Militech Mastiff do compêndio era a mesma arma que a Militech Mastiff SMG e foi removida. Formato descrito no README (seção Dados).",
+  "source": "Black Chrome",
+  "remove": [
+    "militech-mastiff"
+  ],
+  "updates": {
+    "avar-prototype-arasaka": {
+      "page": 102,
+      "notes": "Conferido com Black Chrome, p. 102 e listas das p. 157-168. Corrigido: Qualidade Excelente e Exótica.",
+      "description": "Fuzil de assalto Exótico de Qualidade Excelente com 25 tiros, Autofire (4) e Fogo de Supressão. Modo railgun alternativo: o dano ignora armaduras com SP abaixo de 7, mas só faz tiro único e não faz Aimed Shot.",
+      "tags": [
+        "Qualidade Excelente",
+        "Exótica",
+        "Autofire",
+        "Arma combinada"
+      ],
+      "attributes": {
+        "quality": "Excellent",
+        "exotic": true,
+        "damage": "5d6"
+      },
+      "name": "Arasaka Prototype Variable Assault Rifle"
+    },
+    "e-tack-public-defender": {
+      "page": 115,
+      "notes": "Conferido com Black Chrome, p. 115 e listas das p. 157-168. Corrigido: custa 500eb (o compêndio dizia 50eb).",
+      "description": "Pistola Pesada Exótica de Baixa Qualidade sem gatilho, com Smartgun Link instalado de forma permanente. Dispara em modo letal ou menos que letal.",
+      "tags": [
+        "Baixa Qualidade",
+        "Exótica",
+        "Smartgun",
+        "Não-letal"
+      ],
+      "attributes": {
+        "exotic": true
+      },
+      "price": 500,
+      "priceCategory": "Expensive",
+      "manufacturer": "Pursuit Security"
+    },
+    "eagletech-survivalist": {
+      "page": 103,
+      "notes": "Conferido com Black Chrome, p. 103 e listas das p. 157-168. Corrigido: é Exótica.",
+      "description": "Combinação Exótica de besta e fuzil de assalto com Sniping Scope. O modo fuzil não tem Autofire, tem 10 tiros e é disparado com Archery mesmo usando balas. Aceita munição não-básica.",
+      "tags": [
+        "Exótica",
+        "Arma combinada"
+      ],
+      "attributes": {
+        "exotic": true,
+        "autofire": null,
+        "damage": "4d6 (besta) / 5d6 (fuzil)"
+      }
+    },
+    "faisal-s-dead-or-alive": {
+      "page": 104,
+      "notes": "Conferido com Black Chrome, p. 104 e listas das p. 157-168.",
+      "description": "Escopeta Exótica de Baixa Qualidade com Net Launcher de Baixa Qualidade integrado (2 redes), que não pode ser removido. Modo Shotgun Shell.",
+      "tags": [
+        "Baixa Qualidade",
+        "Exótica"
+      ],
+      "attributes": {}
+    },
+    "fed-arms-pepper-shaker": {
+      "page": 105,
+      "notes": "Conferido com Black Chrome, p. 105 e listas das p. 157-168. Corrigido: usa a perícia Autofire.",
+      "description": "SMG Exótica que só dispara em Autofire (x3) e Fogo de Supressão: não faz tiro único nem Aimed Shot. Gasta só 6 balas por rajada. Aceita munição não-básica.",
+      "tags": [
+        "Exótica",
+        "Autofire"
+      ],
+      "attributes": {
+        "skill": "Autofire",
+        "rof": 1,
+        "concealable": true
+      },
+      "name": "Federated Arms Pepper Shaker"
+    },
+    "georgia-arms-matchmaker": {
+      "page": 105,
+      "notes": "Conferido com Black Chrome, p. 105 e listas das p. 157-168. Corrigido: é Exótica.",
+      "description": "Escopeta Exótica de Baixa Qualidade com 1 tiro. Modo Shotgun Shell. Aceita munição não-básica.",
+      "tags": [
+        "Baixa Qualidade",
+        "Exótica"
+      ],
+      "attributes": {
+        "exotic": true
+      }
+    },
+    "gunmart-bubba-buster": {
+      "page": 106,
+      "notes": "Conferido com Black Chrome, p. 106 e listas das p. 157-168. Corrigido: é Exótica.",
+      "description": "Escopeta Exótica de Baixa Qualidade. Modo Shotgun Shell, aceita munição não-básica. Se disparada 3 vezes em 1 minuto, se destrói.",
+      "tags": [
+        "Baixa Qualidade",
+        "Exótica"
+      ],
+      "attributes": {
+        "exotic": true
+      }
+    },
+    "gunmart-engage": {
+      "page": 107,
+      "notes": "Conferido com Black Chrome, p. 107 e listas das p. 157-168. Corrigido: é Exótico.",
+      "description": "Lança-foguetes Exótico de Baixa Qualidade que só dispara foguetes Armor-Piercing. Vem carregado; com 1 no ataque, ou ao tentar tirar a munição, explode.",
+      "tags": [
+        "Baixa Qualidade",
+        "Exótica"
+      ],
+      "attributes": {
+        "exotic": true,
+        "damage": "8d6"
+      },
+      "name": "GunMart Engage Rocket Launcher"
+    },
+    "gunmart-smart-special": {
+      "page": 108,
+      "notes": "Conferido com Black Chrome, p. 108 e listas das p. 157-168.",
+      "description": "Pistola Pesada Exótica de Baixa Qualidade com Smartgun Link. Com 1 no ataque, se destrói sem conserto.",
+      "tags": [
+        "Baixa Qualidade",
+        "Exótica",
+        "Smartgun"
+      ],
+      "attributes": {}
+    },
+    "gunmart-special": {
+      "page": 108,
+      "notes": "Conferido com Black Chrome, p. 108 e listas das p. 157-168.",
+      "description": "Pistola Pesada Exótica de Baixa Qualidade. Com 1 no ataque, se destrói sem conserto.",
+      "tags": [
+        "Baixa Qualidade",
+        "Exótica",
+        "Descartável"
+      ],
+      "attributes": {}
+    },
+    "hades-multipurpose-assault": {
+      "page": 109,
+      "notes": "Conferido com Black Chrome, p. 109 e listas das p. 157-168. A tabela da p. 167 marca 1 mão. O pente de 16 é da própria arma.",
+      "description": "Escopeta Exótica com 16 tiros no pente. Modo Shotgun Shell, aceita munição não-básica e até 5 tipos de munição carregados ao mesmo tempo.",
+      "tags": [
+        "Exótica"
+      ],
+      "attributes": {
+        "hands": 1
+      },
+      "name": "MetaCorp Hades Multipurpose Assault Shotgun",
+      "manufacturer": "MetaCorp"
+    },
+    "ktech-techhammer": {
+      "page": 110,
+      "notes": "Conferido com Black Chrome, p. 110 e listas das p. 157-168. Corrigido: é Exótica e usa Shoulder Arms no modo escopeta.",
+      "description": "Escopeta Exótica (Shoulder Arms) ou lança-foguetes Exótico (Heavy Weapons), conforme a munição: 4 slugs ou shells, ou 2 Smart Rockets. Os Smart Rockets não exigem Targeting Scope.",
+      "tags": [
+        "Exótica",
+        "Arma combinada"
+      ],
+      "attributes": {
+        "exotic": true,
+        "skill": "ShoulderArms"
+      }
+    },
+    "midnight-arms-beast": {
+      "page": 111,
+      "notes": "Conferido com Black Chrome, p. 111 e listas das p. 157-168. Corrigido: é Exótica.",
+      "description": "Escopeta Exótica com 40 tiros. Modo Shotgun Shell, aceita munição não-básica. Sem BODY 10+ ou montagem, disparar causa a Lesão Crítica Broken Arm. Recarregar exige 2 Ações.",
+      "tags": [
+        "Exótica"
+      ],
+      "attributes": {
+        "exotic": true
+      },
+      "name": "Midnight Arms Beast Shotgun"
+    },
+    "militech-fox-dual-ammo": {
+      "page": 113,
+      "notes": "Conferido com Black Chrome, p. 113 e listas das p. 157-168.",
+      "description": "Pistola Pesada Exótica com dois pentes de 10 tiros, cada um com um tipo de munição. Aceita munição não-básica.",
+      "tags": [
+        "Exótica"
+      ],
+      "attributes": {},
+      "name": "Militech Fox Dual Ammo Pistol"
+    },
+    "militech-mastiff-smg": {
+      "page": 113,
+      "notes": "Conferido com Black Chrome, p. 113 e listas das p. 157-168. Corrigido: a SMG usa munição de Pistola Média e a arma é Exótica.",
+      "description": "Combinação Exótica de SMG e escopeta, de duas mãos. SMG 2d6 com 30 tiros, Autofire (3) e Fogo de Supressão; escopeta 5d6 com 3 slugs e modo Shotgun Shell.",
+      "tags": [
+        "Exótica",
+        "Autofire",
+        "Acessório acoplado",
+        "Arma combinada"
+      ],
+      "attributes": {
+        "weaponClass": "Smg",
+        "exotic": true,
+        "calibers": [
+          "MediumPistol",
+          "Slug",
+          "ShotgunShell"
+        ]
+      }
+    },
+    "militech-perseus": {
+      "page": 112,
+      "notes": "Conferido com Black Chrome, p. 112 e listas das p. 157-168. Corrigido: pente de 11.",
+      "description": "Pistola Muito Pesada Exótica de Qualidade Excelente com 11 tiros. Se disparou na rodada anterior, o ROF sobe para 2.",
+      "tags": [
+        "Qualidade Excelente",
+        "Exótica"
+      ],
+      "attributes": {
+        "magazine": 11
+      }
+    },
+    "modfire-10x": {
+      "page": 114,
+      "notes": "Conferido com Black Chrome, p. 114 e listas das p. 157-168. Corrigido: é Exótica; ROF 2 no modo pistola.",
+      "description": "Pistola Pesada Exótica que vira SMG Exótica ou Fuzil de Assalto Exótico em 1 minuto, com as peças do estojo. Pistola: 3d6, 8 tiros, ROF 2, ocultável. SMG: 2d6, 30 tiros, Autofire (3). Fuzil: 5d6, 25 tiros, Autofire (4), duas mãos.",
+      "tags": [
+        "Exótica",
+        "Arma combinada"
+      ],
+      "attributes": {
+        "exotic": true,
+        "rof": 2,
+        "concealable": true
+      },
+      "manufacturer": "Centurion Essentials"
+    },
+    "nomad-rocker": {
+      "page": 115,
+      "notes": "Conferido com Black Chrome, p. 115 e listas das p. 157-168.",
+      "description": "Pistola Muito Pesada Exótica de Baixa Qualidade que dispara pedras em vez de balas (munição grátis). Conserto rápido e fácil.",
+      "tags": [
+        "Baixa Qualidade",
+        "Exótica"
+      ],
+      "attributes": {}
+    },
+    "overlord-handcannon": {
+      "page": 106,
+      "notes": "Conferido com Black Chrome, p. 106 e listas das p. 157-168. Corrigido: 3d6 (não 4d6) e é Exótica.",
+      "description": "Pistola Pesada Exótica de Baixa Qualidade. Dá +1 em Facedown, a menos que o oponente saiba o que ela é.",
+      "tags": [
+        "Baixa Qualidade",
+        "Exótica"
+      ],
+      "attributes": {
+        "exotic": true,
+        "damage": "3d6",
+        "damageDice": 3
+      }
+    },
+    "pursuit-security-crowd-buster": {
+      "page": 116,
+      "notes": "Conferido com Black Chrome, p. 116 e listas das p. 157-168.",
+      "description": "Fuzil de assalto Exótico com 25 tiros, Autofire (4) e Fogo de Supressão. Modo sônico alternativo pode causar Damaged Ear.",
+      "tags": [
+        "Exótica",
+        "Autofire",
+        "Acessório acoplado"
+      ],
+      "attributes": {},
+      "name": "Pursuit Security Inc. Crowd Buster"
+    },
+    "rostovic-ulicni-unistitelj": {
+      "page": 117,
+      "notes": "Conferido com Black Chrome, p. 117 e listas das p. 157-168. Corrigido: 3d6 com shells (4d6 com metal), não 4d6/5d6, e é Exótica.",
+      "description": "Escopeta Exótica de Baixa Qualidade com 3 tiros, só Shotgun Shells. Como Ação, enfiar metal nos canos aumenta o dano do próximo tiro para 4d6.",
+      "tags": [
+        "Baixa Qualidade",
+        "Exótica"
+      ],
+      "attributes": {
+        "exotic": true,
+        "damage": "3d6 (4d6 com metal)",
+        "damageDice": 3,
+        "calibers": [
+          "ShotgunShell"
+        ]
+      }
+    },
+    "sanroo-hello-cutie-ultra-k8": {
+      "page": 118,
+      "notes": "Conferido com Black Chrome, p. 118 e listas das p. 157-168. Corrigido: pente de 30, é Exótica e usa só munição de Pistola Muito Pesada.",
+      "description": "Pistola Muito Pesada Exótica de Qualidade Excelente que vira SMG Pesada Exótica de Qualidade Excelente (3d6, Autofire 3 e Fogo de Supressão) com uma Ação. 30 tiros de Pistola Muito Pesada. Pode dar +2 em Wardrobe & Style. Sons de anime.",
+      "tags": [
+        "Qualidade Excelente",
+        "Exótica",
+        "Estilo",
+        "Arma combinada"
+      ],
+      "attributes": {
+        "exotic": true,
+        "magazine": 30,
+        "autofire": 3,
+        "calibers": [
+          "VeryHeavyPistol"
+        ]
+      },
+      "name": "Sanroo Hello Cutie Ultra-K8 Assault Pistol"
+    },
+    "sternmeyer-m-04-variable": {
+      "page": 119,
+      "notes": "Conferido com Black Chrome, p. 119 e listas das p. 157-168. Corrigido: é Exótica e tem Autofire (4).",
+      "description": "Combinação Exótica de Baixa Qualidade de fuzil de assalto (20 tiros, Autofire 4, Fogo de Supressão) e lança-granadas (2 granadas, aceita não-básicas). Uma pane afeta os dois modos.",
+      "tags": [
+        "Baixa Qualidade",
+        "Exótica",
+        "Acessório acoplado",
+        "Arma combinada"
+      ],
+      "attributes": {
+        "exotic": true,
+        "autofire": 4
+      },
+      "name": "Sternmeyer M-04 Variable Assault"
+    },
+    "superchrome-glam-rifle": {
+      "page": 120,
+      "notes": "Conferido com Black Chrome, p. 120 e listas das p. 157-168. Corrigido: é Exótico.",
+      "description": "Fuzil de assalto Exótico com 25 tiros, Autofire (4) e Fogo de Supressão. Aceita munição não-básica. Usado à mostra, dá +2 em Wardrobe & Style (não soma com outras armas).",
+      "tags": [
+        "Exótica",
+        "Autofire",
+        "Estilo"
+      ],
+      "attributes": {
+        "exotic": true
+      }
+    },
+    "superchrome-sidearm": {
+      "page": 121,
+      "notes": "Conferido com Black Chrome, p. 121 e listas das p. 157-168. Corrigido: é Exótica.",
+      "description": "Pistola Muito Pesada Exótica. Aceita munição não-básica. Usada à mostra, dá +2 em Wardrobe & Style (não soma com outras armas).",
+      "tags": [
+        "Exótica",
+        "Estilo"
+      ],
+      "attributes": {
+        "exotic": true
+      }
+    },
+    "techtronika-bmg-500": {
+      "page": 122,
+      "notes": "Conferido com Black Chrome, p. 122 e listas das p. 157-168. Corrigido: é um fuzil de assalto Exótico, não metralhadora.",
+      "description": "Fuzil de assalto Exótico disparado com Heavy Weapons no tiro único, com 500 tiros, Autofire (4) e Fogo de Supressão. Exige BODY 11+ ou montagem. Vem com bipé.",
+      "tags": [
+        "Exótica",
+        "Autofire"
+      ],
+      "attributes": {
+        "weaponClass": "AssaultRifle",
+        "exotic": true,
+        "rof": 1
+      },
+      "name": "Techtronika Russia BMG-500"
+    },
+    "tommyknocker": {
+      "page": 123,
+      "notes": "Conferido com Black Chrome, p. 123 e listas das p. 157-168. Corrigido: é Exótica; a tabela marca as mãos como \"Special\".",
+      "description": "Combinação Exótica de Pistola Muito Pesada (8 tiros) e escopeta de Baixa Qualidade (2 slugs, modo Shotgun Shell). Disparar com uma mão sem BODY 10+ arrisca perder a arma.",
+      "tags": [
+        "Exótica",
+        "Acessório acoplado",
+        "Arma combinada"
+      ],
+      "attributes": {
+        "exotic": true,
+        "hands": 1
+      }
+    },
+    "westwood-nova-arms": {
+      "page": 121,
+      "notes": "Conferido com Black Chrome, p. 121 e listas das p. 157-168. Corrigido: pente de 6.",
+      "description": "Revólver (Pistola Muito Pesada) de 6 tiros, incompatível com acessórios de pente. Tela retrátil no cabo com filmes clássicos. Cano de 4, 6½ ou 8⅜ polegadas.",
+      "tags": [
+        "Revólver"
+      ],
+      "attributes": {
+        "magazine": 6
+      },
+      "name": "Westwood",
+      "manufacturer": "Nova Arms"
+    },
+    "arasaka-weeping-reaver-katana": {
+      "page": 91,
+      "notes": "Conferido com Black Chrome, p. 91 e listas das p. 157-168.",
+      "description": "Arma corpo a corpo Muito Pesada Exótica de duas mãos, Qualidade Excelente. Uma vez por minuto, como Ação, cobre a lâmina com até três fluidos diferentes dos três compartimentos do cabo; cada fluido dura 1 minuto.",
+      "tags": [
+        "Qualidade Excelente",
+        "Exótica",
+        "Incendiária"
+      ],
+      "attributes": {},
+      "name": "Arasaka Weeping Reaver"
+    },
+    "faisal-s-magna-knuckles": {
+      "page": 96,
+      "notes": "Conferido com Black Chrome, p. 96 e listas das p. 157-168.",
+      "description": "Soco inglês eletromagnético: arma corpo a corpo Média Exótica de uma mão. Acertar o mesmo alvo duas vezes pode desativar cyberware (gasta 1 das 8 cargas da bateria de 50eb, recarga em 1 hora). Sem carga, é só a arma Média Exótica.",
+      "tags": [
+        "Exótica"
+      ],
+      "attributes": {
+        "damage": "2d6"
+      }
+    },
+    "kendachi-mono-guard": {
+      "page": 96,
+      "notes": "Conferido com Black Chrome, p. 96 e listas das p. 157-168.",
+      "description": "Arma corpo a corpo Pesada Exótica de uma mão, ocultável. Ao causar Foreign Object, a vítima rola de novo até tirar outra Lesão Crítica e sofre essa no lugar.",
+      "tags": [
+        "Exótica",
+        "Monofilamento"
+      ],
+      "attributes": {}
+    },
+    "kendachi-mono-katana": {
+      "page": 92,
+      "notes": "Conferido com Black Chrome, p. 92 e listas das p. 157-168.",
+      "description": "Arma corpo a corpo Muito Pesada Exótica de duas mãos. Com a chave biométrica correta, o dano ignora armaduras com SP abaixo de 7.",
+      "tags": [
+        "Exótica"
+      ],
+      "attributes": {}
+    },
+    "kendachi-mono-wakizashi": {
+      "page": 93,
+      "notes": "Conferido com Black Chrome, p. 93 e listas das p. 157-168.",
+      "description": "Arma corpo a corpo Pesada Exótica de uma mão. Com a chave biométrica correta, o dano ignora armaduras com SP abaixo de 7.",
+      "tags": [
+        "Exótica",
+        "Monofilamento"
+      ],
+      "attributes": {}
+    },
+    "rostovic-kleaver": {
+      "page": 94,
+      "notes": "Conferido com Black Chrome, p. 94 e listas das p. 157-168.",
+      "description": "Arma corpo a corpo Muito Pesada Exótica de duas mãos que exige BODY 11. Carregada com três baterias de 50eb (destruídas no aquecimento), causa 5d6, incendeia o alvo e ignora armaduras com SP abaixo de 11.",
+      "tags": [
+        "Exótica"
+      ],
+      "attributes": {},
+      "name": "Rostović Kleaver"
+    },
+    "slamdance-fangfist": {
+      "page": 98,
+      "notes": "Conferido com Black Chrome, p. 98 e listas das p. 157-168. Corrigido: Qualidade Excelente e Exótica.",
+      "description": "Arma corpo a corpo Média Exótica de uma mão e Qualidade Excelente, guardada numa luva. No turno em que a lâmina é sacada, e só nele, conta como arma Muito Pesada. Com a lâmina recolhida, a luva pode ser ocultada.",
+      "tags": [
+        "Qualidade Excelente",
+        "Exótica",
+        "Arma combinada"
+      ],
+      "attributes": {
+        "quality": "Excellent",
+        "exotic": true,
+        "rof": 2
+      }
+    },
+    "slamdance-tasmanskiy-klo": {
+      "page": 99,
+      "notes": "Conferido com Black Chrome, p. 99 e listas das p. 157-168.",
+      "description": "Três lâminas numa Battleglove modificada: arma corpo a corpo Muito Pesada Exótica de Qualidade Excelente, sacada sem Ação. +2 em Interrogation ao ameaçar. A Battleglove tem 1 slot de opção.",
+      "tags": [
+        "Qualidade Excelente",
+        "Exótica"
+      ],
+      "attributes": {}
+    },
+    "solo-wolf-mono-katana": {
+      "page": 92,
+      "notes": "Conferido com Black Chrome, p. 92 e listas das p. 157-168. Corrigido: Muito Pesada, 4d6 e ROF 1.",
+      "description": "Réplica falsa: arma corpo a corpo Muito Pesada Exótica de duas mãos e Baixa Qualidade. Perception ou Weaponstech DV13 revela a fraude.",
+      "tags": [
+        "Baixa Qualidade",
+        "Exótica"
+      ],
+      "attributes": {
+        "weaponClass": "VeryHeavyMelee",
+        "damage": "4d6",
+        "damageDice": 4,
+        "rof": 1
+      },
+      "name": "Solo Wolf and Bot Mono-Katana",
+      "manufacturer": "Kendachi"
+    },
+    "pursuit-security-bouncer": {
+      "page": 97,
+      "notes": "Conferido com Black Chrome, p. 97 e listas das p. 157-168. Corrigido: é Exótica.",
+      "description": "Combinação Exótica de uma mão de Stun Baton e Microwaver. Cada golpe ou pulso gasta 1 das 8 cargas da bateria de 50eb (recarga em 1 hora). Não pode ser ocultada nem instalada em cyberware popup.",
+      "tags": [
+        "Exótica",
+        "EMP",
+        "Arma combinada"
+      ],
+      "attributes": {
+        "exotic": true,
+        "damage": "2d6 / Microwaver"
+      },
+      "name": "The Pursuit Security Bouncer"
+    },
+    "white-hornet-tanto": {
+      "page": 93,
+      "notes": "Conferido com Black Chrome, p. 93 e listas das p. 157-168.",
+      "description": "Arma corpo a corpo Média Exótica de uma mão, ocultável. Pode causar dano menos que letal.",
+      "tags": [
+        "Exótica",
+        "Não-letal"
+      ],
+      "attributes": {},
+      "manufacturer": "Centurion Essentials"
+    },
+    "zhirafa-rhinocefist": {
+      "page": 95,
+      "notes": "Conferido com Black Chrome, p. 95 e listas das p. 157-168. Corrigido: Qualidade Excelente no modo arma.",
+      "description": "Vestida e ligada por Interface Plugs, os ataques de Brawling sempre causam 4d6. Como Ação, vira arma corpo a corpo Muito Pesada Exótica de Qualidade Excelente (a mão não segura nada). Não pode ser ocultada.",
+      "tags": [
+        "Qualidade Excelente",
+        "Exótica"
+      ],
+      "attributes": {
+        "quality": "Excellent"
+      }
+    },
+    "kendachi-mono-star": {
+      "page": 101,
+      "notes": "Conferido com Black Chrome, p. 101 e listas das p. 157-168. Corrigido: é Exótica.",
+      "description": "Arma corpo a corpo Média Exótica de uma mão, ocultável, que também é arremessada (Athletics). Arremessada, continua dividindo a SP pela metade e, ao causar Foreign Object, causa uma segunda Lesão Crítica.",
+      "tags": [
+        "Exótica",
+        "Monofilamento",
+        "Arremessável",
+        "Arma combinada"
+      ],
+      "attributes": {
+        "exotic": true,
+        "skill": "Athletics"
+      }
+    },
+    "ranger-combat-boomerang": {
+      "page": 100,
+      "notes": "Conferido com Black Chrome, p. 100 e listas das p. 157-168. Corrigido: é Exótica.",
+      "description": "Arma Pesada Exótica de uma mão que só é arremessada (Athletics): não faz ataque corpo a corpo. Arremessada, divide a SP pela metade. Com Targeting Scope, volta ao usuário no início do próximo turno.",
+      "tags": [
+        "Exótica",
+        "Mira acoplada",
+        "Arremessável",
+        "Arma combinada"
+      ],
+      "attributes": {
+        "exotic": true,
+        "skill": "Athletics"
+      },
+      "manufacturer": "Everest VentureWare"
+    },
+    "utility-tomahawk": {
+      "page": 101,
+      "notes": "Conferido com Black Chrome, p. 101 e listas das p. 157-168. Corrigido: é Exótica.",
+      "description": "Arma corpo a corpo Pesada Exótica de uma mão, também arremessável (Athletics). Arremessada, continua dividindo a SP pela metade.",
+      "tags": [
+        "Exótica",
+        "Arremessável",
+        "Arma combinada"
+      ],
+      "attributes": {
+        "exotic": true
+      },
+      "manufacturer": "Everest VentureWare"
+    },
+    "arachnid-grenade": {
+      "page": 86,
+      "notes": "Conferido com Black Chrome, p. 86 e listas das p. 157-168.",
+      "manufacturer": "Centurion Essentials",
+      "description": "Granada não letal: o atingido fica coberto de solução adesiva, agarrado e sem Ação de Movimento, com -2 em todas as Ações. Soltar-se exige Brawling DV15 (de qualquer um ao alcance)."
+    },
+    "gunmart-door-cracker": {
+      "page": 87,
+      "notes": "Conferido com Black Chrome, p. 87 e listas das p. 157-168.",
+      "manufacturer": "GunMart",
+      "description": "Explosivo de entrada forçada. Precisa ser montado; detonado com uma Ação por chave dedicada ou Agent pareado. Só danifica aquilo em que foi preso."
+    },
+    "killchip-100-micro-bomb": {
+      "page": 88,
+      "notes": "Conferido com Black Chrome, p. 88 e listas das p. 157-168.",
+      "description": "Explosivo disfarçado de chip: ao ser inserido num Chipware Socket, causa 6d6 direto no HP e a Lesão Crítica Brain Injury."
+    },
+    "ktech-security-grenade": {
+      "page": 89,
+      "notes": "Conferido com Black Chrome, p. 89 e listas das p. 157-168.",
+      "manufacturer": "KTech",
+      "description": "Granada Armor-Piercing que causa 5d6 aos alvos mas não danifica cobertura."
+    },
+    "micro-hydrogen-combuster": {
+      "page": 88,
+      "notes": "Conferido com Black Chrome, p. 88 e listas das p. 157-168.",
+      "manufacturer": "Hydrosubsidium",
+      "description": "Explosivo Armor-Piercing (6d6) que precisa estar submerso em líquido. Cria cortina de fumaça."
+    },
+    "outlet-explosive": {
+      "page": 89,
+      "notes": "Conferido com Black Chrome, p. 89 e listas das p. 157-168.",
+      "description": "Explosivo disfarçado de adaptador de tomada. Montado, é detonado com uma Ação como uma granada Armor-Piercing (6d6), por chave remota ou Agent pareado."
+    },
+    "shuriken-tornado-grenade": {
+      "page": 87,
+      "notes": "Conferido com Black Chrome, p. 87 e listas das p. 157-168.",
+      "manufacturer": "Great Lakes Cutlery",
+      "description": "Granada que espalha vinte shurikens: dano de granada Armor-Piercing (6d6), rolado separadamente para cada alvo. Ao causar Foreign Object, a vítima sofre uma segunda Lesão Crítica."
+    },
+    "tr-4-detonator-fluid": {
+      "page": 90,
+      "notes": "Conferido com Black Chrome, p. 90 e listas das p. 157-168.",
+      "description": "Misturado ao tanque, explode como granada Armor-Piercing na próxima partida do veículo, atingindo o ponto fraco e ignorando a armadura do veículo."
+    },
+    "borgware-hardened-shielding": {
+      "page": 17,
+      "notes": "Conferido com Black Chrome, p. 17 e listas das p. 157-168. Preço, instalação e HL conferidos; a descrição é um resumo do compêndio."
+    },
+    "budget-chipware-socket": {
+      "page": 17,
+      "notes": "Conferido com Black Chrome, p. 17 e listas das p. 157-168. Preço, instalação e HL conferidos; a descrição é um resumo do compêndio."
+    },
+    "discount-cyberaudio-suite": {
+      "page": 17,
+      "notes": "Conferido com Black Chrome, p. 17 e listas das p. 157-168. Preço, instalação e HL conferidos; a descrição é um resumo do compêndio."
+    },
+    "modular-finger-enthusiast": {
+      "page": 18,
+      "notes": "Conferido com Black Chrome, p. 18 e listas das p. 157-168. Preço, instalação e HL conferidos; a descrição é um resumo do compêndio."
+    },
+    "explicit-memory-stimulator": {
+      "page": 18,
+      "notes": "Conferido com Black Chrome, p. 18 e listas das p. 157-168. Preço, instalação e HL conferidos; a descrição é um resumo do compêndio."
+    },
+    "extra-jointed-upgrade": {
+      "page": 18,
+      "notes": "Conferido com Black Chrome, p. 18 e listas das p. 157-168. Preço, instalação e HL conferidos; a descrição é um resumo do compêndio."
+    },
+    "flashbulb": {
+      "page": 18,
+      "notes": "Conferido com Black Chrome, p. 18 e listas das p. 157-168. Preço, instalação e HL conferidos; a descrição é um resumo do compêndio."
+    },
+    "hardened-cybereye-casing": {
+      "page": 19,
+      "notes": "Conferido com Black Chrome, p. 19 e listas das p. 157-168. Preço, instalação e HL conferidos; a descrição é um resumo do compêndio."
+    },
+    "int-cyberware-hardened-shield": {
+      "page": 20,
+      "notes": "Conferido com Black Chrome, p. 20 e listas das p. 157-168. Preço, instalação e HL conferidos; a descrição é um resumo do compêndio."
+    },
+    "modular-finger-cyberhand": {
+      "page": 20,
+      "notes": "Conferido com Black Chrome, p. 20 e listas das p. 157-168. Preço, instalação e HL conferidos; a descrição é um resumo do compêndio."
+    },
+    "neo-soviet-cyberarm": {
+      "page": 20,
+      "notes": "Conferido com Black Chrome, p. 20 e listas das p. 157-168. Preço, instalação e HL conferidos; a descrição é um resumo do compêndio."
+    },
+    "popup-net-launcher": {
+      "page": 20,
+      "notes": "Conferido com Black Chrome, p. 20 e listas das p. 157-168. Preço, instalação e HL conferidos; a descrição é um resumo do compêndio."
+    },
+    "popup-shotgun": {
+      "page": 21,
+      "notes": "Conferido com Black Chrome, p. 21 e listas das p. 157-168. Preço, instalação e HL conferidos; a descrição é um resumo do compêndio."
+    },
+    "racer-bracer": {
+      "page": 22,
+      "notes": "Conferido com Black Chrome, p. 22 e listas das p. 157-168. Preço, instalação e HL conferidos; a descrição é um resumo do compêndio."
+    },
+    "reflex-co-processor": {
+      "page": 21,
+      "notes": "Conferido com Black Chrome, p. 21 e listas das p. 157-168. Preço, instalação e HL conferidos; a descrição é um resumo do compêndio."
+    },
+    "reinforced-limb-upgrade": {
+      "page": 21,
+      "notes": "Conferido com Black Chrome, p. 21 e listas das p. 157-168. Preço, instalação e HL conferidos; a descrição é um resumo do compêndio."
+    },
+    "sponsored-cybereye": {
+      "page": 22,
+      "notes": "Conferido com Black Chrome, p. 22 e listas das p. 157-168. Preço, instalação e HL conferidos; a descrição é um resumo do compêndio."
+    },
+    "trauma-response-nanomatrix": {
+      "page": 22,
+      "notes": "Conferido com Black Chrome, p. 22 e listas das p. 157-168. Preço, instalação e HL conferidos; a descrição é um resumo do compêndio."
+    },
+    "airhypo-cyberfinger": {
+      "page": 24,
+      "notes": "Conferido com Black Chrome, p. 24 e listas das p. 157-168. Corrigido: instalação em Mall. Para HL 1d6/2, o livro arredonda para baixo.",
+      "manufacturer": "Dynalar",
+      "attributes": {
+        "installLocation": "Mall",
+        "requirements": "Mall"
+      }
+    },
+    "ballpoint-cyberfinger": {
+      "page": 24,
+      "notes": "Conferido com Black Chrome, p. 24 e listas das p. 157-168. Corrigido: instalação em Mall. Para HL 1d6/2, o livro arredonda para baixo.",
+      "manufacturer": "Dynalar",
+      "attributes": {
+        "installLocation": "Mall",
+        "requirements": "Mall"
+      }
+    },
+    "bullet-storage-cyberfinger": {
+      "page": 24,
+      "notes": "Conferido com Black Chrome, p. 24 e listas das p. 157-168. Corrigido: instalação em Mall. Para HL 1d6/2, o livro arredonda para baixo.",
+      "manufacturer": "Dynalar",
+      "attributes": {
+        "installLocation": "Mall",
+        "requirements": "Mall"
+      }
+    },
+    "dartgun-cyberfinger": {
+      "page": 24,
+      "notes": "Conferido com Black Chrome, p. 24 e listas das p. 157-168. Corrigido: instalação em Mall. Para HL 1d6/2, o livro arredonda para baixo.",
+      "manufacturer": "Dynalar",
+      "attributes": {
+        "installLocation": "Mall",
+        "requirements": "Mall"
+      }
+    },
+    "flashlight-cyberfinger": {
+      "page": 24,
+      "notes": "Conferido com Black Chrome, p. 24 e listas das p. 157-168. Corrigido: instalação em Mall. Para HL 1d6/2, o livro arredonda para baixo.",
+      "manufacturer": "Dynalar",
+      "attributes": {
+        "installLocation": "Mall",
+        "requirements": "Mall"
+      }
+    },
+    "homing-tracer-cyberfinger": {
+      "page": 25,
+      "notes": "Conferido com Black Chrome, p. 25 e listas das p. 157-168. Corrigido: instalação em Mall. Para HL 1d6/2, o livro arredonda para baixo.",
+      "manufacturer": "Dynalar",
+      "attributes": {
+        "installLocation": "Mall",
+        "requirements": "Mall"
+      }
+    },
+    "laser-pointer-cyberfinger": {
+      "page": 25,
+      "notes": "Conferido com Black Chrome, p. 25 e listas das p. 157-168. Corrigido: instalação em Mall. Para HL 1d6/2, o livro arredonda para baixo.",
+      "manufacturer": "Dynalar",
+      "attributes": {
+        "installLocation": "Mall",
+        "requirements": "Mall"
+      }
+    },
+    "lighter-cyberfinger": {
+      "page": 25,
+      "notes": "Conferido com Black Chrome, p. 25 e listas das p. 157-168. Corrigido: instalação em Mall. Para HL 1d6/2, o livro arredonda para baixo.",
+      "manufacturer": "Dynalar",
+      "attributes": {
+        "installLocation": "Mall",
+        "requirements": "Mall"
+      }
+    },
+    "lockpick-cyberfinger": {
+      "page": 25,
+      "notes": "Conferido com Black Chrome, p. 25 e listas das p. 157-168. Corrigido: instalação em Mall. Para HL 1d6/2, o livro arredonda para baixo.",
+      "manufacturer": "Dynalar",
+      "attributes": {
+        "installLocation": "Mall",
+        "requirements": "Mall"
+      }
+    },
+    "microphone-cyberfinger": {
+      "page": 25,
+      "notes": "Conferido com Black Chrome, p. 25 e listas das p. 157-168. Corrigido: instalação em Mall. Para HL 1d6/2, o livro arredonda para baixo.",
+      "manufacturer": "Dynalar",
+      "attributes": {
+        "installLocation": "Mall",
+        "requirements": "Mall"
+      }
+    },
+    "mini-air-supply-cyberfinger": {
+      "page": 26,
+      "notes": "Conferido com Black Chrome, p. 26 e listas das p. 157-168. Corrigido: instalação em Mall. Para HL 1d6/2, o livro arredonda para baixo.",
+      "manufacturer": "Dynalar",
+      "attributes": {
+        "installLocation": "Mall",
+        "requirements": "Mall"
+      }
+    },
+    "one-shot-special-cyberfinger": {
+      "page": 26,
+      "notes": "Conferido com Black Chrome, p. 26 e listas das p. 157-168. Corrigido: instalação em Mall. Para HL 1d6/2, o livro arredonda para baixo.",
+      "manufacturer": "Dynalar",
+      "attributes": {
+        "installLocation": "Mall",
+        "requirements": "Mall"
+      }
+    },
+    "spray-paint-cyberfinger": {
+      "page": 26,
+      "notes": "Conferido com Black Chrome, p. 26 e listas das p. 157-168. Corrigido: instalação em Mall. Para HL 1d6/2, o livro arredonda para baixo.",
+      "manufacturer": "Dynalar",
+      "attributes": {
+        "installLocation": "Mall",
+        "requirements": "Mall"
+      }
+    },
+    "squirt-cyberfinger": {
+      "page": 26,
+      "notes": "Conferido com Black Chrome, p. 26 e listas das p. 157-168. Corrigido: instalação em Mall. Para HL 1d6/2, o livro arredonda para baixo.",
+      "manufacturer": "Dynalar",
+      "attributes": {
+        "installLocation": "Mall",
+        "requirements": "Mall"
+      }
+    },
+    "wirecutter-scissor-cyberfingers": {
+      "page": 26,
+      "notes": "Conferido com Black Chrome, p. 26 e listas das p. 157-168. Corrigido: instalação em Mall. Para HL 1d6/2, o livro arredonda para baixo.",
+      "manufacturer": "Dynalar",
+      "attributes": {
+        "installLocation": "Mall",
+        "requirements": "Mall"
+      }
+    },
+    "chipvault": {
+      "page": 44,
+      "notes": "Conferido com Black Chrome, p. 44 e listas das p. 157-168.",
+      "name": "ChipVault by SecSystems",
+      "manufacturer": "SecSystems"
+    },
+    "drink-master-3000-5000": {
+      "page": 42,
+      "notes": "Conferido com Black Chrome, p. 42 e listas das p. 157-168. O bônus de +1 em Persuasão/Cool do compêndio não está na lista do livro.",
+      "name": "The Drink Master 3000",
+      "manufacturer": "Hammered Industries",
+      "description": "Prepara drinques de todo tipo.",
+      "attributes": {
+        "skillBonus": null
+      }
+    },
+    "rapideploy-sheath": {
+      "page": 47,
+      "notes": "Conferido com Black Chrome, p. 47 e listas das p. 157-168.",
+      "manufacturer": "Gambler Workshop",
+      "description": "Coldre ocultável, durável e versátil."
+    },
+    "americar-econocompact": {
+      "page": 64,
+      "notes": "Conferido com Black Chrome, p. 64 e listas das p. 157-168.",
+      "description": "Compact Groundcar econômico de 3 lugares. Incompatível com alguns upgrades.",
+      "attributes": {
+        "includedUpgrades": null
+      },
+      "manufacturer": "AmeriCar",
+      "tags": [
+        "Nomad Access 1"
+      ]
+    },
+    "harvey-100-americar": {
+      "page": 69,
+      "notes": "Conferido com Black Chrome, p. 69 e listas das p. 157-168.",
+      "description": "Roadbike básica, sem upgrades.",
+      "attributes": {
+        "includedUpgrades": null
+      },
+      "name": "The Harvey 100",
+      "manufacturer": "AmeriCar",
+      "tags": [
+        "Nomad Access 1"
+      ]
+    },
+    "highway-master-artemis": {
+      "page": 70,
+      "notes": "Conferido com Black Chrome, p. 70 e listas das p. 157-168. Corrigido: 20 MOVE e 100 MPH (não 60/300) e 2 lugares.",
+      "description": "Roadbike com Armored Chassis, Bulletproof Glass x2 e modo Supercharge.",
+      "attributes": {
+        "speedMove": 20,
+        "topSpeedMph": 100,
+        "seats": 2,
+        "armorSp": 13,
+        "includedUpgrades": "Armored Chassis (SP13), Bulletproof Glass (x2) e Supercharge Mode."
+      },
+      "manufacturer": "Brennan",
+      "tags": [
+        "Nomad Access 5"
+      ]
+    },
+    "quadra-thunder-x": {
+      "page": 76,
+      "notes": "Conferido com Black Chrome, p. 76 e listas das p. 157-168.",
+      "description": "High Performance Groundcar com Armored Chassis, Bulletproof Glass e NOS.",
+      "attributes": {
+        "includedUpgrades": "Armored Chassis (SP13), Bulletproof Glass e NOS."
+      },
+      "manufacturer": "Dayton Quadra",
+      "tags": [
+        "Nomad Access 8"
+      ]
+    },
+    "street-king-combat": {
+      "page": 77,
+      "notes": "Conferido com Black Chrome, p. 77 e listas das p. 157-168. Corrigido: SP13 do Armored Chassis.",
+      "description": "High Performance Groundcar de combate.",
+      "attributes": {
+        "vehicleType": "SportsCar",
+        "armorSp": 13,
+        "includedUpgrades": "Armored Chassis (SP13), Bulletproof Glass (x2), Heavy Chassis, NOS, Seating Upgrade e assentos \"um pouco desconfortáveis\"."
+      },
+      "name": "Street King Combat Vehicle",
+      "manufacturer": "Turbo Neon Motors",
+      "tags": [
+        "Nomad Access 10"
+      ]
+    },
+    "zetatech-aerovox-av-4": {
+      "page": 61,
+      "notes": "Conferido com Black Chrome, p. 61 e listas das p. 157-168. Corrigido: 6 lugares e 120 SDP.",
+      "description": "AV-4 com Heavy Chassis.",
+      "attributes": {
+        "seats": 6,
+        "sdp": 120,
+        "includedUpgrades": "Heavy Chassis."
+      },
+      "name": "Zetatech AeroVox",
+      "manufacturer": "Zetatech",
+      "tags": [
+        "Nomad Access 8"
+      ]
+    },
+    "zetatech-aerocop": {
+      "page": 61,
+      "notes": "Conferido com Black Chrome, p. 61 e listas das p. 157-168. Corrigido: 6 lugares, 120 SDP e SP13.",
+      "description": "AV-4 policial.",
+      "attributes": {
+        "seats": 6,
+        "sdp": 120,
+        "armorSp": 13,
+        "includedUpgrades": "Armored Chassis, Bulletproof Glass (x2), Heavy Chassis e Onboard Machine Gun."
+      },
+      "manufacturer": "Zetatech",
+      "tags": [
+        "Nomad Access 10"
+      ]
+    }
+  },
+  "additions": [
+    {
+      "tags": [
+        "Exótica",
+        "Estilo"
+      ],
+      "manufacturer": "Centurion Essentials",
+      "slug": "superchrome-javelin",
+      "name": "Superchrome® Javelin",
+      "category": "weapons",
+      "page": 120,
+      "price": 1000,
+      "description": "Fuzil de precisão Exótico com 4 tiros. Aceita munição não-básica. Usado à mostra, dá +2 em Wardrobe & Style (não soma com outras armas).",
+      "attributes": {
+        "weaponClass": "SniperRifle",
+        "skill": "ShoulderArms",
+        "damage": "5d6",
+        "damageDice": 5,
+        "rof": 1,
+        "magazine": 4,
+        "maxRange": 800,
+        "hands": 2,
+        "concealable": false,
+        "quality": "Standard",
+        "exotic": true,
+        "calibers": [
+          "Rifle"
+        ]
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Black Chrome, p. 120 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Arasaka",
+      "slug": "arasaka-acid",
+      "name": "Arasaka Acid",
+      "category": "gear",
+      "page": 91,
+      "price": 100,
+      "description": "Fluido para a Arasaka Weeping Reaver, uma aplicação por cilindro, efeito de 1 minuto. A lâmina passa a ser Armor-Piercing.",
+      "attributes": {
+        "gearType": "Tool",
+        "gearClass": "Acessório de arma",
+        "requirements": "Arasaka Weeping Reaver",
+        "effect": "A lâmina passa a ser Armor-Piercing."
+      },
+      "priceCategory": "Premium",
+      "notes": "Conferido com Black Chrome, p. 91 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Arasaka",
+      "slug": "arasaka-fire",
+      "name": "Arasaka Fire",
+      "category": "gear",
+      "page": 91,
+      "price": 100,
+      "description": "Fluido para a Arasaka Weeping Reaver, uma aplicação por cilindro, efeito de 1 minuto. A lâmina pode incendiar o alvo.",
+      "attributes": {
+        "gearType": "Tool",
+        "gearClass": "Acessório de arma",
+        "requirements": "Arasaka Weeping Reaver",
+        "effect": "A lâmina pode incendiar o alvo."
+      },
+      "priceCategory": "Premium",
+      "notes": "Conferido com Black Chrome, p. 91 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Arasaka",
+      "slug": "arasaka-wound-salt",
+      "name": "Arasaka Wound Salt",
+      "category": "gear",
+      "page": 91,
+      "price": 100,
+      "description": "Fluido para a Arasaka Weeping Reaver, uma aplicação por cilindro, efeito de 1 minuto. Ao causar Foreign Object, a vítima rola de novo até tirar outra Lesão Crítica e sofre as duas.",
+      "attributes": {
+        "gearType": "Tool",
+        "gearClass": "Acessório de arma",
+        "requirements": "Arasaka Weeping Reaver",
+        "effect": "Ao causar Foreign Object, a vítima rola de novo até tirar outra Lesão Crítica e sofre as duas."
+      },
+      "priceCategory": "Premium",
+      "notes": "Conferido com Black Chrome, p. 91 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Dynalar",
+      "slug": "standard-cyberfinger",
+      "name": "Standard Cyberfinger",
+      "category": "cyberware",
+      "page": 26,
+      "price": 20,
+      "description": "Só um dedo.",
+      "attributes": {
+        "cyberwareType": "Cyberfinger",
+        "bodyLocation": "Hand",
+        "installLocation": "Mall",
+        "humanityLoss": 0,
+        "foundational": false,
+        "slotsRequired": 1,
+        "requiresPair": false,
+        "requirements": "Mall",
+        "effect": "Dedo cibernético comum."
+      },
+      "priceCategory": "Everyday",
+      "notes": "Conferido com Black Chrome, p. 26 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "slug": "integrated-cyberdeck-upgrade",
+      "name": "Integrated Cyberdeck Upgrade",
+      "category": "cyberware",
+      "page": 19,
+      "price": 500,
+      "description": "Um slot de opção extra para o Cyberdeck instalado no Cyberarm.",
+      "attributes": {
+        "cyberwareType": "LimbOption",
+        "bodyLocation": "Arm",
+        "installLocation": "Clinic",
+        "humanityLoss": 7,
+        "humanityLossDice": "2d6",
+        "foundational": false,
+        "requiresPair": false,
+        "requiresItem": "cyberarm",
+        "requirements": "Clinic",
+        "effect": "+1 slot no Cyberdeck integrado ao Cyberarm."
+      },
+      "priceCategory": "Expensive",
+      "notes": "Conferido com Black Chrome, p. 19 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Biotechnica",
+      "slug": "heuristic-health-monitor",
+      "name": "Heuristic Health Monitor",
+      "category": "fashionware",
+      "page": 19,
+      "price": 500,
+      "description": "Você está em forma, e agora pode mostrar isso ao mundo.",
+      "attributes": {
+        "fashionType": "Display",
+        "bodyArea": "Skin",
+        "installLocation": "Clinic",
+        "humanityLoss": 0,
+        "visualEffect": "Mostra seus indicadores de saúde."
+      },
+      "priceCategory": "Expensive",
+      "notes": "Conferido com Black Chrome, p. 19 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Nu-Tek",
+      "slug": "corporate-island",
+      "name": "Corporate Island",
+      "category": "armor",
+      "page": 35,
+      "price": 500,
+      "description": "Light Armorjack (corpo) com aparência Businesswear.",
+      "attributes": {
+        "armorType": "BodyArmor",
+        "sp": 11,
+        "refPenalty": 0,
+        "dexPenalty": 0,
+        "movePenalty": 0,
+        "effect": "Light Armorjack (corpo) com aparência Businesswear.",
+        "protectedLocations": "Corpo"
+      },
+      "priceCategory": "Expensive",
+      "notes": "Conferido com Black Chrome, p. 35 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Zhukova International",
+      "slug": "the-dirk-combat-jacket",
+      "name": "The Dirk Combat Jacket",
+      "category": "armor",
+      "page": 28,
+      "price": 500,
+      "description": "Light Armorjack (corpo) com aparência Leisurewear. Guarda dois pentes sem teste.",
+      "attributes": {
+        "armorType": "BodyArmor",
+        "sp": 11,
+        "refPenalty": 0,
+        "dexPenalty": 0,
+        "movePenalty": 0,
+        "effect": "Light Armorjack (corpo) com aparência Leisurewear. Guarda dois pentes sem teste.",
+        "protectedLocations": "Corpo"
+      },
+      "priceCategory": "Expensive",
+      "notes": "Conferido com Black Chrome, p. 28 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Torrell and Chiang",
+      "slug": "executive-armor",
+      "name": "Executive Armor",
+      "category": "armor",
+      "page": 34,
+      "price": 1000,
+      "description": "Light Armorjack (corpo) com aparência Businesswear que se repara com o tempo.",
+      "attributes": {
+        "armorType": "BodyArmor",
+        "sp": 11,
+        "refPenalty": 0,
+        "dexPenalty": 0,
+        "movePenalty": 0,
+        "effect": "Light Armorjack (corpo) com aparência Businesswear que se repara com o tempo.",
+        "protectedLocations": "Corpo"
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Black Chrome, p. 34 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Fire Brand",
+      "slug": "fire-brand-bunker-gear",
+      "name": "Fire Brand Bunker Gear",
+      "category": "armor",
+      "page": 29,
+      "price": 1000,
+      "description": "Flak (corpo e cabeça), -4 em REF, DEX e MOVE. Imune a fogo, com máscara de gás e tanque de oxigênio.",
+      "attributes": {
+        "armorType": "BodyArmor",
+        "sp": 15,
+        "refPenalty": 4,
+        "dexPenalty": 4,
+        "movePenalty": 4,
+        "effect": "Flak (corpo e cabeça), -4 em REF, DEX e MOVE. Imune a fogo, com máscara de gás e tanque de oxigênio.",
+        "protectedLocations": "Corpo e Cabeça"
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Black Chrome, p. 29 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Laser Light",
+      "slug": "laser-light-street-jacket",
+      "name": "Laser Light Street Jacket",
+      "category": "armor",
+      "page": 31,
+      "price": 500,
+      "description": "Light Armorjack (corpo) com aparência Urban Flash. Conta como 1 Light Tattoo.",
+      "attributes": {
+        "armorType": "BodyArmor",
+        "sp": 11,
+        "refPenalty": 0,
+        "dexPenalty": 0,
+        "movePenalty": 0,
+        "effect": "Light Armorjack (corpo) com aparência Urban Flash. Conta como 1 Light Tattoo.",
+        "protectedLocations": "Corpo"
+      },
+      "priceCategory": "Expensive",
+      "notes": "Conferido com Black Chrome, p. 31 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Lotos Designs",
+      "slug": "lotos-netsuit",
+      "name": "Lotos Netsuit",
+      "category": "armor",
+      "page": 31,
+      "price": 5000,
+      "description": "Bodyweight Suit (corpo e cabeça) SP13, -2 em REF, DEX e MOVE. Slot de hardware extra e vem com Cyberdeck de Qualidade Excelente.",
+      "attributes": {
+        "armorType": "BodyArmor",
+        "sp": 13,
+        "refPenalty": 2,
+        "dexPenalty": 2,
+        "movePenalty": 2,
+        "effect": "Bodyweight Suit (corpo e cabeça) SP13, -2 em REF, DEX e MOVE. Slot de hardware extra e vem com Cyberdeck de Qualidade Excelente.",
+        "protectedLocations": "Corpo e Cabeça"
+      },
+      "priceCategory": "Luxury",
+      "notes": "Conferido com Black Chrome, p. 31 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Masetto Tech",
+      "slug": "masetto-airrider",
+      "name": "Masetto AirRider",
+      "category": "armor",
+      "page": 33,
+      "price": 100,
+      "description": "Roupa de Kevlar® (corpo) que infla para proteger contra Whiplash em batidas.",
+      "attributes": {
+        "armorType": "BodyArmor",
+        "sp": 7,
+        "refPenalty": 0,
+        "dexPenalty": 0,
+        "movePenalty": 0,
+        "effect": "Roupa de Kevlar® (corpo) que infla para proteger contra Whiplash em batidas.",
+        "protectedLocations": "Corpo"
+      },
+      "priceCategory": "Premium",
+      "notes": "Conferido com Black Chrome, p. 33 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Masetto Tech",
+      "slug": "masetto-holo-wear",
+      "name": "Masetto Holo-Wear",
+      "category": "armor",
+      "page": 35,
+      "price": 1000,
+      "description": "Roupa holográfica de vários estilos; novos visuais podem ser baixados. Cuidado com EMP.",
+      "attributes": {
+        "armorType": "Clothing",
+        "effect": "Roupa holográfica de vários estilos; novos visuais podem ser baixados. Cuidado com EMP.",
+        "clothingSlot": "FullOutfit"
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Black Chrome, p. 35 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Tokyo Dynamics",
+      "slug": "mechaman-motorcycle-helmet",
+      "name": "MechaMan Motorcycle Helmet",
+      "category": "armor",
+      "page": 37,
+      "price": 5000,
+      "description": "Flak (cabeça), -4 em REF, DEX e MOVE. Smart Glasses embutidos com Low Light/Infrared/UV e Chyron.",
+      "attributes": {
+        "armorType": "BodyArmor",
+        "sp": 15,
+        "refPenalty": 4,
+        "dexPenalty": 4,
+        "movePenalty": 4,
+        "effect": "Flak (cabeça), -4 em REF, DEX e MOVE. Smart Glasses embutidos com Low Light/Infrared/UV e Chyron.",
+        "protectedLocations": "Cabeça"
+      },
+      "priceCategory": "Luxury",
+      "notes": "Conferido com Black Chrome, p. 37 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Tokyo Dynamics",
+      "slug": "mechaman-smart-glove",
+      "name": "MechaMan Smart Glove",
+      "category": "armor",
+      "page": 37,
+      "price": 500,
+      "description": "Luva com Subdermal Grip pré-instalado e 1 slot de opção adicional.",
+      "attributes": {
+        "armorType": "Clothing",
+        "effect": "Luva com Subdermal Grip pré-instalado e 1 slot de opção adicional.",
+        "clothingSlot": "Jewelry"
+      },
+      "priceCategory": "Expensive",
+      "notes": "Conferido com Black Chrome, p. 37 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "slug": "mimic-clothing-kit",
+      "name": "Mimic Clothing Kit",
+      "category": "armor",
+      "page": 33,
+      "price": 100,
+      "description": "Kit que blinda uma roupa existente como Light Armorjack (corpo).",
+      "attributes": {
+        "armorType": "BodyArmor",
+        "sp": 11,
+        "refPenalty": 0,
+        "dexPenalty": 0,
+        "movePenalty": 0,
+        "effect": "Kit que blinda uma roupa existente como Light Armorjack (corpo).",
+        "protectedLocations": "Corpo"
+      },
+      "priceCategory": "Premium",
+      "notes": "Conferido com Black Chrome, p. 33 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Montage",
+      "slug": "montage-variable-clothing-line",
+      "name": "Montage Variable Clothing Line",
+      "category": "armor",
+      "page": 32,
+      "price": 500,
+      "description": "Light Armorjack (corpo ou cabeça), aparência Generic Chic ou Gang Colors; muda de padrão e cor, e padrões novos podem ser comprados.",
+      "attributes": {
+        "armorType": "BodyArmor",
+        "sp": 11,
+        "refPenalty": 0,
+        "dexPenalty": 0,
+        "movePenalty": 0,
+        "effect": "Light Armorjack (corpo ou cabeça), aparência Generic Chic ou Gang Colors; muda de padrão e cor, e padrões novos podem ser comprados.",
+        "protectedLocations": "Corpo ou Cabeça"
+      },
+      "priceCategory": "Expensive",
+      "notes": "Conferido com Black Chrome, p. 32 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Gibson Battlegear",
+      "slug": "shock-armor",
+      "name": "Shock Armor",
+      "category": "armor",
+      "page": 29,
+      "price": 500,
+      "description": "Kevlar® (corpo) eletrificável: encerra um agarrão, e o agressor faz Resist Torture/Drugs DV15.",
+      "attributes": {
+        "armorType": "BodyArmor",
+        "sp": 7,
+        "refPenalty": 0,
+        "dexPenalty": 0,
+        "movePenalty": 0,
+        "effect": "Kevlar® (corpo) eletrificável: encerra um agarrão, e o agressor faz Resist Torture/Drugs DV15.",
+        "protectedLocations": "Corpo"
+      },
+      "priceCategory": "Expensive",
+      "notes": "Conferido com Black Chrome, p. 29 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "SkidRow Limited",
+      "slug": "skidrow-trench",
+      "name": "SkidRow Trench",
+      "category": "armor",
+      "page": 33,
+      "price": 100,
+      "description": "Flak (corpo) SP13, -4 em REF, DEX e MOVE.",
+      "attributes": {
+        "armorType": "BodyArmor",
+        "sp": 13,
+        "refPenalty": 4,
+        "dexPenalty": 4,
+        "movePenalty": 4,
+        "effect": "Flak (corpo) SP13, -4 em REF, DEX e MOVE.",
+        "protectedLocations": "Corpo"
+      },
+      "priceCategory": "Premium",
+      "notes": "Conferido com Black Chrome, p. 33 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Zonda",
+      "slug": "street-viper-riding-suit",
+      "name": "Street Viper Riding Suit",
+      "category": "armor",
+      "page": 36,
+      "price": 100,
+      "description": "Kevlar® (corpo) com duas armas corpo a corpo Médias embutidas.",
+      "attributes": {
+        "armorType": "BodyArmor",
+        "sp": 7,
+        "refPenalty": 0,
+        "dexPenalty": 0,
+        "movePenalty": 0,
+        "effect": "Kevlar® (corpo) com duas armas corpo a corpo Médias embutidas.",
+        "protectedLocations": "Corpo"
+      },
+      "priceCategory": "Premium",
+      "notes": "Conferido com Black Chrome, p. 36 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Gibson Battlegear",
+      "slug": "tactical-smart-armor",
+      "name": "Tactical Smart Armor",
+      "category": "armor",
+      "page": 30,
+      "price": 1000,
+      "description": "Medium Armorjack (corpo e cabeça), -2 em REF, DEX e MOVE, com Smart Glasses embutidos.",
+      "attributes": {
+        "armorType": "BodyArmor",
+        "sp": 12,
+        "refPenalty": 2,
+        "dexPenalty": 2,
+        "movePenalty": 2,
+        "effect": "Medium Armorjack (corpo e cabeça), -2 em REF, DEX e MOVE, com Smart Glasses embutidos.",
+        "protectedLocations": "Corpo e Cabeça"
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Black Chrome, p. 30 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "slug": "fma-kotar-linear-frame",
+      "name": "Fma Kotar Linear Frame",
+      "category": "armor",
+      "page": 52,
+      "price": 5000,
+      "description": "+2 em Stealth. Duas armas Pesadas Exóticas de Qualidade Excelente, ou uma Leve e uma Muito Pesada, sacadas sem Ação. BODY passa a 12 enquanto conectado (não sobe além disso). Externo: exige 2 Interface Plugs, sai e entra com uma Ação e não altera HP nem Death Save. Interno (Borgware): instalação em Hospital com BODY 8 e duas Grafted Muscle and Bone Lace, HL 14 (4d6).",
+      "attributes": {
+        "armorType": "LinearFrame",
+        "bodyValue": 12,
+        "humanityLoss": 14,
+        "humanityLossDice": "4d6",
+        "installLocation": "Hospital",
+        "requirements": "Externo: 2 Interface Plugs. Interno: BODY 8 e duas Grafted Muscle and Bone Lace",
+        "effect": "+2 em Stealth. Duas armas Pesadas Exóticas de Qualidade Excelente, ou uma Leve e uma Muito Pesada, sacadas sem Ação."
+      },
+      "priceCategory": "Luxury",
+      "notes": "Conferido com Black Chrome, p. 52 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Polska CyberTechnologies",
+      "slug": "lf-001-swat-linear-frame",
+      "name": "LF-001 SWAT Linear Frame",
+      "category": "armor",
+      "page": 53,
+      "price": 5000,
+      "description": "Anula a penalidade de movimento ao escalar e nadar. BODY passa a 12 enquanto conectado (não sobe além disso). Externo: exige 2 Interface Plugs, sai e entra com uma Ação e não altera HP nem Death Save. Interno (Borgware): instalação em Hospital com BODY 8 e duas Grafted Muscle and Bone Lace, HL 14 (4d6).",
+      "attributes": {
+        "armorType": "LinearFrame",
+        "bodyValue": 12,
+        "humanityLoss": 14,
+        "humanityLossDice": "4d6",
+        "installLocation": "Hospital",
+        "requirements": "Externo: 2 Interface Plugs. Interno: BODY 8 e duas Grafted Muscle and Bone Lace",
+        "effect": "Anula a penalidade de movimento ao escalar e nadar."
+      },
+      "priceCategory": "Luxury",
+      "notes": "Conferido com Black Chrome, p. 53 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Wyzard Technologies",
+      "slug": "vermilion-linear-frame",
+      "name": "Vermilion Linear Frame",
+      "category": "armor",
+      "page": 54,
+      "price": 5000,
+      "description": "Anula a penalidade de salto e funciona como Skate Feet pareados. BODY passa a 12 enquanto conectado (não sobe além disso). Externo: exige 2 Interface Plugs, sai e entra com uma Ação e não altera HP nem Death Save. Interno (Borgware): instalação em Hospital com BODY 8 e duas Grafted Muscle and Bone Lace, HL 14 (4d6).",
+      "attributes": {
+        "armorType": "LinearFrame",
+        "bodyValue": 12,
+        "humanityLoss": 14,
+        "humanityLossDice": "4d6",
+        "installLocation": "Hospital",
+        "requirements": "Externo: 2 Interface Plugs. Interno: BODY 8 e duas Grafted Muscle and Bone Lace",
+        "effect": "Anula a penalidade de salto e funciona como Skate Feet pareados."
+      },
+      "priceCategory": "Luxury",
+      "notes": "Conferido com Black Chrome, p. 54 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Zhirafa Technical Manufacturing",
+      "slug": "el-f4-nt-linear-frame",
+      "name": "EL-F4-NT Linear Frame",
+      "category": "armor",
+      "page": 55,
+      "price": 5000,
+      "description": "Linear Frame externo para construção, com controles manuais (não usa Interface Plugs). BODY passa a 12 enquanto vestido, sem alterar HP nem Death Save. Dá acesso a dois Techtools. Vestir ou tirar é uma Ação.",
+      "attributes": {
+        "armorType": "LinearFrame",
+        "bodyValue": 12,
+        "effect": "BODY 12, dois Techtools, sem Interface Plugs."
+      },
+      "priceCategory": "Luxury",
+      "notes": "Conferido com Black Chrome, p. 55 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Everest VentureWare",
+      "slug": "everest-ventureware-airwell-50",
+      "name": "Everest VentureWare AirWell 50",
+      "category": "gear",
+      "page": 48,
+      "price": 100,
+      "description": "Produz água a partir do ar.",
+      "attributes": {
+        "gearType": "Survival",
+        "effect": "Produz água a partir do ar."
+      },
+      "priceCategory": "Premium",
+      "notes": "Conferido com Black Chrome, p. 48 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Everest VentureWare",
+      "slug": "everest-ventureware-one-touch-habitat",
+      "name": "Everest VentureWare One Touch Habitat",
+      "category": "gear",
+      "page": 48,
+      "price": 100,
+      "description": "Barraca confortável que se monta sozinha.",
+      "attributes": {
+        "gearType": "Survival",
+        "effect": "Barraca confortável que se monta sozinha."
+      },
+      "priceCategory": "Premium",
+      "notes": "Conferido com Black Chrome, p. 48 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Hydrosubsidium",
+      "slug": "hydrosubsidium-universal-aqualung",
+      "name": "Hydrosubsidium Universal Aqualung",
+      "category": "gear",
+      "page": 42,
+      "price": 5000,
+      "description": "Brinquedo caro que permite respirar logo abaixo da água.",
+      "attributes": {
+        "gearType": "Survival",
+        "effect": "Brinquedo caro que permite respirar logo abaixo da água."
+      },
+      "priceCategory": "Luxury",
+      "notes": "Conferido com Black Chrome, p. 42 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Nu-Tek",
+      "slug": "jeeves-executive-garment-bag",
+      "name": "Jeeves Executive Garment Bag",
+      "category": "gear",
+      "page": 43,
+      "price": 1000,
+      "description": "Guarda roupas e também as limpa e conserta.",
+      "attributes": {
+        "gearType": "Lifestyle",
+        "effect": "Guarda roupas e também as limpa e conserta."
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Black Chrome, p. 43 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "KillStrom Music",
+      "slug": "killstrom-banshee-microphone",
+      "name": "KillStrom Banshee Microphone",
+      "category": "gear",
+      "page": 40,
+      "price": 1000,
+      "description": "Microfone de cabeça que faz você soar bem.",
+      "attributes": {
+        "gearType": "Lifestyle",
+        "effect": "Microfone de cabeça que faz você soar bem."
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Black Chrome, p. 40 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "KillStrom Music",
+      "slug": "killstrom-sonic-boom-amp",
+      "name": "KillStrom Sonic Boom Amp",
+      "category": "gear",
+      "page": 40,
+      "price": 1000,
+      "description": "Amplificador de som ensurdecedor, literalmente.",
+      "attributes": {
+        "gearType": "Lifestyle",
+        "effect": "Amplificador de som ensurdecedor, literalmente."
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Black Chrome, p. 40 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "KillStrom Music",
+      "slug": "killstrom-typhoid-speaker",
+      "name": "KillStrom Typhoid Speaker",
+      "category": "gear",
+      "page": 41,
+      "price": 500,
+      "description": "Aumenta a potência e o alcance do Sonic Boom Amp.",
+      "attributes": {
+        "gearType": "Lifestyle",
+        "effect": "Aumenta a potência e o alcance do Sonic Boom Amp."
+      },
+      "priceCategory": "Expensive",
+      "notes": "Conferido com Black Chrome, p. 41 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "KTech",
+      "slug": "ktech-doberman-500",
+      "name": "KTech Doberman 500",
+      "category": "gear",
+      "page": 45,
+      "price": 5000,
+      "description": "Cão-robô de guarda. Sim, dá para fazer carinho.",
+      "attributes": {
+        "gearType": "Security",
+        "effect": "Cão-robô de guarda. Sim, dá para fazer carinho."
+      },
+      "priceCategory": "Luxury",
+      "notes": "Conferido com Black Chrome, p. 45 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "KTech",
+      "slug": "ktech-doberman-500-marking-scent",
+      "name": "KTech Doberman 500 Marking Scent",
+      "category": "gear",
+      "page": 44,
+      "price": 50,
+      "description": "Marca um alvo e facilita rastreá-lo pelo cheiro. Pacote com 12.",
+      "attributes": {
+        "gearType": "Security",
+        "effect": "Marca um alvo e facilita rastreá-lo pelo cheiro. Pacote com 12."
+      },
+      "priceCategory": "Costly",
+      "notes": "Conferido com Black Chrome, p. 44 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Laser Light",
+      "slug": "laser-light-electric-guitar",
+      "name": "Laser Light Electric Guitar",
+      "category": "gear",
+      "page": 41,
+      "price": 1000,
+      "description": "Guitarra elétrica. Conta como 1 Light Tattoo.",
+      "attributes": {
+        "gearType": "Lifestyle",
+        "effect": "Guitarra elétrica. Conta como 1 Light Tattoo."
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Black Chrome, p. 41 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Everest VentureWare",
+      "slug": "mr-biscuit-multi-food-processor",
+      "name": "Mr. Biscuit Multi-Food Processor",
+      "category": "gear",
+      "page": 49,
+      "price": 500,
+      "description": "Faz biscoitos de comida a partir de lixo orgânico.",
+      "attributes": {
+        "gearType": "Survival",
+        "effect": "Faz biscoitos de comida a partir de lixo orgânico."
+      },
+      "priceCategory": "Expensive",
+      "notes": "Conferido com Black Chrome, p. 49 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Petrochem",
+      "slug": "petrochem-nitro-ultra9",
+      "name": "Petrochem Nitro Ultra9",
+      "category": "gear",
+      "page": 49,
+      "price": 100,
+      "description": "Deixa o carro mais rápido e mais explosivo.",
+      "attributes": {
+        "gearType": "VehicleUpgrade",
+        "effect": "Deixa o carro mais rápido e mais explosivo."
+      },
+      "priceCategory": "Premium",
+      "notes": "Conferido com Black Chrome, p. 49 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Biotechnica",
+      "slug": "shower-in-a-can",
+      "name": "Shower-in-a-Can",
+      "category": "gear",
+      "page": 38,
+      "price": 10,
+      "description": "Espuma que desinfeta e desodoriza.",
+      "attributes": {
+        "gearType": "Lifestyle",
+        "effect": "Espuma que desinfeta e desodoriza."
+      },
+      "priceCategory": "Cheap",
+      "notes": "Conferido com Black Chrome, p. 38 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "SovOil",
+      "slug": "sovoil-lubricants",
+      "name": "SovOil Lubricants",
+      "category": "gear",
+      "page": 56,
+      "price": 10,
+      "description": "Lubrificantes para vários usos.",
+      "attributes": {
+        "gearType": "Tool",
+        "effect": "Lubrificantes para vários usos."
+      },
+      "priceCategory": "Cheap",
+      "notes": "Conferido com Black Chrome, p. 56 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "SecSystems",
+      "slug": "streetcase-by-secsystems",
+      "name": "Streetcase by SecSystems",
+      "category": "gear",
+      "page": 47,
+      "price": 500,
+      "description": "Maleta executiva para defesa e armazenamento.",
+      "attributes": {
+        "gearType": "Security",
+        "effect": "Maleta executiva para defesa e armazenamento."
+      },
+      "priceCategory": "Expensive",
+      "notes": "Conferido com Black Chrome, p. 47 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Continental Brands",
+      "slug": "triti-fizz",
+      "name": "Triti-Fizz",
+      "category": "gear",
+      "page": 124,
+      "price": 10,
+      "description": "O refrigerante favorito de Night City.",
+      "attributes": {
+        "gearType": "Lifestyle",
+        "effect": "O refrigerante favorito de Night City."
+      },
+      "priceCategory": "Cheap",
+      "notes": "Conferido com Black Chrome, p. 124 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "WorldSat",
+      "slug": "worldsat-aerial-sphere",
+      "name": "WorldSat Aerial Sphere",
+      "category": "gear",
+      "page": 50,
+      "price": 1000,
+      "description": "Conecta à CitiNet a partir das Badlands.",
+      "attributes": {
+        "gearType": "Electronics",
+        "effect": "Conecta à CitiNet a partir das Badlands."
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Black Chrome, p. 50 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Zetatech",
+      "slug": "zetatech-porta-printer",
+      "name": "Zetatech Porta-Printer",
+      "category": "gear",
+      "page": 43,
+      "price": 1000,
+      "description": "Oficina de Tech que se carrega nas costas.",
+      "attributes": {
+        "gearType": "Tool",
+        "effect": "Oficina de Tech que se carrega nas costas."
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Black Chrome, p. 43 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Segotari",
+      "slug": "app-digital-gladiator",
+      "name": "Digital Gladiator",
+      "category": "gear",
+      "page": 12,
+      "price": 20,
+      "description": "Batalhas de Solo um contra um no Agent.",
+      "attributes": {
+        "gearType": "Electronics",
+        "gearClass": "App",
+        "requirements": "Agent",
+        "effect": "Batalhas de Solo um contra um no Agent."
+      },
+      "priceCategory": "Everyday",
+      "notes": "Conferido com Black Chrome, p. 12 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "SecSystems",
+      "slug": "app-4tify",
+      "name": "4Tify",
+      "category": "gear",
+      "page": 13,
+      "price": 100,
+      "description": "Gaste tempo analisando a cobertura para ganhar +1d6 no próximo dano contra ela.",
+      "attributes": {
+        "gearType": "Electronics",
+        "gearClass": "App",
+        "requirements": "Agent",
+        "effect": "Gaste tempo analisando a cobertura para ganhar +1d6 no próximo dano contra ela."
+      },
+      "priceCategory": "Premium",
+      "notes": "Conferido com Black Chrome, p. 13 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "NCPD",
+      "slug": "app-ncpd-crime-database",
+      "name": "NCPD Crime Database",
+      "category": "gear",
+      "page": 13,
+      "price": 500,
+      "description": "Mostra a ficha criminal de alguém.",
+      "attributes": {
+        "gearType": "Electronics",
+        "gearClass": "App",
+        "requirements": "Agent",
+        "effect": "Mostra a ficha criminal de alguém."
+      },
+      "priceCategory": "Expensive",
+      "notes": "Conferido com Black Chrome, p. 13 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Trauma Team",
+      "slug": "app-trauma-team-medscan",
+      "name": "Trauma Team MedScan",
+      "category": "gear",
+      "page": 14,
+      "price": 20,
+      "description": "Ajuda à distância para cirurgias \"faça você mesmo\".",
+      "attributes": {
+        "gearType": "Electronics",
+        "gearClass": "App",
+        "requirements": "Agent",
+        "effect": "Ajuda à distância para cirurgias \"faça você mesmo\"."
+      },
+      "priceCategory": "Everyday",
+      "notes": "Conferido com Black Chrome, p. 14 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Ziggurat",
+      "slug": "app-ziggurat-city-database",
+      "name": "Ziggurat City Database",
+      "category": "gear",
+      "page": 14,
+      "price": 100,
+      "description": "Guia completo da cidade escolhida. +1 em Local Expert.",
+      "attributes": {
+        "gearType": "Electronics",
+        "gearClass": "App",
+        "requirements": "Agent",
+        "effect": "Guia completo da cidade escolhida. +1 em Local Expert.",
+        "skillBonus": "+1 em Local Expert"
+      },
+      "priceCategory": "Premium",
+      "notes": "Conferido com Black Chrome, p. 14 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Nomad Access 2"
+      ],
+      "manufacturer": "Dayton Aeronautics",
+      "slug": "dayton-sh-45-patroller",
+      "name": "Dayton SH-45 Patroller",
+      "category": "vehicles",
+      "page": 58,
+      "price": 16000,
+      "description": "Bulletproof Glass. Incompatível com alguns upgrades.",
+      "attributes": {
+        "vehicleType": "Gyrocopter",
+        "speedMove": 20,
+        "topSpeedMph": 100,
+        "seats": 1,
+        "sdp": 35,
+        "includedUpgrades": "Bulletproof Glass. Incompatível com alguns upgrades."
+      },
+      "priceCategory": "SuperLuxury",
+      "notes": "Conferido com Black Chrome, p. 58 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Nomad Access 4"
+      ],
+      "manufacturer": "Dayton Aeronautics",
+      "slug": "dayton-sh-45-patroller-law",
+      "name": "Dayton SH-45 Patroller Law",
+      "category": "vehicles",
+      "page": 58,
+      "price": 21000,
+      "description": "Bulletproof Glass (x2) e Onboard Machine Gun. Incompatível com alguns upgrades.",
+      "attributes": {
+        "vehicleType": "Gyrocopter",
+        "speedMove": 20,
+        "topSpeedMph": 100,
+        "seats": 1,
+        "sdp": 35,
+        "includedUpgrades": "Bulletproof Glass (x2) e Onboard Machine Gun. Incompatível com alguns upgrades."
+      },
+      "priceCategory": "SuperLuxury",
+      "notes": "Conferido com Black Chrome, p. 58 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Nomad Access 7"
+      ],
+      "manufacturer": "Dayton Aeronautics",
+      "slug": "dayton-tdt-004",
+      "name": "Dayton TDT 004",
+      "category": "vehicles",
+      "page": 59,
+      "price": 43000,
+      "description": "Heavy Chassis e Seating Upgrade (x2).",
+      "attributes": {
+        "vehicleType": "Helicopter",
+        "speedMove": 40,
+        "topSpeedMph": 200,
+        "seats": 8,
+        "sdp": 80,
+        "includedUpgrades": "Heavy Chassis e Seating Upgrade (x2)."
+      },
+      "priceCategory": "SuperLuxury",
+      "notes": "Conferido com Black Chrome, p. 59 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Nomad Access 1"
+      ],
+      "manufacturer": "Tanson Group",
+      "slug": "tanson-bellhop",
+      "name": "Tanson Bellhop",
+      "category": "vehicles",
+      "page": 60,
+      "price": 16000,
+      "description": "Dobra-se numa mala de rodinhas. Incompatível com alguns upgrades.",
+      "attributes": {
+        "vehicleType": "Gyrocopter",
+        "speedMove": 20,
+        "topSpeedMph": 100,
+        "seats": 1,
+        "sdp": 35,
+        "includedUpgrades": "Dobra-se numa mala de rodinhas. Incompatível com alguns upgrades."
+      },
+      "priceCategory": "SuperLuxury",
+      "notes": "Conferido com Black Chrome, p. 60 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Nomad Access 6"
+      ],
+      "manufacturer": "Zetatech",
+      "slug": "zetatech-destination",
+      "name": "Zetatech Destination",
+      "category": "vehicles",
+      "page": 62,
+      "price": 40000,
+      "description": "Incompatível com alguns upgrades.",
+      "attributes": {
+        "vehicleType": "Aerodyne",
+        "speedMove": 40,
+        "topSpeedMph": 200,
+        "seats": 4,
+        "sdp": 100,
+        "includedUpgrades": "Incompatível com alguns upgrades."
+      },
+      "priceCategory": "SuperLuxury",
+      "notes": "Conferido com Black Chrome, p. 62 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Nomad Access 10"
+      ],
+      "manufacturer": "Zetatech",
+      "slug": "zetatech-herakles",
+      "name": "Zetatech Herakles",
+      "category": "vehicles",
+      "page": 63,
+      "price": 63000,
+      "description": "Armored Chassis, Bulletproof Glass, Heavy Chassis, Seating Upgrade, Onboard Machine Gun e Vehicle Heavy Weapon Mount.",
+      "attributes": {
+        "vehicleType": "Aerodyne",
+        "speedMove": 40,
+        "topSpeedMph": 200,
+        "seats": 8,
+        "sdp": 120,
+        "armorSp": 13,
+        "includedUpgrades": "Armored Chassis, Bulletproof Glass, Heavy Chassis, Seating Upgrade, Onboard Machine Gun e Vehicle Heavy Weapon Mount."
+      },
+      "priceCategory": "SuperLuxury",
+      "notes": "Conferido com Black Chrome, p. 63 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Nomad Access 2"
+      ],
+      "manufacturer": "AmeriCar",
+      "slug": "americar-family-star-van",
+      "name": "AmeriCar Family Star Van",
+      "category": "vehicles",
+      "page": 65,
+      "price": 31000,
+      "description": "Seating Upgrade.",
+      "attributes": {
+        "vehicleType": "Car",
+        "speedMove": 20,
+        "topSpeedMph": 100,
+        "seats": 6,
+        "sdp": 50,
+        "includedUpgrades": "Seating Upgrade."
+      },
+      "priceCategory": "SuperLuxury",
+      "notes": "Conferido com Black Chrome, p. 65 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Nomad Access 4"
+      ],
+      "manufacturer": "Diego Motors",
+      "slug": "diego-motors-chupacabra",
+      "name": "Diego Motors Chupacabra",
+      "category": "vehicles",
+      "page": 66,
+      "price": 37000,
+      "description": "Heavy Chassis, NOS e Seating Upgrade.",
+      "attributes": {
+        "vehicleType": "Car",
+        "speedMove": 20,
+        "topSpeedMph": 100,
+        "seats": 6,
+        "sdp": 70,
+        "includedUpgrades": "Heavy Chassis, NOS e Seating Upgrade."
+      },
+      "priceCategory": "SuperLuxury",
+      "notes": "Conferido com Black Chrome, p. 66 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Nomad Access 4"
+      ],
+      "manufacturer": "Diego Motors",
+      "slug": "diego-motors-range-trike",
+      "name": "Diego Motors Range Trike",
+      "category": "vehicles",
+      "page": 67,
+      "price": 31000,
+      "description": "Armored Chassis (SP13) e Heavy Chassis. Incompatível com alguns upgrades.",
+      "attributes": {
+        "vehicleType": "Motorcycle",
+        "speedMove": 20,
+        "topSpeedMph": 100,
+        "seats": 3,
+        "sdp": 55,
+        "armorSp": 13,
+        "includedUpgrades": "Armored Chassis (SP13) e Heavy Chassis. Incompatível com alguns upgrades."
+      },
+      "priceCategory": "SuperLuxury",
+      "notes": "Conferido com Black Chrome, p. 67 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Nomad Access 4"
+      ],
+      "manufacturer": "Grundy Salvage International",
+      "slug": "the-grundy",
+      "name": "The Grundy",
+      "category": "vehicles",
+      "page": 68,
+      "price": 41000,
+      "description": "Armored Chassis (SP13), Combat Plow e Heavy Chassis.",
+      "attributes": {
+        "vehicleType": "Car",
+        "speedMove": 20,
+        "topSpeedMph": 100,
+        "seats": 4,
+        "sdp": 70,
+        "armorSp": 13,
+        "includedUpgrades": "Armored Chassis (SP13), Combat Plow e Heavy Chassis."
+      },
+      "priceCategory": "SuperLuxury",
+      "notes": "Conferido com Black Chrome, p. 68 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Nomad Access 2"
+      ],
+      "manufacturer": "AmeriCar",
+      "slug": "the-harriet-100",
+      "name": "The Harriet 100",
+      "category": "vehicles",
+      "page": 69,
+      "price": 21000,
+      "description": "Smuggling Upgrade.",
+      "attributes": {
+        "vehicleType": "Motorcycle",
+        "speedMove": 20,
+        "topSpeedMph": 100,
+        "seats": 2,
+        "sdp": 35,
+        "includedUpgrades": "Smuggling Upgrade."
+      },
+      "priceCategory": "SuperLuxury",
+      "notes": "Conferido com Black Chrome, p. 69 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Nomad Access 4"
+      ],
+      "manufacturer": "AmeriCar",
+      "slug": "the-harveymerc",
+      "name": "The HarveyMerc",
+      "category": "vehicles",
+      "page": 69,
+      "price": 30000,
+      "description": "Onboard Machine Gun e Rocket Pod.",
+      "attributes": {
+        "vehicleType": "Motorcycle",
+        "speedMove": 20,
+        "topSpeedMph": 100,
+        "seats": 2,
+        "sdp": 35,
+        "includedUpgrades": "Onboard Machine Gun e Rocket Pod."
+      },
+      "priceCategory": "SuperLuxury",
+      "notes": "Conferido com Black Chrome, p. 69 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Nomad Access 7"
+      ],
+      "manufacturer": "Kaukaz",
+      "slug": "kaukaz-volkhov",
+      "name": "Kaukaz Volkhov",
+      "category": "vehicles",
+      "page": 71,
+      "price": 41000,
+      "description": "Armored Chassis (SP13), Heavy Chassis e Vehicle Heavy Weapon Mount.",
+      "attributes": {
+        "vehicleType": "Car",
+        "speedMove": 20,
+        "topSpeedMph": 100,
+        "seats": 4,
+        "sdp": 55,
+        "armorSp": 13,
+        "includedUpgrades": "Armored Chassis (SP13), Heavy Chassis e Vehicle Heavy Weapon Mount."
+      },
+      "priceCategory": "SuperLuxury",
+      "notes": "Conferido com Black Chrome, p. 71 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Nomad Access 1"
+      ],
+      "manufacturer": "Makigai",
+      "slug": "makigai-ebi",
+      "name": "Makigai Ebi",
+      "category": "vehicles",
+      "page": 72,
+      "price": 23000,
+      "description": "Incompatível com alguns upgrades.",
+      "attributes": {
+        "vehicleType": "Car",
+        "speedMove": 20,
+        "topSpeedMph": 100,
+        "seats": 4,
+        "sdp": 35,
+        "includedUpgrades": "Incompatível com alguns upgrades."
+      },
+      "priceCategory": "SuperLuxury",
+      "notes": "Conferido com Black Chrome, p. 72 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Nomad Access 4"
+      ],
+      "manufacturer": "Militech",
+      "slug": "militech-gorgon-security-van",
+      "name": "Militech Gorgon Security Van",
+      "category": "vehicles",
+      "page": 73,
+      "price": 37000,
+      "description": "Armored Chassis (SP13), Bulletproof Glass e Seating Upgrade.",
+      "attributes": {
+        "vehicleType": "Tactical",
+        "speedMove": 20,
+        "topSpeedMph": 100,
+        "seats": 6,
+        "sdp": 50,
+        "armorSp": 13,
+        "includedUpgrades": "Armored Chassis (SP13), Bulletproof Glass e Seating Upgrade."
+      },
+      "priceCategory": "SuperLuxury",
+      "notes": "Conferido com Black Chrome, p. 73 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Nomad Access 4"
+      ],
+      "manufacturer": "Ortiz Automotives",
+      "slug": "the-zacatzontli-pickup-truck",
+      "name": "The Zacatzontli Pickup Truck",
+      "category": "vehicles",
+      "page": 74,
+      "price": 27000,
+      "description": "Heavy Chassis, Housing Upgrade e itens bônus.",
+      "attributes": {
+        "vehicleType": "Car",
+        "speedMove": 20,
+        "topSpeedMph": 100,
+        "seats": 4,
+        "sdp": 70,
+        "includedUpgrades": "Heavy Chassis, Housing Upgrade e itens bônus."
+      },
+      "priceCategory": "SuperLuxury",
+      "notes": "Conferido com Black Chrome, p. 74 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Nomad Access 8"
+      ],
+      "manufacturer": "Turbo Neon Motors",
+      "slug": "the-paladin-500",
+      "name": "The Paladin 500",
+      "category": "vehicles",
+      "page": 75,
+      "price": 59000,
+      "description": "Armored Chassis (SP13), NOS (x2) e Onboard Machine Gun (x2).",
+      "attributes": {
+        "vehicleType": "SportsCar",
+        "speedMove": 40,
+        "topSpeedMph": 200,
+        "seats": 4,
+        "sdp": 50,
+        "armorSp": 13,
+        "includedUpgrades": "Armored Chassis (SP13), NOS (x2) e Onboard Machine Gun (x2)."
+      },
+      "priceCategory": "SuperLuxury",
+      "notes": "Conferido com Black Chrome, p. 75 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Tanson Group",
+      "slug": "tanson-jetboy-hoverboard",
+      "name": "Tanson JetBoy Hoverboard",
+      "category": "vehicles",
+      "page": 78,
+      "price": 1000,
+      "description": "Manobras usam Athletics. Incompatível com alguns upgrades.",
+      "attributes": {
+        "vehicleType": "Hoverboard",
+        "speedMove": 15,
+        "topSpeedMph": 30,
+        "seats": 1,
+        "sdp": 10,
+        "includedUpgrades": "Manobras usam Athletics. Incompatível com alguns upgrades."
+      },
+      "priceCategory": "VeryExpensive",
+      "notes": "Conferido com Black Chrome, p. 78 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Nomad Access 10"
+      ],
+      "manufacturer": "TetraCorp America",
+      "slug": "tetracorp-america-megahauler",
+      "name": "TetraCorp America MegaHauler",
+      "category": "vehicles",
+      "page": 79,
+      "price": 143000,
+      "description": "Armored Chassis (SP13), Bulletproof Glass (x2), Communications Center, Combat Plow, Heavy Chassis, Housing Capacity, Security limitado e Smuggling Upgrade (x3).",
+      "attributes": {
+        "vehicleType": "Tactical",
+        "speedMove": 20,
+        "topSpeedMph": 100,
+        "seats": 4,
+        "sdp": 200,
+        "armorSp": 13,
+        "includedUpgrades": "Armored Chassis (SP13), Bulletproof Glass (x2), Communications Center, Combat Plow, Heavy Chassis, Housing Capacity, Security limitado e Smuggling Upgrade (x3)."
+      },
+      "priceCategory": "SuperLuxury",
+      "notes": "Conferido com Black Chrome, p. 79 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Nomad Access 6"
+      ],
+      "manufacturer": "TetraCorp America",
+      "slug": "tetracorp-america-badger-corporate-bus",
+      "name": "TetraCorp America Badger Corporate Bus",
+      "category": "vehicles",
+      "page": 80,
+      "price": 50000,
+      "description": "Armored Chassis (SP13), Bulletproof Glass, Heavy Chassis, Seating Upgrade (x4), Security Upgrade e itens bônus.",
+      "attributes": {
+        "vehicleType": "Tactical",
+        "speedMove": 20,
+        "topSpeedMph": 100,
+        "seats": 12,
+        "sdp": 70,
+        "armorSp": 13,
+        "includedUpgrades": "Armored Chassis (SP13), Bulletproof Glass, Heavy Chassis, Seating Upgrade (x4), Security Upgrade e itens bônus."
+      },
+      "priceCategory": "SuperLuxury",
+      "notes": "Conferido com Black Chrome, p. 80 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Nomad Access 2"
+      ],
+      "manufacturer": "Yang's Wheels LTD",
+      "slug": "yangs-wheels-rickshaw",
+      "name": "Yang's Wheels Rickshaw",
+      "category": "vehicles",
+      "page": 81,
+      "price": 21000,
+      "description": "Carroceria destacável e Seating Upgrade.",
+      "attributes": {
+        "vehicleType": "Motorcycle",
+        "speedMove": 20,
+        "topSpeedMph": 100,
+        "seats": 4,
+        "sdp": 35,
+        "includedUpgrades": "Carroceria destacável e Seating Upgrade."
+      },
+      "priceCategory": "SuperLuxury",
+      "notes": "Conferido com Black Chrome, p. 81 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Nomad Access 1"
+      ],
+      "manufacturer": "Zonda",
+      "slug": "zonda-molly-1k",
+      "name": "Zonda Molly 1K",
+      "category": "vehicles",
+      "page": 82,
+      "price": 15000,
+      "description": "Não pode ser dirigido por Interface Plugs. Incompatível com alguns upgrades.",
+      "attributes": {
+        "vehicleType": "Car",
+        "speedMove": 20,
+        "topSpeedMph": 60,
+        "seats": 2,
+        "sdp": 50,
+        "includedUpgrades": "Não pode ser dirigido por Interface Plugs. Incompatível com alguns upgrades."
+      },
+      "priceCategory": "SuperLuxury",
+      "notes": "Conferido com Black Chrome, p. 82 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Nomad Access 8"
+      ],
+      "manufacturer": "Zonda",
+      "slug": "zonda-parallax-cybercycle",
+      "name": "Zonda Parallax Cybercycle™",
+      "category": "vehicles",
+      "page": 83,
+      "price": 110000,
+      "description": "Superbike com Armored Chassis (SP13), Enhanced Interface Plug Integration e NOS.",
+      "attributes": {
+        "vehicleType": "Motorcycle",
+        "speedMove": 60,
+        "topSpeedMph": 300,
+        "seats": 2,
+        "sdp": 35,
+        "armorSp": 13,
+        "includedUpgrades": "Superbike com Armored Chassis (SP13), Enhanced Interface Plug Integration e NOS."
+      },
+      "priceCategory": "SuperLuxury",
+      "notes": "Conferido com Black Chrome, p. 83 e listas das p. 157-168. Ausente do compêndio."
+    },
+    {
+      "tags": [
+        "Nomad Access 4"
+      ],
+      "manufacturer": "Zonda",
+      "slug": "zonda-sliver",
+      "name": "Zonda Sliver",
+      "category": "vehicles",
+      "page": 84,
+      "price": 27000,
+      "description": "Bulletproof Glass, Communications Center e Security Upgrade.",
+      "attributes": {
+        "vehicleType": "Motorcycle",
+        "speedMove": 20,
+        "topSpeedMph": 100,
+        "seats": 2,
+        "sdp": 35,
+        "includedUpgrades": "Bulletproof Glass, Communications Center e Security Upgrade."
+      },
+      "priceCategory": "SuperLuxury",
+      "notes": "Conferido com Black Chrome, p. 84 e listas das p. 157-168. Ausente do compêndio."
+    }
+  ]
+}

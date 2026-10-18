@@ -1,0 +1,193 @@
+{
+  "about": "Conferido com o PDF Mixing Drinks–Changing Lives v1.1 (crossover Cyberpunk RED / VA-11 HALL-A, abril de 2024, seção New Tech). Crossover com VA-11 HALL-A; o próprio DLC diz que não é canônico. O Drinktionary (lista de drinques) não entrou no catálogo. Formato descrito no README (seção Dados).",
+  "source": "Mixing Drinks–Changing Lives",
+  "updates": {
+    "hammered-ind-cyberliver": {
+      "name": "Hammered Industries Cyberliver",
+      "page": 15,
+      "description": "Cyberware de Corpo Interno que reforça o fígado em vez de substituí-lo: +6 em Resist Torture/Drugs contra a intoxicação por álcool e substâncias que o imitam, como karmotrine. Não vale contra o efeito secundário de Street Drugs, mesmo com álcool, não acumula consigo nem com outros bônus (como Toxin Binders).",
+      "attributes": {
+        "installLocation": "Hospital",
+        "humanityLoss": 2,
+        "humanityLossDice": "1d6/2",
+        "requirements": "Hospital",
+        "effect": "+6 em Resist Torture/Drugs contra álcool."
+      },
+      "notes": "Conferido com Mixing Drinks–Changing Lives, p. 15-16. Corrigido: instalação em Hospital e HL 2 (1d6/2). Crossover com VA-11 HALL-A; o próprio DLC diz que não é canônico."
+    },
+    "rocklin-mird113-gun-hand": {
+      "name": "Rocklin Augmentics MIRD113 Gun Hand",
+      "manufacturer": "Rocklin Augmentics",
+      "page": 16,
+      "description": "Opção de Cyberarm. Cada dedo vira um cano: a mão é uma Pistola Média Exótica de 5 tiros (uma bala por dedo) que, mesmo Exótica, aceita munição Non-Basic. Pode ser o único cyberware num braço de carne.",
+      "attributes": {
+        "requiresItem": null,
+        "requirements": "Cyberarm, ou sozinho num braço de carne; Clinic",
+        "effect": "Pistola Média Exótica de 5 tiros na mão."
+      },
+      "notes": "Conferido com Mixing Drinks–Changing Lives, p. 16. Crossover com VA-11 HALL-A; o próprio DLC diz que não é canônico."
+    },
+    "drink-master-3000-5000": {
+      "source": "Black Chrome",
+      "page": 42,
+      "priceNote": null,
+      "notes": "Conferido com Black Chrome, p. 42 e listas das p. 157-168. O bônus de +1 em Persuasão/Cool do compêndio não está na lista do livro. O Drink Master 5000 (5.000eb) é outro item, do Mixing Drinks–Changing Lives."
+    }
+  },
+  "additions": [
+    {
+      "tags": [],
+      "manufacturer": null,
+      "slug": "animal-behavior-chip",
+      "name": "Animal Behavior Chip",
+      "category": "cyberware",
+      "page": 15,
+      "price": 1000,
+      "priceCategory": "VeryExpensive",
+      "description": "Chipware gravado com o comportamento de uma espécie ou raça, que faz o usuário imitá-lo sem perceber (correr atrás de laser, cheirar quem cumprimenta...), sem tirar a fala nem ações humanas. No Chipware Socket, dá +4 em Acting para imitar o comportamento do animal (o corpo exige Extreme Biosculpting).",
+      "attributes": {
+        "foundational": false,
+        "requiresPair": false,
+        "cyberwareType": "Neuralware",
+        "bodyLocation": "NervousSystem",
+        "installLocation": "Socket",
+        "humanityLoss": 14,
+        "humanityLossDice": "4d6",
+        "requiresItem": "chipware-socket",
+        "requirements": "Chipware Socket",
+        "effect": "+4 em Acting para imitar o animal."
+      },
+      "notes": "Conferido com Mixing Drinks–Changing Lives, p. 15. Ausente do compêndio. Crossover com VA-11 HALL-A; o próprio DLC diz que não é canônico."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Hammered Industries",
+      "slug": "drink-master-5000",
+      "name": "The Drink Master 5000",
+      "category": "gear",
+      "page": 15,
+      "price": 5000,
+      "priceCategory": "Luxury",
+      "description": "Gabinete industrial de bar (30 HP como cobertura) que mistura os cinco químicos da Hammered Industries (Adelhyde, Powdered Delta, Bronson Extract, Flanergide e Karmotrine), batendo, gelando e simulando envelhecimento. Cada refil de ingrediente custa 100eb e rende cerca de 100 unidades.",
+      "attributes": {
+        "gearType": "Lifestyle",
+        "effect": "Máquina industrial de drinques."
+      },
+      "notes": "Conferido com Mixing Drinks–Changing Lives, p. 15. Ausente do compêndio. Crossover com VA-11 HALL-A; o próprio DLC diz que não é canônico."
+    },
+    {
+      "tags": [],
+      "manufacturer": "Dynalar",
+      "slug": "dynalar-professional-cyberhand",
+      "name": "Dynalar Professional Cyberhand",
+      "category": "cyberware",
+      "page": 15,
+      "price": 100,
+      "priceCategory": "Premium",
+      "description": "Opção de Cyberarm. Mão cibernética padrão que controla sem fio aparelhos adaptados (digitar, mover cursor) a distância de toque. Pode ser o único cyberware num braço de carne.",
+      "attributes": {
+        "foundational": false,
+        "requiresPair": false,
+        "cyberwareType": "LimbOption",
+        "bodyLocation": "Hand",
+        "installLocation": "Clinic",
+        "humanityLoss": 3,
+        "humanityLossDice": "1d6",
+        "requirements": "Cyberarm, ou sozinho num braço de carne; Clinic",
+        "effect": "Controle sem fio de aparelhos ao toque."
+      },
+      "notes": "Conferido com Mixing Drinks–Changing Lives, p. 15. Ausente do compêndio. Crossover com VA-11 HALL-A; o próprio DLC diz que não é canônico."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "slug": "extreme-biosculpting",
+      "name": "Extreme Biosculpting",
+      "category": "cyberware",
+      "page": 15,
+      "price": 5000,
+      "priceCategory": "Luxury",
+      "description": "Transforma o paciente o mais perto possível de um animal de verdade, tirando boa parte da capacidade de interagir como humano, inclusive de agarrar. A critério do Mestre, tarefas que exigem anatomia humana sofrem penalidade ou ficam impossíveis. O procedimento é Surgery DV21 com 1.000eb de materiais; muitos instalam também um Animal Behavior Chip.",
+      "attributes": {
+        "foundational": false,
+        "requiresPair": false,
+        "cyberwareType": "Bioexotic",
+        "bodyLocation": "FullBody",
+        "installLocation": "Unknown",
+        "humanityLoss": 28,
+        "humanityLossDice": "8d6",
+        "requirements": "Surgery DV21 e 1.000eb de materiais",
+        "effect": "Corpo de animal (perde capacidades humanas)."
+      },
+      "notes": "Conferido com Mixing Drinks–Changing Lives, p. 15. Ausente do compêndio. O livro dá só os dados (8d6); a HL média registrada é 28. Crossover com VA-11 HALL-A; o próprio DLC diz que não é canônico."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "slug": "shining-finger",
+      "name": "Shining Finger",
+      "category": "gear",
+      "page": 16,
+      "price": 50,
+      "priceCategory": "Costly",
+      "priceNote": "50eb por mês",
+      "description": "App de pornografia por assinatura, em tela comum ou Virtuality, que se conecta a implantes Mr. Studd, Midnight Lady ou brinquedos.",
+      "attributes": {
+        "gearType": "Electronics",
+        "gearClass": "App",
+        "requirements": "Agent",
+        "effect": "Assinatura de conteúdo adulto."
+      },
+      "notes": "Conferido com Mixing Drinks–Changing Lives, p. 16. Ausente do compêndio. Crossover com VA-11 HALL-A; o próprio DLC diz que não é canônico."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "slug": "signal-jammer",
+      "name": "Signal Jammer",
+      "category": "cyberware",
+      "page": 16,
+      "price": 500,
+      "priceCategory": "Premium",
+      "description": "Opção de Cyberaudio (disponível como \"orelhas de gato\"). Liga e desliga sem Ação um campo de 6 x 6 m/yds centrado no usuário: quem estiver nele, inclusive o usuário, precisa de uma Ação e Electronics/Security Tech DV13 para transmitir ou receber sinal sem fio.",
+      "attributes": {
+        "foundational": false,
+        "requiresPair": false,
+        "cyberwareType": "Cyberaudio",
+        "bodyLocation": "Ears",
+        "installLocation": "Clinic",
+        "humanityLoss": 3,
+        "humanityLossDice": "1d6",
+        "requiresItem": "cyberaudio-suite",
+        "requirements": "Cyberaudio Suite; Clinic",
+        "effect": "Bloqueia sinais sem fio num raio de 6 m/yds (DV13)."
+      },
+      "notes": "Conferido com Mixing Drinks–Changing Lives, p. 16. Ausente do compêndio. O livro classifica os 500eb como Premium. Crossover com VA-11 HALL-A; o próprio DLC diz que não é canônico."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "slug": "vic-jammer",
+      "name": "VIC Jammer",
+      "category": "cyberware",
+      "page": 16,
+      "price": 100,
+      "priceCategory": "Premium",
+      "description": "Opção de Cybereye que ocupa 2 slots e não precisa de par. +2 em Stealth contra quem detecta só com óptica digital, como câmeras e cybereyes (se todos os olhos do alvo forem cibernéticos).",
+      "attributes": {
+        "foundational": false,
+        "requiresPair": false,
+        "cyberwareType": "Cyberoptics",
+        "bodyLocation": "Eyes",
+        "installLocation": "Clinic",
+        "humanityLoss": 7,
+        "humanityLossDice": "2d6",
+        "slotsRequired": 2,
+        "requiresItem": "cybereye",
+        "requirements": "Cybereye; Clinic",
+        "effect": "+2 em Stealth contra óptica digital."
+      },
+      "notes": "Conferido com Mixing Drinks–Changing Lives, p. 16. Ausente do compêndio. Crossover com VA-11 HALL-A; o próprio DLC diz que não é canônico."
+    }
+  ]
+}

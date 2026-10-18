@@ -1,0 +1,83 @@
+/* Design tokens — Night City terminal. Dark-only by design: the identity is a neon terminal. */
+:root {
+  color-scheme: dark;
+
+  /* surfaces */
+  --bg-0: #050607;
+  --bg-1: #08090c;
+  --bg-2: #0d0f13;
+  --bg-3: #13161b;
+  --bg-4: #1a1e25;
+  --panel: rgba(12, 14, 18, 0.92);
+  --panel-solid: #0c0e12;
+
+  /* neon red */
+  --red: #ff2a3d;
+  --red-bright: #ff4d5e;
+  --red-strong: #e0102a;
+  --red-dim: #7a0f1c;
+  --red-deep: #3a070e;
+  --red-glow: rgba(255, 42, 61, 0.55);
+  --red-haze: rgba(255, 42, 61, 0.12);
+  --red-line: rgba(255, 42, 61, 0.32);
+
+  /* text */
+  --text: #e9edf2;
+  --text-2: #b9c0cb;
+  --text-muted: #7f8794;
+  --text-faint: #535a66;
+
+  /* accents */
+  --amber: #ffcf3a;
+  --amber-dim: #a8851c;
+  --cyan: #3de0ff;
+  --green: #3dff9a;
+
+  /* lines */
+  --line: rgba(255, 255, 255, 0.08);
+  --line-strong: rgba(255, 255, 255, 0.16);
+
+  /* type */
+  --font-ui: 'Rajdhani', 'Segoe UI', system-ui, sans-serif;
+  --font-display: 'Chakra Petch', 'Rajdhani', 'Segoe UI', sans-serif;
+  --font-mono: 'Share Tech Mono', ui-monospace, 'Cascadia Mono', monospace;
+  --font-brush: 'Permanent Marker', 'Chakra Petch', cursive;
+
+  /* geometry */
+  --radius: 3px;
+  --radius-lg: 6px;
+  --cut: 10px; /* chamfer size for clipped corners */
+  --sidebar-w: 212px;
+  --filters-w: 300px;
+  --header-h: 128px;
+  --gutter: 20px;
+
+  /* effects (overridden by the visual-effects settings) */
+  --glow-strength: 1;
+  --glow-sm: 0 0 calc(6px * var(--glow-strength)) var(--red-glow);
+  --glow-md: 0 0 calc(14px * var(--glow-strength)) var(--red-glow);
+  --text-glow: 0 0 calc(10px * var(--glow-strength)) rgba(255, 42, 61, 0.65);
+
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --t-fast: 120ms;
+  --t-med: 220ms;
+}
+
+html[data-motion='off'] {
+  --t-fast: 0ms;
+  --t-med: 0ms;
+}
+
+@media (max-width: 1100px) {
+  :root {
+    --header-h: 104px;
+    --gutter: 16px;
+  }
+}
+
+@media (max-width: 720px) {
+  :root {
+    --header-h: 84px;
+    --gutter: 16px;
+  }
+}

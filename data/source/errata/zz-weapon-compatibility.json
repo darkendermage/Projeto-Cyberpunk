@@ -1,0 +1,370 @@
+{
+  "about": "Tags \"Compatível com\" dos Upgrades de Armas: as classes de arma em que cada upgrade pode ser instalado, derivadas do texto de compatibilidade já conferido nos livros (campo \"Restrições de compatibilidade\", que continua valendo para condições como \"não Exóticas\" ou \"só Shoulder Arms\"). Shoulder Arms = Escopeta, Rifle de Assalto e Rifle de Precisão (perícia de cada arma no catálogo); \"armas de fogo\" = pistolas, SMGs, armas de Shoulder Arms e metralhadora. Optimized Popup (arma de Cyberarm), Experimental Load (munição) e Shredding Ax (instrumento) não se encaixam numa classe de arma.",
+  "updates": {
+    "stun-bayonet": {
+      "attributes": {
+        "compatibleClasses": [
+          "Shotgun",
+          "AssaultRifle",
+          "SniperRifle"
+        ]
+      }
+    },
+    "airhypo-bayonet": {
+      "attributes": {
+        "compatibleClasses": [
+          "Shotgun",
+          "AssaultRifle",
+          "SniperRifle"
+        ]
+      }
+    },
+    "bayonet": {
+      "attributes": {
+        "compatibleClasses": [
+          "Shotgun",
+          "AssaultRifle",
+          "SniperRifle"
+        ]
+      }
+    },
+    "grenade-launcher-underbarrel": {
+      "attributes": {
+        "compatibleClasses": [
+          "Shotgun",
+          "AssaultRifle",
+          "SniperRifle"
+        ]
+      }
+    },
+    "shotgun-underbarrel": {
+      "attributes": {
+        "compatibleClasses": [
+          "Shotgun",
+          "AssaultRifle",
+          "SniperRifle"
+        ]
+      }
+    },
+    "combined-underbarrel": {
+      "attributes": {
+        "compatibleClasses": [
+          "Shotgun",
+          "AssaultRifle",
+          "SniperRifle"
+        ]
+      }
+    },
+    "power-rebuild": {
+      "attributes": {
+        "compatibleClasses": [
+          "MediumPistol",
+          "HeavyPistol",
+          "VeryHeavyPistol",
+          "Smg",
+          "HeavySmg",
+          "Shotgun",
+          "AssaultRifle",
+          "SniperRifle",
+          "MachineGun",
+          "Bow",
+          "Crossbow",
+          "GrenadeLauncher",
+          "RocketLauncher"
+        ]
+      }
+    },
+    "smart-rebuild": {
+      "attributes": {
+        "compatibleClasses": [
+          "MediumPistol",
+          "HeavyPistol",
+          "VeryHeavyPistol",
+          "Smg",
+          "HeavySmg",
+          "Shotgun",
+          "AssaultRifle",
+          "SniperRifle",
+          "MachineGun",
+          "Bow",
+          "Crossbow",
+          "GrenadeLauncher",
+          "RocketLauncher"
+        ]
+      }
+    },
+    "tech-rebuild": {
+      "attributes": {
+        "compatibleClasses": [
+          "MediumPistol",
+          "HeavyPistol",
+          "VeryHeavyPistol",
+          "Smg",
+          "HeavySmg",
+          "Shotgun",
+          "AssaultRifle",
+          "SniperRifle",
+          "MachineGun",
+          "Bow",
+          "Crossbow"
+        ]
+      }
+    },
+    "ammunition-compatibility-internals": {
+      "attributes": {
+        "compatibleClasses": [
+          "MediumPistol",
+          "HeavyPistol",
+          "VeryHeavyPistol",
+          "Smg",
+          "HeavySmg",
+          "Shotgun",
+          "AssaultRifle",
+          "SniperRifle",
+          "MachineGun"
+        ]
+      }
+    },
+    "reinforced-string": {
+      "attributes": {
+        "compatibleClasses": [
+          "Bow",
+          "Crossbow"
+        ]
+      }
+    },
+    "sniper-rifle-rechamber": {
+      "attributes": {
+        "compatibleClasses": [
+          "SniperRifle"
+        ]
+      }
+    },
+    "compatibility-rail": {
+      "attributes": {
+        "compatibleClasses": [
+          "MediumPistol",
+          "HeavyPistol",
+          "VeryHeavyPistol",
+          "Smg",
+          "HeavySmg",
+          "Shotgun",
+          "AssaultRifle",
+          "SniperRifle",
+          "MachineGun",
+          "Bow",
+          "Crossbow",
+          "GrenadeLauncher",
+          "RocketLauncher"
+        ]
+      }
+    },
+    "range-table-modification": {
+      "attributes": {
+        "compatibleClasses": [
+          "MediumPistol",
+          "HeavyPistol",
+          "VeryHeavyPistol",
+          "Smg",
+          "HeavySmg",
+          "Shotgun",
+          "AssaultRifle",
+          "SniperRifle",
+          "MachineGun",
+          "Bow",
+          "Crossbow",
+          "GrenadeLauncher",
+          "RocketLauncher"
+        ]
+      }
+    },
+    "pistol-autosear": {
+      "attributes": {
+        "compatibleClasses": [
+          "MediumPistol",
+          "HeavyPistol",
+          "VeryHeavyPistol"
+        ]
+      }
+    },
+    "shotgun-automatic-control-group": {
+      "attributes": {
+        "compatibleClasses": [
+          "Shotgun"
+        ]
+      }
+    },
+    "smg-cyclic-internals": {
+      "attributes": {
+        "compatibleClasses": [
+          "Smg",
+          "HeavySmg"
+        ]
+      }
+    },
+    "grapple-gun-underbarrel": {
+      "attributes": {
+        "compatibleClasses": [
+          "Crossbow",
+          "Shotgun",
+          "AssaultRifle",
+          "SniperRifle"
+        ]
+      }
+    },
+    "silencer": {
+      "attributes": {
+        "compatibleClasses": [
+          "MediumPistol",
+          "HeavyPistol",
+          "VeryHeavyPistol",
+          "Smg",
+          "HeavySmg",
+          "Shotgun",
+          "AssaultRifle",
+          "SniperRifle",
+          "MachineGun"
+        ]
+      }
+    },
+    "drum-magazine": {
+      "attributes": {
+        "compatibleClasses": [
+          "MediumPistol",
+          "HeavyPistol",
+          "VeryHeavyPistol",
+          "Smg",
+          "HeavySmg",
+          "Shotgun",
+          "AssaultRifle",
+          "SniperRifle",
+          "MachineGun",
+          "GrenadeLauncher",
+          "RocketLauncher"
+        ]
+      }
+    },
+    "extended-magazine": {
+      "attributes": {
+        "compatibleClasses": [
+          "MediumPistol",
+          "HeavyPistol",
+          "VeryHeavyPistol",
+          "Smg",
+          "HeavySmg",
+          "Shotgun",
+          "AssaultRifle",
+          "SniperRifle",
+          "MachineGun",
+          "GrenadeLauncher",
+          "RocketLauncher"
+        ]
+      }
+    },
+    "infrared-nightvision-scope": {
+      "attributes": {
+        "compatibleClasses": [
+          "MediumPistol",
+          "HeavyPistol",
+          "VeryHeavyPistol",
+          "Smg",
+          "HeavySmg",
+          "Shotgun",
+          "AssaultRifle",
+          "SniperRifle",
+          "MachineGun",
+          "Bow",
+          "Crossbow",
+          "GrenadeLauncher",
+          "RocketLauncher"
+        ]
+      }
+    },
+    "smartgun-link": {
+      "attributes": {
+        "compatibleClasses": [
+          "MediumPistol",
+          "HeavyPistol",
+          "VeryHeavyPistol",
+          "Smg",
+          "HeavySmg",
+          "Shotgun",
+          "AssaultRifle",
+          "SniperRifle",
+          "MachineGun",
+          "Bow",
+          "Crossbow",
+          "GrenadeLauncher",
+          "RocketLauncher"
+        ]
+      }
+    },
+    "sniping-scope": {
+      "attributes": {
+        "compatibleClasses": [
+          "MediumPistol",
+          "HeavyPistol",
+          "VeryHeavyPistol",
+          "Smg",
+          "HeavySmg",
+          "Shotgun",
+          "AssaultRifle",
+          "SniperRifle",
+          "MachineGun",
+          "Bow",
+          "Crossbow",
+          "GrenadeLauncher",
+          "RocketLauncher"
+        ]
+      }
+    },
+    "counterweight-system": {
+      "attributes": {
+        "compatibleClasses": [
+          "MediumPistol",
+          "HeavyPistol",
+          "VeryHeavyPistol",
+          "Smg",
+          "HeavySmg",
+          "Shotgun",
+          "AssaultRifle",
+          "SniperRifle",
+          "MachineGun",
+          "Bow",
+          "Crossbow",
+          "GrenadeLauncher",
+          "RocketLauncher",
+          "LightMelee",
+          "MediumMelee",
+          "HeavyMelee",
+          "VeryHeavyMelee"
+        ]
+      }
+    },
+    "stun-bunny": {
+      "attributes": {
+        "compatibleClasses": [
+          "MediumPistol",
+          "HeavyPistol",
+          "VeryHeavyPistol",
+          "Smg",
+          "HeavySmg",
+          "Shotgun",
+          "AssaultRifle",
+          "SniperRifle",
+          "MachineGun"
+        ]
+      }
+    },
+    "vorpal-coating": {
+      "attributes": {
+        "compatibleClasses": [
+          "LightMelee",
+          "MediumMelee",
+          "HeavyMelee",
+          "VeryHeavyMelee"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,158 @@
+{
+  "about": "Conferido com o PDF oficial All About Agents v1.01 (março de 2024). Formato descrito no README (seção Dados).",
+  "source": "All About Agents",
+  "updates": {
+    "ebm-pir2-internal-agent": {
+      "name": "EBM PiR2",
+      "page": 9,
+      "description": "Agent interno de Qualidade Excelente, mais confiável e sem aumentar o risco de enxaqueca. Opção de Cyberaudio. Responde a comandos falados (ou subvocalizados) e só tem saída de áudio, a menos que seja ligado ao Chyron de um Cybereye.",
+      "notes": "Conferido com All About Agents, p. 9 e tabela da p. 11."
+    },
+    "mediaware-braingen-agent": {
+      "name": "Mediaware BrainGen",
+      "page": 9,
+      "description": "Agent interno de Baixa Qualidade, barato e fácil de achar. Opção de Cyberaudio. Responde a comandos falados (ou subvocalizados) e só tem saída de áudio, a menos que seja ligado ao Chyron de um Cybereye.",
+      "notes": "Conferido com All About Agents, p. 9 e tabela da p. 11."
+    },
+    "raven-microcyb-drake-agent": {
+      "name": "Raven Microcybernetics Drake",
+      "manufacturer": "Raven Microcybernetics",
+      "page": 9,
+      "description": "Agent interno de Qualidade Padrão, sem destaques nem grandes fraquezas. Opção de Cyberaudio. Responde a comandos falados (ou subvocalizados) e só tem saída de áudio, a menos que seja ligado ao Chyron de um Cybereye.",
+      "notes": "Conferido com All About Agents, p. 9 e tabela da p. 11."
+    },
+    "rocklin-aug-neuron-agent": {
+      "name": "Rocklin Augmentics Neuron",
+      "manufacturer": "Rocklin Augmentics",
+      "page": 9,
+      "description": "Agent interno de Qualidade Excelente que projeta vídeo direto pelo nervo óptico: mostra imagens no campo de visão mesmo sem Cybereye com Chyron. Opção de Cyberaudio.",
+      "notes": "Conferido com All About Agents, p. 9 e tabela da p. 11."
+    }
+  },
+  "additions": [
+    {
+      "slug": "segotari-double-agent",
+      "name": "Segotari Double Agent",
+      "category": "gear",
+      "manufacturer": "Segotari",
+      "description": "O clássico dos anos 2020: concha preta com acabamento escovado e circuitos prateados. Agent de Baixa Qualidade com tela sensível ao toque e áudio para entrada, e uma segunda tela e alto-falante só de saída. Câmera e microfone.",
+      "notes": "Conferido com All About Agents, p. 9. Também listado no Segotari Power, p. 12, pelo mesmo preço.",
+      "price": 50, "priceCategory": "Costly", "page": 9, "tags": [],
+      "attributes": { "gearType": "Electronics", "gearClass": "Agent", "effect": "Agent de Baixa Qualidade (DV17 para hackear remotamente)." }
+    },
+    {
+      "slug": "wyzard-technologies-merlyn",
+      "name": "Wyzard Technologies Merlyn",
+      "category": "gear",
+      "manufacturer": "Wyzard Technologies",
+      "description": "Agent de Qualidade Excelente usado no pulso como relógio, com holo-display chamativo. Entrada por toque e áudio; saída holográfica e por alto-falante. Câmera, lanterna e microfone.",
+      "notes": "Conferido com All About Agents, p. 9.",
+      "price": 1000, "priceCategory": "VeryExpensive", "page": 9, "tags": [],
+      "attributes": { "gearType": "Electronics", "gearClass": "Agent", "skillBonus": "+1 em Wardrobe and Style quando visível", "effect": "Agent de Qualidade Excelente (DV24 para hackear remotamente)." }
+    },
+    {
+      "slug": "zetatech-grade-a",
+      "name": "Zetatech Grade A",
+      "category": "gear",
+      "manufacturer": "Zetatech",
+      "description": "Um dos Agents mais comuns: discreto, eficiente, retangular. Qualidade Padrão, uma tela sensível ao toque, microfone e alto-falante. Câmera, lanterna e microfone.",
+      "notes": "Conferido com All About Agents, p. 9.",
+      "price": 100, "priceCategory": "Premium", "page": 9, "tags": [],
+      "attributes": { "gearType": "Electronics", "gearClass": "Agent", "effect": "Agent de Qualidade Padrão (DV21 para hackear remotamente)." }
+    },
+    {
+      "slug": "zetatech-grade-a-plus",
+      "name": "Zetatech Grade A-Plus",
+      "category": "gear",
+      "manufacturer": "Zetatech",
+      "description": "Versão melhorada do Grade A. Qualidade Excelente, tela sensível ao toque, microfone, alto-falante e holo-projetor. Câmera, lanterna e microfone.",
+      "notes": "Conferido com All About Agents, p. 9.",
+      "price": 500, "priceCategory": "Expensive", "page": 9, "tags": [],
+      "attributes": { "gearType": "Electronics", "gearClass": "Agent", "effect": "Agent de Qualidade Excelente (DV24 para hackear remotamente)." }
+    },
+    {
+      "slug": "breacher",
+      "name": "Breacher",
+      "category": "gear",
+      "description": "Agent modificado para hackear outros Agents a até 20 m/yds com linha de visão. Só serve para isso: não funciona como Agent nem pode ser hackeado como um. Hackear exige Electronics/Security Tech (1 minuto) contra DV 17, 21 ou 24 conforme a qualidade do alvo; com acesso físico, 15, 17 ou 21 e não precisa de Breacher. Agents internos e celulares descartáveis não podem ser hackeados assim.",
+      "notes": "Conferido com All About Agents, p. 5-7.",
+      "price": 500, "priceCategory": "Expensive", "page": 7, "tags": [],
+      "attributes": { "gearType": "Security", "gearClass": "Hacking", "requirements": "Alvo a até 20 m/yds com linha de visão", "effect": "Hackeia Agents externos à distância." }
+    },
+    {
+      "slug": "crunch-whistle",
+      "name": "Crunch Whistle",
+      "category": "gear",
+      "description": "Opção de hardware de Cyberdeck que liga o deck a um Breacher, permitindo somar o Rank de Interface aos testes de Electronics/Security Tech para hackear Agents.",
+      "notes": "Conferido com All About Agents, p. 7.",
+      "price": 100, "priceCategory": "Premium", "page": 7, "tags": ["Netrunning"],
+      "attributes": { "gearType": "Electronics", "gearClass": "Hardware de Cyberdeck", "requirements": "Cyberdeck e Breacher", "skillBonus": "+Interface em Electronics/Security Tech para hackear Agents", "effect": "Soma Interface ao hackear Agents." }
+    },
+    {
+      "slug": "app-ask-alex-anything", "name": "Ask Alex Anything", "category": "gear", "manufacturer": "Ziggurat",
+      "description": "O buscador mais popular, pré-instalado em todo Agent. O SAAI do Agent o usa para montar relatórios e procurar informação no CitiNet local.",
+      "notes": "Conferido com All About Agents, p. 7.", "price": 0, "priceNote": "Grátis", "page": 7, "tags": [],
+      "attributes": { "gearType": "Electronics", "gearClass": "App", "requirements": "Agent", "effect": "Busca e mostra dados do CitiNet local." }
+    },
+    {
+      "slug": "app-babelchat", "name": "BabelChat", "category": "gear", "manufacturer": "Ziggurat",
+      "description": "Mensagens de texto, mensagens instantâneas e videochamadas. Pré-instalado em todo Agent; temas, emotes e efeitos de câmera são pagos.",
+      "notes": "Conferido com All About Agents, p. 7.", "price": 0, "priceNote": "Grátis", "page": 7, "tags": [],
+      "attributes": { "gearType": "Electronics", "gearClass": "App", "requirements": "Agent", "effect": "Mensagens e videochamadas." }
+    },
+    {
+      "slug": "app-bangme", "name": "BangMe!", "category": "gear", "manufacturer": "Eurobank",
+      "description": "Transferência de dinheiro com um toque, para pontos de venda com BangMe! ou entre dois Agents com o app.",
+      "notes": "Conferido com All About Agents, p. 7.", "price": 10, "priceCategory": "Cheap", "page": 7, "tags": [],
+      "attributes": { "gearType": "Electronics", "gearClass": "App", "requirements": "Agent", "effect": "Transferência de dinheiro." }
+    },
+    {
+      "slug": "app-big-saai", "name": "Big SAAI", "category": "gear", "manufacturer": "Ziggurat",
+      "description": "Melhora o SAAI do Agent, com resultados melhores e mais rápidos. Também registra o uso do Agent e reporta à Ziggurat em segredo.",
+      "notes": "Conferido com All About Agents, p. 7.", "price": 100, "priceCategory": "Premium", "page": 7, "tags": [],
+      "attributes": { "gearType": "Electronics", "gearClass": "App", "requirements": "Agent", "skillBonus": "+3 em Library Search (em vez de +2)", "effect": "Agent passa a dar +3 em Library Search." }
+    },
+    {
+      "slug": "app-brainwasher", "name": "Brainwasher", "category": "gear", "manufacturer": "No/Brainer",
+      "description": "Terapia por SAAI. Quem usar o app pelo menos 1 hora por dia nos 7 dias antes de entrar em terapia (CP:R p. 229) rola 1d10: par, a terapia termina um dia antes; ímpar, leva um dia a mais. O contrato de uso não fala nada sobre privacidade.",
+      "notes": "Conferido com All About Agents, p. 7-8.", "price": 50, "priceNote": "Por mês", "priceCategory": "Costly", "page": 7, "tags": [],
+      "attributes": { "gearType": "Electronics", "gearClass": "App", "requirements": "Agent", "effect": "Pode encurtar ou alongar a terapia em 1 dia." }
+    },
+    {
+      "slug": "app-elflines-online-elftracker", "name": "Elflines Online Elftracker", "category": "gear", "manufacturer": "Segotari",
+      "description": "Liga a conta de Elflines Online ao Agent para ver os stats do elfo, combinar trocas e participar dos chats da elfline.",
+      "notes": "Conferido com All About Agents, p. 8. Também citado no Segotari Power, p. 6.", "price": 50, "priceCategory": "Costly", "page": 8, "tags": [],
+      "attributes": { "gearType": "Electronics", "gearClass": "App", "requirements": "Agent e conta de Elflines Online", "effect": "Acompanhamento de Elflines Online." }
+    },
+    {
+      "slug": "app-the-garden", "name": "The Garden", "category": "gear", "manufacturer": "Ziggurat",
+      "description": "Acesso ao conteúdo do Garden no Data Pool (CP:R p. 280). Com conta, dá para comentar, postar e editar o próprio Garden Patch.",
+      "notes": "Conferido com All About Agents, p. 8.", "price": 0, "priceNote": "Grátis", "page": 8, "tags": [],
+      "attributes": { "gearType": "Electronics", "gearClass": "App", "requirements": "Agent", "effect": "Rede social do Data Pool." }
+    },
+    {
+      "slug": "app-hustool", "name": "HusTool", "category": "gear", "manufacturer": "No/Brainer",
+      "description": "Bicos rápidos: cada um leva meia hora (sem contar deslocamento) e paga 10eb. Rola 1d10: com 1, o bico dá errado e não paga; com 10, paga, mas o usuário encontra problemas (role na Tabela de Encontros da área e horário, CP:R p. 417).",
+      "notes": "Conferido com All About Agents, p. 8.", "price": 20, "priceCategory": "Everyday", "page": 8, "tags": [],
+      "attributes": { "gearType": "Electronics", "gearClass": "App", "requirements": "Agent", "effect": "Bicos de 10eb por meia hora." }
+    },
+    {
+      "slug": "app-roach-race", "name": "Roach Race", "category": "gear", "manufacturer": "CDP S.A.",
+      "description": "Jogo de corrida lateral em pixel art, da Polônia: um cavalo digital cheio de glitches foge do cavaleiro de cabelo branco.",
+      "notes": "Conferido com All About Agents, p. 8. Também citado no Segotari Power, p. 7.", "price": 20, "priceCategory": "Everyday", "page": 8, "tags": [],
+      "attributes": { "gearType": "Lifestyle", "gearClass": "App", "requirements": "Agent", "effect": "Videogame." }
+    },
+    {
+      "slug": "app-watchbox", "name": "WatchBox", "category": "gear", "manufacturer": "No/Brainer",
+      "description": "Segurança barata: com o Agent parado no centro de um cômodo de até 20 m x 20 m, passa 5 minutos analisando o espaço. Depois, barulho alto, luz forte ou movimento de quem não estava lá dispara um alarme sonoro. Invasores com Stealth DV13 passam despercebidos. Não funciona em Agents internos.",
+      "notes": "Conferido com All About Agents, p. 8.", "price": 50, "priceCategory": "Costly", "page": 8, "tags": [],
+      "attributes": { "gearType": "Security", "gearClass": "App", "requirements": "Agent externo", "effect": "Alarme de cômodo (Stealth DV13 para evitar)." }
+    },
+    {
+      "slug": "app-zpost", "name": "ZPost", "category": "gear", "manufacturer": "Ziggurat",
+      "description": "Envia, recebe, lê e organiza e-mails e anexos. Tem bons recursos e (provavelmente) não é monitorado.",
+      "notes": "Conferido com All About Agents, p. 9.", "price": 0, "priceNote": "Grátis", "page": 9, "tags": [],
+      "attributes": { "gearType": "Electronics", "gearClass": "App", "requirements": "Agent", "effect": "E-mail." }
+    }
+  ]
+}

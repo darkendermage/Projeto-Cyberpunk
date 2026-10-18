@@ -1,0 +1,23 @@
+# .NET
+bin/
+obj/
+*.db
+*.db-shm
+*.db-wal
+.vs/
+*.user
+backend/src/CyberpunkDb.Api/wwwroot/
+
+# Node
+node_modules/
+dist/
+*.tsbuildinfo
+.vite/
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.idea/
+
+# Executável desktop (gerado por deploy/desktop/publicar.ps1)
+artifacts/
