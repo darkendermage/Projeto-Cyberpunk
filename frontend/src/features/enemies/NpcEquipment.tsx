@@ -4,7 +4,7 @@ import { Ban, CheckCircle2, Plus, Trash2, X } from 'lucide-react';
 import { api } from '../../api/client';
 import { useCatalogSearch, useItems } from '../../api/hooks';
 import type { FilterCriterionDto, Item, NpcSheet, NpcValidationReport, WeaponQuality } from '../../api/types';
-import { Button, IconButton, Segmented, Select, Spinner } from '../../components/ui/ui';
+import { Button, IconButton, NumberInput, Segmented, Select, Spinner } from '../../components/ui/ui';
 import { useDebouncedValue } from '../../lib/hooks';
 import { formatEb } from '../../lib/format';
 import { useToast } from '../../state/ToastContext';
@@ -105,8 +105,8 @@ export function GearEditor({
                       {line?.summary && <span className={styles.itemSub}>{line.summary}</span>}
                     </td>
                     <td>
-                      <input type="number" min={1} max={999} value={g.quantity} aria-label="Quantidade"
-                        onChange={(e) => dispatch({ type: 'updateGear', index: i, patch: { quantity: Math.max(1, Number(e.target.value)) } })} />
+                      <NumberInput min={1} max={999} value={g.quantity} aria-label="Quantidade"
+                        onChange={(v) => dispatch({ type: 'updateGear', index: i, patch: { quantity: v ?? 1 } })} />
                     </td>
                     <td>
                       {isWeapon ? (

@@ -27,7 +27,7 @@ public sealed record NpcTemplateDto(
     NpcLevel Level, bool Hardened, string Name, string Summary, TemplateSummary Values, IReadOnlyList<RuleFactDto> Facts);
 
 public sealed record SkillDto(
-    string Id, string Name, string Stat, string Category, bool Combat, bool DoubleCost, bool Specialized, int Page);
+    string Id, string Name, string Stat, string Category, bool Combat, bool DoubleCost, bool Specialized, int Page, string? NamePt = null);
 
 public sealed record FreeSkillDto(string Skill, string? Specialization, int Level);
 

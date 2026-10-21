@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Npcs\Rules\npc-rules.json" LogicalName="CyberpunkDb.Application.Npcs.Rules.npc-rules.json" />
+    <EmbeddedResource Include="Characters\Rules\character-rules.json" LogicalName="CyberpunkDb.Application.Characters.Rules.character-rules.json" />
   </ItemGroup>
 
   <PropertyGroup>

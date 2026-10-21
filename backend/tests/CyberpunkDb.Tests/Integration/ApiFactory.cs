@@ -10,7 +10,17 @@ namespace CyberpunkDb.Tests.Integration;
 /// </summary>
 public sealed class ApiFactory : WebApplicationFactory<Program>
 {
-    private readonly string _dbPath = Path.Combine(Path.GetTempPath(), $"cyberpunkdb-tests-{Guid.NewGuid():N}.db");
+    private readonly string _dbPath;
+
+    public ApiFactory() : this(Path.Combine(Path.GetTempPath(), $"cyberpunkdb-tests-{Guid.NewGuid():N}.db")) { }
+
+    /// <summary>Boots the API on an existing database file, as a restarted application would.</summary>
+    internal ApiFactory(string dbPath) => _dbPath = dbPath;
+
+    public string DbPath => _dbPath;
+
+    /// <summary>Keeps the database file when this instance is disposed (used to simulate a restart).</summary>
+    public bool KeepDatabase { get; init; }
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
@@ -27,6 +37,7 @@ public sealed class ApiFactory : WebApplicationFactory<Program>
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);
+        if (KeepDatabase) return;
         try { File.Delete(_dbPath); } catch (IOException) { /* best effort */ }
     }
 }

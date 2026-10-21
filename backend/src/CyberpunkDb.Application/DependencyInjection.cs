@@ -1,5 +1,11 @@
 using CyberpunkDb.Application.Abstractions;
 using CyberpunkDb.Application.Catalog;
+using CyberpunkDb.Application.Characters;
+using CyberpunkDb.Application.Characters.Calculation;
+using CyberpunkDb.Application.Characters.Creation;
+using CyberpunkDb.Application.Characters.Operations;
+using CyberpunkDb.Application.Characters.Rules;
+using CyberpunkDb.Application.Characters.Validation;
 using CyberpunkDb.Application.Collections;
 using CyberpunkDb.Application.Npcs;
 using CyberpunkDb.Application.Npcs.Generation;
@@ -25,6 +31,19 @@ public static class DependencyInjection
         services.AddSingleton<NpcCatalogCache>();
         services.AddScoped<NpcCatalogProvider>();
         services.AddScoped<NpcService>();
+        services.AddSingleton(sp => CharacterRuleBook.LoadEmbedded(sp.GetRequiredService<NpcRuleBook>()));
+        services.AddSingleton<CharacterCalculator>();
+        services.AddSingleton<Characters.Roles.RoleModuleRegistry>();
+        services.AddSingleton<CharacterValidator>();
+        services.AddSingleton<ProgressionOperations>();
+        services.AddSingleton<IDiceRoller, RandomDiceRoller>();
+        services.AddSingleton<CyberwareInstaller>();
+        services.AddSingleton<CharacterCreationService>();
+        services.AddSingleton<CyberwareOperations>();
+        services.AddSingleton<InventoryOperations>();
+        services.AddSingleton<EconomyOperations>();
+        services.AddSingleton<CombatOperations>();
+        services.AddScoped<CharacterService>();
         services.AddValidatorsFromAssemblyContaining<GearListUpsertValidator>(ServiceLifetime.Singleton);
         return services;
     }

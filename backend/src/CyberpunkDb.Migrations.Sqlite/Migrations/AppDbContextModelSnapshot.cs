@@ -33,6 +33,129 @@ namespace CyberpunkDb.Migrations.Sqlite.Migrations
                     b.ToTable("AmmunitionCalibers", (string)null);
                 });
 
+            modelBuilder.Entity("CyberpunkDb.Domain.Entities.Character", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CreationMethod")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Handle")
+                        .HasMaxLength(80)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Role")
+                        .HasMaxLength(40)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SheetJson")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Version")
+                        .IsConcurrencyToken()
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UpdatedAt");
+
+                    b.ToTable("Characters", (string)null);
+                });
+
+            modelBuilder.Entity("CyberpunkDb.Domain.Entities.CharacterEvent", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Action")
+                        .IsRequired()
+                        .HasMaxLength(60)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("After")
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("Amount")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Before")
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("CharacterId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsManual")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Kind")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PayloadJson")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CharacterId", "Kind", "CreatedAt");
+
+                    b.ToTable("CharacterEvents", (string)null);
+                });
+
+            modelBuilder.Entity("CyberpunkDb.Domain.Entities.CharacterPortrait", b =>
+                {
+                    b.Property<int>("CharacterId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ContentType")
+                        .IsRequired()
+                        .HasMaxLength(60)
+                        .HasColumnType("TEXT");
+
+                    b.Property<byte[]>("Data")
+                        .IsRequired()
+                        .HasColumnType("BLOB");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("CharacterId");
+
+                    b.ToTable("CharacterPortraits", (string)null);
+                });
+
             modelBuilder.Entity("CyberpunkDb.Domain.Entities.Favorite", b =>
                 {
                     b.Property<int>("ItemId")
@@ -860,6 +983,24 @@ namespace CyberpunkDb.Migrations.Sqlite.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("CyberpunkDb.Domain.Entities.CharacterEvent", b =>
+                {
+                    b.HasOne("CyberpunkDb.Domain.Entities.Character", null)
+                        .WithMany("Events")
+                        .HasForeignKey("CharacterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("CyberpunkDb.Domain.Entities.CharacterPortrait", b =>
+                {
+                    b.HasOne("CyberpunkDb.Domain.Entities.Character", null)
+                        .WithOne("Portrait")
+                        .HasForeignKey("CyberpunkDb.Domain.Entities.CharacterPortrait", "CharacterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("CyberpunkDb.Domain.Entities.Favorite", b =>
                 {
                     b.HasOne("CyberpunkDb.Domain.Entities.Item", "Item")
@@ -1036,6 +1177,13 @@ namespace CyberpunkDb.Migrations.Sqlite.Migrations
                         .HasForeignKey("CyberpunkDb.Domain.Entities.WeaponAttachment", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("CyberpunkDb.Domain.Entities.Character", b =>
+                {
+                    b.Navigation("Events");
+
+                    b.Navigation("Portrait");
                 });
 
             modelBuilder.Entity("CyberpunkDb.Domain.Entities.GearList", b =>

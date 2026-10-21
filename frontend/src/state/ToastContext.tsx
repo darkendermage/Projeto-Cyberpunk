@@ -26,7 +26,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   const notify = useCallback((message: string, kind: ToastKind = 'success') => {
     const id = nextId++;
     setToasts((list) => [...list.slice(-3), { id, kind, message }]);
-    setTimeout(() => dismiss(id), kind === 'error' ? 6000 : 3200);
+    setTimeout(() => dismiss(id), kind === 'success' ? 3200 : 6000);
   }, [dismiss]);
 
   const value = useMemo<ToastContextValue>(() => ({

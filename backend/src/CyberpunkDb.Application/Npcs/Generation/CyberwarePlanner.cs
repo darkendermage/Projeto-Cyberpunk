@@ -156,7 +156,7 @@ public sealed class CyberwarePlanner(NpcMechanics mechanics, NpcCatalog catalog)
             .Select(e => catalog.Find(e.ItemId))
             .Where(i => i is not null && mechanics.PoolFor(i)?.Key == pool.Key)
             .Sum(i => mechanics.SlotsRequired(i!).Slots);
-        return used + mechanics.SlotsRequired(item).Slots > pool.Slots ? $"{pool.Label} sem slots livres." : null;
+        return used + mechanics.SlotsRequired(item).Slots > mechanics.PoolSlots(pool) ? $"{pool.Label} sem slots livres." : null;
     }
 
     private NpcCyberwareEntry NewEntry(CatalogItem item, string? parent)

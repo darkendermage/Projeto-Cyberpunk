@@ -222,6 +222,39 @@ internal static class CatalogModelConfiguration
             e.HasIndex(x => x.UpdatedAt);
         });
 
+        b.Entity<Character>(e =>
+        {
+            e.ToTable("Characters");
+            e.Property(x => x.Name).HasMaxLength(80).IsRequired();
+            e.Property(x => x.Handle).HasMaxLength(80);
+            e.Property(x => x.Role).HasMaxLength(40);
+            e.Property(x => x.Version).IsConcurrencyToken();
+            e.Property(x => x.SheetJson).IsRequired();
+            if (isPostgres) e.Property(x => x.SheetJson).HasColumnType("jsonb");
+            e.HasMany(x => x.Events).WithOne().HasForeignKey(x => x.CharacterId).OnDelete(DeleteBehavior.Cascade);
+            e.HasOne(x => x.Portrait).WithOne().HasForeignKey<CharacterPortrait>(x => x.CharacterId).OnDelete(DeleteBehavior.Cascade);
+            e.HasIndex(x => x.UpdatedAt);
+        });
+
+        b.Entity<CharacterPortrait>(e =>
+        {
+            e.ToTable("CharacterPortraits");
+            e.HasKey(x => x.CharacterId);
+            e.Property(x => x.ContentType).HasMaxLength(60).IsRequired();
+            e.Property(x => x.Data).IsRequired();
+        });
+
+        b.Entity<CharacterEvent>(e =>
+        {
+            e.ToTable("CharacterEvents");
+            e.Property(x => x.Action).HasMaxLength(60).IsRequired();
+            e.Property(x => x.Before).HasMaxLength(200);
+            e.Property(x => x.After).HasMaxLength(200);
+            e.Property(x => x.Description).HasMaxLength(500).IsRequired();
+            if (isPostgres) e.Property(x => x.PayloadJson).HasColumnType("jsonb");
+            e.HasIndex(x => new { x.CharacterId, x.Kind, x.CreatedAt });
+        });
+
         b.Entity<GearListEntry>(e =>
         {
             e.ToTable("GearListEntries");

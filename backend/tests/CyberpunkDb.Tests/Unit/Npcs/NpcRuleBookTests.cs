@@ -77,7 +77,7 @@ public class NpcRuleBookTests
             .Should().OnlyContain(s => slugs.Contains(s));
     }
 
-    private static void Walk(object? node, string path, List<string> missing, int depth)
+    internal static void Walk(object? node, string path, List<string> missing, int depth)
     {
         if (node is null || depth > 8) return;
         var type = node.GetType();

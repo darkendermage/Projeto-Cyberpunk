@@ -1,0 +1,1207 @@
+{
+  "about": "Parâmetros de criação e jogo de personagens. Cada valor traz 'source' (livro e página conferidos no PDF) ou 'complementary: true' quando é uma regra adotada pela aplicação, sem valor oficial. Sigla: CP:R = Cyberpunk RED Core Rulebook v1.25. As perícias, STATs e regras estruturais de cyberware vêm de npc-rules.json, compartilhado com o Gerador de Inimigos.",
+  "version": 1,
+  "books": {
+    "CP:R": "Cyberpunk RED Core Rulebook (v1.25)",
+    "IR3": "Interface RED Volume 3"
+  },
+
+  "statOrder": ["INT", "REF", "DEX", "TECH", "COOL", "WILL", "LUCK", "MOVE", "BODY", "EMP"],
+
+  "creation": {
+    "roleAbilityStartRank": { "value": 4, "source": "CP:R p.41 (Set your Role's Role Ability to 4)" },
+    "originLanguageLevel": { "value": 4, "source": "CP:R p.45 (You begin with 4 points in that Language Skill)" },
+    "originLanguageFree": { "value": true, "source": "CP:R p.88 e p.90 (Don't forget the 4 Levels of Language you get free based on the Cultural Origin)" },
+    "basicSkills": {
+      "value": ["athletics", "brawling", "concentration", "conversation", "education", "evasion", "first-aid", "human-perception", "language:Streetslang", "local-expert:@home", "perception", "persuasion", "stealth"],
+      "source": "CP:R p.88 e p.90 (The following Skills must be at least Level 2)"
+    },
+    "basicSkillMin": { "value": 2, "source": "CP:R p.88 e p.90" },
+    "multiclassAtCreation": { "value": false, "source": "CP:R p.142 (You can't start off taking on two Roles at once)" },
+    "methods": {
+      "streetrat": {
+        "label": "Streetrat (Templates)",
+        "summary": { "value": "STATs, perícias, armas, armadura, roupa e cyberware vêm prontos da Role. Rápido para começar.", "source": "CP:R p.40 e p.73" },
+        "stats": { "value": "row", "source": "CP:R p.73 (roll 1d10 and copy the numbers adjacent to the result; you may not move your STATs around)" },
+        "skills": { "value": "template", "source": "CP:R p.86 (Skills are predetermined from the start with The Streetrat)" },
+        "gear": { "value": "role", "source": "CP:R p.98, p.103 e p.117" },
+        "startingCash": { "value": 500, "source": "CP:R p.98 (Streetrat and Edgerunner Characters get 500eb to spend on other items or to keep)" }
+      },
+      "edgerunner": {
+        "label": "Edgerunner (Fast and Dirty)",
+        "summary": { "value": "STATs rolados um a um na tabela da Role; 86 pontos distribuídos nas 20 perícias da Role. Equipamento pronto.", "source": "CP:R p.77 e p.88" },
+        "stats": { "value": "perStat", "source": "CP:R p.77 (roll 1d10 for each STAT individually, comparing the roll against the value on the column for that STAT)" },
+        "skillPoints": { "value": 86, "source": "CP:R p.88 (Edgerunners get 86 Skill points; these points may not be applied anywhere else)" },
+        "skillMin": { "value": 2, "source": "CP:R p.88 (No Skill can be higher than 6 or lower than 2)" },
+        "skillMax": { "value": 6, "source": "CP:R p.88" },
+        "roleSkillsOnly": { "value": true, "source": "CP:R p.88 (divide your 86 Skill points up between the Skills listed for that type)" },
+        "gear": { "value": "role", "source": "CP:R p.98, p.103 e p.117" },
+        "startingCash": { "value": 500, "source": "CP:R p.98" }
+      },
+      "completePackage": {
+        "label": "The Complete Package (Calculated)",
+        "summary": { "value": "Compra de STATs e perícias com pontos; todo o equipamento comprado com eurobucks.", "source": "CP:R p.78, p.90 e p.104" },
+        "statPoints": { "value": 62, "source": "CP:R p.78 (normally 62)" },
+        "statPresets": {
+          "value": [
+            { "label": "Minor Supporting Character", "points": 50 },
+            { "label": "Starting Character", "points": 62 },
+            { "label": "Major Supporting Character", "points": 70 },
+            { "label": "Minor Hero", "points": 75 },
+            { "label": "Major Hero", "points": 80 }
+          ],
+          "source": "CP:R p.78 (Rank of Character / STAT Points); o livro recomenda o Starting Character"
+        },
+        "statMin": { "value": 2, "source": "CP:R p.78 (no STAT may be higher than 8 or lower than 2)" },
+        "statMax": { "value": 8, "source": "CP:R p.78" },
+        "skillPoints": { "value": 86, "source": "CP:R p.90 (these Characters get 86 Skill points)" },
+        "skillMax": { "value": 6, "source": "CP:R p.90 (No Skill can be higher than 6)" },
+        "gearBudget": { "value": 2550, "source": "CP:R p.104 (you get 2,550 Eurobucks to buy any weapons, armor, gear, and cyberware)" },
+        "unspentGearKept": { "value": true, "source": "CP:R p.104 (You keep anything you don't spend)" },
+        "fashionBudget": { "value": 800, "source": "CP:R p.105 (an additional 800eb to spend only on Fashion or Fashionware)" },
+        "unspentFashionKept": { "value": false, "source": "CP:R p.105 (Anything you don't spend goes away)" }
+      }
+    },
+    "skillCostCountsFromZero": { "value": true, "source": "CP:R p.89 e p.90 (nos exemplos, o custo total de 86 inclui os níveis 2 das perícias básicas; só o idioma de origem custa 0)" },
+    "humanityLossAtCreation": { "value": "fixed", "source": "CP:R p.110 (At Character Generation, Humanity Loss is preset. After Character Generation, Humanity Loss is determined by the dice)" },
+    "startingHousing": {
+      "default": { "housing": "cargo-container", "lifestyle": "kibble", "firstMonthFree": true, "source": "CP:R p.105 (if you aren't an Exec, you'll start off living in a rented Cargo Container ... Kibble Lifestyle. The first month's rent and kibble are free)" },
+      "exec": { "housing": "corporate-conapt", "lifestyle": "good-prepak", "firstMonthFree": true, "source": "CP:R p.105 (if you are an Exec, you'll start off living rent free in a Corporate Conapt ... Good Prepak Lifestyle, which is already paid for this month)" }
+    }
+  },
+
+  "roles": [
+    {
+      "id": "Rockerboy",
+      "ability": {
+        "name": "Charismatic Impact", "page": 144, "source": "CP:R p.144–145",
+        "summary": "Influencia fãs pela presença: música, arte, poesia ou só carisma. Só funciona em quem é fã.",
+        "points": [
+          "Fora de combate, transforma em fã quem ainda não é (e não te detesta): Charismatic Impact + 1d10 contra DV8 (uma pessoa), DV10 (grupo de até 6) ou DV12 (multidão).",
+          "Para pedir um favor, o Mestre confere se ele cabe no seu Rank e você rola contra o DV do tamanho do grupo. Se falhar, não pode pedir o mesmo favor a esses fãs por uma semana.",
+          "Ranks 1–2: clubes locais, favores pequenos (um drinque, uma carona). 3–4: clubes conhecidos, favores grandes. 5–6: fãs cometem crimes menores por você. 7–8: um fã arrisca a vida por você. 9: crimes graves. 10: seguidores no mundo todo, quase uma seita."
+        ]
+      },
+      "statTable": {
+        "source": "CP:R p.74",
+        "rows": [
+          [7, 6, 6, 5, 6, 8, 7, 7, 3, 8],
+          [3, 7, 7, 7, 7, 6, 7, 7, 5, 8],
+          [4, 5, 7, 7, 6, 6, 7, 7, 5, 8],
+          [4, 5, 7, 7, 6, 8, 7, 6, 3, 8],
+          [3, 7, 7, 7, 6, 8, 6, 5, 4, 7],
+          [5, 6, 7, 5, 7, 8, 5, 7, 3, 7],
+          [5, 6, 6, 7, 7, 8, 7, 6, 3, 6],
+          [5, 7, 7, 5, 6, 6, 6, 6, 4, 8],
+          [3, 5, 5, 6, 7, 8, 7, 5, 5, 7],
+          [4, 5, 6, 5, 8, 8, 7, 6, 4, 7]
+        ]
+      },
+      "skills": {
+        "source": "CP:R p.86 (Streetrat) e p.88 (lista do Edgerunner)",
+        "levels": {
+          "athletics": 2, "brawling": 6, "concentration": 2, "conversation": 2, "education": 2, "evasion": 6, "first-aid": 6,
+          "human-perception": 6, "language:Streetslang": 2, "local-expert:@home": 4, "perception": 2, "persuasion": 6, "stealth": 2,
+          "composition": 6, "handgun": 6, "melee-weapon": 6, "personal-grooming": 4, "play-instrument:@choose": 6, "streetwise": 6, "wardrobe-style": 4
+        }
+      },
+      "starting": {
+        "weapons": {
+          "source": "CP:R p.98",
+          "groups": [
+            [[{ "slug": "very-heavy-pistol" }]],
+            [[{ "slug": "basic-ammo", "caliber": "VeryHeavyPistol", "rounds": 50 }]],
+            [[{ "slug": "heavy-melee-weapon" }], [{ "slug": "flashbang-grenade" }]],
+            [[{ "slug": "teargas-grenade", "qty": 2 }]],
+            [[{ "slug": "light-armorjack", "worn": "Body" }]],
+            [[{ "slug": "light-armorjack", "worn": "Head" }]]
+          ]
+        },
+        "outfit": {
+          "source": "CP:R p.103",
+          "groups": [
+            [[{ "slug": "agent" }]],
+            [[{ "slug": "computer" }]],
+            [[{ "slug": "electric-guitar" }], [{ "slug": "bug-detector-gear" }]],
+            [[{ "slug": "glow-paint", "qty": 5 }]],
+            [[{ "slug": "pocket-amplifier" }]],
+            [[{ "slug": "radio-scanner-music-player-gear" }]],
+            [[{ "slug": "video-camera" }]],
+            [[{ "slug": "roupa-generic-chic-jacket" }, { "slug": "roupa-generic-chic-jewelry", "qty": 3 }, { "slug": "roupa-generic-chic-top", "qty": 4 }]],
+            [[{ "slug": "roupa-leisurewear-jewelry" }, { "slug": "roupa-leisurewear-mirrorshades" }, { "slug": "roupa-leisurewear-footwear" }]],
+            [[{ "slug": "roupa-urban-flash-bottoms" }, { "slug": "roupa-urban-flash-top" }]]
+          ]
+        },
+        "cyberware": {
+          "source": "CP:R p.117",
+          "humanityLoss": 9,
+          "groups": [
+            [[{ "slug": "audio-recorder" }]],
+            [[{ "slug": "chemskin" }]],
+            [[{ "slug": "cyberaudio-suite" }]],
+            [[{ "slug": "techhair" }]]
+          ]
+        }
+      },
+      "lifepath": {
+        "source": "CP:R p.54",
+        "questions": [
+          { "id": "type", "label": "What Kind of Rockerboy are You?", "labelPt": "Que tipo de Rockerboy você é?", "dice": "1d10",
+            "options": ["Musician", "Slam Poet", "Street Artist", "Performance Artist", "Comedian", "Orator", "Politico", "Rap Artist", "DJ", "Idoru"] },
+          { "id": "act", "label": "Are You in a Group or a Solo Act?", "labelPt": "Você está numa banda/grupo ou é um ato solo?", "dice": "choose",
+            "options": ["Group", "Solo"] },
+          { "id": "onceInGroup", "label": "Were You Once in a Group?", "labelPt": "Você já fez parte de um grupo?", "dice": "choose", "showIf": { "question": "act", "value": "Solo" },
+            "options": ["Yes", "No"] },
+          { "id": "whyLeft", "label": "Why Did You Leave?", "labelPt": "Por que você saiu?", "dice": "1d6", "showIf": { "question": "onceInGroup", "value": "Yes" },
+            "options": ["You were a jerk and the rest of the group voted you out.", "You got caught sleeping around with another member's mainline.", "The rest of the group was killed in a tragic \"accident.\"", "The rest of the group was murdered or otherwise broken up by external enemies.", "The group broke up over \"creative differences.\"", "You decided to go solo."] },
+          { "id": "venue", "label": "Where Do You Perform?", "labelPt": "Onde você se apresenta?", "dice": "1d6",
+            "options": ["Alternative Cafes", "Private Clubs", "Seedy Dive Bars", "Guerrilla Performances", "Nightclubs Around the City", "On the Data Pool"] },
+          { "id": "gunning", "label": "Who's Gunning for You/Your Group?", "labelPt": "Quem está atrás de você/do seu grupo?", "dice": "1d6",
+            "options": ["Old group member who thinks you did them dirty.", "Rival group or artist trying to steal market share.", "Corporate enemies who don't like your message.", "Critic or other \"influencer\" trying to bring you down.", "Older media star who feels threatened by your rising fame.", "Romantic interest or media figure who wants revenge for personal reasons."] }
+        ]
+      }
+    },
+    {
+      "id": "Solo",
+      "ability": {
+        "name": "Combat Awareness", "page": 146, "source": "CP:R p.146",
+        "summary": "Divide pontos iguais ao Rank entre habilidades de combate. Redistribui antes da Iniciativa, fora de combate ou, em combate, gastando uma Ação; sem mudança, a divisão anterior continua.",
+        "points": [
+          "Damage Deflection: 2/4/6/8/10 pontos reduzem em 1/2/3/4/5 o primeiro dano sofrido na Rodada.",
+          "Fumble Recovery: 4 pontos para ignorar falhas críticas (1) ao atacar.",
+          "Initiative Reaction: +1 na Iniciativa por ponto.",
+          "Precision Attack: 3/6/9 pontos dão +1/+2/+3 nos ataques.",
+          "Spot Weakness: +1 por ponto no dano (antes da armadura) do primeiro ataque certeiro da Rodada.",
+          "Threat Detection: +1 por ponto em testes de Perception."
+        ]
+      },
+      "statTable": {
+        "source": "CP:R p.74",
+        "rows": [
+          [6, 7, 7, 3, 8, 6, 5, 5, 6, 5],
+          [7, 8, 6, 3, 6, 6, 7, 5, 6, 6],
+          [5, 8, 7, 4, 7, 7, 6, 7, 8, 5],
+          [5, 8, 6, 4, 6, 7, 6, 5, 7, 6],
+          [6, 6, 7, 5, 7, 6, 7, 6, 8, 4],
+          [7, 7, 6, 5, 7, 6, 6, 7, 7, 5],
+          [7, 7, 6, 5, 6, 7, 7, 6, 6, 6],
+          [7, 8, 7, 5, 6, 6, 5, 6, 8, 4],
+          [7, 7, 6, 4, 6, 6, 6, 5, 6, 5],
+          [6, 6, 8, 5, 6, 6, 5, 6, 6, 5]
+        ]
+      },
+      "skills": {
+        "source": "CP:R p.86 (Streetrat) e p.88 (lista do Edgerunner)",
+        "levels": {
+          "athletics": 2, "brawling": 2, "concentration": 2, "conversation": 2, "education": 2, "evasion": 6, "first-aid": 6,
+          "human-perception": 2, "language:Streetslang": 2, "local-expert:@home": 2, "perception": 6, "persuasion": 2, "stealth": 2,
+          "autofire": 6, "handgun": 6, "interrogation": 6, "melee-weapon": 6, "resist-torture-drugs": 6, "shoulder-arms": 6, "tactics": 6
+        }
+      },
+      "starting": {
+        "weapons": {
+          "source": "CP:R p.98",
+          "groups": [
+            [[{ "slug": "assault-rifle-padrao" }]],
+            [[{ "slug": "very-heavy-pistol" }]],
+            [[{ "slug": "heavy-melee-weapon" }], [{ "slug": "bulletproof-shield" }]],
+            [[{ "slug": "basic-ammo", "caliber": "VeryHeavyPistol", "rounds": 30 }]],
+            [[{ "slug": "basic-ammo", "caliber": "Rifle", "rounds": 70 }]],
+            [[{ "slug": "light-armorjack", "worn": "Body" }]],
+            [[{ "slug": "light-armorjack", "worn": "Head" }]]
+          ]
+        },
+        "outfit": {
+          "source": "CP:R p.103",
+          "groups": [
+            [[{ "slug": "agent" }]],
+            [[{ "slug": "roupa-leisurewear-footwear", "qty": 2 }, { "slug": "roupa-leisurewear-jacket", "qty": 3 }, { "slug": "roupa-leisurewear-mirrorshades" }, { "slug": "roupa-leisurewear-bottoms", "qty": 2 }, { "slug": "roupa-leisurewear-top", "qty": 2 }]]
+          ]
+        },
+        "cyberware": {
+          "source": "CP:R p.117",
+          "humanityLoss": 14,
+          "groups": [
+            [[{ "slug": "biomonitor" }]],
+            [[{ "slug": "neural-link" }]],
+            [[{ "slug": "sandevistan" }], [{ "slug": "wolvers", "meatArm": true }]]
+          ]
+        }
+      },
+      "lifepath": {
+        "source": "CP:R p.55",
+        "questions": [
+          { "id": "type", "label": "What Kind of Solo are You?", "labelPt": "Que tipo de Solo você é?", "dice": "1d6",
+            "options": ["Bodyguard", "Street Muscle for Hire", "Corporate Enforcer who takes jobs on the side", "Corporate or Freelance Black Ops Agent", "Local Vigilante for Hire", "Assassin/Hitman for Hire"] },
+          { "id": "moralCompass", "label": "What's Your Moral Compass Like?", "labelPt": "Como é sua bússola moral?", "dice": "1d6",
+            "options": ["Always working for good, trying to take out the \"bad guys.\"", "Always spare the innocent (elderly, women, children, pets).", "Will occasionally slip and do unethical or bad things, but it's rare.", "Ruthless and profit centered; you will work for anyone, take any job for the money.", "Willing to bend the rules (and the law) to get the job done.", "Totally evil. You engage in illegal, unethical work all the time; in fact, you enjoy it."] },
+          { "id": "gunning", "label": "Who's Gunning for You?", "labelPt": "Quem está atrás de você?", "dice": "1d6",
+            "options": ["A Corporation you may have angered.", "A boostergang you may have tackled earlier.", "Corrupt Lawmen or Lawmen who mistakenly think you're guilty of something.", "A rival Solo from another Corp.", "A Fixer who sees you as a threat.", "A rival Solo who sees you as their nemesis."] },
+          { "id": "territory", "label": "What's Your Operational Territory?", "labelPt": "Qual é seu território de operação?", "dice": "1d6",
+            "options": ["A Corporate Zone", "Combat Zones", "The whole City", "The territory of a single Corporation", "The territory of a particular Fixer or contact", "Wherever the money takes you"] }
+        ]
+      }
+    },
+    {
+      "id": "Netrunner",
+      "ability": {
+        "name": "Interface", "page": 147, "source": "CP:R p.147 (Netrunning: p.198)",
+        "summary": "Permite fazer Netrunning, define quantas Ações de NET você tem por Turno e dá acesso às Interface Abilities.",
+        "points": [
+          "Ações de NET por Turno: Rank 1–3 = 2; 4–6 = 3; 7–9 = 4; 10 = 5.",
+          "Interface Abilities: Backdoor (passar por Passwords), Cloak (esconder seus rastros), Control (controlar o que está ligado à Arquitetura), Eye-Dee (identificar dados e seu valor), Pathfinder (mapear a Arquitetura), Scanner (achar sistemas na área), Slide (escapar de um Black ICE), Virus (deixar um vírus no núcleo) e Zap (ataque básico contra Programas e Netrunners)."
+        ]
+      },
+      "statTable": {
+        "source": "CP:R p.74",
+        "rows": [
+          [5, 8, 7, 7, 7, 4, 8, 7, 7, 4],
+          [5, 6, 7, 5, 8, 3, 8, 7, 5, 5],
+          [5, 6, 8, 6, 6, 4, 7, 6, 7, 4],
+          [5, 7, 7, 7, 7, 5, 8, 6, 5, 5],
+          [5, 8, 8, 5, 7, 3, 7, 5, 5, 6],
+          [6, 6, 6, 7, 8, 4, 7, 7, 6, 6],
+          [6, 6, 6, 7, 6, 5, 7, 7, 7, 6],
+          [5, 7, 8, 6, 8, 4, 8, 5, 7, 4],
+          [7, 6, 7, 7, 6, 3, 6, 5, 6, 5],
+          [7, 8, 6, 6, 6, 4, 7, 7, 5, 6]
+        ]
+      },
+      "skills": {
+        "source": "CP:R p.86 (Streetrat) e p.88 (lista do Edgerunner)",
+        "levels": {
+          "athletics": 2, "brawling": 2, "concentration": 2, "conversation": 2, "education": 6, "evasion": 6, "first-aid": 2,
+          "human-perception": 2, "language:Streetslang": 2, "local-expert:@home": 2, "perception": 2, "persuasion": 2, "stealth": 6,
+          "basic-tech": 6, "conceal-reveal-object": 6, "cryptography": 6, "cybertech": 6, "electronics-security-tech": 6, "handgun": 6, "library-search": 6
+        }
+      },
+      "starting": {
+        "weapons": {
+          "source": "CP:R p.98",
+          "groups": [
+            [[{ "slug": "very-heavy-pistol" }]],
+            [[{ "slug": "basic-ammo", "caliber": "VeryHeavyPistol", "rounds": 30 }]],
+            [[{ "slug": "light-armorjack", "worn": "Body" }]],
+            [[{ "slug": "light-armorjack", "worn": "Head" }]]
+          ]
+        },
+        "outfit": {
+          "source": "CP:R p.103",
+          "groups": [
+            [[{ "slug": "agent" }]],
+            [[{ "slug": "cyberdeck-standard" }]],
+            [[{ "slug": "virtuality-goggles" }]],
+            [[{ "slug": "armor" }]],
+            [[{ "slug": "sword" }]],
+            [[{ "slug": "see-ya" }], [{ "slug": "eraser" }]],
+            [[{ "slug": "sword" }], [{ "slug": "vrizzbolt" }]],
+            [[{ "slug": "worm" }], [{ "slug": "sword" }]],
+            [[{ "slug": "roupa-generic-chic-top", "qty": 10 }]],
+            [[{ "slug": "roupa-leisurewear-footwear", "qty": 2 }, { "slug": "roupa-leisurewear-jewelry" }, { "slug": "roupa-leisurewear-bottoms", "qty": 2 }]],
+            [[{ "slug": "roupa-urban-flash-jacket" }]]
+          ]
+        },
+        "cyberware": {
+          "source": "CP:R p.117",
+          "humanityLoss": 14,
+          "groups": [
+            [[{ "slug": "interface-plugs" }]],
+            [[{ "slug": "neural-link" }]],
+            [[{ "slug": "shift-tacts" }]]
+          ]
+        }
+      },
+      "lifepath": {
+        "source": "CP:R p.56-57",
+        "questions": [
+          { "id": "type", "label": "What Kind of Runner are You?", "labelPt": "Que tipo de Netrunner você é?", "dice": "1d6",
+            "options": ["Freelancer who will hack for hire.", "Corporate \"clone runner\" who hacks for the Man.", "Hacktivist interested in cracking systems and exposing bad guys.", "Just like to crack systems for the fun of it.", "Part of a regular team of freelancers.", "Hack for a Media, politico, or Lawman who hires you as needed."] },
+          { "id": "partnership", "label": "Got a Partner, or Do You Work Alone?", "labelPt": "Tem parceiro ou trabalha sozinho?", "dice": "choose",
+            "options": ["Got a Partner", "Work Alone"] },
+          { "id": "partner", "label": "If You Have a Partner, Who are They?", "labelPt": "Quem é seu parceiro?", "dice": "1d6", "showIf": { "question": "partnership", "value": "Got a Partner" },
+            "options": ["Family member", "Old friend", "Possible romantic partner as well", "Secret partner who might be a rogue AI. Might.", "Secret partner with mob/gang connections", "Secret partner with Corporate connections"] },
+          { "id": "workspace", "label": "What's Your Workspace Like?", "labelPt": "Como é seu espaço de trabalho?", "dice": "1d6",
+            "options": ["There are screens everywhere.", "It looks better in Virtuality, you swear.", "It's a filthy bed covered in wires.", "Corporate, modular, and utilitarian.", "Minimalist, clean, and organized.", "It's taken over your entire living space."] },
+          { "id": "clients", "label": "Who are Some of Your Other Clients?", "labelPt": "Quem são seus outros clientes?", "dice": "1d6",
+            "options": ["Local Fixers who send you clients.", "Local gangers who also protect your work area while you sweep for NET threats.", "Corporate Execs who use you for \"black project\" work.", "Local Solos or other combat types who use you to keep their personal systems secure.", "Local Nomads and Fixers who use you to keep their family systems secure.", "You work for yourself and sell whatever data you can find on the NET."] },
+          { "id": "programs", "label": "Where Do You Get Your Programs?", "labelPt": "Onde você consegue seus programas?", "dice": "1d6",
+            "options": ["Dig around in old abandoned City Zones.", "Steal them from other Netrunners you brain-burn.", "Have a local Fixer supply programs in exchange for hack work.", "Corporate Execs supply you with programs in exchange for your services.", "You have backdoors into a few Corporate warehouses.", "You hit the Night Markets and score programs whenever you can."] },
+          { "id": "gunning", "label": "Who's Gunning for You?", "labelPt": "Quem está atrás de você?", "dice": "1d6",
+            "options": ["You think it might be a rogue AI or a NET Ghost. Either way, it's bad news.", "Rival Netrunners who just don't like you.", "Corporates who want you to work for them exclusively.", "Lawmen who consider you an illegal \"black hat\" and want to bust you.", "Old clients who think you screwed them over.", "Fixer or another client who wants your services exclusively."] }
+        ]
+      }
+    },
+    {
+      "id": "Tech",
+      "ability": {
+        "name": "Maker", "page": 147, "source": "CP:R p.147–149",
+        "summary": "Consertar, melhorar, fabricar e inventar itens. A cada Rank ganho, o Tech põe 1 Rank em duas especialidades diferentes.",
+        "points": [
+          "Field Expertise: soma o Rank aos testes de Basic Tech, Cybertech, Electronics/Security Tech, Weaponstech e Tech de veículos. Também permite, como Ação, um conserto improvisado que dura 10 minutos por Rank.",
+          "Upgrade Expertise: uma melhoria por item, como −1d6 de Humanity Loss em cyberware (não borgware) de 2d6 ou mais, +1 slot, +1 SP ou arma Standard virando Excellent. Teste: TECH + perícia Tech do item + Rank + 1d10, com materiais do mesmo preço do item.",
+          "Fabrication Expertise: fabrica itens existentes ou inventados, com materiais uma categoria de preço abaixo.",
+          "Invention Expertise: inventa itens ou melhorias; você descreve o funcionamento e o Mestre define as regras e a categoria de preço.",
+          "DV e tempo pelo preço: Cheap 9 (1 h), Costly 13 (6 h), Premium 17 (1 dia), Expensive 21 (1 semana), Very Expensive 24 (2 semanas), Luxury 29 (1 mês), Super Luxury 29 (1 mês a cada 10.000 eb)."
+        ]
+      },
+      "statTable": {
+        "source": "CP:R p.75",
+        "rows": [
+          [6, 7, 7, 8, 4, 4, 5, 5, 7, 6],
+          [7, 6, 6, 7, 5, 3, 7, 7, 5, 5],
+          [8, 6, 5, 7, 5, 4, 7, 7, 5, 7],
+          [7, 8, 7, 8, 4, 4, 6, 5, 6, 7],
+          [6, 6, 7, 6, 4, 3, 7, 7, 6, 6],
+          [8, 7, 5, 6, 3, 3, 7, 6, 6, 7],
+          [8, 6, 7, 8, 4, 4, 7, 6, 7, 6],
+          [8, 8, 7, 8, 5, 4, 6, 5, 6, 6],
+          [6, 6, 7, 8, 3, 3, 5, 7, 7, 7],
+          [8, 8, 5, 6, 4, 4, 6, 5, 6, 6]
+        ]
+      },
+      "skills": {
+        "source": "CP:R p.86 (Streetrat) e p.88 (lista do Edgerunner)",
+        "levels": {
+          "athletics": 2, "brawling": 2, "concentration": 2, "conversation": 2, "education": 6, "evasion": 6, "first-aid": 6,
+          "human-perception": 2, "language:Streetslang": 2, "local-expert:@home": 2, "perception": 2, "persuasion": 2, "stealth": 2,
+          "basic-tech": 6, "cybertech": 6, "electronics-security-tech": 6, "land-vehicle-tech": 6, "shoulder-arms": 6, "science:@choose": 6, "weaponstech": 6
+        }
+      },
+      "starting": {
+        "weapons": {
+          "source": "CP:R p.98",
+          "groups": [
+            [[{ "slug": "shotgun-padrao" }], [{ "slug": "assault-rifle-padrao" }]],
+            [[{ "slug": "basic-ammo", "caliber": "ShotgunShell", "rounds": 100 }], [{ "slug": "basic-ammo", "caliber": "Rifle", "rounds": 100 }]],
+            [[{ "slug": "flashbang-grenade" }]],
+            [[{ "slug": "light-armorjack", "worn": "Body" }]],
+            [[{ "slug": "light-armorjack", "worn": "Head" }]]
+          ]
+        },
+        "outfit": {
+          "source": "CP:R p.103",
+          "groups": [
+            [[{ "slug": "agent" }]],
+            [[{ "slug": "anti-smog-breathing-mask" }]],
+            [[{ "slug": "disposable-cellphone" }]],
+            [[{ "slug": "duct-tape", "qty": 5 }]],
+            [[{ "slug": "flashlight" }]],
+            [[{ "slug": "road-flare", "qty": 6 }]],
+            [[{ "slug": "tech-bag" }]],
+            [[{ "slug": "roupa-generic-chic-bottoms", "qty": 8 }, { "slug": "roupa-generic-chic-top", "qty": 10 }]],
+            [[{ "slug": "roupa-leisurewear-footwear", "qty": 2 }]]
+          ]
+        },
+        "cyberware": {
+          "source": "CP:R p.117",
+          "humanityLoss": 12,
+          "groups": [
+            [[{ "slug": "cybereye" }]],
+            [[{ "slug": "microoptics" }]],
+            [[{ "slug": "skinwatch" }]],
+            [[{ "slug": "tool-hand", "meatArm": true }]]
+          ]
+        }
+      },
+      "lifepath": {
+        "source": "CP:R p.58-59",
+        "questions": [
+          { "id": "type", "label": "What Kind of Tech are You?", "labelPt": "Que tipo de Tech você é?", "dice": "1d10",
+            "options": ["Cyberware Technician", "Vehicle Mechanic", "Jack of All Trades", "Small Electronics Technician", "Weaponsmith", "Crazy Inventor", "Robot and Drone Mechanic", "Heavy Machinery Mechanic", "Scavenger", "Nautical Mechanic"] },
+          { "id": "workspace", "label": "What's Your Workspace Like?", "labelPt": "Como é sua oficina?", "dice": "1d6",
+            "options": ["A mess strewn with blueprint paper.", "Everything is color coded, but it's still a nightmare.", "Totally digital and obsessively backed up every day.", "You design everything on your Agent.", "You keep everything just in case you need it later.", "Only you understand your filing system."] },
+          { "id": "partnership", "label": "Got a Partner, or Do You Work Alone?", "labelPt": "Tem parceiro ou trabalha sozinho?", "dice": "choose",
+            "options": ["Got a Partner", "Work Alone"] },
+          { "id": "partner", "label": "If You Have a Partner, Who are They?", "labelPt": "Quem é seu parceiro?", "dice": "1d6", "showIf": { "question": "partnership", "value": "Got a Partner" },
+            "options": ["Family member", "Old friend", "Possible romantic partner as well", "Mentor", "Secret partner with mob/gang connections", "Secret partner with Corporate connections"] },
+          { "id": "clients", "label": "Who are Your Main Clients?", "labelPt": "Quem são seus principais clientes?", "dice": "1d6",
+            "options": ["Local Fixers who send you clients.", "Local gangers who also protect your work area or home.", "Corporate Execs who use you for \"black project\" work.", "Local Solos or other combat types who use you for weapon upkeep.", "Local Nomads and Fixers who bring you \"found\" tech to repair.", "You work for yourself and sell what you invent/repair."] },
+          { "id": "supplies", "label": "Where Do You Get Your Supplies?", "labelPt": "Onde você consegue suprimentos?", "dice": "1d6",
+            "options": ["Scavenge the wreckage you find in abandoned City Zones.", "Strip gear from bodies after firefights.", "Have a local Fixer bring you supplies in exchange for repair work.", "Corporate Execs supply you with stuff in exchange for your services.", "You have backdoor into a few Corporate warehouses.", "You hit the Night Markets and score deals whenever you can."] },
+          { "id": "gunning", "label": "Who's Gunning For You?", "labelPt": "Quem está atrás de você?", "dice": "1d6",
+            "options": ["Combat Zone gangers who want you to work for them exclusively.", "Rival Tech trying to steal your customers.", "Corporates who want you to work for them exclusively.", "Larger manufacturer trying to bring you down because your mods are a threat.", "Old client who thinks you screwed them over.", "Rival Tech trying to beat you out for resources and parts."] }
+        ]
+      }
+    },
+    {
+      "id": "Medtech",
+      "ability": {
+        "name": "Medicine", "page": 149, "source": "CP:R p.149–150",
+        "summary": "A cada Rank, 1 ponto numa de três especialidades. Libera usos médicos exclusivos do Medtech, como instalar cyberware, Bodysculpting e terapia (p.226).",
+        "points": [
+          "Surgery: cada ponto dá 2 níveis na perícia Surgery (máx. 10), usada nas Critical Injuries mais graves e para implantar cyberware.",
+          "Medical Tech (Pharmaceuticals): cada ponto dá 1 nível em Medical Tech e um fármaco que você sintetiza (DV13; 200 eb de material rendem tantas doses quanto seu Medical Tech, em 1 hora): Antibiotic, Rapidetox, Speedheal, Stim ou Surge. Máximo de 5 pontos.",
+          "Medical Tech (Cryosystem Operation): cada ponto dá 1 nível em Medical Tech e um benefício: 1 = Cryopump; 2 = acesso a Cryotank; 3 = um Cryotank próprio; 4 e 5 = mais Cryotanks e cargas na Cryopump. Máximo de 5 pontos."
+        ]
+      },
+      "statTable": {
+        "source": "CP:R p.75",
+        "rows": [
+          [7, 5, 6, 7, 5, 3, 8, 5, 5, 7],
+          [6, 7, 7, 7, 4, 4, 6, 7, 7, 7],
+          [6, 5, 5, 8, 5, 3, 8, 5, 7, 8],
+          [8, 7, 6, 8, 3, 5, 6, 6, 5, 7],
+          [6, 7, 5, 7, 5, 5, 8, 7, 6, 8],
+          [8, 5, 5, 8, 5, 5, 6, 6, 5, 6],
+          [8, 6, 5, 8, 5, 4, 8, 5, 7, 7],
+          [6, 5, 7, 7, 3, 5, 8, 5, 5, 8],
+          [6, 6, 7, 7, 5, 4, 6, 6, 5, 6],
+          [8, 7, 6, 6, 3, 4, 8, 7, 6, 7]
+        ]
+      },
+      "skills": {
+        "source": "CP:R p.86 (Streetrat) e p.88 (lista do Edgerunner)",
+        "levels": {
+          "athletics": 2, "brawling": 2, "concentration": 2, "conversation": 6, "education": 6, "evasion": 6, "first-aid": 2,
+          "human-perception": 6, "language:Streetslang": 2, "local-expert:@home": 2, "perception": 2, "persuasion": 2, "stealth": 2,
+          "basic-tech": 6, "cybertech": 4, "deduction": 6, "paramedic": 6, "resist-torture-drugs": 4, "science:@choose": 6, "shoulder-arms": 6
+        }
+      },
+      "starting": {
+        "weapons": {
+          "source": "CP:R p.98",
+          "groups": [
+            [[{ "slug": "shotgun-padrao" }], [{ "slug": "assault-rifle-padrao" }]],
+            [[{ "slug": "basic-ammo", "caliber": "ShotgunShell", "rounds": 100 }], [{ "slug": "basic-ammo", "caliber": "Rifle", "rounds": 100 }]],
+            [[{ "slug": "incendiary-ammo", "caliber": "ShotgunShell", "rounds": 10 }], [{ "slug": "incendiary-ammo", "caliber": "Rifle", "rounds": 10 }]],
+            [[{ "slug": "smoke-grenade", "qty": 2 }]],
+            [[{ "slug": "light-armorjack", "worn": "Body" }]],
+            [[{ "slug": "light-armorjack", "worn": "Head" }]],
+            [[{ "slug": "bulletproof-shield" }]]
+          ]
+        },
+        "outfit": {
+          "source": "CP:R p.103",
+          "groups": [
+            [[{ "slug": "agent" }]],
+            [[{ "slug": "airhypo" }]],
+            [[{ "slug": "handcuffs" }]],
+            [[{ "slug": "flashlight" }]],
+            [[{ "slug": "roupa-generic-chic-jacket", "qty": 3 }]],
+            [[{ "slug": "glow-paint" }]],
+            [[{ "slug": "medtech-bag" }]],
+            [[{ "slug": "roupa-leisurewear-footwear" }, { "slug": "roupa-leisurewear-bottoms", "qty": 3 }, { "slug": "roupa-leisurewear-top", "qty": 5 }]]
+          ]
+        },
+        "cyberware": {
+          "source": "CP:R p.117",
+          "humanityLoss": 12,
+          "groups": [
+            [[{ "slug": "biomonitor" }]],
+            [[{ "slug": "cybereye" }]],
+            [[{ "slug": "nasal-filters" }], [{ "slug": "toxin-binders" }]],
+            [[{ "slug": "teleoptics" }]]
+          ]
+        }
+      },
+      "lifepath": {
+        "source": "CP:R p.60-61",
+        "questions": [
+          { "id": "type", "label": "What Kind of Medtech are You?", "labelPt": "Que tipo de Medtech você é?", "dice": "1d10",
+            "options": ["Surgeon", "General Practitioner", "Trauma Medic", "Psychiatrist", "Cyberpsycho Therapist", "Ripperdoc", "Cryosystems Operator", "Pharmacist", "Bodysculptor", "Forensic Pathologist"] },
+          { "id": "partnership", "label": "Got a Partner, or Do You Work Alone?", "labelPt": "Tem parceiro ou trabalha sozinho?", "dice": "choose",
+            "options": ["Got a Partner", "Work Alone"] },
+          { "id": "partner", "label": "Tell Us About Your Partner(s).", "labelPt": "Quem é seu parceiro?", "dice": "1d6", "showIf": { "question": "partnership", "value": "Got a Partner" },
+            "options": ["Trauma Team group", "Old friend", "Possible romantic partner as well", "Family member", "Secret partner with mob/gang connections", "Secret partner with Corporate connections"] },
+          { "id": "workspace", "label": "What's Your Workspace Like?", "labelPt": "Como é seu espaço de trabalho?", "dice": "1d6",
+            "options": ["Sterilized daily in the morning like clockwork.", "It's not state-of-the-art anymore, but it's comfortable to you.", "Your cryo equipment is also used to cool drinks.", "Everything possible is single-use and stored compacted until needed.", "Not as clean as many of your patients may have hoped.", "Meticulously organized, sharpened, and sterilized."] },
+          { "id": "clients", "label": "Who are Your Main Clients?", "labelPt": "Quem são seus principais clientes?", "dice": "1d6",
+            "options": ["Local Fixers who send you clients.", "Local gangers who also protect your work area or home in exchange for medical help.", "Corporate Execs who use you for \"black project\" medical work.", "Local Solos or other combat types who use you for medical help.", "Local Nomads and Fixers who bring you wounded clients.", "Trauma Team paramedical work."] },
+          { "id": "supplies", "label": "Where Do You Get Your Supplies?", "labelPt": "Onde você consegue suprimentos?", "dice": "1d6",
+            "options": ["Scavenge stashes of medical supplies you find in abandoned City Zones.", "Strip parts from bodies after firefights.", "Have a local Fixer bring you supplies in exchange for medical work.", "Corporate Execs or Trauma Team supply you with stuff in exchange for your services.", "You have a backdoor into a few Corporate or Hospital warehouses.", "You hit the Night Markets and score deals whenever you can."] }
+        ]
+      }
+    },
+    {
+      "id": "Media",
+      "ability": {
+        "name": "Credibility", "page": 151, "source": "CP:R p.151–152",
+        "summary": "Define o alcance e a credibilidade do que você publica, o acesso a fontes e os boatos que chegam até você.",
+        "points": [
+          "Boatos: pelo menos duas vezes por semana o Mestre rola em segredo Credibility + 1d10; contra DV 7, 9, 11 ou 13 você fica sabendo de um boato vago, típico, substancial ou detalhado.",
+          "Ao publicar, o Rank define Acesso/Fontes, Audiência, Credibilidade e Impacto. Credibilidade é a chance em 1d10 de o público acreditar: +1 com uma prova verificável, +2 com mais de quatro. LUCK não vale nesse teste.",
+          "Ranks 1–2: alcance no bairro, 2 em 10 de o público acreditar. 3–4: colaborador conhecido da screamsheet local, 3 em 10. Ranks maiores ampliam audiência e impacto, até abalar Megacorps."
+        ]
+      },
+      "statTable": {
+        "source": "CP:R p.75",
+        "rows": [
+          [6, 6, 5, 5, 8, 7, 5, 7, 5, 7],
+          [8, 7, 7, 3, 6, 6, 6, 5, 6, 8],
+          [6, 7, 7, 5, 6, 8, 5, 5, 5, 7],
+          [6, 5, 7, 5, 6, 7, 5, 5, 6, 6],
+          [6, 6, 7, 4, 8, 7, 6, 7, 5, 8],
+          [7, 5, 5, 4, 8, 7, 6, 7, 5, 8],
+          [8, 5, 6, 3, 7, 6, 6, 5, 6, 7],
+          [6, 5, 6, 5, 6, 8, 6, 6, 7, 8],
+          [7, 7, 5, 4, 6, 7, 6, 5, 6, 7],
+          [7, 6, 6, 3, 7, 6, 7, 6, 7, 6]
+        ]
+      },
+      "skills": {
+        "source": "CP:R p.87 (Streetrat) e p.89 (lista do Edgerunner)",
+        "levels": {
+          "athletics": 2, "brawling": 2, "concentration": 2, "conversation": 6, "education": 2, "evasion": 6, "first-aid": 2,
+          "human-perception": 6, "language:Streetslang": 2, "local-expert:@home": 6, "perception": 6, "persuasion": 6, "stealth": 2,
+          "bribery": 6, "composition": 6, "deduction": 6, "handgun": 6, "library-search": 4, "lip-reading": 4, "photography-film": 4
+        }
+      },
+      "starting": {
+        "weapons": {
+          "source": "CP:R p.98",
+          "groups": [
+            [[{ "slug": "heavy-pistol" }], [{ "slug": "very-heavy-pistol" }]],
+            [[{ "slug": "basic-ammo", "caliber": "HeavyPistol", "rounds": 50 }], [{ "slug": "basic-ammo", "caliber": "VeryHeavyPistol", "rounds": 50 }]],
+            [[{ "slug": "light-armorjack", "worn": "Body" }]],
+            [[{ "slug": "light-armorjack", "worn": "Head" }]]
+          ]
+        },
+        "outfit": {
+          "source": "CP:R p.103",
+          "groups": [
+            [[{ "slug": "agent" }]],
+            [[{ "slug": "audio-recorder-gear" }]],
+            [[{ "slug": "binoculars" }]],
+            [[{ "slug": "disposable-cellphone", "qty": 2 }], [{ "slug": "grapple-gun" }]],
+            [[{ "slug": "flashlight" }]],
+            [[{ "slug": "computer" }]],
+            [[{ "slug": "radio-scanner-music-player-gear" }]],
+            [[{ "slug": "scrambler-descrambler-gear" }]],
+            [[{ "slug": "video-camera" }]],
+            [[{ "slug": "roupa-generic-chic-footwear" }, { "slug": "roupa-generic-chic-bottoms" }, { "slug": "roupa-generic-chic-top" }]],
+            [[{ "slug": "roupa-leisurewear-jacket" }]],
+            [[{ "slug": "roupa-urban-flash-mirrorshades" }]]
+          ]
+        },
+        "cyberware": {
+          "source": "CP:R p.117",
+          "humanityLoss": 10,
+          "groups": [
+            [[{ "slug": "amplified-hearing" }], [{ "slug": "voice-stress-analyzer" }]],
+            [[{ "slug": "cyberaudio-suite" }]],
+            [[{ "slug": "light-tattoo" }]]
+          ]
+        }
+      },
+      "lifepath": {
+        "source": "CP:R p.62",
+        "questions": [
+          { "id": "type", "label": "What Kind of Media are You?", "labelPt": "Que tipo de Media você é?", "dice": "1d6",
+            "options": ["Blogger", "Writer (Books)", "Videographer", "Documentarian", "Investigative Reporter", "Street Scribe"] },
+          { "id": "reach", "label": "How Does Your Work Reach the Public?", "labelPt": "Como seu trabalho chega ao público?", "dice": "1d6",
+            "options": ["Monthly magazine", "Blog", "Mainstream vid feed", "News channel", "\"Book\" sales", "Screamsheets"] },
+          { "id": "ethics", "label": "How Ethical are You?", "labelPt": "Quão ético você é?", "dice": "1d6",
+            "options": ["Fair, honest reporting, strong ethical practices. You only report the verifiable truth.", "Fair and honest reporting, but willing to go on hearsay and rumor if that's what it takes.", "Will occasionally slip and do unethical things, but it's rare. You have some standards.", "Willing to bend any rules to get the bad guys. But only the bad guys.", "Ruthless and determined to make it big, even if it means breaking the law. You're a muckraker.", "Totally corrupt. You take bribes, engage in illegal, unethical reporting all the time. Your pen is for hire to the highest bidder."] },
+          { "id": "stories", "label": "What Types of Stories Do You Want to Tell?", "labelPt": "Que tipo de história você quer contar?", "dice": "1d6",
+            "options": ["Political Intrigue", "Ecological Impact", "Celebrity News", "Corporate Takedowns", "Editorials", "Propaganda"] }
+        ]
+      }
+    },
+    {
+      "id": "Exec",
+      "ability": {
+        "name": "Teamwork", "page": 153, "source": "CP:R p.153–154",
+        "summary": "Benefícios da Corporação e uma equipe de subordinados.",
+        "points": [
+          "Rank 1: um terno Businesswear completo (revender levanta suspeitas).",
+          "Rank 2: Corporate Conapt sem aluguel enquanto estiver na Corporação (o Lifestyle continua por sua conta). Rank 7: casa em Beaverville. Rank 10: McMansion ou Luxury Penthouse.",
+          "Rank 6: Trauma Team Silver pago pela Corporação. Rank 8: Trauma Team Executive.",
+          "Ranks 3, 5 e 9: um Team Member cada (máximo 3), controlado pelo Mestre. Cada ordem pede um Loyalty Save (1d6 abaixo da Loyalty); com Loyalty 0 ou menos, ele tenta te trair."
+        ]
+      },
+      "statTable": {
+        "source": "CP:R p.76",
+        "rows": [
+          [8, 5, 5, 3, 8, 6, 6, 5, 5, 7],
+          [8, 6, 6, 4, 7, 6, 7, 7, 5, 7],
+          [8, 7, 6, 3, 8, 6, 7, 6, 4, 5],
+          [8, 5, 7, 5, 6, 5, 6, 5, 5, 7],
+          [7, 7, 6, 5, 8, 5, 7, 7, 5, 6],
+          [5, 7, 7, 3, 6, 7, 6, 5, 5, 7],
+          [6, 6, 7, 5, 8, 7, 6, 7, 4, 6],
+          [6, 7, 7, 3, 7, 5, 7, 5, 5, 7],
+          [7, 6, 7, 5, 7, 5, 7, 6, 5, 5],
+          [7, 7, 5, 5, 8, 6, 6, 7, 4, 7]
+        ]
+      },
+      "skills": {
+        "source": "CP:R p.87 (Streetrat) e p.89 (lista do Edgerunner)",
+        "levels": {
+          "athletics": 2, "brawling": 2, "concentration": 2, "conversation": 6, "education": 6, "evasion": 6, "first-aid": 2,
+          "human-perception": 6, "language:Streetslang": 2, "local-expert:@home": 2, "perception": 2, "persuasion": 6, "stealth": 2,
+          "accounting": 6, "bureaucracy": 6, "business": 6, "deduction": 6, "handgun": 6, "lip-reading": 6, "personal-grooming": 4
+        }
+      },
+      "starting": {
+        "weapons": {
+          "source": "CP:R p.98",
+          "groups": [
+            [[{ "slug": "very-heavy-pistol" }]],
+            [[{ "slug": "basic-ammo", "caliber": "VeryHeavyPistol", "rounds": 50 }]],
+            [[{ "slug": "light-armorjack", "worn": "Body" }]],
+            [[{ "slug": "light-armorjack", "worn": "Head" }]]
+          ]
+        },
+        "outfit": {
+          "source": "CP:R p.103",
+          "groups": [
+            [[{ "slug": "radio-communicator-gear", "qty": 4 }]],
+            [[{ "slug": "scrambler-descrambler-gear" }]],
+            [[{ "slug": "roupa-businesswear-footwear" }, { "slug": "roupa-businesswear-jacket" }, { "slug": "roupa-businesswear-bottoms" }, { "slug": "roupa-businesswear-mirrorshades" }, { "slug": "roupa-businesswear-top" }, { "slug": "roupa-businesswear-jewelry", "qty": 2 }]]
+          ]
+        },
+        "cyberware": {
+          "source": "CP:R p.117",
+          "humanityLoss": 12,
+          "groups": [
+            [[{ "slug": "biomonitor" }], [{ "slug": "techhair" }]],
+            [[{ "slug": "cyberaudio-suite" }]],
+            [[{ "slug": "internal-agent" }]],
+            [[{ "slug": "toxin-binders" }], [{ "slug": "nasal-filters" }]]
+          ]
+        }
+      },
+      "lifepath": {
+        "source": "CP:R p.63-64",
+        "questions": [
+          { "id": "corpType", "label": "What Kind of Corp Do You Work For?", "labelPt": "Para que tipo de Corp você trabalha?", "dice": "1d10",
+            "options": ["Financial", "Media and Communications", "Cybertech and Medical Technologies", "Pharmaceuticals and Biotech", "Food, Clothing, or other General Consumables", "Energy Production", "Personal Electronics and Robotics", "Corporate Services", "Consumer Services", "Real Estate and Construction"] },
+          { "id": "division", "label": "What Division Do You Work In?", "labelPt": "Em que divisão você trabalha?", "dice": "1d6",
+            "options": ["Procurement", "Manufacturing", "Research and Development", "Human Resources", "Public Affairs/Publicity/Advertising", "Mergers and Acquisitions"] },
+          { "id": "corpEthics", "label": "How Good/Bad is Your Corp?", "labelPt": "Quão boa/má é sua Corp?", "dice": "1d6",
+            "options": ["Always working for good, fully supporting ethical practices.", "Operates as a fair and honest business all the time.", "Will occasionally slip and do unethical things, but it's rare.", "Willing to bend the rules to get what it needs.", "Ruthless and profit-centered, willing to do some bad things.", "Totally evil. Will engage in illegal, unethical business all the time."] },
+          { "id": "base", "label": "Where is Your Corp Based?", "labelPt": "Onde sua Corp está sediada?", "dice": "1d6",
+            "options": ["One city", "Several cities", "Statewide", "National", "International, offices in a few major cities", "International, offices everywhere"] },
+          { "id": "gunning", "label": "Who's Gunning for Your Group?", "labelPt": "Quem está atrás do seu grupo?", "dice": "1d6",
+            "options": ["Rival Corp in the same industry.", "Law enforcement is watching you.", "Local Media wants to bring you down.", "Different divisions in your own company are feuding with each other.", "Local government doesn't like your Corp.", "International Corporations are eyeing you for a hostile takeover."] },
+          { "id": "boss", "label": "Current State with Your Boss", "labelPt": "Relação atual com seu chefe", "dice": "1d6",
+            "options": ["Your Boss mentors you but watch out for their enemies.", "Your Boss gives you a free hand and doesn't want to know what you're up to.", "Your Boss is a micromanager who tries to meddle in your work.", "Your Boss is a psycho whose unpredictable outbursts are offset by quiet paranoia.", "Your Boss is cool and watches your back against rivals.", "Your Boss is threatened by your meteoric rise and is planning to knife you."] }
+        ]
+      }
+    },
+    {
+      "id": "Lawman",
+      "ability": {
+        "name": "Backup", "page": 158, "source": "CP:R p.158–159",
+        "summary": "Chama reforços de um grupo de agentes do seu Rank ou abaixo, interpretados pelo Mestre.",
+        "points": [
+          "Como Ação, role 1d10 igual ou abaixo do seu Rank para alguém atender; se ninguém atender, tente de novo no Turno seguinte. Abusar disso pode custar o emprego.",
+          "Atendido, role 1d6: são as Rodadas até o reforço chegar. Um 6 traz o reforço do nível acima (no Rank 10, dois grupos).",
+          "Ranks 1–2: 4 seguranças corporativos a pé (Combat Number 8, SP 7, HP 20). 3–4: 4 policiais (10, SP 7, HP 25). 5–7: 2 xerifes (14, SP 13, HP 35). 8: um Recovery Zone Marshal (16, SP 15, HP 50). 9: 2 agentes do C-SWAT (15, SP 18, HP 35). 10: agentes nacionais, Interpol ou Netwatch, que também ajudam a investigar."
+        ]
+      },
+      "statTable": {
+        "source": "CP:R p.76",
+        "rows": [
+          [5, 6, 7, 5, 7, 8, 5, 6, 5, 6],
+          [6, 6, 6, 5, 6, 8, 5, 7, 5, 5],
+          [5, 7, 7, 7, 6, 7, 5, 5, 7, 6],
+          [6, 6, 7, 6, 6, 8, 5, 7, 7, 6],
+          [6, 6, 7, 6, 7, 7, 6, 5, 5, 6],
+          [7, 6, 5, 5, 7, 8, 5, 6, 7, 4],
+          [7, 8, 7, 5, 6, 8, 7, 6, 5, 4],
+          [5, 6, 6, 5, 6, 8, 5, 7, 6, 4],
+          [7, 7, 5, 5, 7, 7, 6, 5, 5, 6],
+          [6, 6, 5, 6, 8, 7, 5, 7, 6, 6]
+        ]
+      },
+      "skills": {
+        "source": "CP:R p.87 (Streetrat) e p.89 (lista do Edgerunner)",
+        "levels": {
+          "athletics": 2, "brawling": 6, "concentration": 2, "conversation": 6, "education": 2, "evasion": 6, "first-aid": 2,
+          "human-perception": 2, "language:Streetslang": 2, "local-expert:@home": 2, "perception": 2, "persuasion": 2, "stealth": 2,
+          "autofire": 6, "criminology": 6, "deduction": 6, "handgun": 6, "interrogation": 6, "shoulder-arms": 6, "tracking": 6
+        }
+      },
+      "starting": {
+        "weapons": {
+          "source": "CP:R p.98",
+          "groups": [
+            [[{ "slug": "assault-rifle-padrao" }], [{ "slug": "shotgun-padrao" }]],
+            [[{ "slug": "heavy-pistol" }]],
+            [[{ "slug": "basic-ammo", "caliber": "Rifle", "rounds": 100 }], [{ "slug": "basic-ammo", "caliber": "ShotgunShell", "rounds": 100 }], [{ "slug": "basic-ammo", "caliber": "Slug", "rounds": 100 }]],
+            [[{ "slug": "basic-ammo", "caliber": "HeavyPistol", "rounds": 30 }]],
+            [[{ "slug": "bulletproof-shield" }], [{ "slug": "smoke-grenade", "qty": 2 }]],
+            [[{ "slug": "light-armorjack", "worn": "Body" }]],
+            [[{ "slug": "light-armorjack", "worn": "Head" }]]
+          ]
+        },
+        "outfit": {
+          "source": "CP:R p.103",
+          "groups": [
+            [[{ "slug": "agent" }]],
+            [[{ "slug": "flashlight" }]],
+            [[{ "slug": "handcuffs", "qty": 2 }]],
+            [[{ "slug": "radio-communicator-gear" }]],
+            [[{ "slug": "road-flare", "qty": 10 }]],
+            [[{ "slug": "roupa-generic-chic-jacket" }, { "slug": "roupa-generic-chic-bottoms", "qty": 2 }, { "slug": "roupa-generic-chic-top", "qty": 3 }]],
+            [[{ "slug": "roupa-leisurewear-footwear", "qty": 2 }, { "slug": "roupa-leisurewear-jacket", "qty": 2 }, { "slug": "roupa-leisurewear-bottoms", "qty": 2 }, { "slug": "roupa-leisurewear-mirrorshades" }, { "slug": "roupa-leisurewear-top", "qty": 2 }]]
+          ]
+        },
+        "cyberware": {
+          "source": "CP:R p.117",
+          "humanityLoss": 10,
+          "groups": [
+            [[{ "slug": "hidden-holster" }]],
+            [[{ "slug": "subdermal-pocket" }]]
+          ]
+        }
+      },
+      "lifepath": {
+        "source": "CP:R p.65",
+        "questions": [
+          { "id": "position", "label": "What is Your Position on the Force?", "labelPt": "Qual é sua posição na força?", "dice": "1d6",
+            "options": ["Guard", "Standard Beat or Patrol", "Criminal Investigation", "Special Weapons and Tactics", "Motor Patrol", "Internal Affairs"] },
+          { "id": "jurisdiction", "label": "How Wide is Your Group's Jurisdiction?", "labelPt": "Qual a jurisdição do seu grupo?", "dice": "1d6",
+            "options": ["Corporate Zones", "Standard City Patrol Zone", "Combat Zones", "Outer City", "Recovery Zones", "Open Highways"] },
+          { "id": "corruption", "label": "How Corrupt is Your Group?", "labelPt": "Quão corrupto é seu grupo?", "dice": "1d6",
+            "options": ["Fair, honest policing, strong ethical practices.", "Fair and honest policing, but hard on lawbreakers.", "Will occasionally slip and do unethical things, but it's rare.", "Willing to bend any rules to get the bad guys.", "Ruthless and determined to control The Street, even if it means breaking the law.", "Totally corrupt. You take bribes, engage in illegal, and unethical business all the time."] },
+          { "id": "gunning", "label": "Who's Gunning for Your Group?", "labelPt": "Quem está atrás do seu grupo?", "dice": "1d6",
+            "options": ["Organized Crime", "Boostergangs", "Police Accountability Group", "Dirty Politicians", "Smugglers", "Street Criminals"] },
+          { "id": "target", "label": "Who is Your Group's Major Target?", "labelPt": "Qual é o principal alvo do seu grupo?", "dice": "1d6",
+            "options": ["Organized Crime", "Boostergangs", "Drug Runners", "Dirty Politicians", "Smugglers", "Street Crime"] }
+        ]
+      }
+    },
+    {
+      "id": "Fixer",
+      "ability": {
+        "name": "Operator", "page": 159, "source": "CP:R p.159–161",
+        "summary": "Contatos, acesso ao mercado negro, negociação e trânsito entre culturas.",
+        "points": [
+          "Contacts: quem você consegue procurar para obter bens, favores e informações (pagando por eles).",
+          "Reach: a maior categoria de preço que você sempre encontra. Ranks 1–2: Cheap e Everyday; 3–4: até Expensive; 7–8: até Very Expensive; 9: Luxury; 10: Super Luxury. A partir do Rank 5 você organiza um Night Market por mês.",
+          "Haggle: COOL + Trading + Rank + 1d10 contra o mesmo do outro lado; se vencer, faz um acordo do seu Rank ou abaixo (Ranks 1–2: 10% a mais ou a menos no preço; Rank 9: 20%).",
+          "Grease: você circula entre as culturas da área e, a partir do Rank 3, ganha idiomas delas."
+        ]
+      },
+      "statTable": {
+        "source": "CP:R p.76",
+        "rows": [
+          [8, 5, 7, 4, 6, 5, 8, 5, 5, 8],
+          [8, 5, 5, 5, 6, 7, 8, 7, 5, 7],
+          [6, 6, 6, 4, 5, 6, 8, 6, 3, 8],
+          [7, 7, 5, 5, 7, 6, 7, 7, 5, 8],
+          [8, 6, 6, 3, 6, 5, 8, 7, 5, 6],
+          [8, 7, 5, 5, 6, 7, 7, 5, 3, 6],
+          [8, 6, 6, 5, 6, 5, 6, 7, 5, 8],
+          [6, 6, 7, 4, 7, 6, 7, 7, 4, 7],
+          [8, 7, 7, 5, 5, 5, 7, 6, 5, 7],
+          [6, 5, 6, 5, 5, 6, 8, 6, 4, 7]
+        ]
+      },
+      "skills": {
+        "source": "CP:R p.87 (Streetrat) e p.89 (lista do Edgerunner)",
+        "levels": {
+          "athletics": 2, "brawling": 2, "concentration": 2, "conversation": 6, "education": 2, "evasion": 6, "first-aid": 2,
+          "human-perception": 6, "language:Streetslang": 4, "local-expert:@home": 6, "perception": 2, "persuasion": 4, "stealth": 2,
+          "bribery": 6, "business": 6, "forgery": 6, "handgun": 6, "pick-lock": 4, "streetwise": 6, "trading": 6
+        }
+      },
+      "starting": {
+        "weapons": {
+          "source": "CP:R p.98",
+          "groups": [
+            [[{ "slug": "heavy-pistol" }], [{ "slug": "very-heavy-pistol" }]],
+            [[{ "slug": "heavy-pistol" }], [{ "slug": "very-heavy-pistol" }]],
+            [[{ "slug": "light-melee-weapon" }]],
+            [[{ "slug": "basic-ammo", "caliber": "HeavyPistol", "rounds": 100 }], [{ "slug": "basic-ammo", "caliber": "VeryHeavyPistol", "rounds": 100 }]],
+            [[{ "slug": "light-armorjack", "worn": "Body" }]],
+            [[{ "slug": "light-armorjack", "worn": "Head" }]]
+          ]
+        },
+        "outfit": {
+          "source": "CP:R p.103",
+          "groups": [
+            [[{ "slug": "agent" }]],
+            [[{ "slug": "bug-detector-gear" }]],
+            [[{ "slug": "computer" }]],
+            [[{ "slug": "disposable-cellphone", "qty": 2 }]],
+            [[{ "slug": "roupa-generic-chic-contact-lenses" }, { "slug": "roupa-generic-chic-jewelry" }]],
+            [[{ "slug": "roupa-leisurewear-mirrorshades" }]],
+            [[{ "slug": "roupa-urban-flash-footwear" }, { "slug": "roupa-urban-flash-jacket" }, { "slug": "roupa-urban-flash-bottoms" }, { "slug": "roupa-urban-flash-top" }]]
+          ]
+        },
+        "cyberware": {
+          "source": "CP:R p.117",
+          "humanityLoss": 16,
+          "groups": [
+            [[{ "slug": "cyberaudio-suite" }]],
+            [[{ "slug": "internal-agent" }]],
+            [[{ "slug": "subdermal-pocket" }]],
+            [[{ "slug": "voice-stress-analyzer" }], [{ "slug": "amplified-hearing" }]]
+          ]
+        }
+      },
+      "lifepath": {
+        "source": "CP:R p.66-67",
+        "questions": [
+          { "id": "type", "label": "What Kind of Fixer are You?", "labelPt": "Que tipo de Fixer você é?", "dice": "1d10",
+            "options": ["Broker deals between rival gangs.", "Procure rare or atypical resources for exclusive clientele.", "Specialize in brokering Solo or Tech services as an agent.", "Supply a regular resource for the Night Markets, like food, medicines, or drugs.", "Procure highly illegal resources, like street drugs or milspec weapons.", "Supply resources for Techs and Medtechs, like parts and medical supplies.", "Operate several successful Night Markets, although not as owner.", "Broker use contracts for heavy machinery, military vehicles, and aircraft.", "Broker deals as a fence for scavengers raiding Corps or Combat Zones.", "Act as an exclusive agent for a Media, Rockerboy, or a Nomad Pack."] },
+          { "id": "partnership", "label": "Got a Partner or Work Alone?", "labelPt": "Tem parceiro ou trabalha sozinho?", "dice": "choose",
+            "options": ["Got a Partner", "Work Alone"] },
+          { "id": "partner", "label": "Got a Partner? Who?", "labelPt": "Quem é seu parceiro?", "dice": "1d6", "showIf": { "question": "partnership", "value": "Got a Partner" },
+            "options": ["Family member", "Old friend", "Possible romantic partner as well", "Mentor", "Secret partner with mob/gang connections", "Secret partner with Corporate connections"] },
+          { "id": "office", "label": "What's Your \"Office\" Like?", "labelPt": "Como é seu \"escritório\"?", "dice": "1d6",
+            "options": ["You don't have one. You like to keep it mobile.", "A booth in a local bar.", "All Data Pool messages and anonymous dead drops.", "Spare room in a warehouse, shop, or clinic.", "An otherwise abandoned building.", "The lobby of a cube hotel."] },
+          { "id": "clients", "label": "Who are Your Side Clients?", "labelPt": "Quem são seus clientes paralelos?", "dice": "1d6",
+            "options": ["Local Rockerboys or Medias who use you to get them gigs or contacts.", "Local gangers who also protect your work area or home.", "Corporate Execs who use you for \"black project\" procurement work.", "Local Solos or other combat types who use you to get them jobs or contacts.", "Local Nomads and Fixers who use you to set up transactions or deals.", "Local politicos or Execs who depend on you for finding out information."] },
+          { "id": "gunning", "label": "Who's Gunning for You?", "labelPt": "Quem está atrás de você?", "dice": "1d6",
+            "options": ["Combat Zone gangers who want you to work for them exclusively.", "Rival Fixers trying to steal your clients.", "Execs who want you to work for them exclusively.", "Enemy of a former client who wants to clean up \"loose ends\"--like you.", "Old client who thinks you screwed them over.", "Rival Fixer trying to beat you out for resources and parts."] }
+        ]
+      }
+    },
+    {
+      "id": "Nomad",
+      "ability": {
+        "name": "Moto", "page": 161, "source": "CP:R p.161–162",
+        "summary": "Veículos e a frota da Família Nomad.",
+        "points": [
+          "Soma o Rank em Drive Land Vehicle, Pilot Air Vehicle, Pilot Sea Vehicle e nas perícias Tech de veículos.",
+          "A cada Rank ganho: um veículo da frota da Família (do seu Rank ou abaixo) ou uma melhoria num veículo que você já usa.",
+          "Ranks 1–4: Compact Groundcar, Gyrocopter, Jetski, Roadbike. 5–6: Helicopter, High Performance Groundcar, Speedboat. 7–8: AV-4, Cabin Cruiser, Superbike. 9–10: Aerozep, AV-9, Super Groundcar, Yacht.",
+          "Um veículo da Família por vez; se for destruído, a Família conserta em uma semana por 500 eb. No Rank 10 você vira liderança e pode usar todos ao mesmo tempo."
+        ]
+      },
+      "statTable": {
+        "source": "CP:R p.77",
+        "rows": [
+          [6, 6, 8, 3, 6, 7, 6, 6, 6, 4],
+          [5, 7, 6, 5, 8, 8, 8, 7, 5, 4],
+          [5, 8, 6, 3, 8, 7, 6, 5, 6, 5],
+          [5, 8, 7, 4, 8, 6, 7, 7, 7, 5],
+          [6, 6, 6, 3, 6, 7, 6, 7, 7, 4],
+          [7, 6, 8, 4, 6, 7, 6, 5, 6, 5],
+          [6, 7, 8, 4, 6, 6, 7, 5, 7, 5],
+          [5, 7, 8, 3, 8, 6, 7, 5, 5, 5],
+          [6, 7, 6, 4, 8, 6, 6, 6, 6, 6],
+          [5, 6, 7, 4, 7, 8, 7, 7, 7, 4]
+        ]
+      },
+      "skills": {
+        "source": "CP:R p.87 (Streetrat) e p.89 (lista do Edgerunner)",
+        "levels": {
+          "athletics": 2, "brawling": 6, "concentration": 2, "conversation": 2, "education": 2, "evasion": 6, "first-aid": 6,
+          "human-perception": 2, "language:Streetslang": 2, "local-expert:@home": 2, "perception": 4, "persuasion": 2, "stealth": 6,
+          "animal-handling": 6, "drive-land-vehicle": 6, "handgun": 6, "melee-weapon": 6, "tracking": 6, "trading": 6, "wilderness-survival": 6
+        }
+      },
+      "starting": {
+        "weapons": {
+          "source": "CP:R p.98",
+          "groups": [
+            [[{ "slug": "heavy-pistol" }], [{ "slug": "very-heavy-pistol" }]],
+            [[{ "slug": "basic-ammo", "caliber": "HeavyPistol", "rounds": 100 }], [{ "slug": "basic-ammo", "caliber": "VeryHeavyPistol", "rounds": 100 }]],
+            [[{ "slug": "heavy-melee-weapon" }], [{ "slug": "heavy-pistol" }]],
+            [[{ "slug": "light-armorjack", "worn": "Body" }]],
+            [[{ "slug": "light-armorjack", "worn": "Head" }]]
+          ]
+        },
+        "outfit": {
+          "source": "CP:R p.103",
+          "groups": [
+            [[{ "slug": "agent" }]],
+            [[{ "slug": "anti-smog-breathing-mask" }]],
+            [[{ "slug": "duct-tape" }]],
+            [[{ "slug": "flashlight" }]],
+            [[{ "slug": "grapple-gun" }]],
+            [[{ "slug": "inflatable-bed-sleep-bag" }]],
+            [[{ "slug": "medtech-bag" }]],
+            [[{ "slug": "radio-communicator-gear", "qty": 2 }]],
+            [[{ "slug": "rope-60m" }]],
+            [[{ "slug": "techtool" }]],
+            [[{ "slug": "tent-camping-equipment" }]],
+            [[{ "slug": "roupa-bohemian-jewelry" }]],
+            [[{ "slug": "roupa-nomad-leathers-top", "qty": 4 }, { "slug": "roupa-nomad-leathers-bottoms", "qty": 2 }, { "slug": "roupa-nomad-leathers-footwear", "qty": 2 }, { "slug": "roupa-nomad-leathers-jacket" }, { "slug": "roupa-nomad-leathers-hats" }]]
+          ]
+        },
+        "cyberware": {
+          "source": "CP:R p.117",
+          "humanityLoss": 14,
+          "groups": [
+            [[{ "slug": "interface-plugs" }], [{ "slug": "wolvers", "meatArm": true }]],
+            [[{ "slug": "neural-link" }]]
+          ]
+        }
+      },
+      "lifepath": {
+        "source": "CP:R p.68-69",
+        "questions": [
+          { "id": "packSize", "label": "How Big is Your Pack?", "labelPt": "Qual o tamanho do seu Pack?", "dice": "1d6",
+            "options": ["A single extended tribe or family", "A couple dozen members", "Forty or fifty members", "A hundred or more members", "A Blood Family (hundreds of members)", "An Affiliated Family (made of several Blood Families)"] },
+          { "id": "base", "label": "Is Your Pack Based on Land, Air, or Sea?", "labelPt": "Seu Pack é de terra, ar ou mar?", "dice": "choose",
+            "options": ["Land", "Air", "Sea"] },
+          { "id": "landType", "label": "If on Land, What Do They Do?", "labelPt": "Em terra, o que o Pack faz?", "dice": "1d10", "showIf": { "question": "base", "value": "Land" },
+            "options": ["Gogang", "Passenger transport", "Chautauqua/school", "Traveling show/carnival", "Migrant farmers", "Cargo transport", "Shipment protection", "Smuggling", "Mercenary army", "Construction work gang"] },
+          { "id": "airType", "label": "If in Air, What Do They Do?", "labelPt": "No ar, o que o Pack faz?", "dice": "1d6", "showIf": { "question": "base", "value": "Air" },
+            "options": ["Air piracy", "Cargo transport", "Passenger transport", "Aircraft protection", "Smuggling", "Combat support"] },
+          { "id": "seaType", "label": "If at Sea, What Do They Do?", "labelPt": "No mar, o que o Pack faz?", "dice": "1d6", "showIf": { "question": "base", "value": "Sea" },
+            "options": ["Piracy", "Cargo transport", "Passenger transport", "Smuggling", "Combat support", "Submarine warfare"] },
+          { "id": "packRole", "label": "What Do You Do for Your Pack?", "labelPt": "O que você faz pelo Pack?", "dice": "1d6",
+            "options": ["Scout (negotiator)", "Outrider (protection, weapons)", "Transport pilot/driver", "Loadmaster (large cargo mover, trucker)", "Solo smuggler", "Procurement (fuel, vehicles, etc.)"] },
+          { "id": "philosophy", "label": "What's Your Pack's Overall Philosophy?", "labelPt": "Qual é a filosofia do seu Pack?", "dice": "1d6",
+            "options": ["Always working for good; your Pack accepts others, just wants to get along.", "It's more like a family business. Operates as a fair and honest concern.", "Will occasionally slip and do unethical things, but it's rare.", "Willing to bend the rules whenever they get in the way to get what the Pack needs.", "Ruthless and self-centered, willing to do some bad things if it will get the Pack ahead.", "Totally evil. You rage up and down the highways, killing, looting, and just terrorizing everyone."] },
+          { "id": "gunning", "label": "Who's Gunning for Your Pack?", "labelPt": "Quem está atrás do seu Pack?", "dice": "1d6",
+            "options": ["Organized Crime", "Boostergangs", "Drug Runners", "Dirty Politicians", "Rival Packs in the same businesses", "Dirty Cops"] }
+        ]
+      }
+    }
+  ],
+
+  "lifepath": {
+    "source": "CP:R p.45-53",
+    "culturalOrigins": [
+      { "region": "North American", "languages": ["Chinese", "Cree", "Creole", "English", "French", "Navajo", "Spanish"] },
+      { "region": "South/Central American", "languages": ["Creole", "English", "German", "Guarani", "Mayan", "Portuguese", "Quechua", "Spanish"] },
+      { "region": "Western European", "languages": ["Dutch", "English", "French", "German", "Italian", "Norwegian", "Portuguese", "Spanish"] },
+      { "region": "Eastern European", "languages": ["English", "Finnish", "Polish", "Romanian", "Russian", "Ukrainian"] },
+      { "region": "Middle Eastern/North African", "languages": ["Arabic", "Berber", "English", "Farsi", "French", "Hebrew", "Turkish"] },
+      { "region": "Sub-Saharan African", "languages": ["Arabic", "English", "French", "Hausa", "Lingala", "Oromo", "Portuguese", "Swahili", "Twi", "Yoruba"] },
+      { "region": "South Asian", "languages": ["Bengali", "Dari", "English", "Hindi", "Nepali", "Sinhalese", "Tamil", "Urdu"] },
+      { "region": "South East Asian", "languages": ["Arabic", "Burmese", "English", "Filipino", "Hindi", "Indonesian", "Khmer", "Malayan", "Vietnamese"] },
+      { "region": "East Asian", "languages": ["Cantonese Chinese", "English", "Japanese", "Korean", "Mandarin Chinese", "Mongolian"] },
+      { "region": "Oceania/Pacific Islander", "languages": ["English", "French", "Hawaiian", "Maori", "Pama-Nyungan", "Tahitian"] }
+    ],
+    "customLanguageAllowed": { "value": true, "source": "CP:R p.45 (If you want your Character to speak a language that isn't represented you can go ahead and choose that language instead)" },
+    "tables": [
+      { "id": "personality", "label": "What Are You Like?", "labelPt": "Personalidade", "dice": "1d10", "page": 46,
+        "options": ["Shy and secretive", "Rebellious, antisocial, and violent", "Arrogant, proud, and aloof", "Moody, rash, and headstrong", "Picky, fussy, and nervous", "Stable and serious", "Silly and fluff-headed", "Sneaky and deceptive", "Intellectual and detached", "Friendly and outgoing"] },
+      { "id": "clothingStyle", "label": "Clothing Style", "labelPt": "Estilo de vestimenta", "dice": "1d10", "page": 47,
+        "options": ["Generic Chic", "Leisurewear", "Urban Flash", "Businesswear", "High Fashion", "Bohemian", "Bag Lady Chic", "Gang Colors", "Nomad Leathers", "Asia Pop"] },
+      { "id": "hairstyle", "label": "Hairstyle", "labelPt": "Estilo de cabelo", "dice": "1d10", "page": 47,
+        "options": ["Mohawk", "Long and ratty", "Short and spiked", "Wild and all over", "Bald", "Striped", "Wild colors", "Neat and short", "Short and curly", "Long and straight"] },
+      { "id": "affectation", "label": "Affectation You Are Never Without", "labelPt": "Marca registrada", "dice": "1d10", "page": 47,
+        "options": ["Tattoos", "Mirrorshades", "Ritual scars", "Spiked gloves", "Nose rings", "Tongue or other piercings", "Strange fingernail implants", "Spiked boots or heels", "Fingerless gloves", "Strange contacts"] },
+      { "id": "valueMost", "label": "What Do You Value Most?", "labelPt": "O que você mais valoriza?", "dice": "1d10", "page": 48,
+        "options": ["Money", "Honor", "Your word", "Honesty", "Knowledge", "Vengeance", "Love", "Power", "Family", "Friendship"] },
+      { "id": "feelAboutPeople", "label": "How Do You Feel About Most People?", "labelPt": "O que você sente pela maioria das pessoas?", "dice": "1d10", "page": 48,
+        "options": ["I stay neutral.", "I stay neutral.", "I like almost everyone.", "I hate almost everyone.", "People are tools. Use them for your own goals then discard them.", "Every person is a valuable individual.", "People are obstacles to be destroyed if they cross me.", "People are untrustworthy. Don't depend on anyone.", "Wipe 'em all out and let the cockroaches take over.", "People are wonderful!"] },
+      { "id": "valuedPerson", "label": "Most Valued Person in Your Life?", "labelPt": "Pessoa que você mais valoriza", "dice": "1d10", "page": 48,
+        "options": ["A parent", "A brother or sister", "A lover", "A friend", "Yourself", "A pet", "A teacher or mentor", "A public figure", "A personal hero", "No one"] },
+      { "id": "valuedPossession", "label": "Most Valued Possession You Own?", "labelPt": "Objeto que você mais valoriza", "dice": "1d10", "page": 48,
+        "options": ["A weapon", "A tool", "A piece of clothing", "A photograph", "A book or diary", "A recording", "A musical instrument", "A piece of jewelry", "A toy", "A letter"] },
+      { "id": "familyBackground", "label": "Original Background", "labelPt": "Origem familiar", "dice": "1d10", "page": 49,
+        "options": ["Corporate Execs", "Corporate Managers", "Corporate Technicians", "Nomad Pack", "Ganger \"Family\"", "Combat Zoners", "Urban Homeless", "Megastructure Warren Rats", "Reclaimers", "Edgerunners"] },
+      { "id": "childhoodEnvironment", "label": "Childhood Environment", "labelPt": "Ambiente de infância", "dice": "1d10", "page": 50,
+        "options": ["Ran on The Street, with no adult supervision.", "Spent in a safe Corp Zone walled off from the rest of the City.", "In a Nomad pack moving from place to place.", "In a Nomad pack with roots in transport (ships, planes, caravans).", "In a decaying, once upscale neighborhood, now holding off the boosters to survive.", "In the heart of the Combat Zone, living in a wrecked building or other squat.", "In a huge \"megastructure\" building controlled by a Corp or the City.", "In the ruins of a deserted town or city taken over by Reclaimers.", "In a Drift Nation (a floating offshore city) that is a meeting place for all kinds of people.", "In a Corporate luxury \"starscraper,\" high above the rest of the teeming rabble."] },
+      { "id": "familyCrisis", "label": "Your Family Crisis", "labelPt": "Tragédia familiar", "dice": "1d10", "page": 50,
+        "options": ["Your family lost everything through betrayal.", "Your family lost everything through bad management.", "Your family was exiled or otherwise driven from their original home/nation/Corporation.", "Your family is imprisoned, and you alone escaped.", "Your family vanished. You are the only remaining member.", "Your family was killed, and you were the only survivor.", "Your family is involved in a long-term conspiracy, organization, or association, such as a crime family or revolutionary group.", "Your family was scattered to the winds due to misfortune.", "Your family is cursed with a hereditary feud that has lasted for generations.", "You are the inheritor of a family debt; you must honor this debt before moving on with your life."] },
+      { "id": "lifeGoal", "label": "Life Goals", "labelPt": "Objetivo de vida", "dice": "1d10", "page": 53,
+        "options": ["Get rid of a bad reputation.", "Gain power and control.", "Get off The Street no matter what it takes.", "Cause pain and suffering to anyone who crosses you.", "Live down your past life and try to forget it.", "Hunt down those responsible for your miserable life and make them pay.", "Get what's rightfully yours.", "Save, if possible, anyone else involved in your background, like a lover, or family member.", "Gain fame and recognition.", "Become feared and respected."] }
+    ],
+    "friends": {
+      "count": { "value": "1d10 - 7 (mínimo 0)", "source": "CP:R p.51" },
+      "relationship": ["Like an older sibling to you.", "Like a younger sibling to you.", "A teacher or mentor.", "A partner or coworker.", "A former lover.", "An old enemy.", "Like a parent to you.", "An old childhood friend.", "Someone you know from The Street.", "Someone with a common interest or goal."]
+    },
+    "enemies": {
+      "count": { "value": "1d10 - 7 (mínimo 0)", "source": "CP:R p.51" },
+      "who": ["Ex-friend", "Ex-lover", "Estranged relative", "Childhood enemy", "Person working for you", "Person you work for", "Partner or coworker", "Corporate exec", "Government official", "Boosterganger"],
+      "cause": ["Caused the other to lose face or status.", "Caused the loss of lover, friend, or relative.", "Caused a major public humiliation.", "Accused the other of cowardice or some other major personal flaw.", "Deserted or betrayed the other.", "Turned down the other's offer of a job or romantic involvement.", "You just don't like each other.", "One of you was a romantic rival.", "One of you was a business rival.", "One of you set the other up for a crime they didn't commit."],
+      "resources": ["Just themselves and even they won't go out of their way.", "Just themselves.", "Just themselves and a close friend.", "Themselves and a few (1d6/2) friends.", "Themselves and a few (1d10/2) friends.", "An entire gang (at least 1d10 + 5 people).", "The local cops or other Lawmen.", "A powerful gang lord or small Corporation.", "A powerful Corporation.", "An entire city or government or agency."],
+      "revenge": {
+        "source": "CP:R p.52 (Sweet Revenge: 1-2, 3-4, 5-6 e 7-8 valem a mesma entrada)",
+        "options": ["Avoid the scum.", "Avoid the scum.", "Go into a murderous rage and try to physically rip their face off.", "Go into a murderous rage and try to physically rip their face off.", "Backstab them indirectly.", "Backstab them indirectly.", "Verbally attack them.", "Verbally attack them.", "Set them up for a crime or other transgression they didn't commit.", "Set out to murder or maim them."]
+      }
+    },
+    "tragicLoveAffairs": {
+      "count": { "value": "1d10 - 7 (mínimo 0)", "source": "CP:R p.52" },
+      "outcome": ["Your lover died in an accident.", "Your lover mysteriously vanished.", "It just didn't work out.", "A personal goal or vendetta came between you and your lover.", "Your lover was kidnapped.", "Your lover went insane or cyberpsycho.", "Your lover committed suicide.", "Your lover was killed in a fight.", "A rival cut you out of the action.", "Your lover is imprisoned or exiled."]
+    }
+  },
+
+  "derived": {
+    "seriouslyWounded": {
+      "value": { "fraction": 0.5, "roundUp": true, "comparison": "LessThan", "actionPenalty": -2 },
+      "source": "CP:R p.186 (Seriously Wounded: Less than 1/2 HP (round up); -2 to all Actions)",
+      "note": "A demanda pedia 'atingir ou ficar abaixo'; o livro diz 'menos que'. Para usar a variante, troque comparison para LessThanOrEqual."
+    },
+    "mortallyWounded": {
+      "value": { "belowHp": 1, "actionPenalty": -4, "movePenalty": -6, "moveMinimum": 1 },
+      "source": "CP:R p.186 (Mortally Wounded: Less than 1 HP; -4 to all Actions, -6 to MOVE (Minimum 1); Death Save at start of each Turn)"
+    },
+    "woundStatesReplace": { "value": true, "source": "CP:R p.186 (Each new Wound State replaces the effect of your previous Wound State)" },
+    "stabilizationDv": {
+      "value": { "lightly": 10, "seriously": 13, "mortally": 15 },
+      "source": "CP:R p.186 (Stabilization DV)"
+    },
+    "deathSave": {
+      "value": { "stat": "BODY", "die": "1d10", "succeedsIf": "roll + penalty < BODY", "naturalTenFails": true, "penaltyPerSave": 1, "penaltyPerDamageWhileMortal": 1, "resetsOnStabilization": true },
+      "source": "CP:R p.188 (Roll a d10. If you roll under your BODY, you live. If you roll a 10, you automatically fail. Every time you roll a Death Save, your Death Save Penalty increases ... resets to your Base Death Save Penalty when brought back to 1HP by Stabilization) e p.187 (Mortally Wounded: Death Save Penalty increases by 1 when damaged)"
+    },
+    "humanityPerEmp": { "value": 10, "source": "CP:R p.80 (For every point of Empathy the Character has, they gain 10 points of Humanity)" },
+    "empFromHumanity": { "value": "floor(HUM / 10)", "source": "CP:R p.80 e p.229 (your EMP is effectively lowered to the ten's place of your Humanity)" },
+    "cyberpsychosisBelow": { "value": 0, "source": "CP:R p.80 (If your Character's HUM drops below zero ... they slide into a state called cyberpsychosis)" }
+  },
+
+  "therapy": {
+    "payment": {
+      "value": ["clinic", "medtech", "free"],
+      "source": "CP:R p.229-230 (o preço da terapia; um Medtech que a faz paga só os materiais da Biotechnica; Medtechs can't do Therapy on themselves)"
+    },
+    "maxHumanityPerPiece": { "value": 2, "source": "CP:R p.230 (Each piece of cyberware will decrease your maximum Humanity by 2)" },
+    "maxHumanityPerBorgware": { "value": 4, "source": "CP:R p.230 (Each piece of borgware cyberware lowers maximum Humanity by 4 instead)" },
+    "zeroLossPiecesExempt": { "value": true, "source": "CP:R p.230 (Cyberware with 0 Humanity Loss on installation will not decrease your maximum Humanity)" },
+    "durationWeeks": { "value": 1, "source": "CP:R p.229 (Each of these therapies takes 1 entire week)" },
+    "medtechCannotSelfTreat": { "value": true, "source": "CP:R p.229 (Medtechs can't do Therapy on themselves)" },
+    "hospitalNight": { "value": 100, "source": "CP:R p.229 (If they are sleeping in the hospital, they must pay 100eb per night)" },
+    "kinds": [
+      { "id": "standard", "label": "Standard Humanity Loss", "cost": 500, "recovery": "2d6", "dv": 15, "materials": 100, "source": "CP:R p.230" },
+      { "id": "extreme", "label": "Extreme Humanity Loss", "cost": 1000, "recovery": "4d6", "dv": 17, "materials": 500, "source": "CP:R p.230" }
+    ]
+  },
+
+  "combat": {
+    "ablationPerDamagingHit": { "value": 1, "source": "CP:R p.186 (If you ended up taking any damage, your armor on that location is ablated, reducing its SP by 1 point)" },
+    "spDoesNotStack": { "value": true, "source": "CP:R p.97 e p.184 (Only your highest source of SP in a location determines your SP)" },
+    "armorPenaltyOnce": { "value": true, "source": "CP:R p.184 (lower your REF, DEX, and MOVE by the most punishing Armor Penalty of armor you are wearing, a penalty which you only have to take once)" },
+    "attachmentSlots": { "value": 3, "source": "CP:R p.95 (Each Non-Exotic Ranged Weapon has three Attachment Slots)" },
+    "shieldHp": { "value": 10, "source": "CP:R p.184 (Bulletproof Shield: 10 HP)" },
+    "autofire": {
+      "value": { "bullets": 10, "damage": "2d6", "multiplier": "quanto superou a DV, até o Autofire da arma", "noAimedShot": true },
+      "source": "CP:R p.173 (costs an Action and 10 bullets; roll 2d6 and multiply by the amount you beat the DV, up to the weapon's Autofire)"
+    },
+    "autofireDv": {
+      "value": [
+        { "weaponClass": "Smg", "dv": [20, 17, 20, 25, 30] },
+        { "weaponClass": "HeavySmg", "dv": [20, 17, 20, 25, 30] },
+        { "weaponClass": "AssaultRifle", "dv": [22, 20, 17, 20, 25] }
+      ],
+      "bands": ["0-6", "7-12", "13-25", "26-50", "51-100"],
+      "source": "CP:R p.173 (Autofire DVs Based on Range)"
+    },
+    "suppressiveFire": {
+      "value": { "bullets": 10, "rangeMeters": 25, "check": "alvos: WILL + Concentration + 1d10 contra REF + Autofire + 1d10" },
+      "source": "CP:R p.174 (Suppressive Fire)"
+    },
+    "criticalInjury": {
+      "value": { "trigger": "dois ou mais dados de dano saem 6", "bonusDamage": 5, "bypassesArmor": true },
+      "source": "CP:R p.187"
+    },
+    "quickFix": { "value": "remove o efeito da lesão pelo resto do dia; cada tentativa leva 1 minuto; pode ser feito em si mesmo", "source": "CP:R p.222 (A Quick Fix will remove the Injury Effect for the rest of the day)" },
+    "treatment": { "value": "remove o efeito da lesão permanentemente; cada tentativa leva 4 horas; não pode ser feito em si mesmo", "source": "CP:R p.222 (A Treatment will remove the Injury Effect permanently)" },
+    "cybertechOnCyberware": { "value": true, "source": "CP:R p.222 (lesões em partes substituídas por cyberware podem ser tratadas com Cybertech no lugar de First Aid, Paramedic ou Surgery)" },
+    "criticalInjuries": {
+      "source": "CP:R p.187 (corpo) e p.188 (cabeça)",
+      "body": [
+        { "roll": 2, "name": "Dismembered Arm", "effect": "O braço se foi. Você larga na hora o que estiver naquela mão.", "quickFix": null, "treatment": "Surgery DV17", "deathSave": true },
+        { "roll": 3, "name": "Dismembered Hand", "effect": "A mão se foi. Você larga na hora o que estiver nela.", "quickFix": null, "treatment": "Surgery DV17", "deathSave": true },
+        { "roll": 4, "name": "Collapsed Lung", "effect": "-2 em MOVE (mínimo 1).", "quickFix": "Paramedic DV15", "treatment": "Surgery DV15", "deathSave": true, "movePenalty": -2 },
+        { "roll": 5, "name": "Broken Ribs", "effect": "No fim de todo turno em que se mover mais de 4 m/yds a pé, sofre de novo o dano bônus desta lesão direto nos HP.", "quickFix": "Paramedic DV13", "treatment": "Paramedic DV15 ou Surgery DV13", "deathSave": false },
+        { "roll": 6, "name": "Broken Arm", "effect": "O braço não pode ser usado. Você larga na hora o que estiver naquela mão.", "quickFix": "Paramedic DV13", "treatment": "Paramedic DV15 ou Surgery DV13", "deathSave": false },
+        { "roll": 7, "name": "Foreign Object", "effect": "No fim de todo turno em que se mover mais de 4 m/yds a pé, sofre de novo o dano bônus desta lesão direto nos HP.", "quickFix": "First Aid ou Paramedic DV13", "treatment": "O Quick Fix remove o efeito de vez", "deathSave": false, "quickFixHeals": true },
+        { "roll": 8, "name": "Broken Leg", "effect": "-4 em MOVE (mínimo 1).", "quickFix": "Paramedic DV13", "treatment": "Paramedic DV15 ou Surgery DV13", "deathSave": false, "movePenalty": -4 },
+        { "roll": 9, "name": "Torn Muscle", "effect": "-2 em ataques corpo a corpo.", "quickFix": "First Aid ou Paramedic DV13", "treatment": "O Quick Fix remove o efeito de vez", "deathSave": false, "quickFixHeals": true },
+        { "roll": 10, "name": "Spinal Injury", "effect": "No próximo turno não pode fazer uma Ação, mas ainda pode fazer uma Ação de Movimento.", "quickFix": "Paramedic DV15", "treatment": "Surgery DV15", "deathSave": true },
+        { "roll": 11, "name": "Crushed Fingers", "effect": "-4 em todas as ações com aquela mão.", "quickFix": "Paramedic DV13", "treatment": "Surgery DV15", "deathSave": false },
+        { "roll": 12, "name": "Dismembered Leg", "effect": "A perna se foi. -6 em MOVE (mínimo 1) e não pode se esquivar de ataques.", "quickFix": null, "treatment": "Surgery DV17", "deathSave": true, "movePenalty": -6 }
+      ],
+      "head": [
+        { "roll": 2, "name": "Lost Eye", "effect": "O olho se foi. -4 em ataques à distância e testes de Perception que dependam da visão.", "quickFix": null, "treatment": "Surgery DV17", "deathSave": true },
+        { "roll": 3, "name": "Brain Injury", "effect": "-2 em todas as ações.", "quickFix": null, "treatment": "Surgery DV17", "deathSave": true, "actionPenalty": -2 },
+        { "roll": 4, "name": "Damaged Eye", "effect": "-2 em ataques à distância e testes de Perception que dependam da visão.", "quickFix": "Paramedic DV15", "treatment": "Surgery DV13", "deathSave": false },
+        { "roll": 5, "name": "Concussion", "effect": "-2 em todas as ações.", "quickFix": "First Aid ou Paramedic DV13", "treatment": "O Quick Fix remove o efeito de vez", "deathSave": false, "actionPenalty": -2, "quickFixHeals": true },
+        { "roll": 6, "name": "Broken Jaw", "effect": "-4 em todas as ações que envolvam fala.", "quickFix": "Paramedic DV13", "treatment": "Paramedic ou Surgery DV13", "deathSave": false },
+        { "roll": 7, "name": "Foreign Object", "effect": "No fim de todo turno em que se mover mais de 4 m/yds a pé, sofre de novo o dano bônus desta lesão direto nos HP.", "quickFix": "First Aid ou Paramedic DV13", "treatment": "O Quick Fix remove o efeito de vez", "deathSave": false, "quickFixHeals": true },
+        { "roll": 8, "name": "Whiplash", "effect": "Só aumenta a penalidade base de Death Save.", "quickFix": "Paramedic DV13", "treatment": "Paramedic ou Surgery DV13", "deathSave": true },
+        { "roll": 9, "name": "Cracked Skull", "effect": "Aimed Shots na sua cabeça multiplicam por 3 (em vez de 2) o dano que passa do SP.", "quickFix": "Paramedic DV15", "treatment": "Paramedic ou Surgery DV15", "deathSave": true },
+        { "roll": 10, "name": "Damaged Ear", "effect": "Se mover mais de 4 m/yds a pé num turno, não pode fazer Ação de Movimento no turno seguinte. -2 em Perception que dependa da audição.", "quickFix": "Paramedic DV13", "treatment": "Surgery DV13", "deathSave": false },
+        { "roll": 11, "name": "Crushed Windpipe", "effect": "Você não consegue falar.", "quickFix": null, "treatment": "Surgery DV15", "deathSave": true },
+        { "roll": 12, "name": "Lost Ear", "effect": "A orelha se foi. Se mover mais de 4 m/yds a pé num turno, não pode fazer Ação de Movimento no turno seguinte. -4 em Perception que dependa da audição.", "quickFix": null, "treatment": "Surgery DV17", "deathSave": true }
+      ]
+    }
+  },
+
+  "cyberware": {
+    "meatArmOptions": {
+      "value": ["big-knucks", "rippers", "scratchers", "slice-n-dice", "subdermal-grip", "tool-hand", "wolvers", "standard-hand"],
+      "source": "CP:R p.115 (Can be installed as only piece of Cyberware in a meat arm; Standard Hand can be installed in a meat arm)"
+    },
+    "meatLegOptions": {
+      "value": ["talon-foot", "standard-foot"],
+      "source": "CP:R p.116 (Talon Foot: can be installed as the only piece of Cyberware in a meat leg; Standard Foot can be installed in a meat leg)"
+    },
+    "meatLimbs": { "value": { "arms": 2, "legs": 2 }, "complementary": true, "note": "Dois braços e duas pernas de carne; cada Cyberarm/Cyberleg instalado ocupa um deles." },
+    "anyLimbOptions": {
+      "value": [
+        { "slug": "hardened-shielding", "covering": false },
+        { "slug": "plastic-covering", "covering": true },
+        { "slug": "realskinn-covering", "covering": true },
+        { "slug": "superchrome-covering", "covering": true }
+      ],
+      "source": "CP:R p.116 e p.366 (Requires a Cyberarm or Cyberleg; as coberturas não ocupam Option Slot)"
+    },
+    "oneCoveringPerLimb": { "value": true, "complementary": true, "note": "Uma cobertura por membro: são revestimentos do membro inteiro." },
+    "fbc": {
+      "value": {
+        "bodyRequirement": "Biosystem",
+        "exemptSlugs": ["cyberarm", "cyberaudio-suite", "cybereye", "cyberleg", "cyberskull", "neural-link", "neuroport"],
+        "slotMultiplier": 2
+      },
+      "source": "IR3 p.93 (in an FBC body these pieces cause 0 Humanity Loss and do not depress the maximum Humanity regained via therapy; option slots of foundational cyberware and Internal/External Body are doubled)"
+    },
+    "removalRestoresHumanity": { "value": false, "source": "CP:R p.230 (Humanity cannot be fully regained without the removal of cyberware: remover só libera o teto da terapia; a recuperação vem da terapia)" },
+    "removedPiecesKept": { "value": true, "complementary": true, "note": "A peça removida volta ao inventário, onde pode ser reinstalada ou vendida." }
+  },
+
+  "cyberwareEffects": {
+    "about": "Efeitos de cyberware aplicados à ficha ao instalar. 'stat' soma ao STAT (com teto 'max' e acúmulo 'stacks'); 'skills' soma às perícias; com 'condition' o bônus só vale na situação descrita e aparece como nota, sem entrar na BASE; 'note' é um efeito de jogo exibido na ficha. 'allOf' exige todas as peças; 'minCount' exige N instalações. Sem 'stacks', várias instalações não somam (o livro: 'Multiple installations ... provide no additional benefit'). Os Implanted Linear Frames continuam vindo do campo BODY do catálogo (CP:R p.367).",
+    "effects": [
+      { "items": ["grafted-muscle-and-bone-lace"], "stat": "BODY", "add": 2, "stacks": true, "max": 10, "source": "CP:R p.363 (User increases their BODY by 2 ... Multiple installments stack. Cannot raise BODY above 10)" },
+      { "items": ["audiovox"], "skills": ["acting"], "add": 2, "source": "CP:R p.362 (adds +2 to their Acting skill)" },
+      { "items": ["audiovox"], "skills": ["play-instrument"], "add": 2, "condition": "cantando", "source": "CP:R p.362 (+2 to their Play Instrument Skill while singing)" },
+      { "items": ["toxin-binders"], "skills": ["resist-torture-drugs"], "add": 2, "source": "CP:R p.363 (adds +2 to their Resist Torture/Drugs Skill)" },
+      { "items": ["medscanner-integrated"], "skills": ["first-aid", "paramedic"], "add": 2, "source": "CP:R p.365 (adds +2 to their First Aid and Paramedic Skills)" },
+      { "items": ["techscanner-integrated"], "skills": ["basic-tech", "cybertech", "land-vehicle-tech", "sea-vehicle-tech", "air-vehicle-tech", "electronics-security-tech", "weaponstech"], "add": 2, "source": "CP:R p.366 (adds +2 to their Basic Tech, Cybertech, ... and Weaponstech Skills)" },
+      { "items": ["superchrome-covering"], "skills": ["wardrobe-style"], "add": 2, "source": "CP:R p.366 (+2 to Wardrobe and Style. This bonus only applies once)" },
+      { "allOf": ["chemskin", "techhair"], "skills": ["personal-grooming"], "add": 2, "source": "CP:R p.358 (A user with Chemskin and Techhair adds +2 to their Personal Grooming Skill)" },
+      { "items": ["light-tattoo"], "minCount": 3, "skills": ["wardrobe-style"], "add": 2, "source": "CP:R p.358 (three or more Light Tattoo installations adds +2 to their Wardrobe & Style Skill)" },
+      { "items": ["image-enhance"], "skills": ["perception", "lip-reading", "conceal-reveal-object"], "add": 2, "condition": "testes que envolvem visão", "source": "CP:R p.360 (for Checks which include sight)" },
+      { "items": ["amplified-hearing"], "skills": ["perception"], "add": 2, "condition": "testes que envolvem audição", "source": "CP:R p.361 (for Checks which include hearing)" },
+      { "items": ["voice-stress-analyzer"], "skills": ["human-perception", "interrogation"], "add": 2, "source": "CP:R p.362 (adds +2 to their Human Perception and Interrogation Skills)" },
+      { "items": ["kerenzikov"], "note": "+2 nas rolagens de Iniciativa.", "source": "CP:R p.359 (adds +2 to their Initiative Rolls)" },
+      { "items": ["sandevistan"], "note": "Como Ação: +3 na Iniciativa por um minuto; depois só pode ser ativado de novo em uma hora.", "source": "CP:R p.359" },
+      { "items": ["targeting-scope"], "note": "+1 no teste de Aimed Shot.", "source": "CP:R p.361 (+1 to their Check when making an Aimed Shot)" },
+      { "items": ["teleoptics"], "note": "+1 em tiro único ou Aimed Shot contra alvos a 51 m ou mais (não acumula com Sniping Scope).", "source": "CP:R p.361" },
+      { "items": ["skate-foot"], "note": "+6 m ao usar a Ação Correr.", "source": "CP:R p.366 (Increases movement by 6m/yds when using Run Action)" }
+    ]
+  },
+
+  "progression": {
+    "ipSkillPerLevel": { "value": 20, "source": "CP:R p.410 (Typical Skill Improvement: 20 IP x next Level)" },
+    "ipDoubleSkillPerLevel": { "value": 40, "source": "CP:R p.410 (Difficult (x2) Skill Improvement: 40 IP x next Level)" },
+    "ipRolePerRank": { "value": 60, "source": "CP:R p.410 (Role Ability Rank Improvement: 60 IP x next Rank)" },
+    "maxRank": { "value": 10, "source": "CP:R p.410 (tabela vai até Rank 10)" },
+    "multiclassMinRank": { "value": 4, "source": "CP:R p.142 (you can change Roles anytime you have completed at least 4 Ranks in your previous Role)" },
+    "multiclassNewRoleRank": { "value": 1, "source": "CP:R p.142 (buying Rank 1 in the new Role with Improvement Points)" },
+    "roleLifepathPerRole": { "value": true, "complementary": true, "note": "O Core só fala do Lifepath da Role na criação (p.53) e o multiclasse (p.143) não o menciona. Cada Role do personagem tem o seu: o da criação é mantido e o da Role nova é opcional, preenchido quando fizer sentido na história." }
+  },
+
+  "economy": {
+    "lifestyles": {
+      "source": "CP:R p.377",
+      "options": [
+        { "id": "kibble", "label": "Kibble", "monthly": 100 },
+        { "id": "generic-prepak", "label": "Generic Prepak", "monthly": 300 },
+        { "id": "good-prepak", "label": "Good Prepak", "monthly": 600 },
+        { "id": "fresh-food", "label": "Fresh Food", "monthly": 1500 }
+      ]
+    },
+    "housing": {
+      "source": "CP:R p.378",
+      "options": [
+        { "id": "street", "label": "Living on The Street", "rent": null, "buy": null },
+        { "id": "street-vehicle", "label": "Living on The Street in a Vehicle", "rent": null, "buy": null },
+        { "id": "cube-hotel", "label": "Cube Hotel", "rent": 500, "buy": null },
+        { "id": "cargo-container", "label": "Cargo Container", "rent": 1000, "buy": 15000 },
+        { "id": "studio-apartment", "label": "Studio Apartment", "rent": 1500, "buy": 25000 },
+        { "id": "two-bedroom-apartment", "label": "Two-Bedroom Apartment", "rent": 2500, "buy": 35000 },
+        { "id": "corporate-conapt", "label": "Corporate Conapt", "rent": null, "buy": null, "corporate": true },
+        { "id": "upscale-conapt", "label": "Upscale Conapt", "rent": 7500, "buy": 85000 },
+        { "id": "luxury-penthouse", "label": "Luxury Penthouse", "rent": 15000, "buy": 150000 },
+        { "id": "beaverville-house", "label": "Corporate Beaverville House", "rent": null, "buy": 200000, "corporate": true },
+        { "id": "beaverville-mcmansion", "label": "Corporate Beaverville McMansion", "rent": null, "buy": 500000, "corporate": true }
+      ]
+    },
+    "lifestyleGraceDays": { "value": 7, "source": "CP:R p.377 (If you don't pay for your lifestyle at the start of a month, you have one week to do so before you roll a Death Save at the start of each day you don't)" }
+  }
+}

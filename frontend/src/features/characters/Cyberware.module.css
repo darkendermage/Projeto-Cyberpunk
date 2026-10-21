@@ -1,0 +1,230 @@
+/* Cyberware tab (reference image 3): region panels around an anatomical figure, the clinic catalog on the right
+   and the item details below. */
+
+.status {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 10px;
+}
+.statusItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 12px;
+  background: var(--panel);
+  border: 1px solid var(--red-line);
+}
+.statusLabel {
+  font-family: var(--font-display);
+  font-size: 11.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+.statusValue {
+  font-family: var(--font-mono);
+  font-size: 24px;
+  color: var(--red-bright);
+}
+.statusValue small { font-size: 14px; color: var(--text-muted); }
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) minmax(280px, 400px) minmax(220px, 1fr) minmax(340px, 430px);
+  gap: 12px;
+  align-items: start;
+}
+@media (max-width: 1500px) {
+  .layout { grid-template-columns: minmax(220px, 1fr) minmax(260px, 360px) minmax(220px, 1fr); }
+  .clinic { grid-column: 1 / -1; }
+}
+@media (max-width: 900px) {
+  .layout { grid-template-columns: 1fr; }
+  .figureWrap { order: -1; max-width: 360px; margin: 0 auto; }
+}
+
+.regions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ------------------------------------------------------------ region panel */
+
+.region {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px 10px 10px;
+  text-align: left;
+  color: inherit;
+  background: var(--panel);
+  border: 1px solid var(--red-line);
+  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%);
+}
+.regionActive {
+  border-color: var(--red);
+  background: linear-gradient(135deg, var(--red-haze), transparent 70%), var(--panel);
+  box-shadow: inset 0 0 0 1px var(--red);
+}
+.regionHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  color: inherit;
+  text-align: left;
+}
+.regionTitle {
+  font-family: var(--font-display);
+  font-size: 13.5px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--red-bright);
+}
+.regionSlots {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.slots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.piece {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 96px;
+  max-width: 100%;
+  padding: 5px 8px;
+  font-size: 12.5px;
+  line-height: 1.2;
+  text-align: left;
+  color: var(--text);
+  background: var(--bg-2);
+  border: 1px solid rgba(61, 224, 255, 0.45);
+  box-shadow: inset 0 0 8px rgba(61, 224, 255, 0.12);
+  cursor: pointer;
+}
+.piece small { color: var(--text-muted); font-family: var(--font-mono); }
+.pieceSelected { border-color: var(--cyan); box-shadow: 0 0 0 1px var(--cyan), inset 0 0 10px rgba(61, 224, 255, 0.25); }
+.pieceFoundation { border-color: rgba(61, 224, 255, 0.8); font-weight: 600; }
+.emptySlot {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 34px;
+  color: var(--text-muted);
+  background: var(--bg-1);
+  border: 1px dashed var(--line-strong);
+  cursor: pointer;
+}
+.emptySlot:hover { color: var(--red-bright); border-color: var(--red); }
+
+/* ------------------------------------------------------------ figure */
+
+.figureWrap {
+  position: relative;
+  padding: 8px;
+  background:
+    radial-gradient(ellipse at 50% 35%, rgba(255, 42, 61, 0.14), transparent 60%),
+    radial-gradient(ellipse at 50% 90%, rgba(61, 224, 255, 0.08), transparent 55%);
+  border: 1px solid var(--line);
+}
+.figure { width: 100%; height: auto; display: block; }
+.bones path, .bones circle, .bones rect {
+  fill: none;
+  stroke: url(#boneStroke);
+  stroke-width: 1.3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.75;
+}
+.bones .vertebra { fill: rgba(255, 200, 210, 0.08); opacity: 0.55; }
+.bones .joint { fill: rgba(255, 220, 228, 0.12); }
+.bones .boneChrome path, .bones .boneChrome circle { stroke: var(--cyan); stroke-width: 2.4; opacity: 0.95; }
+.muscles path { fill: none; stroke: rgba(255, 210, 220, 0.2); stroke-width: 0.9; stroke-linecap: round; }
+.limb {
+  fill: transparent;
+  stroke: transparent;
+  stroke-width: 2;
+  cursor: pointer;
+  transition: stroke var(--t-med), fill var(--t-med);
+}
+.limb:hover { stroke: rgba(255, 90, 110, 0.45); }
+.limbChrome, .limbChrome path { fill: url(#chrome); fill-opacity: 0.38; stroke: var(--cyan); stroke-width: 1.2; stroke-opacity: 0.8; }
+.limbSelected, .limbSelected:hover { stroke: var(--red-bright); stroke-width: 2.4; filter: drop-shadow(0 0 5px var(--red)); }
+.ring { fill: none; stroke: var(--cyan); stroke-opacity: 0.35; stroke-width: 1; }
+.leader { fill: none; stroke: var(--red-line); stroke-width: 1; }
+.leaderOn { stroke: rgba(61, 224, 255, 0.55); }
+.leaderActive { stroke: var(--red-bright); stroke-width: 1.6; }
+.hotspot { cursor: pointer; outline: none; }
+.hotspot:focus-visible .hotRing { stroke: var(--amber); stroke-width: 2.5; }
+.hotRing { fill: rgba(5, 6, 7, 0.65); stroke: var(--red); stroke-width: 1.2; stroke-dasharray: 3 3; }
+.hotRingActive { stroke: var(--red-bright); stroke-width: 2.4; stroke-dasharray: none; }
+.hotDot { fill: var(--red-dim); }
+.hotDotOn { fill: var(--cyan); }
+.hotCount { fill: var(--cyan); font-family: var(--font-mono); font-size: 13px; }
+
+/* ------------------------------------------------------------ clinic */
+
+/* Search above, category below, both full width: a long "Todas de ..." label never pushes the layout around. */
+.clinicToolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.clinicToolbar > * { width: 100%; flex: none; min-height: 36px; }
+.clinicToolbar select { width: 100%; }
+
+.clinic {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.catalogList {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 640px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+.catalogItem {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 6px 10px;
+  padding: 8px 10px;
+  text-align: left;
+  color: inherit;
+  background: var(--bg-2);
+  border: 1px solid var(--line-strong);
+  cursor: pointer;
+}
+.catalogItem:hover { border-color: var(--red-line); }
+.catalogItemActive { border-color: var(--red); background: linear-gradient(135deg, var(--red-haze), transparent 70%), var(--bg-2); }
+.catalogName { font-family: var(--font-display); font-weight: 700; color: var(--red-bright); }
+.catalogMeta { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px; font-size: 12.5px; color: var(--text-2); }
+.price { font-family: var(--font-mono); color: var(--cyan); text-align: right; }
+
+/* ------------------------------------------------------------ details */
+
+.details {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) minmax(260px, 0.8fr);
+  gap: 12px;
+}
+@media (max-width: 1100px) { .details { grid-template-columns: 1fr; } }
+.detailTitle {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+}
+.validateButton { min-height: 64px; font-size: 16px; }

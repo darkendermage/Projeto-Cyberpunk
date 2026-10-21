@@ -14,6 +14,9 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options, ISearch
     public DbSet<GearList> GearLists => Set<GearList>();
     public DbSet<GearListEntry> GearListEntries => Set<GearListEntry>();
     public DbSet<Npc> Npcs => Set<Npc>();
+    public DbSet<Character> Characters => Set<Character>();
+    public DbSet<CharacterEvent> CharacterEvents => Set<CharacterEvent>();
+    public DbSet<CharacterPortrait> CharacterPortraits => Set<CharacterPortrait>();
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {

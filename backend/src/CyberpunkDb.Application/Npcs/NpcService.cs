@@ -225,7 +225,7 @@ internal static class NpcRulesMapper
 
         return new NpcRulesDto(
             d.Books, d.About, rules.StatKeys, templates,
-            d.Skills.Select(s => new SkillDto(s.Id, s.Name, s.Stat, s.Category, s.Combat, s.DoubleCost, s.Specialized, s.Page)).ToList(),
+            d.Skills.Select(s => new SkillDto(s.Id, s.Name, s.Stat, s.Category, s.Combat, s.DoubleCost, s.Specialized, s.Page, s.NamePt)).ToList(),
             d.FreeSkills.Entries.Select(e => new FreeSkillDto(e.Skill, e.Specialization, e.Level)).ToList(),
             d.FreeSkills.Source,
             d.Profiles.Select(p => new ProfileDto(p.Id, p.Label, p.Description, p.Role, p.KeyCombatSkills, p.KeyNonCombatSkills)).ToList(),

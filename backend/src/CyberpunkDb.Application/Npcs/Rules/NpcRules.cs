@@ -97,6 +97,8 @@ public sealed record SkillDefinition
 {
     public string Id { get; init; } = "";
     public string Name { get; init; } = "";
+    /// <summary>Portuguese label shown on character sheets; <see cref="Name"/> keeps the book's English name.</summary>
+    public string? NamePt { get; init; }
     public string Stat { get; init; } = "";
     public string Category { get; init; } = "";
     public bool Combat { get; init; }

@@ -2,7 +2,7 @@ import { useMemo, useState, type Dispatch } from 'react';
 import clsx from 'clsx';
 import { Lock, LockOpen, Minus, Plus, Star } from 'lucide-react';
 import type { NpcRules, NpcSheet, NpcValidationReport, SkillLine } from '../../api/types';
-import { Badge, Button, Field, IconButton, Segmented, Select } from '../../components/ui/ui';
+import { Badge, Button, Field, IconButton, NumberInput, Segmented, Select } from '../../components/ui/ui';
 import { type DraftAction, skillKey, STAT_KEYS } from './npcDraft';
 import styles from './EnemyGenerator.module.css';
 
@@ -40,8 +40,8 @@ export function IdentityEditor({
         </Select>
       </Field>
       <Field label="Rank da Role Ability" htmlFor="npc-rank">
-        <input id="npc-rank" type="number" min={0} max={10} value={sheet.roleRank} disabled={!sheet.role}
-          onChange={(e) => set({ roleRank: Number(e.target.value) })} />
+        <NumberInput id="npc-rank" min={0} max={10} value={sheet.roleRank} disabled={!sheet.role}
+          onChange={(v) => set({ roleRank: v ?? 0 })} />
       </Field>
       <Field label="Idioma nativo (Language 4 grátis)" htmlFor="npc-lang">
         <input id="npc-lang" list="npc-languages" value={sheet.nativeLanguage} onChange={(e) => set({ nativeLanguage: e.target.value })} />
@@ -82,8 +82,8 @@ export function StatsEditor({
               </span>
               <div className={styles.stepper}>
                 <button type="button" aria-label={`Diminuir ${k}`} onClick={() => dispatch({ type: 'stat', key: k, value: value - 1 })}><Minus size={12} /></button>
-                <input type="number" aria-label={k} value={value} min={0} max={20}
-                  onChange={(e) => dispatch({ type: 'stat', key: k, value: Number(e.target.value) })} />
+                <NumberInput aria-label={k} value={value} min={0} max={20}
+                  onChange={(v) => dispatch({ type: 'stat', key: k, value: v ?? 0 })} />
                 <button type="button" aria-label={`Aumentar ${k}`} onClick={() => dispatch({ type: 'stat', key: k, value: value + 1 })}><Plus size={12} /></button>
               </div>
               {armored !== undefined && armored !== value && (
@@ -101,8 +101,8 @@ export function StatsEditor({
           <Derived label="SP corpo / cabeça" value={`${d.spBody} / ${d.spHead}`} />
           <Derived label="Peças de cyberware" value={d.cyberwarePieces} />
           <Field label="LUCK (fora do orçamento)" htmlFor="npc-luck">
-            <input id="npc-luck" type="number" min={0} max={10} value={sheet.luck ?? ''} placeholder="—"
-              onChange={(e) => dispatch({ type: 'set', patch: { luck: e.target.value === '' ? null : Number(e.target.value) } })} />
+            <NumberInput id="npc-luck" min={0} max={10} value={sheet.luck} placeholder="—" allowEmpty
+              onChange={(v) => dispatch({ type: 'set', patch: { luck: v } })} />
           </Field>
         </div>
       )}
@@ -211,8 +211,9 @@ export function SkillsEditor({
                   <td>{def!.stat}</td>
                   <td className={styles.num}>{line?.freeLevel || '—'}</td>
                   <td>
-                    <input type="number" min={0} max={10} value={level} aria-label={`Nível de ${def!.name}`}
-                      onChange={(e) => dispatch({ type: 'skill', key, value: e.target.value === '' ? null : Number(e.target.value) })} />
+                    <NumberInput min={0} max={10} value={level} aria-label={`Nível de ${def!.name}`} allowEmpty
+                      title="Vazio volta ao nível padrão (básicas: 2)"
+                      onChange={(v) => dispatch({ type: 'skill', key, value: v })} />
                   </td>
                   <td className={styles.num}>{line?.cost ?? 0}</td>
                   <td className={styles.num}>{line?.base ?? '—'}</td>

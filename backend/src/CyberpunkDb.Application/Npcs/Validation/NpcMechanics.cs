@@ -5,9 +5,15 @@ using CyberpunkDb.Domain.Enums;
 namespace CyberpunkDb.Application.Npcs.Validation;
 
 /// <summary>Mechanical helpers shared by the validator and the generator, so both read the rules the same way.</summary>
-public sealed partial class NpcMechanics(NpcRuleBook rules)
+public sealed partial class NpcMechanics(NpcRuleBook rules, int slotMultiplier = 1)
 {
     public NpcRuleBook Rules { get; } = rules;
+
+    /// <summary>
+    /// Multiplies the Option Slots of foundational pieces and of the Internal/External pools. 1 for everyone except a
+    /// character in a Full Body Conversion body, whose slots are doubled (Interface RED 3 p.93).
+    /// </summary>
+    public int SlotMultiplier { get; } = slotMultiplier;
 
     // ------------------------------------------------------------ prices
 
@@ -46,7 +52,11 @@ public sealed partial class NpcMechanics(NpcRuleBook rules)
     }
 
     public int? SlotsProvided(CatalogItem item) =>
-        Rules.FindOverride(item.Slug)?.SlotsProvided ?? item.Cyber?.SlotsProvided;
+        (Rules.FindOverride(item.Slug)?.SlotsProvided ?? item.Cyber?.SlotsProvided) * SlotMultiplier;
+
+    /// <summary>Slots of a standalone pool; only Internal and External Body grow with the FBC multiplier (IR3 p.93).</summary>
+    public int PoolSlots(SlotPool pool) =>
+        pool.Slots * (pool.Key is "internal" or "external" ? SlotMultiplier : 1);
 
     /// <summary>
     /// True when <paramref name="parent"/> can host an option that requires <paramref name="required"/>:

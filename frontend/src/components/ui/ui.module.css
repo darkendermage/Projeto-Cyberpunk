@@ -261,6 +261,60 @@
   box-shadow: var(--glow-sm);
 }
 
+/* ComboBox: the Select look on a free-text field */
+.combo { width: 100%; }
+.combo input {
+  width: 100%;
+  min-height: 36px;
+  padding: 0 32px 0 12px;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  color: var(--text);
+  font: inherit;
+  font-size: 14.5px;
+}
+.combo input:hover { border-color: var(--red-line); }
+.combo input:focus {
+  outline: none;
+  border-color: var(--red);
+  box-shadow: var(--glow-sm);
+}
+.comboToggle {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 32px;
+  display: grid;
+  place-items: center;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+.comboToggle svg { position: static; }
+.comboList {
+  position: fixed;
+  z-index: 700;
+  max-height: 260px;
+  overflow: auto;
+  margin: 0;
+  padding: 4px 0;
+  list-style: none;
+  background: var(--bg-2);
+  border: 1px solid var(--red-line);
+  border-radius: var(--radius);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6), var(--glow-sm);
+}
+.comboOption {
+  padding: 6px 12px;
+  font-size: 14px;
+  color: var(--text);
+  cursor: pointer;
+}
+.comboOptionActive { background: rgba(255, 42, 61, 0.14); }
+.comboOptionChosen { color: var(--red); }
+
 .field {
   display: flex;
   flex-direction: column;

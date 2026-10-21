@@ -1,7 +1,8 @@
-import { useEffect, useId, useRef, useState, type ButtonHTMLAttributes, type ReactNode, type SelectHTMLAttributes } from 'react';
+import { useEffect, useId, useRef, useState, type ButtonHTMLAttributes, type InputHTMLAttributes, type ReactNode, type SelectHTMLAttributes } from 'react';
 import { createPortal } from 'react-dom';
 import clsx from 'clsx';
 import { AlertTriangle, Check, ChevronDown, RefreshCw, SearchX, X } from 'lucide-react';
+import { parseWholeNumber } from '../../lib/numbers';
 import styles from './ui.module.css';
 
 // ---------------------------------------------------------------- buttons
@@ -76,6 +77,121 @@ export function Select({ className, children, highlighted, ...props }: SelectHTM
       <select {...props}>{children}</select>
       <ChevronDown size={14} aria-hidden />
     </span>
+  );
+}
+
+/**
+ * A text field that looks like {@link Select}: it opens its own list of suggestions but still takes free text
+ * (a language or a neighborhood the list doesn't have). The list is portaled so modals and panels don't clip it.
+ */
+export function ComboBox({ id, value, onChange, options, placeholder, className, 'aria-label': ariaLabel, disabled }: {
+  id?: string;
+  value: string;
+  onChange: (value: string) => void;
+  options: readonly string[];
+  placeholder?: string;
+  className?: string;
+  'aria-label'?: string;
+  disabled?: boolean;
+}) {
+  const fallbackId = useId();
+  const inputId = id ?? fallbackId;
+  const listId = `${inputId}-list`;
+  const wrap = useRef<HTMLSpanElement>(null);
+  const [open, setOpen] = useState(false);
+  const [typed, setTyped] = useState(false);
+  const [active, setActive] = useState(-1);
+  const [rect, setRect] = useState<DOMRect | null>(null);
+
+  const unique = [...new Set(options)];
+  const needle = value.trim().toLowerCase();
+  // Typing narrows the list; opening a field that already holds an answer shows every option.
+  const shown = typed && needle ? unique.filter((o) => o.toLowerCase().includes(needle)) : unique;
+
+  useEffect(() => {
+    if (!open) return;
+    const place = () => setRect(wrap.current?.getBoundingClientRect() ?? null);
+    place();
+    window.addEventListener('resize', place);
+    window.addEventListener('scroll', place, true);
+    return () => { window.removeEventListener('resize', place); window.removeEventListener('scroll', place, true); };
+  }, [open]);
+
+  const show = () => { setTyped(false); setActive(-1); setOpen(true); };
+  const pick = (option: string) => { onChange(option); setOpen(false); };
+
+  return (
+    <span ref={wrap} className={clsx(styles.select, styles.combo, className)}>
+      <input id={inputId} value={value} placeholder={placeholder} disabled={disabled} autoComplete="off" spellCheck={false}
+        role="combobox" aria-expanded={open} aria-controls={listId} aria-autocomplete="list" aria-label={ariaLabel}
+        aria-activedescendant={open && active >= 0 ? `${listId}-${active}` : undefined}
+        onChange={(e) => { onChange(e.target.value); setTyped(true); setActive(-1); setOpen(true); }}
+        onClick={() => (open ? setOpen(false) : show())}
+        onBlur={() => setOpen(false)}
+        onKeyDown={(e) => {
+          if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+            e.preventDefault();
+            if (!open) { show(); return; }
+            const step = e.key === 'ArrowDown' ? 1 : -1;
+            setActive((i) => (shown.length ? (i + step + shown.length) % shown.length : -1));
+          } else if (e.key === 'Enter' && open && active >= 0 && shown[active] != null) {
+            e.preventDefault();
+            pick(shown[active]);
+          } else if (e.key === 'Escape' && open) {
+            e.stopPropagation();
+            setOpen(false);
+          }
+        }} />
+      <button type="button" tabIndex={-1} className={styles.comboToggle} aria-label="Mostrar opções" disabled={disabled}
+        onMouseDown={(e) => e.preventDefault()}
+        onClick={() => { if (open) setOpen(false); else { show(); document.getElementById(inputId)?.focus(); } }}>
+        <ChevronDown size={14} aria-hidden />
+      </button>
+      {open && rect && shown.length > 0 && createPortal(
+        <ul id={listId} role="listbox" className={styles.comboList}
+          style={{ left: rect.left, top: rect.bottom + 2, width: rect.width }}>
+          {shown.map((o, i) => (
+            <li key={o} id={`${listId}-${i}`} role="option" aria-selected={o === value}
+              className={clsx(styles.comboOption, i === active && styles.comboOptionActive, o === value && styles.comboOptionChosen)}
+              onMouseDown={(e) => { e.preventDefault(); pick(o); }} onMouseEnter={() => setActive(i)}>
+              {o}
+            </li>
+          ))}
+        </ul>,
+        document.body,
+      )}
+    </span>
+  );
+}
+
+/**
+ * Whole-number field that can be cleared and retyped: while focused it shows exactly what is typed, and only a
+ * valid number (kept within min–max) reaches onChange. Left empty, it gives `null` on blur when `allowEmpty`, and
+ * otherwise goes back to the current value. Without this, clearing "3" to type "5" snapped to the minimum at once.
+ */
+export function NumberInput({ value, onChange, min, max, allowEmpty = false, onFocus, onBlur, ...props }:
+  Omit<InputHTMLAttributes<HTMLInputElement>, 'value' | 'onChange' | 'min' | 'max' | 'type'> & {
+    value: number | null | undefined;
+    onChange: (value: number | null) => void;
+    min: number;
+    max: number;
+    allowEmpty?: boolean;
+  }) {
+  const [text, setText] = useState<string | null>(null);
+  const shown = text ?? (value == null ? '' : String(value));
+  return (
+    <input {...props} type="number" inputMode="numeric" min={min} max={max} value={shown}
+      onFocus={(e) => { setText(shown); e.target.select(); onFocus?.(e); }}
+      onChange={(e) => {
+        setText(e.target.value);
+        const n = parseWholeNumber(e.target.value, min, max);
+        if (n !== null) onChange(n);
+      }}
+      onBlur={(e) => {
+        if (allowEmpty && text !== null && text.trim() === '') onChange(null);
+        setText(null);
+        onBlur?.(e);
+      }} />
   );
 }
 

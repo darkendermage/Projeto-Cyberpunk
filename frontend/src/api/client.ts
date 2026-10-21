@@ -4,7 +4,8 @@ import type {
   NpcValidationReport, ProblemDetails, SearchRequest, SearchResult,
 } from './types';
 
-const BASE = import.meta.env.VITE_API_BASE ?? '/api';
+export const API_BASE = import.meta.env.VITE_API_BASE ?? '/api';
+const BASE = API_BASE;
 
 /** Error carrying the RFC 7807 payload returned by the API (title + per-field errors). */
 export class ApiError extends Error {
@@ -22,7 +23,7 @@ export class ApiError extends Error {
   }
 }
 
-async function request<T>(path: string, init?: RequestInit): Promise<T> {
+export async function request<T>(path: string, init?: RequestInit): Promise<T> {
   let response: Response;
   try {
     response = await fetch(`${BASE}${path}`, {

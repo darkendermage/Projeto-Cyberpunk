@@ -2,7 +2,7 @@ import { useEffect, useState, type ReactNode } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import clsx from 'clsx';
 import {
-  BookOpen, Database, FileText, GitCompareArrows, Heart, LayoutGrid, ListChecks, Menu, Search, Settings, Skull, Swords, Table2, X,
+  BookOpen, Database, FileText, GitCompareArrows, Heart, LayoutGrid, ListChecks, Menu, Search, Settings, Skull, Swords, Table2, Users, X,
 } from 'lucide-react';
 import { useCompare } from '../../state/CompareContext';
 import { useEffectsSettings } from '../../state/EffectsContext';
@@ -89,6 +89,7 @@ function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
     { to: '/lists', label: 'Minhas Listas', icon: <ListChecks size={19} /> },
     { to: '/favorites', label: 'Favoritos', icon: <Heart size={19} />, count: favorites.data?.length },
     { to: '/compare', label: 'Comparar', icon: <GitCompareArrows size={19} />, count: compare.entries.length },
+    { to: '/characters', label: 'Personagens', icon: <Users size={19} />, active: location.pathname.startsWith('/characters') },
   ];
   const others = [
     { to: '/enemies', label: 'Gerador de Inimigos', icon: <Skull size={19} /> },

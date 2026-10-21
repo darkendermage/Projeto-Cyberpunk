@@ -12,6 +12,9 @@ public interface IAppDbContext
     DbSet<GearList> GearLists { get; }
     DbSet<GearListEntry> GearListEntries { get; }
     DbSet<Npc> Npcs { get; }
+    DbSet<Character> Characters { get; }
+    DbSet<CharacterEvent> CharacterEvents { get; }
+    DbSet<CharacterPortrait> CharacterPortraits { get; }
 
     DbSet<TEntity> Set<TEntity>() where TEntity : class;
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);

@@ -4,7 +4,9 @@ import { Search } from 'lucide-react';
 import { useCategories } from '../../api/hooks';
 import { Badge, Spinner } from '../../components/ui/ui';
 import { CategoryIcon } from '../../components/art/CategoryIcon';
-import { BODY_INJURIES, CRITICAL_RULES, type CriticalInjury, HEAD_INJURIES } from './criticalInjuries';
+import { useCharacterRules } from '../../api/characters';
+import type { CriticalInjuryRule } from '../../api/characterTypes';
+import { CRITICAL_RULES } from './criticalInjuries';
 import { useRangeUnit } from '../../lib/hooks';
 import { AutofireTable, RangeUnitToggle, SingleShotTable } from './RangeTables';
 import page from '../../styles/Page.module.css';
@@ -79,7 +81,7 @@ const CLASS_TABLE = [
   ['Corpo a corpo', '—', 'Contato', 'Adjacente'],
 ];
 
-function CriticalTable({ title, rows }: { title: string; rows: CriticalInjury[] }) {
+function CriticalTable({ title, rows }: { title: string; rows: CriticalInjuryRule[] }) {
   return (
     <div>
       <h3 className={styles.subTitle}>{title}</h3>
@@ -95,7 +97,7 @@ function CriticalTable({ title, rows }: { title: string; rows: CriticalInjury[] 
                   {r.effect}
                   {r.deathSave && <> <Badge tone="red" title="A penalidade base de Death Save aumenta em 1">Death Save +1</Badge></>}
                 </td>
-                <td>{r.quickFix}</td>
+                <td>{r.quickFix ?? '—'}</td>
                 <td>{r.treatment}</td>
               </tr>
             ))}
@@ -108,6 +110,8 @@ function CriticalTable({ title, rows }: { title: string; rows: CriticalInjury[] 
 
 export function TablesPage() {
   const categories = useCategories();
+  // The injury tables come from the rules file on the server, the same data the character sheet uses.
+  const injuries = useCharacterRules().data?.criticalInjuries;
   const [unit, setUnit] = useRangeUnit();
   return (
     <div className={page.page}>
@@ -166,10 +170,12 @@ export function TablesPage() {
           {CRITICAL_RULES.map((rule) => <li key={rule}>{rule}</li>)}
           <li>Quick Fix e tratamento estão no Core p.223. Lesões marcadas com Death Save +1 aumentam a penalidade base de Death Save.</li>
         </ul>
-        <div className={styles.critGrid}>
-          <CriticalTable title="Corpo (Core p.187)" rows={BODY_INJURIES} />
-          <CriticalTable title="Cabeça (Core p.188)" rows={HEAD_INJURIES} />
-        </div>
+        {!injuries ? <Spinner /> : (
+          <div className={styles.critGrid}>
+            <CriticalTable title="Corpo (Core p.187)" rows={injuries.filter((i) => i.location === 'Body')} />
+            <CriticalTable title="Cabeça (Core p.188)" rows={injuries.filter((i) => i.location === 'Head')} />
+          </div>
+        )}
       </section>
 
       <section className={page.section}>
