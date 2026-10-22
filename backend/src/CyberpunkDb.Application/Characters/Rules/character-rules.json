@@ -1140,7 +1140,39 @@
       "source": "IR3 p.93 (in an FBC body these pieces cause 0 Humanity Loss and do not depress the maximum Humanity regained via therapy; option slots of foundational cyberware and Internal/External Body are doubled)"
     },
     "removalRestoresHumanity": { "value": false, "source": "CP:R p.230 (Humanity cannot be fully regained without the removal of cyberware: remover só libera o teto da terapia; a recuperação vem da terapia)" },
-    "removedPiecesKept": { "value": true, "complementary": true, "note": "A peça removida volta ao inventário, onde pode ser reinstalada ou vendida." }
+    "removedPiecesKept": { "value": true, "complementary": true, "note": "A peça removida volta ao inventário, onde pode ser reinstalada ou vendida." },
+    "wearables": {
+      "value": [
+        { "slug": "smart-glasses", "accepts": "Cybereye", "slots": 2, "pairedAsOne": true, "maxWorn": 1,
+          "source": "CP:R p.354 (two option slots for Cybereye options... always count as if they were paired, and it costs the same as installing the option once in a cybereye. You can only wear a single pair at a time)" },
+        { "slug": "smart-lens", "accepts": "Cybereye", "slots": 1, "noPaired": true, "maxWorn": 2,
+          "source": "DGD p.148 (a single Option Slot for a Cybereye Option... Options requiring pairing cannot be installed. You can only wear one Smart Lens per eye)" },
+        { "slug": "battleglove", "accepts": "Cyberarm", "slots": 3, "coversArm": true,
+          "source": "CP:R p.347 (three option slots for Cyberarm or Cyberlimb options... Any options stored in a Cyberarm or meat arm the Battleglove is being worn over are inaccessible)" },
+        { "slug": "mechaman-smart-glove", "accepts": "Cyberarm", "slots": 1, "builtIn": ["subdermal-grip"], "coversArm": true,
+          "requirement": "Neural Link para usar o Subdermal Grip",
+          "source": "BC p.37 (preinstalled with a Subdermal Grip and has 1 additional Option Slot for a Cyberarm or Cyberlimb option... options stored in a Cyberhand or meat hand the Smart Glove is worn over are inaccessible. A Neural Link is still required to make use of the Subdermal Grip)" },
+        { "slug": "cyberdude-smart-glove", "accepts": "Cyberarm", "slots": 2, "builtIn": ["subdermal-grip"], "coversArm": true, "fingersStillWork": true,
+          "source": "IR5 p.99 (preinstalled with a Subdermal Grip and 2 additional Option Slots for Cyberarm or Cyberlimb options... non-finger based cyberware options... are inaccessible; finger-based cyberware can be used normally)" },
+        { "slug": "dynalar-xtra-dex-smart-glove", "accepts": "Cyberarm", "slots": 2, "cyberfingers": 5, "coversArm": true,
+          "requirement": "Interface Plugs: a luva só funciona conectada a eles",
+          "source": "IR4 p.67 (2 Option Slots for Cyberarm or Cyberlimb options and counts as a Modular Finger Cyberhand for the installation of up to 5 Cyberfingers... as long as the user is connected to it via a set of Interface Plugs)" },
+        { "slug": "smart-ears", "accepts": "Cyberaudio", "slots": 2, "builtIn": ["radio-scanner-music-player"], "maxWorn": 1,
+          "source": "IR5 p.100 (a non-removable Radio Scanner/Music Player installed and 2 additional Option Slots for Cyberaudio Options... only wear one set of Smart Ears at a time)" },
+        { "slug": "mechaman-motorcycle-helmet", "accepts": "Cybereye", "slots": 2, "pairedAsOne": true, "builtIn": ["chyron", "low-light-infrared-uv"], "builtInUsesSlots": true,
+          "source": "BC p.37 (Flak Head Armor with built-in Tech upgraded Smart Glasses, which come installed with Chyron and Low Light / Infrared / UV Cybereye options)" }
+      ],
+      "source": "CP:R p.347, 354; DGD p.148; BC p.37; IR4 p.67; IR5 p.99–100 (cada vestível traz a própria página)"
+    },
+    "wearableHumanityLoss": {
+      "value": 0,
+      "complementary": true,
+      "note": "Os livros não falam de Humanity Loss nas Options de um vestível. Elas são vestidas, não implantadas, e a ficha da Tetra no DGD (p.59) lista \"Battleglove w/ Tool Hand\" em GEAR, com cyberware \"None\". Por isso custam 0; troque aqui se a mesa decidir outra coisa."
+    },
+    "fingerOptions": {
+      "value": ["scratchers", "rippers", "slice-n-dice", "rocklin-quick-digits"],
+      "source": "IR5 p.99 (Finger-based cyberware such as Cyberfingers, Quick Digits, Scratchers, Rippers, and Slice N' Dice can be used normally); os Cyberfingers entram pelo tipo"
+    }
   },
 
   "cyberwareEffects": {

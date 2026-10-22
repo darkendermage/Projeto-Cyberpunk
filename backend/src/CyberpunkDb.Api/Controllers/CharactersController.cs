@@ -132,6 +132,16 @@ public sealed class CharactersController(CharacterService characters) : Controll
     [HttpPost("{id:int}/weapons/detach")]
     public Task<CharacterDetailDto> Detach(int id, AttachRequest r, CancellationToken ct) => characters.DetachAsync(id, r, ct);
 
+    /// <summary>Cyberware option in a worn host (Smart Glasses, Battleglove, Smart Ears...): no Cybereye or Cyberarm needed.</summary>
+    [HttpPost("{id:int}/wearables/install")]
+    public Task<CharacterDetailDto> WearableInstall(int id, WearableInstallRequest r, CancellationToken ct) => characters.WearableInstallAsync(id, r, ct);
+
+    [HttpPost("{id:int}/wearables/remove")]
+    public Task<CharacterDetailDto> WearableRemove(int id, WearableOptionRequest r, CancellationToken ct) => characters.WearableRemoveAsync(id, r, ct);
+
+    [HttpPost("{id:int}/wearables/side")]
+    public Task<CharacterDetailDto> WearableSide(int id, WearableSideRequest r, CancellationToken ct) => characters.WearableSideAsync(id, r, ct);
+
     // ------------------------------------------------------------ progression
 
     [HttpPost("{id:int}/progression/ip")]

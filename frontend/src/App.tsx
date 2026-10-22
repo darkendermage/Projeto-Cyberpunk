@@ -18,6 +18,7 @@ const EnemyGeneratorPage = lazy(() => import('./features/enemies/EnemyGeneratorP
 const CharactersPage = lazy(() => import('./features/characters/CharactersPage').then((m) => ({ default: m.CharactersPage })));
 const CharacterPage = lazy(() => import('./features/characters/CharacterPage').then((m) => ({ default: m.CharacterPage })));
 const MartialArtsPage = lazy(() => import('./features/reference/MartialArtsPage').then((m) => ({ default: m.MartialArtsPage })));
+const NightMarketPage = lazy(() => import('./features/night-market/NightMarketPage').then((m) => ({ default: m.NightMarketPage })));
 
 export default function App() {
   return (
@@ -37,6 +38,8 @@ export default function App() {
           <Route path="/glossary" element={<GlossaryPage />} />
           <Route path="/martial-arts" element={<MartialArtsPage />} />
           <Route path="/enemies" element={<EnemyGeneratorPage />} />
+          <Route path="/night-market" element={<NightMarketPage />} />
+          <Route path="/night-market/:id" element={<NightMarketPage />} />
           <Route path="/characters" element={<CharactersPage />} />
           <Route path="/characters/:id" element={<CharacterPage />} />
           <Route path="/characters/:id/:tab" element={<CharacterPage />} />

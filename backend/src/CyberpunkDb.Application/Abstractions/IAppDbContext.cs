@@ -15,6 +15,7 @@ public interface IAppDbContext
     DbSet<Character> Characters { get; }
     DbSet<CharacterEvent> CharacterEvents { get; }
     DbSet<CharacterPortrait> CharacterPortraits { get; }
+    DbSet<NightMarket> NightMarkets { get; }
 
     DbSet<TEntity> Set<TEntity>() where TEntity : class;
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);

@@ -76,6 +76,14 @@ internal static class CharacterTestData
         [WeaponClass.HeavyPistol, WeaponClass.AssaultRifle]);
     public static readonly CatalogItem PistolAutosear = Attachment("pistol-autosear", 100, WeaponAttachmentType.Internals, 0, true, [WeaponClass.HeavyPistol]);
 
+    // Wearable hosts: options worn in gear and gloves (CP:R p.347, 354; DGD p.148; IR5 p.99)
+    public static readonly CatalogItem SmartGlasses = Wearable("smart-glasses", 500, GearType.Electronics);
+    public static readonly CatalogItem SmartLens = Wearable("smart-lens", 500, GearType.Electronics);
+    public static readonly CatalogItem Battleglove = Wearable("battleglove", 1000, GearType.Tool);
+    public static readonly CatalogItem CyberDudeGlove = Wearable("cyberdude-smart-glove", 750, GearType.Tool);
+    public static readonly CatalogItem SubdermalGrip = Cyber("subdermal-grip", 100, CyberwareType.LimbOption, BodyLocation.Arm, 3, "1d6", requires: NeuralLink, slots: 1);
+    public static readonly CatalogItem Scratchers = Cyber("scratchers", 100, CyberwareType.LimbOption, BodyLocation.Hand, 2, "1d6/2", requires: Cyberarm, slots: 1);
+
     public static readonly NpcCatalog Catalog = new(Items);
 
     // ------------------------------------------------------------ reference sheets
@@ -170,6 +178,9 @@ internal static class CharacterTestData
         bool foundational = false, int? provides = null, CatalogItem? requires = null, int? slots = null, bool pair = false, string? requirements = null) =>
         Add(new CatalogItem(++_id, slug, slug, ItemCategory.Cyberware, price, Core, 359,
             Cyber: new CyberInfo(type, location, foundational, provides, slots, requires?.Id, pair, InstallLocation.Clinic, requirements, hl, dice)));
+
+    private static CatalogItem Wearable(string slug, int price, GearType type) =>
+        Add(new CatalogItem(++_id, slug, slug, ItemCategory.Gear, price, Core, 354, Gear: new GearInfo(type, null)));
 
     private static CatalogItem Attachment(string slug, int price, WeaponAttachmentType type, int slots, bool exotic, WeaponClass[] classes) =>
         Add(new CatalogItem(++_id, slug, slug, ItemCategory.WeaponAttachment, price, Core, 344,

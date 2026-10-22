@@ -2,7 +2,7 @@ import { useEffect, useState, type ReactNode } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import clsx from 'clsx';
 import {
-  BookOpen, Database, FileText, GitCompareArrows, Heart, LayoutGrid, ListChecks, Menu, Search, Settings, Skull, Swords, Table2, Users, X,
+  BookOpen, Database, FileText, GitCompareArrows, Heart, LayoutGrid, ListChecks, Menu, Search, Settings, Skull, Store, Swords, Table2, Users, X,
 } from 'lucide-react';
 import { useCompare } from '../../state/CompareContext';
 import { useEffectsSettings } from '../../state/EffectsContext';
@@ -11,6 +11,7 @@ import { CommandPalette } from '../../features/search/CommandPalette';
 import { SettingsPanel } from '../../features/settings/SettingsPanel';
 import { CyberpunkLogo } from '../brand/CyberpunkLogo';
 import { CitySkyline } from './CitySkyline';
+import { UpdateBanner } from './UpdateBanner';
 import styles from './AppShell.module.css';
 
 export function AppShell({ children }: { children: ReactNode }) {
@@ -68,6 +69,8 @@ export function AppShell({ children }: { children: ReactNode }) {
         </div>
       </header>
 
+      <UpdateBanner />
+
       <div className={styles.body}>
         <Sidebar open={navOpen} onClose={() => setNavOpen(false)} />
         <main id="main" className={styles.main}>{children}</main>
@@ -93,6 +96,7 @@ function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
   ];
   const others = [
     { to: '/enemies', label: 'Gerador de Inimigos', icon: <Skull size={19} /> },
+    { to: '/night-market', label: 'Night Market', icon: <Store size={19} />, active: location.pathname.startsWith('/night-market') },
     { to: '/rules', label: 'Regras Rápidas', icon: <FileText size={19} /> },
     { to: '/tables', label: 'Tabelas', icon: <Table2 size={19} /> },
     { to: '/martial-arts', label: 'Artes Marciais', icon: <Swords size={19} /> },

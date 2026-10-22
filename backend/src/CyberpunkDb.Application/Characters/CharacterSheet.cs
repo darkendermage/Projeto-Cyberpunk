@@ -209,6 +209,8 @@ public sealed record InventoryEntry
     public int? Rounds { get; init; }
     public WeaponQuality? Quality { get; init; }
     public WeaponState? Weapon { get; init; }
+    /// <summary>Cyberware options held by a worn host (Smart Glasses, Battleglove, Smart Ears...); see <c>cyberware.wearables</c>.</summary>
+    public WearableState? Wearable { get; init; }
     public ItemOrigin Origin { get; init; } = ItemOrigin.Manual;
     public BudgetPool PaidFrom { get; init; } = BudgetPool.Balance;
     public int? PricePaid { get; init; }
@@ -223,6 +225,17 @@ public sealed record WeaponState
     public int? LoadedAmmoItemId { get; init; }
     /// <summary>Inventory instances of the attachments installed in the weapon's slots (CP:R p.95).</summary>
     public List<string> Attachments { get; init; } = [];
+}
+
+/// <summary>
+/// Options in a wearable host. They are inventory instances, like weapon attachments: worn, not implanted, so they cost
+/// no Humanity, and they only work while the host is equipped.
+/// </summary>
+public sealed record WearableState
+{
+    public List<string> Options { get; init; } = [];
+    /// <summary>Hand a glove is worn on: the options of the arm under it stop working while it is worn.</summary>
+    public BodySide? Side { get; init; }
 }
 
 // ------------------------------------------------------------ cyberware

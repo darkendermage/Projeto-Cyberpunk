@@ -1,7 +1,7 @@
 import type {
-  CategorySchema, CategorySummary, GearListDetail, GearListSummary, GlobalSearchGroup, ImportResult, Item,
+  CategorySchema, CategorySummary, GearListDetail, GearListSummary, GlobalSearchGroup, HealthInfo, ImportResult, Item,
   ItemDetail, ItemUpsert, NpcDetail, NpcGenerationRequest, NpcGenerationResult, NpcRules, NpcSheet, NpcSummary,
-  NpcValidationReport, ProblemDetails, SearchRequest, SearchResult,
+  NpcValidationReport, ProblemDetails, SearchRequest, SearchResult, UpdateInfo,
 } from './types';
 
 export const API_BASE = import.meta.env.VITE_API_BASE ?? '/api';
@@ -51,6 +51,9 @@ export async function request<T>(path: string, init?: RequestInit): Promise<T> {
 const json = (body: unknown) => JSON.stringify(body);
 
 export const api = {
+  health: (signal?: AbortSignal) => request<HealthInfo>('/health', { signal }),
+  updateInfo: (signal?: AbortSignal) => request<UpdateInfo>('/app/update', { signal }),
+  applyUpdate: (version: string) => request<{ restarting: boolean }>('/app/update', { method: 'POST', body: json({ version }) }),
   categories: (signal?: AbortSignal) => request<CategorySummary[]>('/categories', { signal }),
   schema: (category: string, signal?: AbortSignal) => request<CategorySchema>(`/categories/${category}/schema`, { signal }),
   search: (category: string, body: SearchRequest, signal?: AbortSignal) =>

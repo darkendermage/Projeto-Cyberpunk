@@ -15,10 +15,13 @@ public sealed record CyberEffectLine(string Item, string Description, string Sou
 
 public static class CyberwareEffects
 {
-    /// <summary>Effects whose pieces are installed (inventory items don't count until installed).</summary>
+    /// <summary>
+    /// Effects of the pieces that work right now: installed implants not covered by a glove, and the options of worn
+    /// hosts such as Smart Glasses (other inventory items don't count).
+    /// </summary>
     public static List<ActiveCyberwareEffect> Active(CharacterRuleBook rules, CharacterSheet sheet, NpcCatalog catalog)
     {
-        var installed = sheet.Cyberware.Select(c => catalog.Find(c.ItemId)).OfType<CatalogItem>()
+        var installed = WearableCyberware.Working(rules, sheet, catalog)
             .GroupBy(i => i.Slug, StringComparer.OrdinalIgnoreCase)
             .ToDictionary(g => g.Key, g => (Count: g.Count(), g.First().Name), StringComparer.OrdinalIgnoreCase);
 

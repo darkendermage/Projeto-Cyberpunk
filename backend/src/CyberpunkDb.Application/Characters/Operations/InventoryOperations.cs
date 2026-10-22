@@ -183,7 +183,7 @@ public sealed class InventoryOperations(CharacterRuleBook rules, CyberwareOperat
         {
             if (entry.Origin != ItemOrigin.Purchase) throw CharacterChange.Refuse("instanceId", "Só compras podem ser desfeitas.");
             sheet = Refund(sheet, entry.PaidFrom, entry.PricePaid ?? 0, change.Item(entry.ItemId).Name, change);
-            var inventory = sheet.Inventory.Where(e => e.InstanceId != instanceId)
+            var inventory = WearableOperations.Unlink(sheet.Inventory, instanceId).Where(e => e.InstanceId != instanceId)
                 .Select(e => e.Weapon is { } w && w.Attachments.Contains(instanceId) ? e with { Weapon = w with { Attachments = w.Attachments.Where(a => a != instanceId).ToList() } } : e)
                 .ToList();
             return sheet with { Inventory = inventory };

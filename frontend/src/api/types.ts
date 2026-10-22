@@ -212,6 +212,21 @@ export interface ImportResult {
   errors: { index: number; slug?: string | null; name?: string | null; errors: Record<string, string[]> }[];
 }
 
+/** GET /api/app/update — newer GitHub release for the desktop executable. */
+export interface UpdateInfo {
+  current: string;
+  latest: string | null;
+  available: boolean;
+  notes: string | null;
+  releaseUrl: string | null;
+  canApply: boolean;
+}
+
+export interface HealthInfo {
+  status: string;
+  version: string;
+}
+
 export interface ProblemDetails {
   title?: string;
   status?: number;

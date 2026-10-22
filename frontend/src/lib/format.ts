@@ -10,6 +10,11 @@ export function formatNumber(value: number): string {
   return numberFormat.format(value);
 }
 
+export const PRICE_CATEGORY_LABEL: Record<string, string> = {
+  Cheap: 'Cheap', Everyday: 'Everyday', Costly: 'Costly', Premium: 'Premium', Expensive: 'Expensive',
+  VeryExpensive: 'Very Expensive', Luxury: 'Luxury', SuperLuxury: 'Super Luxury',
+};
+
 export const DATA_ORIGIN_LABEL: Record<string, string> = {
   Compendium: 'Compêndio importado (não verificado)',
   Demo: 'Dados de demonstração',

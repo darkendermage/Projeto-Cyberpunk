@@ -18,7 +18,12 @@ export const queryKeys = {
   npcRules: ['npc-rules'] as const,
   npcs: ['npcs'] as const,
   npcValidation: (sheet: NpcSheet) => ['npc-validation', sheet] as const,
+  update: ['app-update'] as const,
 };
+
+/** Newer release of the desktop app; checked once per hour, failures just hide the banner. */
+export const useUpdateInfo = () =>
+  useQuery({ queryKey: queryKeys.update, queryFn: ({ signal }) => api.updateInfo(signal), staleTime: 60 * 60_000, retry: false });
 
 export const useCategories = () =>
   useQuery({ queryKey: queryKeys.categories, queryFn: ({ signal }) => api.categories(signal), staleTime: 60_000 });

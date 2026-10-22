@@ -1,15 +1,12 @@
-import { useState } from 'react';
-import { Home, Landmark, ShoppingBag, Shirt, Trash2, UserRound, Wallet } from 'lucide-react';
-import { problemMessage, useCharacterCommand, useCharacterEvents } from '../../api/characters';
-import type { CharacterDetail, CharacterRules, CharacterSheet, InventoryLine } from '../../api/characterTypes';
-import { Button, IconButton, Modal, NumberInput, Select } from '../../components/ui/ui';
+import { Home, Landmark, Shirt, UserRound } from 'lucide-react';
+import { problemMessage, useCharacterCommand } from '../../api/characters';
+import type { CharacterDetail, CharacterRules, CharacterSheet } from '../../api/characterTypes';
+import { Button, NumberInput, Select } from '../../components/ui/ui';
 import { formatEb } from '../../lib/format';
 import { useToast } from '../../state/ToastContext';
-import { formatDate, signed } from './characterLabels';
 import { Portrait, SheetPanel, StateTag } from './CharacterUi';
 import type { Run } from './CombatPanels';
 import { RelationsPanel, RoleLifepathPanels, RollMissingButton, StyleTablesFields, TablesPanel } from './LifepathPanels';
-import { StorePicker, type PurchaseInput } from './StorePicker';
 import type { SheetEditor } from './useSheetEditor';
 import styles from './Characters.module.css';
 
@@ -55,7 +52,6 @@ export function LifepathView({ detail, rules, editor }: Props) {
       </div>
       <div className={styles.column}>
         <RelationsPanel rules={rules} editor={editor} />
-        <ResourcesPanel detail={detail} run={run} busy={command.isPending} />
       </div>
     </div>
   );
@@ -189,117 +185,5 @@ function HousingPanel({ detail, rules, editor, run, busy }: Props & { run: Run; 
         <p className={`${styles.small} ${styles.red}`}>Lifestyle sem pagamento há mais de uma semana: Death Save no início de cada dia (CP:R p.377).</p>
       )}
     </SheetPanel>
-  );
-}
-
-// ------------------------------------------------------------ resources: money, inventory, ledger
-
-const RECEIVED_LABEL: Partial<Record<InventoryLine['origin'], string>> = { Trade: 'troca', Gift: 'presente', Loot: 'saque' };
-
-function ResourcesPanel({ detail, run, busy }: { detail: CharacterDetail; run: Run; busy: boolean }) {
-  const [shopping, setShopping] = useState(false);
-  const [removing, setRemoving] = useState<InventoryLine | null>(null);
-  const [amount, setAmount] = useState('');
-  const [reason, setReason] = useState('');
-  const ledger = useCharacterEvents(detail.id);
-  const finalized = detail.sheet.creation.finalized;
-  const entries = (ledger.data ?? []).filter((e) => e.kind === 'Ledger').slice(0, 12);
-
-  const buy = async (input: PurchaseInput) => { await run('purchase', { ...input }, input.received ? 'Item recebido.' : 'Compra registrada.'); };
-
-  return (
-    <SheetPanel title="Equipamento e recursos" icon={<Wallet size={16} />}
-      actions={<Button icon={<ShoppingBag size={14} />} disabled={!finalized} title={finalized ? undefined : 'Compras da criação ficam no passo Equipamento'}
-        onClick={() => setShopping(true)}>Adicionar</Button>}>
-      <div className={styles.bigNumbers}>
-        <strong>{formatEb(detail.sheet.wallet.balance)}</strong>
-        <span className={styles.muted}>eurodólares</span>
-      </div>
-      {finalized && (
-        <div className={styles.row}>
-          <input className={`${styles.input} ${styles.inputSmall}`} style={{ width: 90 }} type="number" value={amount} placeholder="± eb"
-            aria-label="Valor do ajuste" onChange={(e) => setAmount(e.target.value)} />
-          <input className={`${styles.input} ${styles.grow}`} value={reason} placeholder="Motivo (pagamento, despesa…)" aria-label="Motivo"
-            onChange={(e) => setReason(e.target.value)} />
-          <Button disabled={busy || !Number(amount) || !reason.trim()} onClick={async () => {
-            if (await run('balance', { amount: Number(amount), reason }, 'Saldo ajustado.')) { setAmount(''); setReason(''); }
-          }}>Lançar</Button>
-        </div>
-      )}
-
-      <table className={styles.table}>
-        <thead><tr><th>Item</th><th className={styles.num}>Qtd</th><th className={styles.num}>Pago</th><th /></tr></thead>
-        <tbody>
-          {detail.report.inventory.map((i) => (
-            <tr key={i.instanceId}>
-              <td>{i.name}{i.caliber && <span className={styles.muted}> ({i.caliber})</span>}{i.state === 'Equipped' && <span className={styles.tag}>equipado</span>}</td>
-              <td className={styles.num}>{i.rounds ?? i.quantity}</td>
-              <td className={styles.num}>{RECEIVED_LABEL[i.origin] ? <span className={styles.tag} title={i.notes ?? undefined}>{RECEIVED_LABEL[i.origin]}</span> : i.pricePaid ? formatEb(i.pricePaid) : '—'}</td>
-              <td>{finalized && <IconButton label={`Vender ou descartar ${i.name}`} onClick={() => setRemoving(i)}><Trash2 size={14} /></IconButton>}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
-      <div className={styles.column} style={{ gap: 4 }}>
-        <span className={styles.idLabel}>Movimentações</span>
-        {entries.length === 0 && <span className={`${styles.small} ${styles.muted}`}>Nenhuma movimentação.</span>}
-        <ul className={styles.list}>
-          {entries.map((e) => (
-            <li key={e.id} className={styles.listItem}>
-              <span className={`${styles.small} ${styles.grow}`}>{e.description}{e.isManual && <span className={styles.tag}>manual</span>}
-                <span className={styles.source}> · {formatDate(e.createdAt)}</span></span>
-              {e.amount != null && e.amount !== 0 && <span className={`${styles.mono} ${e.amount > 0 ? styles.green : styles.red}`}>{signed(e.amount)}</span>}
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      <Modal open={shopping} onClose={() => setShopping(false)} title="Adicionar itens" wide>
-        <div className={styles.panel} style={{ clipPath: 'none', border: 'none' }}>
-          <p className={styles.small}>
-            Saldo: {formatEb(detail.sheet.wallet.balance)}. Compras saem do saldo e o servidor recusa as que passam dele. Itens trocados com
-            outros jogadores, presentes e saques entram sem custo e ficam no histórico. Nada é equipado automaticamente.
-          </p>
-          <StorePicker busy={busy} creationBudgets={false} onBuy={buy} creating={false} available={{ balance: detail.sheet.wallet.balance }} />
-        </div>
-      </Modal>
-      {removing && <RemoveItemDialog item={removing} onClose={() => setRemoving(null)} run={run} busy={busy} />}
-    </SheetPanel>
-  );
-}
-
-function RemoveItemDialog({ item, onClose, run, busy }: { item: InventoryLine; onClose: () => void; run: Run; busy: boolean }) {
-  const held = item.rounds ?? item.quantity;
-  const [quantity, setQuantity] = useState(held);
-  const [sale, setSale] = useState('');
-  const [reason, setReason] = useState('');
-  const selling = Number(sale) > 0;
-  return (
-    <Modal open onClose={onClose} title={`Vender ou descartar: ${item.name}`}>
-      <div className={styles.panel} style={{ clipPath: 'none', border: 'none' }}>
-        <div className={styles.formGrid}>
-          <label className={styles.tableField}>
-            <span className={styles.idLabel}>Quantidade (de {held})</span>
-            <NumberInput className={styles.input} min={1} max={held} value={quantity} data-autofocus
-              onChange={(v) => setQuantity(v ?? 1)} />
-          </label>
-          <label className={styles.tableField}>
-            <span className={styles.idLabel}>Valor recebido (eb)</span>
-            <input className={styles.input} type="number" min={0} value={sale} placeholder="0 = descartar" onChange={(e) => setSale(e.target.value)} />
-          </label>
-        </div>
-        <input className={styles.input} value={reason} placeholder={selling ? 'Para quem e por quê (obrigatório)' : 'Motivo (opcional)'}
-          aria-label="Motivo" onChange={(e) => setReason(e.target.value)} />
-        <p className={styles.source}>O Core não fixa preço de revenda (CP:R p.385): o valor combinado na mesa fica registrado como lançamento manual.</p>
-        <div className={styles.row}>
-          <Button variant={selling ? 'primary' : 'danger'} disabled={busy || (selling && !reason.trim())} onClick={async () => {
-            if (await run('inventory/remove', { instanceId: item.instanceId, quantity, saleAmount: selling ? Number(sale) : null, reason: reason || null },
-              selling ? 'Venda registrada.' : 'Item removido.')) onClose();
-          }}>{selling ? `Vender por ${formatEb(Number(sale))}` : 'Descartar'}</Button>
-          <Button variant="ghost" onClick={onClose}>Cancelar</Button>
-        </div>
-      </div>
-    </Modal>
   );
 }

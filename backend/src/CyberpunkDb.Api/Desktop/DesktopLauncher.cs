@@ -48,14 +48,58 @@ public static class DesktopLauncher
     public static void OpenBrowserWhenStarted(WebApplication app)
     {
         var url = AppUrl(app.Configuration);
+        var afterUpdate = app.Configuration.GetValue<bool>(AfterUpdateKey);
         app.Lifetime.ApplicationStarted.Register(() =>
         {
             Console.WriteLine();
+            if (afterUpdate) Console.WriteLine($"  Atualizado para a versão {AppVersion.Current}.");
             Console.WriteLine($"  {Title} rodando em {url}");
             Console.WriteLine("  Feche esta janela para encerrar.");
             Console.WriteLine();
-            if (app.Configuration.GetValue("Desktop:OpenBrowser", true)) Open(url);
+            // After an update the tab that asked for it reloads by itself.
+            if (!afterUpdate && app.Configuration.GetValue("Desktop:OpenBrowser", true)) Open(url);
         });
+    }
+
+    private const string AfterUpdateKey = "Desktop:AfterUpdate";
+    private const string WaitPidKey = "Desktop:WaitPid";
+
+    /// <summary>
+    /// A restart after an update starts while the old process is still shutting down: wait for it to free
+    /// the port, otherwise <see cref="TryReuseRunningInstanceAsync"/> would find it and exit.
+    /// </summary>
+    public static void WaitForPreviousInstance(IConfiguration configuration)
+    {
+        if (configuration.GetValue<int?>(WaitPidKey) is not { } pid) return;
+        try
+        {
+            using var previous = Process.GetProcessById(pid);
+            previous.WaitForExit(TimeSpan.FromSeconds(15));
+        }
+        catch (Exception ex) when (ex is ArgumentException or InvalidOperationException)
+        {
+            // already gone
+        }
+    }
+
+    /// <summary>Starts the (already replaced) executable in a new console and stops this instance.</summary>
+    public static void RestartAfterUpdate(WebApplication app, string exePath)
+    {
+        try
+        {
+            Process.Start(new ProcessStartInfo(exePath)
+            {
+                UseShellExecute = true,
+                Arguments = $"--{AfterUpdateKey}=true --{WaitPidKey}={Environment.ProcessId}",
+            });
+            Console.WriteLine("  Atualização instalada. Reiniciando...");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"  Atualização instalada, mas não foi possível reabrir o programa: {ex.Message}");
+            Console.WriteLine("  Abra o NightCityItemDB.exe de novo.");
+        }
+        app.Lifetime.StopApplication();
     }
 
     /// <summary>Startup failures would otherwise close the console before the user can read them.</summary>

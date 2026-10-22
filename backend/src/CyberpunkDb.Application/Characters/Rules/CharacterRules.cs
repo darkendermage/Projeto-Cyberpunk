@@ -417,9 +417,41 @@ public sealed record CharacterCyberwareRules
     public Ruled<FbcRule> Fbc { get; init; } = new();
     public Ruled<bool> RemovalRestoresHumanity { get; init; } = new();
     public Ruled<bool> RemovedPiecesKept { get; init; } = new();
+    /// <summary>Gear and clothing with Option Slots for cyberware options (Smart Glasses, Battleglove, Smart Ears...).</summary>
+    public Ruled<WearableHost[]> Wearables { get; init; } = new();
+    public Ruled<int> WearableHumanityLoss { get; init; } = new();
+    /// <summary>Finger-based options that keep working under a glove that allows it (IR5 p.99).</summary>
+    public Ruled<string[]> FingerOptions { get; init; } = new();
 }
 
 public sealed record AnyLimbOption(string Slug, bool Covering);
+
+/// <summary>Kind of option a wearable host takes.</summary>
+[JsonConverter(typeof(JsonStringEnumConverter))]
+public enum WearableAccepts { Cybereye, Cyberarm, Cyberaudio }
+
+/// <summary>A worn item with Option Slots, from its own rules text.</summary>
+public sealed record WearableHost
+{
+    public string Slug { get; init; } = "";
+    public WearableAccepts Accepts { get; init; }
+    public int Slots { get; init; }
+    /// <summary>Options that require a pair take one slot and one purchase (Smart Glasses).</summary>
+    public bool PairedAsOne { get; init; }
+    /// <summary>Options that require a pair can't go in (Smart Lens).</summary>
+    public bool NoPaired { get; init; }
+    /// <summary>Cyberfingers it holds as a Modular Finger Cyberhand, apart from its slots (Dynalar Xtra-Dex).</summary>
+    public int Cyberfingers { get; init; }
+    /// <summary>Options that come installed and can't be removed.</summary>
+    public string[] BuiltIn { get; init; } = [];
+    public bool BuiltInUsesSlots { get; init; }
+    /// <summary>Worn over a hand or arm: the options there are inaccessible while it is worn.</summary>
+    public bool CoversArm { get; init; }
+    public bool FingersStillWork { get; init; }
+    public int? MaxWorn { get; init; }
+    public string? Requirement { get; init; }
+    public string Source { get; init; } = "";
+}
 
 /// <summary>Full Body Conversion exceptions (Interface RED 3 p.93).</summary>
 public sealed record FbcRule

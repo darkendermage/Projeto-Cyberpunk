@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { fitsRegion, HOTSPOTS, humanityLossLabel, LEFT_REGIONS, RIGHT_REGIONS } from './anatomy';
+import { fitsRegion, HOTSPOTS, humanityLossLabel, LEFT_REGIONS, RIGHT_REGIONS, wearableAccepts } from './anatomy';
 
 describe('anatomy', () => {
   it('suggests catalog items by the region selected', () => {
@@ -26,5 +26,15 @@ describe('anatomy', () => {
     expect(humanityLossLabel(7, '2d6', true)).toBe('HL 7');
     expect(humanityLossLabel(7, '2d6', false)).toBe('HL 7 (2d6)');
     expect(humanityLossLabel(0, null, false)).toBe('HL 0');
+  });
+});
+
+describe('wearable hosts', () => {
+  it('maps an option to the kind of worn host that takes it', () => {
+    expect(wearableAccepts('Cyberoptics')).toBe('Cybereye');
+    expect(wearableAccepts('Cyberaudio')).toBe('Cyberaudio');
+    expect(wearableAccepts('LimbOption')).toBe('Cyberarm');
+    expect(wearableAccepts('Cyberfinger')).toBe('Cyberarm');
+    expect(wearableAccepts('Neuralware')).toBeNull();
   });
 });

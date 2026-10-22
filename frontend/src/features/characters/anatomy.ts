@@ -51,6 +51,17 @@ export const CYBER_TYPE_LABEL: Record<string, string> = {
   Borgware: 'Borgware', Bioexotic: 'Bioexotics', Fashionware: 'Fashionware',
 };
 
+/** Kind of wearable host an option goes in (Smart Glasses take Cyberoptics, gloves arm options, Smart Ears Cyberaudio). */
+export function wearableAccepts(cyberType: string | null | undefined): 'Cybereye' | 'Cyberarm' | 'Cyberaudio' | null {
+  switch (cyberType) {
+    case 'Cyberoptics': return 'Cybereye';
+    case 'Cyberaudio': return 'Cyberaudio';
+    case 'LimbOption':
+    case 'Cyberfinger': return 'Cyberarm';
+    default: return null;
+  }
+}
+
 /** "HL 7 (2d6)" during play, "HL 7" while creating (preset, CP:R p.110). */
 export function humanityLossLabel(fixed: number | null, dice: string | null, creating: boolean): string {
   if (fixed == null && !dice) return 'HL —';

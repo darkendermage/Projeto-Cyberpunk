@@ -64,6 +64,10 @@ public sealed class CharacterRuleBook
         Document.Cyberware.MeatLegOptions.Value.Contains(slug, StringComparer.OrdinalIgnoreCase);
 
     /// <summary>Coverings and Hardened Shielding: options of "a Cyberarm or Cyberleg" (CP:R p.116).</summary>
+    /// <summary>The wearable host rules of a worn item (Smart Glasses, Battleglove...), or null.</summary>
+    public WearableHost? FindWearable(string slug) =>
+        Document.Cyberware.Wearables.Value.FirstOrDefault(w => w.Slug.Equals(slug, StringComparison.OrdinalIgnoreCase));
+
     public AnyLimbOption? FindAnyLimbOption(string slug) =>
         Document.Cyberware.AnyLimbOptions.Value.FirstOrDefault(o => o.Slug.Equals(slug, StringComparison.OrdinalIgnoreCase));
 

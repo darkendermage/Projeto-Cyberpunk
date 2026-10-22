@@ -1,0 +1,566 @@
+{
+  "priceLadder": {
+    "value": [
+      { "category": "Cheap", "price": 10 },
+      { "category": "Everyday", "price": 20 },
+      { "category": "Costly", "price": 50 },
+      { "category": "Premium", "price": 100 },
+      { "category": "Expensive", "price": 500 },
+      { "category": "VeryExpensive", "price": 1000 },
+      { "category": "Luxury", "price": 5000 },
+      { "category": "SuperLuxury", "price": 10000 }
+    ],
+    "source": "CP:R p.385",
+    "note": "Oito categorias de preço com o preço de mercado de cada uma; Super Luxury é 10.000eb ou mais."
+  },
+  "withoutFixer": {
+    "value": "Premium",
+    "source": "CP:R p.385",
+    "note": "Sem um Fixer experiente ou um dos Night Markets dele, só se compra até Premium."
+  },
+  "generator": {
+    "goodsRolls": { "value": 2, "source": "CP:R p.338", "note": "Role 1d6 duas vezes; se repetir, role de novo até sair outro tipo." },
+    "linesPerType": { "value": "1d10", "source": "CP:R p.338", "note": "1d10 por tipo de mercadoria: quantos tipos de item há naquele tipo." },
+    "bandSize": { "value": 5, "source": "CP:R p.338–339", "note": "A tabela d100 tem 20 faixas de 5 (1–5, 6–10... 96–100). Resultado repetido é rolado de novo." },
+    "allQualities": { "value": true, "source": "CP:R p.338", "note": "Item com várias qualidades: todas estão presentes no mercado." },
+    "notTotalInventory": { "value": "Não é o estoque total: é a lista dos tipos de coisa à venda.", "source": "CP:R p.338" },
+    "foundational": { "value": true, "source": "CP:R p.338", "note": "Ao sair uma Cyberware Option, a peça Foundational exigida (Cybereye, Neural Link...) também está à venda." },
+    "cyberwareInstall": { "value": "O cyberware não é instalado no mercado: o vendedor indica o ripperdoc dele, com instalação grátis. Fashionware é instalado ali mesmo.", "source": "CP:R p.338" },
+    "gmChoiceDraw": { "value": true, "complementary": true, "note": "\"À escolha do Mestre\" vira um espaço aberto. O botão de sorteio escolhe um item do acervo que atende à linha; é uma ajuda da aplicação, não uma regra do livro." },
+    "goods": {
+      "value": [
+        {
+          "id": "food", "roll": 1, "name": "Food and Drugs", "description": "Comida processada, verduras frescas, animais vivos e, às vezes, street drugs frescas.",
+          "related": [ { "category": "drugs" }, { "category": "gear", "types": ["Survival"], "slugs": ["kibble-pack", "mre", "food-stick"] } ],
+          "table": [
+            { "label": "Canned Goods", "local": { "name": "Canned Goods", "price": 10 } },
+            { "label": "Packaged goods", "local": { "name": "Packaged Goods", "price": 10 } },
+            { "label": "Frozen Goods", "local": { "name": "Frozen Goods", "price": 10 } },
+            { "label": "Bags of Grain", "local": { "name": "Bags of Grain", "price": 20 } },
+            { "label": "Kibble Pack", "slugs": ["kibble-pack"] },
+            { "label": "Bags of Prepak", "local": { "name": "Bags of Prepak", "price": 20 } },
+            { "label": "Street Drugs of 20eb or less", "query": { "category": "drugs", "price": { "max": 20 } } },
+            { "label": "Poor Quality Alcohol", "local": { "name": "Poor Quality Alcohol", "price": 10 } },
+            { "label": "Alcohol", "local": { "name": "Alcohol", "price": 20 } },
+            { "label": "Excellent Quality Alcohol", "local": { "name": "Excellent Quality Alcohol", "price": 100 } },
+            { "label": "MRE", "slugs": ["mre"] },
+            { "label": "Live Chicken", "local": { "name": "Live Chicken", "price": 50 } },
+            { "label": "Live Fish", "local": { "name": "Live Fish", "price": 50 } },
+            { "label": "Fresh Fruits", "local": { "name": "Fresh Fruits", "price": 50 } },
+            { "label": "Fresh Vegetables", "local": { "name": "Fresh Vegetables", "price": 50 } },
+            { "label": "Root Vegetables", "local": { "name": "Root Vegetables", "price": 20 } },
+            { "label": "Live Pigs", "local": { "name": "Live Pigs", "price": 100 } },
+            { "label": "Exotic Fruits", "local": { "name": "Exotic Fruits", "price": 100 } },
+            { "label": "Exotic Vegetables", "local": { "name": "Exotic Vegetables", "price": 100 } },
+            { "label": "Street Drugs of exactly 50eb", "query": { "category": "drugs", "price": { "eq": 50 } } }
+          ]
+        },
+        {
+          "id": "electronics", "roll": 2, "name": "Personal Electronics", "description": "Engenhocas de todo tipo. Nas bancas mais suspeitas, até Black ICE.",
+          "related": [ { "category": "gear", "types": ["Electronics", "Security"] }, { "category": "netrunning" } ],
+          "table": [
+            { "label": "Agent", "slugs": ["agent"] },
+            { "label": "Programs or Hardware of 100eb or less", "query": { "category": "netrunning", "types": ["Program", "BlackIce", "Hardware"], "price": { "max": 100 } } },
+            { "label": "Audio Recorder", "slugs": ["audio-recorder-gear"] },
+            { "label": "Bug Detector", "slugs": ["bug-detector-gear"] },
+            { "label": "Chemical Analyzer", "slugs": ["chemical-analyzer-gear"] },
+            { "label": "Computer", "slugs": ["computer"] },
+            { "label": "Cyberdeck", "slugs": ["cyberdeck-poor", "cyberdeck-standard", "cyberdeck-excellent"], "note": "As três qualidades de Cyberdeck (CP:R p.338: todas as qualidades presentes)." },
+            { "label": "Disposable Cell Phone", "slugs": ["disposable-cellphone"] },
+            { "label": "Electric Guitar or Other Instrument", "slugs": ["electric-guitar", "drum-synthesizer"] },
+            { "label": "Programs or Hardware of exactly 500eb", "query": { "category": "netrunning", "types": ["Program", "BlackIce", "Hardware"], "price": { "eq": 500 } } },
+            { "label": "Medscanner", "slugs": ["medscanner"] },
+            { "label": "Homing Tracer", "slugs": ["homing-tracer-gear"] },
+            { "label": "Radio Communicator", "slugs": ["radio-communicator-gear"] },
+            { "label": "Techscanner", "slugs": ["techscanner"] },
+            { "label": "Smart Glasses", "slugs": ["smart-glasses"] },
+            { "label": "Radar Detector", "slugs": ["radar-detector-gear"] },
+            { "label": "Scrambler/Descrambler", "slugs": ["scrambler-descrambler-gear"] },
+            { "label": "Radio Scanner/Music Player", "slugs": ["radio-scanner-music-player-gear"] },
+            { "label": "Braindance Viewer", "slugs": ["braindance-viewer"] },
+            { "label": "Virtuality Goggles", "slugs": ["virtuality-goggles"] }
+          ]
+        },
+        {
+          "id": "weapons", "roll": 3, "name": "Weapons and Armor", "description": "Tudo o que é preciso para causar caos na Street.",
+          "related": [ { "category": "weapons" }, { "category": "ammunition" }, { "category": "weapon-attachments" }, { "category": "armor", "types": ["BodyArmor", "Shield"] } ],
+          "table": [
+            { "label": "Medium Pistol", "slugs": ["medium-pistol"] },
+            { "label": "Heavy Pistol or Very Heavy Pistol", "slugs": ["heavy-pistol", "very-heavy-pistol"] },
+            { "label": "SMG", "slugs": ["smg-padrao"] },
+            { "label": "Heavy SMG", "slugs": ["heavy-smg-padrao"] },
+            { "label": "Shotgun", "slugs": ["shotgun-padrao"] },
+            { "label": "Assault Rifle", "slugs": ["assault-rifle-padrao"] },
+            { "label": "Sniper Rifle", "slugs": ["sniper-rifle-padrao"] },
+            { "label": "Bows or Crossbow", "local": { "name": "Bows & Crossbows", "price": 100, "category": "weapons" }, "note": "O catálogo não tem o arco/besta genérico do Core (CP:R p.341)." },
+            { "label": "Grenade Launcher or Rocket Launcher", "slugs": ["grenade-launcher-padrao", "rocket-launcher-padrao"] },
+            { "label": "Ammunition of 500eb or less", "query": { "category": "ammunition", "price": { "max": 500 } } },
+            { "label": "A Single Exotic Weapon of GM's choice", "gmChoice": true, "query": { "category": "weapons", "exotic": true } },
+            { "label": "Light Melee Weapon", "slugs": ["light-melee-weapon"] },
+            { "label": "Medium Melee Weapon", "slugs": ["medium-melee-weapon"] },
+            { "label": "Heavy Melee Weapon", "slugs": ["heavy-melee-weapon"] },
+            { "label": "Very Heavy Melee Weapon", "slugs": ["very-heavy-melee-weapon"], "note": "A tabela do gerador diz 100eb (Premium); a de armas (CP:R p.340) e o catálogo dizem 500eb (Expensive). Vale o preço do catálogo." },
+            { "label": "Armor of 100eb or less", "query": { "category": "armor", "types": ["BodyArmor", "Shield"], "price": { "max": 100 } } },
+            { "label": "Armor of exactly 500eb", "query": { "category": "armor", "types": ["BodyArmor", "Shield"], "price": { "eq": 500 } } },
+            { "label": "Armor of exactly 1,000eb", "query": { "category": "armor", "types": ["BodyArmor", "Shield"], "price": { "eq": 1000 } } },
+            { "label": "Weapon Attachments of 100eb or less", "query": { "category": "weapon-attachments", "price": { "max": 100 } } },
+            { "label": "Weapon Attachments of 500eb or higher", "query": { "category": "weapon-attachments", "price": { "min": 500 } } }
+          ]
+        },
+        {
+          "id": "cyberware", "roll": 4, "name": "Cyberware", "description": "O melhor cybertech da Street; provavelmente nem roubado nem arrancado de alguém.",
+          "related": [ { "category": "cyberware", "exceptTypes": ["Fashionware"] } ],
+          "table": [
+            { "label": "Cybereye", "slugs": ["cybereye"] },
+            { "label": "Cyberaudio Suite", "slugs": ["cyberaudio-suite"] },
+            { "label": "Neural Link", "slugs": ["neural-link"] },
+            { "label": "Cyberarm", "slugs": ["cyberarm"] },
+            { "label": "Cyberleg", "slugs": ["cyberleg"] },
+            { "label": "External Cyberware of exactly 1,000eb", "query": { "category": "cyberware", "types": ["ExternalBody"], "price": { "eq": 1000 } } },
+            { "label": "External Cyberware of 500eb or less", "query": { "category": "cyberware", "types": ["ExternalBody"], "price": { "max": 500 } } },
+            { "label": "Internal Cyberware of exactly 1,000eb", "query": { "category": "cyberware", "types": ["InternalBody"], "price": { "eq": 1000 } } },
+            { "label": "Internal Cyberware of 500eb or less", "query": { "category": "cyberware", "types": ["InternalBody"], "price": { "max": 500 } } },
+            { "label": "Cybereye Option of exactly 1,000eb", "query": { "category": "cyberware", "types": ["Cyberoptics"], "foundational": false, "price": { "eq": 1000 } } },
+            { "label": "Cybereye Option of 500eb or less", "query": { "category": "cyberware", "types": ["Cyberoptics"], "foundational": false, "price": { "max": 500 } } },
+            { "label": "Cyberaudio Option of exactly 1,000eb", "query": { "category": "cyberware", "types": ["Cyberaudio"], "foundational": false, "price": { "eq": 1000 } } },
+            { "label": "Cyberaudio Option of 500eb or less", "query": { "category": "cyberware", "types": ["Cyberaudio"], "foundational": false, "price": { "max": 500 } } },
+            { "label": "Neuralware Option of exactly 1,000eb", "query": { "category": "cyberware", "types": ["Neuralware"], "foundational": false, "price": { "eq": 1000 } } },
+            { "label": "Neuralware Option of 500eb or less", "query": { "category": "cyberware", "types": ["Neuralware"], "foundational": false, "price": { "max": 500 } } },
+            { "label": "Cyberlimb Option of exactly 1,000eb", "query": { "category": "cyberware", "types": ["LimbOption", "Cyberfinger"], "foundational": false, "price": { "eq": 1000 } } },
+            { "label": "Cyberlimb Option of 500eb or less", "query": { "category": "cyberware", "types": ["LimbOption", "Cyberfinger"], "foundational": false, "price": { "max": 500 } } },
+            { "label": "Fashionware of GM's Choice", "gmChoice": true, "query": { "category": "cyberware", "types": ["Fashionware"] } },
+            { "label": "Borgware of GM's Choice", "gmChoice": true, "query": { "category": "cyberware", "types": ["Borgware"] } },
+            { "label": "Any Cyberware of GM's Choice", "gmChoice": true, "query": { "category": "cyberware" } }
+          ]
+        },
+        {
+          "id": "fashion", "roll": 5, "name": "Clothing and Fashionware", "description": "A moda mais quente da Street num lugar só, com um pouco de cromo para combinar. Fashionware é instalado no mercado.",
+          "related": [ { "category": "armor", "types": ["Clothing"] }, { "category": "cyberware", "types": ["Fashionware"] } ],
+          "table": [
+            { "label": "Bag Lady Chic", "query": { "category": "armor", "types": ["Clothing"], "styles": ["BagLadyChic"] } },
+            { "label": "Gang Colors", "query": { "category": "armor", "types": ["Clothing"], "styles": ["GangColors"] } },
+            { "label": "Generic Chic", "query": { "category": "armor", "types": ["Clothing"], "styles": ["GenericChic"] } },
+            { "label": "Bohemian", "query": { "category": "armor", "types": ["Clothing"], "styles": ["Bohemian"] } },
+            { "label": "Leisurewear", "query": { "category": "armor", "types": ["Clothing"], "styles": ["Leisurewear"] } },
+            { "label": "Nomad Leathers", "query": { "category": "armor", "types": ["Clothing"], "styles": ["NomadLeathers"] } },
+            { "label": "Asia Pop", "query": { "category": "armor", "types": ["Clothing"], "styles": ["AsiaPop"] } },
+            { "label": "Urban Flash", "query": { "category": "armor", "types": ["Clothing"], "styles": ["UrbanFlash"] } },
+            { "label": "Businesswear", "query": { "category": "armor", "types": ["Clothing"], "styles": ["Businesswear"] } },
+            { "label": "High Fashion", "query": { "category": "armor", "types": ["Clothing"], "styles": ["HighFashion"] } },
+            { "label": "Biomonitor", "slugs": ["biomonitor"] },
+            { "label": "Chemskin", "slugs": ["chemskin"] },
+            { "label": "EMP Threading", "slugs": ["emp-threading"] },
+            { "label": "Light Tattoo", "slugs": ["light-tattoo"] },
+            { "label": "Shift Tacts", "slugs": ["shift-tacts"] },
+            { "label": "Skinwatch", "slugs": ["skinwatch"] },
+            { "label": "Techhair", "slugs": ["techhair"] },
+            { "label": "Generic Chic", "query": { "category": "armor", "types": ["Clothing"], "styles": ["GenericChic"] } },
+            { "label": "Leisurewear", "query": { "category": "armor", "types": ["Clothing"], "styles": ["Leisurewear"] } },
+            { "label": "Gang Colors", "query": { "category": "armor", "types": ["Clothing"], "styles": ["GangColors"] } }
+          ]
+        },
+        {
+          "id": "survival", "roll": 6, "name": "Survival Gear", "description": "Todo o equipamento prático para sobreviver no Time of the Red.",
+          "related": [ { "category": "gear", "types": ["Survival", "Tool", "Medical"] } ],
+          "table": [
+            { "label": "Anti-Smog Breathing Mask", "slugs": ["anti-smog-breathing-mask"] },
+            { "label": "Auto Level Dampening Ear Protectors", "slugs": ["auto-ear-protectors"] },
+            { "label": "Binoculars", "slugs": ["binoculars"] },
+            { "label": "Carryall", "slugs": ["carryall"] },
+            { "label": "Flashlight", "slugs": ["flashlight"] },
+            { "label": "Duct Tape", "slugs": ["duct-tape"] },
+            { "label": "Inflatable Bed & Sleep-bag", "slugs": ["inflatable-bed-sleep-bag"] },
+            { "label": "Lock Picking Set", "slugs": ["lock-picking-set"] },
+            { "label": "Handcuffs", "slugs": ["handcuffs"] },
+            { "label": "Medtech Bag", "slugs": ["medtech-bag"] },
+            { "label": "Tent and Camping Equipment", "slugs": ["tent-camping-equipment"] },
+            { "label": "Rope (60m/yds)", "slugs": ["rope-60m"] },
+            { "label": "Techtool", "slugs": ["techtool"] },
+            { "label": "Personal CarePak", "slugs": ["personal-carepak"] },
+            { "label": "Radiation Suit", "local": { "name": "Radiation Suit", "price": 1000 }, "note": "O catálogo não tem a Radiation Suit (CP:R p.101)." },
+            { "label": "Road Flare", "slugs": ["road-flare"] },
+            { "label": "Grapple Gun", "slugs": ["grapple-gun"] },
+            { "label": "Tech Bag", "slugs": ["tech-bag"] },
+            { "label": "Shovel or Axe", "local": { "name": "Shovel or Axe", "price": 50 } },
+            { "label": "Airhypo", "slugs": ["airhypo"] }
+          ]
+        }
+      ],
+      "source": "CP:R p.338–339"
+    },
+    "relatedBooks": {
+      "value": true,
+      "complementary": true,
+      "note": "Com outros livros ligados, cada tipo sorteado também traz itens desses livros nas categorias de \"related\". O Core só tem a tabela d100."
+    }
+  },
+  "operator": {
+    "reach": {
+      "value": [
+        { "minRank": 1, "maxRank": 2, "category": "Everyday" },
+        { "minRank": 3, "maxRank": 4, "category": "Expensive" },
+        { "minRank": 5, "maxRank": 6, "category": "Expensive" },
+        { "minRank": 7, "maxRank": 8, "category": "VeryExpensive" },
+        { "minRank": 9, "maxRank": 9, "category": "Luxury" },
+        { "minRank": 10, "maxRank": 10, "category": "SuperLuxury" }
+      ],
+      "source": "CP:R p.160–161",
+      "note": "Reach: a maior categoria que o Fixer sempre encontra, peça por peça. Os Ranks 5–6 não mudam o Reach (seguem até Expensive) e organizam Night Markets."
+    },
+    "nightMarketRank": { "value": 5, "source": "CP:R p.160", "note": "A partir do Rank 5, uma vez por mês, com outros Fixers do mesmo rank, o Fixer monta um Night Market." },
+    "nightMarketReach": { "value": "SuperLuxury", "source": "CP:R p.160", "note": "No Night Market que ajudou a organizar, o Fixer encontra até Super Luxury." },
+    "midnightMarketRank": { "value": 9, "source": "CP:R p.161 e p.339", "note": "Só um Fixer de Rank 9 ou mais monta um Midnight Market (dentro de um Night Market)." },
+    "haggleFormula": {
+      "value": "COOL + Trading + Operator Rank + 1d10 contra COOL + Trading + Operator Rank (se for Fixer) + 1d10 do outro lado",
+      "source": "CP:R p.159"
+    },
+    "haggleTie": { "value": "Defender", "source": "CP:R p.129", "note": "Em teste oposto, o empate fica com o Defensor: quem pechincha precisa superar o outro lado." },
+    "criticals": { "value": "10 natural: role mais 1d10 e some. 1 natural: role mais 1d10 e subtraia. O segundo dado não gera outro crítico.", "source": "CP:R p.130" },
+    "dealsPerTransaction": { "value": 1, "source": "CP:R p.159", "note": "Vencendo, faz 1 acordo do seu Rank ou abaixo; só 1 acordo por transação." },
+    "deals": {
+      "value": [
+        { "id": "discount10", "minRank": 1, "kind": "Discount", "percent": 10, "label": "10% a menos (ou a mais, vendendo)", "text": "Ranks 1–2: 10% a mais ou a menos que o preço de mercado, comprando ou vendendo." },
+        { "id": "buyFiveGetOne", "minRank": 3, "kind": "ExtraItem", "minQuantity": 5, "label": "Leva 5, ganha +1", "text": "Ranks 3–4: comprando 5 ou mais do mesmo item, ganha mais um de graça." },
+        { "id": "jobPay20", "minRank": 5, "kind": "JobPay", "label": "+20% no pagamento de um Job", "text": "Ranks 5–6: negocia até 20% a mais no pagamento por pessoa de um Job. Não se aplica a compras." },
+        { "id": "splitPayment", "minRank": 7, "kind": "SplitPayment", "categories": ["Luxury", "SuperLuxury"], "label": "Metade agora, metade em 1 mês", "text": "Ranks 7–8: comprando um item Luxury ou Super Luxury, paga metade agora e metade em um mês. Quem não paga a segunda metade nunca mais consegue esse acordo." },
+        { "id": "discount20", "minRank": 9, "kind": "Discount", "percent": 20, "label": "20% a menos (ou a mais, vendendo)", "text": "Rank 9: 20% a mais ou a menos que o preço de mercado, comprando ou vendendo." },
+        { "id": "jobPayDouble", "minRank": 10, "kind": "JobPay", "label": "Dobro do pagamento de um Job Dangerous", "text": "Rank 10: negocia o dobro do pagamento por pessoa de um Job Dangerous. Não se aplica a compras." }
+      ],
+      "source": "CP:R p.159–161"
+    },
+    "rounding": { "value": "Floor", "complementary": true, "note": "Descontos e acréscimos em porcentagem são arredondados para baixo, em eb inteiros." }
+  },
+  "condition": {
+    "damagedSteps": { "value": 1, "source": "IR5 p.5", "note": "Quem sabe que o item está Damaged paga uma categoria abaixo (Assault Rifle Damaged: 100eb em vez de 500eb)." },
+    "destroyedSteps": { "value": 2, "source": "IR5 p.5", "note": "Alguns Fixers compram itens Destroyed por duas categorias abaixo." },
+    "detectRank": { "value": 4, "source": "IR5 p.5", "note": "Fixers com Operator 4 ou mais sabem na hora que o item está Damaged, a não ser que o dano tenha sido disfarçado (em geral com Forgery)." },
+    "lowValueDamaged": { "value": 20, "source": "IR5 p.5", "note": "Poucos Fixers que conhecem o assunto compram um item Damaged que custaria 20eb (Everyday) ou menos." },
+    "beyondRepair": { "value": 0, "source": "IR5 p.5", "note": "Poucos compram itens Destroyed Beyond Repair; para Maker, não valem quase nada." },
+    "sellingIsGmCall": { "value": "Vender item Damaged ou Destroyed, às claras com desconto ou num golpe, fica a critério do Mestre.", "source": "IR5 p.5" },
+    "floor": { "value": "Cheap", "complementary": true, "note": "Abaixo de Cheap não há categoria: um item Cheap Damaged continua a 10eb." },
+    "categoryPrice": { "value": "Ladder", "complementary": true, "note": "Ao descer de categoria, o preço passa a ser o preço de mercado da nova categoria (CP:R p.385), como no exemplo do livro." }
+  },
+  "midnightMarket": {
+    "items": { "value": "1d10+5", "source": "CP:R p.339", "note": "Um Midnight Market tem 1d10 + 5 itens raros e cobiçados, à escolha do Mestre." },
+    "drawPool": { "value": { "minCategory": "Luxury", "orExotic": true }, "complementary": true, "note": "O sorteio de ajuda escolhe entre itens Luxury ou mais caros e armas exóticas." }
+  },
+  "mysteryBoxes": {
+    "redemption": {
+      "value": "Uma Achievement pode ser trocada, por decisão unânime do grupo, por uma Mystery Box: role 1d10 na Table of Mystery para a caixa e 1d6 na tabela dela ao abrir (uma Ação). Armas vêm carregadas com a munição que o Mestre quiser. A caixa aparece sem som a até 10 m de alguém do grupo, num lugar que ninguém está olhando.",
+      "source": "IR4 p.24"
+    },
+    "pricePattern": { "value": [50, 100, 100, 100, 100, 500], "source": "IR4 p.27", "note": "Para criar caixas novas: o preço do conteúdo segue mais ou menos esse padrão, e as armas vêm carregadas." },
+    "boxes": {
+      "value": [
+        { "roll": 1, "name": "A box bound tightly in rope", "contents": [
+          { "roll": 1, "label": "Rope x2, each 60 m/yards", "slug": "rope-60m", "quantity": 2 },
+          { "roll": 2, "label": "Virtuality Goggles", "slug": "virtuality-goggles" },
+          { "roll": 3, "label": "Grapple Gun", "slug": "grapple-gun" },
+          { "roll": 4, "label": "Vial of Poison", "slug": "vial-of-poison" },
+          { "roll": 5, "label": "Urban Flash Jewelry", "slug": "roupa-urban-flash-jewelry" },
+          { "roll": 6, "label": "Cybermatrix Gang Jazzler (12 Days of Cybermas DLC)", "slug": "cybermatrix-gang-jazzler" } ] },
+        { "roll": 2, "name": "A box covered in chipped paint", "contents": [
+          { "roll": 1, "label": "Teargas Grenade", "slug": "teargas-grenade" },
+          { "roll": 2, "label": "Fully Loaded GunMart Smart Special*", "slug": "gunmart-smart-special", "loaded": true },
+          { "roll": 3, "label": "Bicycle (Spinning Your Wheels DLC)", "slug": "bicycle" },
+          { "roll": 4, "label": "Flare Gun and a Road Flare (Woodchipper's Garage DLC)", "slug": "flare-gun", "extraSlug": "road-flare" },
+          { "roll": 5, "label": "Bulletproof Shield", "slug": "bulletproof-shield" },
+          { "roll": 6, "label": "Fully Loaded Militech Crusher (12 Days of Gunmas DLC)", "slug": "militech-crusher", "loaded": true } ] },
+        { "roll": 3, "name": "A box dripping wet with fluid", "contents": [
+          { "roll": 1, "label": "Can of Smash x5", "slug": "smash", "quantity": 5 },
+          { "roll": 2, "label": "Airhypo loaded with Black Lace", "slug": "airhypo", "extraSlug": "black-lace" },
+          { "roll": 3, "label": "Bodyweight AutoInjector (Hornet's Pharmacy DLC)", "slug": "bodyweight-autoinjector" },
+          { "roll": 4, "label": "Everest VentureWare AirWell 50*", "slug": "everest-ventureware-airwell-50" },
+          { "roll": 5, "label": "Poison Grenade", "slug": "poison-grenade" },
+          { "roll": 6, "label": "T-R4 Detonator Fluid*", "slug": "tr-4-detonator-fluid" } ] },
+        { "roll": 4, "name": "A box freezing cold to the touch", "contents": [
+          { "roll": 1, "label": "Bohemian Mirrorshades", "slug": "roupa-bohemian-mirrorshades" },
+          { "roll": 2, "label": "Street Viper Riding Suit*", "slug": "street-viper-riding-suit" },
+          { "roll": 3, "label": "Two Sponsored Cybereyes*", "slug": "sponsored-cybereye", "quantity": 2 },
+          { "roll": 4, "label": "SkidRow Trench*", "slug": "skidrow-trench" },
+          { "roll": 5, "label": "Airhypo loaded with Prime Time (Hornet's Pharmacy DLC)", "slug": "airhypo", "extraSlug": "prime-time" },
+          { "roll": 6, "label": "Laser Light Street Jacket*", "slug": "laser-light-street-jacket" } ] },
+        { "roll": 5, "name": "A box handsomely gift wrapped", "contents": [
+          { "roll": 1, "label": "Binoculars", "slug": "binoculars" },
+          { "roll": 2, "label": "Light Armorjack Body", "slug": "light-armorjack" },
+          { "roll": 3, "label": "Excellent Quality Medium Pistol", "slug": "medium-pistol", "quality": "Excellent" },
+          { "roll": 4, "label": "Video Camera", "slug": "video-camera" },
+          { "roll": 5, "label": "NeuTongue (Must Have Cyberware Deals DLC)", "slug": "neutongue" },
+          { "roll": 6, "label": "Reflex Co-Processor*", "slug": "reflex-co-processor" } ] },
+        { "roll": 6, "name": "A box marked with a lime green X", "contents": [
+          { "roll": 1, "label": "A boxed copy of Elflines Online" },
+          { "roll": 2, "label": "Two Disposable Cell Phones", "slug": "disposable-cellphone", "quantity": 2 },
+          { "roll": 3, "label": "Modular Finger Cyberhand*", "slug": "modular-finger-cyberhand" },
+          { "roll": 4, "label": "Leisurewear Jewelry", "slug": "roupa-leisurewear-jewelry" },
+          { "roll": 5, "label": "Agent", "slug": "agent" },
+          { "roll": 6, "label": "Smart Glasses", "slug": "smart-glasses" } ] },
+        { "roll": 7, "name": "A box melted out of shape", "contents": [
+          { "roll": 1, "label": "Scavenged Armor Body (Black Chrome+ DLC)", "slug": "scavenged-armor" },
+          { "roll": 2, "label": "Incendiary Grenade", "slug": "incendiary-grenade" },
+          { "roll": 3, "label": "Neo-Soviet Cyberarm*", "slug": "neo-soviet-cyberarm" },
+          { "roll": 4, "label": "Fully loaded Stolbovoy ST-5 Assault Rifle (12 Days of Gunmas DLC)", "slug": "stolbovoy-st-5", "loaded": true },
+          { "roll": 5, "label": "Fully Loaded Everest VentureWare SurvivalMaster (Black Chrome+ DLC)", "slug": "everest-survivalmaster", "loaded": true },
+          { "roll": 6, "label": "Fully Loaded Flamethrower", "slug": "flamethrower", "loaded": true } ] },
+        { "roll": 8, "name": "A box sealed with a lipstick kiss", "contents": [
+          { "roll": 1, "label": "Light Melee Weapon", "slug": "light-melee-weapon" },
+          { "roll": 2, "label": "Mr. Studd Sexual Implant", "slug": "midnight-lady-mr-studd" },
+          { "roll": 3, "label": "Shuriken Tornado Grenade*", "slug": "shuriken-tornado-grenade" },
+          { "roll": 4, "label": "Asia Pop Footwear", "slug": "roupa-asia-pop-footwear" },
+          { "roll": 5, "label": "Two Businesswear Tops", "slug": "roupa-businesswear-top", "quantity": 2 },
+          { "roll": 6, "label": "White Hornet Tanto*", "slug": "white-hornet-tanto" } ] },
+        { "roll": 9, "name": "A box reeking of oil", "contents": [
+          { "roll": 1, "label": "Fully Loaded GunMart Bubba Buster*", "slug": "gunmart-bubba-buster", "loaded": true },
+          { "roll": 2, "label": "Fully Loaded Overlord Handcannon*", "slug": "overlord-handcannon", "loaded": true },
+          { "roll": 3, "label": "Nomad Leathers Footwear", "slug": "roupa-nomad-leathers-footwear" },
+          { "roll": 4, "label": "Fully Loaded Poor Quality Sniper Rifle", "slug": "sniper-rifle-padrao", "quality": "Poor", "loaded": true },
+          { "roll": 5, "label": "Sniping Scope", "slug": "sniping-scope" },
+          { "roll": 6, "label": "Smartgun Link", "slug": "smartgun-link" } ] },
+        { "roll": 10, "name": "A box showing signs of repair", "contents": [
+          { "roll": 1, "label": "Utility Tomahawk*", "slug": "utility-tomahawk" },
+          { "roll": 2, "label": "Holo Projector Palm (Must Have Cyberware Deals DLC)", "slug": "holo-projector-palm" },
+          { "roll": 3, "label": "Techtool", "slug": "techtool" },
+          { "roll": 4, "label": "Audio Recorder", "slug": "audio-recorder-gear" },
+          { "roll": 5, "label": "Armor Piercing Grenade", "slug": "armor-piercing-grenade" },
+          { "roll": 6, "label": "Techscanner Cyberware", "slug": "techscanner-integrated" } ] }
+      ],
+      "source": "IR4 p.27–28",
+      "note": "Itens marcados com * são do Black Chrome. Sem o livro, troque por um item de valor equivalente."
+    }
+  },
+  "doorPrize": {
+    "arrival": {
+      "value": 50,
+      "complementary": true,
+      "note": "No BC+ (p.2) a Molly conta \"quarenta e oito... quarenta e nove... cinquenta!\" e premia quem chega. A aplicação lê isso como um prêmio a cada 50 visitantes; o livro não dá a regra."
+    },
+    "bonus": {
+      "value": [
+        { "label": "Uma lata de Piranha Smash, cortesia dos Piranhas", "slug": "piranha-smash" },
+        { "label": "Uma das máscaras da Molly (\"pode ficar com ela\")", "slug": "anti-smog-breathing-mask" }
+      ],
+      "source": "BC+ p.2",
+      "note": "O ganhador recebe também a lata de Smash e a máscara, e o Joe Anderson passa a acompanhá-lo como escolta."
+    },
+    "example": {
+      "value": { "label": "Mil balas de Junk Ammunition (20 pacotes de 50)", "slug": "junk-ammunition", "quantity": 20, "weight": 3 },
+      "source": "BC+ p.2–3",
+      "note": "O prêmio sorteado no texto: \"mil balas... não é da boa, mas serve para treinar tiro\"; o Joe confirma depois que era Junk Ammunition."
+    },
+    "slices": {
+      "value": [
+        { "label": "Small Game Ammunition (100 balas)", "slug": "small-game-ammo", "quantity": 1, "weight": 2 },
+        { "label": "Bullet to Slug Adapter Casings (caixa de 10)", "slug": "bullet-to-slug-adapter-casings", "quantity": 1, "weight": 2 },
+        { "label": "Scavenged Armor", "slug": "scavenged-armor", "quantity": 1, "weight": 2 },
+        { "label": "Molotov Cocktail x2", "slug": "molotov-cocktail", "quantity": 2, "weight": 2 },
+        { "label": "Big Dreem", "slug": "big-dreem", "quantity": 1, "weight": 1 },
+        { "label": "Timeless WW1 Rifle to Pistol Conversion", "slug": "ww1-rifle-pistol-conversion", "quantity": 1, "weight": 1 },
+        { "label": "Everest VentureWare SportMaster", "slug": "everest-sportmaster", "quantity": 1, "weight": 1 },
+        { "label": "Solo of Fortune Bodypillow", "slug": "solo-of-fortune-bodypillow", "quantity": 1, "weight": 1 },
+        { "label": "Piranha Smash x3", "slug": "piranha-smash", "quantity": 3, "weight": 2 }
+      ],
+      "complementary": true,
+      "note": "O BC+ não traz a roleta. As outras fatias saem do estoque da Molly no próprio BC+ (p.3–6), com pesos escolhidos pela aplicação."
+    }
+  },
+  "fixerAvailability": {
+    "value": "Às vezes o preço não reflete a dificuldade: um item pode custar um valor e ter outra categoria para fins de disponibilidade. Use o preço em eb para pagar e a categoria para saber se dá para encontrar.",
+    "source": "IR2 p.66; IR5 p.37"
+  },
+  "blackChrome": {
+    "booths": {
+      "value": "Cada listagem do Black Chrome (menos os Apps) diz \"Pick-up or Browse at Booth @#\": a letra é um dos seis Night Markets do livro (p.131) e o número é o lugar no mapa. Além do que o Mestre sortear pelo Core, quem vai a um desses mercados encontra os itens do livro com aquela letra.",
+      "source": "BC p.7"
+    },
+    "listingFee": { "value": "1eb por listagem com as fotos e textos prontos do CBK (mínimo de 50eb).", "source": "BC p.6" },
+    "buyNow": { "value": "Buy Now!!! compra de qualquer ponto do mercado; o item é retirado depois, mostrando o recibo no Agent. Poucos Fixers devolvem o dinheiro.", "source": "BC p.8" }
+  },
+  "presets": [
+    {
+      "id": "core", "name": "Night Market (Core)", "kind": "NightMarket", "letter": "N",
+      "organizer": { "name": "Fixer organizador", "role": "Fixer", "operatorRank": 5 },
+      "summary": "Mercado gerado pelas tabelas do Core: dois tipos de mercadoria, 1d10 linhas por tipo.",
+      "goods": "Roll",
+      "source": "CP:R p.337–339"
+    },
+    {
+      "id": "bc-a", "name": "3-Piece's Joint", "kind": "NightMarket", "letter": "A",
+      "organizer": { "name": "3-Piece", "role": "Fixer (Operator 5) e Media (Credibility 2)", "operatorRank": 5, "trading": 14 },
+      "frequency": "Mensal, em datas aleatórias.",
+      "location": "Último andar do novo Short Circuit, Little Europe, na beira da Hot Zone.",
+      "sells": "Tecnologia: peças, cyberdecks, hardware de cyberdeck e programas. Nada é vendido incompleto ou quebrado, a não ser que o cliente queira.",
+      "invite": "Só quem já é freguês do Short Circuit, ou foi indicado por alguém de confiança; no fundo, quem decide é a Bug.",
+      "goods": "Suggested", "suggestedGoods": ["electronics"],
+      "stalls": [
+        { "number": 1, "label": "Cyberfingers", "goods": ["cyberware"] },
+        { "number": 2, "label": "Weapons", "goods": ["weapons"] },
+        { "number": 3, "label": "Electronics and Tech", "goods": ["electronics"] },
+        { "number": 4, "label": "Fashion", "goods": ["fashion"] },
+        { "number": 5, "label": "Cyberware", "goods": ["cyberware"] }
+      ],
+      "source": "BC p.132–135"
+    },
+    {
+      "id": "bc-b", "name": "Woodchipper's Block Party", "kind": "NightMarket", "letter": "B",
+      "organizer": { "name": "Woodchipper", "role": "Fixer (Operator 5)", "operatorRank": 5, "trading": 12 },
+      "frequency": "Mais ou menos a cada dois meses, conforme o movimento dos Jodes, Thelas e Aldecaldos, e o tempo.",
+      "location": "Um cul-de-sac de Santo Domingo, perto da garagem da Woodchipper, a céu aberto.",
+      "sells": "Armas para todos os convidados e veículos para Fixers patrocinadores; equipamento para a vida ao ar livre e munição. Lugar seguro para a primeira cirurgia de Internal Linear Frame.",
+      "invite": "Convite pessoal, aval de um Nomad ou patrocínio de um Fixer de Operator 5 ou mais (que ganha uma banca).",
+      "goods": "Suggested", "suggestedGoods": ["weapons", "survival"],
+      "stalls": [
+        { "number": 1, "label": "Vehicles", "goods": [] },
+        { "number": 2, "label": "Survival Gear", "goods": ["survival"] },
+        { "number": 3, "label": "Weapons", "goods": ["weapons"] },
+        { "number": 4, "label": "Fashion", "goods": ["fashion"] },
+        { "number": 5, "label": "Linear Frames", "goods": [] },
+        { "number": 6, "label": "Cyberware", "goods": ["cyberware"] },
+        { "number": 7, "label": "More Weapons", "goods": ["weapons"] }
+      ],
+      "source": "BC p.136–139"
+    },
+    {
+      "id": "bc-c", "name": "Molly Anderson's Market", "kind": "NightMarket", "letter": "C",
+      "organizer": { "name": "Molly Anderson", "role": "Fixer (Operator 6)", "operatorRank": 6, "trading": 13 },
+      "frequency": "Mensal; a data depende de quão seguro anda o Old Combat Zone. Quanto pior, melhor para a Molly.",
+      "location": "Um estacionamento subterrâneo reforçado sob um prédio tombado no Old Combat Zone, ao sul do Old Japantown.",
+      "sells": "Um pouco de tudo, quase sempre de segunda mão (sobretudo o cyberware): armas e armaduras repintadas pela Judie, cyberlimbs recondicionados.",
+      "invite": "Todo convite passa pela Molly. O aval de um Anderson quase garante; vigiar uma expedição de salvamento também vale.",
+      "rules": "Só os Andersons andam armados. Quem parece uma arma ganha um Anderson de escolta, e é bom dar gorjeta.",
+      "goods": "Suggested", "suggestedGoods": ["weapons", "cyberware"],
+      "stalls": [
+        { "number": 1, "label": "Music", "goods": [] },
+        { "number": 2, "label": "Security Gear", "goods": ["electronics"] },
+        { "number": 3, "label": "Cyberware", "goods": ["cyberware"] },
+        { "number": 4, "label": "Weapons", "goods": ["weapons"] },
+        { "number": 5, "label": "Vehicles", "goods": [] },
+        { "number": 6, "label": "Other Junk", "goods": ["food", "fashion", "survival"] }
+      ],
+      "pools": [
+        { "label": "Estoque da Molly (Black Chrome+)", "stall": 6, "query": { "slugs": ["bullet-to-slug-adapter-casings", "junk-ammunition", "small-game-ammo", "big-dreem", "everest-sportmaster", "everest-survivalmaster", "sanroo-1truluv", "molotov-cocktail", "ww1-rifle-pistol-conversion", "scavenged-armor", "piranha-smash", "solo-of-fortune-bodypillow"] }, "source": "BC+ p.3–6" }
+      ],
+      "features": ["DoorPrize", "SecondHand"],
+      "source": "BC p.140–143; BC+ p.2–6"
+    },
+    {
+      "id": "bc-d", "name": "Mister K's Midnight Market", "kind": "MidnightMarket", "letter": "D",
+      "organizer": { "name": "Mister Kernighan", "role": "Fixer (Operator 9)", "operatorRank": 9 },
+      "frequency": "Trimestral, sem data fixa: quando o Mister K tem itens à altura.",
+      "location": "Acima do Atlantis, em The Glen, em dois andares de luxo.",
+      "sells": "Luxo, serviços e um leilão no fim da noite. Vinte vendedores possíveis no livro, além do restaurante Angelo's, Forever Friends (drone pets), Kimiko's (kimonos), The Birdcage, Plein Air Gallery, a suíte do Mister K e o salão do leilão.",
+      "invite": "Cem convites entregues em mãos por courier; podem ser vendidos, dados ou roubados.",
+      "goods": "Suggested", "suggestedGoods": ["fashion", "weapons"],
+      "stalls": [
+        { "number": 1, "label": "Fashion and Armor", "goods": ["fashion"] },
+        { "number": 2, "label": "Weapons", "goods": ["weapons"] },
+        { "number": 3, "label": "Vehicles", "goods": [] }
+      ],
+      "features": ["Midnight"],
+      "source": "BC p.144–147"
+    },
+    {
+      "id": "bc-e", "name": "Ms. Mynah's Night Market", "kind": "NightMarket", "letter": "E",
+      "organizer": { "name": "Ms. Mynah", "role": "Fixer (Operator 6)", "operatorRank": 6, "trading": 15 },
+      "frequency": "Um dia por mês, sempre no dia cinco.",
+      "location": "Minimallism, um shopping abandonado em Rancho Coronado.",
+      "sells": "Bancas escolhidas segundo as tradições românticas da avó da Ms. Mynah: comida, bebida, mercadorias e serviços para o cliente ficar e gastar bem.",
+      "invite": "Por convite: todo mês, quinhentos clientes recebem uma senha pelo Zchat.",
+      "goods": "Suggested", "suggestedGoods": ["food", "fashion"],
+      "stalls": [
+        { "number": 1, "label": "Fashion and Armor", "goods": ["fashion"] },
+        { "number": 2, "label": "Weapons", "goods": ["weapons"] },
+        { "number": 3, "label": "Various Others", "goods": ["food", "electronics", "cyberware", "survival"] }
+      ],
+      "source": "BC p.148–151"
+    },
+    {
+      "id": "bc-f", "name": "Rex Royale's Casino", "kind": "NightMarket", "letter": "F",
+      "organizer": { "name": "Rex Royale", "role": "Fixer (Operator 8)", "operatorRank": 8, "trading": 16 },
+      "frequency": "Mais ou menos uma vez por mês, ou antes se chegar uma carga grande.",
+      "location": "Porões de prédios abandonados, nunca o mesmo duas vezes, ao norte da divisa entre Little China e Upper Marina.",
+      "sells": "O que o Rex usa: armaduras e armas, quanto mais chamativas melhor; às vezes outras coisas. Dizem que ele dá desconto a quem o vence num jogo de azar, mas cobra em favores.",
+      "invite": "Cartas de baralho assinadas, entregues em mãos: só cinquenta e duas por mercado.",
+      "goods": "Suggested", "suggestedGoods": ["weapons"],
+      "stalls": [
+        { "number": 1, "label": "Cyberware", "goods": ["cyberware"] },
+        { "number": 2, "label": "Longarms", "goods": ["weapons"] },
+        { "number": 3, "label": "Armor", "goods": ["weapons"] },
+        { "number": 4, "label": "Other Gear", "goods": ["electronics", "survival", "food", "fashion"] },
+        { "number": 5, "label": "Handguns", "goods": ["weapons"] }
+      ],
+      "source": "BC p.152–155"
+    },
+    {
+      "id": "upload", "name": "Midnight With the Upload", "kind": "MidnightMarket", "letter": "U",
+      "organizer": { "name": "The Upload", "role": "Vendedor de Midnight Market" },
+      "frequency": "Esses Midnight Markets não acontecem com frequência.",
+      "sells": "Cyberdecks, hardware e programas da SGI, Kirama, Microtech, Raven e Zetatech. A Upload aceita dinheiro sujo de cena de crime e paga bem por gravações de combate (snuff).",
+      "goods": "None",
+      "stalls": [
+        { "number": 1, "label": "Cyberdecks", "goods": [] },
+        { "number": 2, "label": "Hardware e programas", "goods": [] }
+      ],
+      "pools": [
+        { "label": "Cyberdecks", "stall": 1, "query": { "category": "netrunning", "types": ["Cyberdeck"], "books": [{ "book": "Interface 3", "minPage": 37, "maxPage": 43 }] }, "source": "IR3 p.39–40" },
+        { "label": "Hardware e programas", "stall": 2, "query": { "category": "netrunning", "exceptTypes": ["Cyberdeck"], "books": [{ "book": "Interface 3", "minPage": 37, "maxPage": 43 }] }, "source": "IR3 p.40–42" }
+      ],
+      "source": "IR3 p.37–43 (DLC Midnight With the Upload)"
+    },
+    {
+      "id": "hornet", "name": "Hornet's Pharmacy", "kind": "Shop", "letter": "H",
+      "organizer": { "name": "Hornet", "role": "Fixer" },
+      "location": "Um trem de carga velho e grafitado, parado numa estação abandonada de Heywood, luxuoso por dentro.",
+      "sells": "Armas químicas, fármacos e um pouco de cromo.",
+      "goods": "None",
+      "stalls": [ { "number": 1, "label": "Balcão do Hornet", "goods": [] } ],
+      "pools": [ { "label": "Estoque do Hornet", "stall": 1, "query": { "books": [{ "book": "Hornet's Pharmacy" }] }, "source": "IR4 p.3–8 (DLC Hornet's Pharmacy)" } ],
+      "source": "IR4 p.3–8 (DLC Hornet's Pharmacy)"
+    },
+    {
+      "id": "woodchipper", "name": "Woodchipper's Garage", "kind": "Shop", "letter": "W",
+      "organizer": { "name": "Woodchipper", "role": "Nomad, não é Fixer: centro de distribuição de armas para os Fixers que negociam com os clãs" },
+      "location": "Heywood.",
+      "sells": "Armas pesadas recuperadas de bases militares desativadas nas Badlands, para Solos e gangues sem ligação com Corps.",
+      "goods": "None",
+      "stalls": [ { "number": 1, "label": "Garagem", "goods": [] } ],
+      "pools": [ { "label": "Estoque da garagem", "stall": 1, "query": { "books": [{ "book": "Woodchipper's Garage" }] }, "source": "IR3 p.25–30 (DLC Woodchipper's Garage)" } ],
+      "source": "IR3 p.25–30 (DLC Woodchipper's Garage)"
+    },
+    {
+      "id": "toggle", "name": "Toggle's Temple", "kind": "Armory", "letter": "T",
+      "organizer": { "name": "Toggle", "role": "Colecionador; cuida do lugar sozinho" },
+      "location": "Esgotos, porões e garagens subterrâneas sob a borda oeste da Hot Zone.",
+      "sells": "Arsenal, estande de tiro e circuito de obstáculos. As armas são emprestadas para usar ali dentro; munição extra se compra nas vendits.",
+      "invite": "Só entra quem o Toggle conhece ou quem alguém de confiança indica.",
+      "admission": { "label": "Entrada (por pessoa, por visita)", "price": 20, "source": "IR5 p.37" },
+      "forSale": false,
+      "goods": "None",
+      "stalls": [
+        { "number": 1, "label": "Arsenal (uso no local)", "goods": [] },
+        { "number": 2, "label": "Vendits de munição", "goods": [] }
+      ],
+      "pools": [
+        { "label": "Arsenal", "stall": 1, "query": { "exceptCategories": ["ammunition"], "books": [{ "book": "Toggle's Temple" }] }, "forSale": false, "source": "IR5 p.37–60 (DLC Toggle's Temple)" },
+        { "label": "Munição", "stall": 2, "query": { "category": "ammunition", "books": [{ "book": "Toggle's Temple" }, { "book": "Core Book" }] }, "source": "IR5 p.37" }
+      ],
+      "source": "IR5 p.35–60 (DLC Toggle's Temple)"
+    },
+    {
+      "id": "mr-amaze", "name": "Mr. Amaze — Must Have Cyberware Deals", "kind": "Shop", "letter": "M",
+      "organizer": { "name": "Mr. Amaze", "role": "Fixer de South Night City" },
+      "location": "Dock 13, South Night City.",
+      "sells": "As ofertas de cyberware da semana e as Mystery Boxes do programa M.R.A.M.A.Z.E.",
+      "goods": "None",
+      "stalls": [ { "number": 1, "label": "Ofertas da semana", "goods": [] } ],
+      "pools": [ { "label": "Must Have Cyberware Deals", "stall": 1, "query": { "books": [{ "book": "Interface 3", "minPage": 45, "maxPage": 50 }] }, "source": "IR3 p.45–50 (DLC Must Have Cyberware Deals)" } ],
+      "features": ["MysteryBoxes"],
+      "source": "IR3 p.45–50; IR4 p.23–28"
+    },
+    {
+      "id": "custom", "name": "Personalizado", "kind": "NightMarket", "letter": "X",
+      "organizer": { "name": "Fixer organizador", "role": "Fixer", "operatorRank": 5 },
+      "summary": "O Mestre escolhe os tipos de mercadoria e os livros; o resto segue as tabelas do Core.",
+      "goods": "Pick",
+      "source": "CP:R p.338; BC p.7"
+    }
+  ]
+}

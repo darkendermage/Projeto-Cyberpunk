@@ -29,6 +29,14 @@ sem mexer em favoritos e listas. Itens do catálogo editados por você podem vol
 ao valor do catálogo novo; itens que você cadastrou não são afetados.
 Para levar seus dados para outro PC, copie essa pasta.
 
+ATUALIZAÇÕES
+Quando sai uma versão nova, aparece um aviso amarelo no topo do site:
+"Versão X disponível". Clique em "Atualizar agora": o programa baixa a versão
+nova, se reinicia sozinho e a página recarrega. Seus dados continuam.
+O X do aviso esconde a mensagem até a próxima versão.
+Deixe o NightCityItemDB.exe numa pasta sua (Downloads, Documentos, Área de
+Trabalho): em "Arquivos de Programas" o Windows não deixa o programa se atualizar.
+
 SOBRE OS DADOS
 Os itens vêm de um compêndio que ainda não foi conferido com os livros oficiais,
 e cada ficha avisa isso. Registros marcados como DEMO são só exemplos.

@@ -34,3 +34,8 @@
   flex: 1;
   accent-color: var(--red);
 }
+
+.version {
+  color: var(--text-faint);
+  font-size: 13px;
+}

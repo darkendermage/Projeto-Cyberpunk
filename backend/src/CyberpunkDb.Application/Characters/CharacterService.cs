@@ -31,6 +31,7 @@ public sealed class CharacterService(
     ProgressionOperations progression,
     EconomyOperations economy,
     CombatOperations combat,
+    WearableOperations wearables,
     NpcCatalogProvider catalogs)
 {
     internal static readonly JsonSerializerOptions SheetJson = new(JsonSerializerDefaults.Web)
@@ -381,6 +382,15 @@ public sealed class CharacterService(
 
     public Task<CharacterDetailDto> DetachAsync(int id, AttachRequest r, CancellationToken ct) =>
         MutateAsync(id, r.Version, c => inventory.Detach(c.Sheet, r, c), ct);
+
+    public Task<CharacterDetailDto> WearableInstallAsync(int id, WearableInstallRequest r, CancellationToken ct) =>
+        MutateAsync(id, r.Version, c => wearables.Install(c.Sheet, r, c), ct);
+
+    public Task<CharacterDetailDto> WearableRemoveAsync(int id, WearableOptionRequest r, CancellationToken ct) =>
+        MutateAsync(id, r.Version, c => wearables.Remove(c.Sheet, r, c), ct);
+
+    public Task<CharacterDetailDto> WearableSideAsync(int id, WearableSideRequest r, CancellationToken ct) =>
+        MutateAsync(id, r.Version, c => wearables.SetSide(c.Sheet, r, c), ct);
 
     public Task<CharacterDetailDto> AwardIpAsync(int id, AwardIpRequest r, CancellationToken ct) =>
         MutateAsync(id, r.Version, c => progression.AwardIp(c.Sheet, r, c), ct);

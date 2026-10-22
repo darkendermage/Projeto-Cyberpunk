@@ -86,6 +86,8 @@ export interface InventoryEntry {
   caliber?: Caliber | null;
   rounds?: number | null;
   weapon?: WeaponState | null;
+  /** Cyberware options held by a worn host (Smart Glasses, Battleglove...). */
+  wearable?: { options: string[]; side?: 'Left' | 'Right' | null } | null;
   origin: ItemOrigin;
   paidFrom: BudgetPool;
   pricePaid?: number | null;
@@ -339,6 +341,31 @@ export interface CyberLine {
   region: string;
   price: number;
   requirements: string | null;
+  /** A glove worn over this arm makes the option inaccessible. */
+  coveredBy?: string | null;
+}
+
+export type WearableAccepts = 'Cybereye' | 'Cyberarm' | 'Cyberaudio';
+
+/** A worn item with Option Slots (Smart Glasses, Smart Lens, Battleglove, Smart Gloves, Smart Ears). */
+export interface WearableLine {
+  instanceId: string;
+  itemId: number;
+  name: string;
+  accepts: WearableAccepts;
+  slots: number;
+  slotsUsed: number;
+  cyberfingers: number;
+  cyberfingersUsed: number;
+  worn: boolean;
+  side: 'Left' | 'Right' | null;
+  coversArm: boolean;
+  options: { instanceId: string; itemId: number; name: string; slots: number; finger: boolean }[];
+  builtIn: string[];
+  covered: string[];
+  requirement: string | null;
+  warnings: string[];
+  source: string;
 }
 
 export interface CyberRegionReport {
@@ -431,6 +458,7 @@ export interface CharacterReport {
   regions: CyberRegionReport[];
   fullBodyConversion: boolean;
   cyberwareEffects: CyberEffectLine[];
+  wearables: WearableLine[];
 }
 
 export interface CharacterIssue {

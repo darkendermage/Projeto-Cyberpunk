@@ -162,7 +162,9 @@ public sealed record CyberLine(
     int? CurrentSp,
     string Region,
     int Price,
-    string? Requirements);
+    string? Requirements,
+    // A glove worn over this arm makes the option inaccessible (CP:R p.347; BC p.37; IR4 p.67; IR5 p.99).
+    string? CoveredBy = null);
 
 public sealed record HousingReport(
     string? HousingId,
@@ -200,4 +202,6 @@ public sealed record CharacterReport(
     // Inhabiting a Full Body Conversion body (Interface RED 3 p.93).
     bool FullBodyConversion,
     // What the installed cyberware does to the sheet (STAT and skill bonuses, game effects).
-    IReadOnlyList<CyberEffectLine> CyberwareEffects);
+    IReadOnlyList<CyberEffectLine> CyberwareEffects,
+    // Worn items with Option Slots (Smart Glasses, Battleglove, Smart Ears...).
+    IReadOnlyList<WearableLine> Wearables);

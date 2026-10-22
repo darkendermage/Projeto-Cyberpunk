@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
-import { Brain, Cpu, HeartPulse, Plus, Repeat, Search, ShieldCheck, Trash2, Undo2, Wallet } from 'lucide-react';
+import { Brain, Cpu, Glasses, HeartPulse, Plus, Repeat, Search, ShieldCheck, Trash2, Undo2, Wallet } from 'lucide-react';
 import { characterApi, problemMessage, useCharacterCommand } from '../../api/characters';
 import type {
   CharacterDetail, CharacterRules, CyberLine, CyberRegionReport, InstallRequestBody, StoreItem,
@@ -11,7 +11,7 @@ import { formatEb } from '../../lib/format';
 import { useDebouncedValue } from '../../lib/hooks';
 import { useToast } from '../../state/ToastContext';
 import { AnatomyFigure } from './AnatomyFigure';
-import { CYBER_TYPE_LABEL, fitsRegion, humanityLossLabel, LEFT_REGIONS, RIGHT_REGIONS, type RegionKey } from './anatomy';
+import { CYBER_TYPE_LABEL, fitsRegion, humanityLossLabel, LEFT_REGIONS, RIGHT_REGIONS, type RegionKey, wearableAccepts } from './anatomy';
 import { CyberEffectsPanel, SheetPanel, StateTag } from './CharacterUi';
 import type { Run } from './CombatPanels';
 import type { SheetEditor } from './useSheetEditor';
@@ -162,6 +162,7 @@ function RegionPanel({ region, lines, active, selection, onRegion, onPiece }: {
               className={`${styles.piece} ${l.foundational ? styles.pieceFoundation : ''} ${selected ? styles.pieceSelected : ''}`}>
               {l.name}
               <small>HL {l.humanityLossApplied}{l.slotsProvided ? ` · ${l.slotsUsed}/${l.slotsProvided}` : ''}</small>
+              {l.coveredBy && <small className={base.amber} title="Inacessível enquanto a luva estiver vestida">coberto por {l.coveredBy}</small>}
             </button>
           );
         })}
@@ -294,6 +295,13 @@ function InstallDetails({ detail, rules, selection, run, busy, replacing, side, 
   const [meatLimb, setMeatLimb] = useState(false);
   const [host, setHost] = useState('');
   const [ack, setAck] = useState(false);
+  const itemId = item?.id ?? (selection as { itemId: number }).itemId;
+  const fetched = useItemDetail(itemId).data?.item;
+  const cyberType = item?.cyberType ?? (fetched?.attributes.cyberwareType as string | undefined);
+  const accepts = wearableAccepts(cyberType);
+  const targets = accepts ? detail.report.wearables.filter((w) => w.accepts === accepts) : [];
+  const [target, setTarget] = useState('');
+  const wearable = targets.find((w) => w.instanceId === target) ?? null;
 
   const body: InstallRequestBody = {
     itemId: selection.kind === 'catalog' ? selection.item.id : null,
@@ -306,10 +314,20 @@ function InstallDetails({ detail, rules, selection, run, busy, replacing, side, 
     queryKey: ['cyber-preview', detail.id, detail.version, body],
     queryFn: ({ signal }) => characterApi.previewInstall(detail.id, body, signal),
     placeholderData: keepPreviousData,
+    enabled: !wearable,
   });
   const p = preview.data;
   const replacedName = replacing ? detail.report.cyberware.find((l) => l.instanceId === replacing)?.name : null;
   const needsAck = (p?.textRequirements.length ?? 0) > 0;
+
+  const putInWearable = async () => {
+    const ok = await run('wearables/install', {
+      wearableInstanceId: wearable!.instanceId,
+      itemId: selection.kind === 'catalog' ? selection.item.id : null,
+      optionInstanceId: selection.kind === 'inventory' ? selection.instanceId : null,
+    }, `${name} posto em ${wearable!.name}.`);
+    if (ok) onDone();
+  };
 
   const install = async () => {
     const ok = replacing && selection.kind === 'catalog'
@@ -325,9 +343,22 @@ function InstallDetails({ detail, rules, selection, run, busy, replacing, side, 
         <div className={base.column} style={{ gap: 8 }}>
           <span className={styles.detailTitle}>{name}</span>
           {item && <span className={base.small}>{CYBER_TYPE_LABEL[item.cyberType ?? ''] ?? item.cyberType} · {formatEb(item.price)} · {item.summary}</span>}
-          <ItemDescription itemId={item?.id ?? (selection as { itemId: number }).itemId} />
-          {meatPossible && <Checkbox checked={meatLimb} onChange={setMeatLimb} label="Instalar num membro de carne (única peça do membro, CP:R p.115)" />}
-          {anyLimb && (
+          <ItemDescription itemId={itemId} />
+          {targets.length > 0 && !replacing && (
+            <label className={base.tableField}>
+              <span className={base.idLabel}>Onde instalar</span>
+              <Select value={target} onChange={(e) => setTarget(e.target.value)} aria-label="Destino">
+                <option value="">No corpo</option>
+                {targets.map((w) => (
+                  <option key={w.instanceId} value={w.instanceId}>
+                    {w.name} ({w.slotsUsed}/{w.slots} slots{w.worn ? '' : ', guardado'})
+                  </option>
+                ))}
+              </Select>
+            </label>
+          )}
+          {!wearable && meatPossible && <Checkbox checked={meatLimb} onChange={setMeatLimb} label="Instalar num membro de carne (única peça do membro, CP:R p.115)" />}
+          {!wearable && anyLimb && (
             <label className={base.tableField}>
               <span className={base.idLabel}>Membro (Cyberarm ou Cyberleg)</span>
               <Select value={host} onChange={(e) => setHost(e.target.value)} aria-label="Membro hospedeiro">
@@ -338,6 +369,19 @@ function InstallDetails({ detail, rules, selection, run, busy, replacing, side, 
           )}
         </div>
 
+        {wearable ? (
+          <div className={base.column} style={{ gap: 6 }}>
+            <span className={base.idLabel}>No vestível</span>
+            <p className={base.small}>
+              {name} vai em <strong>{wearable.name}</strong>: {wearable.slotsUsed}/{wearable.slots} slots em uso
+              {wearable.cyberfingers > 0 ? ` · Cyberfingers ${wearable.cyberfingersUsed}/${wearable.cyberfingers}` : ''}.
+              Nada é implantado: sem Humanity Loss, e só funciona com o item vestido.
+            </p>
+            {selection.kind === 'catalog' && <span className={base.small}>Custo: {formatEb(selection.item.price)} (o mesmo de instalar uma vez num Cybereye ou Cyberarm).</span>}
+            {wearable.requirement && <span className={`${base.small} ${base.amber}`}>Requisito: {wearable.requirement}</span>}
+            <span className={base.source}>{wearable.source}</span>
+          </div>
+        ) : (
         <div className={base.column} style={{ gap: 6 }}>
           <span className={base.idLabel}>O que será instalado</span>
           {!p ? <Spinner /> : p.error && p.pieces.length === 0 ? <p className={`${base.small} ${base.red}`}>{p.error}</p> : (
@@ -358,7 +402,15 @@ function InstallDetails({ detail, rules, selection, run, busy, replacing, side, 
           {p && p.textRequirements.map((r) => <span key={r} className={`${base.small} ${base.amber}`}>Requisito: {r}</span>)}
           {needsAck && <Checkbox checked={ack} onChange={setAck} label="O personagem cumpre esses requisitos" />}
         </div>
+        )}
 
+        {wearable ? (
+          <div className={base.column} style={{ gap: 8 }}>
+            <Button variant="primary" className={styles.validateButton} icon={<Glasses size={18} />} disabled={busy} onClick={putInWearable}>
+              Pôr em {wearable.name}
+            </Button>
+          </div>
+        ) : (
         <div className={base.column} style={{ gap: 8 }}>
           {p && (
             <dl className={base.kv}>
@@ -379,6 +431,7 @@ function InstallDetails({ detail, rules, selection, run, busy, replacing, side, 
             {replacedName ? 'Validar e substituir' : 'Validar e instalar'}
           </Button>
         </div>
+        )}
       </div>
     </SheetPanel>
   );

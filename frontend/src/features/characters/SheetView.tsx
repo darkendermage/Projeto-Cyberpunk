@@ -1,12 +1,12 @@
 import { useMemo, useState } from 'react';
-import { Brain, Clover, History, Package, Plus, Search, SlidersHorizontal, X } from 'lucide-react';
+import { Brain, Clover, History, Plus, Search, SlidersHorizontal, X } from 'lucide-react';
 import { problemMessage, useCharacterCommand, useCharacterEvents } from '../../api/characters';
 import type { CharacterDetail, CharacterRules, ModifierTarget, StatModifier } from '../../api/characterTypes';
 import { Button, IconButton, Segmented, Select } from '../../components/ui/ui';
 import { formatEb } from '../../lib/format';
 import { useToast } from '../../state/ToastContext';
 import {
-  filterSkills, formatDate, groupSkills, ITEM_STATE_LABEL, signed, SKILL_FILTERS, skillLabel, STAT_LABEL, type SkillFilter,
+  filterSkills, formatDate, groupSkills, signed, SKILL_FILTERS, skillLabel, STAT_LABEL, type SkillFilter,
 } from './characterLabels';
 import { CyberEffectsPanel, Portrait, RoleAbilityButton, SheetPanel, StateTag } from './CharacterUi';
 import { ArmorPanel, HealthPanel, InjuriesPanel, type Run, WeaponsPanel } from './CombatPanels';
@@ -49,7 +49,6 @@ export function SheetView({ detail, rules, editor }: Props) {
         <ArmorPanel {...props} />
         <WeaponsPanel {...props} />
         <InjuriesPanel {...props} />
-        <InventoryPanel {...props} />
         <HistoryPanel id={detail.id} />
       </div>
     </div>
@@ -270,52 +269,6 @@ function ModifiersPanel({ detail, editor }: { detail: CharacterDetail; editor: S
         <input className={styles.input} style={{ maxWidth: 200 }} value={source} placeholder="Origem (ex.: Synthcoke)" onChange={(e) => setSource(e.target.value)} />
         <IconButton label="Adicionar modificador" disabled={!Number(value) || !source.trim()} onClick={add}><Plus size={14} /></IconButton>
       </div>
-    </SheetPanel>
-  );
-}
-
-// ------------------------------------------------------------ inventory
-
-function InventoryPanel({ detail, run, busy }: { detail: CharacterDetail; run: Run; busy: boolean; rules: CharacterRules; locked: boolean }) {
-  const items = detail.report.inventory;
-  return (
-    <SheetPanel title="Equipamento" icon={<Package size={16} />}>
-      {items.length === 0 ? <p className={styles.muted}>Inventário vazio.</p> : (
-        <table className={styles.table}>
-          <thead><tr><th>Item</th><th className={styles.num}>Qtd</th><th>Estado</th></tr></thead>
-          <tbody>
-            {items.map((i) => {
-              const armor = i.sp != null;
-              return (
-                <tr key={i.instanceId}>
-                  <td>
-                    {i.name}
-                    {i.caliber && <span className={styles.muted}> ({i.caliber})</span>}
-                    {i.fashion && <span className={styles.tag}>moda</span>}
-                  </td>
-                  <td className={styles.num}>{i.rounds ?? i.quantity}</td>
-                  <td>
-                    <Select style={{ minWidth: 118 }} value={i.state === 'Equipped' && i.worn ? `Equipped:${i.worn}` : i.state} disabled={busy} aria-label={`Estado de ${i.name}`}
-                      onChange={(e) => {
-                        const [state, worn] = e.target.value.split(':');
-                        void run('equip', { instanceId: i.instanceId, state, worn: worn ?? null });
-                      }}>
-                      {armor ? (
-                        <>
-                          <option value="Equipped:Body">No corpo</option>
-                          <option value="Equipped:Head">Na cabeça</option>
-                        </>
-                      ) : <option value="Equipped">{ITEM_STATE_LABEL.Equipped}</option>}
-                      <option value="Carried">{ITEM_STATE_LABEL.Carried}</option>
-                      <option value="Stored">{ITEM_STATE_LABEL.Stored}</option>
-                    </Select>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      )}
     </SheetPanel>
   );
 }

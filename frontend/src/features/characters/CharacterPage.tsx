@@ -9,17 +9,19 @@ import page from '../../styles/Page.module.css';
 import { METHOD_LABEL, STATUS_LABEL } from './characterLabels';
 import { CreationView } from './CreationView';
 import { CyberwareView } from './CyberwareView';
+import { EquipmentView } from './EquipmentView';
 import { LifepathView } from './LifepathView';
 import { SaveIndicator, StateTag } from './CharacterUi';
 import { SheetView } from './SheetView';
 import { useSheetEditor } from './useSheetEditor';
 import styles from './Characters.module.css';
 
-export type CharacterTab = 'criacao' | 'ficha' | 'caminho' | 'cyberware';
+export type CharacterTab = 'criacao' | 'ficha' | 'caminho' | 'equipamento' | 'cyberware';
 
 const TABS: { tab: CharacterTab; label: string; ready: boolean }[] = [
   { tab: 'ficha', label: 'Personagem', ready: true },
   { tab: 'caminho', label: 'Caminho de Vida', ready: true },
+  { tab: 'equipamento', label: 'Equipamento', ready: true },
   { tab: 'cyberware', label: 'Cyberware', ready: true },
 ];
 
@@ -50,7 +52,7 @@ function CharacterWorkspace({ detail, rules, tab }: { detail: CharacterDetail; r
   const tone = detail.status === 'Complete' ? 'ok' : detail.status === 'Creating' ? 'warn' : 'bad';
   const identity = editor.draft.identity;
 
-  // Alt+1/2/3 jump between Personagem, Caminho de Vida and Cyberware; Ctrl+S saves (see useSheetEditor).
+  // Alt+1..4 jump between Personagem, Caminho de Vida, Equipamento and Cyberware; Ctrl+S saves (see useSheetEditor).
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (!e.altKey || e.ctrlKey || e.metaKey) return;
@@ -78,7 +80,7 @@ function CharacterWorkspace({ detail, rules, tab }: { detail: CharacterDetail; r
         </div>
         <StateTag tone={tone}>{STATUS_LABEL[detail.status]}</StateTag>
 
-        <nav className={styles.tabs} aria-label="Seções da ficha (Alt+1, Alt+2, Alt+3)">
+        <nav className={styles.tabs} aria-label="Seções da ficha (Alt+1 a Alt+4)">
           {creating && (
             <NavLink to={`/characters/${detail.id}/criacao`} className={({ isActive }) => `${styles.tab} ${isActive ? styles.tabActive : ''}`}>
               Criação
@@ -112,6 +114,7 @@ function CharacterWorkspace({ detail, rules, tab }: { detail: CharacterDetail; r
       {tab === 'criacao' && creating && <CreationView detail={detail} rules={rules} editor={editor} />}
       {tab === 'ficha' && <SheetView detail={detail} rules={rules} editor={editor} />}
       {tab === 'caminho' && <LifepathView detail={detail} rules={rules} editor={editor} />}
+      {tab === 'equipamento' && <EquipmentView detail={detail} rules={rules} editor={editor} />}
       {tab === 'cyberware' && <CyberwareView detail={detail} rules={rules} editor={editor} />}
     </div>
   );

@@ -68,6 +68,7 @@ public static partial class CharacterTransfer
         var owned = inventory.Select(e => e.InstanceId).ToHashSet();
         inventory = inventory.Select(e =>
         {
+            if (e.Wearable is { } worn) e = e with { Wearable = worn with { Options = (worn.Options ?? []).Where(owned.Contains).ToList() } };
             if (e.Weapon is not { } w) return e;
             int? ammo = null;
             if (w.LoadedAmmoItemId is { } loaded)

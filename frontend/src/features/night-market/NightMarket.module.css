@@ -1,0 +1,653 @@
+/* Night Market: market library, creation, the CBK listings app (Black Chrome p.6–8), events and the index. */
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px 20px;
+}
+
+.label {
+  font-family: var(--font-display);
+  font-size: 11.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.muted {
+  color: var(--text-muted);
+  font-size: 13.5px;
+}
+
+.source {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--text-faint);
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+}
+
+.grid2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.grid3 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+@media (max-width: 860px) {
+  .grid2, .grid3 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ------------------------------------------------------------ preset cards */
+
+.presets {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 10px;
+}
+
+.preset {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 14px 12px 16px;
+  text-align: left;
+  color: var(--text-2);
+  background: var(--bg-2);
+  border: 1px solid var(--line-strong);
+  clip-path: polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, 0 100%);
+  transition: border-color var(--t-fast), background var(--t-fast);
+}
+.preset:hover {
+  border-color: var(--red-line);
+}
+.presetActive {
+  color: var(--text);
+  background: linear-gradient(135deg, var(--red-haze), transparent 70%), var(--bg-2);
+  border-color: var(--red);
+}
+.presetLetter {
+  position: absolute;
+  right: 14px;
+  top: 8px;
+  font-family: var(--font-display);
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--red-dim);
+  line-height: 1;
+}
+.presetActive .presetLetter {
+  color: var(--red);
+  text-shadow: var(--text-glow);
+}
+.presetName {
+  font-family: var(--font-display);
+  font-size: 15.5px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  padding-right: 34px;
+}
+.presetMeta {
+  font-size: 12.5px;
+  color: var(--text-muted);
+}
+
+.presetGroup + .presetGroup {
+  margin-top: 14px;
+}
+
+.details {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 380px);
+  gap: 16px;
+  align-items: start;
+}
+
+@media (max-width: 1100px) {
+  .details {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 6px 14px;
+  font-size: 14px;
+  color: var(--text-2);
+}
+.facts dt {
+  font-family: var(--font-display);
+  font-size: 11.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  padding-top: 2px;
+}
+
+/* ------------------------------------------------------------ library */
+
+.library {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 10px;
+}
+
+.marketCard {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 14px;
+  background: var(--bg-2);
+  border: 1px solid var(--line-strong);
+  border-left: 3px solid var(--red);
+  color: var(--text-2);
+  text-decoration: none;
+  transition: border-color var(--t-fast);
+}
+.marketCard:hover {
+  border-color: var(--red-line);
+}
+.marketCard h3 {
+  font-family: var(--font-display);
+  font-size: 16px;
+  color: var(--text);
+}
+
+/* ------------------------------------------------------------ CBK app */
+
+.cbk {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--red-line);
+  background: linear-gradient(180deg, rgba(255, 42, 61, 0.06), transparent 140px), var(--bg-1);
+}
+
+.cbkBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 16px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--red-line);
+  background: var(--bg-2);
+}
+
+.cbkLogo {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--red-bright);
+  text-shadow: var(--text-glow);
+}
+.cbkLogo small {
+  margin-left: 8px;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  color: var(--text-muted);
+  text-shadow: none;
+}
+
+.live {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--green);
+}
+.live::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 8px currentColor;
+}
+.closed {
+  color: var(--text-muted);
+}
+
+.search {
+  flex: 1 1 220px;
+  min-width: 180px;
+  padding: 7px 10px;
+  color: var(--text);
+  background: var(--bg-0);
+  border: 1px solid var(--line-strong);
+  font-family: var(--font-ui);
+  font-size: 14.5px;
+}
+.search:focus {
+  outline: none;
+  border-color: var(--red);
+}
+
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 14px;
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--line);
+}
+.tab {
+  padding: 2px 0;
+  font-family: var(--font-display);
+  font-size: 12.5px;
+  letter-spacing: 0.12em;
+  text-transform: lowercase;
+  color: var(--text-muted);
+  border-bottom: 2px solid transparent;
+}
+.tab:hover {
+  color: var(--text-2);
+}
+.tabActive {
+  color: var(--red-bright);
+  border-bottom-color: var(--red);
+}
+.tabCount {
+  margin-left: 4px;
+  color: var(--text-faint);
+}
+
+.map {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--line);
+}
+.booth {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 5px 9px;
+  font-size: 13px;
+  color: var(--text-2);
+  background: var(--bg-2);
+  border: 1px solid var(--line-strong);
+}
+.booth b {
+  font-family: var(--font-mono);
+  font-weight: 400;
+  color: var(--amber);
+}
+.booth:hover {
+  border-color: var(--amber-dim);
+}
+.boothActive {
+  border-color: var(--amber);
+  background: rgba(255, 207, 58, 0.08);
+}
+
+.listings {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 12px;
+  padding: 14px;
+}
+
+.listing {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background: var(--bg-2);
+  border: 1px solid var(--line-strong);
+}
+.listingArt {
+  height: 112px;
+}
+.listingBody {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 12px 12px;
+}
+.listingName {
+  font-family: var(--font-display);
+  font-size: 15.5px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--text);
+  text-align: left;
+}
+.listingName:hover {
+  color: var(--red-bright);
+}
+.maker {
+  font-size: 12.5px;
+  color: var(--text-muted);
+}
+.price {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 15px;
+  color: var(--amber);
+}
+.price s {
+  color: var(--text-faint);
+  font-size: 12.5px;
+}
+.price small {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.pitch {
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--text-2);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.listingFoot {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: auto;
+}
+
+.buyNow {
+  width: 100%;
+  padding: 8px 10px;
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #120204;
+  background: var(--red);
+  border: 0;
+  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+  box-shadow: var(--glow-sm);
+  transition: background var(--t-fast);
+}
+.buyNow:hover:not(:disabled) {
+  background: var(--red-bright);
+}
+.buyNow:disabled {
+  color: var(--text-muted);
+  background: var(--bg-4);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.pickup {
+  font-size: 12px;
+  text-align: center;
+  color: var(--text-muted);
+}
+.pickup b {
+  font-family: var(--font-mono);
+  font-weight: 400;
+  color: var(--amber);
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.warn {
+  font-size: 12px;
+  color: var(--amber);
+}
+
+.gmTools {
+  display: flex;
+  gap: 6px;
+  justify-content: flex-end;
+}
+
+/* ------------------------------------------------------------ side panels */
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 360px);
+  gap: 16px;
+  align-items: start;
+}
+.aside {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+@media (max-width: 1180px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.slot {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px 10px;
+  border: 1px dashed var(--amber-dim);
+  background: rgba(255, 207, 58, 0.04);
+}
+
+.ledger {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 360px;
+  overflow: auto;
+}
+.sale {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 2px 8px;
+  padding: 6px 8px;
+  font-size: 13px;
+  border-left: 2px solid var(--line-strong);
+  background: var(--bg-2);
+}
+.saleUndone {
+  opacity: 0.45;
+  text-decoration: line-through;
+}
+.saleTotal {
+  font-family: var(--font-mono);
+  color: var(--amber);
+}
+
+.events {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 300px;
+  overflow: auto;
+  font-size: 13px;
+}
+.event b {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.notice {
+  padding: 8px 12px;
+  border-left: 3px solid var(--cyan);
+  background: rgba(61, 224, 255, 0.06);
+  font-size: 13.5px;
+  color: var(--text-2);
+}
+
+/* ------------------------------------------------------------ door prize wheel */
+
+.wheelWrap {
+  position: relative;
+  width: 220px;
+  height: 220px;
+  margin: 6px auto;
+}
+.wheel {
+  width: 100%;
+  height: 100%;
+  transition: transform 3.2s cubic-bezier(0.12, 0.7, 0.1, 1);
+}
+html[data-motion='off'] .wheel {
+  transition: none;
+}
+.pointer {
+  position: absolute;
+  left: 50%;
+  top: -6px;
+  width: 0;
+  height: 0;
+  transform: translateX(-50%);
+  border-left: 9px solid transparent;
+  border-right: 9px solid transparent;
+  border-top: 16px solid var(--amber);
+  filter: drop-shadow(0 0 4px rgba(255, 207, 58, 0.7));
+}
+
+.prize {
+  padding: 10px 12px;
+  border: 1px solid var(--amber-dim);
+  background: rgba(255, 207, 58, 0.06);
+  font-size: 14px;
+}
+.prize strong {
+  color: var(--amber);
+}
+
+/* ------------------------------------------------------------ dialogs and tables */
+
+.dialog {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.haggle {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.side {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid var(--line-strong);
+  background: var(--bg-2);
+}
+.sideTitle {
+  font-family: var(--font-display);
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.dice {
+  display: flex;
+  gap: 6px;
+}
+.dice input {
+  width: 64px;
+}
+
+.deals {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.deal {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  padding: 6px 8px;
+  font-size: 13.5px;
+  border: 1px solid var(--line);
+}
+.dealOff {
+  opacity: 0.55;
+}
+
+.result {
+  padding: 8px 10px;
+  font-size: 14px;
+  border-left: 3px solid var(--red);
+  background: var(--bg-2);
+}
+.resultWin {
+  border-left-color: var(--green);
+}
+
+.number {
+  width: 84px;
+  padding: 6px 8px;
+  color: var(--text);
+  background: var(--bg-0);
+  border: 1px solid var(--line-strong);
+  font-family: var(--font-mono);
+}
+.text {
+  width: 100%;
+  padding: 6px 8px;
+  color: var(--text);
+  background: var(--bg-0);
+  border: 1px solid var(--line-strong);
+  font-family: var(--font-ui);
+  font-size: 14.5px;
+}
+
+.pager {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.picker {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 300px;
+  overflow: auto;
+}
+.pickRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 6px 8px;
+  text-align: left;
+  font-size: 13.5px;
+  color: var(--text-2);
+  border: 1px solid var(--line);
+  background: var(--bg-2);
+}
+.pickRow:hover {
+  border-color: var(--red-line);
+  color: var(--text);
+}
+.pickActive {
+  border-color: var(--red);
+  color: var(--text);
+}

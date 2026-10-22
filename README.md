@@ -1,6 +1,6 @@
 # Night City Item Database
 
-Catálogo e gerenciador de itens e de personagens para **Cyberpunk 2020 / Cyberpunk RED**: armas, munições, upgrades de armas (acessórios, Rebuilds e Tech Upgrades), itens avulsos, armaduras (incluindo Linear Frames, roupas e ACPA), cyberware (inclusive Fashionware), Netrunning (Cyberdecks, Programas, Black ICE e Hardware), drogas, veículos e melhorias de QG. Tem filtros avançados por categoria, busca global, fichas detalhadas, favoritos, listas, comparação e área administrativa com importação e exportação. As páginas de referência trazem regras rápidas, tabelas (alcance das armas em metros ou tiles de 2 m e Critical Injuries), glossário e os estilos de Artes Marciais com seus Special Moves. O **Gerador de Inimigos** monta NPCs (Mook, Lieutenant, Mini-Boss e Boss) nos modos automático, semiautomático e manual, com validação única baseada nos livros. Os **Personagens** são fichas de jogador independentes, criadas pelos três métodos oficiais, com ficha de jogo, Caminho de Vida, cyberware sobre um modelo anatômico, loja, economia e progressão por IP.
+Catálogo e gerenciador de itens e de personagens para **Cyberpunk 2020 / Cyberpunk RED**: armas, munições, upgrades de armas (acessórios, Rebuilds e Tech Upgrades), itens avulsos, armaduras (incluindo Linear Frames, roupas e ACPA), cyberware (inclusive Fashionware), Netrunning (Cyberdecks, Programas, Black ICE e Hardware), drogas, veículos e melhorias de QG. Tem filtros avançados por categoria, busca global, fichas detalhadas, favoritos, listas, comparação e área administrativa com importação e exportação. As páginas de referência trazem regras rápidas, tabelas (alcance das armas em metros ou tiles de 2 m e Critical Injuries), glossário e os estilos de Artes Marciais com seus Special Moves. O **Gerador de Inimigos** monta NPCs (Mook, Lieutenant, Mini-Boss e Boss) nos modos automático, semiautomático e manual, com validação única baseada nos livros. Os **Personagens** são fichas de jogador independentes, criadas pelos três métodos oficiais, com ficha de jogo, Caminho de Vida, cyberware sobre um modelo anatômico, loja, economia e progressão por IP. O **Night Market** simula as feiras de Night City: o gerador do Core, os seis mercados do Black Chrome com o app CBK, as bancas dos Interface RED, Haggle do Fixer, itens Damaged/Destroyed, Door Prize, Mystery Boxes e o Night Market Index.
 
 - **Backend:** C# / ASP.NET Core 8 Web API, EF Core 8, FluentValidation
 - **Frontend:** React 18 + TypeScript (Vite), TanStack Query, React Router, CSS Modules
@@ -16,6 +16,9 @@ O script gera:
 
 - `artifacts\NightCityItemDB.exe` (cerca de 50 MB): um arquivo só, com .NET, frontend, catálogo e configuração embutidos. Não precisa instalar nada.
 - `artifacts\NightCityItemDB-win-x64.zip`: o `.exe` mais o `LEIA-ME.txt`, pronto para enviar.
+- `artifacts\NightCityItemDB.exe.sha256`: o hash que a atualização automática confere.
+
+Parâmetros opcionais: `-Versao 1.3.0` (padrão `0.0.0-dev`) e `-Repositorio dono/repo` (o repo do GitHub de onde o programa busca atualizações; sem ele, a atualização automática fica desligada). As versões oficiais saem pelo GitHub Actions (abaixo), não deste script rodado à mão.
 
 Como o executável funciona:
 
@@ -24,6 +27,25 @@ Como o executável funciona:
 - **Atualizações:** antes de uma migration, o programa guarda uma cópia do banco (as 3 mais recentes). Quando o catálogo embutido muda, ele é reimportado pelo `slug`, sem tocar em favoritos e listas.
 - **Configuração:** a padrão está em `deploy/desktop/appsettings.Desktop.json`. Um `appsettings.Desktop.json` ao lado do `.exe` sobrescreve o padrão (por exemplo, para trocar a porta).
 - **Aviso do Windows:** o `.exe` não é assinado, então o SmartScreen pode avisar na primeira execução ("Mais informações" > "Executar assim mesmo").
+
+### Lançar uma versão (atualização automática)
+
+```bash
+git tag -a v1.3.0 -m "O que mudou nesta versão"
+git push origin v1.3.0
+```
+
+O workflow `.github/workflows/release.yml` roda os testes do backend e do frontend, gera o executável com essa versão e cria a Release no GitHub com `NightCityItemDB.exe`, `NightCityItemDB.exe.sha256` e o `.zip`. A mensagem da tag vira as notas da versão. A tag precisa estar no formato `vX.Y.Z`.
+
+Nos executáveis já distribuídos (`Desktop/AppUpdater.cs`):
+
+- Ao abrir, o site consulta `GET /api/app/update`, que lê a última Release do repositório (cache de 1 hora; sem internet, nada aparece).
+- Havendo versão maior, aparece um aviso no topo com **Atualizar agora**, as novidades e a opção de esconder até a próxima versão.
+- **Atualizar agora** chama `POST /api/app/update`: baixa o `.exe` novo ao lado do atual (`.new`), confere o SHA-256, renomeia o atual para `.old`, põe o novo no lugar e reinicia. A aba aberta espera o programa voltar e recarrega. O `.old` é apagado na abertura seguinte.
+- O banco fica em `%LOCALAPPDATA%`, então favoritos, listas e personagens continuam. Se a versão nova tiver migration, o backup automático continua valendo.
+- A pasta do `.exe` precisa ser gravável (Downloads, Documentos, Área de Trabalho). Em `Arquivos de Programas`, o aviso explica o que fazer.
+- O repositório vem do build (`-p:UpdatesRepository`, que o workflow preenche com o próprio repo). `"Updates": { "Enabled": false }` num `appsettings.Desktop.json` ao lado do `.exe` desliga a checagem.
+- Executáveis anteriores a esse recurso não sabem se atualizar: a primeira versão com atualização automática precisa ser enviada à mão.
 
 ## Executar localmente (desenvolvimento)
 
@@ -73,8 +95,8 @@ Para produção, rode `npm run build` e copie `frontend/dist` para `backend/src/
 ### Testes
 
 ```bash
-cd backend && dotnet test     # 262 testes: filtros, validação, gerador de NPCs, regras de personagem e integração da API (SQLite + seed real)
-cd frontend && npm test       # filtros, URL, editor de NPCs, tabela de alcance, perícias, Lifepath e anatomia do cyberware
+cd backend && dotnet test     # 316 testes: filtros, validação, gerador de NPCs, regras de personagem, Night Market e integração da API (SQLite + seed real)
+cd frontend && npm test       # filtros, URL, editor de NPCs, tabela de alcance, perícias, Lifepath, anatomia do cyberware e Night Market
 ```
 
 ## Arquitetura
@@ -89,13 +111,15 @@ backend/
 frontend/src
   api/        cliente tipado + hooks React Query
   lib/        lógica pura de filtros (testada) e formatação
-  features/   catalog (abas, cards, lista, filtros, ficha), search, favorites, lists, compare, admin, reference, characters
+  features/   catalog (abas, cards, lista, filtros, ficha), search, favorites, lists, compare, admin, reference, characters, night-market
   components/ layout (header com skyline, sidebar), UI base, arte vetorial dos itens
 data/
   source/     compêndio original (markdown)
   source/errata/  correções conferidas com os PDFs (um arquivo por livro)
+  source/night-market-index.json, black-chrome-booths.json  extraídos dos PDFs (Night Market)
   seed/       catálogo no formato de importação (gerado)
 tools/compendium-import/convert.mjs   conversor compêndio -> seed
+tools/night-market/extract.mjs       Night Market Index e booths do Black Chrome a partir dos PDFs
 ```
 
 ### Modelo de dados
@@ -191,8 +215,9 @@ O idioma de origem entra no nível 4 sem custo (p.45); Streetslang não conta co
 ### Abas
 
 - **Personagem:** STATs efetivos (base nunca é sobrescrita; cyberware como Grafted Muscle and Bone Lace e os Implanted Linear Frames já entram no valor), Habilidade de Role clicável com o resumo das regras, perícias com LVL/MOD/BASE e busca em português ou inglês, HP e Wound States, Death Save e sua penalidade (só avança por ação explícita), Critical Injuries com Quick Fix e Treatment, armaduras com ablação, armas com munição, Autofire/Supressão e anexos, LUCK, modificadores temporários, progressão por IP e histórico.
-- **Caminho de Vida:** tabelas do Lifepath geral e um Lifepath por Role do personagem (com as ramificações do livro), relações (amigos, inimigos, aliados, amores, contatos), moda e estilo, moradia e lifestyle com pagamento mensal e status calculado, saldo, compras, itens recebidos sem custo (troca entre jogadores, presente, saque; só depois da criação), venda e descarte.
-- **Cyberware:** busca e categoria empilhadas na clínica, modelo anatômico em SVG com as regiões do livro, slots por região, clínica filtrada pela região, prévia da instalação (peças-base incluídas, lado, custo, faixa de Humanity Loss, teto da terapia), remoção, substituição e terapia.
+- **Caminho de Vida:** tabelas do Lifepath geral e um Lifepath por Role do personagem (com as ramificações do livro), relações (amigos, inimigos, aliados, amores, contatos), moda e estilo, moradia e lifestyle com pagamento mensal e status calculado.
+- **Equipamento:** saldo e lançamentos, loja, itens recebidos sem custo (troca entre jogadores, presente, saque; só depois da criação), inventário com estado (equipado, carregado, guardado; armadura na cabeça ou no corpo), venda e descarte, upgrades das armas e os vestíveis com Option Slots. Disparar, recarregar e a ablação de armadura continuam na aba Personagem.
+- **Cyberware:** na clínica, "Onde instalar" põe uma Option direto num vestível do inventário (Smart Glasses, Battleglove, Smart Ears...) sem precisar de Cybereye ou Cyberarm; o painel "Vestíveis com slots" (aba Equipamento) mostra slots, a mão da luva e o que ela cobre. Busca e categoria empilhadas na clínica, modelo anatômico em SVG com as regiões do livro, slots por região, clínica filtrada pela região, prévia da instalação (peças-base incluídas, lado, custo, faixa de Humanity Loss, teto da terapia), remoção, substituição e terapia.
 
 ### Exportar e importar
 
@@ -204,7 +229,7 @@ Cada personagem pode ser exportado para um arquivo `.cyberpunk.json` (botão de 
 - A loja (criação e "Adicionar itens") é paginada no servidor e alcança o catálogo inteiro; clicar no nome mostra a descrição do item.
 - Os efeitos de cyberware ficam em `cyberwareEffects` no JSON de regras: bônus de STAT com teto e acúmulo, bônus de perícia (somados à BASE quando valem sempre, só anotados quando dependem da situação, como "+2 em testes que envolvem visão") e efeitos de jogo exibidos no painel "Efeitos do cyberware". Um teste confere que cada efeito cita página e aponta para um item existente no catálogo.
 
-Atalhos: Ctrl+S salva na hora; Alt+1, Alt+2 e Alt+3 trocam de aba. Campos de texto salvam sozinhos em fila; ações de regra são comandos no servidor. Toda gravação leva a versão da ficha: se outra janela salvou antes, a API responde 409 em vez de sobrescrever.
+Atalhos: Ctrl+S salva na hora; Alt+1 a Alt+4 trocam de aba (Personagem, Caminho de Vida, Equipamento e Cyberware). Campos de texto salvam sozinhos em fila; ações de regra são comandos no servidor. Toda gravação leva a versão da ficha: se outra janela salvou antes, a API responde 409 em vez de sobrescrever.
 
 ### Regras e fontes
 
@@ -220,6 +245,7 @@ As regras ficam em `backend/src/CyberpunkDb.Application/Characters/Rules/charact
 | Armadura (maior SP, penalidade uma vez, ablação), Autofire, Supressão, 3 Attachment Slots | CP:R p.95, 173–174, 184–186 |
 | HL fixa na criação e rolada depois; membro de carne; coberturas e Hardened Shielding | CP:R p.110–116 |
 | Full Body Conversion: 0 HL e sem redução do teto nas peças listadas, slots dobrados | Interface RED 3 p.93 |
+| Vestíveis com Option Slots: Smart Glasses (2 Cybereye, par conta como um), Smart Lens (1, sem par), Battleglove (3 de braço), Smart Gloves MechaMan/CyberDude/Dynalar, Smart Ears (2 Cyberaudio), capacete MechaMan; a luva desliga as Options do braço por baixo | CP:R p.347, 354; DGD p.148; BC p.37; IR4 p.67; IR5 p.99–100 |
 | Lifestyle, moradia e semana de carência | CP:R p.377–378 |
 | Custos de IP e multiclasse | CP:R p.142, 410 |
 | Efeitos de cyberware na ficha (STAT, perícias, efeitos de jogo) | CP:R p.358–367 (`cyberwareEffects`) |
@@ -231,13 +257,62 @@ Divergências registradas:
 - **Wolvers e Tool Hand:** o catálogo liga essas opções ao Cyberarm, mas o Core permite instalá-las como única peça num membro de carne. Os pacotes de Solo, Tech e Nomad usam isso.
 - **Revenda:** o Core não fixa preço de revenda (p.385). O valor combinado na mesa entra como lançamento manual.
 
-Regras complementares (sem valor oficial): uma cobertura por membro, peças removidas voltam ao inventário, dois braços e duas pernas de carne, e um Lifepath por Role no multiclasse (o Core só o roda na criação, p.53, e não o menciona no multiclasse, p.143: o da criação é mantido e o da Role nova é opcional).
+Regras complementares (sem valor oficial): Options em vestíveis não custam Humanity (os livros não dizem; a Tetra do DGD, p.59, leva "Battleglove w/ Tool Hand" em GEAR com cyberware "None"; ajustável em `wearableHumanityLoss`), uma cobertura por membro, peças removidas voltam ao inventário, dois braços e duas pernas de carne, e um Lifepath por Role no multiclasse (o Core só o roda na criação, p.53, e não o menciona no multiclasse, p.143: o da criação é mantido e o da Role nova é opcional).
 
 ### Extensões preparadas
 
 - **Módulos de Role:** a interface `IRoleModule` (`Characters/Roles/RoleModules.cs`) recebe os dados próprios de cada Role em `RoleData` e entra na validação. Nenhum módulo é obrigatório.
 - **Moradia:** o pagamento mensal é registrado por ação; cobrança automática e consequências de inadimplência ficam para depois. O status já é calculado com a semana de carência.
 - **QG** (HQ IP, instalações): o catálogo já tem as melhorias de QG; a ficha ainda não as vincula.
+
+## Night Market
+
+Página `/night-market` (em **Outros**) e `/night-market/{id}`. Cada mercado é uma linha própria no banco (`NightMarkets.StateJson`): booths, listagens, vendas e histórico. As compras são avulsas: vão para o livro do mercado e não mexem nas fichas dos personagens. Como nas outras áreas, o frontend não tem regra de jogo; preços com condição e Haggle são calculados no servidor a cada leitura e compra. Toda gravação leva a versão do mercado (409 se outra janela salvou antes).
+
+- **Mercados:** escolha um mercado pronto, ajuste organizador, Operator Rank, tipos de mercadoria (rolados, sugeridos pelo livro ou escolhidos), linhas por tipo (dados físicos), livros do acervo, seed, chance de itens Damaged e golpe, e gere. A mesma seed monta o mesmo mercado; **Rolar de novo** troca a seed e mantém o livro de vendas.
+- **CBK:** o app do Black Chrome (p.6–8): abas por categoria, busca, mapa de booths `@A1`..., cards com foto, fabricante, preço, sales pitch, **Buy Now!!!** e "Pick-up or Browse at Booth". A **Visão do Mestre** mostra golpes, origem de cada listagem, avisos e as ferramentas de edição (condição, estoque, booth, preço combinado, remover, adicionar do catálogo, do índice ou nome e preço).
+- **Haggle:** COOL + Trading + Operator Rank + 1d10 dos dois lados, com críticos e empate para o Defensor; os dados podem ser digitados. Vencendo, um acordo do Rank ou abaixo.
+- **Eventos:** espaços "à escolha do Mestre" (escolher ou sortear), Midnight Market, contador de visitantes, Door Prize da Molly (roleta) e Mystery Boxes do Mr. Amaze.
+- **Night Market Index:** as 1.177 linhas do índice (v1.1, jan. 2025), com filtro por seção, categoria de preço e "com ficha"/"só no índice"; 954 abrem a ficha do catálogo.
+- **Ferramentas do Fixer:** quanto um Fixer paga por um item (condição, se o vendedor avisa, fica quieto ou disfarça, e Haggle de quem vende), teste de Haggle e a Table of Mystery avulsa (Mystery Box ganha com Achievement).
+
+| Mercado | Organizador | Fonte |
+|---|---|---|
+| Night Market (Core) e Personalizado | Fixer de Operator 5+ | CP:R p.337–339 |
+| A 3-Piece's Joint · B Woodchipper's Block Party · C Molly Anderson's Market · D Mister K's Midnight Market · E Ms. Mynah's · F Rex Royale's Casino | Operator 5, 5, 6, 9, 6 e 8 | BC p.131–155 (Molly também BC+ p.2–6) |
+| Midnight With the Upload · Must Have Cyberware Deals (Mr. Amaze) · Woodchipper's Garage | The Upload · Mr. Amaze · Woodchipper (Nomad) | IR3 p.25–30, 37–50 |
+| Hornet's Pharmacy · Mystery Boxes | Hornet · Mr. Amaze | IR4 p.3–8, 23–28 |
+| Toggle's Temple (arsenal: armas só emprestadas, entrada 20eb) | Toggle | IR5 p.35–60 |
+
+### Regras e fontes
+
+Os parâmetros ficam em `backend/src/CyberpunkDb.Application/NightMarkets/Rules/night-market-rules.json`, no mesmo formato das outras regras (página em `source` ou marca `complementary`, conferido por teste). A aba **Fontes e parâmetros** mostra tudo.
+
+| Regra | Fonte |
+|---|---|
+| Gerador: 1d6 duas vezes sem repetir, 1d10 linhas por tipo, d100 em 20 faixas sem repetir; todas as qualidades presentes; Option traz a peça Foundational; cyberware instalado pelo ripper do vendedor, Fashionware no local | CP:R p.338–339 |
+| Midnight Market: 1d10+5 itens raros, Fixer de Rank 9 | CP:R p.161, 339 |
+| Reach, Night Market a partir do Rank 5, Haggle e acordos por Rank | CP:R p.159–161 |
+| Empate fica com o Defensor; críticos (10 soma, 1 subtrai) | CP:R p.129–130 |
+| Oito categorias de preço; sem Fixer, só até Premium | CP:R p.385 |
+| Preço Poor/Excellent das armas | CP:R p.342 (`npc-rules.json`) |
+| CBK, booths `@#`, Buy Now!!!, taxa por listagem | BC p.6–8 |
+| Damaged 1 categoria abaixo, Destroyed 2, Operator 4+ percebe o dano, poucos compram Damaged de 20eb ou menos | IR5 p.5 |
+| Mystery Boxes: troca por Achievement, Table of Mystery 1d10 × 1d6 | IR4 p.24, 27–28 |
+| Door Prize: bônus de Smash e máscara, exemplo das mil balas de Junk Ammunition | BC+ p.2–3 |
+| Categoria de disponibilidade diferente do preço | IR2 p.66; IR5 p.37 |
+
+Divergências registradas:
+
+- **Very Heavy Melee Weapon:** a tabela do gerador diz 100eb (Premium); a de armas (CP:R p.340) e o catálogo dizem 500eb. Vale o catálogo.
+- **Itens que o catálogo não tem:** comidas e bebidas da tabela, Bows & Crossbows genérico, Radiation Suit e Shovel or Axe entram com nome e preço da tabela.
+- **Black Chrome+ no catálogo:** o slug de "Black Chrome+" vira `black-chrome` na importação, então os 12 itens do BC+ aparecem com a fonte "Black Chrome". O estoque da Molly usa os slugs dos itens para não depender disso.
+
+Regras complementares (sem valor oficial): a roleta do Door Prize (o BC+ só narra o sorteio) e o prêmio a cada 50 visitantes; o sorteio de ajuda das escolhas do Mestre e do Midnight Market (Luxury ou mais, ou arma exótica); itens de outros livros por tipo sorteado; a chance de itens Damaged na segunda mão; piso em Cheap ao descer de categoria; porcentagens arredondadas para baixo; e o estoque, que só é controlado quando o Mestre informa (o Core lista tipos, não o estoque).
+
+### Dados extraídos dos PDFs
+
+`node tools/night-market/extract.mjs ["pasta dos PDFs"]` (precisa do `pdftotext` no PATH) gera `data/source/night-market-index.json` (o índice, ligado ao catálogo pelo nome) e `data/source/black-chrome-booths.json` (os booths de cada listagem do Black Chrome). As poucas linhas que o layout do PDF quebra estão corrigidas à mão no próprio script, cada uma com a página. Os dois arquivos vão embutidos na aplicação.
 
 ## Dados
 

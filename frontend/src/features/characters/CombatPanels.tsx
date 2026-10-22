@@ -176,7 +176,6 @@ export function WeaponsPanel({ detail, run, busy, locked }: Props) {
                           onClick={() => run('weapons/reload', { instanceId: w.instanceId })}><RotateCcw size={14} /></IconButton>
                         {w.loadedAmmo && <span className={styles.source}>{w.loadedAmmo}</span>}
                       </div>}
-                      <Attachments detail={detail} weaponId={w.instanceId} slots={w.attachmentSlots} run={run} busy={busy} />
                     </td>
                   </tr>
                 )}
@@ -194,7 +193,7 @@ export function WeaponsPanel({ detail, run, busy, locked }: Props) {
  * Attachments of one weapon: the installed ones (removable) and the ones in the inventory that can go in. Class,
  * slots and Exotic restrictions are checked by the server (CP:R p.95).
  */
-function Attachments({ detail, weaponId, slots, run, busy }: { detail: CharacterDetail; weaponId: string; slots: number; run: Run; busy: boolean }) {
+export function Attachments({ detail, weaponId, slots, run, busy }: { detail: CharacterDetail; weaponId: string; slots: number; run: Run; busy: boolean }) {
   const [pick, setPick] = useState('');
   const entry = detail.sheet.inventory.find((e) => e.instanceId === weaponId);
   const installed = entry?.weapon?.attachments ?? [];

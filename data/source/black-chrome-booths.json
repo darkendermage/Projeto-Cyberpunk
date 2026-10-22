@@ -1,0 +1,536 @@
+{
+ "airhypo-cyberfinger": [
+  "A1"
+ ],
+ "americar-econocompact": [
+  "B1"
+ ],
+ "americar-family-star-van": [
+  "B1"
+ ],
+ "arachnid-grenade": [
+  "C4"
+ ],
+ "arasaka-acid": [
+  "D2"
+ ],
+ "arasaka-fire": [
+  "D2"
+ ],
+ "arasaka-weeping-reaver-katana": [
+  "D2"
+ ],
+ "arasaka-wound-salt": [
+  "D2"
+ ],
+ "avar-prototype-arasaka": [
+  "D2"
+ ],
+ "ballpoint-cyberfinger": [
+  "A1"
+ ],
+ "borgware-hardened-shielding": [
+  "F1"
+ ],
+ "budget-chipware-socket": [
+  "C3"
+ ],
+ "bullet-storage-cyberfinger": [
+  "A1"
+ ],
+ "chipvault": [
+  "C2"
+ ],
+ "corporate-island": [
+  "E1"
+ ],
+ "dartgun-cyberfinger": [
+  "A1"
+ ],
+ "dayton-sh-45-patroller": [
+  "D3"
+ ],
+ "dayton-sh-45-patroller-law": [
+  "D3"
+ ],
+ "dayton-tdt-004": [
+  "D3"
+ ],
+ "diego-motors-chupacabra": [
+  "B1"
+ ],
+ "diego-motors-range-trike": [
+  "B1"
+ ],
+ "discount-cyberaudio-suite": [
+  "C3"
+ ],
+ "drink-master-3000-5000": [
+  "F4"
+ ],
+ "e-tack-public-defender": [
+  "F5"
+ ],
+ "eagletech-survivalist": [
+  "B3"
+ ],
+ "el-f4-nt-linear-frame": [
+  "B5"
+ ],
+ "everest-ventureware-airwell-50": [
+  "B2"
+ ],
+ "everest-ventureware-one-touch-habitat": [
+  "B2"
+ ],
+ "executive-armor": [
+  "D1",
+  "E1"
+ ],
+ "explicit-memory-stimulator": [
+  "C3"
+ ],
+ "extra-jointed-upgrade": [
+  "A5"
+ ],
+ "faisal-s-dead-or-alive": [
+  "F2"
+ ],
+ "faisal-s-magna-knuckles": [
+  "E2"
+ ],
+ "fed-arms-pepper-shaker": [
+  "C4"
+ ],
+ "fire-brand-bunker-gear": [
+  "B4",
+  "F3"
+ ],
+ "flashbulb": [
+  "A5",
+  "C3"
+ ],
+ "flashlight-cyberfinger": [
+  "A1"
+ ],
+ "fma-kotar-linear-frame": [
+  "D2"
+ ],
+ "georgia-arms-matchmaker": [
+  "C4"
+ ],
+ "gunmart-bubba-buster": [
+  "C4"
+ ],
+ "gunmart-door-cracker": [
+  "B7",
+  "F4"
+ ],
+ "gunmart-engage": [
+  "C4"
+ ],
+ "gunmart-smart-special": [
+  "C4"
+ ],
+ "gunmart-special": [
+  "C4"
+ ],
+ "hades-multipurpose-assault": [
+  "B3",
+  "D2"
+ ],
+ "hardened-cybereye-casing": [
+  "F1"
+ ],
+ "harvey-100-americar": [
+  "B1",
+  "F4"
+ ],
+ "heuristic-health-monitor": [
+  "D1",
+  "E3"
+ ],
+ "highway-master-artemis": [
+  "B1"
+ ],
+ "homing-tracer-cyberfinger": [
+  "A1"
+ ],
+ "hydrosubsidium-universal-aqualung": [
+  "D1"
+ ],
+ "int-cyberware-hardened-shield": [
+  "F1"
+ ],
+ "integrated-cyberdeck-upgrade": [
+  "A5"
+ ],
+ "jeeves-executive-garment-bag": [
+  "D1",
+  "E3"
+ ],
+ "kaukaz-volkhov": [
+  "B1"
+ ],
+ "kendachi-mono-guard": [
+  "D2"
+ ],
+ "kendachi-mono-katana": [
+  "D2"
+ ],
+ "kendachi-mono-star": [
+  "D2"
+ ],
+ "kendachi-mono-wakizashi": [
+  "D2"
+ ],
+ "killchip-100-micro-bomb": [
+  "A2"
+ ],
+ "killstrom-banshee-microphone": [
+  "C1",
+  "E3"
+ ],
+ "killstrom-sonic-boom-amp": [
+  "C1",
+  "E3"
+ ],
+ "killstrom-typhoid-speaker": [
+  "C1",
+  "E3"
+ ],
+ "ktech-doberman-500": [
+  "D2"
+ ],
+ "ktech-doberman-500-marking-scent": [
+  "D2",
+  "F4"
+ ],
+ "ktech-security-grenade": [
+  "F4"
+ ],
+ "ktech-techhammer": [
+  "B3"
+ ],
+ "laser-light-electric-guitar": [
+  "C1",
+  "E3"
+ ],
+ "laser-light-street-jacket": [
+  "E1"
+ ],
+ "laser-pointer-cyberfinger": [
+  "A1"
+ ],
+ "lf-001-swat-linear-frame": [
+  "B5"
+ ],
+ "lighter-cyberfinger": [
+  "A1"
+ ],
+ "lockpick-cyberfinger": [
+  "A1"
+ ],
+ "lotos-netsuit": [
+  "A4"
+ ],
+ "makigai-ebi": [
+  "C5"
+ ],
+ "masetto-airrider": [
+  "B4",
+  "E1"
+ ],
+ "masetto-holo-wear": [
+  "E1"
+ ],
+ "mechaman-motorcycle-helmet": [
+  "B4",
+  "D1"
+ ],
+ "mechaman-smart-glove": [
+  "B4",
+  "D1"
+ ],
+ "micro-hydrogen-combuster": [
+  "D2"
+ ],
+ "microphone-cyberfinger": [
+  "A1"
+ ],
+ "midnight-arms-beast": [
+  "F2"
+ ],
+ "militech-fox-dual-ammo": [
+  "F5"
+ ],
+ "militech-gorgon-security-van": [
+  "D3"
+ ],
+ "militech-mastiff-smg": [
+  "F5"
+ ],
+ "militech-perseus": [
+  "D2",
+  "F5"
+ ],
+ "mimic-clothing-kit": [
+  "E1"
+ ],
+ "mini-air-supply-cyberfinger": [
+  "A1"
+ ],
+ "modfire-10x": [
+  "B3",
+  "F5"
+ ],
+ "modular-finger-cyberhand": [
+  "A5",
+  "C3"
+ ],
+ "modular-finger-enthusiast": [
+  "A5"
+ ],
+ "montage-variable-clothing-line": [
+  "E1"
+ ],
+ "mr-biscuit-multi-food-processor": [
+  "B2"
+ ],
+ "neo-soviet-cyberarm": [
+  "B6",
+  "C3"
+ ],
+ "nomad-rocker": [
+  "B3"
+ ],
+ "one-shot-special-cyberfinger": [
+  "A1",
+  "E3"
+ ],
+ "outlet-explosive": [
+  "A2"
+ ],
+ "overlord-handcannon": [
+  "C4"
+ ],
+ "petrochem-nitro-ultra9": [
+  "B1"
+ ],
+ "popup-net-launcher": [
+  "B6"
+ ],
+ "popup-shotgun": [
+  "B6",
+  "F1"
+ ],
+ "pursuit-security-bouncer": [
+  "F4"
+ ],
+ "pursuit-security-crowd-buster": [
+  "F2"
+ ],
+ "quadra-thunder-x": [
+  "B1",
+  "D3"
+ ],
+ "racer-bracer": [
+  "B6"
+ ],
+ "ranger-combat-boomerang": [
+  "B2"
+ ],
+ "rapideploy-sheath": [
+  "F4"
+ ],
+ "reflex-co-processor": [
+  "B6",
+  "F1"
+ ],
+ "reinforced-limb-upgrade": [
+  "B6"
+ ],
+ "rostovic-kleaver": [
+  "C4"
+ ],
+ "rostovic-ulicni-unistitelj": [
+  "C4"
+ ],
+ "sanroo-hello-cutie-ultra-k8": [
+  "D2",
+  "E2"
+ ],
+ "shock-armor": [
+  "F3"
+ ],
+ "shower-in-a-can": [
+  "C6"
+ ],
+ "shuriken-tornado-grenade": [
+  "B7"
+ ],
+ "skidrow-trench": [
+  "E1",
+  "F3"
+ ],
+ "slamdance-fangfist": [
+  "F4"
+ ],
+ "slamdance-tasmanskiy-klo": [
+  "D3"
+ ],
+ "solo-wolf-mono-katana": [
+  "C4"
+ ],
+ "sovoil-lubricants": [
+  "A3",
+  "B1",
+  "C6",
+  "F4"
+ ],
+ "sponsored-cybereye": [
+  "C3",
+  "E3"
+ ],
+ "spray-paint-cyberfinger": [
+  "A1"
+ ],
+ "squirt-cyberfinger": [
+  "A1"
+ ],
+ "standard-cyberfinger": [
+  "A1",
+  "E3"
+ ],
+ "sternmeyer-m-04-variable": [
+  "B3"
+ ],
+ "street-king-combat": [
+  "B1",
+  "D3"
+ ],
+ "street-viper-riding-suit": [
+  "B4",
+  "F3"
+ ],
+ "streetcase-by-secsystems": [
+  "C2",
+  "D1"
+ ],
+ "superchrome-glam-rifle": [
+  "D2",
+  "E2"
+ ],
+ "superchrome-javelin": [
+  "D2",
+  "E2"
+ ],
+ "superchrome-sidearm": [
+  "D2",
+  "E2"
+ ],
+ "tactical-smart-armor": [
+  "F3"
+ ],
+ "tanson-bellhop": [
+  "D3"
+ ],
+ "tanson-jetboy-hoverboard": [
+  "C5",
+  "D3"
+ ],
+ "techtronika-bmg-500": [
+  "B1"
+ ],
+ "tetracorp-america-badger-corporate-bus": [
+  "D3"
+ ],
+ "tetracorp-america-megahauler": [
+  "B1"
+ ],
+ "the-dirk-combat-jacket": [
+  "E1",
+  "F3"
+ ],
+ "the-grundy": [
+  "B1"
+ ],
+ "the-harriet-100": [
+  "B1",
+  "F4"
+ ],
+ "the-harveymerc": [
+  "B1",
+  "F4"
+ ],
+ "the-paladin-500": [
+  "B1",
+  "D3"
+ ],
+ "the-zacatzontli-pickup-truck": [
+  "B1"
+ ],
+ "tommyknocker": [
+  "D2"
+ ],
+ "tr-4-detonator-fluid": [
+  "B7"
+ ],
+ "trauma-response-nanomatrix": [
+  "F1"
+ ],
+ "triti-fizz": [
+  "C6"
+ ],
+ "utility-tomahawk": [
+  "B2"
+ ],
+ "vermilion-linear-frame": [
+  "D2"
+ ],
+ "westwood-nova-arms": [
+  "D2",
+  "F5"
+ ],
+ "white-hornet-tanto": [
+  "D2"
+ ],
+ "wirecutter-scissor-cyberfingers": [
+  "A1"
+ ],
+ "worldsat-aerial-sphere": [
+  "B2"
+ ],
+ "yangs-wheels-rickshaw": [
+  "C5"
+ ],
+ "zetatech-aerocop": [
+  "D3"
+ ],
+ "zetatech-aerovox-av-4": [
+  "D3"
+ ],
+ "zetatech-destination": [
+  "D3"
+ ],
+ "zetatech-herakles": [
+  "D3"
+ ],
+ "zetatech-porta-printer": [
+  "A3",
+  "E3"
+ ],
+ "zhirafa-rhinocefist": [
+  "B5"
+ ],
+ "zonda-molly-1k": [
+  "B1"
+ ],
+ "zonda-parallax-cybercycle": [
+  "D3"
+ ],
+ "zonda-sliver": [
+  "B1",
+  "D3"
+ ]
+}

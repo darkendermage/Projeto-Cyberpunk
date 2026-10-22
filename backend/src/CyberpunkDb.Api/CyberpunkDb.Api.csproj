@@ -5,7 +5,14 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <ApplicationIcon>NightCityItemDB.ico</ApplicationIcon>
+    <!-- Overridden by publicar.ps1 -Versao / the release workflow (tag v1.3.0 -> 1.3.0); the app compares it with the latest GitHub release. -->
+    <Version>0.0.0-dev</Version>
   </PropertyGroup>
+
+  <!-- GitHub repository ("owner/name") whose releases the desktop app updates from: -p:UpdatesRepository=... -->
+  <ItemGroup Condition="'$(UpdatesRepository)' != ''">
+    <AssemblyMetadata Include="UpdatesRepository" Value="$(UpdatesRepository)" />
+  </ItemGroup>
 
   <!--
     Desktop single-file build: dotnet publish -r win-x64 -p:DesktopBundle=true

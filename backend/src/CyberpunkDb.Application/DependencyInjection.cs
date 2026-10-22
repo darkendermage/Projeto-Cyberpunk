@@ -7,6 +7,10 @@ using CyberpunkDb.Application.Characters.Operations;
 using CyberpunkDb.Application.Characters.Rules;
 using CyberpunkDb.Application.Characters.Validation;
 using CyberpunkDb.Application.Collections;
+using CyberpunkDb.Application.NightMarkets;
+using CyberpunkDb.Application.NightMarkets.Generation;
+using CyberpunkDb.Application.NightMarkets.Rules;
+using CyberpunkDb.Application.NightMarkets.Trading;
 using CyberpunkDb.Application.Npcs;
 using CyberpunkDb.Application.Npcs.Generation;
 using CyberpunkDb.Application.Npcs.Rules;
@@ -43,7 +47,15 @@ public static class DependencyInjection
         services.AddSingleton<InventoryOperations>();
         services.AddSingleton<EconomyOperations>();
         services.AddSingleton<CombatOperations>();
+        services.AddSingleton<WearableOperations>();
         services.AddScoped<CharacterService>();
+        services.AddSingleton(sp => NightMarketRuleBook.LoadEmbedded(sp.GetRequiredService<NpcRuleBook>()));
+        services.AddSingleton<MarketPricing>();
+        services.AddSingleton<MarketOperations>();
+        services.AddSingleton<NightMarketGenerator>();
+        services.AddSingleton<MarketCatalogCache>();
+        services.AddScoped<MarketCatalogProvider>();
+        services.AddScoped<NightMarketService>();
         services.AddValidatorsFromAssemblyContaining<GearListUpsertValidator>(ServiceLifetime.Singleton);
         return services;
     }

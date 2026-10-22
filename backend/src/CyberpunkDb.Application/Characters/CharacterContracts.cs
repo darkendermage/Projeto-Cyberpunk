@@ -87,6 +87,13 @@ public sealed record TherapyRequest(int Version, string Kind, string Payment = "
 
 public sealed record AttachRequest(int Version, string WeaponInstanceId, string AttachmentInstanceId);
 
+/// <summary>Option for a worn host: bought now (<see cref="ItemId"/>) or taken from the inventory (<see cref="OptionInstanceId"/>).</summary>
+public sealed record WearableInstallRequest(int Version, string WearableInstanceId, int? ItemId = null, string? OptionInstanceId = null, BudgetPool? Pool = null);
+
+public sealed record WearableOptionRequest(int Version, string WearableInstanceId, string OptionInstanceId);
+
+public sealed record WearableSideRequest(int Version, string WearableInstanceId, BodySide? Side);
+
 public sealed record PreviewPieceDto(
     string InstanceId, string Name, string Slug, int Price, int HumanityLoss, string? HumanityLossDice, string? Host,
     BodySide? Side, bool MeatLimb, string Region);

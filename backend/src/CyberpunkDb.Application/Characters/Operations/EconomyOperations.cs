@@ -60,6 +60,7 @@ public sealed class EconomyOperations(CharacterCalculator calculator)
         var remaining = held - amount;
         if (remaining == 0)
         {
+            inventory = WearableOperations.Unlink(inventory, entry.InstanceId);
             inventory.RemoveAll(e => e.InstanceId == entry.InstanceId);
             inventory = inventory.Select(e => e.Weapon is { } w && w.Attachments.Contains(entry.InstanceId)
                 ? e with { Weapon = w with { Attachments = w.Attachments.Where(a => a != entry.InstanceId).ToList() } }

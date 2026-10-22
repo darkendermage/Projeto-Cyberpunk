@@ -236,6 +236,19 @@ internal static class CatalogModelConfiguration
             e.HasIndex(x => x.UpdatedAt);
         });
 
+        b.Entity<NightMarket>(e =>
+        {
+            e.ToTable("NightMarkets");
+            e.Property(x => x.Name).HasMaxLength(80).IsRequired();
+            e.Property(x => x.PresetId).HasMaxLength(40).IsRequired();
+            e.Property(x => x.Letter).HasMaxLength(2).IsRequired();
+            e.Property(x => x.Organizer).HasMaxLength(80).IsRequired();
+            e.Property(x => x.Version).IsConcurrencyToken();
+            e.Property(x => x.StateJson).IsRequired();
+            if (isPostgres) e.Property(x => x.StateJson).HasColumnType("jsonb");
+            e.HasIndex(x => x.UpdatedAt);
+        });
+
         b.Entity<CharacterPortrait>(e =>
         {
             e.ToTable("CharacterPortraits");

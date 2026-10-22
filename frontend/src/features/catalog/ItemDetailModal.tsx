@@ -5,18 +5,13 @@ import type { FieldDescriptor, Item } from '../../api/types';
 import { useCategoryKey, useItemDetail, useSchema } from '../../api/hooks';
 import { ItemArt } from '../../components/art/ItemArt';
 import { ErrorState, Modal, Spinner } from '../../components/ui/ui';
-import { DATA_ORIGIN_LABEL, formatAttribute, formatEb, RULE_SYSTEM_LABEL } from '../../lib/format';
+import { DATA_ORIGIN_LABEL, formatAttribute, formatEb, PRICE_CATEGORY_LABEL, RULE_SYSTEM_LABEL } from '../../lib/format';
 import { rangeRowsFor } from '../../lib/rangeTable';
 import { useRangeUnit } from '../../lib/hooks';
 import { RangeUnitToggle, WeaponRange } from '../reference/RangeTables';
 import { CATEGORY_CODES } from './categoryMeta';
 import { AddToListMenu, CompareButton, FavoriteButton } from './ItemActions';
 import styles from './ItemDetailModal.module.css';
-
-const PRICE_CATEGORY_LABEL: Record<string, string> = {
-  Cheap: 'Cheap', Everyday: 'Everyday', Costly: 'Costly', Premium: 'Premium', Expensive: 'Expensive',
-  VeryExpensive: 'Very Expensive', Luxury: 'Luxury', SuperLuxury: 'Super Luxury',
-};
 
 export function ItemDetailModal({ itemId, onClose }: { itemId: number | null; onClose: () => void }) {
   const detail = useItemDetail(itemId);

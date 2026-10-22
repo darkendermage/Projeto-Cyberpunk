@@ -219,6 +219,8 @@ public sealed class CyberwareOperations(CharacterRuleBook rules, CyberwareInstal
                         ?? throw CharacterChange.Refuse("fromInventory", "Item não encontrado no inventário.");
             var stored = catalog.Find(entry.ItemId) ?? throw CharacterChange.Refuse("fromInventory", "Item fora do catálogo.");
             if (stored.Cyber is null) throw CharacterChange.Refuse("fromInventory", $"{stored.Name} não é cyberware.");
+            if (entry.Quantity <= 1 && sheet.Inventory.FirstOrDefault(e => e.Wearable?.Options.Contains(entry.InstanceId) == true) is { } host)
+                throw CharacterChange.Refuse("fromInventory", $"{stored.Name} está em {catalog.Find(host.ItemId)?.Name}: retire de lá antes de implantar.");
             return (stored, entry);
         }
         var item = request.ItemId is { } id ? catalog.Find(id) : null;

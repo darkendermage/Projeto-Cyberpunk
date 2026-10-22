@@ -1,9 +1,12 @@
+import { useQuery } from '@tanstack/react-query';
+import { api } from '../../api/client';
 import { Button, Modal, Segmented, Switch } from '../../components/ui/ui';
 import { useEffectsSettings } from '../../state/EffectsContext';
 import styles from './SettingsPanel.module.css';
 
 export function SettingsPanel({ open, onClose }: { open: boolean; onClose: () => void }) {
   const { settings, update, reset } = useEffectsSettings();
+  const health = useQuery({ queryKey: ['health'], queryFn: ({ signal }) => api.health(signal), enabled: open, staleTime: Infinity });
 
   return (
     <Modal open={open} onClose={onClose} title="Configurações" variant="drawer-right">
@@ -36,6 +39,8 @@ export function SettingsPanel({ open, onClose }: { open: boolean; onClose: () =>
         </section>
 
         <Button onClick={reset}>Restaurar padrões</Button>
+
+        {health.data && <p className={styles.version}>Versão <span className="mono">{health.data.version}</span></p>}
       </div>
     </Modal>
   );

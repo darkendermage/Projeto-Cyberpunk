@@ -59,7 +59,8 @@ public sealed class CharacterCalculator(CharacterRuleBook rules)
             ComputeHousing(sheet, today ?? DateOnly.FromDateTime(DateTime.UtcNow)),
             CyberwareAnatomy.Describe(sheet, catalog, Mechanics(sheet, catalog)),
             rules.InFbc(sheet, catalog),
-            CyberwareEffects.Lines(rules, effects));
+            CyberwareEffects.Lines(rules, effects),
+            WearableCyberware.Lines(rules, sheet, catalog));
     }
 
     // ------------------------------------------------------------ housing and lifestyle
@@ -141,6 +142,7 @@ public sealed class CharacterCalculator(CharacterRuleBook rules)
     private CyberLine[] CyberLines(CharacterSheet sheet, NpcCatalog catalog)
     {
         var mechanics = Mechanics(sheet, catalog);
+        var covered = WearableCyberware.Covered(rules, sheet, catalog);
         return sheet.Cyberware.Select(c =>
         {
             var item = catalog.Find(c.ItemId);
@@ -151,7 +153,7 @@ public sealed class CharacterCalculator(CharacterRuleBook rules)
                 c.ParentInstanceId, c.Side, c.MeatLimb, item?.Cyber?.Foundational ?? false,
                 item is null ? null : mechanics.SlotsProvided(item), used, c.HumanityLossApplied, item?.Cyber?.HumanityLossDice,
                 c.CurrentSp, CyberwareAnatomy.RegionOf(c, sheet.Cyberware, catalog), item?.Price ?? 0,
-                item is null ? null : mechanics.FreeTextRequirement(item, catalog));
+                item is null ? null : mechanics.FreeTextRequirement(item, catalog), covered.GetValueOrDefault(c.InstanceId));
         }).ToArray();
     }
 
