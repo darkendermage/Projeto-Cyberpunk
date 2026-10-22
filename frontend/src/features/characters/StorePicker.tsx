@@ -24,15 +24,15 @@ export interface PurchaseInput {
   note?: string | null;
 }
 
-type Acquisition = 'Purchase' | 'Trade' | 'Gift' | 'Loot';
-const ACQUISITION_LABEL: Record<Acquisition, string> = { Purchase: 'Compra', Trade: 'Troca', Gift: 'Presente', Loot: 'Saque' };
+type Received = 'Trade' | 'Gift' | 'Loot';
+const RECEIVED_LABEL: Record<Received, string> = { Gift: 'Presente', Trade: 'Troca', Loot: 'Saque' };
 
 /**
  * Catalog search with a confirmation step per item: price, quantity, budget now and after, and the explicit choice
- * to install or equip. After creation an item can also come in without paying (trade, gift, loot).
+ * to install or equip. With `receiving` (after creation only) items come in without paying: trade, gift or loot.
  * The server still decides whether it is allowed (price, budget, installation).
  */
-export function StorePicker({ onBuy, busy, creationBudgets, available, creating }: {
+export function StorePicker({ onBuy, busy, creationBudgets, available, creating, receiving = false }: {
   onBuy: (input: PurchaseInput, item: StoreItem) => Promise<unknown> | void;
   busy: boolean;
   /** Complete Package creation: pay from the general and fashion budgets. */
@@ -40,6 +40,8 @@ export function StorePicker({ onBuy, busy, creationBudgets, available, creating 
   /** Money available, by budget, to project the balance before confirming. */
   available: { balance: number; gear?: number; fashion?: number };
   creating: boolean;
+  /** Trade, gift or loot: no money moves. */
+  receiving?: boolean;
 }) {
   const [query, setQuery] = useState('');
   const [category, setCategory] = useState('');
@@ -81,7 +83,8 @@ export function StorePicker({ onBuy, busy, creationBudgets, available, creating 
             <thead><tr><th>Item</th><th>Categoria</th><th className={styles.num}>Preço</th><th /></tr></thead>
             <tbody>
               {data.items.map((item) => (
-                <StoreRow key={item.id} item={item} onBuy={onBuy} busy={busy} creationBudgets={creationBudgets} available={available} creating={creating} />
+                <StoreRow key={item.id} item={item} onBuy={onBuy} busy={busy} creationBudgets={creationBudgets} available={available}
+                  creating={creating} receiving={receiving} />
               ))}
             </tbody>
           </table>
@@ -95,9 +98,9 @@ export function StorePicker({ onBuy, busy, creationBudgets, available, creating 
   );
 }
 
-function StoreRow({ item, onBuy, busy, creationBudgets, available, creating }: {
+function StoreRow({ item, onBuy, busy, creationBudgets, available, creating, receiving }: {
   item: StoreItem; onBuy: (input: PurchaseInput, item: StoreItem) => Promise<unknown> | void; busy: boolean;
-  creationBudgets: boolean; available: { balance: number; gear?: number; fashion?: number }; creating: boolean;
+  creationBudgets: boolean; available: { balance: number; gear?: number; fashion?: number }; creating: boolean; receiving: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const [info, setInfo] = useState(false);
@@ -106,9 +109,9 @@ function StoreRow({ item, onBuy, busy, creationBudgets, available, creating }: {
   const [install, setInstall] = useState(creating);
   const [equip, setEquip] = useState(false);
   const [worn, setWorn] = useState<ArmorSlot>('Body');
-  const [how, setHow] = useState<Acquisition>('Purchase');
+  const [how, setHow] = useState<Received>('Gift');
   const [note, setNote] = useState('');
-  const free = !creating && how !== 'Purchase';
+  const free = receiving && !creating;
   const needsCaliber = item.category === 'Ammunition' && item.calibers.length > 1;
   const pool: BudgetPool | null = creationBudgets ? (item.fashion ? 'CreationFashion' : 'CreationGear') : null;
   const budgetNow = pool === 'CreationFashion' ? available.fashion ?? 0 : pool === 'CreationGear' ? available.gear ?? 0 : available.balance;
@@ -132,16 +135,20 @@ function StoreRow({ item, onBuy, busy, creationBudgets, available, creating }: {
         </td>
         <td className={styles.small}>{CATEGORY_LABEL[item.category] ?? item.category}</td>
         <td className={styles.total}>{formatEb(item.price)}</td>
-        <td><Button icon={<ShoppingCart size={14} />} active={open} onClick={() => setOpen(!open)}>{open ? 'Fechar' : creating ? 'Comprar' : 'Adicionar'}</Button></td>
+        <td>
+          <Button icon={free ? <Gift size={14} /> : <ShoppingCart size={14} />} active={open} onClick={() => setOpen(!open)}>
+            {open ? 'Fechar' : free ? 'Receber' : 'Comprar'}
+          </Button>
+        </td>
       </tr>
       {(info || open) && (
         <tr>
           <td colSpan={4}>
             <p className={styles.storeDescription}>{item.description ?? 'O catálogo não tem descrição para este item.'}</p>
             {open && <div className={styles.row} style={{ padding: '6px 0' }}>
-              {!creating && (
-                <Select value={how} onChange={(e) => setHow(e.target.value as Acquisition)} aria-label="Como o item chega" highlighted={free}>
-                  {(Object.keys(ACQUISITION_LABEL) as Acquisition[]).map((k) => <option key={k} value={k}>{ACQUISITION_LABEL[k]}</option>)}
+              {free && (
+                <Select value={how} onChange={(e) => setHow(e.target.value as Received)} aria-label="Como o item chega">
+                  {(Object.keys(RECEIVED_LABEL) as Received[]).map((k) => <option key={k} value={k}>{RECEIVED_LABEL[k]}</option>)}
                 </Select>
               )}
               {!item.cyberware && (

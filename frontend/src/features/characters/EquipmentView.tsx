@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Crosshair, Glasses, Package, ShoppingBag, Trash2, Wallet, X } from 'lucide-react';
+import { Crosshair, Gift, Glasses, Package, Shirt, ShoppingBag, Trash2, Wallet, X } from 'lucide-react';
 import { problemMessage, useCharacterCommand, useCharacterEvents } from '../../api/characters';
 import type { CharacterDetail, CharacterRules, InventoryLine, WearableLine } from '../../api/characterTypes';
 import { Button, IconButton, Modal, NumberInput, Select } from '../../components/ui/ui';
@@ -41,7 +41,7 @@ export function EquipmentView({ detail, editor }: Props) {
         <WalletPanel detail={detail} run={run} busy={busy} />
       </div>
       <div className={styles.column}>
-        <InventoryPanel detail={detail} run={run} busy={busy} />
+        <InventoryPanels detail={detail} run={run} busy={busy} />
       </div>
       <div className={styles.column}>
         <AttachmentsPanel detail={detail} run={run} busy={busy} />
@@ -53,8 +53,10 @@ export function EquipmentView({ detail, editor }: Props) {
 
 // ------------------------------------------------------------ money: balance, store, ledger
 
+type StoreMode = 'buy' | 'receive';
+
 function WalletPanel({ detail, run, busy }: { detail: CharacterDetail; run: Run; busy: boolean }) {
-  const [shopping, setShopping] = useState(false);
+  const [store, setStore] = useState<StoreMode | null>(null);
   const [amount, setAmount] = useState('');
   const [reason, setReason] = useState('');
   const ledger = useCharacterEvents(detail.id);
@@ -65,8 +67,15 @@ function WalletPanel({ detail, run, busy }: { detail: CharacterDetail; run: Run;
 
   return (
     <SheetPanel title="Dinheiro e compras" icon={<Wallet size={16} />}
-      actions={<Button icon={<ShoppingBag size={14} />} disabled={!finalized} title={finalized ? undefined : 'Compras da criação ficam no passo Equipamento'}
-        onClick={() => setShopping(true)}>Adicionar</Button>}>
+      actions={(
+        <>
+          <Button icon={<ShoppingBag size={14} />} disabled={!finalized} title={finalized ? 'Comprar com o saldo' : 'Compras da criação ficam no passo Equipamento'}
+            onClick={() => setStore('buy')}>Comprar</Button>
+          <Button icon={<Gift size={14} />} disabled={!finalized}
+            title={finalized ? 'Troca, presente ou saque: entra sem pagar' : 'Itens sem custo só entram depois da criação'}
+            onClick={() => setStore('receive')}>Receber</Button>
+        </>
+      )}>
       <div className={styles.bigNumbers}>
         <strong>{formatEb(detail.sheet.wallet.balance)}</strong>
         <span className={styles.muted}>eurodólares</span>
@@ -97,13 +106,16 @@ function WalletPanel({ detail, run, busy }: { detail: CharacterDetail; run: Run;
         </ul>
       </div>
 
-      <Modal open={shopping} onClose={() => setShopping(false)} title="Adicionar itens" wide>
+      <Modal open={store !== null} onClose={() => setStore(null)} title={store === 'receive' ? 'Receber itens sem pagar' : 'Comprar itens'} wide>
         <div className={styles.panel} style={{ clipPath: 'none', border: 'none' }}>
           <p className={styles.small}>
-            Saldo: {formatEb(detail.sheet.wallet.balance)}. Compras saem do saldo e o servidor recusa as que passam dele. Itens trocados com
-            outros jogadores, presentes e saques entram sem custo e ficam no histórico. Nada é equipado automaticamente.
+            {store === 'receive'
+              ? 'Itens trocados com outros jogadores, presentes e saques entram sem custo e ficam no histórico com a origem. Cyberware recebido vai para o inventário; instalar continua custando Humanity.'
+              : `Saldo: ${formatEb(detail.sheet.wallet.balance)}. Compras saem do saldo e o servidor recusa as que passam dele.`}
+            {' '}Nada é equipado automaticamente.
           </p>
-          <StorePicker busy={busy} creationBudgets={false} onBuy={buy} creating={false} available={{ balance: detail.sheet.wallet.balance }} />
+          <StorePicker busy={busy} creationBudgets={false} onBuy={buy} creating={false} receiving={store === 'receive'}
+            available={{ balance: detail.sheet.wallet.balance }} />
         </div>
       </Modal>
     </SheetPanel>
@@ -114,54 +126,69 @@ function WalletPanel({ detail, run, busy }: { detail: CharacterDetail; run: Run;
 
 const RECEIVED_LABEL: Partial<Record<InventoryLine['origin'], string>> = { Trade: 'troca', Gift: 'presente', Loot: 'saque' };
 
-function InventoryPanel({ detail, run, busy }: { detail: CharacterDetail; run: Run; busy: boolean }) {
+/** Gear and fashion (clothing and Fashionware, CP:R p.111) in separate panels, so the outfit doesn't bury the arsenal. */
+function InventoryPanels({ detail, run, busy }: { detail: CharacterDetail; run: Run; busy: boolean }) {
   const [removing, setRemoving] = useState<InventoryLine | null>(null);
-  const items = detail.report.inventory;
   const finalized = detail.sheet.creation.finalized;
+  const gear = detail.report.inventory.filter((i) => !i.fashion);
+  const fashion = detail.report.inventory.filter((i) => i.fashion);
+  const table = { run, busy, finalized, onRemove: setRemoving };
   return (
-    <SheetPanel title="Inventário" icon={<Package size={16} />}>
-      {items.length === 0 ? <p className={styles.muted}>Inventário vazio.</p> : (
-        <table className={styles.table}>
-          <thead><tr><th>Item</th><th className={styles.num}>Qtd</th><th className={styles.num}>Pago</th><th>Estado</th><th /></tr></thead>
-          <tbody>
-            {items.map((i) => {
-              const armor = i.sp != null;
-              return (
-                <tr key={i.instanceId}>
-                  <td>
-                    {i.name}
-                    {i.caliber && <span className={styles.muted}> ({i.caliber})</span>}
-                    {i.fashion && <span className={styles.tag}>moda</span>}
-                  </td>
-                  <td className={styles.num}>{i.rounds ?? i.quantity}</td>
-                  <td className={styles.num}>
-                    {RECEIVED_LABEL[i.origin] ? <span className={styles.tag} title={i.notes ?? undefined}>{RECEIVED_LABEL[i.origin]}</span> : i.pricePaid ? formatEb(i.pricePaid) : '—'}
-                  </td>
-                  <td>
-                    <Select style={{ minWidth: 118 }} value={i.state === 'Equipped' && i.worn ? `Equipped:${i.worn}` : i.state} disabled={busy} aria-label={`Estado de ${i.name}`}
-                      onChange={(e) => {
-                        const [state, worn] = e.target.value.split(':');
-                        void run('equip', { instanceId: i.instanceId, state, worn: worn ?? null });
-                      }}>
-                      {armor ? (
-                        <>
-                          <option value="Equipped:Body">No corpo</option>
-                          <option value="Equipped:Head">Na cabeça</option>
-                        </>
-                      ) : <option value="Equipped">{ITEM_STATE_LABEL.Equipped}</option>}
-                      <option value="Carried">{ITEM_STATE_LABEL.Carried}</option>
-                      <option value="Stored">{ITEM_STATE_LABEL.Stored}</option>
-                    </Select>
-                  </td>
-                  <td>{finalized && <IconButton label={`Vender ou descartar ${i.name}`} onClick={() => setRemoving(i)}><Trash2 size={14} /></IconButton>}</td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      )}
+    <>
+      <SheetPanel title="Inventário" icon={<Package size={16} />}>
+        {gear.length === 0 ? <p className={styles.muted}>Nenhum equipamento.</p> : <InventoryTable items={gear} {...table} />}
+      </SheetPanel>
+      <SheetPanel title="Moda" icon={<Shirt size={16} />}>
+        {fashion.length === 0
+          ? <p className={`${styles.small} ${styles.muted}`}>Roupas e Fashionware do personagem aparecem aqui.</p>
+          : <InventoryTable items={fashion} {...table} />}
+      </SheetPanel>
       {removing && <RemoveItemDialog item={removing} onClose={() => setRemoving(null)} run={run} busy={busy} />}
-    </SheetPanel>
+    </>
+  );
+}
+
+function InventoryTable({ items, run, busy, finalized, onRemove }: {
+  items: InventoryLine[]; run: Run; busy: boolean; finalized: boolean; onRemove: (item: InventoryLine) => void;
+}) {
+  return (
+    <table className={styles.table}>
+      <thead><tr><th>Item</th><th className={styles.num}>Qtd</th><th className={styles.num}>Pago</th><th>Estado</th><th /></tr></thead>
+      <tbody>
+        {items.map((i) => {
+          const armor = i.sp != null;
+          return (
+            <tr key={i.instanceId}>
+              <td>
+                {i.name}
+                {i.caliber && <span className={styles.muted}> ({i.caliber})</span>}
+              </td>
+              <td className={styles.num}>{i.rounds ?? i.quantity}</td>
+              <td className={styles.num}>
+                {RECEIVED_LABEL[i.origin] ? <span className={styles.tag} title={i.notes ?? undefined}>{RECEIVED_LABEL[i.origin]}</span> : i.pricePaid ? formatEb(i.pricePaid) : '—'}
+              </td>
+              <td>
+                <Select style={{ minWidth: 118 }} value={i.state === 'Equipped' && i.worn ? `Equipped:${i.worn}` : i.state} disabled={busy} aria-label={`Estado de ${i.name}`}
+                  onChange={(e) => {
+                    const [state, worn] = e.target.value.split(':');
+                    void run('equip', { instanceId: i.instanceId, state, worn: worn ?? null });
+                  }}>
+                  {armor ? (
+                    <>
+                      <option value="Equipped:Body">No corpo</option>
+                      <option value="Equipped:Head">Na cabeça</option>
+                    </>
+                  ) : <option value="Equipped">{ITEM_STATE_LABEL.Equipped}</option>}
+                  <option value="Carried">{ITEM_STATE_LABEL.Carried}</option>
+                  <option value="Stored">{ITEM_STATE_LABEL.Stored}</option>
+                </Select>
+              </td>
+              <td>{finalized && <IconButton label={`Vender ou descartar ${i.name}`} onClick={() => onRemove(i)}><Trash2 size={14} /></IconButton>}</td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
   );
 }
 
