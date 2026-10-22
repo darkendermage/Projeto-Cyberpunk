@@ -95,7 +95,7 @@ Para produção, rode `npm run build` e copie `frontend/dist` para `backend/src/
 ### Testes
 
 ```bash
-cd backend && dotnet test     # 316 testes: filtros, validação, gerador de NPCs, regras de personagem, Night Market e integração da API (SQLite + seed real)
+cd backend && dotnet test     # 335 testes: filtros, validação, gerador de NPCs, regras de personagem, Night Market, atualização automática e integração da API (SQLite + seed real)
 cd frontend && npm test       # filtros, URL, editor de NPCs, tabela de alcance, perícias, Lifepath, anatomia do cyberware e Night Market
 ```
 

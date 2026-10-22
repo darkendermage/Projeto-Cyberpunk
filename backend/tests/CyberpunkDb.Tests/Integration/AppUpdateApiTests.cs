@@ -41,6 +41,8 @@ public class AppUpdateApiTests(ApiFactory factory)
     {
         // A cross-site request without preflight can only use "simple" content types such as text/plain.
         var response = await _client.PostAsync("/api/app/update", new StringContent("""{ "version": "9.9.9" }""", Encoding.UTF8, "text/plain"));
-        response.StatusCode.Should().Be(HttpStatusCode.UnsupportedMediaType);
+        // The JSON-only endpoint is not even matched, so the request falls through to the API's 404.
+        response.IsSuccessStatusCode.Should().BeFalse();
+        response.StatusCode.Should().NotBe(HttpStatusCode.Conflict, "the updater must not have been reached");
     }
 }

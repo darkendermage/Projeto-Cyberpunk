@@ -14,7 +14,7 @@
 
 *Armas, cromo, fichas de personagem, inimigos e o Night Market inteiro, num programa só.*
 
-[![Baixar](https://img.shields.io/badge/BAIXAR-WINDOWS-ff2a3d?style=for-the-badge&labelColor=0a0204)](https://github.com/darkendermage/Projeto-Cyberpunk/releases/latest)
+[![Baixar](https://img.shields.io/badge/BAIXAR-WINDOWS-ff2a3d?style=for-the-badge&labelColor=0a0204)](https://github.com/darkendermage/Projeto-Cyberpunk/releases/latest/download/NightCityItemDB-win-x64.zip)
 [![Versão](https://img.shields.io/github/v/release/darkendermage/Projeto-Cyberpunk?style=for-the-badge&label=VERS%C3%83O&color=ffcf3a&labelColor=0a0204)](https://github.com/darkendermage/Projeto-Cyberpunk/releases/latest)
 ![Cyberpunk RED](https://img.shields.io/badge/CYBERPUNK-RED%20%2F%202020-3de0ff?style=for-the-badge&labelColor=0a0204)
 ![Idioma](https://img.shields.io/badge/IDIOMA-PORTUGU%C3%8AS-3dff9a?style=for-the-badge&labelColor=0a0204)
@@ -29,7 +29,7 @@
 
 Não precisa instalar nada, nem criar conta, nem ter internet para jogar.
 
-1. **Baixe** o arquivo `NightCityItemDB-win-x64.zip` na [página de downloads](https://github.com/darkendermage/Projeto-Cyberpunk/releases/latest).
+1. **[Clique aqui para baixar](https://github.com/darkendermage/Projeto-Cyberpunk/releases/latest/download/NightCityItemDB-win-x64.zip)** o `NightCityItemDB-win-x64.zip`. As notas de cada versão ficam na [página de versões](https://github.com/darkendermage/Projeto-Cyberpunk/releases).
 2. **Extraia** o `.zip` numa pasta sua (Documentos ou Área de Trabalho, por exemplo).
 3. **Dê dois cliques** em `NightCityItemDB.exe`. O app abre sozinho no seu navegador.
 
