@@ -253,6 +253,8 @@
   letter-spacing: 0.12em;
   text-transform: lowercase;
   color: var(--text-muted);
+  background: none;
+  border: 0;
   border-bottom: 2px solid transparent;
 }
 .tab:hover {
@@ -321,13 +323,18 @@
   gap: 6px;
   padding: 10px 12px 12px;
 }
+/* Same title as the catalog cards (ItemCard .name/.open): plain text even when it is a button. */
 .listingName {
-  font-family: var(--font-display);
-  font-size: 15.5px;
+  padding: 0;
+  font-family: var(--font-ui);
+  font-size: 18px;
   font-weight: 700;
-  line-height: 1.2;
+  line-height: 1.15;
+  letter-spacing: 0.01em;
   color: var(--text);
   text-align: left;
+  background: none;
+  border: 0;
 }
 .listingName:hover {
   color: var(--red-bright);
