@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import { Lock, LockOpen, Minus, Plus, Star } from 'lucide-react';
 import type { NpcRules, NpcSheet, NpcValidationReport, SkillLine } from '../../api/types';
 import { Badge, Button, Field, IconButton, NumberInput, Segmented, Select } from '../../components/ui/ui';
-import { type DraftAction, skillKey, STAT_KEYS } from './npcDraft';
+import { type DraftAction, ERA_LABEL, gangsByEra, skillKey, STAT_KEYS } from './npcDraft';
 import styles from './EnemyGenerator.module.css';
 
 export function LockButton({ locked, onToggle, label }: { locked: boolean; onToggle: () => void; label: string }) {
@@ -32,6 +32,16 @@ export function IdentityEditor({
       <Field label="Conceito" htmlFor="npc-concept">
         <input id="npc-concept" value={sheet.concept ?? ''} maxLength={300} onChange={(e) => set({ concept: e.target.value || null })}
           placeholder="Ex.: Policial corrupto da NCPD" />
+      </Field>
+      <Field label="Gangue" htmlFor="npc-sheet-gang" hint="Rótulo da ficha. Na geração vale a gangue da configuração.">
+        <Select id="npc-sheet-gang" value={sheet.gangId ?? ''} onChange={(e) => set({ gangId: e.target.value || null })}>
+          <option value="">Nenhuma</option>
+          {gangsByEra(rules.gangs).map(([era, gangs]) => (
+            <optgroup key={era} label={ERA_LABEL[era] ?? era}>
+              {gangs.map((g) => <option key={g.id} value={g.id}>{g.label}</option>)}
+            </optgroup>
+          ))}
+        </Select>
       </Field>
       <Field label="Role" htmlFor="npc-role">
         <Select id="npc-role" value={sheet.role ?? ''} onChange={(e) => set({ role: e.target.value || null, roleRank: e.target.value ? Math.max(sheet.roleRank, 1) : 0 })}>

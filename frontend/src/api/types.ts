@@ -280,6 +280,7 @@ export interface NpcSheet {
   level: NpcLevel;
   hardened: boolean;
   profileId?: string | null;
+  gangId?: string | null;
   role?: string | null;
   roleRank: number;
   nativeLanguage: string;
@@ -422,6 +423,7 @@ export interface NpcGenerationRequest {
   level: NpcLevel;
   hardened: boolean;
   profileId?: string | null;
+  gangId?: string | null;
   seed?: number | null;
   base?: NpcSheet | null;
   cyberwareRules: NpcCyberwareRule[];
@@ -504,6 +506,20 @@ export interface ProfileInfo {
   keyNonCombatSkills: string[];
 }
 
+export interface GangInfo {
+  id: string;
+  label: string;
+  /** "2045" (Time of the Red) or "2077" (Edgerunners Mission Kit). */
+  era: string;
+  kind: string;
+  description: string;
+  aesthetic: string;
+  territory: string[];
+  languages: string[];
+  preferredProfiles: string[];
+  facts: RuleFact[];
+}
+
 export interface NpcRules {
   books: Record<string, string>;
   about: string;
@@ -513,6 +529,7 @@ export interface NpcRules {
   freeSkills: { skill: string; specialization: string | null; level: number }[];
   freeSkillsSource: string;
   profiles: ProfileInfo[];
+  gangs: GangInfo[];
   roles: string[];
   languages: string[];
   homes: string[];

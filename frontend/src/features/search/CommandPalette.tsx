@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { CornerDownLeft, Search } from 'lucide-react';
 import { useGlobalSearch } from '../../api/hooks';
 import { useDebouncedValue } from '../../lib/hooks';

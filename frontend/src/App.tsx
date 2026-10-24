@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react';
-import { Link, Navigate, Route, Routes } from 'react-router-dom';
+import { Link, Navigate, Route, Routes } from 'react-router';
 import { AppShell } from './components/layout/AppShell';
 import { EmptyState, Spinner } from './components/ui/ui';
 import { CatalogPage } from './features/catalog/CatalogPage';

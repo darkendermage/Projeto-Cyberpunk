@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import clsx from 'clsx';
 import { GitCompareArrows, ListPlus, Plus, Star } from 'lucide-react';
 import type { Item } from '../../api/types';

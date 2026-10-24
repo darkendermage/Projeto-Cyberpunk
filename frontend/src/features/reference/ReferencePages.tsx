@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { Search } from 'lucide-react';
 import { useCategories } from '../../api/hooks';
 import { Badge, Spinner } from '../../components/ui/ui';

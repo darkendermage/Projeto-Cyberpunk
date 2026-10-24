@@ -24,7 +24,7 @@ export function useSheetEditor(detail: CharacterDetail) {
   const versionRef = useRef(detail.version);
   const pendingRef = useRef<CharacterSheet | null>(null);
   const savingRef = useRef<Promise<void> | null>(null);
-  const timerRef = useRef<ReturnType<typeof setTimeout>>();
+  const timerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
   const id = detail.id;
 
   useEffect(() => {
@@ -35,36 +35,40 @@ export function useSheetEditor(detail: CharacterDetail) {
     }
   }, [detail]);
 
-  const flush = useCallback(async (): Promise<void> => {
-    clearTimeout(timerRef.current);
-    if (savingRef.current) {
-      await savingRef.current;
-      if (pendingRef.current) return flush();
-      return;
-    }
-    const sheet = pendingRef.current;
-    if (!sheet) return;
-    pendingRef.current = null;
-    setStatus('saving');
-    const run = (async () => {
-      try {
-        const saved = await characterApi.save(id, versionRef.current, sheet);
-        versionRef.current = saved.version;
-        store(saved);
-        setStatus(pendingRef.current ? 'pending' : 'saved');
-      } catch (error) {
-        setStatus('error');
-        toast.notify(problemMessage(error), 'error');
-        if (error instanceof ApiError && error.status === 409) {
-          pendingRef.current = null;
-          await client.invalidateQueries({ queryKey: characterKeys.detail(id) });
-        }
+  // The inner function retries itself while edits keep arriving during a save.
+  const flush = useCallback((): Promise<void> => {
+    const attempt = async (): Promise<void> => {
+      clearTimeout(timerRef.current);
+      if (savingRef.current) {
+        await savingRef.current;
+        if (pendingRef.current) return attempt();
+        return;
       }
-    })();
-    savingRef.current = run;
-    await run;
-    savingRef.current = null;
-    if (pendingRef.current) await flush();
+      const sheet = pendingRef.current;
+      if (!sheet) return;
+      pendingRef.current = null;
+      setStatus('saving');
+      const run = (async () => {
+        try {
+          const saved = await characterApi.save(id, versionRef.current, sheet);
+          versionRef.current = saved.version;
+          store(saved);
+          setStatus(pendingRef.current ? 'pending' : 'saved');
+        } catch (error) {
+          setStatus('error');
+          toast.notify(problemMessage(error), 'error');
+          if (error instanceof ApiError && error.status === 409) {
+            pendingRef.current = null;
+            await client.invalidateQueries({ queryKey: characterKeys.detail(id) });
+          }
+        }
+      })();
+      savingRef.current = run;
+      await run;
+      savingRef.current = null;
+      if (pendingRef.current) await attempt();
+    };
+    return attempt();
   }, [client, id, store, toast]);
 
   const update = useCallback((change: (sheet: CharacterSheet) => CharacterSheet) => {

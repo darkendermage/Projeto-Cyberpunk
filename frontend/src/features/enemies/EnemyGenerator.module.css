@@ -700,3 +700,36 @@
   font-size: 12.5px;
   color: var(--text-muted);
 }
+
+/* ------------------------------------------------------------ gangs */
+
+.gangPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--red-line);
+  border-left: 3px solid var(--cyan);
+  background: var(--red-haze);
+}
+.gangName {
+  font-family: var(--font-display);
+  font-size: 16px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+.gangText {
+  font-size: 14px;
+  line-height: 1.45;
+}
+.gangAesthetic {
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: var(--text-muted);
+}
+.gangAesthetic strong {
+  color: var(--cyan);
+  font-weight: 600;
+}

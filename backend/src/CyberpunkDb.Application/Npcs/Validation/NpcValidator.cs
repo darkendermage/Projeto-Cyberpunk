@@ -54,6 +54,8 @@ public sealed class NpcValidator(NpcRuleBook rules)
             c.Warn("NAME_MISSING", "NAME_MISSING", "O NPC está sem nome.", "Dê um nome ou apelido antes de salvar.", null, "name");
         if (c.Sheet.Role is { } role && !rules.Document.Roles.Contains(role, StringComparer.OrdinalIgnoreCase))
             c.Hard("ROLE_UNKNOWN", "ROLE_UNKNOWN", $"Role \"{role}\" não existe.", $"Use um destes: {string.Join(", ", rules.Document.Roles)}.", null, "role");
+        if (c.Sheet.GangId is { } gang && rules.FindGang(gang) is null)
+            c.Info("GANG_UNKNOWN", "GANG_UNKNOWN", $"A gangue \"{gang}\" não está na lista de gangues.", "Escolha outra gangue ou deixe sem gangue.", null, "gangId");
         if (c.Sheet.RoleRank is < 0 or > 10)
             c.Hard("ROLE_RANK_INVALID", "ROLE_RANK_INVALID", "O Rank da Role Ability deve estar entre 0 e 10.", null, null, "roleRank");
         else if (c.Sheet.RoleRank > 0 && c.Sheet.Role is null)

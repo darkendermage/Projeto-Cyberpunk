@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { Star } from 'lucide-react';
 import { useFavorites } from '../../api/hooks';
 import { useSchemas } from '../../api/useSchemas';

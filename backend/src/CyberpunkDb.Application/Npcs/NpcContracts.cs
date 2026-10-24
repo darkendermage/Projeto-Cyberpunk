@@ -34,6 +34,12 @@ public sealed record FreeSkillDto(string Skill, string? Specialization, int Leve
 public sealed record ProfileDto(
     string Id, string Label, string Description, string? Role, IReadOnlyList<string> KeyCombatSkills, IReadOnlyList<string> KeyNonCombatSkills);
 
+/// <summary>A gang as the generator shows it: who they are, how they look, where they roll and what they carry.</summary>
+public sealed record GangDto(
+    string Id, string Label, string Era, string Kind, string Description, string Aesthetic,
+    IReadOnlyList<string> Territory, IReadOnlyList<string> Languages, IReadOnlyList<string> PreferredProfiles,
+    IReadOnlyList<RuleFactDto> Facts);
+
 public sealed record NpcRulesDto(
     IReadOnlyDictionary<string, string> Books,
     string About,
@@ -43,6 +49,7 @@ public sealed record NpcRulesDto(
     IReadOnlyList<FreeSkillDto> FreeSkills,
     string FreeSkillsSource,
     IReadOnlyList<ProfileDto> Profiles,
+    IReadOnlyList<GangDto> Gangs,
     IReadOnlyList<string> Roles,
     IReadOnlyList<string> Languages,
     IReadOnlyList<string> Homes,

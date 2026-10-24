@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router';
 import clsx from 'clsx';
 import type { CategorySummary } from '../../api/types';
 import { CategoryIcon } from '../../components/art/CategoryIcon';

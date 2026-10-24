@@ -51,10 +51,10 @@ export function ItemTable({ items, schema, sort, dir, onSort, onOpen }: Props) {
     if (compare.toggle(item) === 'full') toast.notify(`A comparação aceita até ${MAX_COMPARE} itens.`, 'info');
   };
 
-  const SortHeader = ({ field, label, align }: { field: string; label: string; align?: 'right' }) => {
+  const sortHeader = (field: string, label: string, align?: 'right') => {
     const active = sort === field;
     return (
-      <th scope="col" className={clsx(align === 'right' && styles.right)} aria-sort={active ? (dir === 'asc' ? 'ascending' : 'descending') : 'none'}>
+      <th key={field} scope="col" className={clsx(align === 'right' && styles.right)} aria-sort={active ? (dir === 'asc' ? 'ascending' : 'descending') : 'none'}>
         <button type="button" className={clsx(styles.sortButton, active && styles.sortActive)}
           onClick={() => onSort(field, active && dir === 'asc' ? 'desc' : 'asc')}>
           {label}
@@ -73,17 +73,17 @@ export function ItemTable({ items, schema, sort, dir, onSort, onOpen }: Props) {
               <input ref={headerBox} type="checkbox" checked={selectedHere > 0 && selectedHere === Math.min(items.length, MAX_COMPARE)}
                 onChange={toggleAll} aria-label={selectedHere > 0 ? 'Limpar seleção para comparar' : 'Selecionar para comparar'} />
             </th>
-            <SortHeader field="name" label="Nome" />
+            {sortHeader('name', 'Nome')}
             <th scope="col">Tipo</th>
             <th scope="col" className={styles.colMaker}>Fabricante</th>
             {columns.map((f) => {
               // Dice columns ("3d6") sort through their numeric twin ("damageDice").
               const sortKey = f.sortable ? f.key : f.kind === 'dice' && fields.get(`${f.key}Dice`)?.sortable ? `${f.key}Dice` : null;
               return sortKey
-                ? <SortHeader key={f.key} field={sortKey} label={shortLabel(f)} />
+                ? sortHeader(sortKey, shortLabel(f))
                 : <th key={f.key} scope="col" title={f.label}>{shortLabel(f)}</th>;
             })}
-            <SortHeader field="price" label="Custo" align="right" />
+            {sortHeader('price', 'Custo', 'right')}
             <th scope="col" className={styles.colSource}>Fonte</th>
             <th scope="col" className={styles.actionsHead}><span className="visually-hidden">Ações</span></th>
           </tr>

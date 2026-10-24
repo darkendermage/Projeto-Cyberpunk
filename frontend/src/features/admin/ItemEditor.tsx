@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router';
 import { Save, Trash2 } from 'lucide-react';
 import { ApiError, api } from '../../api/client';
 import { useCategories, useInvalidateCatalog, useItemDetail, useSchema } from '../../api/hooks';

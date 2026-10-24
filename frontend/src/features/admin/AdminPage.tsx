@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router';
 import { FileJson, FileSpreadsheet, Plus, Upload } from 'lucide-react';
 import { api } from '../../api/client';
 import { useCategories, useInvalidateCatalog } from '../../api/hooks';

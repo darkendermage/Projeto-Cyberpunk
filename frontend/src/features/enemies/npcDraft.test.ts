@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
-  buildGenerationRequest, cyberwareTree, descendants, draftReducer, emptySheet, mergeGenerated,
+  buildGenerationRequest, cyberwareTree, descendants, draftReducer, emptySheet, gangsByEra, mergeGenerated,
 } from './npcDraft';
 
 const withCyber = () => ({
@@ -68,19 +68,22 @@ describe('cyberware tree', () => {
 });
 
 describe('buildGenerationRequest', () => {
-  const settings = { profileId: 'sniper', seed: ' 42 ', applyEmpGuideline: true };
+  const settings = { profileId: 'sniper', gangId: 'maelstrom', seed: ' 42 ', applyEmpGuideline: true };
   const sheet = { ...emptySheet('Lieutenant'), hardened: true, name: 'Cherub', cyberwareRules: [{ itemId: 3, state: 'Forbidden' as const }] };
 
   it('automatic mode sends only level and constraints', () => {
     const request = buildGenerationRequest('auto', sheet, settings);
-    expect(request).toMatchObject({ level: 'Lieutenant', hardened: true, profileId: 'sniper', seed: 42, base: null, applyEmpGuideline: true });
+    expect(request).toMatchObject({
+      level: 'Lieutenant', hardened: true, profileId: 'sniper', gangId: 'maelstrom', seed: 42, base: null, applyEmpGuideline: true,
+    });
     expect(request.cyberwareRules).toEqual([{ itemId: 3, state: 'Forbidden' }]);
   });
 
   it('semi-automatic mode sends the sheet with its locks', () => {
-    const request = buildGenerationRequest('semi', sheet, { ...settings, profileId: '', seed: '' });
+    const request = buildGenerationRequest('semi', sheet, { ...settings, profileId: '', gangId: '', seed: '' });
     expect(request.base?.name).toBe('Cherub');
     expect(request.profileId).toBeNull();
+    expect(request.gangId).toBeNull();
     expect(request.seed).toBeNull();
   });
 });
@@ -92,5 +95,20 @@ describe('mergeGenerated', () => {
     expect(mergeGenerated(generated, current, 'auto').locks.stats).toEqual([]);
     expect(mergeGenerated(generated, current, 'semi').locks.stats).toEqual(['REF']);
     expect(mergeGenerated(generated, current, 'auto').cyberwareRules).toEqual(current.cyberwareRules);
+  });
+
+  it('keeps the gang the server assigned', () => {
+    const generated = { ...emptySheet(), gangId: 'tyger-claws' };
+    expect(mergeGenerated(generated, emptySheet(), 'auto').gangId).toBe('tyger-claws');
+  });
+});
+
+describe('gangsByEra', () => {
+  it('groups gangs by era, keeping the rules order', () => {
+    const gang = (id: string, era: string) => ({
+      id, label: id, era, kind: '', description: '', aesthetic: '', territory: [], languages: [], preferredProfiles: [], facts: [],
+    });
+    const groups = gangsByEra([gang('a', '2045'), gang('b', '2077'), gang('c', '2045')]);
+    expect(groups.map(([era, gangs]) => `${era}:${gangs.map((g) => g.id).join(',')}`)).toEqual(['2045:a,c', '2077:b']);
   });
 });

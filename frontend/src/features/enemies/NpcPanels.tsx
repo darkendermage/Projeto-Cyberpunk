@@ -2,11 +2,11 @@ import { useState } from 'react';
 import clsx from 'clsx';
 import { AlertOctagon, AlertTriangle, CheckCircle2, Info, ShieldAlert } from 'lucide-react';
 import type {
-  BudgetLine, GenerationConflict, NpcIssue, NpcLevel, NpcRules, NpcSheet, NpcValidationReport, RuleFact,
+  BudgetLine, GangInfo, GenerationConflict, NpcIssue, NpcLevel, NpcRules, NpcSheet, NpcValidationReport, RuleFact,
 } from '../../api/types';
 import { Badge, Button, Collapsible, Spinner, Switch } from '../../components/ui/ui';
 import { formatEb } from '../../lib/format';
-import { LEVEL_LABEL } from './npcDraft';
+import { ERA_LABEL, LEVEL_LABEL } from './npcDraft';
 import styles from './EnemyGenerator.module.css';
 
 const LEVELS: NpcLevel[] = ['Mook', 'Lieutenant', 'MiniBoss', 'Boss'];
@@ -183,6 +183,35 @@ export function ConflictsPanel({ conflicts }: { conflicts: GenerationConflict[] 
           </li>
         ))}
       </ul>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------- gangs
+
+/** Who the gang is, how it looks and what the books say it carries. */
+export function GangPanel({ gang, rules }: { gang: GangInfo; rules: NpcRules }) {
+  const typical = gang.preferredProfiles
+    .map((id) => rules.profiles.find((p) => p.id === id)?.label)
+    .filter(Boolean)
+    .slice(0, 3);
+  return (
+    <div className={styles.gangPanel}>
+      <div className={styles.inline}>
+        <span className={styles.gangName}>{gang.label}</span>
+        <Badge tone="cyan">{gang.kind}</Badge>
+        <Badge tone={gang.era === '2077' ? 'amber' : 'default'}>{ERA_LABEL[gang.era] ?? gang.era}</Badge>
+      </div>
+      <p className={styles.gangText}>{gang.description}</p>
+      <p className={styles.gangAesthetic}><strong>Estética.</strong> {gang.aesthetic}</p>
+      <div className={styles.inline}>
+        {gang.territory.length > 0 && <span className={styles.issueMeta}><strong>Território:</strong> {gang.territory.join(', ')}</span>}
+        {gang.languages.length > 0 && <span className={styles.issueMeta}><strong>Idiomas:</strong> {gang.languages.join(', ')}</span>}
+        {typical.length > 0 && <span className={styles.issueMeta}><strong>Arquétipos típicos:</strong> {typical.join(', ')}</span>}
+      </div>
+      <Collapsible title="Nos livros e no gerador">
+        <FactsTable facts={gang.facts} />
+      </Collapsible>
     </div>
   );
 }

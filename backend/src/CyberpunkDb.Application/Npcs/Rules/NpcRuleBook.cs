@@ -31,13 +31,14 @@ public sealed record NpcTemplate(
     public int MaxRoleRank => Math.Max(RoleRank.Value.Rank, HardenedRoleRank?.Value.Rank ?? 0);
 }
 
-/// <summary>The loaded <c>npc-rules.json</c>: templates, skills, profiles and cyberware rules. Singleton.</summary>
+/// <summary>The loaded <c>npc-rules.json</c>: templates, skills, profiles, gangs and cyberware rules. Singleton.</summary>
 public sealed class NpcRuleBook
 {
     private const string ResourceName = "CyberpunkDb.Application.Npcs.Rules.npc-rules.json";
 
     private readonly Dictionary<string, SkillDefinition> _skills;
     private readonly Dictionary<string, NpcProfile> _profiles;
+    private readonly Dictionary<string, NpcGang> _gangs;
     private readonly Dictionary<string, CyberwareOverride> _overrides;
     private readonly Dictionary<string, int> _cyberSp;
 
@@ -46,6 +47,7 @@ public sealed class NpcRuleBook
         Document = document;
         _skills = document.Skills.ToDictionary(s => s.Id, StringComparer.OrdinalIgnoreCase);
         _profiles = document.Profiles.ToDictionary(p => p.Id, StringComparer.OrdinalIgnoreCase);
+        _gangs = document.Gangs.ToDictionary(g => g.Id, StringComparer.OrdinalIgnoreCase);
         _overrides = document.Cyberware.Overrides.ToDictionary(o => o.Slug, StringComparer.OrdinalIgnoreCase);
         _cyberSp = document.Armor.CyberwareStoppingPower.ToDictionary(c => c.Slug, c => c.Sp, StringComparer.OrdinalIgnoreCase);
         StatKeys = document.Stats.Keys;
@@ -55,6 +57,7 @@ public sealed class NpcRuleBook
     public IReadOnlyList<string> StatKeys { get; }
     public IReadOnlyList<SkillDefinition> Skills => Document.Skills;
     public IReadOnlyList<NpcProfile> Profiles => Document.Profiles;
+    public IReadOnlyList<NpcGang> Gangs => Document.Gangs;
 
     public static NpcRuleBook LoadEmbedded()
     {
@@ -66,6 +69,7 @@ public sealed class NpcRuleBook
 
     public SkillDefinition? FindSkill(string id) => _skills.GetValueOrDefault(id);
     public NpcProfile? FindProfile(string? id) => id is null ? null : _profiles.GetValueOrDefault(id);
+    public NpcGang? FindGang(string? id) => id is null ? null : _gangs.GetValueOrDefault(id);
     public CyberwareOverride? FindOverride(string slug) => _overrides.GetValueOrDefault(slug);
     public int? CyberwareStoppingPower(string slug) => _cyberSp.TryGetValue(slug, out var sp) ? sp : null;
 

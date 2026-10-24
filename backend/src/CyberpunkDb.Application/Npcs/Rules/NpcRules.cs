@@ -180,6 +180,8 @@ public sealed record GeneratorRules
     public Ruled<double> GearSpendFloor { get; init; } = new();
     public Ruled<double> CoreBookWeight { get; init; } = new();
     public Ruled<double> ExoticWeaponWeight { get; init; } = new();
+    /// <summary>Chance of taking the handle from the gang's own list instead of the general one.</summary>
+    public Ruled<double> GangHandleChance { get; init; } = new();
     public string[] Languages { get; init; } = [];
     public string[] Homes { get; init; } = [];
     public string[] Handles { get; init; } = [];
@@ -222,6 +224,50 @@ public sealed record NpcProfile
     public string[] SignatureCyberware { get; init; } = [];
 }
 
+/// <summary>
+/// How a gang bends a profile. Weights are added to the profile's own (STAT weights are multiplied); weapon
+/// classes the gang favors move to the front when the profile's weapon skill can use them. All of it is the
+/// application's reading of the gang's description, so the whole block is complementary.
+/// </summary>
+public sealed record GangBias
+{
+    /// <summary>Weights of the profiles drawn when the profile is left random.</summary>
+    public Dictionary<string, double> Profiles { get; init; } = [];
+    public Dictionary<string, double> StatWeights { get; init; } = [];
+    public Dictionary<string, double> SecondarySkills { get; init; } = [];
+    public Dictionary<string, double> Cyberware { get; init; } = [];
+    public Dictionary<string, double> Gear { get; init; } = [];
+    public WeaponClass[] WeaponClasses { get; init; } = [];
+    public WeaponClass[] ForbiddenWeaponClasses { get; init; } = [];
+    public ArmorStyle? ArmorStyle { get; init; }
+    /// <summary>Replaces <see cref="GeneratorRules.CyberwareSpendRange"/> for this gang.</summary>
+    public IntRangeF? CyberwareSpendRange { get; init; }
+    /// <summary>Never picked by the generator for this gang; the user's required implants still win.</summary>
+    public string[] ForbiddenCyberware { get; init; } = [];
+    public bool AllCyberwareForbidden { get; init; }
+}
+
+/// <summary>A Night City gang laid over a profile: identity, look and the gear it favors.</summary>
+public sealed record NpcGang
+{
+    public string Id { get; init; } = "";
+    public string Label { get; init; } = "";
+    /// <summary>"2045" (Time of the Red) or "2077" (Edgerunners Mission Kit).</summary>
+    public string Era { get; init; } = "";
+    public string Kind { get; init; } = "";
+    public Ruled<string> Description { get; init; } = new();
+    public Ruled<string> Aesthetic { get; init; } = new();
+    /// <summary>Districts from <see cref="GeneratorRules.Homes"/>; empty means the gang has no fixed turf.</summary>
+    public Ruled<string[]> Territory { get; init; } = new();
+    /// <summary>Native language weights; empty keeps the general list.</summary>
+    public Ruled<Dictionary<string, double>> Languages { get; init; } = new();
+    /// <summary>Themed handles, mixed with the general list.</summary>
+    public Ruled<string[]> Handles { get; init; } = new();
+    /// <summary>What the books say the gang carries (encounter tables, member stat blocks).</summary>
+    public Ruled<string>[] Loadout { get; init; } = [];
+    public Ruled<GangBias> Bias { get; init; } = new();
+}
+
 public sealed record RolePresenceRule(string Label, double Probability, bool Complementary);
 
 public sealed record EmpGuideline
@@ -251,6 +297,7 @@ public sealed record NpcRulesDocument
     public CyberwareRules Cyberware { get; init; } = new();
     public GeneratorRules Generator { get; init; } = new();
     public NpcProfile[] Profiles { get; init; } = [];
+    public NpcGang[] Gangs { get; init; } = [];
 
     internal static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web)
     {

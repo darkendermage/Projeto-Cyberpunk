@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router';
 import { ArrowLeft, Lock, LockOpen, Pencil, Plus, RefreshCw, Trash2 } from 'lucide-react';
 import clsx from 'clsx';
 import { problemMessage } from '../../api/characters';

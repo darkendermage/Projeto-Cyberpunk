@@ -26,7 +26,7 @@ export function useMediaQuery(query: string): boolean {
 export function useInView<T extends Element>(onVisible: () => void, enabled: boolean) {
   const ref = useRef<T | null>(null);
   const handler = useRef(onVisible);
-  handler.current = onVisible;
+  useEffect(() => { handler.current = onVisible; });
 
   useEffect(() => {
     const node = ref.current;

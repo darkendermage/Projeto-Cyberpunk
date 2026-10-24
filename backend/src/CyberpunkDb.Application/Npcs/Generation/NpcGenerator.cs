@@ -13,6 +13,8 @@ public sealed record NpcGenerationRequest
     public NpcLevel Level { get; init; }
     public bool Hardened { get; init; }
     public string? ProfileId { get; init; }
+    /// <summary>Gang laid over the profile (<see cref="GangOverlay"/>): turf, language, handles and favored gear.</summary>
+    public string? GangId { get; init; }
     public int? Seed { get; init; }
     public NpcSheet? Base { get; init; }
     public List<NpcCyberwareRule> CyberwareRules { get; init; } = [];
@@ -44,11 +46,14 @@ public sealed class NpcGenerator(NpcRuleBook rules, NpcValidator validator)
 
         if (request.ProfileId is not null && rules.FindProfile(request.ProfileId) is null)
             return Fail(seed, 0, null, [new("PROFILE_UNKNOWN", $"Perfil \"{request.ProfileId}\" não existe.", "Escolha um perfil da lista ou deixe em branco.", null)]);
+        var gang = rules.FindGang(request.GangId);
+        if (request.GangId is not null && gang is null)
+            return Fail(seed, 0, request.ProfileId, [new("GANG_UNKNOWN", $"Gangue \"{request.GangId}\" não existe.", "Escolha uma gangue da lista ou deixe em branco.", null)]);
 
         var conflicts = Precheck(t, baseSheet, cyberRules, catalog);
         if (conflicts.Count > 0) return Fail(seed, 0, request.ProfileId, conflicts);
 
-        var profile = rules.FindProfile(request.ProfileId) ?? rules.Profiles[new Random(seed).Next(rules.Profiles.Count)];
+        var profile = rules.FindProfile(request.ProfileId) ?? RandomProfile(gang, new Random(seed));
         NpcValidationReport? last = null;
         var maxAttempts = rules.Document.Generator.MaxAttempts.Value;
         for (var attempt = 0; attempt < maxAttempts; attempt++)
@@ -81,8 +86,15 @@ public sealed class NpcGenerator(NpcRuleBook rules, NpcValidator validator)
         var g = rules.Document.Generator;
         var locks = b.Locks;
 
-        var nativeLanguage = locks.Identity ? b.NativeLanguage : g.Languages[rng.Next(g.Languages.Length)];
-        var home = locks.Identity ? b.Home : g.Homes[rng.Next(g.Homes.Length)];
+        var gang = rules.FindGang(request.GangId);
+        var bias = gang?.Bias.Value ?? new GangBias();
+        if (gang is not null) profile = GangOverlay.Apply(profile, gang);
+
+        var nativeLanguage = locks.Identity ? b.NativeLanguage
+            : gang?.Languages.Value is { Count: > 0 } langs ? Weighted.Pick(langs.ToList(), kv => kv.Value, rng).Key
+            : g.Languages[rng.Next(g.Languages.Length)];
+        var turf = gang?.Territory.Value is { Length: > 0 } territory ? territory : g.Homes;
+        var home = locks.Identity ? b.Home : turf[rng.Next(turf.Length)];
         var stats = DistributeStats(t, profile, b, rng);
 
         // Cyberware first (it may provide SP), then gear (armor penalties), then skills (bases depend on both).
@@ -92,8 +104,11 @@ public sealed class NpcGenerator(NpcRuleBook rules, NpcValidator validator)
         foreach (var rule in request.CyberwareRules.Where(r => r.State == CyberwareRuleState.Required))
             if (!cyber.Contains(rule.ItemId) && catalog.Find(rule.ItemId) is { Cyber: not null } item)
                 cyber.TryInstall(item, t.CyberwareBudget.Value);
+        // The gang's taboos only limit what the generator picks on its own; required implants are already in.
+        cyber.WithForbidden(bias.ForbiddenCyberware.Select(slug => catalog.Find(slug)?.Id).OfType<int>());
         var cyberLimit = t.CyberwareBudget.Value ?? g.UnlimitedCyberwareReference.Value;
-        var target = (int)(cyberLimit * Weighted.Between(rng, g.CyberwareSpendRange.Value.Min, g.CyberwareSpendRange.Value.Max));
+        var spend = bias.CyberwareSpendRange ?? g.CyberwareSpendRange.Value;
+        var target = bias.AllCyberwareForbidden ? 0 : (int)(cyberLimit * Weighted.Between(rng, spend.Min, spend.Max));
         cyber.FillOptional(profile, t.CyberwareBudget.Value, target, rng);
 
         var frames = cyber.Entries.Select(e => catalog.Find(e.ItemId)).Where(i => i?.Armor is { Implanted: true, BodyValue: not null });
@@ -118,11 +133,12 @@ public sealed class NpcGenerator(NpcRuleBook rules, NpcValidator validator)
 
         return new NpcSheet
         {
-            Name = b.Name.Length > 0 ? b.Name : g.Handles[rng.Next(g.Handles.Length)],
-            Concept = b.Concept ?? profile.Label,
+            Name = b.Name.Length > 0 ? b.Name : PickHandle(gang, rng),
+            Concept = b.Concept ?? (gang is null ? profile.Label : $"{gang.Label} · {profile.Label}"),
             Level = request.Level,
             Hardened = request.Hardened,
             ProfileId = profile.Id,
+            GangId = gang?.Id,
             Role = role,
             RoleRank = rank,
             NativeLanguage = nativeLanguage,
@@ -357,6 +373,24 @@ public sealed class NpcGenerator(NpcRuleBook rules, NpcValidator validator)
     }
 
     // ------------------------------------------------------------ helpers
+
+    /// <summary>A gang draws among the profiles that suit it; without one, any profile is equally likely.</summary>
+    private NpcProfile RandomProfile(NpcGang? gang, Random rng)
+    {
+        var suited = (gang?.Bias.Value?.Profiles ?? [])
+            .Select(kv => (Profile: rules.FindProfile(kv.Key), Weight: kv.Value))
+            .Where(p => p.Profile is not null && p.Weight > 0)
+            .ToList();
+        return suited.Count > 0 ? Weighted.Pick(suited, p => p.Weight, rng).Profile! : rules.Profiles[rng.Next(rules.Profiles.Count)];
+    }
+
+    private string PickHandle(NpcGang? gang, Random rng)
+    {
+        var g = rules.Document.Generator;
+        if (gang?.Handles.Value is { Length: > 0 } own && rng.NextDouble() < g.GangHandleChance.Value)
+            return own[rng.Next(own.Length)];
+        return g.Handles[rng.Next(g.Handles.Length)];
+    }
 
     private (string? Role, int Rank) PickRole(NpcTemplate t, NpcProfile profile, Random rng)
     {

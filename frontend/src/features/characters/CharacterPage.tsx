@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Link, Navigate, NavLink, useNavigate, useParams } from 'react-router-dom';
+import { Link, Navigate, NavLink, useNavigate, useParams } from 'react-router';
 import { ArrowLeft, Copy, Download } from 'lucide-react';
 import { downloadCharacter, problemMessage, useCharacter, useCharacterLibrary, useCharacterRules, useCharacters } from '../../api/characters';
 import type { CharacterDetail, CharacterRules } from '../../api/characterTypes';

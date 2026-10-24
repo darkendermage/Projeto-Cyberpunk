@@ -2,8 +2,8 @@
 
 Documentação para quem vai mexer no código. A apresentação do aplicativo para jogadores está no [README](../README.md).
 
-- **Backend:** C# / ASP.NET Core 8 Web API, EF Core 8, FluentValidation
-- **Frontend:** React 18 + TypeScript (Vite), TanStack Query, React Router, CSS Modules
+- **Backend:** C# / ASP.NET Core 10 Web API, EF Core 10, FluentValidation
+- **Frontend:** React 19 + TypeScript (Vite), TanStack Query, React Router, CSS Modules
 - **Banco:** PostgreSQL 16 (principal, com migrations). SQLite como modo local sem instalação.
 
 ## Executável para Windows (para enviar a amigos)
@@ -49,7 +49,7 @@ Nos executáveis já distribuídos (`Desktop/AppUpdater.cs`):
 
 ## Executar localmente (desenvolvimento)
 
-Pré-requisitos: [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) e Node.js 20 ou superior. Para usar o PostgreSQL, você também precisa de Docker ou de um PostgreSQL 14+ instalado.
+Pré-requisitos: [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0) e Node.js 26 ou superior (`frontend/.nvmrc`). Para usar o PostgreSQL, você também precisa de Docker ou de um PostgreSQL 14+ instalado.
 
 ### 1. Banco de dados
 
@@ -95,7 +95,7 @@ Para produção, rode `npm run build` e copie `frontend/dist` para `backend/src/
 ### Testes
 
 ```bash
-cd backend && dotnet test     # 335 testes: filtros, validação, gerador de NPCs, regras de personagem, Night Market, atualização automática e integração da API (SQLite + seed real)
+cd backend && dotnet test     # 349 testes: filtros, validação, gerador de NPCs e gangues, regras de personagem, Night Market, atualização automática e integração da API (SQLite + seed real)
 cd frontend && npm test       # filtros, URL, editor de NPCs, tabela de alcance, perícias, Lifepath, anatomia do cyberware e Night Market
 ```
 
@@ -171,7 +171,7 @@ A troca de categorias tem migration própria (`NetrunningAndMoto`): as linhas de
 
 Página `/enemies`. Toda ficha, gerada ou montada à mão, passa pelo mesmo validador (`Application/Npcs/Validation/NpcValidator.cs`), exposto em `POST /api/npcs/validate`. O frontend não contém regras do jogo: ele envia a ficha e mostra o relatório (orçamentos, valores derivados, erros, avisos e fontes).
 
-- **Automático:** escolhe categoria (e Hardened), perfil opcional, seed opcional e implantes obrigatórios/proibidos. O gerador distribui STATs e perícias pelos pesos do perfil, compra equipamento e cyberware dentro dos orçamentos e valida. Se a ficha não passar, tenta outra seed (até 25 vezes) e, no fim, explica o motivo.
+- **Automático:** escolhe categoria (e Hardened), gangue opcional, perfil opcional, seed opcional e implantes obrigatórios/proibidos. O gerador distribui STATs e perícias pelos pesos do perfil, compra equipamento e cyberware dentro dos orçamentos e valida. Se a ficha não passar, tenta outra seed (até 25 vezes) e, no fim, explica o motivo.
 - **Semiautomático:** os valores travados (cadeado), o nome e o conceito são mantidos; o gerador completa o resto com o orçamento que sobra. Escolhas impossíveis (STATs travados acima do orçamento, obrigatório que depende de um proibido, cyberware obrigatório caro demais) são recusadas antes de gerar, com a sugestão de ajuste.
 - **Manual:** editor completo com validação ao vivo. Implantes são instalados por `POST /api/npcs/cyberware/install`, que usa o mesmo planner do gerador (adiciona a peça base, aloca slots e pares, recusa proibidos).
 
@@ -195,6 +195,16 @@ Os parâmetros ficam em um único arquivo, `backend/src/CyberpunkDb.Application/
 O DGD (p.150) chama os templates de "guidelines, not hard rules". Por isso, violar um orçamento ou máximo é um erro que bloqueia o status **Válido**, mas o Mestre pode aceitá-lo com uma justificativa: a ficha fica **Válida com exceções**. Erros mecânicos (peça base ausente, slots estourados, item inexistente) não aceitam exceção. Faixas sugeridas (HP, SP, bases) geram só avisos. Uma ficha com erros só pode ser salva como **Rascunho**. O status é sempre recalculado no servidor.
 
 Regras complementares (sem valor oficial): o (x2) do Core também conta no orçamento de perícia do DGD; uma armadura por local; capacidade do corpo (dois olhos, dois braços, duas pernas, um Neural Link); probabilidade de Role por categoria; e os oito perfis de inimigo, que orientam o gerador mas não são regras.
+
+### Gangues
+
+A seção `gangs` de `npc-rules.json` traz 23 gangues: as da era RED, de 2045 (Core p.308–309, com o detalhe do Danger Gal Dossier para 6th Street, Bozos, Generation Red, Maelstrom, Piranhas e Tyger Claws), e as da era 2077 do Edgerunners Mission Kit (p.25–27). A gangue é uma camada sobre o perfil (`Generation/GangOverlay.cs`):
+
+- **Perfil e identidade:** com o perfil em "Aleatório", o sorteio fica entre os arquétipos típicos da gangue. O lar sai do território dela, o idioma nativo segue os pesos dela e o apelido vem da lista temática.
+- **Equipamento:** a gangue soma pesos aos implantes, itens (roupas Gang Colors, drogas, granadas) e perícias secundárias do perfil, e multiplica os pesos de STAT. As classes de arma preferidas vão para o início da lista, mas só quando o skill da arma do perfil pode usá-las.
+- **Cyberware:** a gangue pode trocar a faixa de gasto (Maelstrom 70–100% do orçamento, Generation Red 5–30%), evitar implantes (os Animals não usam cyberware de força nem de combate) ou proibir tudo (Inquisitors). Esses tabus só valem para o que o gerador escolhe sozinho: implantes obrigatórios escolhidos pelo usuário continuam sendo instalados.
+
+Descrição, estética, território e o que os livros dizem que cada gangue carrega têm página. O equipamento vem principalmente das tabelas de encontro do Core (p.418–424) e das fichas de membros do DGD. Os pesos do gerador (`bias`) são interpretação da aplicação e ficam marcados como complementares. Na página, o painel da gangue mostra tudo isso em **Nos livros e no gerador**. A ficha guarda o `gangId` no JSON, sem coluna própria.
 
 **Divergência registrada:** o catálogo marca o Chipware Socket com 0 slot. O validador segue o Core (p.359), via `cyberware.overrides` em `npc-rules.json`.
 

@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router';
 import { PAGE_SIZES } from '../../api/hooks';
 import { type Criterion, decodeCriterion, encodeCriterion } from '../../lib/filters';
 import { readStorage, writeStorage } from '../../lib/hooks';

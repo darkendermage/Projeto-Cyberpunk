@@ -1,7 +1,7 @@
 // Pure state handling for the enemy editor. No game rules here: budgets, limits and derived values all come
 // from the server-side validator (POST /api/npcs/validate), shared by the automatic, semi-automatic and manual modes.
 import type {
-  CyberwareRuleState, NpcCyberwareEntry, NpcGearEntry, NpcGenerationRequest, NpcLevel, NpcSheet,
+  CyberwareRuleState, GangInfo, NpcCyberwareEntry, NpcGearEntry, NpcGenerationRequest, NpcLevel, NpcSheet,
 } from '../../api/types';
 
 export type CreationMode = 'auto' | 'semi' | 'manual';
@@ -15,6 +15,14 @@ export const LEVEL_LABEL: Record<NpcLevel, string> = {
   Boss: 'Boss',
 };
 
+export const ERA_LABEL: Record<string, string> = { '2045': 'Era RED (2045)', '2077': 'Era 2077' };
+
+/** Gangs grouped by era, in the order the rules list them. */
+export function gangsByEra(gangs: GangInfo[]): [string, GangInfo[]][] {
+  const eras = [...new Set(gangs.map((g) => g.era))];
+  return eras.map((era) => [era, gangs.filter((g) => g.era === era)]);
+}
+
 export function emptySheet(level: NpcLevel = 'Mook'): NpcSheet {
   return {
     name: '',
@@ -22,6 +30,7 @@ export function emptySheet(level: NpcLevel = 'Mook'): NpcSheet {
     level,
     hardened: false,
     profileId: null,
+    gangId: null,
     role: null,
     roleRank: 0,
     nativeLanguage: 'English',
@@ -44,7 +53,7 @@ export const skillKey = (id: string, specialization?: string | null) =>
 
 export type DraftAction =
   | { type: 'load'; sheet: NpcSheet }
-  | { type: 'set'; patch: Partial<Pick<NpcSheet, 'name' | 'concept' | 'level' | 'hardened' | 'role' | 'roleRank' | 'nativeLanguage' | 'home' | 'luck' | 'notes' | 'profileId'>> }
+  | { type: 'set'; patch: Partial<Pick<NpcSheet, 'name' | 'concept' | 'level' | 'hardened' | 'role' | 'roleRank' | 'nativeLanguage' | 'home' | 'luck' | 'notes' | 'profileId' | 'gangId'>> }
   | { type: 'stat'; key: string; value: number }
   | { type: 'skill'; key: string; value: number | null }
   | { type: 'toggleKeySkill'; key: string }
@@ -136,6 +145,7 @@ export function cyberwareTree(entries: NpcCyberwareEntry[]): { entry: NpcCyberwa
 
 export interface GeneratorSettings {
   profileId: string;
+  gangId: string;
   seed: string;
   applyEmpGuideline: boolean;
 }
@@ -150,6 +160,7 @@ export function buildGenerationRequest(mode: CreationMode, sheet: NpcSheet, sett
     level: sheet.level,
     hardened: sheet.hardened,
     profileId: settings.profileId || null,
+    gangId: settings.gangId || null,
     seed: seed !== null && Number.isFinite(seed) ? seed : null,
     base: mode === 'semi' ? sheet : null,
     cyberwareRules: sheet.cyberwareRules,

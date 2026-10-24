@@ -76,6 +76,7 @@ Fichas completas de jogador, salvas no seu computador.
 Precisa de uma gangue para emboscar o grupo daqui a cinco minutos?
 
 - Gera **Mooks, Lieutenants, Mini-Bosses e Bosses** do jeito que o livro manda, com armas, armadura e cyberware.
+- **Gangues de Night City:** Maelstrom, Tyger Claws, Bozos, Inquisitors, Valentinos e mais 18, da era RED (2045) e da era 2077. Cada gangue traz a sua estética, território, idioma, apelidos, armas e cyberware preferidos, tudo com a página do livro.
 - **Três modos:** automático (um clique), semiautomático (você trava o que quer e ele completa o resto) e manual (você monta e ele confere).
 - Toda ficha é conferida com as regras e avisa o que está fora do padrão. O Mestre sempre pode aceitar uma exceção.
 

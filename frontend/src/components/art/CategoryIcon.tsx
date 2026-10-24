@@ -1,4 +1,4 @@
-import type { SVGProps } from 'react';
+import type { JSX, SVGProps } from 'react';
 
 /** Line icons for the category tabs, drawn on a 24px grid to match lucide's stroke style. */
 const paths: Record<string, JSX.Element> = {

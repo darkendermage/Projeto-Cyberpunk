@@ -229,7 +229,39 @@ internal static class NpcRulesMapper
             d.FreeSkills.Entries.Select(e => new FreeSkillDto(e.Skill, e.Specialization, e.Level)).ToList(),
             d.FreeSkills.Source,
             d.Profiles.Select(p => new ProfileDto(p.Id, p.Label, p.Description, p.Role, p.KeyCombatSkills, p.KeyNonCombatSkills)).ToList(),
+            d.Gangs.Select(MapGang).ToList(),
             d.Roles, d.Generator.Languages, d.Generator.Homes, general);
+    }
+
+    private static GangDto MapGang(NpcGang g)
+    {
+        var bias = g.Bias.Value ?? new GangBias();
+        var facts = new List<RuleFactDto>
+        {
+            Fact("description", "Quem são", g.Description.Value, g.Description),
+            Fact("aesthetic", "Estética", g.Aesthetic.Value, g.Aesthetic),
+        };
+        if (g.Territory.Value is { Length: > 0 } turf) facts.Add(Fact("territory", "Território", string.Join(", ", turf), g.Territory));
+        if (g.Languages.Value is { Count: > 0 } langs) facts.Add(Fact("languages", "Idiomas nativos", string.Join(", ", langs.Keys), g.Languages));
+        facts.AddRange(g.Loadout.Select((l, i) => Fact($"loadout:{i}", "Nos livros", l.Value, l)));
+        facts.Add(Fact("bias", "Preferências do gerador", BiasText(bias), g.Bias));
+        return new GangDto(g.Id, g.Label, g.Era, g.Kind, g.Description.Value, g.Aesthetic.Value,
+            g.Territory.Value ?? [], (g.Languages.Value ?? []).Keys.ToList(),
+            bias.Profiles.Where(kv => kv.Value > 0).OrderByDescending(kv => kv.Value).Select(kv => kv.Key).ToList(),
+            facts);
+    }
+
+    private static string BiasText(GangBias b)
+    {
+        var parts = new List<string>();
+        if (b.WeaponClasses.Length > 0) parts.Add($"armas: {string.Join(", ", b.WeaponClasses.Select(c => EnumLabels.Label(c)))}");
+        if (b.ArmorStyle is { } style) parts.Add($"armadura {style switch { ArmorStyle.Heavy => "pesada", ArmorStyle.Medium => "média", _ => "leve" }}");
+        if (b.AllCyberwareForbidden) parts.Add("nenhum cyberware");
+        else if (b.CyberwareSpendRange is { } r) parts.Add($"gasto de cyberware {r.Min:P0}–{r.Max:P0} do orçamento");
+        if (b.ForbiddenCyberware.Length > 0) parts.Add($"evita {string.Join(", ", b.ForbiddenCyberware)}");
+        if (b.Cyberware.Count > 0) parts.Add($"implantes: {string.Join(", ", b.Cyberware.OrderByDescending(kv => kv.Value).Take(6).Select(kv => kv.Key))}");
+        if (b.Gear.Count > 0) parts.Add($"itens: {string.Join(", ", b.Gear.OrderByDescending(kv => kv.Value).Take(6).Select(kv => kv.Key))}");
+        return string.Join(" · ", parts);
     }
 
     private static string RoleText(NpcRuleBook rules, RoleGuideline g) =>

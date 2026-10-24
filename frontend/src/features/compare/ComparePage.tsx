@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router';
 import { GitCompareArrows, X } from 'lucide-react';
 import clsx from 'clsx';
 import type { FieldDescriptor, Item } from '../../api/types';

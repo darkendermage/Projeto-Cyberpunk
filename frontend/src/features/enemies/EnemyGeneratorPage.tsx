@@ -11,15 +11,15 @@ import { useToast } from '../../state/ToastContext';
 import page from '../../styles/Page.module.css';
 import { IdentityEditor, SkillsEditor, StatsEditor } from './NpcEditors';
 import { CyberwareEditor, CyberwareRulesEditor, GearEditor } from './NpcEquipment';
-import { BudgetBars, ConflictsPanel, LevelPicker, RulesSources, StatusBanner, ValidationPanel } from './NpcPanels';
+import { BudgetBars, ConflictsPanel, GangPanel, LevelPicker, RulesSources, StatusBanner, ValidationPanel } from './NpcPanels';
 import {
-  buildGenerationRequest, type CreationMode, draftReducer, emptySheet, type GeneratorSettings, mergeGenerated,
+  buildGenerationRequest, type CreationMode, draftReducer, emptySheet, ERA_LABEL, gangsByEra, type GeneratorSettings, mergeGenerated,
 } from './npcDraft';
 import { NpcLibrary, SheetPreview } from './SheetPreview';
 import styles from './EnemyGenerator.module.css';
 
 const MODE_HINT: Record<CreationMode, string> = {
-  auto: 'Escolha a categoria e, se quiser, um perfil e restrições de cyberware. O gerador monta a ficha inteira.',
+  auto: 'Escolha a categoria e, se quiser, uma gangue, um perfil e restrições de cyberware. O gerador monta a ficha inteira.',
   semi: 'Preencha e trave (cadeado) o que deve ficar como está. O gerador completa o resto com o orçamento que sobrar.',
   manual: 'Monte a ficha à mão. A validação roda a cada alteração com as mesmas regras dos outros modos.',
 };
@@ -35,7 +35,7 @@ function EnemyGenerator({ rules }: { rules: NpcRules }) {
   const toast = useToast();
   const [mode, setMode] = useState<CreationMode>('auto');
   const [sheet, dispatch] = useReducer(draftReducer, undefined, () => emptySheet());
-  const [settings, setSettings] = useState<GeneratorSettings>({ profileId: '', seed: '', applyEmpGuideline: false });
+  const [settings, setSettings] = useState<GeneratorSettings>({ profileId: '', gangId: '', seed: '', applyEmpGuideline: false });
   const [currentId, setCurrentId] = useState<number | null>(null);
   const [conflicts, setConflicts] = useState<GenerationConflict[]>([]);
   const [lastRun, setLastRun] = useState<NpcGenerationResult | null>(null);
@@ -119,6 +119,8 @@ function EnemyGenerator({ rules }: { rules: NpcRules }) {
   };
 
   const profile = rules.profiles.find((p) => p.id === settings.profileId);
+  const gang = rules.gangs.find((g) => g.id === settings.gangId);
+  const ranGang = rules.gangs.find((g) => g.id === lastRun?.sheet?.gangId);
 
   return (
     <div className={page.page}>
@@ -146,10 +148,24 @@ function EnemyGenerator({ rules }: { rules: NpcRules }) {
         <div className={styles.card}>
           <p className={styles.cardTitle}>Configuração da geração</p>
           <div className={styles.formGrid}>
-            <Field label="Perfil" htmlFor="npc-profile" hint={profile?.description ?? 'Sorteado entre os perfis disponíveis.'}>
+            <Field label="Gangue" htmlFor="npc-gang" hint={gang ? `${gang.kind} · ${ERA_LABEL[gang.era] ?? gang.era}` : 'Sem gangue: só o arquétipo.'}>
+              <Select id="npc-gang" value={settings.gangId} highlighted={!!gang}
+                onChange={(e) => setSettings({ ...settings, gangId: e.target.value })}>
+                <option value="">Nenhuma</option>
+                {gangsByEra(rules.gangs).map(([era, gangs]) => (
+                  <optgroup key={era} label={ERA_LABEL[era] ?? era}>
+                    {gangs.map((g) => <option key={g.id} value={g.id}>{g.label}</option>)}
+                  </optgroup>
+                ))}
+              </Select>
+            </Field>
+            <Field label="Perfil" htmlFor="npc-profile"
+              hint={profile?.description ?? (gang ? 'Sorteado entre os arquétipos típicos da gangue (★).' : 'Sorteado entre os perfis disponíveis.')}>
               <Select id="npc-profile" value={settings.profileId} onChange={(e) => setSettings({ ...settings, profileId: e.target.value })}>
                 <option value="">Aleatório</option>
-                {rules.profiles.map((p) => <option key={p.id} value={p.id}>{p.label}</option>)}
+                {rules.profiles.map((p) => (
+                  <option key={p.id} value={p.id}>{gang?.preferredProfiles.includes(p.id) ? `★ ${p.label}` : p.label}</option>
+                ))}
               </Select>
             </Field>
             <Field label="Seed (opcional)" htmlFor="npc-seed" hint="A mesma seed reproduz o mesmo NPC.">
@@ -161,6 +177,7 @@ function EnemyGenerator({ rules }: { rules: NpcRules }) {
                 label="-1 EMP a cada 5 implantes (DGD p.152, opcional)" />
             </div>
           </div>
+          {gang && <GangPanel gang={gang} rules={rules} />}
           <Collapsible title="Cyberware obrigatório e proibido" active={sheet.cyberwareRules.length}>
             <CyberwareRulesEditor sheet={sheet} dispatch={dispatch} />
           </Collapsible>
@@ -177,6 +194,7 @@ function EnemyGenerator({ rules }: { rules: NpcRules }) {
           </div>
           {lastRun?.success && (
             <p className={styles.muted}>
+              {ranGang && <>Gangue {ranGang.label} · </>}
               Perfil {rules.profiles.find((p) => p.id === lastRun.profileId)?.label ?? '—'} · seed {lastRun.seed} · {lastRun.attempts} tentativa(s).
             </p>
           )}

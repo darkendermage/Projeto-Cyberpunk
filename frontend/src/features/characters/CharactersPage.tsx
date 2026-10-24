@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router';
 import { Copy, Download, HeartPulse, Plus, Trash2, Upload, UserRound, Users, Wallet } from 'lucide-react';
 import {
   characterApi, downloadCharacter, problemMessage, readCharacterFile, useCharacterLibrary, useCharacterRules, useCharacters,

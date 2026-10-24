@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router';
 import { ArrowDownWideNarrow, ArrowUpNarrowWide, FilterX, LayoutGrid, SlidersHorizontal, Table2, Undo2 } from 'lucide-react';
 import type { Item } from '../../api/types';
 import { useCatalogSearch, useCategories, useSchema } from '../../api/hooks';

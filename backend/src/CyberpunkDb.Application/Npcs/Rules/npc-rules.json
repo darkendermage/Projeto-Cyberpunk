@@ -1,10 +1,11 @@
 {
-  "about": "Parâmetros de construção de NPCs. Cada valor traz 'source' (livro e página conferidos no PDF) ou 'complementary: true' quando é uma regra adotada pela aplicação, sem valor oficial. Siglas: CP:R = Cyberpunk RED Core Rulebook v1.25; DGD = Danger Gal Dossier; IR5 = Interface RED Volume 5. O DGD (p.150) chama os templates de 'guidelines, not hard rules': a aplicação trata orçamentos e máximos como erros que o Mestre pode justificar com uma exceção.",
+  "about": "Parâmetros de construção de NPCs. Cada valor traz 'source' (livro e página conferidos no PDF) ou 'complementary: true' quando é uma regra adotada pela aplicação, sem valor oficial. Siglas: CP:R = Cyberpunk RED Core Rulebook v1.25; DGD = Danger Gal Dossier; IR5 = Interface RED Volume 5; EMK = Edgerunners Mission Kit. O DGD (p.150) chama os templates de 'guidelines, not hard rules': a aplicação trata orçamentos e máximos como erros que o Mestre pode justificar com uma exceção.",
   "version": 1,
   "books": {
     "CP:R": "Cyberpunk RED Core Rulebook (v1.25)",
     "DGD": "Danger Gal Dossier",
-    "IR5": "Interface RED Volume 5"
+    "IR5": "Interface RED Volume 5",
+    "EMK": "Edgerunners Mission Kit (era 2077; páginas pela numeração 'PG')"
   },
 
   "stats": {
@@ -303,8 +304,9 @@
     "gearSpendFloor": { "value": 0.6, "complementary": true, "note": "Fração mínima do orçamento de equipamento que o gerador tenta usar." },
     "coreBookWeight": { "value": 3, "complementary": true },
     "exoticWeaponWeight": { "value": 0.3, "complementary": true },
+    "gangHandleChance": { "value": 0.6, "complementary": true, "note": "Chance de o apelido sair da lista da gangue em vez da lista geral." },
     "languages": ["English", "Spanish", "Japanese", "Mandarin", "Cantonese", "Korean", "Russian", "Arabic", "Hindi", "Tagalog", "French", "German", "Haitian Creole", "Portuguese"],
-    "homes": ["Watson", "Little China", "Kabuki", "Heywood", "The Glen", "Vista del Rey", "Pacifica", "Santo Domingo", "Rancho Coronado", "Japantown", "Northside", "Little Europe", "The Old Combat Zone", "South Night City", "Badlands"],
+    "homes": ["Watson", "Little China", "Kabuki", "Heywood", "The Glen", "Vista del Rey", "Pacifica", "Santo Domingo", "Rancho Coronado", "Japantown", "Northside", "Little Europe", "The Old Combat Zone", "South Night City", "Badlands", "North Heywood", "Charter Hill", "Dogtown"],
     "handles": ["Razor", "Glitch", "Static", "Brick", "Vex", "Kilo", "Neon", "Rook", "Spook", "Tank", "Viper", "Chrome", "Patch", "Mono", "Dice", "Wrench", "Ghost", "Spike", "Jinx", "Cutter", "Moth", "Rivet", "Sable", "Torch", "Hex", "Dozer", "Fuse", "Lynx", "Ratchet", "Smoke", "Echo", "Krait", "Bolt", "Pike", "Zero", "Shiv", "Grit", "Halo", "Nix", "Crash"]
   },
 
@@ -447,6 +449,624 @@
       "armorStyle": "Heavy",
       "cyberware": { "neural-link": 2, "sandevistan": 2.5, "kerenzikov": 2, "cybereye": 2, "targeting-scope": 2.5, "low-light-infrared-uv": 2, "cyberaudio-suite": 1.5, "radio-communicator": 2, "subdermal-armor": 2.5, "grafted-muscle-and-bone-lace": 2, "cyberarm": 1, "popup-ranged-weapon": 1.5, "toxin-binders": 1, "nasal-filters": 1 },
       "gear": { "agent": 1.5, "radio-communicator-gear": 1.5, "flashbang-grenade": 1, "teargas-grenade": 0.5 }
+    }
+  ],
+
+  "gangs": [
+    {
+      "id": "6th-street",
+      "label": "6th Street",
+      "era": "2045",
+      "kind": "Vigilantes (gangue de veteranos)",
+      "description": { "value": "Veteranos da 4ª Guerra Corporativa que viraram gangue vigilante, com hierarquia militar herdada da guerra. Hoje são polícia privada credenciada em North Heywood e protetores da Holy Angels Church, mas a falta de dinheiro já os empurra para extorsão e contrabando.", "source": "CP:R p.308; DGD p.9" },
+      "aesthetic": { "value": "Visual de tropa: patentes, insígnias e equipamento militar dos tempos de campo. Patrulham em grupos de 4 a 6, a pé ou de moto. O comandante X obriga cada membro a declarar o cyberware todo mês e afasta quem se cromar demais.", "source": "DGD p.9" },
+      "territory": { "value": ["North Heywood"], "source": "DGD p.9 (arsenal da Guarda Nacional em North Heywood)" },
+      "languages": { "value": {}, "complementary": true },
+      "handles": { "value": ["Sarge", "Dogtag", "Bravo", "Foxhole", "Hardpoint", "Ranger", "Medal", "Chevron", "Bunker", "Recon"], "complementary": true },
+      "loadout": [
+        { "value": "Medium Armorjack e SMGs pesadas.", "source": "CP:R p.424 (Turf War: 6th Street; use Boosters; Replace Leather with Medium Armorjack; Replace Rippers with Heavy SMGs)" },
+        { "value": "Membros com rifle de precisão, rifles de assalto, escopetas de baixa qualidade, pistola pesada e arma pesada corpo a corpo; Sandevistan ou Kerenzikov, Grafted Muscle and Bone Lace; granadas de fumaça, gás e flashbang; algemas e rádio.", "source": "DGD p.10-13" }
+      ],
+      "bias": {
+        "complementary": true,
+        "note": "Interpretação da aplicação a partir de CP:R p.424 e DGD p.9-13. O teto de gasto em cyberware reflete a regra do X contra excesso de implantes (DGD p.9).",
+        "value": {
+          "profiles": { "corporate-enforcer": 3, "street-gunslinger": 1.5, "sniper": 1.5, "corporate-bodyguard": 1, "technician": 1 },
+          "statWeights": { "WILL": 1.2, "BODY": 1.1 },
+          "secondarySkills": { "tactics": 2, "first-aid": 1.5, "drive-land-vehicle": 1.5, "autofire": 1 },
+          "weaponClasses": ["HeavySmg", "AssaultRifle", "Shotgun", "HeavyPistol", "HeavyMelee"],
+          "armorStyle": "Medium",
+          "cyberwareSpendRange": { "min": 0.25, "max": 0.55 },
+          "cyberware": { "neural-link": 1.5, "sandevistan": 1.5, "kerenzikov": 1.5, "grafted-muscle-and-bone-lace": 1.5, "cyberleg": 0.5, "jump-booster": 0.5, "popup-ranged-weapon": 0.5 },
+          "gear": { "handcuffs": 2, "radio-communicator-gear": 2, "flashlight": 1, "road-flare": 0.5, "smoke-grenade": 1, "teargas-grenade": 1, "flashbang-grenade": 0.5 }
+        }
+      }
+    },
+    {
+      "id": "bozos",
+      "label": "Bozos",
+      "era": "2045",
+      "kind": "Pranksters assassinos",
+      "description": { "value": "Começaram como gangue de pegadinhas e viraram a gangue definitiva de palhaços assassinos. Brincam com o medo das pessoas: emboscadas no escuro, vítimas trancadas com ratos, elevadores parados e inundados. Uma guerra civil dividiu a gangue em 'circos' rivais que tentam superar uns aos outros em pegadinhas, como a 'Mass Addiction Event' de synthcoke em Little Europe. Não têm graça nenhuma.", "source": "CP:R p.308; DGD p.15" },
+      "aesthetic": { "value": "Biosculpidos como palhaços de circo: nariz vermelho de bola, cabelo vermelho desgrenhado e pés longos e chatos (de verdade, não sapatos), com fantasia completa. Saem dos bueiros em bando e deixam um nariz ensanguentado como assinatura.", "source": "CP:R p.308; DGD p.15" },
+      "territory": { "value": ["Little Europe", "South Night City"], "source": "DGD p.15 (loja de piadas em Little Europe e complexo em South Night City)" },
+      "languages": { "value": {}, "complementary": true },
+      "handles": { "value": ["Giggles", "Pratfall", "Jingles", "Honk", "Chuckles", "Big Shoes", "Rubbernose", "Confetti", "Custard", "Slapstick"], "complementary": true },
+      "loadout": [
+        { "value": "Light Armorjack de bolinhas, marretas gigantes e pistolas muito pesadas coloridas; Big Knucks no lugar de Rippers.", "source": "CP:R p.424 (Turf War: Bozos; Replace Rippers with Big Knucks; Add Very Heavy Melee Weapons)" },
+        { "value": "Membros com chainknife, Air Pistol com paintballs de ácido, Scratchers, Exotic Bodysculpting, Color Shift, frascos de veneno e biotoxina, granadas de fumaça e flashbang, buzina de bicicleta.", "source": "DGD p.16-24" }
+      ],
+      "bias": {
+        "complementary": true,
+        "note": "Interpretação da aplicação a partir de CP:R p.424 e DGD p.15-24.",
+        "value": {
+          "profiles": { "gang-fighter": 3, "melee-solo": 2.5, "street-gunslinger": 1.5, "technician": 0.5 },
+          "secondarySkills": { "acting": 1.5, "stealth": 1.5, "interrogation": 1, "contortionist": 1 },
+          "weaponClasses": ["VeryHeavyMelee", "VeryHeavyPistol", "HeavyMelee", "HeavyPistol"],
+          "armorStyle": "Light",
+          "cyberware": { "big-knucks": 3, "scratchers": 2, "color-shift": 1.5, "chemskin": 1.5, "light-tattoo": 1, "neural-link": 1, "kerenzikov": 1 },
+          "gear": { "synthcoke": 1.5, "vial-of-poison": 1, "smoke-grenade": 1, "flashbang-grenade": 1, "glow-paint": 1, "duct-tape": 1 }
+        }
+      }
+    },
+    {
+      "id": "generation-red",
+      "label": "Generation Red",
+      "era": "2045",
+      "kind": "YoGang (gangue de jovens)",
+      "description": { "value": "Uma YoGang: crianças e adolescentes sem família por perto que se juntaram para sobreviver. Não procuram briga, mas são pestinhas determinados que defendem o clubhouse com unhas, dentes e armadilhas. Têm o que conseguem catar ou roubar.", "source": "DGD p.57" },
+      "aesthetic": { "value": "Um prédio de escritórios abandonado no Old Combat Zone virou clubhouse: o térreo é pista de skate com rampas de entulho, as paredes estão cobertas de grafite e poesia. Skates, patins, bicicletas, tinta fluorescente e muita fita adesiva.", "source": "DGD p.57" },
+      "territory": { "value": ["The Old Combat Zone"], "source": "DGD p.57 (clubhouse a sudeste do Glen, no Old Combat Zone)" },
+      "languages": { "value": {}, "complementary": true },
+      "handles": { "value": ["Skid", "Pixel", "Sprocket", "Kickflip", "Doodle", "Pipsqueak", "Grind", "Scrap", "Tagger", "Ollie"], "complementary": true },
+      "loadout": [
+        { "value": "Pistolas pesadas de baixa qualidade, armas corpo a corpo improvisadas, Leathers ou Kevlar; flashbangs; skate, patins, bicicleta, tinta fluorescente e fita adesiva; quase nenhum cyberware (EMP Threading, Light Tattoo).", "source": "DGD p.58-66" }
+      ],
+      "bias": {
+        "complementary": true,
+        "note": "Interpretação da aplicação a partir de DGD p.57-66: pouco cromo e equipamento de sucata.",
+        "value": {
+          "profiles": { "gang-fighter": 2, "street-gunslinger": 2, "technician": 2, "netrunner": 1.5, "melee-solo": 1 },
+          "statWeights": { "DEX": 1.2, "MOVE": 1.2, "BODY": 0.8 },
+          "secondarySkills": { "athletics": 1.5, "stealth": 2, "basic-tech": 1, "paint-draw-sculpt": 1, "pick-lock": 1 },
+          "weaponClasses": ["HeavyPistol", "MediumPistol", "HeavyMelee", "LightMelee"],
+          "armorStyle": "Light",
+          "cyberwareSpendRange": { "min": 0.05, "max": 0.3 },
+          "cyberware": { "emp-threading": 2, "light-tattoo": 2, "techhair": 1 },
+          "gear": { "glow-paint": 2, "duct-tape": 2, "flashlight": 1, "flashbang-grenade": 1, "carryall": 1, "kibble-pack": 1 }
+        }
+      }
+    },
+    {
+      "id": "inquisitors",
+      "label": "Inquisitors",
+      "era": "2045",
+      "kind": "Culto (gangue religiosa)",
+      "description": { "value": "Gangue-culto que considera o cyberware uma blasfêmia e não pensa duas vezes antes de arrancá-lo do corpo dos outros, para 'salvar sua alma'. Está em guerra com todas as outras gangues da cidade, especialmente a Maelstrom. Todo mundo odeia esses caras.", "source": "CP:R p.308" },
+      "aesthetic": { "value": "Robes da gangue, que escondem quando estão no trabalho comum; qualquer um pode ser um Inquisitor. Atacam em bando com nunchakus, chicotes, armas corpo a corpo e pistolas, e alguns ficam atrás com Air Pistols carregadas de paintballs de ácido. Sem cyberware, sem Techhair.", "source": "CP:R p.308 e p.423" },
+      "territory": { "value": [], "complementary": true, "note": "O Core não dá território fixo aos Inquisitors." },
+      "languages": { "value": {}, "complementary": true },
+      "handles": { "value": ["Brother Ash", "Sister Mercy", "Penitent", "Zealot", "Deacon", "Flail", "Ashes", "Purifier", "Psalm", "Cinder"], "complementary": true },
+      "loadout": [
+        { "value": "Sem Leathers e sem Techhair; Rippers trocados por armas corpo a corpo médias; dois deles com Air Pistol e 20 paintballs de ácido.", "source": "CP:R p.423 (Culties: Inquisitors; use Boosters; Remove Leathers and Techhair; Replace Rippers with Medium Melee Weapons)" },
+        { "value": "Espancam quem tem olhos de grife ou fashionware.", "source": "CP:R p.418 e p.421" }
+      ],
+      "bias": {
+        "complementary": true,
+        "note": "Interpretação da aplicação a partir de CP:R p.308 e p.423: o gerador nunca escolhe cyberware para um Inquisitor (implantes obrigatórios escolhidos pelo usuário continuam valendo).",
+        "value": {
+          "profiles": { "melee-solo": 3, "gang-fighter": 2.5, "street-gunslinger": 1.5 },
+          "statWeights": { "WILL": 1.3, "EMP": 1.3 },
+          "secondarySkills": { "persuasion": 1.5, "interrogation": 1.5, "brawling": 1.5 },
+          "weaponClasses": ["MediumMelee", "HeavyMelee", "HeavyPistol", "MediumPistol"],
+          "armorStyle": "Light",
+          "allCyberwareForbidden": true,
+          "gear": { "flashlight": 1, "handcuffs": 0.5 }
+        }
+      }
+    },
+    {
+      "id": "iron-sights",
+      "label": "Iron Sights",
+      "era": "2045",
+      "kind": "Gangue de combate",
+      "description": { "value": "Gangue de combate pequena, mas surpreendentemente durona, de quase-ciberpsicopatas. Já foi bancada pela Arasaka e passou aperto depois da guerra, mas dizem que arrumou um novo patrocinador e voltou a flexionar as Rippers.", "source": "CP:R p.308" },
+      "aesthetic": { "value": "Armorjacks com as cores da gangue, SMGs e armas automáticas, cyberarmas à mostra, olhos cibernéticos de visão noturna e reflexos acelerados. Implicam com quem chama atenção e cobram 'pedágio'.", "source": "CP:R p.15, p.419 e p.422" },
+      "territory": { "value": [], "complementary": true, "note": "O Core não dá território fixo aos Iron Sights." },
+      "languages": { "value": {}, "complementary": true },
+      "handles": { "value": ["Sightline", "Crosshair", "Muzzle", "Ironside", "Recoil", "Bead", "Hairtrigger", "Ricochet", "Gunmetal", "Scope"], "complementary": true },
+      "loadout": [
+        { "value": "SMGs, Rippers, cybereyes Low Light/Infrared/UV, Neural Link e Kerenzikov.", "source": "CP:R p.419 (Boostergang: Iron Sights; Replace Poor Quality Very Heavy Pistols with Poor Quality SMGs; Add Low Light/Infrared/UV Cybereyes, Neural Link, & Kerenzikov)" },
+        { "value": "À noite: SMGs pesadas, duas cyberarmas e reflexos acelerados.", "source": "CP:R p.422 e p.424" }
+      ],
+      "bias": {
+        "complementary": true,
+        "note": "Interpretação da aplicação a partir de CP:R p.419, p.422 e p.424.",
+        "value": {
+          "profiles": { "gang-fighter": 3, "street-gunslinger": 2.5, "melee-solo": 1.5, "corporate-enforcer": 1 },
+          "statWeights": { "REF": 1.2 },
+          "secondarySkills": { "autofire": 1.5, "interrogation": 1 },
+          "weaponClasses": ["Smg", "HeavySmg"],
+          "armorStyle": "Light",
+          "cyberwareSpendRange": { "min": 0.55, "max": 0.9 },
+          "cyberware": { "rippers": 3, "cybereye": 3, "low-light-infrared-uv": 3, "neural-link": 3, "kerenzikov": 3, "cyberarm": 1.5, "wolvers": 1.5, "popup-melee-weapon": 1 },
+          "gear": { "roupa-gang-colors-jacket": 1.5, "disposable-cellphone": 1 }
+        }
+      }
+    },
+    {
+      "id": "maelstrom",
+      "label": "Maelstrom",
+      "era": "2045",
+      "kind": "Boostergang (gangue de combate)",
+      "description": { "value": "Gangue de combate formada com os restos dos Metal Warriors e de dissidentes da Red Chrome Legion e dos Iron Sights, todos com rixas sangrentas contra os Inquisitors. Adotou a filosofia de ódio à carne de um antigo rival, e o cyberware visível e extremo cresceu exponencialmente. Hoje vive do tráfico de drogas e de peças cibernéticas, de bandos de scavvers na Hot Zone e de acordos com ripperdocs. Sede: Totentanz, no Burleson Tower Hotel.", "source": "CP:R p.308; DGD p.67" },
+      "aesthetic": { "value": "Cromo à mostra, quanto mais extremo melhor. É marca de honra usar 'cromo velho' com cicatrizes do Nuke; na parede do salão está o cromo queimado dos mortos, incluindo o corpo mumificado do antigo líder, Hammer. Lema: 'Chrome, Smash, Dance, and Bash'.", "source": "DGD p.67" },
+      "territory": { "value": [], "complementary": true, "note": "A sede é o Totentanz, na beira da Hot Zone (CP:R p.310; DGD p.67), que não é um bairro da lista de lares." },
+      "languages": { "value": {}, "complementary": true },
+      "handles": { "value": ["Hotwire", "Gearbox", "Scrapjaw", "Overclock", "Rustbucket", "Socket", "Meatgrinder", "Totentanz", "Burnout", "Sprocket"], "complementary": true },
+      "loadout": [
+        { "value": "Medium Armorjack e cyberarmas por toda parte; Wolvers no lugar de Rippers.", "source": "CP:R p.424 (Turf War: Maelstrom; use Boosters; Replace Leather with Medium Armorjack. Replace Rippers with Wolvers)" },
+        { "value": "Membros com cyberarms (com popups de lança-chamas, lança-granadas e Wolvers), Grafted Muscle and Bone Lace, Implanted Linear Frame, Subdermal Armor, cybereyes Low Light/Infrared/UV, Combat Jaw, Pain Editor e máscaras anti-smog parafusadas no rosto.", "source": "DGD p.68-78" }
+      ],
+      "bias": {
+        "complementary": true,
+        "note": "Interpretação da aplicação a partir de CP:R p.308, CP:R p.424 e DGD p.67-78: gasta quase todo o orçamento de cyberware.",
+        "value": {
+          "profiles": { "melee-solo": 3, "gang-fighter": 2.5, "corporate-enforcer": 1.5, "technician": 1, "netrunner": 0.5 },
+          "statWeights": { "BODY": 1.3, "EMP": 0.6 },
+          "secondarySkills": { "brawling": 1.5, "endurance": 1, "resist-torture-drugs": 1, "cybertech": 1 },
+          "weaponClasses": ["VeryHeavyPistol", "Shotgun", "AssaultRifle", "HeavyMelee", "VeryHeavyMelee"],
+          "armorStyle": "Medium",
+          "cyberwareSpendRange": { "min": 0.7, "max": 1.0 },
+          "cyberware": { "cyberarm": 4, "wolvers": 4, "popup-ranged-weapon": 2, "popup-melee-weapon": 2, "popup-grenade-launcher": 1, "grafted-muscle-and-bone-lace": 3, "subdermal-armor": 3, "cybereye": 2, "low-light-infrared-uv": 2, "cyberleg": 1.5, "hardened-shielding": 1, "neural-link": 1.5, "pain-editor": 1.5, "emp-threading": 1, "superchrome-covering": 1 },
+          "gear": { "anti-smog-breathing-mask": 2, "smash": 1, "road-flare": 0.5, "disposable-cellphone": 0.5 }
+        }
+      }
+    },
+    {
+      "id": "philharmonic-vampyres",
+      "label": "Philharmonic Vampyres",
+      "era": "2045",
+      "kind": "Pranksters",
+      "description": { "value": "Gangue de pegadinhas batizada décadas atrás, quando cinco membros de smoking, capa e presas de vampiro voaram presos a cabos atrás da Night City Symphony numa noite de Halloween. Artistas, arruaceiros ou comentaristas sociais? Ninguém sabe. Suas pegadinhas vivem de hackear postes, Data Terms e telões.", "source": "CP:R p.309 e p.421" },
+      "aesthetic": { "value": "Smoking, capa e presas de vampiro (são parte da fantasia ou não?). Sempre com um truque eletrônico pronto: semáforos piscando no ritmo de uma música pop, alerta falso de míssil, chuva de eurodólares falsos.", "source": "CP:R p.309 e p.421" },
+      "territory": { "value": [], "complementary": true, "note": "O Core não dá território fixo aos Vamps." },
+      "languages": { "value": {}, "complementary": true },
+      "handles": { "value": ["Nosferatu", "Maestro", "Fang", "Crescendo", "Velvet", "Count Static", "Opera", "Batwing", "Nocturne", "Encore"], "complementary": true },
+      "loadout": [
+        { "value": "Perícia Electronics/Security Tech com base 10 para as pegadinhas.", "source": "CP:R p.421 (Philharmonic Vampires; Use Boosters; Add an Electronic/Security Tech Skill Base of 10)" }
+      ],
+      "bias": {
+        "complementary": true,
+        "note": "Interpretação da aplicação a partir de CP:R p.309 e p.421; as presas usam o implante Vampyres do Core.",
+        "value": {
+          "profiles": { "technician": 2.5, "netrunner": 2.5, "street-gunslinger": 1.5, "gang-fighter": 1 },
+          "statWeights": { "TECH": 1.2, "COOL": 1.2 },
+          "secondarySkills": { "electronics-security-tech": 3, "acting": 1.5, "wardrobe-style": 1.5, "play-instrument:Violin": 0.5 },
+          "armorStyle": "Light",
+          "cyberware": { "vampyres": 4, "light-tattoo": 1, "techhair": 1, "neural-link": 1 },
+          "gear": { "roupa-businesswear-top": 2, "roupa-businesswear-jacket": 1, "roupa-businesswear-bottoms": 1, "flashlight": 0.5, "smoke-grenade": 1 }
+        }
+      }
+    },
+    {
+      "id": "piranhas",
+      "label": "Piranhas",
+      "era": "2045",
+      "kind": "Gangue de festa",
+      "description": { "value": "A típica gangue de festa: festejam, bebem Smash, usam e vendem drogas e assaltam gente 'só porque sim'. A Festa é tudo. Sob Corpse Reviver, absorveram outras gangues de festa e se organizaram em 'cardumes' com DJs, técnicos de som e luz, mixologistas, dealers e seguranças: não existe festa boa em Night City sem um Piranha no meio.", "source": "CP:R p.309; DGD p.95" },
+      "aesthetic": { "value": "Dentes brilhando, jaquetas de couro rasgadas e muito neon. O Piranha Palace muda de lugar toda semana, de um armazém no Combat Zone a uma cobertura no centro.", "source": "CP:R p.424; DGD p.95" },
+      "territory": { "value": [], "complementary": true, "note": "O Piranha Palace muda de lugar com frequência (DGD p.95)." },
+      "languages": { "value": {}, "complementary": true },
+      "handles": { "value": ["Riptide", "Fishbowl", "Chomp", "Shoal", "Neon Fin", "Afterparty", "Molly", "Bassline", "Glowstick", "Frenzy"], "complementary": true },
+      "loadout": [
+        { "value": "Pistolas muito pesadas e Rippers (punks de rua); Light Armorjack no lugar de Leathers; à noite, pistolas médias, facas e reflexos acelerados (Neural Link e Kerenzikov).", "source": "CP:R p.419, p.421 e p.422" },
+        { "value": "Membros com Piranha Smash, Synthcoke, Blue Glass, Black Lace, Boost, Airhypo, AudioVox, Techhair e EMP Threading.", "source": "DGD p.96-98" }
+      ],
+      "bias": {
+        "complementary": true,
+        "note": "Interpretação da aplicação a partir de CP:R p.309, p.419-424 e DGD p.95-98.",
+        "value": {
+          "profiles": { "gang-fighter": 3, "street-gunslinger": 2, "technician": 1, "melee-solo": 1 },
+          "statWeights": { "COOL": 1.2, "EMP": 1.1 },
+          "secondarySkills": { "dance": 1.5, "trading": 1, "wardrobe-style": 1, "persuasion": 1 },
+          "weaponClasses": ["VeryHeavyPistol", "MediumPistol", "Smg", "LightMelee"],
+          "armorStyle": "Light",
+          "cyberware": { "rippers": 2, "neural-link": 1.5, "kerenzikov": 1.5, "techhair": 2, "emp-threading": 1.5, "light-tattoo": 1.5, "audiovox": 1 },
+          "gear": { "smash": 3, "piranha-smash": 1.5, "synthcoke": 2, "blue-glass": 1.5, "black-lace": 1, "boost": 1.5, "airhypo": 1, "glow-stick": 1 }
+        }
+      }
+    },
+    {
+      "id": "prime-time-players",
+      "label": "Prime-Time Players",
+      "era": "2045",
+      "kind": "Posergang",
+      "description": { "value": "Posergang que usa biosculpt para ficar igual a personagens de sitcoms e séries de TV antigas. É uma gangue-família que protege o bairro e sente saudade de um tempo que passou, dividida em facções por série. São territoriais e protegem os seus com unhas e dentes.", "source": "CP:R p.309" },
+      "aesthetic": { "value": "Rostos biosculpidos de astros de TV de outras épocas, figurinos de época, jaquetas de couro com franjas e escopetas à moda antiga.", "source": "CP:R p.309 e p.424" },
+      "territory": { "value": [], "complementary": true, "note": "O Core não dá território fixo aos Players." },
+      "languages": { "value": {}, "complementary": true },
+      "handles": { "value": ["The Fonz", "Laugh Track", "Rerun", "Ratings", "Sweeps", "Syndication", "Pilot", "Catchphrase", "Cliffhanger", "Primetime"], "complementary": true },
+      "loadout": [
+        { "value": "Escopetas com 20 balas slug, perícia Shoulder Arms com base 10 e jaquetas de couro com franjas.", "source": "CP:R p.424 (Turf War: Primetime Players; use Boosters; Add Shotgun with 20 Slugs and a Shoulder Arms Skill Base of 10)" }
+      ],
+      "bias": {
+        "complementary": true,
+        "note": "Interpretação da aplicação a partir de CP:R p.309 e p.424.",
+        "value": {
+          "profiles": { "corporate-enforcer": 2, "technician": 2, "gang-fighter": 2, "street-gunslinger": 1 },
+          "statWeights": { "COOL": 1.2, "EMP": 1.2 },
+          "secondarySkills": { "acting": 2, "wardrobe-style": 1.5, "personal-grooming": 1.5, "shoulder-arms": 1.5 },
+          "weaponClasses": ["Shotgun"],
+          "armorStyle": "Light",
+          "cyberware": { "color-shift": 1, "chemskin": 1, "techhair": 1.5 },
+          "gear": { "roupa-nomad-leathers-jacket": 2, "roupa-leisurewear-top": 1, "video-camera": 0.5 }
+        }
+      }
+    },
+    {
+      "id": "reckoners",
+      "label": "Reckoners",
+      "era": "2045",
+      "kind": "Culto apocalíptico",
+      "description": { "value": "Um dos vários cultos apocalípticos que surgiram depois da guerra. Andam pelas ruas pregando a chegada da Colheita das Almas, recrutam entre os sem-teto e pedem 'doações', muitas vezes tiradas do seu corpo inconsciente. Alguns são loucos de verdade e querem trazer o Fim dos Tempos agora mesmo, com sangue e C4.", "source": "CP:R p.309" },
+      "aesthetic": { "value": "Pregadores de rua andrajosos que veem no céu vermelho um sinal do Fim. Andam armados abertamente com facas, porretes e pistolas pesadas, e enfiam a verdade na sua cabeça na base da porrada.", "source": "CP:R p.309 e p.419" },
+      "territory": { "value": [], "complementary": true, "note": "O Core não dá território fixo aos Reckoners." },
+      "languages": { "value": {}, "complementary": true },
+      "handles": { "value": ["Harvest", "Prophet", "Doomsayer", "Ember", "Revelation", "Shepherd", "Omen", "Ashfall", "Tithe", "Brimstone"], "complementary": true },
+      "loadout": [
+        { "value": "Big Knucks no lugar de Rippers, pistolas pesadas de baixa qualidade no lugar das muito pesadas e uma arma corpo a corpo leve.", "source": "CP:R p.419 (Culties: Use Boosters; Replace Rippers with Big Knucks and Poor Quality Very Heavy Pistols with Poor Quality Heavy Pistols; Add a Light Melee Weapon)" }
+      ],
+      "bias": {
+        "complementary": true,
+        "note": "Interpretação da aplicação a partir de CP:R p.309 e p.419; o C4 entra como perícia de Demolitions.",
+        "value": {
+          "profiles": { "gang-fighter": 3, "melee-solo": 2, "technician": 1 },
+          "statWeights": { "WILL": 1.3, "EMP": 1.2 },
+          "secondarySkills": { "persuasion": 2, "demolitions": 1, "wilderness-survival": 1, "endurance": 1 },
+          "weaponClasses": ["HeavyPistol", "LightMelee", "MediumMelee"],
+          "armorStyle": "Light",
+          "cyberwareSpendRange": { "min": 0.1, "max": 0.35 },
+          "cyberware": { "big-knucks": 3 },
+          "gear": { "road-flare": 1, "inflatable-bed-sleep-bag": 1, "personal-carepak": 0.5, "incendiary-grenade": 0.5 }
+        }
+      }
+    },
+    {
+      "id": "red-chrome-legion",
+      "label": "Red Chrome Legion",
+      "era": "2045",
+      "kind": "Gangue de ódio",
+      "description": { "value": "Gangue de ódio neofascista: jovens reunidos em torno de várias ideologias de ódio. Atacam qualquer coisa que achem que não é 'certa'.", "source": "CP:R p.309" },
+      "aesthetic": { "value": "Uniformes e slogans militaristas são a regra. Medium ou Heavy Armorjack em forma de farda e rifles de assalto.", "source": "CP:R p.309, p.418 e p.424" },
+      "territory": { "value": [], "complementary": true, "note": "O Core não dá território fixo à Legion." },
+      "languages": { "value": {}, "complementary": true },
+      "handles": { "value": ["Vanguard", "Iron Cross", "Bootheel", "Marshal", "Purge", "Standard", "Drill", "Legionnaire", "Torchbearer", "Rank"], "complementary": true },
+      "loadout": [
+        { "value": "Heavy Armorjack no lugar de Leathers.", "source": "CP:R p.418 (Red Chrome Legion; use Boosters; Replace Leather with Heavy Armorjack)" },
+        { "value": "Fardas de Medium Armorjack, rifles de assalto e perícia Shoulder Arms com base 10.", "source": "CP:R p.424 (Turf War: Red Chrome Legion)" }
+      ],
+      "bias": {
+        "complementary": true,
+        "note": "Interpretação da aplicação a partir de CP:R p.309, p.418 e p.424.",
+        "value": {
+          "profiles": { "corporate-enforcer": 3, "gang-fighter": 1.5, "street-gunslinger": 1, "sniper": 1 },
+          "statWeights": { "BODY": 1.2, "WILL": 1.2, "EMP": 0.7 },
+          "secondarySkills": { "tactics": 1.5, "athletics": 1, "interrogation": 1.5 },
+          "weaponClasses": ["AssaultRifle"],
+          "armorStyle": "Heavy",
+          "cyberware": { "rippers": 1, "subdermal-armor": 1 },
+          "gear": { "roupa-gang-colors-jacket": 1, "flashlight": 0.5 }
+        }
+      }
+    },
+    {
+      "id": "scavvers",
+      "label": "Scavvers",
+      "era": "2045",
+      "kind": "Catadores (não exatamente uma gangue)",
+      "description": { "value": "Não são bem uma gangue: são os sem-teto desesperados que ocupam as zonas destruídas da cidade e vasculham os escombros em busca de cobre, platina, tecnologia velha e armas abandonadas. Muitos morrem nisso, e cada vez precisam cavar mais fundo em terreno inseguro.", "source": "CP:R p.309" },
+      "aesthetic": { "value": "Couro imundo, facas improvisadas e pistolas muito pesadas de baixa qualidade. Mendigam, ignoram você ou tentam te roubar, e sempre pode haver mais meia dúzia por perto.", "source": "CP:R p.419" },
+      "territory": { "value": ["The Old Combat Zone"], "source": "CP:R p.309 (zonas arruinadas da cidade)" },
+      "languages": { "value": {}, "complementary": true },
+      "handles": { "value": ["Rat", "Tin", "Copper", "Rubble", "Dig", "Junker", "Grime", "Salvage", "Mole", "Ashcan"], "complementary": true },
+      "loadout": [
+        { "value": "Leathers imundas, facas improvisadas (arma leve no lugar de Rippers) e pistolas muito pesadas de baixa qualidade.", "source": "CP:R p.419 (Scavvers; Use Boosters; Replace Rippers with Light Melee Weapon)" }
+      ],
+      "bias": {
+        "complementary": true,
+        "note": "Interpretação da aplicação a partir de CP:R p.309 e p.419: pouco cromo e equipamento de sucata.",
+        "value": {
+          "profiles": { "gang-fighter": 2, "street-gunslinger": 2, "technician": 2, "melee-solo": 1 },
+          "statWeights": { "BODY": 1.1, "COOL": 0.8 },
+          "secondarySkills": { "wilderness-survival": 1.5, "conceal-reveal-object": 1.5, "basic-tech": 1.5, "streetwise": 1 },
+          "weaponClasses": ["VeryHeavyPistol", "LightMelee"],
+          "armorStyle": "Light",
+          "cyberwareSpendRange": { "min": 0.0, "max": 0.2 },
+          "gear": { "roupa-bag-lady-chic-jacket": 2, "anti-smog-breathing-mask": 1.5, "flashlight": 1, "carryall": 1, "kibble-pack": 1, "rope-60m": 0.5 }
+        }
+      }
+    },
+    {
+      "id": "tyger-claws",
+      "label": "Tyger Claws",
+      "era": "2045",
+      "kind": "Gangue protetora",
+      "description": { "value": "Antiga gangue de fachada da Arasaka, refundada por Shinobu Nakagawa e pela Night City Co-prosperity Sphere como gangue protetora da comunidade japonesa (e asiática) de Night City. Teve papel importante na reconstrução de Japantown e Kabuki. Na superfície protege; por baixo, cobra uma parte de tudo no seu território, de Night Markets a pachinko.", "source": "CP:R p.309; DGD p.121" },
+      "aesthetic": { "value": "Motos rápidas, reflexos acelerados e artes marciais mortais. A face pública são os Kimen-Gumi, com máscaras de Oni coloridas. Jaquetas de motoqueiro levemente blindadas, katanas e pistolas muito pesadas.", "source": "CP:R p.309 e p.424; DGD p.121" },
+      "territory": { "value": ["Kabuki", "Japantown", "Little China"], "source": "DGD p.121 (Kabuki, no Watson Development, e as ruínas de Japantown)" },
+      "languages": { "value": { "Japanese": 6, "English": 2, "Mandarin": 1, "Cantonese": 1, "Korean": 1 }, "complementary": true, "note": "Pesos da aplicação: a gangue protege a comunidade japonesa (DGD p.121) e asiática (CP:R p.309)." },
+      "handles": { "value": ["Kitsune", "Oni", "Raiden", "Hayabusa", "Kage", "Ronin", "Tora", "Tsuba", "Kaiju", "Shuriken"], "complementary": true },
+      "loadout": [
+        { "value": "Jaquetas de motoqueiro levemente blindadas (Light Armorjack), katanas (arma pesada corpo a corpo) e pistolas muito pesadas.", "source": "CP:R p.424 (Turf War: Tyger Claws; use Boosters; Add Heavy Melee Weapons; Replace Leather with Light Armorjack)" },
+        { "value": "Membros com armas corpo a corpo pesadas e muito pesadas (Kendachi Mono-Three), pistolas muito pesadas, escopetas, Kerenzikov, skill chips, máscaras anti-smog e Synthcoke.", "source": "DGD p.122-130" }
+      ],
+      "bias": {
+        "complementary": true,
+        "note": "Interpretação da aplicação a partir de CP:R p.309, CP:R p.424 e DGD p.121-130.",
+        "value": {
+          "profiles": { "melee-solo": 3, "street-gunslinger": 2, "corporate-bodyguard": 1.5, "netrunner": 1, "sniper": 0.5 },
+          "statWeights": { "REF": 1.2, "DEX": 1.3 },
+          "secondarySkills": { "martial-arts:Karate": 2, "drive-land-vehicle": 2, "melee-weapon": 1, "business": 0.5 },
+          "weaponClasses": ["HeavyMelee", "VeryHeavyMelee", "VeryHeavyPistol", "Shotgun"],
+          "armorStyle": "Light",
+          "cyberware": { "neural-link": 2.5, "kerenzikov": 3, "sandevistan": 1.5, "chipware-socket": 1, "skill-chip": 1, "light-tattoo": 1, "emp-threading": 1 },
+          "gear": { "roupa-asia-pop-jacket": 1.5, "anti-smog-breathing-mask": 1, "handcuffs": 0.5, "synthcoke": 0.5 }
+        }
+      }
+    },
+    {
+      "id": "voodoo-boys",
+      "label": "Voodoo Boys",
+      "era": "2045",
+      "kind": "Gangue terrorista",
+      "description": { "value": "Gangue terrorista com toques de magia ritual, que talvez tenha nascido de grandes contatos do crime na Flórida e no Caribe e que lida sobretudo com drogas não sintéticas. Isso está mudando: haitianos de verdade e refugiados da República Dominicana se ofenderam com esses 'Voodoo Boys' e passaram a mutilar vítimas e esquartejar mortos a facão, deixando partes do corpo como aviso.", "source": "CP:R p.309" },
+      "aesthetic": { "value": "Floreios de ritual e magia, facões, SMGs e granadas de gás lacrimogêneo.", "source": "CP:R p.309 e p.424" },
+      "territory": { "value": [], "complementary": true, "note": "O Core não dá território fixo aos Voodoo Boys de 2045." },
+      "languages": { "value": { "English": 4, "Haitian Creole": 2, "Spanish": 1 }, "complementary": true, "note": "Pesos da aplicação a partir de CP:R p.309 (contatos no Caribe; refugiados haitianos e dominicanos)." },
+      "handles": { "value": ["Baron", "Hex", "Mojo", "Gris-Gris", "Bones", "Machete", "Loa", "Midnight", "Candle", "Crossroads"], "complementary": true },
+      "loadout": [
+        { "value": "SMGs no lugar das pistolas muito pesadas e uma granada de gás lacrimogêneo.", "source": "CP:R p.424 (Turf War: Voodoo Boys; use Boosters; Replace Poor Quality Very Heavy Pistols with SMGs; Add 1 Teargas Grenade)" }
+      ],
+      "bias": {
+        "complementary": true,
+        "note": "Interpretação da aplicação a partir de CP:R p.309 e p.424; os facões entram como arma média corpo a corpo.",
+        "value": {
+          "profiles": { "gang-fighter": 3, "street-gunslinger": 2, "melee-solo": 1.5, "netrunner": 1 },
+          "secondarySkills": { "trading": 1.5, "interrogation": 1, "streetwise": 1 },
+          "weaponClasses": ["Smg", "MediumMelee"],
+          "armorStyle": "Light",
+          "cyberware": { "rippers": 1, "light-tattoo": 1 },
+          "gear": { "teargas-grenade": 3, "glow-paint": 0.5 }
+        }
+      }
+    },
+    {
+      "id": "6th-street-2077",
+      "label": "6th Street (2077)",
+      "era": "2077",
+      "kind": "Gangue de veteranos",
+      "description": { "value": "Começou com boas intenções: veteranos fazendo o trabalho que a NCPD não fazia. Mas o trabalho exigia armas, dinheiro e acesso; vieram os subornos, a taxa de proteção e outros esquemas. Hoje é só mais uma gangue embrulhada em fachada militar.", "source": "EMK p.25" },
+      "aesthetic": { "value": "Fachada militar: patentes, fardas e armamento de veterano.", "source": "EMK p.25" },
+      "territory": { "value": ["Santo Domingo", "Charter Hill", "Heywood"], "source": "EMK p.25 (Santo Domingo; influência em Charter Hill e Heywood)" },
+      "languages": { "value": {}, "complementary": true },
+      "handles": { "value": ["Sarge", "Dogtag", "Bravo", "Hardpoint", "Ranger", "Chevron", "Rifleman", "Patriot", "Ironside", "Recon"], "complementary": true },
+      "loadout": [],
+      "bias": {
+        "complementary": true,
+        "note": "Interpretação da aplicação a partir de EMK p.25.",
+        "value": {
+          "profiles": { "corporate-enforcer": 3, "street-gunslinger": 1.5, "sniper": 1.5, "technician": 1 },
+          "statWeights": { "WILL": 1.2, "BODY": 1.1 },
+          "secondarySkills": { "tactics": 2, "first-aid": 1, "autofire": 1 },
+          "weaponClasses": ["AssaultRifle", "HeavySmg", "Shotgun", "HeavyPistol"],
+          "armorStyle": "Medium",
+          "cyberware": { "neural-link": 1.5, "sandevistan": 1, "kerenzikov": 1.5, "grafted-muscle-and-bone-lace": 1, "subdermal-armor": 1 },
+          "gear": { "radio-communicator-gear": 1.5, "teargas-grenade": 0.5, "flashbang-grenade": 0.5 }
+        }
+      }
+    },
+    {
+      "id": "animals",
+      "label": "Animals",
+      "era": "2077",
+      "kind": "Gangue de força bruta",
+      "description": { "value": "Puristas que dispensam cyberware de força e de combate em favor de hormônios de crescimento geneticamente modificados, ultratestosterona e 'the Juice', um coquetel químico secreto que aumenta força, tamanho e velocidade. Respeitam força e habilidade acima de tudo; disputas internas se resolvem em julgamento por combate. Não seguram território: se vendem como músculo, organizam lutas até a morte e invadem bairros, depósitos e esconderijos de outras gangues.", "source": "EMK p.25" },
+      "aesthetic": { "value": "Músculos tão grandes que parecem prestes a estourar a pele. A 'selva de pedra' é literal para eles.", "source": "EMK p.25" },
+      "territory": { "value": [], "source": "EMK p.25 (os Animals normalmente não seguram território)" },
+      "languages": { "value": {}, "complementary": true },
+      "handles": { "value": ["Bull", "Gorilla", "Rhino", "Grizzly", "Juice", "Mammoth", "Bison", "Silverback", "Brute", "Tusk"], "complementary": true },
+      "loadout": [],
+      "bias": {
+        "complementary": true,
+        "note": "Interpretação da aplicação a partir de EMK p.25: sem cyberware de força ou de combate; o 'Juice' não existe no catálogo, então entram drogas de combate do Core e do Hornet's Pharmacy.",
+        "value": {
+          "profiles": { "melee-solo": 4, "gang-fighter": 2, "corporate-bodyguard": 1 },
+          "statWeights": { "BODY": 1.6, "WILL": 1.2, "INT": 0.7, "TECH": 0.7 },
+          "secondarySkills": { "brawling": 3, "athletics": 2, "endurance": 1.5, "martial-arts:Wrestling": 1 },
+          "weaponClasses": ["HeavyMelee", "VeryHeavyMelee"],
+          "armorStyle": "Light",
+          "cyberwareSpendRange": { "min": 0.0, "max": 0.2 },
+          "forbiddenCyberware": ["cyberarm", "cyberleg", "grafted-muscle-and-bone-lace", "big-knucks", "rippers", "scratchers", "slice-n-dice", "wolvers", "popup-melee-weapon", "popup-ranged-weapon", "popup-grenade-launcher", "subdermal-armor", "skin-weave", "kerenzikov", "sandevistan", "implanted-linear-frame-sigma", "implanted-linear-frame-beta"],
+          "cyberware": { "toxin-binders": 1.5, "enhanced-antibodies": 1.5, "light-tattoo": 1 },
+          "gear": { "berserker": 2, "boost": 1.5, "smash": 1 }
+        }
+      }
+    },
+    {
+      "id": "barghest",
+      "label": "Barghest",
+      "era": "2077",
+      "kind": "Milícia",
+      "description": { "value": "A milícia do Coronel Kurt Hansen, que tomou Dogtown no fim da Guerra da Unificação com o que restou da sua unidade e recrutou moradores para repor os mortos. Hansen dá armas, treino, dinheiro e atendimento médico; em troca, exige lealdade absoluta. São o punho dele em Dogtown e impõem a palavra dele como lei.", "source": "EMK p.25" },
+      "aesthetic": { "value": "Soldados de verdade: equipamento militar, disciplina de tropa e a ameaça de que suas peças acabem à venda no mercado local.", "source": "EMK p.25" },
+      "territory": { "value": ["Dogtown"], "source": "EMK p.19 e p.25 (Dogtown, em Pacifica)" },
+      "languages": { "value": {}, "complementary": true },
+      "handles": { "value": ["Hound", "Kennel", "Hansen's Own", "Muzzle", "Picket", "Sentry", "Cordon", "Breach", "Ordnance", "Kevlar"], "complementary": true },
+      "loadout": [],
+      "bias": {
+        "complementary": true,
+        "note": "Interpretação da aplicação a partir de EMK p.25.",
+        "value": {
+          "profiles": { "corporate-enforcer": 4, "sniper": 2, "technician": 1, "corporate-bodyguard": 1 },
+          "statWeights": { "WILL": 1.2, "BODY": 1.2 },
+          "secondarySkills": { "tactics": 2, "first-aid": 1.5, "autofire": 1.5, "heavy-weapons": 1 },
+          "weaponClasses": ["AssaultRifle", "Shotgun", "HeavySmg"],
+          "armorStyle": "Heavy",
+          "cyberware": { "neural-link": 1.5, "sandevistan": 1.5, "cybereye": 1.5, "targeting-scope": 1.5, "subdermal-armor": 1.5, "radio-communicator": 1.5 },
+          "gear": { "radio-communicator-gear": 2, "flashbang-grenade": 1, "armor-piercing-grenade": 0.5, "binoculars": 1 }
+        }
+      }
+    },
+    {
+      "id": "maelstrom-2077",
+      "label": "Maelstrom (2077)",
+      "era": "2077",
+      "kind": "Boostergang",
+      "description": { "value": "A boostergang definitiva, perigosa e violenta, que vive o lema 'metal é melhor que carne'. Ninguém entra sem implantes extensos, feitos para apagar a humanidade física e expor o metal superior por baixo, numa reverência quase oculta ao cromo. Apesar de muitos membros andarem na beira da ciberpsicose, a gangue construiu um império de contrabando, tecnologia do mercado negro e drogas.", "source": "EMK p.25-26" },
+      "aesthetic": { "value": "Cromo exposto e rituais de superstição. O Totentanz é o símbolo perfeito: alto, escuro e ultraviolento.", "source": "EMK p.25-26" },
+      "territory": { "value": ["Northside", "Kabuki"], "source": "EMK p.26 (Northside Industrial District, com alcance até Kabuki)" },
+      "languages": { "value": {}, "complementary": true },
+      "handles": { "value": ["Rivethead", "Gasket", "Flatline", "Coilgun", "Socket", "Overclock", "Scrapjaw", "Chromehead", "Sparkplug", "Burnout"], "complementary": true },
+      "loadout": [],
+      "bias": {
+        "complementary": true,
+        "note": "Interpretação da aplicação a partir de EMK p.25-26: gasta quase todo o orçamento de cyberware.",
+        "value": {
+          "profiles": { "melee-solo": 3, "gang-fighter": 2.5, "corporate-enforcer": 1.5, "netrunner": 1, "technician": 1 },
+          "statWeights": { "BODY": 1.3, "EMP": 0.6 },
+          "secondarySkills": { "brawling": 1.5, "cybertech": 1, "trading": 1 },
+          "weaponClasses": ["Shotgun", "VeryHeavyPistol", "HeavySmg", "HeavyMelee"],
+          "armorStyle": "Medium",
+          "cyberwareSpendRange": { "min": 0.75, "max": 1.0 },
+          "cyberware": { "cyberarm": 4, "wolvers": 3, "popup-ranged-weapon": 2, "grafted-muscle-and-bone-lace": 3, "subdermal-armor": 3, "cybereye": 3, "low-light-infrared-uv": 2, "neural-link": 2, "superchrome-covering": 1.5, "pain-editor": 1 },
+          "gear": { "anti-smog-breathing-mask": 1, "smash": 1, "synthcoke": 1 }
+        }
+      }
+    },
+    {
+      "id": "mox",
+      "label": "The Mox",
+      "era": "2077",
+      "kind": "Gangue protetora",
+      "description": { "value": "Gangue pequena cujo território é uma profissão: a Mox existe para proteger profissionais do sexo. Nasceu em 2067, depois que os Tyger Claws mataram Elizabeth 'Lizzie' Borden, dona do clube. Com o tempo a liderança endureceu e passou a proteger só quem trabalha para ela, e há quem tema que estejam virando os opressores que juraram combater.", "source": "EMK p.26" },
+      "aesthetic": { "value": "Visual de clube noturno e braindance; a sede é o Lizzie's Bar, um clube de braindance.", "source": "EMK p.21 e p.26" },
+      "territory": { "value": ["Watson"], "source": "EMK p.21 (Lizzie's Bar, em Watson)" },
+      "languages": { "value": {}, "complementary": true },
+      "handles": { "value": ["Velvet", "Rosebud", "Garter", "Satin", "Lace", "Cherry", "Spike Heel", "Silk", "Stiletto", "Neon Kiss"], "complementary": true },
+      "loadout": [],
+      "bias": {
+        "complementary": true,
+        "note": "Interpretação da aplicação a partir de EMK p.21 e p.26.",
+        "value": {
+          "profiles": { "corporate-bodyguard": 2.5, "street-gunslinger": 2.5, "melee-solo": 1.5, "netrunner": 1, "technician": 1 },
+          "statWeights": { "COOL": 1.3, "EMP": 1.2 },
+          "secondarySkills": { "human-perception": 2, "persuasion": 1.5, "wardrobe-style": 1.5, "personal-grooming": 1, "dance": 1 },
+          "weaponClasses": ["HeavyPistol", "MediumPistol", "Smg", "LightMelee"],
+          "armorStyle": "Light",
+          "cyberware": { "midnight-lady-mr-studd": 1.5, "contraceptive-implant": 2, "light-tattoo": 2, "techhair": 1.5, "chemskin": 1.5, "shift-tacts": 1, "hidden-holster": 1.5 },
+          "gear": { "roupa-urban-flash-top": 2, "roupa-urban-flash-jacket": 1, "braindance-viewer": 0.5, "disposable-cellphone": 1 }
+        }
+      }
+    },
+    {
+      "id": "scavs",
+      "label": "Scavs",
+      "era": "2077",
+      "kind": "Ladrões de órgãos",
+      "description": { "value": "Não são bem uma gangue; são uma praga que age em pequenas células enquanto um líder conseguir mantê-las juntas. Só pensam em lucro e o conseguem arrancando cyberware do corpo das pessoas para vender a ripperdocs e fixers de má fama. Não têm honra, mas têm olho bom para implantes e órgãos.", "source": "EMK p.26" },
+      "aesthetic": { "value": "Gente de beco escuro à espreita de quem anda cromado. Se você carrega cromo, cuide das costas.", "source": "EMK p.26" },
+      "territory": { "value": [], "source": "EMK p.26 (células pequenas, sem território)" },
+      "languages": { "value": { "English": 3, "Russian": 2 }, "complementary": true, "note": "Pesos da aplicação." },
+      "handles": { "value": ["Butcher", "Scalpel", "Gutter", "Harvest", "Ripper", "Vulture", "Organ", "Bonesaw", "Leech", "Chop"], "complementary": true },
+      "loadout": [],
+      "bias": {
+        "complementary": true,
+        "note": "Interpretação da aplicação a partir de EMK p.26.",
+        "value": {
+          "profiles": { "gang-fighter": 2.5, "technician": 2, "street-gunslinger": 2, "melee-solo": 1 },
+          "secondarySkills": { "cybertech": 2, "first-aid": 1.5, "stealth": 1.5, "paramedic": 0.5 },
+          "weaponClasses": ["Smg", "HeavyPistol", "MediumMelee"],
+          "armorStyle": "Light",
+          "cyberware": { "tool-hand": 1.5, "medscanner-integrated": 1.5, "cybereye": 1, "microoptics": 1 },
+          "gear": { "medtech-bag": 1.5, "techtool": 1.5, "vial-of-poison": 1, "carryall": 1, "duct-tape": 1 }
+        }
+      }
+    },
+    {
+      "id": "tyger-claws-2077",
+      "label": "Tyger Claws (2077)",
+      "era": "2077",
+      "kind": "Gangue protetora",
+      "description": { "value": "Uma das gangues mais antigas de Night City, nascida do Tiger's Claw, um clube de motoqueiros bancado pela Arasaka. É grande, dividida em facções que disputam dinheiro e território entre si, mas quem é de fora encontra uma frente unida; a guerra interna recomeça depois.", "source": "EMK p.26" },
+      "aesthetic": { "value": "A herança de clube de motoqueiros: motos, katanas e reflexos rápidos.", "source": "EMK p.26" },
+      "territory": { "value": ["Little China", "Kabuki", "Japantown", "Charter Hill"], "source": "EMK p.26 (Little China, Kabuki e Japantown, com influência em Charter Hill)" },
+      "languages": { "value": { "Japanese": 5, "English": 3, "Mandarin": 1, "Korean": 1 }, "complementary": true, "note": "Pesos da aplicação." },
+      "handles": { "value": ["Kitsune", "Oni", "Raiden", "Hayabusa", "Kage", "Ronin", "Tora", "Jotaro", "Hiromi", "Kaiju"], "complementary": true },
+      "loadout": [],
+      "bias": {
+        "complementary": true,
+        "note": "Interpretação da aplicação a partir de EMK p.26.",
+        "value": {
+          "profiles": { "melee-solo": 3, "street-gunslinger": 2, "netrunner": 1.5, "corporate-bodyguard": 1 },
+          "statWeights": { "REF": 1.2, "DEX": 1.3 },
+          "secondarySkills": { "martial-arts:Karate": 1.5, "drive-land-vehicle": 2, "melee-weapon": 1 },
+          "weaponClasses": ["HeavyMelee", "VeryHeavyMelee", "VeryHeavyPistol", "Smg"],
+          "armorStyle": "Light",
+          "cyberware": { "neural-link": 2.5, "kerenzikov": 2, "sandevistan": 2.5, "light-tattoo": 1.5, "techhair": 1, "cybereye": 1 },
+          "gear": { "roupa-asia-pop-jacket": 2, "anti-smog-breathing-mask": 0.5 }
+        }
+      }
+    },
+    {
+      "id": "valentinos",
+      "label": "Valentinos",
+      "era": "2077",
+      "kind": "Gangue-família",
+      "description": { "value": "Gangue ligada à comunidade por laços de sangue. Os parentes tocam negócios locais, de bares e mercearias a boates e oficinas, que muitas vezes servem de fachada para lavagem de dinheiro, laboratórios de drogas e desmanches. Veneram honra, justiça e família: trair é o pior crime. Dizem que nasceram de um antigo clube de sedutores, mas nenhum Valentino confirma.", "source": "EMK p.26" },
+      "aesthetic": { "value": "Orgulho de bairro e de família: são tão parte de Heywood quanto o chão. Frequentam o El Coyote Cojo e controlam a funerária La Catrina.", "source": "EMK p.18 e p.26" },
+      "territory": { "value": ["Heywood", "Vista del Rey"], "source": "EMK p.18 e p.26 (Heywood)" },
+      "languages": { "value": { "Spanish": 6, "English": 3, "Portuguese": 0.5 }, "complementary": true, "note": "Pesos da aplicação: os nomes dos locais da gangue (El Coyote Cojo, La Catrina) sugerem a comunidade hispânica de Heywood." },
+      "handles": { "value": ["Mijo", "Santo", "Lowrider", "Corazón", "Chingón", "Guapo", "La Catrina", "Coyote", "Plata", "Familia"], "complementary": true },
+      "loadout": [],
+      "bias": {
+        "complementary": true,
+        "note": "Interpretação da aplicação a partir de EMK p.26.",
+        "value": {
+          "profiles": { "street-gunslinger": 3, "gang-fighter": 2.5, "technician": 1.5, "corporate-bodyguard": 1 },
+          "statWeights": { "COOL": 1.2, "EMP": 1.2 },
+          "secondarySkills": { "drive-land-vehicle": 1.5, "land-vehicle-tech": 1, "business": 1, "persuasion": 1, "wardrobe-style": 1 },
+          "weaponClasses": ["HeavyPistol", "VeryHeavyPistol", "Smg"],
+          "armorStyle": "Light",
+          "cyberware": { "hidden-holster": 1.5, "light-tattoo": 1.5, "chemskin": 1, "neural-link": 1, "kerenzikov": 1 },
+          "gear": { "roupa-gang-colors-jewelry": 2, "roupa-gang-colors-jacket": 1.5, "disposable-cellphone": 1 }
+        }
+      }
+    },
+    {
+      "id": "voodoo-boys-2077",
+      "label": "Voodoo Boys (2077)",
+      "era": "2077",
+      "kind": "Gangue de netrunners",
+      "description": { "value": "Não são os posers dos anos 2020: estes Voodoo Boys vieram da mão de obra haitiana trazida para construir Pacifica nos anos 2060 e, quando os investidores fugiram, tomaram parte do distrito. Uma parte gangue, uma parte governo. Muitos são netrunners que acreditam que a Blackwall vai cair e deixar as IAs dominarem o mundo, e querem estar do lado certo quando o apocalipse digital chegar. 'Voodoo Boys' é só o nome que os de fora usam; o verdadeiro, só os iniciados sabem.", "source": "EMK p.26-27" },
+      "aesthetic": { "value": "Fé e NET misturadas: rituais da própria cultura e religião, e muitos netrunners plugados.", "source": "EMK p.26-27" },
+      "territory": { "value": ["Pacifica"], "source": "EMK p.26 (parte de Pacifica)" },
+      "languages": { "value": { "Haitian Creole": 6, "French": 2, "English": 2 }, "complementary": true, "note": "Pesos da aplicação a partir de EMK p.26 (comunidade haitiana)." },
+      "handles": { "value": ["Veve", "Drumbeat", "Maman", "Legba", "Baron", "Loa", "Houngan", "Ghede", "Crossroads", "Blackwall"], "complementary": true },
+      "loadout": [],
+      "bias": {
+        "complementary": true,
+        "note": "Interpretação da aplicação a partir de EMK p.26-27.",
+        "value": {
+          "profiles": { "netrunner": 5, "street-gunslinger": 1.5, "gang-fighter": 1, "corporate-bodyguard": 1 },
+          "statWeights": { "INT": 1.2, "TECH": 1.1 },
+          "secondarySkills": { "cryptography": 1.5, "library-search": 1, "electronics-security-tech": 1.5 },
+          "weaponClasses": ["Smg", "HeavyPistol", "MediumMelee"],
+          "armorStyle": "Light",
+          "cyberware": { "neural-link": 2, "interface-plugs": 2, "chipware-socket": 1, "light-tattoo": 1.5, "techhair": 1 },
+          "gear": { "agent": 1, "teargas-grenade": 0.5 }
+        }
+      }
     }
   ]
 }

@@ -21,6 +21,8 @@ public sealed record NpcSheet
     public NpcLevel Level { get; init; }
     public bool Hardened { get; init; }
     public string? ProfileId { get; init; }
+    /// <summary>Gang from <c>npc-rules.json</c> the NPC belongs to, if any.</summary>
+    public string? GangId { get; init; }
     public string? Role { get; init; }
     public int RoleRank { get; init; }
     public string NativeLanguage { get; init; } = "English";
@@ -43,6 +45,7 @@ public sealed record NpcSheet
     {
         Name = Name?.Trim() ?? "",
         Concept = string.IsNullOrWhiteSpace(Concept) ? null : Concept.Trim(),
+        GangId = string.IsNullOrWhiteSpace(GangId) ? null : GangId.Trim(),
         Role = string.IsNullOrWhiteSpace(Role) ? null : Role.Trim(),
         NativeLanguage = string.IsNullOrWhiteSpace(NativeLanguage) ? "English" : NativeLanguage.Trim(),
         Home = string.IsNullOrWhiteSpace(Home) ? "Watson" : Home.Trim(),

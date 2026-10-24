@@ -50,6 +50,44 @@ public class NpcsApiTests(ApiFactory factory)
     }
 
     [Fact]
+    public async Task Every_gang_generates_valid_sheets_from_the_real_catalog()
+    {
+        using var scope = factory.Services.CreateScope();
+        var service = scope.ServiceProvider.GetRequiredService<NpcService>();
+        var rules = scope.ServiceProvider.GetRequiredService<NpcRuleBook>();
+        var failures = new List<string>();
+
+        foreach (var level in Enum.GetValues<NpcLevel>())
+        foreach (var hardened in new[] { false, true })
+        foreach (var gang in rules.Gangs)
+        for (var seed = 1; seed <= 3; seed++)
+        {
+            var result = await service.GenerateAsync(new NpcGenerationRequest { Level = level, Hardened = hardened, GangId = gang.Id, Seed = seed }, default);
+            if (!result.Success)
+                failures.Add($"{level}{(hardened ? "+H" : "")}/{gang.Id}/{seed}: {string.Join(" | ", result.Conflicts.Select(c => c.Message))}");
+            else if (result.Sheet!.GangId != gang.Id)
+                failures.Add($"{level}/{gang.Id}/{seed}: gangId {result.Sheet.GangId}");
+        }
+
+        failures.Should().BeEmpty();
+    }
+
+    [Fact]
+    public async Task Rules_expose_the_gangs_with_their_look_and_sources()
+    {
+        var rules = (await _client.GetFromJsonAsync<JsonNode>("/api/npcs/rules"))!;
+
+        var gangs = rules["gangs"]!.AsArray();
+        gangs.Should().HaveCountGreaterThan(20);
+        var maelstrom = gangs.First(g => g!["id"]!.GetValue<string>() == "maelstrom")!;
+        maelstrom["era"]!.GetValue<string>().Should().Be("2045");
+        maelstrom["aesthetic"]!.GetValue<string>().Should().NotBeNullOrWhiteSpace();
+        maelstrom["preferredProfiles"]!.AsArray().Should().NotBeEmpty();
+        maelstrom["facts"]!.AsArray().Should().OnlyContain(f => f!["source"] != null || f["complementary"]!.GetValue<bool>());
+        rules["books"]!["EMK"].Should().NotBeNull();
+    }
+
+    [Fact]
     public async Task Generate_endpoint_returns_sheet_report_and_seed()
     {
         var response = await _client.PostAsJsonAsync("/api/npcs/generate", new { level = "Lieutenant", profileId = "netrunner", seed = 42 });

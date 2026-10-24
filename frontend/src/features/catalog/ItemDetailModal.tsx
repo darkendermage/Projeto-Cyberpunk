@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router';
 import clsx from 'clsx';
 import { AlertTriangle, BadgeCheck, ExternalLink, Pencil } from 'lucide-react';
 import type { FieldDescriptor, Item } from '../../api/types';

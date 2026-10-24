@@ -1,5 +1,5 @@
 import { useEffect, useState, type ReactNode } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router';
 import clsx from 'clsx';
 import {
   BookOpen, Database, FileText, GitCompareArrows, Heart, LayoutGrid, ListChecks, Menu, Search, Settings, Skull, Store, Swords, Table2, Users, X,

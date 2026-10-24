@@ -11,6 +11,7 @@ const QUALITY_SHORT = { Poor: 'PQ ', Standard: '', Excellent: 'EQ ' } as const;
 export function SheetPreview({ rules, sheet, report }: { rules: NpcRules; sheet: NpcSheet; report: NpcValidationReport }) {
   const d = report.derived;
   const profile = rules.profiles.find((p) => p.id === sheet.profileId);
+  const gang = rules.gangs.find((g) => g.id === sheet.gangId);
   const weapons = report.gearLines.filter((l) => l.category === 'Weapon');
   const armor = report.gearLines.filter((l) => l.worn);
   const other = report.gearLines.filter((l) => l.category !== 'Weapon' && !l.worn);
@@ -23,6 +24,7 @@ export function SheetPreview({ rules, sheet, report }: { rules: NpcRules; sheet:
       <div className={styles.sheetName}>{sheet.name || 'Sem nome'}</div>
       <div className={styles.sheetConcept}>{sheet.concept ?? profile?.label ?? '—'}</div>
       <div className={styles.sheetRow}>
+        {gang && <span><b>Gangue</b> {gang.label}</span>}
         <span><b>Level</b> {sheet.hardened ? 'Hardened ' : ''}{LEVEL_LABEL[sheet.level]}</span>
         <span><b>Role</b> {sheet.role ? `${sheet.role} ${sheet.roleRank}` : '—'}</span>
         <span><b>HP</b> {d.hp}</span>

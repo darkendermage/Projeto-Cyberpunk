@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router';
 import clsx from 'clsx';
 import { Download, ListChecks, Minus, Pencil, Plus, Trash2 } from 'lucide-react';
 import { useList, useListMutations, useLists } from '../../api/hooks';

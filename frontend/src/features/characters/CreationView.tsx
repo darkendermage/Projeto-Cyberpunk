@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { CheckCircle2, Dices, Plus, RotateCcw, Undo2 } from 'lucide-react';
 import { problemMessage, useCharacterCommand } from '../../api/characters';
 import type {
