@@ -241,10 +241,6 @@ public abstract class CategoryDefinition<T> : ICategoryDefinition where T : Item
         return entities.Select(e => ToDto(e)).ToList();
     }
 
-    public async Task<IReadOnlyList<Item>> LoadAllAsync(IAppDbContext db, CancellationToken ct) =>
-        await IncludeDetails(WithBaseIncludes(db.Set<T>().AsNoTracking()))
-            .OrderBy(i => i.Name).AsSplitQuery().ToListAsync(ct);
-
     public async Task<IReadOnlyList<RelationGroupDto>> GetRelationsAsync(IAppDbContext db, Item item, CancellationToken ct)
     {
         var groups = new List<RelationGroupDto>(await GetCategoryRelationsAsync(db, (T)item, ct));
@@ -311,17 +307,6 @@ public abstract class CategoryDefinition<T> : ICategoryDefinition where T : Item
         return TextNormalizer.Normalize(string.Join(' ', parts.Where(p => !string.IsNullOrWhiteSpace(p))));
     }
 
-    public IReadOnlyList<(string Key, string Label)> ExportColumns =>
-        Fields.Where(f => !f.IsBase).Select(f => (f.Key, f.Label)).ToList();
-
-    public IReadOnlyDictionary<string, string?> ToDisplayRow(Item item) =>
-        Fields.Where(f => !f.IsBase).ToDictionary(f => f.Key, f => f.GetDisplayText((T)item));
-
-    public Dictionary<string, JsonElement> ExportAttributes(Item item) =>
-        Fields.Where(f => !f.IsBase && f.IsEditable)
-            .Select(f => (f.Key, Value: f.GetValue((T)item)))
-            .Where(x => x.Value is not null && !(x.Value is System.Collections.ICollection { Count: 0 }))
-            .ToDictionary(x => x.Key, x => JsonSerializer.SerializeToElement(x.Value));
 
     // ---------------------------------------------------------------- writes
 

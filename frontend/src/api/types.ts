@@ -186,32 +186,6 @@ export interface GearListDetail {
   unpricedEntries: number;
 }
 
-export interface ItemUpsert {
-  slug?: string | null;
-  name: string;
-  category: string;
-  description?: string | null;
-  notes?: string | null;
-  price?: number | null;
-  priceNote?: string | null;
-  priceCategory?: string | null;
-  manufacturer?: string | null;
-  source?: string | null;
-  page?: number | null;
-  imageUrl?: string | null;
-  ruleSystem?: string | null;
-  dataOrigin?: string | null;
-  tags?: string[];
-  attributes?: Record<string, AttributeValue>;
-}
-
-export interface ImportResult {
-  created: number;
-  updated: number;
-  failed: number;
-  errors: { index: number; slug?: string | null; name?: string | null; errors: Record<string, string[]> }[];
-}
-
 /** GET /api/app/update — newer GitHub release for the desktop executable. */
 export interface UpdateInfo {
   current: string;

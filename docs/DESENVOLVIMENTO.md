@@ -95,7 +95,7 @@ Para produção, rode `npm run build` e copie `frontend/dist` para `backend/src/
 ### Testes
 
 ```bash
-cd backend && dotnet test     # 349 testes: filtros, validação, gerador de NPCs e gangues, regras de personagem, Night Market, atualização automática e integração da API (SQLite + seed real)
+cd backend && dotnet test     # 402 testes: filtros, validação, gerador de NPCs e gangues, regras de personagem, Night Market, Arquiteturas de NET, Mesa de Combate, atualização automática e integração da API (SQLite + seed real)
 cd frontend && npm test       # filtros, URL, editor de NPCs, tabela de alcance, perícias, Lifepath, anatomia do cyberware e Night Market
 ```
 
@@ -111,7 +111,7 @@ backend/
 frontend/src
   api/        cliente tipado + hooks React Query
   lib/        lógica pura de filtros (testada) e formatação
-  features/   catalog (abas, cards, lista, filtros, ficha), search, favorites, lists, compare, admin, reference, characters, night-market
+  features/   catalog (abas, cards, lista, filtros, ficha), search, favorites, lists, compare, reference, characters, night-market, net-architecture, combat
   components/ layout (header com skyline, sidebar), UI base, arte vetorial dos itens
 data/
   source/     compêndio original (markdown)
@@ -324,6 +324,50 @@ Regras complementares (sem valor oficial): a roleta do Door Prize (o BC+ só nar
 
 `node tools/night-market/extract.mjs ["pasta dos PDFs"]` (precisa do `pdftotext` no PATH) gera `data/source/night-market-index.json` (o índice, ligado ao catálogo pelo nome) e `data/source/black-chrome-booths.json` (os booths de cada listagem do Black Chrome). As poucas linhas que o layout do PDF quebra estão corrigidas à mão no próprio script, cada uma com a página. Os dois arquivos vão embutidos na aplicação.
 
+## Mesa de Combate
+
+Página `/combat`. As regras do Friday Night Firefight ficam em `backend/src/CyberpunkDb.Application/Encounters/Rules/combat-rules.json`, com página ou a marca `complementary`. Autofire, Critical Injuries, Wound States e Death Save não são repetidos: vêm de `character-rules.json`, as mesmas regras do painel de combate da ficha.
+
+- **PCs** entram como um link para a ficha. Dano (`DamageRequest`, com `HalveArmor` para corpo a corpo), Critical Injuries, Death Saves, cura e munição (`FireRequest`) passam pelas operações da própria ficha.
+- **NPCs e genéricos** entram como um *snapshot* (STATs efetivos, bases de perícia, armas do catálogo, SP, HP e BODY) e o estado de cada um (HP, SP ablada, lesões, penalidade do Death Save, munição) fica no encontro. A conta do dano (`Characters/Operations/DamageMath.cs`) é a mesma da ficha.
+- **`AttackResolver`** decide acerto, DV, dano e crítico; o `EncounterService` aplica na ficha ou no encontro, passando antes pela cobertura.
+
+| Regra | Fonte |
+|---|---|
+| Iniciativa REF + 1d10, empate rola de novo; 1 Move Action + 1 Action | CP:R p.168–169 |
+| Tiro mirado (−8; cabeça ×2, mão, perna) | CP:R p.170 |
+| Ataque à distância contra a DV do alcance ou a esquiva (REF 8+); empate do defensor | CP:R p.172–173 |
+| Autofire (2d6 × margem até o multiplicador), Shotgun Shell, explosivos, Suppressive Fire | CP:R p.173–174 |
+| Corpo a corpo contra DEX + Evasion; metade do SP; Brawling e Martial Arts pelo BODY | CP:R p.175–178 |
+| Fogo, eletrocussão, veneno, queda (sem Critical Injury) | CP:R p.180–181 |
+| Cobertura por material e espessura; exemplos; escudos | CP:R p.182–184 |
+| Dano, ablação, Wound States, Critical Injuries, Death Save | CP:R p.186–188 |
+
+Os exemplos do livro são testes: o tiro e o Autofire do Royal (p.170 e p.173), o machete contra o Rico Rico (p.175) e a barricada da Gina (p.182).
+
+Regras complementares: alcance informado em metros; inimigo genérico com valores iniciais editáveis; munição dos NPCs contada no encontro, de pente cheio ao entrar. A tabela de exemplos de cobertura usa o HP que o livro lista (a porta de metal aparece com 20 HP, embora Thin Steel valha 25 na tabela de materiais).
+
+## Arquiteturas de NET
+
+Página `/net-architecture`. As regras ficam em `backend/src/CyberpunkDb.Application/NetArchitectures/Rules/net-architecture-rules.json`, e cada valor tem página ou a marca `complementary`, como nos outros módulos. O frontend não contém regras: gera, edita e exporta pela API (`/api/net-architectures`), que devolve o estado, o custo e os Watchers recalculados.
+
+| Regra | Fonte |
+|---|---|
+| Dificuldade: DV de Password, File e Control Node; Interface "com chance" | CP:R p.210 |
+| 3d6 andares; d10 7+ cria ramo; nenhum ramo antes do 3º andar; o tronco é o mais longo | CP:R p.210 |
+| Lobby (1d6) nos andares 1 e 2; corpo (3d6) pela dificuldade; Black ICE e Password não repetem | CP:R p.210–211 |
+| Boss Floor (tabela de uma dificuldade acima); troca de Program por outro de mesmo custo | CP:R p.211 |
+| Demons (REZ, Interface, NET Actions, Combat Number) | CP:R p.212 |
+| Defesas Active, Emplaced e Environmental; Active precisa de Demon | CP:R p.213–216 |
+| Preço por andar, limite de Control Nodes e portabilidade; preço por DV; ICE ×2/×3 no mesmo andar; Demons; Defesas pela DV de neutralizar | CP:R p.217–218 |
+| Watchers, Quiet Jack In, Cloak contra Pathfinder e contra a PER da ICE | Going Quiet p.4–5 |
+
+O exemplo "TLB LTD" do Core (p.218) é teste: 13.500eb.
+
+Regras complementares: a divisão dos andares entre os ramos (o livro diz "a gosto"); o limite de Demons lido como 1 a cada 6 andares arredondando para cima; os tipos de local, com pesos de defesas, dispositivos e ideias de File; o tipo de Demon por dificuldade e 1 Demon a cada 3 Control Nodes; o Netrunner inimigo, com o Interface "com chance" da dificuldade; rolar de novo o Control Node acima do limite de compra; e dispositivos civis sem custo.
+
+A Arquitetura fica salva como JSON (`NetArchitectures.StateJson`, `jsonb` no PostgreSQL) com controle de versão: editar numa janela antiga devolve 409. "Rolar andares" mantém a forma e os andares travados; "Gerar outra" troca tudo.
+
 ## Dados
 
 | Origem | O que é | Como aparece |
@@ -331,7 +375,7 @@ Regras complementares (sem valor oficial): a roleta do Door Prize (o BC+ só nar
 | `Compendium` | 1 item convertido de `data/source/compendio_completo_cyberpunk_red.md` e ainda não conferido (Nanoswarm Incubator) | aviso na ficha: "não conferido com os livros" |
 | `Verified` | 1.058 itens conferidos com PDFs oficiais (*Core Rulebook*, *Black Chrome*, *Black Chrome+*, *Interface RED 2 a 5*, *Edgerunners Mission Kit*, *Danger Gal Dossier*, *Tales of the RED*, *12 Days of ...*, *Woodchipper's Garage*, *Toggle's Temple*, *Hornet's Pharmacy*, *All About Agents*, *Segotari Power*, *Going Quiet*, *Cyberware Enhancements*, *No Place Like Home*, *Mixing Drinks–Changing Lives*, *Invented Tech Upgrades*); correções em `data/source/errata/` | selo **CONFERIDO**, com fonte e página na ficha |
 | `Demo` | nenhum no catálogo atual (os de Fashionware e roupas foram trocados pelos do *Core Rulebook*) | selo **DEMO** no card |
-| `Custom` | itens cadastrados na Administração | selo **CUSTOM** |
+| `Custom` | itens cadastrados à mão em versões antigas (que tinham Administração) | selo **CUSTOM** |
 
 O compêndio não traz alcance nem munição compatível por arma. Esses valores são **derivados da classe da arma**, com exceções para armas exóticas e combinadas. A página *Tabelas* da aplicação documenta essa regra. Itens duplicados entre tabelas do compêndio foram mantidos uma única vez.
 
@@ -353,5 +397,5 @@ Ao reimportar um catálogo atualizado, a aplicação apaga os itens que vieram d
 
 ## Observações
 
-- Não há autenticação. A área de Administração, os favoritos, as listas e os personagens servem a um único perfil local. Coloque a API atrás de autenticação antes de expô-la publicamente.
+- Não há autenticação. Os favoritos, as listas, os personagens, os Night Markets e as Arquiteturas de NET servem a um único perfil local. Coloque a API atrás de autenticação antes de expô-la publicamente.
 - Os efeitos visuais (scanlines, glitch, animações, intensidade do neon, skyline) podem ser desligados na engrenagem do cabeçalho. A preferência do sistema por movimento reduzido é respeitada.

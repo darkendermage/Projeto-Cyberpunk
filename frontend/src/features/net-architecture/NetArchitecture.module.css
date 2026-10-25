@@ -1,0 +1,439 @@
+/* NET Architectures: library, creation form, the elevator diagram, floor list, cost, Demons and Watchers. */
+
+.muted {
+  color: var(--text-muted);
+  font-size: 13.5px;
+}
+
+.source {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--text-faint);
+}
+
+.label {
+  font-family: var(--font-display);
+  font-size: 11.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+}
+
+.warn {
+  color: var(--amber);
+  font-size: 13px;
+}
+
+.narrow {
+  width: 80px;
+}
+
+/* ------------------------------------------------------------ panels */
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+  padding: 14px;
+  background: var(--panel);
+  border: 1px solid var(--red-line);
+}
+
+.panelTitle {
+  font-family: var(--font-display);
+  font-size: 13px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--red);
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 12px;
+}
+
+/* ------------------------------------------------------------ library */
+
+.library {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 10px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 14px;
+  background: var(--bg-2);
+  border: 1px solid var(--line-strong);
+  border-left: 3px solid var(--cyan);
+  color: var(--text-2);
+  text-decoration: none;
+  transition: border-color var(--t-fast);
+}
+.card:hover {
+  border-color: var(--red-line);
+}
+.card h3 {
+  font-family: var(--font-display);
+  font-size: 16px;
+  color: var(--text);
+}
+
+/* ------------------------------------------------------------ detail header and layout */
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  font-family: var(--font-display);
+  font-size: 13px;
+  color: var(--text-muted);
+  text-decoration: none;
+}
+.back:hover {
+  color: var(--text);
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px 20px;
+}
+.header > div:first-child {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: 24px;
+  letter-spacing: 0.04em;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 380px);
+  gap: 14px;
+  align-items: start;
+}
+@media (max-width: 1100px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.aside {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+}
+
+.notes {
+  white-space: pre-wrap;
+  color: var(--text-2);
+}
+
+/* ------------------------------------------------------------ diagram */
+
+.diagramWrap {
+  overflow: auto;
+  max-height: 70vh;
+  border: 1px solid var(--line-strong);
+  background: #0b0d12;
+}
+
+.diagram {
+  display: block;
+}
+
+.diagramNode {
+  cursor: pointer;
+  outline: none;
+}
+.diagramNode:hover rect:first-child,
+.diagramNode:focus-visible rect:first-child {
+  stroke: var(--cyan);
+}
+
+.ice { color: var(--red); }
+.pwd { color: var(--amber); }
+.file { color: var(--cyan); }
+.node { color: var(--green); }
+
+.linkButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 34px;
+  padding: 0 12px;
+  font-family: var(--font-display);
+  font-size: 13.5px;
+  color: var(--text-2);
+  border: 1px solid var(--line-strong);
+  text-decoration: none;
+}
+.linkButton:hover {
+  border-color: var(--red-line);
+  color: var(--text);
+}
+
+/* ------------------------------------------------------------ floor table */
+
+.selectedRow td {
+  background: rgba(61, 224, 255, 0.06);
+}
+
+.floorCell {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+.floorCell strong {
+  font-family: var(--font-mono);
+  font-size: 20px;
+  color: var(--text);
+}
+
+.contents {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.contents li {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.kind {
+  font-family: var(--font-display);
+  font-size: 14.5px;
+  color: var(--text);
+  border-left: 3px solid var(--line-strong);
+  padding-left: 8px;
+}
+.kindBlackIce { border-left-color: var(--red); }
+.kindPassword { border-left-color: var(--amber); }
+.kindFile { border-left-color: var(--cyan); }
+.kindControlNode { border-left-color: var(--green); }
+
+.stats {
+  padding-left: 11px;
+  font-size: 12.5px;
+  color: var(--text-muted);
+}
+
+.watcherHere {
+  font-size: 12.5px;
+  color: var(--amber);
+}
+
+.dvCell {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  white-space: nowrap;
+  font-family: var(--font-mono);
+  font-size: 13px;
+}
+
+.rowActions {
+  white-space: nowrap;
+}
+
+/* ------------------------------------------------------------ cost, demons, watchers */
+
+.total {
+  font-family: var(--font-mono);
+  font-size: 28px;
+  color: var(--text);
+}
+
+.warnings {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 10px 10px 10px 26px;
+  font-size: 13px;
+  color: var(--amber);
+  border: 1px solid rgba(255, 207, 58, 0.35);
+  background: rgba(255, 207, 58, 0.05);
+}
+
+.costGroup {
+  border-top: 1px solid var(--line);
+  padding-top: 8px;
+}
+.costGroup summary {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  cursor: pointer;
+  font-family: var(--font-display);
+  font-size: 14px;
+  color: var(--text-2);
+}
+.costGroup ul {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 8px 0;
+  padding: 0;
+  list-style: none;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+.costGroup li {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.demon {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px 0;
+  border-top: 1px solid var(--line);
+}
+.demon .stats {
+  padding-left: 0;
+}
+
+.watchers {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.watchers li {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+}
+.watchers .stats {
+  padding-left: 0;
+}
+
+.checks {
+  font-size: 13px;
+}
+.checks li {
+  display: block;
+}
+
+/* ------------------------------------------------------------ dialogs */
+
+.dialog {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.dialog section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.contentEditor {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 12px;
+  background: var(--bg-2);
+  border: 1px solid var(--line-strong);
+}
+
+.defenseInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.defenseInfo .stats {
+  padding-left: 0;
+}
+
+.rowPicker {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 6px;
+}
+
+.rowOption {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  text-align: left;
+  font-size: 13.5px;
+  color: var(--text-2);
+  background: var(--bg-2);
+  border: 1px solid var(--line-strong);
+  cursor: pointer;
+}
+.rowOption:hover:not(:disabled) {
+  border-color: var(--red-line);
+  color: var(--text);
+}
+.rowOption[aria-pressed='true'] {
+  border-color: var(--cyan);
+  color: var(--text);
+}
+
+.rollNumber {
+  min-width: 22px;
+  font-family: var(--font-mono);
+  color: var(--cyan);
+}
+
+/* ------------------------------------------------------------ sources */
+
+.facts {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 14px;
+  color: var(--text-2);
+}
+.facts li {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 4px 16px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--line);
+}

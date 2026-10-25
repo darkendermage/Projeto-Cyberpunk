@@ -150,15 +150,6 @@ export function useListMutations() {
   };
 }
 
-/** After any catalog write, cached searches, schemas and details are stale. */
-export function useInvalidateCatalog() {
-  const client = useQueryClient();
-  return () => {
-    for (const key of ['search', 'schema', 'item', 'items', 'categories', 'global-search', 'favorites', 'lists'])
-      client.invalidateQueries({ queryKey: [key] });
-  };
-}
-
 // ---------------------------------------------------------------- enemy generator
 
 export const useNpcRules = () =>

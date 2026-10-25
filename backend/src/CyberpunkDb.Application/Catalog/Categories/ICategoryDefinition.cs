@@ -23,14 +23,10 @@ public interface ICategoryDefinition
 
     Task<Item?> LoadAsync(IAppDbContext db, int id, bool tracking, CancellationToken ct);
     Task<IReadOnlyList<ItemDto>> LoadManyAsync(IAppDbContext db, IReadOnlyCollection<int> ids, CancellationToken ct);
-    Task<IReadOnlyList<Item>> LoadAllAsync(IAppDbContext db, CancellationToken ct);
     Task<IReadOnlyList<RelationGroupDto>> GetRelationsAsync(IAppDbContext db, Item item, CancellationToken ct);
 
     ItemDto ToDto(Item item);
     string BuildSearchText(Item item);
-    IReadOnlyList<(string Key, string Label)> ExportColumns { get; }
-    IReadOnlyDictionary<string, string?> ToDisplayRow(Item item);
-    Dictionary<string, JsonElement> ExportAttributes(Item item);
 
     Item CreateEntity();
     /// <summary>Applies attribute values and runs field + cross-field validation. Returns errors keyed by field.</summary>

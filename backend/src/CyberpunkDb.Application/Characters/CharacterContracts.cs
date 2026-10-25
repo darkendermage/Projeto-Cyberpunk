@@ -121,8 +121,10 @@ public sealed record InstanceRequest(int Version, string InstanceId);
 
 public sealed record EquipRequest(int Version, string InstanceId, ItemState State, ArmorSlot? Worn = null);
 
+/// <summary><see cref="HalveArmor"/>: melee weapons and Martial Arts ignore half of the SP, rounded up (CP:R p.176).</summary>
 public sealed record DamageRequest(
-    int Version, int Amount, InjuryLocation Location = InjuryLocation.Body, bool BypassArmor = false, string? Description = null);
+    int Version, int Amount, InjuryLocation Location = InjuryLocation.Body, bool BypassArmor = false, string? Description = null,
+    bool HalveArmor = false);
 
 public sealed record HealRequest(int Version, int Amount, string? Description = null);
 

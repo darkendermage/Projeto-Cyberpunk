@@ -15,6 +15,8 @@
     <EmbeddedResource Include="Npcs\Rules\npc-rules.json" LogicalName="CyberpunkDb.Application.Npcs.Rules.npc-rules.json" />
     <EmbeddedResource Include="Characters\Rules\character-rules.json" LogicalName="CyberpunkDb.Application.Characters.Rules.character-rules.json" />
     <EmbeddedResource Include="NightMarkets\Rules\night-market-rules.json" LogicalName="CyberpunkDb.Application.NightMarkets.Rules.night-market-rules.json" />
+    <EmbeddedResource Include="NetArchitectures\Rules\net-architecture-rules.json" LogicalName="CyberpunkDb.Application.NetArchitectures.Rules.net-architecture-rules.json" />
+    <EmbeddedResource Include="Encounters\Rules\combat-rules.json" LogicalName="CyberpunkDb.Application.Encounters.Rules.combat-rules.json" />
     <!-- extracted from the PDFs by tools/night-market/extract.mjs -->
     <EmbeddedResource Include="..\..\..\data\source\night-market-index.json" LogicalName="CyberpunkDb.Application.NightMarkets.night-market-index.json" />
     <EmbeddedResource Include="..\..\..\data\source\black-chrome-booths.json" LogicalName="CyberpunkDb.Application.NightMarkets.black-chrome-booths.json" />

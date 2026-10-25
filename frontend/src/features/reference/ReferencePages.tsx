@@ -47,8 +47,7 @@ export function QuickRulesPage() {
           <div className={page.prose}>
             <p><strong>Compêndio importado</strong>: registros convertidos do compêndio fornecido. Ainda não foram conferidos com os livros.</p>
             <p><strong>CONFERIDO</strong>: itens comparados com os PDFs oficiais (<em>Core Rulebook</em>, <em>Black Chrome</em>, <em>Black Chrome+</em>, <em>Interface RED</em> 2 a 5, <em>Edgerunners Mission Kit</em>, <em>Danger Gal Dossier</em>, <em>Tales of the RED</em>, <em>12 Days of</em> Gunmas, Cybermas, Gearmas, REDmas, Cutiemas e Vehiclemas, <em>Woodchipper&apos;s Garage</em>, <em>Toggle&apos;s Temple</em>, <em>Hornet&apos;s Pharmacy</em>, <em>All About Agents</em>, <em>Segotari Power</em>, <em>Going Quiet</em>, <em>Cyberware Enhancements</em>, <em>No Place Like Home</em>, <em>Mixing Drinks–Changing Lives</em> e <em>Invented Tech Upgrades</em>). A ficha mostra a página e, nas notas, o que mudou em relação ao compêndio.</p>
-            <p><strong>DEMO</strong>: registros de demonstração. O catálogo não traz mais nenhum; a origem continua disponível para quem cadastrar exemplos na Administração.</p>
-            <p><strong>Cadastro manual</strong>: itens criados na área de Administração.</p>
+            <p><strong>DEMO</strong> e <strong>Cadastro manual</strong>: registros criados em versões antigas do programa, que tinham uma área de Administração. O catálogo atual não traz nenhum, mas eles continuam aparecendo se o seu banco ainda os tiver.</p>
           </div>
         </section>
 

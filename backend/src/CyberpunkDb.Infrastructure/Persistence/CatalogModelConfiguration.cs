@@ -249,6 +249,27 @@ internal static class CatalogModelConfiguration
             e.HasIndex(x => x.UpdatedAt);
         });
 
+        b.Entity<Encounter>(e =>
+        {
+            e.ToTable("Encounters");
+            e.Property(x => x.Name).HasMaxLength(80).IsRequired();
+            e.Property(x => x.Version).IsConcurrencyToken();
+            e.Property(x => x.StateJson).IsRequired();
+            if (isPostgres) e.Property(x => x.StateJson).HasColumnType("jsonb");
+            e.HasIndex(x => x.UpdatedAt);
+        });
+
+        b.Entity<NetArchitecture>(e =>
+        {
+            e.ToTable("NetArchitectures");
+            e.Property(x => x.Name).HasMaxLength(80).IsRequired();
+            e.Property(x => x.LocationId).HasMaxLength(40).IsRequired();
+            e.Property(x => x.Version).IsConcurrencyToken();
+            e.Property(x => x.StateJson).IsRequired();
+            if (isPostgres) e.Property(x => x.StateJson).HasColumnType("jsonb");
+            e.HasIndex(x => x.UpdatedAt);
+        });
+
         b.Entity<CharacterPortrait>(e =>
         {
             e.ToTable("CharacterPortraits");

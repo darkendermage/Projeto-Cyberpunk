@@ -138,7 +138,7 @@ function StatColumn({ detail }: { detail: CharacterDetail }) {
         return (
           <div key={s.key} className={styles.stat} role="listitem" title={tip}>
             <span className={styles.statKey}>{s.key}</span>
-            <span className={styles.statValue} data-changed={s.effective !== s.base}>{s.effective}</span>
+            <span className={styles.statValue} data-changed={s.effective > s.base ? 'up' : s.effective < s.base ? 'down' : undefined}>{s.effective}</span>
             {s.effective !== s.base && <span className={styles.statBase}>base {s.base}</span>}
           </div>
         );

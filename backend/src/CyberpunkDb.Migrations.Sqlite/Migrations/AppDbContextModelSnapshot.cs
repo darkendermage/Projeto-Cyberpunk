@@ -15,7 +15,7 @@ namespace CyberpunkDb.Migrations.Sqlite.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "8.0.11");
+            modelBuilder.HasAnnotation("ProductVersion", "10.0.13");
 
             modelBuilder.Entity("CyberpunkDb.Domain.Entities.AmmunitionCaliber", b =>
                 {
@@ -154,6 +154,46 @@ namespace CyberpunkDb.Migrations.Sqlite.Migrations
                     b.HasKey("CharacterId");
 
                     b.ToTable("CharacterPortraits", (string)null);
+                });
+
+            modelBuilder.Entity("CyberpunkDb.Domain.Entities.Encounter", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Round")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("StateJson")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Version")
+                        .IsConcurrencyToken()
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UpdatedAt");
+
+                    b.ToTable("Encounters", (string)null);
                 });
 
             modelBuilder.Entity("CyberpunkDb.Domain.Entities.Favorite", b =>
@@ -361,6 +401,51 @@ namespace CyberpunkDb.Migrations.Sqlite.Migrations
                         .IsUnique();
 
                     b.ToTable("Manufacturers", (string)null);
+                });
+
+            modelBuilder.Entity("CyberpunkDb.Domain.Entities.NetArchitecture", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Difficulty")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Floors")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("LocationId")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("StateJson")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Version")
+                        .IsConcurrencyToken()
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UpdatedAt");
+
+                    b.ToTable("NetArchitectures", (string)null);
                 });
 
             modelBuilder.Entity("CyberpunkDb.Domain.Entities.NightMarket", b =>

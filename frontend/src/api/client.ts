@@ -1,6 +1,6 @@
 import type {
-  CategorySchema, CategorySummary, GearListDetail, GearListSummary, GlobalSearchGroup, HealthInfo, ImportResult, Item,
-  ItemDetail, ItemUpsert, NpcDetail, NpcGenerationRequest, NpcGenerationResult, NpcRules, NpcSheet, NpcSummary,
+  CategorySchema, CategorySummary, GearListDetail, GearListSummary, GlobalSearchGroup, HealthInfo, Item,
+  ItemDetail, NpcDetail, NpcGenerationRequest, NpcGenerationResult, NpcRules, NpcSheet, NpcSummary,
   NpcValidationReport, ProblemDetails, SearchRequest, SearchResult, UpdateInfo,
 } from './types';
 
@@ -98,10 +98,4 @@ export const api = {
   duplicateNpc: (id: number) => request<NpcDetail>(`/npcs/${id}/duplicate`, { method: 'POST' }),
   deleteNpc: (id: number) => request<void>(`/npcs/${id}`, { method: 'DELETE' }),
 
-  createItem: (body: ItemUpsert) => request<Item>('/admin/items', { method: 'POST', body: json(body) }),
-  updateItem: (id: number, body: ItemUpsert) => request<Item>(`/admin/items/${id}`, { method: 'PUT', body: json(body) }),
-  deleteItem: (id: number) => request<void>(`/admin/items/${id}`, { method: 'DELETE' }),
-  importItems: (rows: unknown) => request<ImportResult>('/admin/import', { method: 'POST', body: json(rows) }),
-  exportUrl: (category: string | null, format: 'json' | 'csv') =>
-    `${BASE}/admin/export?format=${format}${category ? `&category=${category}` : ''}`,
 };

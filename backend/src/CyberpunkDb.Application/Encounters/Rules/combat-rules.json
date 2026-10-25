@@ -1,0 +1,149 @@
+{
+  "about": "Parâmetros da Mesa de Combate (Friday Night Firefight). Cada valor traz 'source' (página impressa conferida no PDF) ou 'complementary: true'. Siglas: CP:R = Cyberpunk RED Core Rulebook v1.25. Autofire, Critical Injuries, Wound States, Death Save e estabilização vêm das regras de personagem (character-rules.json), as mesmas da ficha.",
+  "books": { "CP:R": "Cyberpunk RED Core Rulebook (v1.25)" },
+
+  "initiative": { "value": "REF + 1d10; fila em ordem decrescente", "source": "CP:R p.168 (Initiative = REF + 1d10 ... in descending order)" },
+  "initiativeTies": { "value": "Empate: rolam de novo até o maior vencer", "source": "CP:R p.168 (Resolve ties by rolling again until the higher number wins)" },
+  "turn": { "value": "1 Move Action + 1 Action por turno; uma rodada dura cerca de 3 segundos", "source": "CP:R p.168" },
+  "actions": {
+    "source": "CP:R p.168-169 (Combat Actions in Brief)",
+    "value": [
+      { "name": "Move Action", "label": "Mover", "text": "Até MOVE × 2 m (ou MOVE quadrados). Dá para atirar no meio do movimento." },
+      { "name": "Attack", "label": "Atacar", "text": "Ataque à distância ou corpo a corpo. ROF 2 permite dois ataques; nunca duas armas ROF 1 na mesma Action." },
+      { "name": "Run", "label": "Correr", "text": "Um segundo Move Action, se já usou o primeiro." },
+      { "name": "Reload", "label": "Recarregar", "text": "Troca o pente inteiro por um só tipo de munição." },
+      { "name": "Hold Action", "label": "Segurar a Action", "text": "Escolha o gatilho (evento ou número na fila), a Action e o alvo." },
+      { "name": "Grab", "label": "Agarrar", "text": "DEX + Brawling contra DEX + Brawling. Grapple: −2 em tudo para os dois." },
+      { "name": "Choke / Throw", "label": "Estrangular / Arremessar", "text": "Com o alvo agarrado: BODY direto no HP, sem armadura." },
+      { "name": "Get Up", "label": "Levantar", "text": "Sair de Prone; até lá, sem Move Action." },
+      { "name": "Stabilize", "label": "Estabilizar", "text": "Começa a cura ou tira alguém de Mortally Wounded (DV pela Wound State)." },
+      { "name": "Use a Skill / Object", "label": "Usar perícia ou objeto", "text": "Tarefa rápida; tarefas longas somam turnos." },
+      { "name": "Use NET Actions", "label": "Ações de NET", "text": "Netrunner plugado gasta a Action em NET Actions." }
+    ]
+  },
+
+  "rangeBands": {
+    "source": "CP:R p.173 (Single Shot DVs Based on Range)",
+    "value": [
+      { "min": 0, "max": 6 }, { "min": 7, "max": 12 }, { "min": 13, "max": 25 }, { "min": 26, "max": 50 },
+      { "min": 51, "max": 100 }, { "min": 101, "max": 200 }, { "min": 201, "max": 400 }, { "min": 401, "max": 800 }
+    ]
+  },
+  "singleShot": {
+    "source": "CP:R p.173 (Single Shot DVs Based on Range)",
+    "note": "null = fora de alcance (N/A no livro).",
+    "value": [
+      { "key": "pistol", "label": "Pistola", "classes": ["MediumPistol", "HeavyPistol", "VeryHeavyPistol"], "dv": [13, 15, 20, 25, 30, 30, null, null] },
+      { "key": "smg", "label": "SMG", "classes": ["Smg", "HeavySmg"], "dv": [15, 13, 15, 20, 25, 25, 30, null] },
+      { "key": "shotgun", "label": "Escopeta (Slug)", "classes": ["Shotgun"], "dv": [13, 15, 20, 25, 30, 35, null, null] },
+      { "key": "assaultRifle", "label": "Rifle de Assalto", "classes": ["AssaultRifle"], "dv": [17, 16, 15, 13, 15, 20, 25, 30] },
+      { "key": "sniperRifle", "label": "Rifle de Precisão", "classes": ["SniperRifle"], "dv": [30, 25, 25, 20, 15, 16, 17, 20] },
+      { "key": "bow", "label": "Arco e Besta", "classes": ["Bow", "Crossbow"], "dv": [15, 13, 15, 17, 20, 22, null, null] },
+      { "key": "grenadeLauncher", "label": "Lança-Granadas", "classes": ["GrenadeLauncher"], "dv": [16, 15, 15, 17, 20, 22, 25, null] },
+      { "key": "rocketLauncher", "label": "Lança-Foguetes", "classes": ["RocketLauncher"], "dv": [17, 16, 15, 15, 20, 20, 25, 30] }
+    ]
+  },
+  "dodgeRef": { "value": 8, "source": "CP:R p.172 (A Defender with a REF 8 or higher can choose to attempt to dodge a Ranged Attack)" },
+  "defenderWinsTies": { "value": true, "source": "CP:R p.172 e p.176 (Defender wins in a tie)" },
+
+  "aimedShot": {
+    "value": { "penalty": -8, "maxRof": 1, "headMultiplier": 2, "crackedSkullMultiplier": 3 },
+    "source": "CP:R p.170 (Aimed Shots: -8; Head: multiply the damage that gets through head armor by 2) e p.188 (Cracked Skull: by 3)"
+  },
+  "aimedEffects": {
+    "source": "CP:R p.170",
+    "value": [
+      { "mode": "AimedHead", "label": "Cabeça", "effect": "O dano que passar do SP da cabeça é dobrado." },
+      { "mode": "AimedHand", "label": "Item na mão", "effect": "Se 1 ponto passar da armadura do corpo, o alvo derruba um item da mão à sua escolha." },
+      { "mode": "AimedLeg", "label": "Perna", "effect": "Se 1 ponto passar da armadura do corpo, o alvo sofre a Critical Injury Broken Leg (se ainda tiver perna sem ela)." }
+    ]
+  },
+
+  "melee": {
+    "value": { "check": "DEX + perícia + 1d10 contra DEX + Evasion + 1d10", "halveArmor": true, "reachMeters": 2, "veryHeavyRof": 1 },
+    "source": "CP:R p.176 (Melee Combat is resolved: Attacker's DEX + Relevant Melee Attack Skill + 1d10 vs. Defender's DEX + Evasion Skill + 1d10; all melee weapons ignore half of the Defender's armor. Round up)"
+  },
+  "unarmedDamage": {
+    "source": "CP:R p.176 (Brawling) e p.178 (Martial Arts)",
+    "value": [
+      { "maxBody": 4, "dice": "1d6" },
+      { "maxBody": 6, "dice": "2d6" },
+      { "maxBody": 10, "dice": "3d6" },
+      { "maxBody": null, "dice": "4d6" }
+    ]
+  },
+  "cyberarmMinimum": { "value": "2d6", "source": "CP:R p.176 (with a Cyberarm, your damage for a Brawling Attack is always at least 2d6)" },
+  "brawlingHalvesArmor": { "value": false, "source": "CP:R p.176 (a Brawling attack does not ignore half the Defender's armor)" },
+  "martialArtsHalvesArmor": { "value": true, "source": "CP:R p.178 (Martial Arts Attacks ignore half of the Defender's armor. Round up)" },
+  "grapple": { "value": "Grab: DEX + Brawling contra DEX + Brawling; no Grapple os dois ficam com −2 em tudo. Choke e Throw causam BODY direto no HP, sem armadura e sem ablação; Choke por 3 rodadas seguidas deixa inconsciente.", "source": "CP:R p.177" },
+  "thrown": { "value": { "maxMeters": 25, "row": "grenadeLauncher", "check": "DEX + Athletics + 1d10" }, "source": "CP:R p.177 (Throw an object: DEX + Athletics + 1d10, up to 25m/yds, using the Grenade Launcher DV entry; melee weapons deal their damage but don't halve SP)" },
+
+  "shotgunShell": { "value": { "dv": 13, "damage": "3d6", "rangeMeters": 6 }, "source": "CP:R p.174 (Shotgun Shell: vs. a DV13; every target in front of you within 6m/yds takes 3d6; damage rolled once)" },
+  "explosives": { "value": "Área de 10×10 m; um só dano para todos. Errou: o Mestre decide onde caiu. REF 8+ pode esquivar rolando acima do ataque. A cobertura só protege se aguentar o dano; se for destruída, o alvo leva o dano todo.", "source": "CP:R p.174 (Explosives)" },
+  "suppressive": { "value": { "check": "WILL + Concentration + 1d10 contra REF + Autofire + 1d10", "rangeMeters": 25, "effect": "Quem falha usa o próximo Move Action (e o Run, se precisar) para ir para a cobertura." }, "source": "CP:R p.174 (Suppressive Fire)" },
+
+  "coverMaterials": {
+    "source": "CP:R p.182 (Cover Hit Points)",
+    "value": [
+      { "id": "steel", "label": "Aço", "thick": 50, "thin": 25 },
+      { "id": "stone", "label": "Pedra", "thick": 40, "thin": 20 },
+      { "id": "bulletproof-glass", "label": "Vidro à prova de balas", "thick": 30, "thin": 15 },
+      { "id": "concrete", "label": "Concreto", "thick": 25, "thin": 10 },
+      { "id": "wood", "label": "Madeira", "thick": 20, "thin": 5 },
+      { "id": "plaster", "label": "Gesso, espuma ou plástico", "thick": 15, "thin": 0 }
+    ]
+  },
+  "coverExamples": {
+    "source": "CP:R p.183 (Cover Material and Thickness Examples)",
+    "note": "HP como o livro lista. A porta de metal aparece como Thin Steel com 20 HP, embora Thin Steel valha 25 na tabela de materiais (p.182).",
+    "value": [
+      { "label": "Porta de cofre de banco", "material": "steel", "thick": true, "hp": 50 },
+      { "label": "Vidro de agência bancária", "material": "bulletproof-glass", "thick": true, "hp": 30 },
+      { "label": "Balcão de bar", "material": "wood", "thick": true, "hp": 20 },
+      { "label": "Rocha grande", "material": "stone", "thick": true, "hp": 40 },
+      { "label": "Para-brisa blindado (fino)", "material": "bulletproof-glass", "thick": false, "hp": 15 },
+      { "label": "Para-brisa blindado (grosso)", "material": "bulletproof-glass", "thick": true, "hp": 30 },
+      { "label": "Porta de carro", "material": "steel", "thick": false, "hp": 25 },
+      { "label": "Data Term", "material": "concrete", "thick": true, "hp": 25 },
+      { "label": "Bloco do motor", "material": "steel", "thick": true, "hp": 50 },
+      { "label": "Hidrante", "material": "steel", "thick": true, "hp": 50 },
+      { "label": "Parede de cabana de troncos", "material": "wood", "thick": true, "hp": 20 },
+      { "label": "Porta de metal", "material": "steel", "thick": false, "hp": 20 },
+      { "label": "Parede de escritório", "material": "plaster", "thick": true, "hp": 15 },
+      { "label": "Mesa virada", "material": "wood", "thick": false, "hp": 5 },
+      { "label": "Vidro de visita de presídio", "material": "bulletproof-glass", "thick": false, "hp": 15 },
+      { "label": "Geladeira", "material": "steel", "thick": false, "hp": 25 },
+      { "label": "Contêiner", "material": "steel", "thick": false, "hp": 25 },
+      { "label": "Sofá", "material": "plaster", "thick": true, "hp": 15 },
+      { "label": "Estátua", "material": "stone", "thick": false, "hp": 20 },
+      { "label": "Árvore", "material": "wood", "thick": true, "hp": 20 },
+      { "label": "Poste", "material": "concrete", "thick": true, "hp": 25 },
+      { "label": "Guarda-roupa", "material": "wood", "thick": false, "hp": 5 },
+      { "label": "Porta de madeira", "material": "wood", "thick": false, "hp": 5 }
+    ]
+  },
+  "coverRules": { "value": "Ou para a bala ou não é cobertura (não existe cobertura parcial). Com linha de visão, não há cobertura. A 0 HP a cobertura é destruída e o dano que sobra se perde (exceto explosivos).", "source": "CP:R p.182 (The Golden Rules of Cover)" },
+  "shields": { "value": "Bulletproof Shield: 10 HP. Escudo de cadáver: HP igual ao BODY que tinha em vida. Com escudo o alvo está em cobertura e não pode esquivar. Escudo humano não bloqueia corpo a corpo nem tiro mirado na cabeça.", "source": "CP:R p.183-184" },
+
+  "environment": {
+    "source": "CP:R p.180-181 (Other Ways to get Hurt)",
+    "value": [
+      { "id": "fire-mild", "label": "Em chamas (leve: madeira)", "damage": "2", "bypassArmor": true, "note": "No fim de cada turno até gastar uma Action para se apagar; não abla." },
+      { "id": "fire-strong", "label": "Em chamas (forte: gasolina)", "damage": "4", "bypassArmor": true, "note": "No fim de cada turno até gastar uma Action para se apagar; não abla." },
+      { "id": "fire-deadly", "label": "Em chamas (mortal: termite)", "damage": "6", "bypassArmor": true, "note": "No fim de cada turno até gastar uma Action para se apagar; não abla." },
+      { "id": "electrocution", "label": "Eletrocução", "damage": "6d6", "bypassArmor": false, "note": "Absorvida pela armadura; repete no fim de cada turno sem se afastar." },
+      { "id": "poison-mild", "label": "Veneno leve (Resist Torture/Drugs DV11)", "damage": "1d6", "bypassArmor": true, "note": "Só se falhar o teste." },
+      { "id": "poison-strong", "label": "Veneno forte (DV13)", "damage": "2d6", "bypassArmor": true, "note": "Só se falhar o teste." },
+      { "id": "poison-deadly", "label": "Veneno mortal (DV15)", "damage": "3d6", "bypassArmor": true, "note": "Só se falhar o teste." },
+      { "id": "fall", "label": "Queda (por 10 m)", "damage": "2d6", "bypassArmor": false, "note": "2d6 a cada 10 m, absorvido pela armadura do corpo; Athletics DV15 ou Broken Leg." }
+    ]
+  },
+  "environmentNoCrits": { "value": true, "source": "CP:R p.181 (Damage caused by environmental factors like fire and radiation cannot cause Critical Injuries)" },
+
+  "generic": {
+    "value": { "ref": 6, "dex": 6, "body": 6, "will": 6, "move": 6, "hp": 35, "spBody": 11, "spHead": 11, "attackBase": 12, "evasionBase": 10, "damage": "3d6", "weaponClass": "HeavyPistol" },
+    "complementary": true,
+    "note": "Valores iniciais do inimigo genérico rápido, sem ficha; todos editáveis. Próximos do Lieutenant do DGD p.152."
+  },
+  "npcAmmo": { "value": true, "complementary": true, "note": "A munição dos NPCs é contada no encontro (pente cheio ao entrar); os PCs gastam a munição da ficha." }
+}

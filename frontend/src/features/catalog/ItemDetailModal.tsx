@@ -1,6 +1,6 @@
-import { Link, useNavigate } from 'react-router';
+import { useNavigate } from 'react-router';
 import clsx from 'clsx';
-import { AlertTriangle, BadgeCheck, ExternalLink, Pencil } from 'lucide-react';
+import { AlertTriangle, BadgeCheck, ExternalLink } from 'lucide-react';
 import type { FieldDescriptor, Item } from '../../api/types';
 import { useCategoryKey, useItemDetail, useSchema } from '../../api/hooks';
 import { ItemArt } from '../../components/art/ItemArt';
@@ -49,7 +49,6 @@ export function ItemDetailModal({ itemId, onClose }: { itemId: number | null; on
                 <FavoriteButton item={item} variant="inline" />
                 <CompareButton item={item} variant="inline" />
                 <AddToListMenu item={item} />
-                <Link to={`/admin?edit=${item.id}`} className={styles.edit} onClick={onClose}><Pencil size={14} /> Editar</Link>
               </div>
             </div>
           </header>

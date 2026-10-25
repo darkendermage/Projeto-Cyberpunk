@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { CharacterSkillLine } from '../../api/characterTypes';
-import { filterSkills, groupSkills, languagesFor, signed, skillLabel } from './characterLabels';
+import { filterSkills, groupSkills, languagesFor, signed, skillLabel, withCurrent } from './characterLabels';
 
 const line = (over: Partial<CharacterSkillLine>): CharacterSkillLine => ({
   key: 'x', skillId: 'x', name: 'X', namePt: null, specialization: null, stat: 'INT', category: 'Awareness',
@@ -51,5 +51,13 @@ describe('skill helpers', () => {
     expect(languagesFor(rules, 'East Asian')).toEqual(['Japanese', 'English']);
     expect(languagesFor(rules, null)).toEqual(['English', 'French', 'Japanese']);
     expect(languagesFor(rules, 'Unknown')).toEqual(['English', 'French', 'Japanese']);
+  });
+});
+
+describe('withCurrent', () => {
+  it('keeps a saved value that is not in the list', () => {
+    expect(withCurrent(['Watson', 'Heywood'], 'Watson')).toEqual(['Watson', 'Heywood']);
+    expect(withCurrent(['Watson', 'Heywood'], 'Lua')).toEqual(['Lua', 'Watson', 'Heywood']);
+    expect(withCurrent(['Watson'], null)).toEqual(['Watson']);
   });
 });

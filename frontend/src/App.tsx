@@ -10,7 +10,6 @@ import page from './styles/Page.module.css';
 const FavoritesPage = lazy(() => import('./features/favorites/FavoritesPage').then((m) => ({ default: m.FavoritesPage })));
 const ListsPage = lazy(() => import('./features/lists/ListsPage').then((m) => ({ default: m.ListsPage })));
 const ComparePage = lazy(() => import('./features/compare/ComparePage').then((m) => ({ default: m.ComparePage })));
-const AdminPage = lazy(() => import('./features/admin/AdminPage').then((m) => ({ default: m.AdminPage })));
 const QuickRulesPage = lazy(() => import('./features/reference/ReferencePages').then((m) => ({ default: m.QuickRulesPage })));
 const TablesPage = lazy(() => import('./features/reference/ReferencePages').then((m) => ({ default: m.TablesPage })));
 const GlossaryPage = lazy(() => import('./features/reference/ReferencePages').then((m) => ({ default: m.GlossaryPage })));
@@ -19,6 +18,8 @@ const CharactersPage = lazy(() => import('./features/characters/CharactersPage')
 const CharacterPage = lazy(() => import('./features/characters/CharacterPage').then((m) => ({ default: m.CharacterPage })));
 const MartialArtsPage = lazy(() => import('./features/reference/MartialArtsPage').then((m) => ({ default: m.MartialArtsPage })));
 const NightMarketPage = lazy(() => import('./features/night-market/NightMarketPage').then((m) => ({ default: m.NightMarketPage })));
+const CombatPage = lazy(() => import('./features/combat/CombatPage').then((m) => ({ default: m.CombatPage })));
+const NetArchitecturePage = lazy(() => import('./features/net-architecture/NetArchitecturePage').then((m) => ({ default: m.NetArchitecturePage })));
 
 export default function App() {
   return (
@@ -32,7 +33,6 @@ export default function App() {
           <Route path="/lists" element={<ListsPage />} />
           <Route path="/lists/:id" element={<ListsPage />} />
           <Route path="/compare" element={<ComparePage />} />
-          <Route path="/admin" element={<AdminPage />} />
           <Route path="/rules" element={<QuickRulesPage />} />
           <Route path="/tables" element={<TablesPage />} />
           <Route path="/glossary" element={<GlossaryPage />} />
@@ -40,6 +40,10 @@ export default function App() {
           <Route path="/enemies" element={<EnemyGeneratorPage />} />
           <Route path="/night-market" element={<NightMarketPage />} />
           <Route path="/night-market/:id" element={<NightMarketPage />} />
+          <Route path="/combat" element={<CombatPage />} />
+          <Route path="/combat/:id" element={<CombatPage />} />
+          <Route path="/net-architecture" element={<NetArchitecturePage />} />
+          <Route path="/net-architecture/:id" element={<NetArchitecturePage />} />
           <Route path="/characters" element={<CharactersPage />} />
           <Route path="/characters/:id" element={<CharacterPage />} />
           <Route path="/characters/:id/:tab" element={<CharacterPage />} />

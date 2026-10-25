@@ -18,6 +18,8 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options, ISearch
     public DbSet<CharacterEvent> CharacterEvents => Set<CharacterEvent>();
     public DbSet<CharacterPortrait> CharacterPortraits => Set<CharacterPortrait>();
     public DbSet<NightMarket> NightMarkets => Set<NightMarket>();
+    public DbSet<NetArchitecture> NetArchitectures => Set<NetArchitecture>();
+    public DbSet<Encounter> Encounters => Set<Encounter>();
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {

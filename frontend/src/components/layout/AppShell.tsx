@@ -2,7 +2,7 @@ import { useEffect, useState, type ReactNode } from 'react';
 import { NavLink, useLocation } from 'react-router';
 import clsx from 'clsx';
 import {
-  BookOpen, Database, FileText, GitCompareArrows, Heart, LayoutGrid, ListChecks, Menu, Search, Settings, Skull, Store, Swords, Table2, Users, X,
+  BookOpen, Crosshair, FileText, GitCompareArrows, Heart, LayoutGrid, ListChecks, Menu, Network, Search, Settings, Skull, Store, Swords, Table2, Users, X,
 } from 'lucide-react';
 import { useCompare } from '../../state/CompareContext';
 import { useEffectsSettings } from '../../state/EffectsContext';
@@ -96,12 +96,13 @@ function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
   ];
   const others = [
     { to: '/enemies', label: 'Gerador de Inimigos', icon: <Skull size={19} /> },
+    { to: '/combat', label: 'Mesa de Combate', icon: <Crosshair size={19} />, active: location.pathname.startsWith('/combat') },
     { to: '/night-market', label: 'Night Market', icon: <Store size={19} />, active: location.pathname.startsWith('/night-market') },
+    { to: '/net-architecture', label: 'Arquiteturas de NET', icon: <Network size={19} />, active: location.pathname.startsWith('/net-architecture') },
     { to: '/rules', label: 'Regras Rápidas', icon: <FileText size={19} /> },
     { to: '/tables', label: 'Tabelas', icon: <Table2 size={19} /> },
     { to: '/martial-arts', label: 'Artes Marciais', icon: <Swords size={19} /> },
     { to: '/glossary', label: 'Glossário', icon: <BookOpen size={19} /> },
-    { to: '/admin', label: 'Administração', icon: <Database size={19} /> },
   ];
 
   const renderLink = (l: { to: string; label: string; icon: ReactNode; count?: number; active?: boolean }) => (

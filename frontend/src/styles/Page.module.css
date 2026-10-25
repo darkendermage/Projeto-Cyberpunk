@@ -1,4 +1,4 @@
-/* Shared layout for secondary pages (favorites, lists, compare, admin, reference) */
+/* Shared layout for secondary pages (favorites, lists, compare, reference) */
 .page {
   display: flex;
   flex-direction: column;

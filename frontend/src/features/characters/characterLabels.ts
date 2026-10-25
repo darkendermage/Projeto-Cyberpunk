@@ -13,6 +13,11 @@ export function languagesFor(rules: Pick<CharacterRules, 'culturalOrigins'>, reg
   return [...new Set(rules.culturalOrigins.flatMap((o) => o.languages))].sort((a, b) => a.localeCompare(b));
 }
 
+/** The options of a select, plus the saved value when it is not one of them (older sheets kept free text). */
+export function withCurrent(options: readonly string[], current: string | null | undefined): string[] {
+  return current && !options.includes(current) ? [current, ...options] : [...options];
+}
+
 export const METHOD_LABEL: Record<CreationMethod, string> = {
   Streetrat: 'Streetrat',
   Edgerunner: 'Edgerunner',

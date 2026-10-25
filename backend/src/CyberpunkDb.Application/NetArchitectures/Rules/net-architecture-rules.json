@@ -1,0 +1,334 @@
+{
+  "about": "Parâmetros do gerador de Arquiteturas de NET. Cada valor traz 'source' (livro e página conferidos no PDF) ou 'complementary: true' quando é uma regra adotada pela aplicação. Siglas: CP:R = Cyberpunk RED Core Rulebook v1.25 (página impressa); GQ = Going Quiet (DLC, julho de 2025).",
+  "books": {
+    "CP:R": "Cyberpunk RED Core Rulebook (v1.25)",
+    "GQ": "Going Quiet (DLC)"
+  },
+
+  "difficulties": {
+    "source": "CP:R p.210 (Step 0: The Difficulty Rating)",
+    "value": [
+      { "id": "Basic", "label": "Básica", "dv": 6, "fightingChance": 2, "mightDie": null, "description": "Para Netrunners iniciantes." },
+      { "id": "Standard", "label": "Padrão", "dv": 8, "fightingChance": 4, "mightDie": 2, "description": "A maioria dos sistemas comerciais. O livro recomenda começar por aqui." },
+      { "id": "Uncommon", "label": "Incomum", "dv": 10, "fightingChance": 6, "mightDie": 4, "description": "Redes corporativas protegidas e depósitos de dados." },
+      { "id": "Advanced", "label": "Avançada", "dv": 12, "fightingChance": 8, "mightDie": 6, "description": "Instalações militares, cofres de elite e projetos secretos." }
+    ]
+  },
+
+  "shape": {
+    "floorDice": { "value": { "count": 3, "sides": 6 }, "source": "CP:R p.210 (Roll 3d6. This is the total number of floors)" },
+    "branchDie": { "value": 10, "source": "CP:R p.210 (Roll a d10)" },
+    "branchOn": { "value": 7, "source": "CP:R p.210 (If you got 7 or higher, the Architecture has a branch in it. Roll that d10 again ... When you don't, stop)" },
+    "lobbyFloors": { "value": 2, "source": "CP:R p.210-211 (For the first two floors ... roll on the Lobby table)" },
+    "firstBranchFloor": { "value": 3, "source": "CP:R p.210 (A NET Architecture cannot branch until after the second floor in the main branch)" },
+    "longestBranch": { "value": true, "source": "CP:R p.210 (Make sure that there is also a longest branch ... a defined 'bottom' ... where a Netrunner can leave a Virus)" },
+    "split": { "value": "O tronco fica sempre estritamente mais longo que qualquer ramo; cada ramo tem pelo menos 1 andar; ramos que não cabem nos andares rolados são descartados.", "complementary": true, "note": "O livro manda dividir os andares 'according to your taste'; a aplicação sorteia a divisão respeitando as travas do livro." }
+  },
+
+  "lobbyTable": {
+    "source": "CP:R p.211 (Net Architecture: First Two Floors (The Lobby), 1d6)",
+    "value": [
+      { "roll": 1, "contents": [{ "kind": "File", "dv": 6 }] },
+      { "roll": 2, "contents": [{ "kind": "Password", "dv": 6 }] },
+      { "roll": 3, "contents": [{ "kind": "Password", "dv": 8 }] },
+      { "roll": 4, "contents": [{ "kind": "BlackIce", "slug": "skunk" }] },
+      { "roll": 5, "contents": [{ "kind": "BlackIce", "slug": "wisp" }] },
+      { "roll": 6, "contents": [{ "kind": "BlackIce", "slug": "killer" }] }
+    ]
+  },
+
+  "bodyTables": {
+    "source": "CP:R p.211 (NET Architecture: All Other Floors, 3d6)",
+    "note": "Colunas conferidas no texto do PDF, linha a linha (3 a 18).",
+    "value": [
+      {
+        "difficulty": "Basic",
+        "rows": [
+          { "roll": 3, "contents": [{ "kind": "BlackIce", "slug": "hellhound" }] },
+          { "roll": 4, "contents": [{ "kind": "BlackIce", "slug": "sabertooth" }] },
+          { "roll": 5, "contents": [{ "kind": "BlackIce", "slug": "raven" }, { "kind": "BlackIce", "slug": "raven" }] },
+          { "roll": 6, "contents": [{ "kind": "BlackIce", "slug": "hellhound" }] },
+          { "roll": 7, "contents": [{ "kind": "BlackIce", "slug": "wisp" }] },
+          { "roll": 8, "contents": [{ "kind": "BlackIce", "slug": "raven" }] },
+          { "roll": 9, "contents": [{ "kind": "Password", "dv": 6 }] },
+          { "roll": 10, "contents": [{ "kind": "File", "dv": 6 }] },
+          { "roll": 11, "contents": [{ "kind": "ControlNode", "dv": 6 }] },
+          { "roll": 12, "contents": [{ "kind": "Password", "dv": 6 }] },
+          { "roll": 13, "contents": [{ "kind": "BlackIce", "slug": "skunk" }] },
+          { "roll": 14, "contents": [{ "kind": "BlackIce", "slug": "asp" }] },
+          { "roll": 15, "contents": [{ "kind": "BlackIce", "slug": "scorpion-black-ice" }] },
+          { "roll": 16, "contents": [{ "kind": "BlackIce", "slug": "killer" }, { "kind": "BlackIce", "slug": "skunk" }] },
+          { "roll": 17, "contents": [{ "kind": "BlackIce", "slug": "wisp" }, { "kind": "BlackIce", "slug": "wisp" }, { "kind": "BlackIce", "slug": "wisp" }] },
+          { "roll": 18, "contents": [{ "kind": "BlackIce", "slug": "liche" }] }
+        ]
+      },
+      {
+        "difficulty": "Standard",
+        "rows": [
+          { "roll": 3, "contents": [{ "kind": "BlackIce", "slug": "hellhound" }, { "kind": "BlackIce", "slug": "hellhound" }] },
+          { "roll": 4, "contents": [{ "kind": "BlackIce", "slug": "hellhound" }, { "kind": "BlackIce", "slug": "killer" }] },
+          { "roll": 5, "contents": [{ "kind": "BlackIce", "slug": "skunk" }, { "kind": "BlackIce", "slug": "skunk" }] },
+          { "roll": 6, "contents": [{ "kind": "BlackIce", "slug": "sabertooth" }] },
+          { "roll": 7, "contents": [{ "kind": "BlackIce", "slug": "scorpion-black-ice" }] },
+          { "roll": 8, "contents": [{ "kind": "BlackIce", "slug": "hellhound" }] },
+          { "roll": 9, "contents": [{ "kind": "Password", "dv": 8 }] },
+          { "roll": 10, "contents": [{ "kind": "File", "dv": 8 }] },
+          { "roll": 11, "contents": [{ "kind": "ControlNode", "dv": 8 }] },
+          { "roll": 12, "contents": [{ "kind": "Password", "dv": 8 }] },
+          { "roll": 13, "contents": [{ "kind": "BlackIce", "slug": "asp" }] },
+          { "roll": 14, "contents": [{ "kind": "BlackIce", "slug": "killer" }] },
+          { "roll": 15, "contents": [{ "kind": "BlackIce", "slug": "liche" }] },
+          { "roll": 16, "contents": [{ "kind": "BlackIce", "slug": "asp" }] },
+          { "roll": 17, "contents": [{ "kind": "BlackIce", "slug": "raven" }, { "kind": "BlackIce", "slug": "raven" }, { "kind": "BlackIce", "slug": "raven" }] },
+          { "roll": 18, "contents": [{ "kind": "BlackIce", "slug": "liche" }, { "kind": "BlackIce", "slug": "raven" }] }
+        ]
+      },
+      {
+        "difficulty": "Uncommon",
+        "rows": [
+          { "roll": 3, "contents": [{ "kind": "BlackIce", "slug": "kraken" }] },
+          { "roll": 4, "contents": [{ "kind": "BlackIce", "slug": "hellhound" }, { "kind": "BlackIce", "slug": "scorpion-black-ice" }] },
+          { "roll": 5, "contents": [{ "kind": "BlackIce", "slug": "hellhound" }, { "kind": "BlackIce", "slug": "killer" }] },
+          { "roll": 6, "contents": [{ "kind": "BlackIce", "slug": "raven" }, { "kind": "BlackIce", "slug": "raven" }] },
+          { "roll": 7, "contents": [{ "kind": "BlackIce", "slug": "sabertooth" }] },
+          { "roll": 8, "contents": [{ "kind": "BlackIce", "slug": "hellhound" }] },
+          { "roll": 9, "contents": [{ "kind": "Password", "dv": 10 }] },
+          { "roll": 10, "contents": [{ "kind": "File", "dv": 10 }] },
+          { "roll": 11, "contents": [{ "kind": "ControlNode", "dv": 10 }] },
+          { "roll": 12, "contents": [{ "kind": "Password", "dv": 10 }] },
+          { "roll": 13, "contents": [{ "kind": "BlackIce", "slug": "killer" }] },
+          { "roll": 14, "contents": [{ "kind": "BlackIce", "slug": "liche" }] },
+          { "roll": 15, "contents": [{ "kind": "BlackIce", "slug": "dragon" }] },
+          { "roll": 16, "contents": [{ "kind": "BlackIce", "slug": "asp" }, { "kind": "BlackIce", "slug": "raven" }] },
+          { "roll": 17, "contents": [{ "kind": "BlackIce", "slug": "dragon" }, { "kind": "BlackIce", "slug": "wisp" }] },
+          { "roll": 18, "contents": [{ "kind": "BlackIce", "slug": "giant" }] }
+        ]
+      },
+      {
+        "difficulty": "Advanced",
+        "rows": [
+          { "roll": 3, "contents": [{ "kind": "BlackIce", "slug": "hellhound" }, { "kind": "BlackIce", "slug": "hellhound" }, { "kind": "BlackIce", "slug": "hellhound" }] },
+          { "roll": 4, "contents": [{ "kind": "BlackIce", "slug": "asp" }, { "kind": "BlackIce", "slug": "asp" }] },
+          { "roll": 5, "contents": [{ "kind": "BlackIce", "slug": "hellhound" }, { "kind": "BlackIce", "slug": "liche" }] },
+          { "roll": 6, "contents": [{ "kind": "BlackIce", "slug": "wisp" }, { "kind": "BlackIce", "slug": "wisp" }, { "kind": "BlackIce", "slug": "wisp" }] },
+          { "roll": 7, "contents": [{ "kind": "BlackIce", "slug": "hellhound" }, { "kind": "BlackIce", "slug": "sabertooth" }] },
+          { "roll": 8, "contents": [{ "kind": "BlackIce", "slug": "kraken" }] },
+          { "roll": 9, "contents": [{ "kind": "Password", "dv": 12 }] },
+          { "roll": 10, "contents": [{ "kind": "File", "dv": 12 }] },
+          { "roll": 11, "contents": [{ "kind": "ControlNode", "dv": 12 }] },
+          { "roll": 12, "contents": [{ "kind": "Password", "dv": 12 }] },
+          { "roll": 13, "contents": [{ "kind": "BlackIce", "slug": "giant" }] },
+          { "roll": 14, "contents": [{ "kind": "BlackIce", "slug": "dragon" }] },
+          { "roll": 15, "contents": [{ "kind": "BlackIce", "slug": "killer" }, { "kind": "BlackIce", "slug": "scorpion-black-ice" }] },
+          { "roll": 16, "contents": [{ "kind": "BlackIce", "slug": "kraken" }] },
+          { "roll": 17, "contents": [{ "kind": "BlackIce", "slug": "raven" }, { "kind": "BlackIce", "slug": "wisp" }, { "kind": "BlackIce", "slug": "hellhound" }] },
+          { "roll": 18, "contents": [{ "kind": "BlackIce", "slug": "dragon" }, { "kind": "BlackIce", "slug": "dragon" }] }
+        ]
+      }
+    ]
+  },
+
+  "noRepeat": { "value": ["BlackIce", "Password"], "source": "CP:R p.210 (re-rolling any Program or Password entries already rolled)", "note": "Uma linha com Black ICE ou Password não sai duas vezes na mesma tabela da arquitetura. Files e Control Nodes podem repetir." },
+  "bossFloor": { "value": true, "source": "CP:R p.211 (Sparingly, you can even pick a floor from a NET Architecture from one Difficulty Rating higher ... a 'Boss Floor')" },
+  "sameCostSwap": { "value": true, "source": "CP:R p.211 (feel free to replace any Program you've generated with another Program of the same Cost)" },
+  "activeNeedsDemon": { "value": true, "source": "CP:R p.211 e p.213 (Any Active Defenses will need a Demon present to run them)" },
+
+  "demons": {
+    "source": "CP:R p.212 (Demons: REZ, Interface, NET Actions, Combat Number) e p.218 (custo)",
+    "value": [
+      { "id": "imp", "name": "Imp", "rez": 15, "interface": 3, "netActions": 2, "combatNumber": 14, "cost": 1000, "priceCategory": "VeryExpensive", "icon": "Pequena esfera de luz laranja com chifres vermelhos." },
+      { "id": "efreet", "name": "Efreet", "rez": 25, "interface": 4, "netActions": 3, "combatNumber": 14, "cost": 5000, "priceCategory": "Luxury", "icon": "Homem negro alto e forte, em traje de gala, com fez e adaga." },
+      { "id": "balron", "name": "Balron", "rez": 30, "interface": 7, "netActions": 4, "combatNumber": 14, "cost": 10000, "priceCategory": "SuperLuxury", "icon": "Monstro humanoide enorme em armadura negra futurista, coberto de tentáculos verdes que chiam e brilham." }
+    ]
+  },
+  "demonAbilities": { "value": "Só usam Zap (para se defender) e Control (para operar Control Nodes); não rodam Programs nem Black ICE; não são barrados por Passwords; sempre sabem quando um Netrunner entra; sem SPD, PER nem DEF (defendem com Interface + 1d10); não dá para usar Slide contra eles.", "source": "CP:R p.212" },
+  "floorsPerDemon": { "value": 6, "source": "CP:R p.218 (You can only have one Demon per six floors in your Architecture)", "note": "Lido como 1 Demon a cada 6 andares, arredondando para cima (3 a 6 andares: 1; 7 a 12: 2; 13 a 18: 3)." },
+  "demonsShareFloor": { "value": false, "source": "CP:R p.218 (Demons are special and cannot be placed in doubles or triples)" },
+
+  "defenses": {
+    "source": "CP:R p.213 (Active), p.214 (Emplaced), p.215-216 (Environmental)",
+    "value": [
+      { "id": "air-swarm-drone-cloud", "name": "Air Swarm Drone Cloud", "label": "Nuvem de drones enxame", "group": "Active", "page": 213, "counterDv": 17, "counterTime": "5 min", "trigger": "Alvo entra na área sem passe ou crachá.", "data": "8 MOVE · 15 HP · perímetro da área defendida", "description": "Drones voadores do tamanho de mosquitos, com superfícies cortantes de nanofio. Trate a nuvem como uma entidade com uma arma corpo a corpo muito pesada.", "loadoutOptions": [], "loadoutPicks": 0 },
+      { "id": "ground-drone", "name": "Ground Drone", "label": "Drone terrestre", "group": "Active", "page": 213, "counterDv": 21, "counterTime": "5 min", "trigger": "Alvo entra na área sem passe ou crachá.", "data": "4 MOVE · 30 HP · perímetro da área defendida", "description": "Bola rolante, esteiras, rodas ou forma de serpente.", "loadoutOptions": ["Very Heavy Pistol com 8 balas Armor Piercing", "SMG com 30 balas Basic", "Câmera de observação"], "loadoutPicks": 2 },
+      { "id": "large-air-drone", "name": "Large Air Drone", "label": "Drone aéreo grande", "group": "Active", "page": 213, "counterDv": 21, "counterTime": "5 min", "trigger": "Alvo entra na área sem passe ou crachá.", "data": "6 MOVE · 20 HP · perímetro da área defendida", "description": "Drone aéreo armado.", "loadoutOptions": ["Dartgun com 8 Poison Arrows", "Very Heavy Pistol com 8 balas Armor Piercing", "Câmera de observação"], "loadoutPicks": 2 },
+      { "id": "mini-air-drone", "name": "Mini Air Drone", "label": "Mini drone aéreo", "group": "Active", "page": 213, "counterDv": 17, "counterTime": "5 min", "trigger": "Alvo entra na área sem passe ou crachá.", "data": "6 MOVE · 15 HP · perímetro da área defendida", "description": "Drone aéreo pequeno.", "loadoutOptions": ["Dartgun com 8 Poison Arrows", "Very Heavy Pistol com 8 balas Armor Piercing", "Câmera de observação"], "loadoutPicks": 1 },
+      { "id": "spider-walking-drone", "name": "Spider Walking Drone", "label": "Drone aranha", "group": "Active", "page": 213, "counterDv": 21, "counterTime": "5 min", "trigger": "Alvo entra na área sem passe ou crachá.", "data": "4 MOVE · 40 HP · perímetro da área defendida", "description": "Drone andador de pernas articuladas.", "loadoutOptions": ["Grenade Launcher com 2 granadas de gás lacrimogêneo", "Very Heavy Melee Weapon", "Heavy SMG com 40 balas Basic", "Câmera de observação"], "loadoutPicks": 2 },
+
+      { "id": "automated-blood-swarm", "name": "Automated Blood Swarm", "label": "Enxame sanguíneo automático", "group": "Emplaced", "page": 214, "counterDv": 21, "counterTime": "5 min", "trigger": "Alvo entra na sala sem passe ou crachá.", "data": "Um ataque em todos os alvos · perímetro da área defendida", "description": "Dispersa nanitas como uma névoa vermelha que coagulam a hemoglobina de quem inala. Todos na área fazem Resist Torture/Drugs DV15; quem falha leva 3d6 direto no HP, sem ablar a armadura. Filtros contra gás bloqueiam.", "loadoutOptions": [], "loadoutPicks": 0 },
+      { "id": "automated-melee-weapon", "name": "Automated Melee Weapon", "label": "Arma corpo a corpo automática", "group": "Emplaced", "page": 214, "counterDv": 17, "counterTime": "5 min", "trigger": "Alvo entra na sala sem passe ou crachá; ataca até todos morrerem, saírem do alcance ou um crachá válido aparecer.", "data": "Combat Number 14 · 25 HP · perímetro da área defendida", "description": "Uma Very Heavy Melee Weapon automática num canto da sala: cortador industrial de água ou fio monofilamento girando.", "loadoutOptions": [], "loadoutPicks": 0 },
+      { "id": "automated-turret", "name": "Automated Turret", "label": "Torreta automática", "group": "Emplaced", "page": 214, "counterDv": 17, "counterTime": "5 min", "trigger": "Alvo entra na sala sem passe ou crachá; atira até o alvo morrer, sair do alcance ou um crachá válido aparecer.", "data": "Combat Number 14 · 25 HP · perímetro da área defendida", "description": "Arma automática, normalmente no teto da sala.", "loadoutOptions": ["Assault Rifle com 25 balas Basic", "Flamethrower com 4 Incendiary Shotgun Shells", "Dartgun com 8 Poison Arrows", "Very Heavy Pistol com 8 balas Armor Piercing", "Heavy SMG com 40 balas Basic"], "loadoutPicks": 1 },
+
+      { "id": "observation-cameras", "name": "Observation Cameras", "label": "Câmeras de observação", "group": "Environmental", "page": 215, "counterDv": 9, "counterTime": "1 min", "trigger": "Alvo entra na sala.", "data": "5 HP · Perception DV17 para notar · vê uma sala ou corredor inteiro", "description": "Veem em Low Light, Infrared e UV e mandam as imagens para um Demon ou para a segurança.", "loadoutOptions": [], "loadoutPicks": 0 },
+      { "id": "tanglefoot-flooring", "name": "Tanglefoot Flooring", "label": "Carpete enredante", "group": "Environmental", "page": 215, "counterDv": 13, "counterTime": "1 min", "trigger": "Alvo pisa no carpete.", "data": "20 HP · Perception DV17 para notar", "description": "Rede de nanofio num carpete comum. Prende pés e pernas: MOVE −1d6 até destruir o carpete ou sair dele.", "loadoutOptions": [], "loadoutPicks": 0 },
+      { "id": "electrical-flooring", "name": "Electrical Flooring", "label": "Piso eletrificado", "group": "Environmental", "page": 215, "counterDv": 13, "counterTime": "1 min", "trigger": "Alvo pisa na área da grade.", "data": "20 HP · Perception DV17 para notar · ROF 1", "description": "Grade no piso que dá 6d6 no corpo (reduzido pela armadura, sem ablar) e choca de novo a cada turno até o alvo sair.", "loadoutOptions": [], "loadoutPicks": 0 },
+      { "id": "laser-grid", "name": "Laser Grid", "label": "Grade de laser", "group": "Environmental", "page": 215, "counterDv": 17, "counterTime": "5 min", "trigger": "Alvo entra na área defendida.", "data": "Perception DV17 para notar · perímetro da área defendida", "description": "Tocar um laser é como levar um golpe de Very Heavy Melee Weapon no corpo. Se for percebida, dá para atravessar com Contortionist DV17.", "loadoutOptions": [], "loadoutPicks": 0 },
+      { "id": "tip-floor", "name": "Tip-floor", "label": "Alçapão basculante", "group": "Environmental", "page": 215, "counterDv": 13, "counterTime": "1 min", "trigger": "Alvo pisa no alçapão.", "data": "Perception DV17 para notar", "description": "Piso com contrapeso que derruba o alvo num fosso (Athletics DV15 para se salvar; Grapple Hand ou Grapple Gun dispensam o teste). O fundo pode ter nanofio ou estacas: 6d6 no corpo, reduzido pela armadura.", "loadoutOptions": [], "loadoutPicks": 0 },
+      { "id": "goop", "name": "Goop", "label": "Gosma", "group": "Environmental", "page": 215, "counterDv": 13, "counterTime": "1 min", "trigger": "Alvo entra na área dos aspersores.", "data": "10 HP · Perception DV17 para notar", "description": "Aspersores que cobrem pés e pernas com gosma espessa: MOVE −2d6 até destruir a gosma ou escapar da área.", "loadoutOptions": [], "loadoutPicks": 0 },
+      { "id": "ceiling-wall-punchers", "name": "Ceiling/Wall Punchers", "label": "Pistões de teto e parede", "group": "Environmental", "page": 215, "counterDv": 13, "counterTime": "5 min", "trigger": "Alvo pisa na área da grade.", "data": "20 HP · Perception DV17 para notar · ROF 1", "description": "Hastes de aço que descem do teto ou saem da parede esmagando quem está entre elas: 6d6 no corpo, reduzido pela armadura.", "loadoutOptions": [], "loadoutPicks": 0 },
+      { "id": "slip-floor", "name": "Slip-floor", "label": "Piso escorregadio", "group": "Environmental", "page": 216, "counterDv": 13, "counterTime": "1 min", "trigger": "Alvo entra na área dos aspersores.", "data": "10 HP · Perception DV17 para notar", "description": "Aspersores espalham um líquido superliso: quem se mover na área faz Athletics DV15 ou cai Prone.", "loadoutOptions": [], "loadoutPicks": 0 },
+      { "id": "stun-panels", "name": "Stun Panels", "label": "Painéis atordoantes", "group": "Environmental", "page": 216, "counterDv": 13, "counterTime": "1 min", "trigger": "Alvo chega a 2 m de um painel; área 10 m × 10 m centrada no painel.", "data": "5 HP · Perception DV17 para notar", "description": "Painéis disfarçados de arte ou lousa que soltam luz e som ofuscantes: Resist Torture/Drugs DV15 ou Damaged Eye e Damaged Ear por um minuto (sem o dano bônus).", "loadoutOptions": [], "loadoutPicks": 0 },
+      { "id": "sleep-gas-elevator", "name": "Sleep Gas Elevator", "label": "Elevador com gás do sono", "group": "Environmental", "page": 216, "counterDv": 17, "counterTime": "5 min", "trigger": "Alvo entra no espaço fechado.", "data": "60 HP · Perception DV17 para notar", "description": "Todas as aberturas se fecham hermeticamente; a armadilha entra no topo da Initiative Queue e, no turno dela, todos fazem Resist Torture/Drugs DV13 ou ficam Unconscious até tomar dano ou serem acordados.", "loadoutOptions": [], "loadoutPicks": 0 }
+    ]
+  },
+  "defenseControl": { "value": "Active Defenses precisam de um Demon (ou de um Netrunner) controlando o Control Node para funcionar. Emplaced e Environmental funcionam sozinhas; as Environmental, mesmo controladas, só podem ser ligadas ou desligadas. Sem ninguém no controle, qualquer defesa pode ser neutralizada com Electronics/Security Tech e depois comandada com um Agent a até 6 m de um ponto de acesso.", "source": "CP:R p.213-215" },
+
+  "devices": {
+    "source": "CP:R p.199 (Control: cameras, drones, turrets, laser grids, elevators, sprinklers) e p.210 (Step 3: exemplos de Control Nodes)",
+    "value": [
+      { "id": "door-lock", "label": "Trava eletrônica de porta" },
+      { "id": "elevator", "label": "Elevador" },
+      { "id": "sprinklers", "label": "Sprinklers" },
+      { "id": "sirens", "label": "Sirenes e alarme" },
+      { "id": "lighting", "label": "Iluminação" },
+      { "id": "air-conditioning", "label": "Ar-condicionado" },
+      { "id": "video-display", "label": "Telões e feeds de vídeo" },
+      { "id": "conveyor-belt", "label": "Esteira de linha de montagem" },
+      { "id": "chlorination-valves", "label": "Válvulas de cloração" },
+      { "id": "soda-machine", "label": "Máquina de refrigerante" },
+      { "id": "massage-chair", "label": "Cadeira de massagem" },
+      { "id": "pitching-machine", "label": "Máquina de arremesso" }
+    ]
+  },
+
+  "pricing": {
+    "floors": {
+      "source": "CP:R p.217 (Buying a NET Architecture)",
+      "value": [
+        { "min": 3, "max": 6, "maxControlNodes": 2, "portable": true, "costPerFloor": 1000, "priceCategory": "VeryExpensive" },
+        { "min": 7, "max": 12, "maxControlNodes": 3, "portable": false, "costPerFloor": 5000, "priceCategory": "Luxury" },
+        { "min": 13, "max": 18, "maxControlNodes": null, "portable": false, "costPerFloor": 10000, "priceCategory": "SuperLuxury" }
+      ]
+    },
+    "features": {
+      "source": "CP:R p.217 (Adding Passwords, Control Nodes, and Files: custo pela DV)",
+      "value": [
+        { "dv": 6, "cost": 500, "priceCategory": "Expensive" },
+        { "dv": 8, "cost": 1000, "priceCategory": "VeryExpensive" },
+        { "dv": 10, "cost": 5000, "priceCategory": "Luxury" },
+        { "dv": 12, "cost": 10000, "priceCategory": "SuperLuxury" }
+      ]
+    },
+    "iceMultiplier": { "value": [1, 2, 3], "source": "CP:R p.218 (2 Black ICE no mesmo andar: paga o dobro de cada; 3: o triplo de cada)" },
+    "iceSameAsDeck": { "value": true, "source": "CP:R p.218 (Black ICE for NET Architecture use is priced exactly the same as Black ICE for Cyberdecks)" },
+    "defenses": {
+      "source": "CP:R p.218 (Adding Defenses to Control Nodes: custo pela DV para neutralizar com Electronics/Security Tech)",
+      "value": [
+        { "dv": 9, "cost": 500, "priceCategory": "Expensive" },
+        { "dv": 13, "cost": 1000, "priceCategory": "VeryExpensive" },
+        { "dv": 17, "cost": 5000, "priceCategory": "Luxury" },
+        { "dv": 21, "cost": 10000, "priceCategory": "SuperLuxury" }
+      ]
+    },
+    "devicesFree": { "value": true, "complementary": true, "note": "Dispositivos civis ligados a um Control Node (luz, elevador, sprinklers) já existem no prédio; o livro só precifica Defesas." },
+    "availability": { "value": "Só em Night Markets com Personal Electronics, de um Fixer Rank 4 ou maior.", "source": "CP:R p.217-218" }
+  },
+
+  "locations": {
+    "complementary": true,
+    "note": "Tipos de local da aplicação para o Passo 3 (CP:R p.210: todo File e Control Node precisa de um motivo no Meatspace). Os pesos e ideias são sugestões, não regras do livro.",
+    "value": [
+      {
+        "id": "generic", "label": "Genérico", "description": "Sem contexto: sorteia entre todas as defesas e dispositivos.",
+        "defenseShare": 0.5, "demonChance": 0.5,
+        "defenses": {}, "devices": {},
+        "fileIdeas": ["Registros de acesso", "Logs de vídeo da segurança", "E-mails internos", "Folha de pagamento", "Contratos", "Inventário", "Senhas anotadas por um funcionário descuidado"]
+      },
+      {
+        "id": "nightclub", "label": "Boate ou bar", "description": "Som, luz, área VIP e um escritório nos fundos.",
+        "defenseShare": 0.3, "demonChance": 0.6,
+        "defenses": { "observation-cameras": 4, "stun-panels": 2, "automated-turret": 1, "slip-floor": 1 },
+        "devices": { "lighting": 4, "video-display": 3, "door-lock": 3, "sprinklers": 1, "air-conditioning": 1, "soda-machine": 1 },
+        "fileIdeas": ["Lista de convidados VIP", "Contabilidade paralela do dono", "Gravações da área VIP", "Agenda de shows e cachês", "Contatos de fornecedores de drogas"]
+      },
+      {
+        "id": "corporate-office", "label": "Escritório corporativo", "description": "Andares de baias, salas de reunião e o andar executivo.",
+        "defenseShare": 0.55, "demonChance": 0.7,
+        "defenses": { "observation-cameras": 4, "automated-turret": 2, "laser-grid": 1, "stun-panels": 1, "sleep-gas-elevator": 1, "mini-air-drone": 1 },
+        "devices": { "door-lock": 4, "elevator": 3, "lighting": 2, "air-conditioning": 2, "video-display": 1, "massage-chair": 1 },
+        "fileIdeas": ["Relatório trimestral ainda não publicado", "Dossiê de um executivo rival", "Folha de pagamento", "Projeto de produto em sigilo", "E-mails comprometedores da diretoria", "Lista de funcionários com nível de acesso"]
+      },
+      {
+        "id": "warehouse", "label": "Armazém ou doca", "description": "Pátio de contêineres, esteiras e um escritório de turno.",
+        "defenseShare": 0.45, "demonChance": 0.5,
+        "defenses": { "observation-cameras": 3, "ground-drone": 2, "automated-turret": 2, "electrical-flooring": 1, "tip-floor": 1 },
+        "devices": { "conveyor-belt": 4, "door-lock": 3, "lighting": 2, "sirens": 2 },
+        "fileIdeas": ["Manifesto de carga", "Rotas e horários de entrega", "Inventário de contêineres", "Registro de entrada e saída de caminhões", "Carga 'desaparecida' no sistema"]
+      },
+      {
+        "id": "laboratory", "label": "Laboratório", "description": "Salas limpas, câmaras frias e equipamento caro.",
+        "defenseShare": 0.6, "demonChance": 0.7,
+        "defenses": { "observation-cameras": 3, "laser-grid": 2, "sleep-gas-elevator": 1, "automated-blood-swarm": 1, "spider-walking-drone": 1, "goop": 1 },
+        "devices": { "door-lock": 4, "air-conditioning": 2, "chlorination-valves": 2, "sirens": 1 },
+        "fileIdeas": ["Dados de pesquisa", "Fórmula de uma droga experimental", "Relatório de testes em cobaias humanas", "Protocolo de contenção", "Lista de financiadores"]
+      },
+      {
+        "id": "luxury-residence", "label": "Residência de luxo", "description": "Cobertura ou mansão de alguém com dinheiro e medo.",
+        "defenseShare": 0.5, "demonChance": 0.5,
+        "defenses": { "observation-cameras": 4, "automated-turret": 1, "tanglefoot-flooring": 1, "stun-panels": 1, "large-air-drone": 1 },
+        "devices": { "lighting": 3, "door-lock": 3, "air-conditioning": 2, "video-display": 2, "massage-chair": 1, "sprinklers": 1 },
+        "fileIdeas": ["Diário pessoal", "Fotos comprometedoras", "Extratos de contas no exterior", "Agenda de compromissos", "Testamento"]
+      },
+      {
+        "id": "clinic", "label": "Clínica ou ripperdoc", "description": "Consultório, centro cirúrgico e estoque de implantes.",
+        "defenseShare": 0.35, "demonChance": 0.4,
+        "defenses": { "observation-cameras": 4, "automated-turret": 1, "stun-panels": 1 },
+        "devices": { "door-lock": 4, "lighting": 2, "air-conditioning": 2, "sirens": 1 },
+        "fileIdeas": ["Prontuários de pacientes", "Estoque de cyberware (com a procedência)", "Registro de cirurgias não declaradas", "Lista de devedores"]
+      },
+      {
+        "id": "military", "label": "Instalação militar", "description": "Base, depósito de armas ou posto avançado.",
+        "defenseShare": 0.8, "demonChance": 0.9,
+        "defenses": { "automated-turret": 4, "ground-drone": 2, "spider-walking-drone": 2, "large-air-drone": 2, "laser-grid": 2, "observation-cameras": 2, "automated-melee-weapon": 1, "ceiling-wall-punchers": 1 },
+        "devices": { "door-lock": 3, "sirens": 3, "lighting": 1 },
+        "fileIdeas": ["Ordens de operação", "Inventário de armas", "Escalas de guarda e códigos", "Mapa de minas e sensores", "Relatório de inteligência"]
+      },
+      {
+        "id": "police", "label": "Delegacia ou NCPD", "description": "Recepção, celas, sala de provas e arquivo.",
+        "defenseShare": 0.6, "demonChance": 0.6,
+        "defenses": { "observation-cameras": 4, "automated-turret": 2, "stun-panels": 1, "mini-air-drone": 1 },
+        "devices": { "door-lock": 4, "sirens": 2, "lighting": 1 },
+        "fileIdeas": ["Ficha criminal de um contato", "Inventário da sala de provas", "Relatório de investigação em andamento", "Lista de informantes", "Escala das viaturas"]
+      },
+      {
+        "id": "gang-hideout", "label": "Esconderijo de gangue", "description": "Base improvisada com tecnologia roubada.",
+        "defenseShare": 0.55, "demonChance": 0.3,
+        "defenses": { "automated-turret": 3, "observation-cameras": 2, "electrical-flooring": 1, "tip-floor": 1, "ground-drone": 1 },
+        "devices": { "door-lock": 3, "lighting": 2, "video-display": 1, "sirens": 1, "soda-machine": 1 },
+        "fileIdeas": ["Lista de membros e devedores", "Rotas de tráfico", "Contatos de fixers", "Fotos de alvos", "Inventário de armas roubadas"]
+      }
+    ]
+  },
+
+  "stealth": {
+    "watchers": { "value": "Watchers são os Demons, os Netrunners inimigos e qualquer outra entidade com Interface presentes na Arquitetura.", "source": "GQ p.4" },
+    "checks": {
+      "source": "GQ p.4-5 (Stealth Netrunning)",
+      "value": [
+        { "label": "Quiet Jack In", "roll": "Gasta 1 NET Action a mais ao entrar: Interface + 1d10 contra Interface + 1d10 de cada Watcher. Vencendo todos, entra sem ser detectado." },
+        { "label": "Black ICE em stealth", "roll": "Interface + bônus de Cloak + 1d10 contra PER + 1d10 da ICE, no lugar do Speed Check. Falhou: stealth quebra e a ICE vai para o topo da Initiative Queue." },
+        { "label": "Encontro com Watcher", "roll": "Interface + bônus de Cloak + 1d10 contra Interface + bônus de Pathfinder + 1d10 do Watcher, sem gastar NET Action." },
+        { "label": "Busca do Watcher", "roll": "No turno dele, um Watcher pode gastar 1 NET Action (uma vez por turno) para um Pathfinder contra o Cloak do Netrunner." },
+        { "label": "Quebra de stealth", "roll": "Tomar um Control Node, atacar Black ICE ou um Watcher quebra o stealth. Deixar Virus e copiar Files, não. Para voltar ao stealth, é preciso sair e entrar de novo em silêncio." }
+      ]
+    },
+    "placement": { "value": "Netrunners gostam de ficar no andar mais fundo; Demons ficam perto de um Control Node.", "source": "GQ p.5" },
+    "enemyNetrunnerInterface": { "value": "Interface 'com chance' da dificuldade (Básica 2, Padrão 4, Incomum 6, Avançada 8)", "complementary": true, "note": "O GQ não dá o Interface de um Netrunner inimigo; a aplicação usa a coluna 'fighting chance' do CP:R p.210 como ponto de partida, editável." }
+  },
+
+  "generator": {
+    "difficultyWeights": { "value": { "Basic": 2, "Standard": 4, "Uncommon": 3, "Advanced": 1 }, "complementary": true, "note": "Pesos do sorteio de dificuldade. O livro manda escolher pensando no Interface do Netrunner do grupo." },
+    "respectNodeLimit": { "value": true, "complementary": true, "note": "Por padrão, um Control Node acima do limite de compra (CP:R p.217) é rolado de novo." },
+    "nodesPerDemon": { "value": 3, "complementary": true, "note": "Quando há Demon, o gerador coloca 1 a cada 3 Control Nodes, sem passar do limite de Demons." },
+    "demonWeights": {
+      "complementary": true,
+      "note": "Tipo de Demon por dificuldade. O livro diz que Imps são comuns e que um Balron num cinema estaria escondendo algo (CP:R p.211).",
+      "value": {
+        "Basic": { "imp": 1 },
+        "Standard": { "imp": 4, "efreet": 1 },
+        "Uncommon": { "imp": 2, "efreet": 3, "balron": 0.5 },
+        "Advanced": { "efreet": 3, "balron": 2 }
+      }
+    },
+    "enemyNetrunnerChance": { "value": { "Basic": 0.1, "Standard": 0.2, "Uncommon": 0.35, "Advanced": 0.5 }, "complementary": true, "note": "Chance de um Netrunner inimigo estar plugado quando a opção é 'sortear'." }
+  }
+}

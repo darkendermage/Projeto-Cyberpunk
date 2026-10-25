@@ -5,11 +5,11 @@ import {
   characterApi, downloadCharacter, problemMessage, readCharacterFile, useCharacterLibrary, useCharacterRules, useCharacters,
 } from '../../api/characters';
 import type { CharacterSummary, CreationMethod } from '../../api/characterTypes';
-import { Button, ComboBox, EmptyState, ErrorState, Field, IconButton, Modal, Select, Spinner } from '../../components/ui/ui';
+import { Button, EmptyState, ErrorState, Field, IconButton, Modal, Select, Spinner } from '../../components/ui/ui';
 import { formatEb } from '../../lib/format';
 import { useToast } from '../../state/ToastContext';
 import page from '../../styles/Page.module.css';
-import { formatDate, languagesFor, METHOD_HINT, METHOD_LABEL, STATUS_LABEL } from './characterLabels';
+import { formatDate, languagesFor, METHOD_HINT, METHOD_LABEL, STATUS_LABEL, withCurrent } from './characterLabels';
 import { StateTag } from './CharacterUi';
 import styles from './Characters.module.css';
 
@@ -215,10 +215,16 @@ export function NewCharacterModal({ open, onClose }: { open: boolean; onClose: (
                 </Select>
               </Field>
               <Field label="Idioma de origem" htmlFor="nc-lang" hint={`Language nível ${r.originLanguageLevel}, sem custo`}>
-                <ComboBox id="nc-lang" value={language} onChange={setLanguage} options={languages} placeholder="Escolha ou digite…" />
+                <Select id="nc-lang" value={language} onChange={(e) => setLanguage(e.target.value)}>
+                  <option value="">Escolha…</option>
+                  {withCurrent(languages, language).map((l) => <option key={l} value={l}>{l}</option>)}
+                </Select>
               </Field>
               <Field label="Bairro (Local Expert)" htmlFor="nc-home">
-                <ComboBox id="nc-home" value={home} onChange={setHome} options={r.homes} placeholder="Escolha ou digite…" />
+                <Select id="nc-home" value={home} onChange={(e) => setHome(e.target.value)}>
+                  {!home && <option value="">Escolha…</option>}
+                  {withCurrent(r.homes, home).map((h) => <option key={h} value={h}>{h}</option>)}
+                </Select>
               </Field>
               {method === 'CompletePackage' && cp && (
                 <Field label="Pontos de STAT" htmlFor="nc-preset" hint="O livro recomenda o Starting Character (CP:R p.78)">

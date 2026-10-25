@@ -23,18 +23,16 @@ public sealed class CombatOperations(CharacterRuleBook rules, CharacterCalculato
         if (request.Amount < 0) throw CharacterChange.Refuse("amount", "Dano não pode ser negativo.");
         var before = calculator.Calculate(sheet, change.Catalog);
         var slot = request.Location == InjuryLocation.Head ? ArmorSlot.Head : ArmorSlot.Body;
-        var sp = request.BypassArmor ? 0 : (slot == ArmorSlot.Head ? before.Armor.Head.Sp : before.Armor.Body.Sp);
-
-        var through = Math.Max(0, request.Amount - sp);
-        if (slot == ArmorSlot.Head && through > 0)
-            through *= sheet.Injuries.Any(i => i.Status == InjuryStatus.Active && i.Name.Equals(Cracked, StringComparison.OrdinalIgnoreCase)) ? 3 : 2;
+        var sp = DamageMath.EffectiveSp(slot == ArmorSlot.Head ? before.Armor.Head.Sp : before.Armor.Body.Sp, request.HalveArmor, request.BypassArmor);
+        var cracked = sheet.Injuries.Any(i => i.Status == InjuryStatus.Active && i.Name.Equals(Cracked, StringComparison.OrdinalIgnoreCase));
+        var through = DamageMath.Through(request.Amount, sp, slot == ArmorSlot.Head, cracked);
 
         var hp = before.Health.CurrentHp;
         var after = Math.Max(0, hp - through);
         var where = slot == ArmorSlot.Head ? "cabeça" : "corpo";
         change.Log(CharacterEventKind.Combat, "damage",
             (request.Description is { Length: > 0 } d ? d + ": " : "") +
-            $"{request.Amount} de dano no {where}, SP {sp}{(request.BypassArmor ? " ignorado" : "")}; {through} passaram.",
+            $"{request.Amount} de dano no {where}, SP {sp}{(request.BypassArmor ? " ignorado" : request.HalveArmor ? " (metade, corpo a corpo)" : "")}; {through} passaram.",
             -through, hp.ToString(), after.ToString());
 
         var combat = sheet.Combat with { CurrentHp = after, Stabilized = after >= 1 && sheet.Combat.Stabilized };

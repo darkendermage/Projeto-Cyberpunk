@@ -58,7 +58,6 @@ Mais de **1.000 itens conferidos página a página com os livros oficiais**, com
 - **Filtros de verdade:** procure "pistolas com ROF 2 que custam até 500eb" em segundos.
 - **Busca rápida:** aperte `Ctrl` + `K` em qualquer tela e digite o nome.
 - **Favoritos, listas e comparação:** monte a lista de compras do seu Solo ou ponha armas lado a lado para comparar.
-- **Seus próprios itens:** cadastre o equipamento caseiro da sua mesa na área de Administração.
 
 ### 🧬 Personagens
 
@@ -80,6 +79,17 @@ Precisa de uma gangue para emboscar o grupo daqui a cinco minutos?
 - **Três modos:** automático (um clique), semiautomático (você trava o que quer e ele completa o resto) e manual (você monta e ele confere).
 - Toda ficha é conferida com as regras e avisa o que está fora do padrão. O Mestre sempre pode aceitar uma exceção.
 
+### ⚔️ Mesa de Combate
+
+O tiroteio inteiro sem calculadora na mão.
+
+- **Todo mundo na mesma fila:** os PCs (fichas salvas), NPCs salvos, inimigos gerados na hora (até com gangue, tipo "4 Maelstrom Mooks") e genéricos rápidos. Iniciativa REF + 1d10, rodadas e de quem é a vez.
+- **Ataque resolvido como no livro:** DV pelo alcance, esquiva para quem tem REF 8+, Autofire, tiro mirado na cabeça, mão ou perna, Shotgun Shell, explosivos em área, Suppressive Fire e corpo a corpo com metade da armadura.
+- **Dados na mão ou no app:** cada rolagem aceita o número que o jogador tirou; vazio, o app rola.
+- **Ferimentos de verdade:** SP que abla, Wound States com penalidade, Critical Injury nos dois 6, Death Save no início do turno, estabilização, fogo, veneno e queda.
+- **Cobertura com HP:** porta de carro, bloco do motor, mesa virada… que vão se desfazendo a cada tiro.
+- **A ficha acompanha:** o dano e a munição gastos pelos PCs vão direto para a ficha deles.
+
 ### 🏮 Night Market
 
 As feiras clandestinas de Night City, prontas para a sua mesa.
@@ -90,6 +100,17 @@ As feiras clandestinas de Night City, prontas para a sua mesa.
 - **Haggle:** a pechincha do Fixer com os dados de cada lado.
 - **Eventos:** Midnight Market, Door Prize da Molly e Mystery Boxes do Mr. Amaze.
 - **Night Market Index:** as 1.177 linhas do índice oficial, com acesso direto à ficha do item.
+
+### 🕸️ Arquiteturas de NET
+
+O prédio que o seu Netrunner vai invadir, montado em segundos.
+
+- **Gere pelas regras do Core:** dificuldade (Básica a Avançada), 3d6 andares com ramos, Lobby e corpo pelas tabelas oficiais.
+- **Encaixe no mundo:** escolha o tipo de local (boate, escritório, laboratório, base militar…) e cada Control Node ganha uma função (torreta, drone, laser, elevador, sprinklers) e cada File, um conteúdo.
+- **Demons e Watchers:** Imp, Efreet ou Balron cuidando dos drones, e Netrunners inimigos para o stealth do *Going Quiet*.
+- **Edite andar a andar:** role de novo, escolha a linha da tabela, monte um Boss Floor, troque a Black ICE por outra do mesmo preço ou trave o que gostou.
+- **Quanto custa:** o preço de compra calculado como no Core, para quando o grupo quiser proteger o próprio esconderijo.
+- **Leve para a mesa:** mapa em árvore (.svg) e a tabela "Floor | On the Other Side of the Door | DV" pronta para copiar.
 
 ### 📖 Referência de mesa
 

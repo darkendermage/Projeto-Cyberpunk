@@ -5,10 +5,10 @@ import { problemMessage, useCharacterCommand } from '../../api/characters';
 import type {
   CharacterDetail, CharacterRules, CharacterSheet, CreationMethod, RoleRules, SkillRule,
 } from '../../api/characterTypes';
-import { Button, ComboBox, Field, IconButton, Select } from '../../components/ui/ui';
+import { Button, Field, IconButton, Select } from '../../components/ui/ui';
 import { formatEb } from '../../lib/format';
 import { useToast } from '../../state/ToastContext';
-import { languagesFor, METHOD_LABEL, SKILL_CATEGORIES, STAT_LABEL } from './characterLabels';
+import { languagesFor, METHOD_LABEL, SKILL_CATEGORIES, STAT_LABEL, withCurrent } from './characterLabels';
 import { BudgetBar, IssueList, NumberStepper, RoleAbilityButton, SheetPanel } from './CharacterUi';
 import { RelationsPanel, RoleLifepathPanels, RollMissingButton, StyleTablesFields, TablesPanel } from './LifepathPanels';
 import { StorePicker, type PurchaseInput } from './StorePicker';
@@ -154,10 +154,16 @@ function IdentityStep({ sheet, rules, editor, onReset }: {
             </Select>
           </Field>
           <Field label="Idioma de origem" htmlFor="id-lang" hint={`Language ${rules.originLanguageLevel}, sem custo`}>
-            <ComboBox id="id-lang" value={id.nativeLanguage ?? ''} onChange={(v) => set({ nativeLanguage: v })} options={languages} placeholder="Escolha ou digite…" />
+            <Select id="id-lang" value={id.nativeLanguage ?? ''} onChange={(e) => set({ nativeLanguage: e.target.value })}>
+              <option value="">Escolha…</option>
+              {withCurrent(languages, id.nativeLanguage).map((l) => <option key={l} value={l}>{l}</option>)}
+            </Select>
           </Field>
           <Field label="Bairro (Local Expert)" htmlFor="id-home">
-            <ComboBox id="id-home" value={id.home} onChange={(v) => set({ home: v })} options={rules.homes} placeholder="Escolha ou digite…" />
+            <Select id="id-home" value={id.home} onChange={(e) => set({ home: e.target.value })}>
+              {!id.home && <option value="">Escolha…</option>}
+              {withCurrent(rules.homes, id.home).map((h) => <option key={h} value={h}>{h}</option>)}
+            </Select>
           </Field>
         </div>
       </SheetPanel>

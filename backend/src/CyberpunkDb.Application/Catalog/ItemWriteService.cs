@@ -1,5 +1,3 @@
-using System.Globalization;
-using System.Text;
 using System.Text.Json;
 using CyberpunkDb.Application.Abstractions;
 using CyberpunkDb.Application.Catalog.Categories;
@@ -12,49 +10,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CyberpunkDb.Application.Catalog;
 
-/// <summary>Write side of the catalog: create, update, delete, import and export.</summary>
+/// <summary>Write side of the catalog: imports the seed compendium into the database.</summary>
 public sealed class ItemWriteService(IAppDbContext db, CategoryRegistry registry)
 {
-    public async Task<ItemDto> CreateAsync(ItemUpsertDto dto, CancellationToken ct)
-    {
-        var def = registry.Get(dto.Category);
-        var item = def.CreateEntity();
-        var slug = string.IsNullOrWhiteSpace(dto.Slug) ? TextNormalizer.Slugify(dto.Name) : dto.Slug.Trim();
-        if (await db.Items.AnyAsync(i => i.Slug == slug, ct))
-            throw RequestValidationException.For("slug", $"Já existe um item com o identificador '{slug}'.");
-
-        await ApplyAsync(def, item, dto, isCreate: true, defaultOrigin: DataOrigin.Custom, ct);
-        db.Items.Add(item);
-        await db.SaveChangesAsync(ct);
-        return def.ToDto(item);
-    }
-
-    public async Task<ItemDto> UpdateAsync(int id, ItemUpsertDto dto, CancellationToken ct)
-    {
-        var item = await LoadTrackedAsync(id, ct);
-        var def = registry.For(item);
-        if (!string.IsNullOrWhiteSpace(dto.Category) && registry.Get(dto.Category) != def)
-            throw RequestValidationException.For("category", "Não é possível mudar a categoria de um item existente.");
-
-        var slug = string.IsNullOrWhiteSpace(dto.Slug) ? item.Slug : dto.Slug.Trim();
-        if (slug != item.Slug && await db.Items.AnyAsync(i => i.Slug == slug && i.Id != id, ct))
-            throw RequestValidationException.For("slug", $"Já existe um item com o identificador '{slug}'.");
-
-        await ApplyAsync(def, item, dto, isCreate: false, defaultOrigin: item.DataOrigin, ct);
-        await db.SaveChangesAsync(ct);
-        return def.ToDto(item);
-    }
-
-    public async Task DeleteAsync(int id, CancellationToken ct)
-    {
-        var item = await db.Items.FirstOrDefaultAsync(i => i.Id == id, ct) ?? throw new NotFoundException($"Item {id} não encontrado.");
-        // Cyberware options that point to this item lose the link instead of blocking the delete.
-        await db.Set<CyberwareItem>().Where(c => c.RequiresItemId == id)
-            .ExecuteUpdateAsync(s => s.SetProperty(c => c.RequiresItemId, (int?)null), ct);
-        db.Items.Remove(item);
-        await db.SaveChangesAsync(ct);
-    }
-
     /// <summary>Upserts items by slug. Valid rows are saved even if others fail; errors are reported per row.</summary>
     public async Task<ImportResult> ImportAsync(IReadOnlyList<ItemUpsertDto> rows, CancellationToken ct)
     {
@@ -110,71 +68,6 @@ public sealed class ItemWriteService(IAppDbContext db, CategoryRegistry registry
         }
 
         return new ImportResult(created, updated, errors.Count, errors);
-    }
-
-    public async Task<IReadOnlyList<ItemUpsertDto>> ExportAsync(string? categoryKey, CancellationToken ct)
-    {
-        var defs = string.IsNullOrWhiteSpace(categoryKey) ? registry.All : [registry.Get(categoryKey)];
-        var result = new List<ItemUpsertDto>();
-        foreach (var def in defs)
-        {
-            foreach (var item in await def.LoadAllAsync(db, ct))
-            {
-                var attributes = def.ExportAttributes(item);
-                if (item is CyberwareItem { RequiresItem: { } required })
-                    attributes[CyberwareCategory.RequiresKey] = JsonSerializer.SerializeToElement(required.Slug);
-
-                result.Add(new ItemUpsertDto
-                {
-                    Slug = item.Slug,
-                    Name = item.Name,
-                    Category = def.Key,
-                    Description = item.Description,
-                    Notes = item.Notes,
-                    Price = item.PriceEb,
-                    PriceNote = item.PriceNote,
-                    PriceCategory = item.PriceCategory?.ToString(),
-                    Manufacturer = item.Manufacturer?.Name,
-                    Source = item.SourceBook?.Name,
-                    Page = item.Page,
-                    ImageUrl = item.ImageUrl,
-                    RuleSystem = item.RuleSystem.ToString(),
-                    DataOrigin = item.DataOrigin.ToString(),
-                    Tags = item.Tags.Select(t => t.Value).OrderBy(t => t).ToList(),
-                    Attributes = attributes,
-                    Extra = string.IsNullOrWhiteSpace(item.ExtraAttributesJson)
-                        ? null
-                        : JsonDocument.Parse(item.ExtraAttributesJson).RootElement.Clone(),
-                });
-            }
-        }
-        return result;
-    }
-
-    /// <summary>CSV with base columns plus the category attributes as readable text (enum labels, "Sim"/"Não").</summary>
-    public async Task<string> ExportCsvAsync(string categoryKey, CancellationToken ct)
-    {
-        var def = registry.Get(categoryKey);
-        var items = await def.LoadAllAsync(db, ct);
-        var columns = def.ExportColumns;
-
-        var sb = new StringBuilder();
-        var header = new[] { "slug", "nome", "preco_eb", "fabricante", "fonte", "sistema", "origem", "tags", "descricao" }
-            .Concat(columns.Select(c => c.Label));
-        sb.AppendLine(string.Join(';', header.Select(Csv)));
-
-        foreach (var item in items)
-        {
-            var row = def.ToDisplayRow(item);
-            var values = new[]
-            {
-                item.Slug, item.Name, item.PriceEb?.ToString(CultureInfo.InvariantCulture), item.Manufacturer?.Name,
-                item.SourceBook?.Name, EnumLabels.Label(item.RuleSystem), EnumLabels.Label(item.DataOrigin),
-                string.Join(", ", item.Tags.Select(t => t.Value)), item.Description,
-            }.Concat(columns.Select(c => row[c.Key]));
-            sb.AppendLine(string.Join(';', values.Select(Csv)));
-        }
-        return sb.ToString();
     }
 
     // ------------------------------------------------------------------ helpers
@@ -312,12 +205,4 @@ public sealed class ItemWriteService(IAppDbContext db, CategoryRegistry registry
         (Uri.TryCreate(url, UriKind.Absolute, out var uri) && (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps));
 
     private static string? NullIfEmpty(string? value) => string.IsNullOrWhiteSpace(value) ? null : value.Trim();
-
-    private static string Csv(string? value)
-    {
-        if (string.IsNullOrEmpty(value)) return string.Empty;
-        // Neutralise spreadsheet formula injection and quote fields that need it.
-        if (value[0] is '=' or '+' or '-' or '@') value = "'" + value;
-        return value.IndexOfAny([';', '"', '\n', '\r']) >= 0 ? $"\"{value.Replace("\"", "\"\"")}\"" : value;
-    }
 }

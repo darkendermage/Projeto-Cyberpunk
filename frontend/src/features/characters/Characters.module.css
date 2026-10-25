@@ -326,7 +326,9 @@
   line-height: 1;
   color: var(--text);
 }
-.statValue[data-changed='true'] { color: var(--amber); }
+/* Raised by cyberware or effects reads as a boost; lowered (armor penalty) as a warning. */
+.statValue[data-changed='up'] { color: var(--green); }
+.statValue[data-changed='down'] { color: var(--amber); }
 .statBase {
   align-self: center;
   font-family: var(--font-mono);
@@ -674,6 +676,8 @@
 .tableFieldInput {
   display: flex;
   gap: 4px;
+  /* Long labels wrap to two lines; pushing the input down keeps every input of a grid row aligned. */
+  margin-top: auto;
 }
 .tableFieldInput .input { min-width: 0; }
 
