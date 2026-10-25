@@ -33,7 +33,13 @@ export const characterApi = {
   uploadPortrait: async (id: number, file: File) => {
     const form = new FormData();
     form.append('file', file);
-    const response = await fetch(`${API_BASE}/characters/${id}/portrait`, { method: 'PUT', body: form });
+    let response: Response;
+    try {
+      response = await fetch(`${API_BASE}/characters/${id}/portrait`, { method: 'PUT', body: form });
+    } catch {
+      // The server closes the connection on an oversized upload, so the browser only sees a network failure.
+      throw new ApiError(0, { title: 'Não deu para enviar o retrato. Verifique se a imagem tem até 2 MB e se o programa está aberto.' });
+    }
     if (!response.ok) {
       let problem = { title: `Erro ${response.status}` } as { title?: string; errors?: Record<string, string[]> };
       try { problem = await response.json(); } catch { /* non-JSON */ }

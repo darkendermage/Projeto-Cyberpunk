@@ -4,6 +4,7 @@ import { characterApi, problemMessage, useStoreCharacter } from '../../api/chara
 import type { CharacterDetail, CharacterIssue, CharacterRules, CreationBudget } from '../../api/characterTypes';
 import { IconButton, Modal } from '../../components/ui/ui';
 import { formatEb } from '../../lib/format';
+import { PortraitError, preparePortrait } from '../../lib/portrait';
 import { useToast } from '../../state/ToastContext';
 import type { SaveStatus } from './useSheetEditor';
 import styles from './Characters.module.css';
@@ -157,10 +158,10 @@ export function Portrait({ detail, compact }: { detail: CharacterDetail; compact
     if (!file) return;
     setBusy(true);
     try {
-      await characterApi.uploadPortrait(detail.id, file);
+      await characterApi.uploadPortrait(detail.id, await preparePortrait(file));
       await refresh();
     } catch (error) {
-      toast.notify(problemMessage(error), 'error');
+      toast.notify(error instanceof PortraitError ? error.message : problemMessage(error), 'error');
     } finally {
       setBusy(false);
       if (input.current) input.current.value = '';
@@ -183,7 +184,7 @@ export function Portrait({ detail, compact }: { detail: CharacterDetail; compact
         : <div className={styles.portraitEmpty}><UserRound size={compact ? 32 : 72} /></div>}
       <div className={styles.portraitActions}>
         <input ref={input} type="file" accept="image/png,image/jpeg,image/webp,image/gif" hidden onChange={(e) => upload(e.target.files?.[0])} />
-        <IconButton label="Trocar retrato (até 2 MB)" onClick={() => input.current?.click()} disabled={busy}><ImagePlus size={16} /></IconButton>
+        <IconButton label="Trocar retrato (imagens grandes são reduzidas)" onClick={() => input.current?.click()} disabled={busy}><ImagePlus size={16} /></IconButton>
         {detail.hasPortrait && <IconButton label="Remover retrato" onClick={remove} disabled={busy}><Trash2 size={16} /></IconButton>}
       </div>
     </div>
