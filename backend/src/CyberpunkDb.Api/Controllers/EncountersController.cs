@@ -55,6 +55,10 @@ public sealed class EncountersController(EncounterService encounters) : Controll
     public Task<EncounterDetailDto> SetInitiative(int id, string combatantId, SetInitiativeRequest request, CancellationToken ct) =>
         encounters.SetInitiativeAsync(id, combatantId, request, ct);
 
+    [HttpPost("{id:int}/combatants/{combatantId}/move")]
+    public Task<EncounterDetailDto> Move(int id, string combatantId, MoveInQueueRequest request, CancellationToken ct) =>
+        encounters.MoveInQueueAsync(id, combatantId, request, ct);
+
     [HttpPost("{id:int}/combatants/{combatantId}/active")]
     public Task<EncounterDetailDto> SetActive(int id, string combatantId, EncounterVersionRequest request, CancellationToken ct) =>
         encounters.SetActiveAsync(id, combatantId, request, ct);

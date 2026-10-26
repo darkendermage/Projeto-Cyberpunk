@@ -96,7 +96,7 @@ function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
   ];
   const others = [
     { to: '/enemies', label: 'Gerador de Inimigos', icon: <Skull size={19} /> },
-    { to: '/combat', label: 'Mesa de Combate', icon: <Crosshair size={19} />, active: location.pathname.startsWith('/combat') },
+    { to: '/combat', label: 'Friday Night Firefight', icon: <Crosshair size={19} />, active: location.pathname.startsWith('/combat') },
     { to: '/night-market', label: 'Night Market', icon: <Store size={19} />, active: location.pathname.startsWith('/night-market') },
     { to: '/net-architecture', label: 'Arquiteturas de NET', icon: <Network size={19} />, active: location.pathname.startsWith('/net-architecture') },
     { to: '/rules', label: 'Regras Rápidas', icon: <FileText size={19} /> },

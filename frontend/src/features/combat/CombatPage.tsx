@@ -32,9 +32,9 @@ function Library() {
   return (
     <div className={page.page}>
       <header className={page.header}>
-        <h1>Mesa de Combate</h1>
+        <h1>Friday Night Firefight</h1>
         <p className={page.lead}>
-          O Friday Night Firefight do Core (p.168–188) na mesa: PCs e inimigos na mesma fila de iniciativa, ataques resolvidos com a DV
+          A mesa de combate do Core (p.168–188): PCs e inimigos na mesma fila de iniciativa, ataques resolvidos com a DV
           do alcance, Autofire, tiro mirado, corpo a corpo com metade da armadura, cobertura com HP, Critical Injuries e Death Saves. O dano
           nos PCs vai direto para a ficha deles.
         </p>

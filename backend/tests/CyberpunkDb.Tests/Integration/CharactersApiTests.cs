@@ -107,6 +107,16 @@ public class CharactersApiTests(ApiFactory factory)
         }
     }
 
+    [Fact]
+    public async Task Cyberware_brings_its_short_effect_for_the_hover()
+    {
+        var store = (await _client.GetFromJsonAsync<StorePageDto>("/api/characters/store?category=Cyberware&pageSize=1000", Json))!;
+        store.Items.Should().NotBeEmpty().And.OnlyContain(i => !string.IsNullOrWhiteSpace(i.Effect));
+
+        var c = await FinalizedSolo("Hover");
+        c.Report.Cyberware.Should().NotBeEmpty().And.OnlyContain(l => !string.IsNullOrWhiteSpace(l.Effect));
+    }
+
     // ------------------------------------------------------------ 1. the three methods
 
     // ------------------------------------------------------------ export and import

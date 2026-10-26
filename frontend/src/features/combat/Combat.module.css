@@ -105,6 +105,24 @@
   cursor: pointer;
 }
 .queueRow:hover { border-color: var(--red-line); }
+.queueItem { position: relative; display: flex; align-items: center; gap: 4px; }
+.queueItem[draggable='true'] { cursor: grab; }
+.dragging { opacity: 0.45; }
+.dropBefore::before, .dropAfter::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--red);
+  box-shadow: var(--glow-sm);
+  pointer-events: none;
+}
+.dropBefore::before { top: -4px; }
+.dropAfter::after { bottom: -4px; }
+.grip { flex: none; color: var(--text-faint); }
+.moveButtons { display: flex; flex-direction: column; gap: 2px; flex: none; }
+.moveButton { width: 22px; height: 18px; min-height: 0; padding: 0; }
 .ally { border-left-color: var(--cyan); }
 .enemy { border-left-color: var(--red); }
 .queueActive { box-shadow: var(--glow-sm); border-color: var(--red); background: rgba(255, 42, 61, 0.08); }
@@ -142,6 +160,66 @@
 .stats dt { font-family: var(--font-display); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); }
 .stats dd { margin: 0; font-family: var(--font-mono); font-size: 16px; color: var(--text); }
 .injuries { margin: 0; padding-left: 18px; font-size: 13px; color: var(--amber); }
+
+/* ------------------------------------------------------------ read-only sheet */
+
+.tableView { display: flex; flex-direction: column; gap: 18px; }
+.tableView[hidden] { display: none; }
+
+/* Tabs above the table: the table itself plus one per opened sheet, closable like browser tabs. */
+.sheetTabs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 4px;
+  margin-bottom: -10px;
+  border-bottom: 1px solid var(--red-line);
+}
+.sheetTab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 240px;
+  padding: 7px 12px;
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--text-2);
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-bottom: none;
+  border-top: 2px solid transparent;
+}
+.sheetTab:hover { color: var(--text); }
+.sheetTab.ally { border-top-color: rgba(61, 224, 255, 0.45); }
+.sheetTab.enemy { border-top-color: rgba(255, 42, 61, 0.45); }
+.sheetTabActive { color: var(--red-bright); background: var(--red-haze); border-color: var(--red-line); border-top-color: var(--red); }
+.sheetTabName {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  padding: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: inherit;
+  background: none;
+  border: 0;
+}
+.sheetTabClose { width: 20px; height: 20px; min-height: 0; padding: 0; margin-right: -4px; }
+.sheetList { display: flex; flex-direction: column; gap: 4px; margin: 0; padding: 0; list-style: none; font-size: 13.5px; color: var(--text-2); }
+.sheetList strong { color: var(--text); font-weight: 600; }
+.skillList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 2px 14px;
+  margin: 0;
+}
+.skillList div { display: flex; justify-content: space-between; gap: 8px; padding: 3px 0; border-bottom: 1px solid var(--line); font-size: 13.5px; }
+.skillList dt { color: var(--text-2); }
+.skillList dd { margin: 0; font-family: var(--font-mono); color: var(--text); }
 
 /* ------------------------------------------------------------ attack result */
 

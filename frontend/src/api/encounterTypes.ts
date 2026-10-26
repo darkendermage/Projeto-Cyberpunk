@@ -66,7 +66,12 @@ export interface FighterView {
   characterId: number | null;
   characterVersion: number | null;
   source: string | null;
+  /** NPCs and generic enemies: STATs and Skills of the snapshot (PCs read their own sheet). */
+  stats?: NamedValue[] | null;
+  skills?: NamedValue[] | null;
 }
+
+export interface NamedValue { id: string; label: string; value: number }
 
 export interface CoverPiece {
   id: string;

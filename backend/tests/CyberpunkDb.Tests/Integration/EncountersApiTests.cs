@@ -117,4 +117,44 @@ public class EncountersApiTests(ApiFactory factory)
         e["status"]!.GetValue<string>().Should().Be("Ended");
         (await _client.DeleteAsync($"/api/encounters/{id}")).StatusCode.Should().Be(HttpStatusCode.NoContent);
     }
+
+    [Fact]
+    public async Task Dragging_in_the_queue_takes_the_neighbor_initiative_and_keeps_the_order()
+    {
+        var e = await Post("/api/encounters", new { name = "Fila" }, HttpStatusCode.Created);
+        var id = e["id"]!.GetValue<int>();
+        foreach (var name in new[] { "A", "B", "C", "D" })
+            e = await Post($"/api/encounters/{id}/combatants", new
+            {
+                version = V(e), side = "Enemy", generic = new { name, attackBase = 10, damage = "2d6", weaponClass = "MediumPistol" },
+            });
+        string Id(string name) => Fighter(e, name)["id"]!.GetValue<string>();
+        string[] Order() => e["queue"]!.AsArray().Select(f => f!["name"]!.GetValue<string>()).ToArray();
+        int Init(string name) => Fighter(e, name)["initiative"]!.GetValue<int>();
+
+        (await _client.PostAsJsonAsync($"/api/encounters/{id}/combatants/{Id("A")}/move", new { version = V(e) }))
+            .StatusCode.Should().Be(HttpStatusCode.BadRequest, "sem iniciativa não há número para assumir");
+
+        foreach (var (name, value) in new[] { ("A", 20), ("B", 15), ("C", 15), ("D", 10) })
+            e = await Post($"/api/encounters/{id}/combatants/{Id(name)}/initiative", new { version = V(e), initiative = value });
+        e = await Post($"/api/encounters/{id}/combatants/{Id("A")}/active", new { version = V(e) });
+
+        // D to the top: takes A's 20 and wins the tie.
+        e = await Post($"/api/encounters/{id}/combatants/{Id("D")}/move", new { version = V(e), beforeId = Id("A") });
+        Order()[0].Should().Be("D");
+        Order()[1].Should().Be("A");
+        Init("D").Should().Be(20);
+
+        // A to the bottom: takes the 15 of the one above and loses the tie.
+        var middle = Order()[2..];
+        e = await Post($"/api/encounters/{id}/combatants/{Id("A")}/move", new { version = V(e) });
+        Order().Should().Equal(["D", .. middle, "A"]);
+        Init("A").Should().Be(15);
+        Fighter(e, "A")["id"]!.GetValue<string>().Should().Be(e["activeId"]!.GetValue<string>(), "mover não passa o turno");
+
+        // Changing someone else keeps the tie as the GM left it.
+        e = await Post($"/api/encounters/{id}/combatants/{Id("D")}/initiative", new { version = V(e), initiative = 30 });
+        Order().Should().Equal(["D", .. middle, "A"]);
+        e["log"]!.AsArray().Select(l => l!["text"]!.GetValue<string>()).Should().Contain(t => t.Contains("movido na fila"));
+    }
 }

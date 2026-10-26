@@ -95,7 +95,7 @@ Para produção, rode `npm run build` e copie `frontend/dist` para `backend/src/
 ### Testes
 
 ```bash
-cd backend && dotnet test     # 402 testes: filtros, validação, gerador de NPCs e gangues, regras de personagem, Night Market, Arquiteturas de NET, Mesa de Combate, atualização automática e integração da API (SQLite + seed real)
+cd backend && dotnet test     # 404 testes: filtros, validação, gerador de NPCs e gangues, regras de personagem, Night Market, Arquiteturas de NET, Friday Night Firefight (mesa de combate), atualização automática e integração da API (SQLite + seed real)
 cd frontend && npm test       # filtros, URL, editor de NPCs, tabela de alcance, perícias, Lifepath, anatomia do cyberware e Night Market
 ```
 
@@ -324,9 +324,9 @@ Regras complementares (sem valor oficial): a roleta do Door Prize (o BC+ só nar
 
 `node tools/night-market/extract.mjs ["pasta dos PDFs"]` (precisa do `pdftotext` no PATH) gera `data/source/night-market-index.json` (o índice, ligado ao catálogo pelo nome) e `data/source/black-chrome-booths.json` (os booths de cada listagem do Black Chrome). As poucas linhas que o layout do PDF quebra estão corrigidas à mão no próprio script, cada uma com a página. Os dois arquivos vão embutidos na aplicação.
 
-## Mesa de Combate
+## Friday Night Firefight (Mesa de Combate)
 
-Página `/combat`. As regras do Friday Night Firefight ficam em `backend/src/CyberpunkDb.Application/Encounters/Rules/combat-rules.json`, com página ou a marca `complementary`. Autofire, Critical Injuries, Wound States e Death Save não são repetidos: vêm de `character-rules.json`, as mesmas regras do painel de combate da ficha.
+Página `/combat`, chamada de Friday Night Firefight no menu. As regras do Friday Night Firefight ficam em `backend/src/CyberpunkDb.Application/Encounters/Rules/combat-rules.json`, com página ou a marca `complementary`. Autofire, Critical Injuries, Wound States e Death Save não são repetidos: vêm de `character-rules.json`, as mesmas regras do painel de combate da ficha.
 
 - **PCs** entram como um link para a ficha. Dano (`DamageRequest`, com `HalveArmor` para corpo a corpo), Critical Injuries, Death Saves, cura e munição (`FireRequest`) passam pelas operações da própria ficha.
 - **NPCs e genéricos** entram como um *snapshot* (STATs efetivos, bases de perícia, armas do catálogo, SP, HP e BODY) e o estado de cada um (HP, SP ablada, lesões, penalidade do Death Save, munição) fica no encontro. A conta do dano (`Characters/Operations/DamageMath.cs`) é a mesma da ficha.
@@ -345,7 +345,7 @@ Página `/combat`. As regras do Friday Night Firefight ficam em `backend/src/Cyb
 
 Os exemplos do livro são testes: o tiro e o Autofire do Royal (p.170 e p.173), o machete contra o Rico Rico (p.175) e a barricada da Gina (p.182).
 
-Regras complementares: alcance informado em metros; inimigo genérico com valores iniciais editáveis; munição dos NPCs contada no encontro, de pente cheio ao entrar. A tabela de exemplos de cobertura usa o HP que o livro lista (a porta de metal aparece com 20 HP, embora Thin Steel valha 25 na tabela de materiais).
+Regras complementares: alcance informado em metros; reordenar a fila à mão (`POST combatants/{id}/move`) faz o combatente assumir a iniciativa do vizinho de baixo (ou de cima, no fim da fila) e decide o empate na ordem escolhida, e um empate já decidido não é rolado de novo quando outra iniciativa muda; inimigo genérico com valores iniciais editáveis; munição dos NPCs contada no encontro, de pente cheio ao entrar. A tabela de exemplos de cobertura usa o HP que o livro lista (a porta de metal aparece com 20 HP, embora Thin Steel valha 25 na tabela de materiais).
 
 ## Arquiteturas de NET
 

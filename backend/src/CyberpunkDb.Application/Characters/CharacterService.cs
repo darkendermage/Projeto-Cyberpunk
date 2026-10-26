@@ -72,7 +72,7 @@ public sealed class CharacterService(
                 CharacterValidator.IsFashion(i), i.Cyber is not null && i.Ammo is null,
                 i.Ammo?.Calibers ?? i.Weapon?.Calibers ?? [], i.Ammo?.PerPack, StoreSummary(i),
                 i.Cyber?.Type, i.Cyber?.Location, i.Cyber?.HumanityLoss, i.Cyber?.HumanityLossDice, i.Cyber?.Foundational ?? false,
-                i.Cyber?.Requirements, descriptions.GetValueOrDefault(i.Id)))
+                i.Cyber?.Requirements, descriptions.GetValueOrDefault(i.Id), i.Cyber?.Effect))
             .ToList();
         return new StorePageDto(items, matches.Count, page, pageSize);
     }

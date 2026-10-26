@@ -172,7 +172,7 @@ public sealed class EncounterService(
                 var roll = r.Rolls?.GetValueOrDefault(c.Id) is int typed and >= 1 and <= 10 ? typed : dice.Roll(10);
                 var reflex = fighters[c.Id].Ref;
                 lines.Add($"{c.Name}: REF {reflex} + {roll} = {reflex + roll}");
-                return c with { Initiative = reflex + roll };
+                return c with { Initiative = reflex + roll, TieBreak = 0 };
             }).ToList();
             list = BreakTies(list);
             var next = s with { Combatants = list };
@@ -185,9 +185,34 @@ public sealed class EncounterService(
         MutateAsync(id, r.Version, (s, _, _) =>
         {
             var c = Require(s, combatantId);
-            var next = Replace(s, c with { Initiative = r.Initiative });
+            var next = Replace(s, c with { Initiative = r.Initiative, TieBreak = 0 });
             next = next with { Combatants = BreakTies(next.Combatants) };
             return Task.FromResult(Log(next, c.Id, "initiative", $"{c.Name}: Iniciativa {r.Initiative} (ajuste manual)."));
+        }, ct);
+
+    /// <summary>
+    /// Manual reorder: the moved combatant takes the Initiative of its new neighbor below (above when at the bottom) and the
+    /// tie with that Initiative is settled in the order the GM chose, so the queue stays sorted by Initiative.
+    /// </summary>
+    public Task<EncounterDetailDto> MoveInQueueAsync(int id, string combatantId, MoveInQueueRequest r, CancellationToken ct) =>
+        MutateAsync(id, r.Version, (s, _, _) =>
+        {
+            var c = Require(s, combatantId);
+            if (r.BeforeId == c.Id) return Task.FromResult(s);
+            var order = s.Queue.Where(x => x.Id != c.Id).ToList();
+            var at = r.BeforeId is null ? order.Count : order.FindIndex(x => x.Id == r.BeforeId);
+            if (at < 0) throw new NotFoundException("Combatente não encontrado.");
+            order.Insert(at, c);
+
+            var initiative = (at + 1 < order.Count ? order[at + 1].Initiative : null) ?? (at > 0 ? order[at - 1].Initiative : null)
+                ?? throw RequestValidationException.For("initiative", "Role a iniciativa primeiro.");
+            order[at] = c with { Initiative = initiative };
+            var group = order.Where(x => x.Initiative == initiative).ToList();
+            var tieBreaks = group.Select((x, i) => (x.Id, TieBreak: group.Count == 1 ? 0 : group.Count - i)).ToDictionary(x => x.Id, x => x.TieBreak);
+            var list = s.Combatants.Select(x => x.Id == c.Id ? order[at] : x)
+                .Select(x => tieBreaks.TryGetValue(x.Id, out var t) ? x with { TieBreak = t } : x).ToList();
+            var next = s with { Combatants = list };
+            return Task.FromResult(Log(next, c.Id, "initiative", $"{c.Name}: movido na fila (Iniciativa {initiative}, ajuste manual)."));
         }, ct);
 
     public Task<EncounterDetailDto> SetActiveAsync(int id, string combatantId, EncounterVersionRequest r, CancellationToken ct) =>
@@ -564,13 +589,17 @@ public sealed class EncounterService(
         Ammo = snapshot.Weapons.Where(w => w.Magazine is not null).ToDictionary(w => w.Key, w => w.Magazine!.Value),
     };
 
-    /// <summary>Tied Initiatives roll again until the higher number wins (CP:R p.168).</summary>
+    /// <summary>
+    /// Tied Initiatives roll again until the higher number wins (CP:R p.168). A tie already settled (every tie-break set
+    /// and distinct, by an earlier roll or a manual move) is kept, so changing someone else does not reshuffle it.
+    /// </summary>
     private List<Combatant> BreakTies(List<Combatant> list) =>
         list.Select(c => c.Initiative is null || list.Count(o => o.Initiative == c.Initiative) == 1 ? c with { TieBreak = 0 } : c)
             .GroupBy(c => c.Initiative).SelectMany(g =>
             {
                 var group = g.ToList();
                 if (g.Key is null || group.Count == 1) return group;
+                if (group.All(c => c.TieBreak > 0) && group.Select(c => c.TieBreak).Distinct().Count() == group.Count) return group;
                 var rolls = new HashSet<int>();
                 return group.Select(c =>
                 {

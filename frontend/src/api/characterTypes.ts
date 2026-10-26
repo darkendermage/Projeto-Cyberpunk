@@ -343,6 +343,8 @@ export interface CyberLine {
   requirements: string | null;
   /** A glove worn over this arm makes the option inaccessible. */
   coveredBy?: string | null;
+  /** Short effect text from the catalog, shown on hover. */
+  effect?: string | null;
 }
 
 export type WearableAccepts = 'Cybereye' | 'Cyberarm' | 'Cyberaudio';
@@ -647,6 +649,8 @@ export interface StoreItem {
   requirements: string | null;
   /** Catalog description (book text or summary), shown when the item is opened. */
   description: string | null;
+  /** Short effect text (cyberware), shown on hover. */
+  effect?: string | null;
 }
 
 /** One page of the store. */

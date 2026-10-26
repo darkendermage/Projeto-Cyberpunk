@@ -26,7 +26,9 @@ public sealed record FighterView(
     IReadOnlyList<WeaponView> Weapons,
     IReadOnlyList<InjuryView> Injuries, IReadOnlyList<string> Conditions,
     int DeathSavePenalty, int DeathSaveTarget, bool MustDeathSave, bool Dead, bool Stabilized,
-    string? CoverId, int? CharacterId, int? CharacterVersion, string? Source)
+    string? CoverId, int? CharacterId, int? CharacterVersion, string? Source,
+    // NPCs and generic enemies: the STATs and Skills of the snapshot, for the read-only sheet. PCs read their own sheet.
+    IReadOnlyList<NamedValueDto>? Stats = null, IReadOnlyList<NamedValueDto>? Skills = null)
 {
     public bool CanDodge(int dodgeRef) => Ref >= dodgeRef;
     public bool CrackedSkull => Injuries.Any(i => i.Name.Equals("Cracked Skull", StringComparison.OrdinalIgnoreCase));
@@ -113,7 +115,16 @@ public sealed class FighterViews(CharacterRuleBook characterRules, CharacterCalc
             weapons,
             c.Injuries.Select(i => new InjuryView(i.Name, i.Location, i.Effect, i.DeathSave)).ToList(), c.Conditions,
             basePenalty + c.DeathSavePenalty, s.Body, wound == WoundState.Mortally && !c.Dead, c.Dead, c.Stabilized,
-            c.CoverId, null, null, s.Source);
+            c.CoverId, null, null, s.Source,
+            s.Stats.Select(x => new NamedValueDto(x.Key, x.Key.ToUpperInvariant(), x.Value)).ToList(),
+            s.Skills.Select(x => new NamedValueDto(x.Key, SkillLabel(x.Key), Skill(x.Key))).OrderBy(x => x.Label, StringComparer.OrdinalIgnoreCase).ToList());
+    }
+
+    private string SkillLabel(string key)
+    {
+        var parts = key.Split(':', 2);
+        var name = npcRules.FindSkill(parts[0])?.Name ?? parts[0];
+        return parts.Length == 2 ? $"{name} ({parts[1]})" : name;
     }
 
     /// <summary>Brawling and each Martial Arts form the combatant knows, with damage by BODY (CP:R p.176, p.178).</summary>

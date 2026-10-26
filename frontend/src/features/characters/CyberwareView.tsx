@@ -6,7 +6,7 @@ import type {
   CharacterDetail, CharacterRules, CyberLine, CyberRegionReport, InstallRequestBody, StoreItem,
 } from '../../api/characterTypes';
 import { useItemDetail } from '../../api/hooks';
-import { Button, Checkbox, Modal, Select, Spinner } from '../../components/ui/ui';
+import { Button, Checkbox, Modal, Select, Spinner, Tooltip } from '../../components/ui/ui';
 import { formatEb } from '../../lib/format';
 import { useDebouncedValue } from '../../lib/hooks';
 import { useToast } from '../../state/ToastContext';
@@ -158,12 +158,14 @@ function RegionPanel({ region, lines, active, selection, onRegion, onPiece }: {
           if (!l) return null;
           const selected = selection?.kind === 'installed' && selection.instanceId === id;
           return (
-            <button key={id} type="button" onClick={() => onPiece(id)} aria-pressed={selected}
-              className={`${styles.piece} ${l.foundational ? styles.pieceFoundation : ''} ${selected ? styles.pieceSelected : ''}`}>
-              {l.name}
-              <small>HL {l.humanityLossApplied}{l.slotsProvided ? ` · ${l.slotsUsed}/${l.slotsProvided}` : ''}</small>
-              {l.coveredBy && <small className={base.amber} title="Inacessível enquanto a luva estiver vestida">coberto por {l.coveredBy}</small>}
-            </button>
+            <Tooltip key={id} content={l.effect}>
+              <button type="button" onClick={() => onPiece(id)} aria-pressed={selected}
+                className={`${styles.piece} ${l.foundational ? styles.pieceFoundation : ''} ${selected ? styles.pieceSelected : ''}`}>
+                {l.name}
+                <small>HL {l.humanityLossApplied}{l.slotsProvided ? ` · ${l.slotsUsed}/${l.slotsProvided}` : ''}</small>
+                {l.coveredBy && <small className={base.amber} title="Inacessível enquanto a luva estiver vestida">coberto por {l.coveredBy}</small>}
+              </button>
+            </Tooltip>
           );
         })}
         {Array.from({ length: Math.min(free, 4) }, (_, i) => (
@@ -223,18 +225,20 @@ function Clinic({ detail, region, onClearRegion, selection, onPick }: {
           const active = selection?.kind === 'catalog' && selection.item.id === i.id;
           const pricey = (i.price ?? 0) > budget;
           return (
-            <button key={i.id} type="button" role="option" aria-selected={active}
-              className={`${styles.catalogItem} ${active ? styles.catalogItemActive : ''}`} onClick={() => onPick(i)}>
-              <span className={styles.catalogName}>{i.name}</span>
-              <span className={styles.price}>{formatEb(i.price)}</span>
-              <span className={styles.catalogMeta}>
-                <span className={base.tag}>{CYBER_TYPE_LABEL[i.cyberType ?? ''] ?? i.cyberType}</span>
-                <span>{humanityLossLabel(i.humanityLoss, i.humanityLossDice, creating)}</span>
-                {installed.has(i.id) && <span className={`${base.tag} ${base.tagRole}`}>instalado</span>}
-                {pricey && <span className={`${base.tag}`} style={{ color: 'var(--amber)' }}>acima do saldo</span>}
-                {i.requirements && !/^(Mall|Clinic|Hospital)$/i.test(i.requirements) && <span className={base.source}>{i.requirements}</span>}
-              </span>
-            </button>
+            <Tooltip key={i.id} content={i.effect ?? i.summary}>
+              <button type="button" role="option" aria-selected={active}
+                className={`${styles.catalogItem} ${active ? styles.catalogItemActive : ''}`} onClick={() => onPick(i)}>
+                <span className={styles.catalogName}>{i.name}</span>
+                <span className={styles.price}>{formatEb(i.price)}</span>
+                <span className={styles.catalogMeta}>
+                  <span className={base.tag}>{CYBER_TYPE_LABEL[i.cyberType ?? ''] ?? i.cyberType}</span>
+                  <span>{humanityLossLabel(i.humanityLoss, i.humanityLossDice, creating)}</span>
+                  {installed.has(i.id) && <span className={`${base.tag} ${base.tagRole}`}>instalado</span>}
+                  {pricey && <span className={`${base.tag}`} style={{ color: 'var(--amber)' }}>acima do saldo</span>}
+                  {i.requirements && !/^(Mall|Clinic|Hospital)$/i.test(i.requirements) && <span className={base.source}>{i.requirements}</span>}
+                </span>
+              </button>
+            </Tooltip>
           );
         })}
         {catalog.data && items.length === 0 && <p className={base.muted}>Nada nesta região com esse filtro.</p>}

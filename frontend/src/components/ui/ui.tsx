@@ -1,4 +1,7 @@
-import { useEffect, useId, useRef, useState, type ButtonHTMLAttributes, type InputHTMLAttributes, type ReactNode, type SelectHTMLAttributes } from 'react';
+import {
+  cloneElement, useEffect, useId, useRef, useState,
+  type ButtonHTMLAttributes, type InputHTMLAttributes, type ReactElement, type ReactNode, type SelectHTMLAttributes,
+} from 'react';
 import { createPortal } from 'react-dom';
 import clsx from 'clsx';
 import { AlertTriangle, Check, ChevronDown, RefreshCw, SearchX, X } from 'lucide-react';
@@ -280,6 +283,50 @@ export function Collapsible({
 }
 
 // ---------------------------------------------------------------- overlays
+
+/**
+ * A short hint on hover or keyboard focus. The bubble is portaled so scrolling lists don't clip it, and the wrapper uses
+ * display: contents, so the child keeps its place in grids and flex rows. Without content it renders only the child.
+ */
+export function Tooltip({ content, children }: { content?: ReactNode; children: ReactElement<{ 'aria-describedby'?: string }> }) {
+  const id = useId();
+  const wrap = useRef<HTMLSpanElement>(null);
+  const timer = useRef<number | undefined>(undefined);
+  const [rect, setRect] = useState<DOMRect | null>(null);
+
+  useEffect(() => () => window.clearTimeout(timer.current), []);
+  useEffect(() => {
+    if (!rect) return;
+    const hide = () => setRect(null);
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') hide(); };
+    window.addEventListener('scroll', hide, true);
+    window.addEventListener('keydown', onKey);
+    return () => { window.removeEventListener('scroll', hide, true); window.removeEventListener('keydown', onKey); };
+  }, [rect]);
+
+  if (!content) return children;
+  const show = () => {
+    window.clearTimeout(timer.current);
+    timer.current = window.setTimeout(() => setRect(wrap.current?.firstElementChild?.getBoundingClientRect() ?? null), 300);
+  };
+  const hide = () => { window.clearTimeout(timer.current); setRect(null); };
+  const below = rect != null && rect.top < 100;
+  const left = rect ? Math.min(Math.max(rect.left + rect.width / 2, 150), window.innerWidth - 150) : 0;
+
+  return (
+    <span ref={wrap} className={styles.tooltipAnchor} onMouseEnter={show} onMouseLeave={hide} onBlur={hide}
+      onFocus={(e) => { if ((e.target as HTMLElement).matches(':focus-visible')) show(); }}>
+      {cloneElement(children, { 'aria-describedby': rect ? id : undefined })}
+      {rect && createPortal(
+        <span id={id} role="tooltip" className={clsx(styles.tooltip, below && styles.tooltipBelow)}
+          style={{ left, top: below ? rect.bottom + 8 : rect.top - 8 }}>
+          {content}
+        </span>,
+        document.body,
+      )}
+    </span>
+  );
+}
 
 export function Modal({
   open, onClose, title, children, wide, labelledBy, variant = 'center',

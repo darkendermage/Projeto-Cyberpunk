@@ -17,7 +17,7 @@ public sealed record ArmorInfo(
 public sealed record CyberInfo(
     CyberwareType? Type, BodyLocation? Location, bool Foundational, int? SlotsProvided, int? SlotsRequired,
     int? RequiresItemId, bool RequiresPair, InstallLocation? Install, string? Requirements,
-    int? HumanityLoss = null, string? HumanityLossDice = null)
+    int? HumanityLoss = null, string? HumanityLossDice = null, string? Effect = null)
 {
     /// <summary>Counts against the Fashion budget of a Complete Package (CP:R p.105).</summary>
     public bool IsFashionware => Type == CyberwareType.Fashionware;
@@ -97,14 +97,14 @@ public sealed class NpcCatalogProvider(IAppDbContext db, NpcCatalogCache cache)
                     a.BodyValue, implanted, a.Requirements),
                 Cyber: implanted
                     ? new CyberInfo(CyberwareType.Borgware, BodyLocation.FullBody, false, null, null, null, false, a.InstallLocation, a.Requirements,
-                        a.HumanityLoss, a.HumanityLossDice)
+                        a.HumanityLoss, a.HumanityLossDice, a.Effect)
                     : null));
         }
 
         foreach (var c in await db.Set<CyberwareItem>().AsNoTracking().ToListAsync(ct))
             items.Add(new CatalogItem(c.Id, c.Slug, c.Name, c.Category, c.PriceEb, Book(c.SourceBookId), c.Page,
                 Cyber: new CyberInfo(c.CyberwareType, c.BodyLocation, c.IsFoundational, c.SlotsProvided, c.SlotsRequired,
-                    c.RequiresItemId, c.RequiresPair, c.InstallLocation, c.Requirements, c.HumanityLoss, c.HumanityLossDice)));
+                    c.RequiresItemId, c.RequiresPair, c.InstallLocation, c.Requirements, c.HumanityLoss, c.HumanityLossDice, c.Effect)));
 
         foreach (var m in await db.Set<Ammunition>().AsNoTracking().Include(x => x.Calibers).ToListAsync(ct))
             items.Add(new CatalogItem(m.Id, m.Slug, m.Name, m.Category, m.PriceEb, Book(m.SourceBookId), m.Page,

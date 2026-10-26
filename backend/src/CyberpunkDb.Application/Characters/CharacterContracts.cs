@@ -229,7 +229,7 @@ public sealed record StoreItemDto(
     int Id, string Slug, string Name, ItemCategory Category, int? Price, string? Source, int? Page,
     bool Fashion, bool Cyberware, IReadOnlyList<Caliber> Calibers, int? PerPack, string? Summary,
     CyberwareType? CyberType = null, BodyLocation? BodyLocation = null, int? HumanityLoss = null, string? HumanityLossDice = null,
-    bool Foundational = false, string? Requirements = null, string? Description = null);
+    bool Foundational = false, string? Requirements = null, string? Description = null, string? Effect = null);
 
 /// <summary>One page of the store: the items, the total that matched and the page actually returned.</summary>
 public sealed record StorePageDto(IReadOnlyList<StoreItemDto> Items, int Total, int Page, int PageSize);

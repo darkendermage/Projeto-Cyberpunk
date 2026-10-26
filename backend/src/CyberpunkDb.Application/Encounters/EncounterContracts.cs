@@ -26,6 +26,8 @@ public sealed record AddCombatantsRequest(
 /// <summary>Initiative for everyone (or the listed combatants); typed d10s win over rolled ones.</summary>
 public sealed record InitiativeRequest(int Version, Dictionary<string, int>? Rolls = null, List<string>? Only = null);
 public sealed record SetInitiativeRequest(int Version, int Initiative);
+/// <summary>Drag in the Initiative Queue: the combatant goes right before <see cref="BeforeId"/> (null: to the bottom).</summary>
+public sealed record MoveInQueueRequest(int Version, string? BeforeId = null);
 
 /// <summary>
 /// One attack (CP:R p.170-178). <see cref="Weapon"/> is a weapon key of the attacker, "brawling", a Martial Arts key or

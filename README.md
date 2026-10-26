@@ -66,7 +66,7 @@ Fichas completas de jogador, salvas no seu computador.
 - **Criação pelos três métodos do livro:** Streetrat, Edgerunner e Complete Package, com as dez Roles.
 - **Caminho de Vida:** as tabelas de Lifepath geral e de cada Role. O botão **Rolar o que falta** sorteia tudo que ficou em branco.
 - **Ficha de jogo:** STATs, perícias, HP e ferimentos, Death Save, Critical Injuries, armaduras perdendo SP, munição, Autofire, LUCK e progressão por IP.
-- **Cyberware no corpo:** um modelo anatômico mostra onde cada peça vai, quantos slots sobram e quanta Humanity custa. Inclui a terapia para recuperar Humanity.
+- **Cyberware no corpo:** um modelo anatômico mostra onde cada peça vai, quantos slots sobram e quanta Humanity custa. Passe o mouse numa peça para ver em uma linha o que ela faz. Inclui a terapia para recuperar Humanity.
 - **Equipamento e grana:** loja com o catálogo inteiro, saldo em eurobucks, moradia e lifestyle. Itens de troca, presente ou saque entram sem pagar, e as roupas ficam separadas do arsenal.
 - **Leve para outro PC:** exporte a ficha num arquivo e importe na casa do amigo.
 
@@ -79,11 +79,12 @@ Precisa de uma gangue para emboscar o grupo daqui a cinco minutos?
 - **Três modos:** automático (um clique), semiautomático (você trava o que quer e ele completa o resto) e manual (você monta e ele confere).
 - Toda ficha é conferida com as regras e avisa o que está fora do padrão. O Mestre sempre pode aceitar uma exceção.
 
-### ⚔️ Mesa de Combate
+### ⚔️ Friday Night Firefight
 
-O tiroteio inteiro sem calculadora na mão.
+A antiga Mesa de Combate, com o nome do capítulo de combate do livro. O tiroteio inteiro sem calculadora na mão.
 
-- **Todo mundo na mesma fila:** os PCs (fichas salvas), NPCs salvos, inimigos gerados na hora (até com gangue, tipo "4 Maelstrom Mooks") e genéricos rápidos. Iniciativa REF + 1d10, rodadas e de quem é a vez.
+- **Todo mundo na mesma fila:** os PCs (fichas salvas), NPCs salvos, inimigos gerados na hora (até com gangue, tipo "4 Maelstrom Mooks") e genéricos rápidos. Iniciativa REF + 1d10, rodadas e de quem é a vez. Arraste alguém na fila (ou use ↑/↓) para reordenar.
+- **Fichas em abas:** dê duplo clique em alguém da fila (ou use "Abrir ficha em aba") e a ficha completa do PC abre numa aba ao lado da Mesa, como no navegador. Dá para editar ali mesmo, ter várias abertas e fechar com o × ou com o botão do meio do mouse. NPCs e genéricos mostram a ficha com que entraram no combate.
 - **Ataque resolvido como no livro:** DV pelo alcance, esquiva para quem tem REF 8+, Autofire, tiro mirado na cabeça, mão ou perna, Shotgun Shell, explosivos em área, Suppressive Fire e corpo a corpo com metade da armadura.
 - **Dados na mão ou no app:** cada rolagem aceita o número que o jogador tirou; vazio, o app rola.
 - **Ferimentos de verdade:** SP que abla, Wound States com penalidade, Critical Injury nos dois 6, Death Save no início do turno, estabilização, fogo, veneno e queda.

@@ -1,21 +1,28 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import { Link, useNavigate } from 'react-router';
 import {
-  Activity, ArrowLeft, Bandage, Copy, Dices, Flag, HeartPulse, Shield, SkipForward, Skull, Swords, Trash2, UserPlus,
+  Activity, ArrowLeft, Bandage, ChevronDown, ChevronUp, Copy, Dices, Flag, GripVertical, HeartPulse, IdCard, Shield, SkipForward, Skull, Swords,
+  Trash2, UserPlus, X,
 } from 'lucide-react';
 import clsx from 'clsx';
 import { problemMessage } from '../../api/characters';
-import { encounterApi, useEncounter, useEncounterCommand } from '../../api/encounters';
+import { encounterApi, encounterKeys, useEncounter, useEncounterCommand } from '../../api/encounters';
 import type { EncounterDetail, EncounterRules, FighterView, InjuryLocation } from '../../api/encounterTypes';
 import { Badge, Button, Checkbox, Collapsible, ErrorState, IconButton, NumberInput, Select, Spinner, Switch } from '../../components/ui/ui';
 import { useToast } from '../../state/ToastContext';
+import { EmbeddedCharacter, type CharacterTab } from '../characters/CharacterPage';
 import page from '../../styles/Page.module.css';
 import { AddCombatantsDialog } from './AddCombatantsDialog';
 import { AttackPanel, AttackResultView } from './AttackPanel';
 import { CONDITIONS, hpPercent, WOUND_LABEL, WOUND_TONE } from './combat';
+import { FighterSheet } from './FighterSheet';
 import styles from './Combat.module.css';
 
 export type Run = (path: string, body?: Record<string, unknown>, done?: string, method?: 'POST' | 'PUT') => void;
+
+/** A sheet opened in its own tab next to the table; tab is the section a PC sheet shows. */
+interface SheetTab { fighterId: string; tab: CharacterTab }
 
 export function EncounterView({ id, rules }: { id: number; rules: EncounterRules }) {
   const query = useEncounter(id);
@@ -30,9 +37,26 @@ function Table({ detail, rules }: { detail: EncounterDetail; rules: EncounterRul
   const command = useEncounterCommand(detail.id);
   const [adding, setAdding] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [sheets, setSheets] = useState<SheetTab[]>([]);
+  const [current, setCurrent] = useState<string | null>(null);
+  const [dragId, setDragId] = useState<string | null>(null);
+  const [drop, setDrop] = useState<{ id: string; after: boolean } | null>(null);
   const busy = command.isPending;
+  const canMove = !busy && detail.queue.some((f) => f.initiative != null);
   const active = detail.queue.find((f) => f.id === detail.activeId) ?? null;
   const selected = detail.queue.find((f) => f.id === (selectedId ?? detail.activeId)) ?? detail.queue[0] ?? null;
+  // Someone who leaves the fight takes their tab along.
+  const open = sheets.filter((s) => detail.queue.some((f) => f.id === s.fighterId));
+  const shown = detail.queue.find((f) => f.id === current && open.some((s) => s.fighterId === f.id)) ?? null;
+
+  const openSheet = (id: string) => {
+    setSheets((list) => (list.some((s) => s.fighterId === id) ? list : [...list, { fighterId: id, tab: 'ficha' }]));
+    setCurrent(id);
+  };
+  const closeSheet = (id: string) => {
+    setSheets((list) => list.filter((s) => s.fighterId !== id));
+    if (current === id) setCurrent(null);
+  };
 
   const run: Run = (path, body = {}, done, method) =>
     command.mutate({ path, body, method }, {
@@ -42,6 +66,19 @@ function Table({ detail, rules }: { detail: EncounterDetail; rules: EncounterRul
       },
       onError: (error) => toast.notify(problemMessage(error), 'error'),
     });
+
+  // Moving takes the neighbor's Initiative on the server, so a drop that keeps the same place sends nothing.
+  const move = (id: string, beforeId: string | null) => {
+    const at = detail.queue.findIndex((f) => f.id === id);
+    if (beforeId === id || beforeId === (detail.queue[at + 1]?.id ?? null)) return;
+    run(`combatants/${id}/move`, { beforeId });
+  };
+
+  const dropOn = (index: number, after: boolean) => {
+    if (dragId) move(dragId, after ? detail.queue[index + 1]?.id ?? null : detail.queue[index].id);
+    setDragId(null);
+    setDrop(null);
+  };
 
   const remove = async () => {
     if (!window.confirm(`Excluir "${detail.name}"? As fichas dos PCs não mudam.`)) return;
@@ -78,6 +115,34 @@ function Table({ detail, rules }: { detail: EncounterDetail; rules: EncounterRul
         </div>
       </header>
 
+      {open.length > 0 && (
+        <nav className={styles.sheetTabs} aria-label="Abas da mesa">
+          <button type="button" className={clsx(styles.sheetTab, !shown && styles.sheetTabActive)} aria-current={!shown ? 'page' : undefined}
+            onClick={() => setCurrent(null)}>
+            <Swords size={14} /> Mesa
+          </button>
+          {open.map((s) => {
+            const f = detail.queue.find((x) => x.id === s.fighterId)!;
+            return (
+              <span key={s.fighterId} className={clsx(styles.sheetTab, shown?.id === f.id && styles.sheetTabActive, f.side === 'Enemy' ? styles.enemy : styles.ally)}
+                onAuxClick={(e) => { if (e.button === 1) closeSheet(f.id); }}>
+                <button type="button" className={styles.sheetTabName} aria-current={shown?.id === f.id ? 'page' : undefined}
+                  onClick={() => setCurrent(f.id)}>
+                  <IdCard size={14} /> {f.name}
+                </button>
+                <IconButton label={`Fechar a ficha de ${f.name}`} className={styles.sheetTabClose} onClick={() => closeSheet(f.id)}><X size={13} /></IconButton>
+              </span>
+            );
+          })}
+        </nav>
+      )}
+
+      {shown && (
+        <SheetTabView key={shown.id} f={shown} encounterId={detail.id} tab={open.find((s) => s.fighterId === shown.id)!.tab}
+          onTab={(tab) => setSheets((list) => list.map((s) => (s.fighterId === shown.id ? { ...s, tab } : s)))} />
+      )}
+
+      <div className={styles.tableView} hidden={shown != null}>
       {detail.queue.length === 0 ? (
         <section className={styles.panel}>
           <p className={styles.muted}>Ninguém na mesa ainda. Adicione PCs, NPCs salvos, inimigos gerados ou genéricos.</p>
@@ -88,18 +153,44 @@ function Table({ detail, rules }: { detail: EncounterDetail; rules: EncounterRul
           <section className={styles.panel} aria-label="Fila de iniciativa">
             <h2 className={styles.panelTitle}>Fila de iniciativa</h2>
             <ol className={styles.queue}>
-              {detail.queue.map((f) => (
-                <QueueRow key={f.id} f={f} active={f.id === detail.activeId} selected={f.id === selected?.id}
-                  cover={detail.covers.find((c) => c.id === f.coverId)?.label} onSelect={() => setSelectedId(f.id)} />
+              {detail.queue.map((f, i) => (
+                <li key={f.id} draggable={canMove}
+                  className={clsx(styles.queueItem, dragId === f.id && styles.dragging,
+                    drop?.id === f.id && (drop.after ? styles.dropAfter : styles.dropBefore))}
+                  onDragStart={(e) => { e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', f.id); setDragId(f.id); }}
+                  onDragEnd={() => { setDragId(null); setDrop(null); }}
+                  onDragOver={(e) => {
+                    if (!dragId) return;
+                    e.preventDefault();
+                    const box = e.currentTarget.getBoundingClientRect();
+                    const after = e.clientY > box.top + box.height / 2;
+                    if (drop?.id !== f.id || drop.after !== after) setDrop({ id: f.id, after });
+                  }}
+                  onDrop={(e) => { e.preventDefault(); dropOn(i, drop?.id === f.id && drop.after); }}>
+                  {canMove && <GripVertical size={14} className={styles.grip} aria-hidden />}
+                  <QueueRow f={f} active={f.id === detail.activeId} selected={f.id === selected?.id}
+                    cover={detail.covers.find((c) => c.id === f.coverId)?.label} onSelect={() => setSelectedId(f.id)} onOpen={() => openSheet(f.id)} />
+                  {canMove && (
+                    <span className={styles.moveButtons}>
+                      <IconButton label={`Subir ${f.name} na fila`} disabled={i === 0} className={styles.moveButton}
+                        onClick={() => move(f.id, detail.queue[i - 1].id)}><ChevronUp size={13} /></IconButton>
+                      <IconButton label={`Descer ${f.name} na fila`} disabled={i === detail.queue.length - 1} className={styles.moveButton}
+                        onClick={() => move(f.id, detail.queue[i + 2]?.id ?? null)}><ChevronDown size={13} /></IconButton>
+                    </span>
+                  )}
+                </li>
               ))}
             </ol>
+            {canMove && <span className={styles.source}>Arraste (ou use ↑/↓) para reordenar: quem é movido assume a iniciativa do vizinho.</span>}
+            <span className={styles.source}>Duplo clique abre a ficha numa aba.</span>
             <span className={styles.source}>{rules.rules.initiative.value} · {rules.rules.initiativeTies.value} ({rules.rules.initiative.source})</span>
           </section>
 
           <div className={styles.main}>
             <AttackPanel key={selected?.id} detail={detail} rules={rules} attacker={selected} busy={busy} run={run} />
             {detail.lastAttack && <AttackResultView result={detail.lastAttack} />}
-            {selected && <FighterPanel key={selected.id} f={selected} detail={detail} rules={rules} busy={busy} run={run} />}
+            {selected && <FighterPanel key={selected.id} f={selected} detail={detail} rules={rules} busy={busy} run={run}
+              onSheet={() => openSheet(selected.id)} />}
           </div>
         </div>
       )}
@@ -125,16 +216,19 @@ function Table({ detail, rules }: { detail: EncounterDetail; rules: EncounterRul
         </ul>
         <p className={styles.muted}>{rules.rules.turn.value}</p>
       </Collapsible>
+      </div>
 
       <AddCombatantsDialog open={adding} onClose={() => setAdding(false)} rules={rules} busy={busy} run={run} />
     </div>
   );
 }
 
-function QueueRow({ f, active, selected, cover, onSelect }: { f: FighterView; active: boolean; selected: boolean; cover?: string; onSelect: () => void }) {
+function QueueRow({ f, active, selected, cover, onSelect, onOpen }: {
+  f: FighterView; active: boolean; selected: boolean; cover?: string; onSelect: () => void; onOpen: () => void;
+}) {
   return (
-    <li>
-      <button type="button" onClick={onSelect}
+    <>
+      <button type="button" onClick={onSelect} onDoubleClick={onOpen}
         className={clsx(styles.queueRow, active && styles.queueActive, selected && styles.queueSelected, f.side === 'Enemy' ? styles.enemy : styles.ally, f.dead && styles.dead)}>
         <span className={styles.init}>{f.initiative ?? '—'}</span>
         <span className={styles.queueMain}>
@@ -149,11 +243,27 @@ function QueueRow({ f, active, selected, cover, onSelect }: { f: FighterView; ac
         </span>
         {f.mustDeathSave && !f.dead && <span className={styles.deathFlag} title="Death Save no início do turno">DS</span>}
       </button>
-    </li>
+    </>
   );
 }
 
-function FighterPanel({ f, detail, rules, busy, run }: { f: FighterView; detail: EncounterDetail; rules: EncounterRules; busy: boolean; run: Run }) {
+/**
+ * One sheet tab: a PC opens its full sheet (edits save as on the sheet page); NPCs and generic enemies show what they
+ * joined the fight with. A PC sheet that moves ahead of the table (an edit made here) reloads the table.
+ */
+function SheetTabView({ f, encounterId, tab, onTab }: { f: FighterView; encounterId: number; tab: CharacterTab; onTab: (tab: CharacterTab) => void }) {
+  const client = useQueryClient();
+  const known = f.characterVersion;
+  const onVersion = useCallback((version: number) => {
+    if (known != null && version !== known) void client.invalidateQueries({ queryKey: encounterKeys.detail(encounterId) });
+  }, [client, encounterId, known]);
+  if (f.kind === 'Pc' && f.characterId) return <EmbeddedCharacter id={f.characterId} tab={tab} onTab={onTab} onVersion={onVersion} />;
+  return <FighterSheet f={f} />;
+}
+
+function FighterPanel({ f, detail, rules, busy, run, onSheet }: {
+  f: FighterView; detail: EncounterDetail; rules: EncounterRules; busy: boolean; run: Run; onSheet: () => void;
+}) {
   const [amount, setAmount] = useState<number | null>(null);
   const [location, setLocation] = useState<InjuryLocation>('Body');
   const [bypass, setBypass] = useState(false);
@@ -172,7 +282,7 @@ function FighterPanel({ f, detail, rules, busy, run }: { f: FighterView; detail:
         <span className={styles.row}>
           <Badge tone={f.side === 'Enemy' ? 'red' : 'cyan'}>{f.side === 'Enemy' ? 'Inimigo' : 'Aliado'}</Badge>
           <Badge tone={WOUND_TONE[f.woundState]}>{WOUND_LABEL[f.woundState]}</Badge>
-          {f.kind === 'Pc' && f.characterId && <Link to={`/characters/${f.characterId}`} className={styles.link}>Abrir ficha</Link>}
+          <Button variant="ghost" icon={<IdCard size={14} />} onClick={onSheet}>Abrir ficha em aba</Button>
         </span>
       </div>
       <dl className={styles.stats}>

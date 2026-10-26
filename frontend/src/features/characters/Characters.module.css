@@ -55,6 +55,9 @@
 
 /* ------------------------------------------------------------ page header (selector + tabs) */
 
+/* The sheet inside another page (a combat table tab): no page frame of its own. */
+.embedded { display: flex; flex-direction: column; gap: 18px; }
+
 .topbar {
   display: flex;
   flex-wrap: wrap;
@@ -92,6 +95,8 @@
   border-bottom: 2px solid transparent;
   text-decoration: none;
 }
+.tab:where(button) { background: none; border: 0; border-bottom: 2px solid transparent; }
+.tab:where(a) { display: inline-flex; align-items: center; gap: 6px; }
 .tab:hover { color: var(--text); }
 .tabActive {
   color: var(--red-bright);

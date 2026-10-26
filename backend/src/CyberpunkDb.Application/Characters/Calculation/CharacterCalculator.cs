@@ -153,7 +153,7 @@ public sealed class CharacterCalculator(CharacterRuleBook rules)
                 c.ParentInstanceId, c.Side, c.MeatLimb, item?.Cyber?.Foundational ?? false,
                 item is null ? null : mechanics.SlotsProvided(item), used, c.HumanityLossApplied, item?.Cyber?.HumanityLossDice,
                 c.CurrentSp, CyberwareAnatomy.RegionOf(c, sheet.Cyberware, catalog), item?.Price ?? 0,
-                item is null ? null : mechanics.FreeTextRequirement(item, catalog), covered.GetValueOrDefault(c.InstanceId));
+                item is null ? null : mechanics.FreeTextRequirement(item, catalog), covered.GetValueOrDefault(c.InstanceId), item?.Cyber?.Effect);
         }).ToArray();
     }
 

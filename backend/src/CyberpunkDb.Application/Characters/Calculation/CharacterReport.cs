@@ -164,7 +164,9 @@ public sealed record CyberLine(
     int Price,
     string? Requirements,
     // A glove worn over this arm makes the option inaccessible (CP:R p.347; BC p.37; IR4 p.67; IR5 p.99).
-    string? CoveredBy = null);
+    string? CoveredBy = null,
+    /// <summary>Short effect text from the catalog, shown on hover.</summary>
+    string? Effect = null);
 
 public sealed record HousingReport(
     string? HousingId,
