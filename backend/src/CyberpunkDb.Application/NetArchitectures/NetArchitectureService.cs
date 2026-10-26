@@ -6,6 +6,7 @@ using CyberpunkDb.Application.NetArchitectures.Generation;
 using CyberpunkDb.Application.NetArchitectures.Rules;
 using CyberpunkDb.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.NetArchitectures;
 
@@ -54,7 +55,7 @@ public sealed class NetArchitectureService(
         var state = generator.Generate(request);
         var now = DateTime.UtcNow;
         var name = string.IsNullOrWhiteSpace(request.Name)
-            ? $"{rules.Location(state.LocationId).Label} — {rules.Difficulty(state.Difficulty).Label}, {state.FloorCount} andares"
+            ? L.T($"{rules.Location(state.LocationId).Label} — {rules.Difficulty(state.Difficulty).Label}, {state.FloorCount} andares", $"{L.D(rules.Location(state.LocationId).Label)} — {L.D(rules.Difficulty(state.Difficulty).Label)}, {state.FloorCount} floors")
             : request.Name.Trim();
         var entity = new NetArchitecture { Name = Truncate(name, 80), CreatedAt = now };
         Apply(entity, state, now);
@@ -86,7 +87,7 @@ public sealed class NetArchitectureService(
 
     public Task<NetArchitectureDetailDto> UpdateAsync(int id, UpdateArchitectureRequest r, CancellationToken ct)
     {
-        if (string.IsNullOrWhiteSpace(r.Name)) throw RequestValidationException.For("name", "Dê um nome à Arquitetura.");
+        if (string.IsNullOrWhiteSpace(r.Name)) throw RequestValidationException.For("name", L.T("Dê um nome à Arquitetura.", "Give the Architecture a name."));
         return MutateAsync(id, r.Version, (state, entity) =>
         {
             entity.Name = Truncate(r.Name.Trim(), 80);
@@ -153,7 +154,7 @@ public sealed class NetArchitectureService(
     {
         var entity = await FindAsync(id, ct);
         if (entity.Version != version)
-            throw new ConflictException("Esta Arquitetura foi alterada em outra janela. Recarregue para ver a versão atual.");
+            throw new ConflictException(L.T("Esta Arquitetura foi alterada em outra janela. Recarregue para ver a versão atual.", "This Architecture was changed in another window. Reload to see the current version."));
         var state = operation(Deserialize(entity.StateJson), entity);
         Apply(entity, state, DateTime.UtcNow);
         try
@@ -162,7 +163,7 @@ public sealed class NetArchitectureService(
         }
         catch (DbUpdateConcurrencyException)
         {
-            throw new ConflictException("Esta Arquitetura foi alterada ao mesmo tempo em outra janela. Recarregue e tente de novo.");
+            throw new ConflictException(L.T("Esta Arquitetura foi alterada ao mesmo tempo em outra janela. Recarregue e tente de novo.", "This Architecture was changed at the same time in another window. Reload and try again."));
         }
         return Detail(entity, state, await catalogs.GetAsync(ct));
     }
@@ -196,7 +197,7 @@ public sealed class NetArchitectureService(
         JsonSerializer.Deserialize<ArchitectureState>(json, StateJson) ?? new ArchitectureState();
 
     private async Task<NetArchitecture> FindAsync(int id, CancellationToken ct) =>
-        await db.NetArchitectures.FirstOrDefaultAsync(a => a.Id == id, ct) ?? throw new NotFoundException($"Arquitetura {id} não encontrada.");
+        await db.NetArchitectures.FirstOrDefaultAsync(a => a.Id == id, ct) ?? throw new NotFoundException(L.T($"Arquitetura {id} não encontrada.", $"Architecture {id} not found."));
 
     private static string Truncate(string value, int max) => value.Length <= max ? value : value[..max];
 }

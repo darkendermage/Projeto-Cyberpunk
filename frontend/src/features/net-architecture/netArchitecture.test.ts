@@ -45,8 +45,8 @@ describe('contentLabel', () => {
     expect(contentLabel({ id: '1', kind: 'BlackIce', slug: 'hellhound' }, l)).toBe('Hellhound');
     expect(contentLabel({ id: '2', kind: 'Password', dv: 8 }, l)).toBe('Password DV8');
     expect(contentLabel({ id: '3', kind: 'ControlNode', dv: 10, function: { defenseId: 'automated-turret', loadout: [] } }, l))
-      .toBe('Control Node DV10 · Torreta automática');
+      .toBe('Control Node DV10 · Automated turret');
     expect(contentLabel({ id: '4', kind: 'ControlNode', dv: 6, function: { deviceId: 'lighting', loadout: [] } }, l))
-      .toBe('Control Node DV6 · Iluminação');
+      .toBe('Control Node DV6 · Lighting');
   });
 });

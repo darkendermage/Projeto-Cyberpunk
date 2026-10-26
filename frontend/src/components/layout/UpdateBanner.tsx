@@ -6,6 +6,7 @@ import { readStorage, writeStorage } from '../../lib/hooks';
 import { shouldOfferUpdate, waitForNewVersion } from '../../lib/updates';
 import { Button } from '../ui/ui';
 import styles from './UpdateBanner.module.css';
+import { t, tv } from '../../i18n';
 
 const DISMISSED_KEY = 'ncdb.dismissedUpdate';
 
@@ -54,36 +55,36 @@ export function UpdateBanner() {
           : <Download size={18} className={styles.icon} />}
 
         <p className={styles.text}>
-          {phase.kind === 'offer' && <>Versão <strong>{info.latest}</strong> disponível (você está na {info.current}).</>}
-          {phase.kind === 'installing' && <>Baixando e instalando a versão <strong>{info.latest}</strong>…</>}
-          {phase.kind === 'restarting' && <>Reiniciando o programa. A página recarrega sozinha.</>}
-          {phase.kind === 'failed' && <>Não foi possível atualizar: {phase.message}</>}
-          {phase.kind === 'timeout' && <>O programa não voltou sozinho. Abra o NightCityItemDB.exe de novo.</>}
+          {phase.kind === 'offer' && <>{t('Versão ', 'Version ')}<strong>{info.latest}</strong> {t('disponível (você está na ', 'is available (you have ')}{info.current}).</>}
+          {phase.kind === 'installing' && <>{t('Baixando e instalando a versão ', 'Downloading and installing version ')}<strong>{info.latest}</strong>…</>}
+          {phase.kind === 'restarting' && <>{t('Reiniciando o programa. A página recarrega sozinha.', 'Restarting the program. The page reloads by itself.')}</>}
+          {phase.kind === 'failed' && <>{t('Não foi possível atualizar: ', 'Couldn\'t update: ')}{tv(phase.message)}</>}
+          {phase.kind === 'timeout' && <>{t('O programa não voltou sozinho. Abra o NightCityItemDB.exe de novo.', 'The program didn\'t come back by itself. Open NightCityItemDB.exe again.')}</>}
         </p>
 
         <div className={styles.actions}>
           {info.notes && !busy && (
             <Button variant="ghost" onClick={() => setNotesOpen((v) => !v)} aria-expanded={notesOpen}>
-              {notesOpen ? 'Ocultar novidades' : 'Novidades'}
+              {notesOpen ? t('Ocultar novidades', 'Hide what\'s new') : t('Novidades', 'What\'s new')}
             </Button>
           )}
           {(phase.kind === 'offer' || phase.kind === 'failed') && (
             <Button variant="primary" icon={<RefreshCw size={15} />} onClick={install}>
-              {phase.kind === 'failed' ? 'Tentar de novo' : 'Atualizar agora'}
+              {phase.kind === 'failed' ? t('Tentar de novo', 'Try again') : t('Atualizar agora', 'Update now')}
             </Button>
           )}
           {phase.kind === 'failed' && info.releaseUrl && (
-            <a className={styles.link} href={info.releaseUrl} target="_blank" rel="noreferrer">Baixar manualmente</a>
+            <a className={styles.link} href={info.releaseUrl} target="_blank" rel="noreferrer">{t('Baixar manualmente', 'Download manually')}</a>
           )}
           {!busy && (
-            <button type="button" className={styles.close} onClick={dismiss} aria-label="Lembrar depois" title="Lembrar na próxima versão">
+            <button type="button" className={styles.close} onClick={dismiss} aria-label={t('Lembrar depois', 'Remind me later')} title={t('Lembrar na próxima versão', 'Remind me on the next version')}>
               <X size={16} />
             </button>
           )}
         </div>
       </div>
 
-      {notesOpen && info.notes && <pre className={styles.notes}>{info.notes}</pre>}
+      {notesOpen && info.notes && <pre className={styles.notes}>{tv(info.notes)}</pre>}
     </div>
   );
 }

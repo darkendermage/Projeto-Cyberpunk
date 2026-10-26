@@ -1,17 +1,18 @@
 import type {
   HaggleRequest, ItemCondition, Listing, ListingOrigin, MarketFeature, MarketKind, NightMarketDetail, PrizeEntry, Stall, WeaponQuality,
 } from '../../api/nightMarketTypes';
+import { t, tv } from '../../i18n';
 
 export const KIND_LABEL: Record<MarketKind, string> = {
   NightMarket: 'Night Market',
   MidnightMarket: 'Midnight Market',
-  Shop: 'Loja',
-  Armory: 'Arsenal',
+  Shop: t('Loja', 'Shop'),
+  Armory: t('Arsenal', 'Armory'),
 };
 
 export const FEATURE_LABEL: Record<MarketFeature, string> = {
   DoorPrize: 'Door Prize',
-  SecondHand: 'Segunda mão',
+  SecondHand: t('Segunda mão', 'Second Hand'),
   Midnight: 'Midnight Market',
   MysteryBoxes: 'Mystery Boxes',
 };
@@ -24,16 +25,16 @@ export const CONDITION_LABEL: Record<ItemCondition, string> = {
 };
 
 export const ORIGIN_LABEL: Record<ListingOrigin, string> = {
-  CoreTable: 'Tabela do Core',
-  Foundational: 'Peça-base',
+  CoreTable: t('Tabela do Core', 'Core table'),
+  Foundational: t('Peça-base', 'Foundational piece'),
   BlackChrome: 'Black Chrome',
-  Preset: 'Estoque do mercado',
-  Related: 'Outros livros',
-  GmChoice: 'Escolha do Mestre',
+  Preset: t('Estoque do mercado', 'Market stock'),
+  Related: t('Outros livros', 'Other books'),
+  GmChoice: t('Escolha do Mestre', 'GM\'s choice'),
   Midnight: 'Midnight Market',
-  Manual: 'Adicionado pelo Mestre',
+  Manual: t('Adicionado pelo Mestre', 'Added by the GM'),
   Index: 'Night Market Index',
-  Admission: 'Entrada',
+  Admission: t('Entrada', 'Admission'),
 };
 
 /** Tabs of the CBK app, as on the Black Chrome pages, by catalog category. */
@@ -100,7 +101,7 @@ export function wheelSlices(entries: Pick<PrizeEntry, 'label' | 'weight'>[]): Wh
   return entries.map((e) => {
     const start = angle;
     angle += (e.weight / total) * 360;
-    return { label: e.label, start, end: angle };
+    return { label: tv(e.label), start, end: angle };
   });
 }
 

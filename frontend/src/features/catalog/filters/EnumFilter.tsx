@@ -3,7 +3,7 @@ import type { FacetValue, FieldDescriptor, FilterOp } from '../../../api/types';
 import { Checkbox, Segmented } from '../../../components/ui/ui';
 import { type Criterion, getCriterion, setCriterion, setOperator, toggleValue } from '../../../lib/filters';
 import styles from './Filters.module.css';
-
+import { t, tv } from '../../../i18n';
 interface Props {
   field: FieldDescriptor;
   facets: FacetValue[] | undefined;
@@ -13,7 +13,7 @@ interface Props {
   limit?: number;
 }
 
-const MODE_LABELS: Partial<Record<FilterOp, string>> = { in: 'Qualquer', all: 'Todos', nin: 'Excluir' };
+const MODE_LABELS: Partial<Record<FilterOp, string>> = { in: t('Qualquer', 'Any'), all: t('Todos', 'All'), nin: t('Excluir', 'Exclude') };
 
 /**
  * Multi-select with live counts. Only values present in the current result set are listed
@@ -35,7 +35,7 @@ export function EnumFilter({ field, facets, criteria, onChange, columns = 1, lim
     return [...byValue.values()];
   }, [facets, field.options, selected]);
 
-  if (options.length === 0) return <p className={styles.noOptions}>Sem opções para os filtros atuais.</p>;
+  if (options.length === 0) return <p className={styles.noOptions}>{t('Sem opções para os filtros atuais.', 'No options for the current filters.')}</p>;
 
   const modes = field.kind === 'set' ? (['all', 'in', 'nin'] as FilterOp[]) : (['in', 'nin'] as FilterOp[]);
   const visible = expanded ? options : options.slice(0, limit);
@@ -45,22 +45,22 @@ export function EnumFilter({ field, facets, criteria, onChange, columns = 1, lim
     <div>
       {selected.length > 0 && (
         <div className={styles.modeRow}>
-          <Segmented size="sm" ariaLabel={`Modo do filtro ${field.label}`} value={op}
+          <Segmented size="sm" ariaLabel={t(`Modo do filtro ${field.label}`, `Filter mode for ${field.label}`)} value={op}
             onChange={(next) => onChange(setOperator(criteria, field.key, next))}
             options={modes.map((m) => ({ value: m, label: MODE_LABELS[m] }))} />
-          <button type="button" className={styles.linkButton} onClick={() => onChange(setCriterion(criteria, field.key, null))}>limpar</button>
+          <button type="button" className={styles.linkButton} onClick={() => onChange(setCriterion(criteria, field.key, null))}>{t('limpar', 'clear')}</button>
         </div>
       )}
       <div className={columns === 2 ? styles.twoCols : styles.oneCol}>
         {visible.map((o) => (
-          <Checkbox key={o.value} label={o.label} count={o.count}
+          <Checkbox key={o.value} label={tv(o.label)} count={o.count}
             checked={selected.includes(o.value)} muted={o.count === 0}
             onChange={() => onChange(toggleValue(criteria, field.key, o.value, defaultOp))} />
         ))}
       </div>
       {options.length > limit && (
         <button type="button" className={styles.linkButton} onClick={() => setExpanded((e) => !e)}>
-          {expanded ? 'mostrar menos' : `mostrar mais (${options.length - limit})`}
+          {expanded ? t('mostrar menos', 'show less') : t(`mostrar mais (${options.length - limit})`, `show more (${options.length - limit})`)}
         </button>
       )}
     </div>

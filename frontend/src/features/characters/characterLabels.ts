@@ -2,6 +2,7 @@
 import type {
   CharacterRules, CharacterSkillLine, CharacterStatus, CreationMethod, InjuryStatus, ItemState, WoundState,
 } from '../../api/characterTypes';
+import { locale, skillName, t } from '../../i18n';
 
 /**
  * Native-language suggestions: the languages of the chosen Cultural Origin (CP:R p.45) or, before one is chosen,
@@ -25,74 +26,74 @@ export const METHOD_LABEL: Record<CreationMethod, string> = {
 };
 
 export const METHOD_HINT: Record<CreationMethod, string> = {
-  Streetrat: 'Templates prontos da Role. O jeito mais rápido de jogar.',
-  Edgerunner: 'STATs rolados um a um; você distribui os pontos de perícia.',
-  CompletePackage: 'Compra de STATs, perícias e todo o equipamento. Controle total.',
+  Streetrat: t('Templates prontos da Role. O jeito mais rápido de jogar.', 'Ready-made Role templates. The fastest way to play.'),
+  Edgerunner: t('STATs rolados um a um; você distribui os pontos de perícia.', 'STATs rolled one by one; you spend the skill points.'),
+  CompletePackage: t('Compra de STATs, perícias e todo o equipamento. Controle total.', 'Buy STATs, skills and all the gear. Full control.'),
 };
 
 export const STATUS_LABEL: Record<CharacterStatus, string> = {
-  Creating: 'Em criação',
-  Complete: 'Concluído',
-  NeedsAttention: 'Pendências',
+  Creating: t('Em criação', 'In creation'),
+  Complete: t('Concluído', 'Complete'),
+  NeedsAttention: t('Pendências', 'Issues'),
 };
 
 export const WOUND_LABEL: Record<WoundState, string> = {
-  Unhurt: 'Sem ferimentos',
+  Unhurt: t('Sem ferimentos', 'Unhurt'),
   Lightly: 'Lightly Wounded',
   Seriously: 'Seriously Wounded',
   Mortally: 'Mortally Wounded',
 };
 
 export const INJURY_STATUS_LABEL: Record<InjuryStatus, string> = {
-  Active: 'Ativa',
-  QuickFixed: 'Quick Fix (efeito suspenso hoje)',
-  Healed: 'Tratada',
+  Active: t('Ativa', 'Active'),
+  QuickFixed: t('Quick Fix (efeito suspenso hoje)', 'Quick Fix (effect suspended today)'),
+  Healed: t('Tratada', 'Treated'),
 };
 
 export const ITEM_STATE_LABEL: Record<ItemState, string> = {
-  Carried: 'Carregado',
-  Equipped: 'Equipado',
-  Stored: 'Guardado',
+  Carried: t('Carregado', 'Carried'),
+  Equipped: t('Equipado', 'Equipped'),
+  Stored: t('Guardado', 'Stored'),
 };
 
 /** Catalog categories as the store lists them. */
 export const CATEGORY_LABEL: Record<string, string> = {
-  Weapon: 'Armas', Ammunition: 'Munições', WeaponAttachment: 'Upgrades de armas', Gear: 'Itens avulsos', Armor: 'Armaduras e roupas',
-  Cyberware: 'Cyberware', Netrunning: 'Netrunning', Drug: 'Drogas', Vehicle: 'Veículos', VehicleUpgrade: 'Upgrades veiculares', HqUpgrade: 'QG',
+  Weapon: t('Armas', 'Weapons'), Ammunition: t('Munições', 'Ammunition'), WeaponAttachment: t('Upgrades de armas', 'Weapon attachments'), Gear: t('Itens avulsos', 'Loose gear'), Armor: t('Armaduras e roupas', 'Armor and clothing'),
+  Cyberware: 'Cyberware', Netrunning: 'Netrunning', Drug: t('Drogas', 'Drugs'), Vehicle: t('Veículos', 'Vehicles'), VehicleUpgrade: t('Upgrades veiculares', 'Vehicle upgrades'), HqUpgrade: 'QG',
 };
 
 export const STAT_LABEL: Record<string, string> = {
-  INT: 'Inteligência', REF: 'Reflexos', DEX: 'Destreza', TECH: 'Técnica', COOL: 'Frieza',
-  WILL: 'Vontade', LUCK: 'Sorte', MOVE: 'Movimento', BODY: 'Corpo', EMP: 'Empatia',
+  INT: t('Inteligência', 'Intelligence'), REF: t('Reflexos', 'Reflexes'), DEX: t('Destreza', 'Dexterity'), TECH: t('Técnica', 'Technique'), COOL: t('Frieza', 'Cool'),
+  WILL: t('Vontade', 'Willpower'), LUCK: t('Sorte', 'Luck'), MOVE: t('Movimento', 'Move'), BODY: t('Corpo', 'Body'), EMP: t('Empatia', 'Empathy'),
 };
 
 /** Skill categories in sheet order, with the Portuguese headings of the reference sheet. */
 export const SKILL_CATEGORIES: { key: string; label: string }[] = [
-  { key: 'Awareness', label: 'Perícias de Atenção' },
-  { key: 'Body', label: 'Perícias Corporais' },
-  { key: 'Control', label: 'Perícias de Condução' },
-  { key: 'Education', label: 'Perícias de Educação' },
-  { key: 'Fighting', label: 'Perícias de Luta' },
-  { key: 'Performance', label: 'Perícias de Performance' },
-  { key: 'Ranged Weapon', label: 'Perícias de Armas à Distância' },
-  { key: 'Social', label: 'Perícias Sociais' },
-  { key: 'Technique', label: 'Perícias Técnicas' },
+  { key: 'Awareness', label: t('Perícias de Atenção', 'Awareness Skills') },
+  { key: 'Body', label: t('Perícias Corporais', 'Body Skills') },
+  { key: 'Control', label: t('Perícias de Condução', 'Control Skills') },
+  { key: 'Education', label: t('Perícias de Educação', 'Education Skills') },
+  { key: 'Fighting', label: t('Perícias de Luta', 'Fighting Skills') },
+  { key: 'Performance', label: t('Perícias de Performance', 'Performance Skills') },
+  { key: 'Ranged Weapon', label: t('Perícias de Armas à Distância', 'Ranged Weapon Skills') },
+  { key: 'Social', label: t('Perícias Sociais', 'Social Skills') },
+  { key: 'Technique', label: t('Perícias Técnicas', 'Technique Skills') },
 ];
 
 /** "Idioma (Streetslang)", with the specialization; the English book name goes to the tooltip. */
 export function skillLabel(line: Pick<CharacterSkillLine, 'name' | 'namePt' | 'specialization'>): string {
-  const base = line.namePt ?? line.name;
+  const base = skillName(line.name, line.namePt);
   return line.specialization ? `${base} (${line.specialization})` : base;
 }
 
 export type SkillFilter = 'all' | 'trained' | 'role' | 'combat' | 'basic';
 
 export const SKILL_FILTERS: { value: SkillFilter; label: string }[] = [
-  { value: 'all', label: 'Todas' },
-  { value: 'trained', label: 'Com nível' },
-  { value: 'role', label: 'Da Role' },
-  { value: 'basic', label: 'Básicas' },
-  { value: 'combat', label: 'Combate' },
+  { value: 'all', label: t('Todas', 'All') },
+  { value: 'trained', label: t('Com nível', 'With level') },
+  { value: 'role', label: t('Da Role', 'Role skills') },
+  { value: 'basic', label: t('Básicas', 'Basic') },
+  { value: 'combat', label: t('Combate', 'Combat') },
 ];
 
 const normalize = (s: string) => s.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase();
@@ -106,7 +107,7 @@ export function filterSkills(lines: CharacterSkillLine[], query: string, filter:
     if (filter === 'basic' && !l.basic) return false;
     if (filter === 'combat' && !l.combat) return false;
     if (!q) return true;
-    return [l.name, l.namePt ?? '', l.specialization ?? '', l.stat].some((t) => normalize(t).includes(q));
+    return [l.name, l.namePt ?? '', l.specialization ?? '', l.stat].some((entry) => normalize(entry).includes(q));
   });
 }
 
@@ -122,5 +123,5 @@ export function signed(value: number): string {
 
 export function formatDate(iso: string | null | undefined): string {
   if (!iso) return '—';
-  return new Date(iso).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' });
+  return new Date(iso).toLocaleString(locale, { dateStyle: 'short', timeStyle: 'short' });
 }

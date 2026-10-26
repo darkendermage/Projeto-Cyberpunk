@@ -12,6 +12,7 @@ import { ArchitectureView } from './ArchitectureView';
 import { DIFFICULTY_TONE, formatEbShort } from './netArchitecture';
 import { SourcesView } from './SourcesView';
 import styles from './NetArchitecture.module.css';
+import { t, tv } from '../../i18n';
 
 type Tab = 'library' | 'sources';
 
@@ -29,16 +30,14 @@ function Home({ rules }: { rules: NetArchitectureRules }) {
   return (
     <div className={page.page}>
       <header className={page.header}>
-        <h1>Arquiteturas de NET</h1>
+        <h1>{t('Arquiteturas de NET', 'NET Architectures')}</h1>
         <p className={page.lead}>
-          Gere a Arquitetura que o Netrunner vai invadir pelos passos do Core (p.210–211): dificuldade, andares e ramos, Lobby e corpo,
-          e o que cada Control Node e File controla no mundo real. Demons, Defesas e o preço de compra seguem p.212–218, e os Watchers
-          do <em>Going Quiet</em> ficam prontos para o stealth.
+          {t('Gere a Arquitetura que o Netrunner vai invadir pelos passos do Core (p.210–211): dificuldade, andares e ramos, Lobby e corpo, e o que cada Control Node e File controla no mundo real. Demons, Defesas e o preço de compra seguem p.212–218, e os Watchers do ', 'Generate the Architecture the Netrunner will break into, following the Core steps (p.210–211): difficulty, floors and branches, Lobby and body, and what each Control Node and File controls in the real world. Demons, Defenses and the purchase price follow p.212–218, and the Watchers from ')}<em>Going Quiet</em> {t('ficam prontos para o stealth.', 'are ready for stealth.')}
         </p>
       </header>
-      <Segmented ariaLabel="Seção" value={tab} onChange={(t) => setParams(t === 'library' ? {} : { tab: t })} options={[
-        { value: 'library', label: 'Arquiteturas' },
-        { value: 'sources', label: 'Tabelas e fontes' },
+      <Segmented ariaLabel={t('Seção', 'Section')} value={tab} onChange={(entry) => setParams(entry === 'library' ? {} : { tab: entry })} options={[
+        { value: 'library', label: t('Arquiteturas', 'Architectures') },
+        { value: 'sources', label: t('Tabelas e fontes', 'Tables and sources') },
       ]} />
       {tab === 'library' ? <Library rules={rules} /> : <SourcesView rules={rules} />}
     </div>
@@ -52,18 +51,18 @@ function Library({ rules }: { rules: NetArchitectureRules }) {
     <>
       <CreateArchitecture rules={rules} />
       <section className={page.section}>
-        <h2>Arquiteturas salvas</h2>
+        <h2>{t('Arquiteturas salvas', 'Saved Architectures')}</h2>
         {list.isLoading ? <Spinner /> : (list.data ?? []).length === 0 ? (
-          <EmptyState title="Nenhuma Arquitetura ainda" icon={<Network size={30} />}>Gere a primeira acima.</EmptyState>
+          <EmptyState title={t('Nenhuma Arquitetura ainda', 'No Architectures yet')} icon={<Network size={30} />}>{t('Gere a primeira acima.', 'Generate the first one above.')}</EmptyState>
         ) : (
           <div className={styles.library}>
             {list.data!.map((a) => (
               <Link key={a.id} to={`/net-architecture/${a.id}`} className={styles.card}>
-                <h3>{a.name}</h3>
-                <span className={styles.muted}>{a.location.label} · {a.floors} andares{a.branches > 0 ? ` · ${a.branches} ramo(s)` : ''}</span>
+                <h3>{tv(a.name)}</h3>
+                <span className={styles.muted}>{tv(a.location.label)} · {a.floors} {t('andares', 'floors')}{a.branches > 0 ? t(` · ${a.branches} ramo(s)`, ` · ${a.branches} branch(es)`) : ''}</span>
                 <span className={styles.row}>
-                  <Badge tone={DIFFICULTY_TONE[a.difficulty]}>{difficulties.find((d) => d.id === a.difficulty)?.label ?? a.difficulty}</Badge>
-                  <span className={styles.source}>{formatEbShort(a.total)} · {a.portable ? 'portátil' : 'não portátil'}</span>
+                  <Badge tone={DIFFICULTY_TONE[a.difficulty]}>{tv(difficulties.find((d) => d.id === a.difficulty)?.label) ?? a.difficulty}</Badge>
+                  <span className={styles.source}>{formatEbShort(a.total)} · {a.portable ? t('portátil', 'portable') : t('não portátil', 'not portable')}</span>
                 </span>
               </Link>
             ))}
@@ -107,7 +106,7 @@ function CreateArchitecture({ rules }: { rules: NetArchitectureRules }) {
     },
     onSuccess: (detail) => {
       store(detail);
-      toast.notify(`Arquitetura gerada: ${detail.name}.`);
+      toast.notify(t(`Arquitetura gerada: ${detail.name}.`, `Architecture generated: ${detail.name}.`));
       navigate(`/net-architecture/${detail.id}`);
     },
     onError: (error) => toast.notify(problemMessage(error), 'error'),
@@ -115,46 +114,46 @@ function CreateArchitecture({ rules }: { rules: NetArchitectureRules }) {
 
   return (
     <section className={styles.panel}>
-      <h2 className={styles.panelTitle}>Nova Arquitetura</h2>
+      <h2 className={styles.panelTitle}>{t('Nova Arquitetura', 'New Architecture')}</h2>
       <div className={styles.formGrid}>
-        <Field label="Dificuldade (Passo 0)" htmlFor="na-difficulty"
-          hint={chosen ? `DV${chosen.dv} · Netrunner com chance: Interface ${chosen.fightingChance}+ · ${chosen.description}` : `Sorteada · ${r.difficulties.source}`}>
+        <Field label={t('Dificuldade (Passo 0)', 'Difficulty (Step 0)')} htmlFor="na-difficulty"
+          hint={chosen ? t(`DV${chosen.dv} · Netrunner com chance: Interface ${chosen.fightingChance}+ · ${tv(chosen.description)}`, `DV${chosen.dv} · Netrunner with a fighting chance: Interface ${chosen.fightingChance}+ · ${tv(chosen.description)}`) : t(`Sorteada · ${r.difficulties.source}`, `Random · ${r.difficulties.source}`)}>
           <Select id="na-difficulty" value={difficulty} onChange={(e) => setDifficulty(e.target.value as NetDifficulty | '')}>
-            <option value="">Sortear</option>
-            {r.difficulties.value.map((d) => <option key={d.id} value={d.id}>{d.label} (DV{d.dv})</option>)}
+            <option value="">{t('Sortear', 'Random')}</option>
+            {r.difficulties.value.map((d) => <option key={d.id} value={d.id}>{tv(d.label)} (DV{d.dv})</option>)}
           </Select>
         </Field>
-        <Field label="Andares (Passo 1)" htmlFor="na-floors" hint={floors == null ? 'Vazio: rola 3d6 (3 a 18)' : 'De 3 a 18'}>
+        <Field label={t('Andares (Passo 1)', 'Floors (Step 1)')} htmlFor="na-floors" hint={floors == null ? t('Vazio: rola 3d6 (3 a 18)', 'Empty: rolls 3d6 (3 to 18)') : t('De 3 a 18', 'From 3 to 18')}>
           <NumberInput id="na-floors" min={3} max={18} allowEmpty value={floors} onChange={setFloors} placeholder="3d6" />
         </Field>
-        <Field label="Ramos" htmlFor="na-branches" hint={branches == null ? 'Vazio: 1d10 por ramo, 7+ cria um ramo' : 'Ramos que não couberem são descartados'}>
+        <Field label={t('Ramos', 'Branches')} htmlFor="na-branches" hint={branches == null ? t('Vazio: 1d10 por ramo, 7+ cria um ramo', 'Empty: 1d10 per branch, 7+ creates a branch') : t('Ramos que não couberem são descartados', 'Branches that don\'t fit are dropped')}>
           <NumberInput id="na-branches" min={0} max={8} allowEmpty value={branches} onChange={setBranches} placeholder="1d10" />
         </Field>
-        <Field label="Tipo de local (Passo 3)" htmlFor="na-location" hint={location?.description}>
+        <Field label={t('Tipo de local (Passo 3)', 'Location type (Step 3)')} htmlFor="na-location" hint={tv(location?.description)}>
           <Select id="na-location" value={locationId} onChange={(e) => setLocationId(e.target.value)}>
-            {r.locations.value.map((l) => <option key={l.id} value={l.id}>{l.label}</option>)}
+            {r.locations.value.map((l) => <option key={l.id} value={l.id}>{tv(l.label)}</option>)}
           </Select>
         </Field>
-        <Field label="Netrunner inimigo (Watcher)" htmlFor="na-netrunner" hint="Going Quiet p.4–5">
+        <Field label={t('Netrunner inimigo (Watcher)', 'Enemy Netrunner (Watcher)')} htmlFor="na-netrunner" hint="Going Quiet p.4–5">
           <Select id="na-netrunner" value={netrunner} onChange={(e) => setNetrunner(e.target.value as 'roll' | 'yes' | 'no')}>
-            <option value="roll">Sortear pela dificuldade</option>
-            <option value="yes">Sim, plugado no fundo</option>
-            <option value="no">Não</option>
+            <option value="roll">{t('Sortear pela dificuldade', 'Random by difficulty')}</option>
+            <option value="yes">{t('Sim, plugado no fundo', 'Yes, jacked in at the bottom')}</option>
+            <option value="no">{t('Não', 'No')}</option>
           </Select>
         </Field>
-        <Field label="Seed (opcional)" htmlFor="na-seed" hint="A mesma seed gera a mesma Arquitetura.">
-          <NumberInput id="na-seed" min={1} max={2147483647} allowEmpty value={seed} onChange={setSeed} placeholder="Aleatória" />
+        <Field label={t('Seed (opcional)', 'Seed (optional)')} htmlFor="na-seed" hint={t('A mesma seed gera a mesma Arquitetura.', 'The same seed generates the same Architecture.')}>
+          <NumberInput id="na-seed" min={1} max={2147483647} allowEmpty value={seed} onChange={setSeed} placeholder={t('Aleatória', 'Random')} />
         </Field>
-        <Field label="Nome (opcional)" htmlFor="na-name">
-          <input id="na-name" value={name} maxLength={80} onChange={(e) => setName(e.target.value)} placeholder="Ex.: Servidor da Biotechnica" />
+        <Field label={t('Nome (opcional)', 'Name (optional)')} htmlFor="na-name">
+          <input id="na-name" value={name} maxLength={80} onChange={(e) => setName(e.target.value)} placeholder={t('Ex.: Servidor da Biotechnica', 'E.g. Biotechnica server')} />
         </Field>
       </div>
       <div className={styles.row}>
-        <Switch checked={respect} onChange={setRespect} label={`Respeitar o limite de Control Nodes da compra (${r.pricing.floors.source})`} />
+        <Switch checked={respect} onChange={setRespect} label={t(`Respeitar o limite de Control Nodes da compra (${r.pricing.floors.source})`, `Respect the purchase's Control Node limit (${r.pricing.floors.source})`)} />
       </div>
       <div className={styles.row}>
         <Button variant="primary" icon={create.isPending ? <Spinner /> : <Dices size={15} />} disabled={create.isPending} onClick={() => create.mutate()}>
-          Gerar Arquitetura
+          {t('Gerar Arquitetura', 'Generate Architecture')}
         </Button>
       </div>
     </section>

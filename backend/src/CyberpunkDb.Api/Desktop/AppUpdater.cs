@@ -4,6 +4,7 @@ using System.Security.Cryptography;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using CyberpunkDb.Application.Common;
+using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Api.Desktop;
 
@@ -90,15 +91,15 @@ public sealed class AppUpdater : IDisposable
     public async Task ApplyAsync(string version, CancellationToken ct)
     {
         if (!_options.CanApply)
-            throw new ConflictException("A atualização automática só funciona no executável para Windows.");
+            throw new ConflictException(L.T("A atualização automática só funciona no executável para Windows.", "Automatic updates only work in the Windows executable."));
         if (!await _applyLock.WaitAsync(0, ct))
-            throw new ConflictException("Uma atualização já está em andamento.");
+            throw new ConflictException(L.T("Uma atualização já está em andamento.", "An update is already in progress."));
 
         try
         {
             var release = await GetLatestAsync(ct);
             if (release is null || !IsNewer(release) || release.Version != AppVersion.Parse(version))
-                throw new ConflictException("Essa versão não está mais disponível. Recarregue a página.");
+                throw new ConflictException(L.T("Essa versão não está mais disponível. Recarregue a página.", "That version is no longer available. Reload the page."));
 
             var exe = _options.ExePath!;
             var downloaded = exe + ".new";
@@ -107,7 +108,7 @@ public sealed class AppUpdater : IDisposable
             if (!string.Equals(expected, actual, StringComparison.OrdinalIgnoreCase))
             {
                 TryDelete(downloaded);
-                throw new ConflictException("O arquivo baixado está corrompido (SHA-256 não confere). Tente de novo.");
+                throw new ConflictException(L.T("O arquivo baixado está corrompido (SHA-256 não confere). Tente de novo.", "The downloaded file is corrupted (SHA-256 doesn't match). Try again."));
             }
 
             Swap(exe, downloaded);
@@ -199,7 +200,7 @@ public sealed class AppUpdater : IDisposable
         }
         catch (HttpRequestException ex)
         {
-            throw new ConflictException($"Não foi possível baixar a atualização: {ex.Message}");
+            throw new ConflictException(L.T($"Não foi possível baixar a atualização: {ex.Message}", $"Couldn't download the update: {ex.Message}"));
         }
     }
 
@@ -227,13 +228,13 @@ public sealed class AppUpdater : IDisposable
         catch (UnauthorizedAccessException)
         {
             throw new ConflictException(
-                $"Sem permissão para gravar em {Path.GetDirectoryName(path)}. Mova o NightCityItemDB.exe para uma pasta sua " +
-                "(por exemplo, Documentos) e tente de novo.");
+                L.T($"Sem permissão para gravar em {Path.GetDirectoryName(path)}. Mova o NightCityItemDB.exe para uma pasta sua ", $"No permission to write to {Path.GetDirectoryName(path)}. Move NightCityItemDB.exe to a folder of yours ") +
+                L.T("(por exemplo, Documentos) e tente de novo.", "(for example, Documents) and try again."));
         }
         catch (Exception ex) when (ex is HttpRequestException or IOException)
         {
             TryDelete(path);
-            throw new ConflictException($"Não foi possível baixar a atualização: {ex.Message}");
+            throw new ConflictException(L.T($"Não foi possível baixar a atualização: {ex.Message}", $"Couldn't download the update: {ex.Message}"));
         }
     }
 

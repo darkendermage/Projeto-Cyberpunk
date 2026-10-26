@@ -2,6 +2,7 @@ import type { Ref } from 'react';
 import type { NetArchitectureDetail } from '../../api/netArchitectureTypes';
 import { DIAGRAM, doorText, isBossFloor, layoutDiagram, type Lookups } from './netArchitecture';
 import styles from './NetArchitecture.module.css';
+import { t, tv } from '../../i18n';
 
 // Literal token colors (styles/tokens.css): the exported .svg has no stylesheet.
 const KIND_COLOR: Record<string, string> = {
@@ -31,7 +32,7 @@ export function ArchitectureDiagram({ detail, lookups, selected, onSelect, ref }
   return (
     <div className={styles.diagramWrap}>
       <svg ref={ref} xmlns="http://www.w3.org/2000/svg" width={layout.width} height={layout.height} viewBox={`0 0 ${layout.width} ${layout.height}`}
-        className={styles.diagram} role="img" aria-label={`Diagrama da Arquitetura ${detail.name}`}
+        className={styles.diagram} role="img" aria-label={t(`Diagrama da Arquitetura ${tv(detail.name)}`, `Diagram of the Architecture ${tv(detail.name)}`)}
         style={{ fontFamily: "'Rajdhani', 'Segoe UI', sans-serif" }}>
         <rect width={layout.width} height={layout.height} fill="#0b0d12" />
         {layout.links.map((l) => (
@@ -42,7 +43,7 @@ export function ArchitectureDiagram({ detail, lookups, selected, onSelect, ref }
           const bottom = floor.id === detail.bottomFloorId;
           const boss = isBossFloor(floor, state);
           const watchers = watchersAt(floor.id);
-          const kinds = [...new Set(floor.contents.map((c) => c.kind))];
+          const kinds = [...new Set(floor.contents.map((c) => tv(c.kind)))];
           const isSelected = floor.id === selected;
           return (
             <g key={floor.id} transform={`translate(${x},${y})`} className={styles.diagramNode} onClick={() => onSelect(floor.id)}
@@ -58,7 +59,7 @@ export function ArchitectureDiagram({ detail, lookups, selected, onSelect, ref }
               </text>
               <text x={12} y={35} fontSize={13.5} fill="#e9edf2">{truncate(doorText(floor, lookups), 24)}</text>
               {watchers.length > 0 && (
-                <text x={12} y={48} fontSize={10.5} fill="#ffcf3a">{truncate(watchers.map((w) => w.name).join(', '), 30)}</text>
+                <text x={12} y={48} fontSize={10.5} fill="#ffcf3a">{truncate(watchers.map((w) => tv(w.name)).join(', '), 30)}</text>
               )}
             </g>
           );

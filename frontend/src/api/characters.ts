@@ -4,6 +4,7 @@ import type {
   CharacterDetail, CharacterEvent, CharacterEventKind, CharacterRules, CharacterSheet, CharacterSummary,
   CreateCharacterRequest, InstallPreview, InstallRequestBody, StorePage,
 } from './characterTypes';
+import { locale, t } from '../i18n';
 
 const json = (body: unknown) => JSON.stringify(body);
 const post = <T>(path: string, body: unknown) => request<T>(path, { method: 'POST', body: json(body) });
@@ -35,13 +36,13 @@ export const characterApi = {
     form.append('file', file);
     let response: Response;
     try {
-      response = await fetch(`${API_BASE}/characters/${id}/portrait`, { method: 'PUT', body: form });
+      response = await fetch(`${API_BASE}/characters/${id}/portrait`, { method: 'PUT', body: form, headers: { 'Accept-Language': locale } });
     } catch {
       // The server closes the connection on an oversized upload, so the browser only sees a network failure.
-      throw new ApiError(0, { title: 'Não deu para enviar o retrato. Verifique se a imagem tem até 2 MB e se o programa está aberto.' });
+      throw new ApiError(0, { title: t('Não deu para enviar o retrato. Verifique se a imagem tem até 2 MB e se o programa está aberto.', 'Couldn\'t upload the portrait. Check that the image is 2 MB or less and that the program is open.') });
     }
     if (!response.ok) {
-      let problem = { title: `Erro ${response.status}` } as { title?: string; errors?: Record<string, string[]> };
+      let problem = { title: t(`Erro ${response.status}`, `Error ${response.status}`) } as { title?: string; errors?: Record<string, string[]> };
       try { problem = await response.json(); } catch { /* non-JSON */ }
       throw new ApiError(response.status, problem);
     }
@@ -71,7 +72,7 @@ export const useCharacterEvents = (id: number, enabled = true) =>
  * Message of an API failure. Rule refusals come back as field errors (400); the title alone only says
  * "invalid fields", so the first field message is what the player needs to read.
  */
-export function problemMessage(error: unknown, fallback = 'Algo deu errado.'): string {
+export function problemMessage(error: unknown, fallback = t('Algo deu errado.', 'Something went wrong.')): string {
   if (error instanceof ApiError) {
     const first = Object.values(error.fieldErrors).flat()[0];
     return first ?? error.message;
@@ -123,11 +124,11 @@ export function downloadCharacter(id: number) {
 
 /** Reads a chosen file as JSON, refusing what is clearly not an export before it reaches the server. */
 export async function readCharacterFile(file: File): Promise<unknown> {
-  if (file.size > IMPORT_MAX_BYTES) throw new Error('O arquivo passa de 12 MB.');
+  if (file.size > IMPORT_MAX_BYTES) throw new Error(t('O arquivo passa de 12 MB.', 'The file is larger than 12 MB.'));
   try {
     return JSON.parse(await file.text());
   } catch {
-    throw new Error('O arquivo não é um personagem exportado (JSON inválido).');
+    throw new Error(t('O arquivo não é um personagem exportado (JSON inválido).', 'The file is not an exported character (invalid JSON).'));
   }
 }
 

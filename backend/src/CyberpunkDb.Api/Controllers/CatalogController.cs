@@ -2,6 +2,7 @@ using CyberpunkDb.Application.Catalog;
 using CyberpunkDb.Application.Catalog.Contracts;
 using CyberpunkDb.Application.Common;
 using Microsoft.AspNetCore.Mvc;
+using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Api.Controllers;
 
@@ -40,7 +41,7 @@ public sealed class CatalogController(CatalogService catalog) : ControllerBase
         var parsed = new List<int>();
         foreach (var part in (ids ?? string.Empty).Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
         {
-            if (!int.TryParse(part, out var id)) throw RequestValidationException.For("ids", $"Id inválido: '{part}'.");
+            if (!int.TryParse(part, out var id)) throw RequestValidationException.For("ids", L.T($"Id inválido: '{part}'.", $"Invalid id: '{part}'."));
             if (!parsed.Contains(id)) parsed.Add(id);
         }
         return catalog.GetItemsAsync(parsed, ct);

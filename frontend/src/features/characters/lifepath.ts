@@ -1,6 +1,7 @@
 // Narrative Lifepath helpers. The tables come from the API (CP:R p.45–69); rolling on them is a narrative aid,
 // so it happens here and the player can always pick or write something else (the book says "roll or choose").
 import type { CharacterRules, CharacterSheet, LifepathQuestion, Relationship, RelationshipKind } from '../../api/characterTypes';
+import { t } from '../../i18n';
 
 export type Rng = () => number;
 
@@ -38,18 +39,18 @@ export function visibleQuestions(questions: LifepathQuestion[], answers: Record<
 }
 
 export const RELATIONSHIP_SECTIONS: { kind: RelationshipKind; title: string; empty: string }[] = [
-  { kind: 'Friend', title: 'Amigos', empty: 'Nenhum amigo registrado.' },
-  { kind: 'Lover', title: 'Tragédias amorosas', empty: 'Nenhum romance trágico.' },
-  { kind: 'Enemy', title: 'Inimigos', empty: 'Nenhum inimigo. Por enquanto.' },
-  { kind: 'Ally', title: 'Aliados', empty: 'Nenhum aliado registrado.' },
-  { kind: 'Contact', title: 'Contatos', empty: 'Nenhum contato registrado.' },
+  { kind: 'Friend', title: t('Amigos', 'Friends'), empty: t('Nenhum amigo registrado.', 'No friends recorded.') },
+  { kind: 'Lover', title: t('Tragédias amorosas', 'Tragic love affairs'), empty: t('Nenhum romance trágico.', 'No tragic romance.') },
+  { kind: 'Enemy', title: t('Inimigos', 'Enemies'), empty: t('Nenhum inimigo. Por enquanto.', 'No enemies. For now.') },
+  { kind: 'Ally', title: t('Aliados', 'Allies'), empty: t('Nenhum aliado registrado.', 'No allies recorded.') },
+  { kind: 'Contact', title: t('Contatos', 'Contacts'), empty: t('Nenhum contato registrado.', 'No contacts recorded.') },
 ];
 
 /** General Lifepath tables grouped as on the reference sheet. Style tables are kept in the style section. */
 export const LIFEPATH_GROUPS: { title: string; tables: string[] }[] = [
-  { title: 'Personalidade', tables: ['personality'] },
-  { title: 'Motivações', tables: ['valueMost', 'feelAboutPeople', 'valuedPerson', 'valuedPossession'] },
-  { title: 'Origem e família', tables: ['familyBackground', 'childhoodEnvironment', 'familyCrisis', 'lifeGoal'] },
+  { title: t('Personalidade', 'Personality'), tables: ['personality'] },
+  { title: t('Motivações', 'Motivations'), tables: ['valueMost', 'feelAboutPeople', 'valuedPerson', 'valuedPossession'] },
+  { title: t('Origem e família', 'Origin and family'), tables: ['familyBackground', 'childhoodEnvironment', 'familyCrisis', 'lifeGoal'] },
 ];
 
 /** Tables whose answers live in the style section of the sheet (clothing, hair, signature affectation). */
@@ -93,10 +94,10 @@ export function rollMissing(
   }
 
   const rollTable = (id: string, current: string | null | undefined): string | null => {
-    const t = rules.lifepathTables.find((x) => x.id === id);
-    if (current || !t || t.dice === 'choose' || t.options.length === 0) return null;
+    const entry = rules.lifepathTables.find((x) => x.id === id);
+    if (current || !entry || entry.dice === 'choose' || entry.options.length === 0) return null;
     filled++;
-    return rollOption(t.options, rng);
+    return rollOption(entry.options, rng);
   };
   for (const id of LIFEPATH_GROUPS.flatMap((g) => g.tables)) {
     const rolled = rollTable(id, answers[id]);

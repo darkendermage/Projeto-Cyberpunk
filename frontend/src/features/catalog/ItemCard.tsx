@@ -6,7 +6,7 @@ import { cardStats, DATA_ORIGIN_LABEL, formatEb, shortLabel } from '../../lib/fo
 import { CATEGORY_CODES } from './categoryMeta';
 import { CompareButton, FavoriteButton } from './ItemActions';
 import styles from './ItemCard.module.css';
-
+import { t, tv } from '../../i18n';
 const ORIGIN_BADGE: Record<string, string> = { Demo: 'DEMO', Custom: 'CUSTOM', Verified: 'CONFERIDO' };
 
 interface Props {
@@ -44,26 +44,26 @@ function ItemCardImpl({ item, schema, onOpen }: Props) {
       <div className={styles.body}>
         <div className={styles.titleRow}>
           <h3 className={styles.name}>
-            <button type="button" className={styles.open} onClick={() => onOpen(item)}>{item.name}</button>
+            <button type="button" className={styles.open} onClick={() => onOpen(item)}>{tv(item.name)}</button>
           </h3>
-          {badge && <span className={styles.badge} title={item.source?.name}>{badge}</span>}
+          {badge && <span className={styles.badge} title={tv(item.source?.name)}>{badge}</span>}
         </div>
 
         <div className={styles.metaRow}>
-          <span className={styles.subtype}>{item.subtype?.label}</span>
+          <span className={styles.subtype}>{tv(item.subtype?.label)}</span>
           <span className={styles.price}>
-            {item.price != null ? <>{formatEb(item.price)} <small>eddies</small></> : <small>{item.priceNote ?? 'sem preço'}</small>}
+            {item.price != null ? <>{formatEb(item.price)} <small>eddies</small></> : <small>{item.priceNote ?? t('sem preço', 'no price')}</small>}
           </span>
         </div>
 
-        {item.description && <p className={styles.description}>{item.description}</p>}
+        {item.description && <p className={styles.description}>{tv(item.description)}</p>}
 
         {stats.length > 0 && (
           <dl className={styles.stats} style={{ gridTemplateColumns: `repeat(${stats.length}, 1fr)` }}>
             {stats.map(({ field, value }) => (
-              <div key={field.key} title={field.label}>
+              <div key={field.key} title={tv(field.label)}>
                 <dt>{shortLabel(field)}</dt>
-                <dd>{value.text}{value.unit && <small> {value.unit}</small>}</dd>
+                <dd>{tv(value.text)}{value.unit && <small> {value.unit}</small>}</dd>
               </div>
             ))}
           </dl>

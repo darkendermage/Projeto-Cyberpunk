@@ -119,8 +119,8 @@ describe('presentation', () => {
     const label = (_: string, v: string) => (v === 'Smg' ? 'SMG' : v);
     const byKey = (k: string) => schema.fields.find((f) => f.key === k);
     expect(describeCriterion({ field: 'weaponClass', op: 'in', values: ['Smg'] }, byKey('weaponClass'), label)).toBe('Tipo de arma: SMG');
-    expect(describeCriterion({ field: 'weaponClass', op: 'nin', values: ['Smg'] }, byKey('weaponClass'), label)).toBe('Tipo de arma exceto SMG');
-    expect(describeCriterion({ field: 'price', op: 'between', values: ['100', '500'] }, byKey('price'), label)).toBe('Preço entre 100 e 500 eb');
+    expect(describeCriterion({ field: 'weaponClass', op: 'nin', values: ['Smg'] }, byKey('weaponClass'), label)).toBe('Tipo de arma except SMG');
+    expect(describeCriterion({ field: 'price', op: 'between', values: ['100', '500'] }, byKey('price'), label)).toBe('Preço between 100 and 500 eb');
     expect(describeCriterion({ field: 'rof', op: 'gte', values: ['2'] }, byKey('rof'), label)).toBe('ROF ≥ 2');
   });
 });

@@ -3,6 +3,7 @@ import type { FighterView, NamedValue } from '../../api/encounterTypes';
 import { Badge } from '../../components/ui/ui';
 import { WOUND_LABEL, WOUND_TONE } from './combat';
 import styles from './Combat.module.css';
+import { t, tv } from '../../i18n';
 
 /** Read-only sheet of an NPC or generic enemy: the snapshot it joined the fight with, plus its running state. */
 export function FighterSheet({ f }: { f: FighterView }) {
@@ -11,31 +12,31 @@ export function FighterSheet({ f }: { f: FighterView }) {
     { id: 'WILL', label: 'WILL', value: f.will }, { id: 'MOVE', label: 'MOVE', value: f.move },
   ];
   return (
-    <section className={styles.panel} aria-label={`Ficha de ${f.name}`}>
+    <section className={styles.panel} aria-label={t(`Ficha de ${tv(f.name)}`, `Sheet of ${tv(f.name)}`)}>
       <div className={styles.rowBetween}>
         <div>
-          <h2 className={styles.panelTitle}>{f.name}</h2>
-          <span className={styles.muted}>{f.kind === 'Generic' ? 'Inimigo genérico' : 'NPC'}</span>
+          <h2 className={styles.panelTitle}>{tv(f.name)}</h2>
+          <span className={styles.muted}>{f.kind === 'Generic' ? t('Inimigo genérico', 'Generic enemy') : 'NPC'}</span>
         </div>
         <span className={styles.row}>
-          <Badge tone={f.side === 'Enemy' ? 'red' : 'cyan'}>{f.side === 'Enemy' ? 'Inimigo' : 'Aliado'}</Badge>
+          <Badge tone={f.side === 'Enemy' ? 'red' : 'cyan'}>{f.side === 'Enemy' ? t('Inimigo', 'Enemy') : t('Aliado', 'Ally')}</Badge>
           <Badge tone={WOUND_TONE[f.woundState]}>{WOUND_LABEL[f.woundState]}</Badge>
         </span>
       </div>
       <dl className={styles.stats}>
         <div><dt>HP</dt><dd>{f.hp}/{f.maxHp}</dd></div>
-        <div><dt>SP corpo</dt><dd>{f.spBody}/{f.maxSpBody}</dd></div>
-        <div><dt>SP cabeça</dt><dd>{f.spHead}/{f.maxSpHead}</dd></div>
-        <div><dt>Penalidade</dt><dd>{f.actionPenalty}</dd></div>
+        <div><dt>{t('SP corpo', 'Body SP')}</dt><dd>{f.spBody}/{f.maxSpBody}</dd></div>
+        <div><dt>{t('SP cabeça', 'Head SP')}</dt><dd>{f.spHead}/{f.maxSpHead}</dd></div>
+        <div><dt>{t('Penalidade', 'Penalty')}</dt><dd>{f.actionPenalty}</dd></div>
       </dl>
       <Values title="STATs" values={stats} />
-      <Block title="Armas e ataques">
+      <Block title={t('Armas e ataques', 'Weapons and attacks')}>
         <ul className={styles.sheetList}>
           {f.weapons.map((w) => (
             <li key={w.key}>
-              <strong>{w.name}</strong> {w.damage} · ROF {w.rof} · ataque +{w.attackTotal}
+              <strong>{tv(w.name)}</strong> {tv(w.damage)} · ROF {w.rof} {t('· ataque +', '· attack +')}{w.attackTotal}
               {w.autofireTotal != null && ` · autofire +${w.autofireTotal}`}
-              {w.magazine != null && ` · ${w.rounds ?? 0}/${w.magazine} tiros`}
+              {w.magazine != null && t(` · ${w.rounds ?? 0}/${w.magazine} tiros`, ` · ${w.rounds ?? 0}/${w.magazine} rounds`)}
             </li>
           ))}
         </ul>
@@ -44,11 +45,11 @@ export function FighterSheet({ f }: { f: FighterView }) {
       {f.injuries.length > 0 && (
         <Block title="Critical Injuries">
           <ul className={styles.injuries}>
-            {f.injuries.map((i) => <li key={i.name}><strong>{i.name}</strong> ({i.location === 'Head' ? 'cabeça' : 'corpo'}){i.effect ? ` — ${i.effect}` : ''}</li>)}
+            {f.injuries.map((i) => <li key={i.name}><strong>{tv(i.name)}</strong> ({i.location === 'Head' ? t('cabeça', 'head') : t('corpo', 'body')}){i.effect ? ` — ${tv(i.effect)}` : ''}</li>)}
           </ul>
         </Block>
       )}
-      <span className={styles.source}>Ficha registrada quando entrou no combate{f.source ? ` · ${f.source}` : ''}.</span>
+      <span className={styles.source}>{t('Ficha registrada quando entrou no combate', 'Sheet recorded when they joined the fight')}{f.source ? ` · ${f.source}` : ''}.</span>
     </section>
   );
 }
@@ -61,7 +62,7 @@ function Values({ title, values, list }: { title: string; values: NamedValue[]; 
   return (
     <Block title={title}>
       <dl className={list ? styles.skillList : styles.stats}>
-        {values.map((v) => <div key={v.id}><dt>{v.label}</dt><dd>{v.value}</dd></div>)}
+        {values.map((v) => <div key={v.id}><dt>{tv(v.label)}</dt><dd>{tv(v.value)}</dd></div>)}
       </dl>
     </Block>
   );

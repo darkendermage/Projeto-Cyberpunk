@@ -1,5 +1,5 @@
 import type { CategorySchema, FieldDescriptor, FilterCriterionDto, FilterOp } from '../api/types';
-
+import { t } from '../i18n';
 /**
  * UI-side filter model: one criterion per field, values kept as strings (as they live in the URL).
  * Criteria are AND-ed by the API; multiple values inside "in" are OR-ed.
@@ -18,12 +18,12 @@ export const OP_LABELS: Record<FilterOp, string> = {
   lt: '<',
   lte: '≤',
   between: 'entre',
-  in: 'é',
-  nin: 'não é',
-  all: 'tem todos',
-  contains: 'contém',
-  isnull: 'sem valor',
-  notnull: 'com valor',
+  in: t('é', 'is'),
+  nin: t('não é', 'is not'),
+  all: t('tem todos', 'has all'),
+  contains: t('contém', 'contains'),
+  isnull: t('sem valor', 'no value'),
+  notnull: t('com valor', 'has a value'),
 };
 
 const VALUELESS: FilterOp[] = ['isnull', 'notnull'];
@@ -142,17 +142,17 @@ export function describeCriterion(
   const label = field?.label ?? c.field;
   const unit = field?.unit && field.unit !== 'penalty' ? ` ${field.unit}` : '';
   if (VALUELESS.includes(c.op)) return `${label}: ${OP_LABELS[c.op]}`;
-  if (field?.kind === 'boolean') return `${label}: ${c.values[0] === 'true' ? 'Sim' : 'Não'}`;
+  if (field?.kind === 'boolean') return t(`${label}: ${c.values[0] === 'true' ? 'Sim' : 'Não'}`, `${label}: ${c.values[0] === 'true' ? 'Yes' : 'No'}`);
   if (field?.kind === 'number') {
     if (c.op === 'between') {
       const [min, max] = c.values;
-      if (min && max) return `${label} entre ${min} e ${max}${unit}`;
+      if (min && max) return t(`${label} entre ${min} e ${max}${unit}`, `${label} between ${min} and ${max}${unit}`);
       return min ? `${label} ≥ ${min}${unit}` : `${label} ≤ ${max}${unit}`;
     }
     return `${label} ${OP_LABELS[c.op]} ${c.values[0]}${unit}`;
   }
   const values = c.values.map((v) => labelFor(c.field, v)).join(', ');
-  if (c.op === 'nin') return `${label} exceto ${values}`;
-  if (c.op === 'all' && c.values.length > 1) return `${label}: ${values} (todos)`;
+  if (c.op === 'nin') return t(`${label} exceto ${values}`, `${label} except ${values}`);
+  if (c.op === 'all' && c.values.length > 1) return t(`${label}: ${values} (todos)`, `${label}: ${values} (all)`);
   return `${label}: ${values}`;
 }

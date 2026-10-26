@@ -1,6 +1,7 @@
 using CyberpunkDb.Application.Npcs.Rules;
 using CyberpunkDb.Application.Npcs.Validation;
 using CyberpunkDb.Domain.Enums;
+using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.Npcs.Generation;
 
@@ -45,10 +46,10 @@ public sealed class NpcGenerator(NpcRuleBook rules, NpcValidator validator)
         var seed = request.Seed ?? Random.Shared.Next(1, int.MaxValue);
 
         if (request.ProfileId is not null && rules.FindProfile(request.ProfileId) is null)
-            return Fail(seed, 0, null, [new("PROFILE_UNKNOWN", $"Perfil \"{request.ProfileId}\" não existe.", "Escolha um perfil da lista ou deixe em branco.", null)]);
+            return Fail(seed, 0, null, [new("PROFILE_UNKNOWN", L.T($"Perfil \"{request.ProfileId}\" não existe.", $"Profile \"{request.ProfileId}\" doesn't exist."), L.T("Escolha um perfil da lista ou deixe em branco.", "Pick a profile from the list or leave it blank."), null)]);
         var gang = rules.FindGang(request.GangId);
         if (request.GangId is not null && gang is null)
-            return Fail(seed, 0, request.ProfileId, [new("GANG_UNKNOWN", $"Gangue \"{request.GangId}\" não existe.", "Escolha uma gangue da lista ou deixe em branco.", null)]);
+            return Fail(seed, 0, request.ProfileId, [new("GANG_UNKNOWN", L.T($"Gangue \"{request.GangId}\" não existe.", $"Gang \"{request.GangId}\" doesn't exist."), L.T("Escolha uma gangue da lista ou deixe em branco.", "Pick a gang from the list or leave it blank."), null)]);
 
         var conflicts = Precheck(t, baseSheet, cyberRules, catalog);
         if (conflicts.Count > 0) return Fail(seed, 0, request.ProfileId, conflicts);
@@ -68,8 +69,8 @@ public sealed class NpcGenerator(NpcRuleBook rules, NpcValidator validator)
             .Select(i => new GenerationConflict(i.Code, i.Message, i.Suggestion, i.Source))
             .DistinctBy(c => c.Message)
             .Prepend(new GenerationConflict("NO_VALID_COMBINATION",
-                $"Nenhuma combinação válida foi encontrada em {maxAttempts} tentativas.",
-                "Libere campos travados, reduza obrigatórios ou mude o perfil.", null))
+                L.T($"Nenhuma combinação válida foi encontrada em {maxAttempts} tentativas.", $"No valid combination was found in {maxAttempts} attempts."),
+                L.T("Libere campos travados, reduza obrigatórios ou mude o perfil.", "Unlock fields, reduce required items or change the profile."), null))
             .ToList();
         return Fail(seed, maxAttempts, profile.Id, reasons);
     }
@@ -134,7 +135,7 @@ public sealed class NpcGenerator(NpcRuleBook rules, NpcValidator validator)
         return new NpcSheet
         {
             Name = b.Name.Length > 0 ? b.Name : PickHandle(gang, rng),
-            Concept = b.Concept ?? (gang is null ? profile.Label : $"{gang.Label} · {profile.Label}"),
+            Concept = b.Concept ?? (gang is null ? L.D(profile.Label) : $"{L.D(gang.Label)} · {L.D(profile.Label)}"),
             Level = request.Level,
             Hardened = request.Hardened,
             ProfileId = profile.Id,
@@ -167,14 +168,14 @@ public sealed class NpcGenerator(NpcRuleBook rules, NpcValidator validator)
         // STATs: locked values plus the minimum of every other STAT must fit the budget.
         var locked = b.Locks.Stats.Where(k => b.Stats.ContainsKey(k)).Select(k => k.ToUpperInvariant()).Distinct().ToList();
         foreach (var k in locked.Where(k => b.Stats[k] > t.MaxStat.Value))
-            conflicts.Add(new("STAT_ABOVE_MAX", $"{k} travado em {b.Stats[k]} ultrapassa o máximo de {t.MaxStat.Value} para {t.DisplayName}.",
-                $"Reduza {k} para {t.MaxStat.Value} ou destrave o campo.", t.MaxStat.Reference));
+            conflicts.Add(new("STAT_ABOVE_MAX", L.T($"{k} travado em {b.Stats[k]} ultrapassa o máximo de {t.MaxStat.Value} para {t.DisplayName}.", $"{k} locked at {b.Stats[k]} goes over the maximum of {t.MaxStat.Value} for {t.DisplayName}."),
+                L.T($"Reduza {k} para {t.MaxStat.Value} ou destrave o campo.", $"Lower {k} to {t.MaxStat.Value} or unlock the field."), t.MaxStat.Reference));
         var minimum = locked.Sum(k => b.Stats[k]) + rules.StatKeys.Where(k => !locked.Contains(k))
             .Sum(k => k == "EMP" ? s.EmpMin.Value : s.Min.Value);
         if (minimum > t.StatPoints.Value)
             conflicts.Add(new("STAT_BUDGET_EXCEEDED",
-                $"Os STATs travados somam {locked.Sum(k => b.Stats[k])}; com o mínimo nos demais, o total chega a {minimum}, acima do orçamento de {t.StatPoints.Value} em {minimum - t.StatPoints.Value}.",
-                "Reduza algum STAT travado ou destrave campos.", t.StatPoints.Reference));
+                L.T($"Os STATs travados somam {locked.Sum(k => b.Stats[k])}; com o mínimo nos demais, o total chega a {minimum}, acima do orçamento de {t.StatPoints.Value} em {minimum - t.StatPoints.Value}.", $"The locked STATs add up to {locked.Sum(k => b.Stats[k])}; with the minimum on the others, the total reaches {minimum}, {minimum - t.StatPoints.Value} over the budget of {t.StatPoints.Value}."),
+                L.T("Reduza algum STAT travado ou destrave campos.", "Lower a locked STAT or unlock fields."), t.StatPoints.Reference));
 
         // Skills.
         var free = rules.FreeSkillLevels(b.NativeLanguage, b.Home);
@@ -184,18 +185,18 @@ public sealed class NpcGenerator(NpcRuleBook rules, NpcValidator validator)
             var (id, _) = SkillKey.Parse(key);
             if (rules.FindSkill(id) is not { } def)
             {
-                conflicts.Add(new("SKILL_UNKNOWN", $"Perícia travada \"{key}\" não existe.", "Remova a trava.", null));
+                conflicts.Add(new("SKILL_UNKNOWN", L.T($"Perícia travada \"{key}\" não existe.", $"Locked skill \"{key}\" doesn't exist."), "Remova a trava.", null));
                 continue;
             }
             var level = b.Skills[key];
             if (level > t.MaxSkill.Value)
-                conflicts.Add(new("SKILL_ABOVE_MAX", $"A perícia {def.Name} travada em {level} ultrapassa o nível máximo de {t.MaxSkill.Value} permitido para esta categoria.",
-                    $"Reduza para {t.MaxSkill.Value}.", t.MaxSkill.Reference));
+                conflicts.Add(new("SKILL_ABOVE_MAX", L.T($"A perícia {def.Name} travada em {level} ultrapassa o nível máximo de {t.MaxSkill.Value} permitido para esta categoria.", $"The {def.Name} skill locked at {level} goes over the maximum level of {t.MaxSkill.Value} allowed for this category."),
+                    L.T($"Reduza para {t.MaxSkill.Value}.", $"Lower it to {t.MaxSkill.Value}."), t.MaxSkill.Reference));
             skillCost += Math.Max(0, level - free.GetValueOrDefault(key)) * rules.SkillCostMultiplier(def);
         }
         if (skillCost > t.SkillPoints.Value)
-            conflicts.Add(new("SKILL_BUDGET_EXCEEDED", $"As perícias travadas custam {skillCost} pontos, acima do orçamento de {t.SkillPoints.Value} em {skillCost - t.SkillPoints.Value}.",
-                "Reduza perícias travadas.", t.SkillPoints.Reference));
+            conflicts.Add(new("SKILL_BUDGET_EXCEEDED", L.T($"As perícias travadas custam {skillCost} pontos, acima do orçamento de {t.SkillPoints.Value} em {skillCost - t.SkillPoints.Value}.", $"The locked skills cost {skillCost} points, {skillCost - t.SkillPoints.Value} over the budget of {t.SkillPoints.Value}."),
+                L.T("Reduza perícias travadas.", "Lower locked skills."), t.SkillPoints.Reference));
 
         // Gear.
         var gearCost = 0;
@@ -203,22 +204,22 @@ public sealed class NpcGenerator(NpcRuleBook rules, NpcValidator validator)
         {
             if (catalog.Find(e.ItemId) is not { } item)
             {
-                conflicts.Add(new("ITEM_NOT_FOUND", $"Item fixo {e.ItemId} não existe no catálogo.", "Remova o item.", null));
+                conflicts.Add(new("ITEM_NOT_FOUND", L.T($"Item fixo {e.ItemId} não existe no catálogo.", $"Fixed item {e.ItemId} doesn't exist in the catalog."), "Remova o item.", null));
                 continue;
             }
             var (price, _, error) = _m.GearUnitPrice(item, e.Quality);
-            if (error is not null) conflicts.Add(new("WEAPON_QUALITY_UNAVAILABLE", error, "Mantenha a qualidade cadastrada.", rules.Document.WeaponQualityPricing.Source));
+            if (error is not null) conflicts.Add(new("WEAPON_QUALITY_UNAVAILABLE", error, L.T("Mantenha a qualidade cadastrada.", "Keep the catalog quality."), rules.Document.WeaponQualityPricing.Source));
             gearCost += (price ?? 0) * e.Quantity;
         }
         if (gearCost > t.GearBudget.Value)
             conflicts.Add(new("GEAR_BUDGET_EXCEEDED",
-                $"O equipamento fixo custa {NpcValidator.Eb(gearCost)} e ultrapassa o orçamento de {NpcValidator.Eb(t.GearBudget.Value)} em {NpcValidator.Eb(gearCost - t.GearBudget.Value)}.",
-                "Remova itens fixos ou troque por versões mais baratas.", t.GearBudget.Reference));
+                L.T($"O equipamento fixo custa {NpcValidator.Eb(gearCost)} e ultrapassa o orçamento de {NpcValidator.Eb(t.GearBudget.Value)} em {NpcValidator.Eb(gearCost - t.GearBudget.Value)}.", $"The fixed gear costs {NpcValidator.Eb(gearCost)} and goes {NpcValidator.Eb(gearCost - t.GearBudget.Value)} over the budget of {NpcValidator.Eb(t.GearBudget.Value)}."),
+                L.T("Remova itens fixos ou troque por versões mais baratas.", "Remove fixed items or swap them for cheaper versions."), t.GearBudget.Reference));
 
         // Cyberware: required items must be installable with their dependencies, within budget, never forbidden.
         var forbidden = cyberRules.Where(r => r.State == CyberwareRuleState.Forbidden).Select(r => r.ItemId).ToHashSet();
         foreach (var e in b.Cyberware.Where(e => e.Locked && forbidden.Contains(e.ItemId)))
-            conflicts.Add(new("CYBER_FORBIDDEN", $"{catalog.Find(e.ItemId)?.Name ?? e.ItemId.ToString()} está fixo na ficha e também proibido.", "Escolha um dos dois.", null));
+            conflicts.Add(new("CYBER_FORBIDDEN", L.T($"{catalog.Find(e.ItemId)?.Name ?? e.ItemId.ToString()} está fixo na ficha e também proibido.", $"{catalog.Find(e.ItemId)?.Name ?? e.ItemId.ToString()} is fixed on the sheet and also forbidden."), L.T("Escolha um dos dois.", "Pick one of the two."), null));
 
         var planner = new CyberwarePlanner(_m, catalog).WithForbidden(forbidden);
         planner.AddLocked(b.Cyberware.Where(e => e.Locked && catalog.Find(e.ItemId) is not null));
@@ -226,18 +227,18 @@ public sealed class NpcGenerator(NpcRuleBook rules, NpcValidator validator)
         {
             if (catalog.Find(rule.ItemId) is not { Cyber: not null } item)
             {
-                conflicts.Add(new("ITEM_NOT_FOUND", $"Implante obrigatório {rule.ItemId} não existe no catálogo.", null, null));
+                conflicts.Add(new("ITEM_NOT_FOUND", L.T($"Implante obrigatório {rule.ItemId} não existe no catálogo.", $"Required implant {rule.ItemId} doesn't exist in the catalog."), null, null));
                 continue;
             }
             if (planner.Contains(item.Id)) continue;
             var error = planner.TryInstall(item, null);
             if (error is not null)
-                conflicts.Add(new("CYBER_REQUIRED_IMPOSSIBLE", $"Não é possível instalar {item.Name}: {error}", "Libere a dependência proibida ou remova a obrigatoriedade.", null));
+                conflicts.Add(new("CYBER_REQUIRED_IMPOSSIBLE", L.T($"Não é possível instalar {item.Name}: {error}", $"Can't install {item.Name}: {error}"), L.T("Libere a dependência proibida ou remova a obrigatoriedade.", "Allow the forbidden dependency or drop the requirement."), null));
         }
         if (t.CyberwareBudget.Value is { } limit && planner.Spent > limit)
             conflicts.Add(new("CYBER_BUDGET_EXCEEDED",
-                $"O cyberware obrigatório excede o orçamento disponível: custa {NpcValidator.Eb(planner.Spent)} com as dependências, para um orçamento de {NpcValidator.Eb(limit)}.",
-                "Remova implantes obrigatórios ou use uma categoria com orçamento maior.", t.CyberwareBudget.Reference));
+                L.T($"O cyberware obrigatório excede o orçamento disponível: custa {NpcValidator.Eb(planner.Spent)} com as dependências, para um orçamento de {NpcValidator.Eb(limit)}.", $"The required cyberware exceeds the available budget: it costs {NpcValidator.Eb(planner.Spent)} with its dependencies, for a budget of {NpcValidator.Eb(limit)}."),
+                L.T("Remova implantes obrigatórios ou use uma categoria com orçamento maior.", "Remove required implants or use a category with a bigger budget."), t.CyberwareBudget.Reference));
 
         return conflicts;
     }

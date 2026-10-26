@@ -3,6 +3,7 @@ import { Select } from '../../../components/ui/ui';
 import { type Criterion, getCriterion, setCriterion } from '../../../lib/filters';
 import { formatAttribute, optionLabel } from '../../../lib/format';
 import styles from './Filters.module.css';
+import { t, tv } from '../../../i18n';
 
 interface Props {
   field: FieldDescriptor;
@@ -24,20 +25,20 @@ export function SelectFilter({ field, criteria, onChange, facets }: Props & { fa
   if (single && !options.some((o) => o.value === value)) options.push({ value, label: optionLabel(field, value), count: 0 });
 
   return (
-    <Select value={value} highlighted={value !== ''} aria-label={field.label}
+    <Select value={value} highlighted={value !== ''} aria-label={tv(field.label)}
       onChange={(e) => {
         const v = e.target.value;
         if (v === CUSTOM) return;
         onChange(setCriterion(criteria, field.key, v ? { field: field.key, op: 'in', values: [v] } : null));
       }}>
-      <option value="">Todos</option>
+      <option value="">{t('Todos', 'All')}</option>
       {value === CUSTOM && (
         <option value={CUSTOM}>
-          {criterion!.op === 'nin' ? 'Exceto ' : ''}{criterion!.values.map((v) => optionLabel(field, v)).join(', ')}
+          {criterion!.op === 'nin' ? t('Exceto ', 'Except ') : ''}{criterion!.values.map((v) => optionLabel(field, v)).join(', ')}
         </option>
       )}
       {options.map((o) => (
-        <option key={o.value} value={o.value}>{o.label}{o.count !== undefined ? ` (${o.count})` : ''}</option>
+        <option key={o.value} value={o.value}>{tv(o.label)}{o.count !== undefined ? ` (${o.count})` : ''}</option>
       ))}
     </Select>
   );
@@ -48,12 +49,12 @@ export function BooleanSelect({ field, criteria, onChange }: Props) {
   const criterion = getCriterion(criteria, field.key);
   const value = criterion?.values[0] ?? '';
   return (
-    <Select value={value} highlighted={value !== ''} aria-label={field.label}
+    <Select value={value} highlighted={value !== ''} aria-label={tv(field.label)}
       onChange={(e) => onChange(setCriterion(criteria, field.key,
         e.target.value ? { field: field.key, op: 'eq', values: [e.target.value] } : null))}>
-      <option value="">Todos</option>
-      <option value="true">Sim</option>
-      <option value="false">Não</option>
+      <option value="">{t('Todos', 'All')}</option>
+      <option value="true">{t('Sim', 'Yes')}</option>
+      <option value="false">{t('Não', 'No')}</option>
     </Select>
   );
 }
@@ -94,12 +95,12 @@ export function RangeFilter({ field, criteria, onChange }: Props) {
     };
     return (
       <div className={styles.rangePair}>
-        <Select value={low} highlighted={low !== ''} aria-label={`${field.label}: mínimo`} onChange={(e) => set(e.target.value, high)}>
-          <option value="">Qualquer</option>
+        <Select value={low} highlighted={low !== ''} aria-label={t(`${tv(field.label)}: mínimo`, `${tv(field.label)}: minimum`)} onChange={(e) => set(e.target.value, high)}>
+          <option value="">{t('Qualquer', 'Any')}</option>
           {field.values.filter((v) => !high || v <= Number(high)).map((v) => <option key={v} value={String(v)}>{`≥ ${label(v)}`}</option>)}
         </Select>
-        <Select value={high} highlighted={high !== ''} aria-label={`${field.label}: máximo`} onChange={(e) => set(low, e.target.value)}>
-          <option value="">Qualquer</option>
+        <Select value={high} highlighted={high !== ''} aria-label={t(`${tv(field.label)}: máximo`, `${tv(field.label)}: maximum`)} onChange={(e) => set(low, e.target.value)}>
+          <option value="">{t('Qualquer', 'Any')}</option>
           {field.values.filter((v) => !low || v >= Number(low)).map((v) => <option key={v} value={String(v)}>{`≤ ${label(v)}`}</option>)}
         </Select>
       </div>
@@ -108,10 +109,10 @@ export function RangeFilter({ field, criteria, onChange }: Props) {
 
   return (
     <div className={styles.rangePair}>
-      <input type="number" inputMode="decimal" value={low} placeholder={field.min != null ? `mín. ${field.min}` : 'mín.'}
-        aria-label={`${field.label}: mínimo`} onChange={(e) => set(e.target.value, high)} />
-      <input type="number" inputMode="decimal" value={high} placeholder={field.max != null ? `máx. ${field.max}` : 'máx.'}
-        aria-label={`${field.label}: máximo`} onChange={(e) => set(low, e.target.value)} />
+      <input type="number" inputMode="decimal" value={low} placeholder={field.min != null ? t(`mín. ${field.min}`, `min. ${field.min}`) : t('mín.', 'min.')}
+        aria-label={t(`${tv(field.label)}: mínimo`, `${tv(field.label)}: minimum`)} onChange={(e) => set(e.target.value, high)} />
+      <input type="number" inputMode="decimal" value={high} placeholder={field.max != null ? t(`máx. ${field.max}`, `max. ${field.max}`) : t('máx.', 'max.')}
+        aria-label={t(`${tv(field.label)}: máximo`, `${tv(field.label)}: maximum`)} onChange={(e) => set(low, e.target.value)} />
     </div>
   );
 }

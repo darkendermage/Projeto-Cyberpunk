@@ -17,6 +17,7 @@ import { ItemTable } from './ItemTable';
 import { Pagination } from './Pagination';
 import { useCatalogState } from './useCatalogState';
 import styles from './CatalogPage.module.css';
+import { t, tv } from '../../i18n';
 
 export function CatalogPage() {
   const { category = DEFAULT_CATEGORY } = useParams();
@@ -64,7 +65,7 @@ export function CatalogPage() {
         {categories.data && <CategoryTabs categories={categories.data} view={state.view} />}
         <div className={styles.errorWrap}>
           <ErrorState error={schemaQuery.error} onRetry={() => schemaQuery.refetch()} />
-          <Link to={`/catalog/${DEFAULT_CATEGORY}`} className={styles.backLink}>Voltar para Armas</Link>
+          <Link to={`/catalog/${DEFAULT_CATEGORY}`} className={styles.backLink}>{t('Voltar para Armas', 'Back to Weapons')}</Link>
         </div>
       </div>
     );
@@ -85,35 +86,35 @@ export function CatalogPage() {
         <section ref={topRef} className={styles.results} aria-busy={busy}>
           <header className={styles.heading}>
             <div className={styles.headingText}>
-              <h1 className="hud-title" data-glitch={schema?.label ?? ''}>{schema?.label ?? '...'}</h1>
-              {schema && <p className={styles.description}>{schema.description}</p>}
+              <h1 className="hud-title" data-glitch={schema?.label ?? ''}>{tv(schema?.label) ?? '...'}</h1>
+              {schema && <p className={styles.description}>{tv(schema.description)}</p>}
             </div>
             <div className={styles.headingControls}>
-              <div className={styles.viewToggle} role="group" aria-label="Visualização">
+              <div className={styles.viewToggle} role="group" aria-label={t('Visualização', 'View')}>
                 <Button active={state.view === 'table'} icon={<Table2 size={16} />} aria-pressed={state.view === 'table'}
-                  onClick={() => update({ view: 'table' })}>Tabela</Button>
+                  onClick={() => update({ view: 'table' })}>{t('Tabela', 'Table')}</Button>
                 <Button active={state.view === 'grid'} icon={<LayoutGrid size={16} />} aria-pressed={state.view === 'grid'}
-                  onClick={() => update({ view: 'grid' })}>Grade</Button>
+                  onClick={() => update({ view: 'grid' })}>{t('Grade', 'Grid')}</Button>
               </div>
               {!wide && (
                 <Button icon={<SlidersHorizontal size={16} />} onClick={() => setFiltersOpen(true)} active={activeCount > 0}>
-                  Filtros{activeCount > 0 ? ` (${activeCount})` : ''}
+                  {t('Filtros', 'Filters')}{activeCount > 0 ? ` (${activeCount})` : ''}
                 </Button>
               )}
               <span className={styles.count} aria-live="polite">
-                {busy && <Spinner label="Atualizando resultados" />}
-                {total !== undefined && <><strong>{formatNumber(total)}</strong> {total === 1 ? 'item encontrado' : 'itens encontrados'}</>}
+                {busy && <Spinner label={t('Atualizando resultados', 'Updating results')} />}
+                {total !== undefined && <><strong>{formatNumber(total)}</strong> {total === 1 ? t('item encontrado', 'item found') : t('itens encontrados', 'items found')}</>}
               </span>
             </div>
           </header>
 
           {schema && state.view === 'grid' && (
             <div className={styles.sortRow}>
-              <label className={styles.sortLabel} htmlFor="sort-select">Ordenar por</label>
+              <label className={styles.sortLabel} htmlFor="sort-select">{t('Ordenar por', 'Sort by')}</label>
               <Select id="sort-select" value={sortKey} onChange={(e) => setSort(e.target.value, state.dir)} className={styles.sortSelect}>
-                {schema.sortOptions.map((o) => <option key={o.key} value={o.key}>{o.label}</option>)}
+                {schema.sortOptions.map((o) => <option key={o.key} value={o.key}>{tv(o.label)}</option>)}
               </Select>
-              <IconButton label={state.dir === 'asc' ? 'Ordem crescente (clique para inverter)' : 'Ordem decrescente (clique para inverter)'}
+              <IconButton label={state.dir === 'asc' ? t('Ordem crescente (clique para inverter)', 'Ascending order (click to reverse)') : t('Ordem decrescente (clique para inverter)', 'Descending order (click to reverse)')}
                 onClick={() => setSort(sortKey, state.dir === 'asc' ? 'desc' : 'asc')}>
                 {state.dir === 'asc' ? <ArrowUpNarrowWide size={17} /> : <ArrowDownWideNarrow size={17} />}
               </IconButton>
@@ -129,17 +130,16 @@ export function CatalogPage() {
           {!search.isError && !result && <div className={styles.loading}><Spinner /></div>}
 
           {!search.isError && result && items.length === 0 && (
-            <EmptyState title="Nenhum item encontrado"
+            <EmptyState title={t('Nenhum item encontrado', 'No items found')}
               action={
                 <div className={styles.emptyActions}>
                   {state.criteria.length > 0 && (
-                    <Button icon={<Undo2 size={15} />} onClick={() => setCriteria(state.criteria.slice(0, -1))}>Desfazer último filtro</Button>
+                    <Button icon={<Undo2 size={15} />} onClick={() => setCriteria(state.criteria.slice(0, -1))}>{t('Desfazer último filtro', 'Undo last filter')}</Button>
                   )}
-                  <Button variant="primary" icon={<FilterX size={15} />} onClick={clearAll}>Limpar filtros</Button>
+                  <Button variant="primary" icon={<FilterX size={15} />} onClick={clearAll}>{t('Limpar filtros', 'Clear filters')}</Button>
                 </div>
               }>
-              Nenhum registro de <strong>{schema?.label}</strong> atende a todos os critérios ao mesmo tempo.
-              Os filtros são combinados com <strong>E</strong>: remova algum critério ou amplie os intervalos.
+              {t('Nenhum registro de ', 'No ')}<strong>{tv(schema?.label)}</strong> {t('atende a todos os critérios ao mesmo tempo. Os filtros são combinados com ', 'record matches every criterion at once. Filters are combined with ')}<strong>E</strong>{t(': remova algum critério ou amplie os intervalos.', ': remove a criterion or widen the ranges.')}
             </EmptyState>
           )}
 
@@ -161,12 +161,11 @@ export function CatalogPage() {
           )}
 
           <p className={styles.dataNote}>
-            Catálogo carregado a partir do compêndio fornecido. Itens com o selo verde foram conferidos com os PDFs oficiais; os
-            demais ainda não foram verificados contra os livros. Cada ficha informa a origem do registro.
+            {t('Catálogo carregado a partir do compêndio fornecido. Itens com o selo verde foram conferidos com os PDFs oficiais; os demais ainda não foram verificados contra os livros. Cada ficha informa a origem do registro.', 'Catalog loaded from the provided compendium. Items with the green seal were checked against the official PDFs; the rest haven\'t been verified against the books yet. Each item page shows where its record came from.')}
           </p>
         </section>
 
-        {wide && <aside className={styles.filters} aria-label="Filtros">{filterPanel}</aside>}
+        {wide && <aside className={styles.filters} aria-label={t('Filtros', 'Filters')}>{filterPanel}</aside>}
       </div>
 
       {!wide && (

@@ -12,6 +12,7 @@ import page from '../../styles/Page.module.css';
 import { formatDate, languagesFor, METHOD_HINT, METHOD_LABEL, STATUS_LABEL, withCurrent } from './characterLabels';
 import { StateTag } from './CharacterUi';
 import styles from './Characters.module.css';
+import { t, tv } from '../../i18n';
 
 export function CharactersPage() {
   const list = useCharacters();
@@ -21,23 +22,23 @@ export function CharactersPage() {
     <div className={page.page}>
       <header className={styles.row}>
         <div className={styles.grow}>
-          <h1 className="hud-title">Personagens</h1>
+          <h1 className="hud-title">{t('Personagens', 'Characters')}</h1>
           <p className={page.lead}>
-            Fichas independentes de Cyberpunk RED: crie pelos três métodos oficiais, acompanhe em jogo e mantenha o histórico.
+            {t('Fichas independentes de Cyberpunk RED: crie pelos três métodos oficiais, acompanhe em jogo e mantenha o histórico.', 'Standalone Cyberpunk RED sheets: create them with the three official methods, track them in play and keep their history.')}
           </p>
         </div>
         <div className={styles.row} style={{ flexWrap: 'nowrap' }}>
           <ImportButton />
-          <Button variant="primary" icon={<Plus size={16} />} onClick={() => setCreating(true)}>Novo personagem</Button>
+          <Button variant="primary" icon={<Plus size={16} />} onClick={() => setCreating(true)}>{t('Novo personagem', 'New character')}</Button>
         </div>
       </header>
 
       {list.isLoading && <Spinner />}
       {list.error && <ErrorState error={list.error} onRetry={() => list.refetch()} />}
       {list.data && list.data.length === 0 && (
-        <EmptyState title="Nenhum personagem ainda" icon={<Users size={28} />}
-          action={<Button variant="primary" icon={<Plus size={16} />} onClick={() => setCreating(true)}>Criar o primeiro</Button>}>
-          Escolha um método de criação e uma Role para começar, ou importe um personagem exportado.
+        <EmptyState title={t('Nenhum personagem ainda', 'No characters yet')} icon={<Users size={28} />}
+          action={<Button variant="primary" icon={<Plus size={16} />} onClick={() => setCreating(true)}>{t('Criar o primeiro', 'Create the first one')}</Button>}>
+          {t('Escolha um método de criação e uma Role para começar, ou importe um personagem exportado.', 'Pick a creation method and a Role to start, or import an exported character.')}
         </EmptyState>
       )}
       {list.data && list.data.length > 0 && (
@@ -69,7 +70,7 @@ function ImportButton() {
     }
     importFile.mutate(content, {
       onSuccess: (d) => {
-        toast.notify(`${d.sheet.identity.name} importado como personagem novo.`);
+        toast.notify(t(`${d.sheet.identity.name} importado como personagem novo.`, `${d.sheet.identity.name} imported as a new character.`));
         if (d.notices.length > 0) toast.notify(d.notices.join(' '), 'info');
         navigate(`/characters/${d.id}`);
       },
@@ -81,8 +82,8 @@ function ImportButton() {
     <>
       <input ref={input} type="file" accept=".json,application/json" hidden aria-hidden
         onChange={(e) => { void pick(e.target.files?.[0]); e.target.value = ''; }} />
-      <Button icon={<Upload size={16} />} disabled={importFile.isPending} title="Criar um personagem a partir de um arquivo exportado"
-        onClick={() => input.current?.click()}>Importar</Button>
+      <Button icon={<Upload size={16} />} disabled={importFile.isPending} title={t('Criar um personagem a partir de um arquivo exportado', 'Create a character from an exported file')}
+        onClick={() => input.current?.click()}>{t('Importar', 'Import')}</Button>
     </>
   );
 }
@@ -101,47 +102,47 @@ function CharacterCard({ character: c }: { character: CharacterSummary }) {
         ? <img className={styles.avatar} src={characterApi.portraitUrl(c.id, c.updatedAt)} alt="" />
         : <div className={styles.avatar}><UserRound size={34} /></div>}
       <div className={styles.cardBody}>
-        <Link to={target} className={styles.cardName}>{c.name}{c.handle && <span className={styles.muted}> “{c.handle}”</span>}</Link>
+        <Link to={target} className={styles.cardName}>{tv(c.name)}{c.handle && <span className={styles.muted}> “{c.handle}”</span>}</Link>
         <div className={styles.cardMeta}>
-          <span>{c.role ?? 'Sem Role'}{c.roleRank ? ` · Rank ${c.roleRank}` : ''}</span>
+          <span>{c.role ?? t('Sem Role', 'No Role')}{c.roleRank ? ` · Rank ${c.roleRank}` : ''}</span>
           <span className={styles.muted}>{METHOD_LABEL[c.method]}</span>
         </div>
         <div className={styles.cardMeta}>
-          <StateTag tone={tone} title={c.errorCount ? `${c.errorCount} erro(s), ${c.warningCount} aviso(s)` : undefined}>
+          <StateTag tone={tone} title={c.errorCount ? t(`${c.errorCount} erro(s), ${c.warningCount} aviso(s)`, `${c.errorCount} error(s), ${c.warningCount} warning(s)`) : undefined}>
             {STATUS_LABEL[c.status]}{c.errorCount > 0 ? ` (${c.errorCount})` : ''}
           </StateTag>
           {c.status !== 'Creating' && (
             <>
-              <span title="Pontos de vida"><HeartPulse size={13} /> <span className={styles.mono}>{c.currentHp}/{c.maxHp}</span></span>
-              <span title="Humanidade" className={styles.mono}>HUM {c.humanity}/{c.humanityMax}</span>
+              <span title={t('Pontos de vida', 'Hit Points')}><HeartPulse size={13} /> <span className={styles.mono}>{c.currentHp}/{c.maxHp}</span></span>
+              <span title={t('Humanidade', 'Humanity')} className={styles.mono}>HUM {c.humanity}/{c.humanityMax}</span>
             </>
           )}
-          <span title="Saldo"><Wallet size={13} /> <span className={styles.mono}>{formatEb(c.balance)}</span></span>
+          <span title={t('Saldo', 'Balance')}><Wallet size={13} /> <span className={styles.mono}>{formatEb(c.balance)}</span></span>
         </div>
-        <div className={styles.cardMeta}><span className={styles.source}>Atualizado {formatDate(c.updatedAt)}</span></div>
+        <div className={styles.cardMeta}><span className={styles.source}>{t('Atualizado ', 'Updated ')}{formatDate(c.updatedAt)}</span></div>
       </div>
       <div className={styles.cardActions}>
-        <Button onClick={() => navigate(target)}>{c.status === 'Creating' ? 'Continuar criação' : 'Abrir ficha'}</Button>
-        <IconButton label="Duplicar como base" onClick={() => duplicate.mutate(c.id, {
-          onSuccess: (d) => toast.notify(`Cópia criada: ${d.sheet.identity.name}.`),
+        <Button onClick={() => navigate(target)}>{c.status === 'Creating' ? t('Continuar criação', 'Continue creation') : t('Abrir ficha', 'Open sheet')}</Button>
+        <IconButton label={t('Duplicar como base', 'Duplicate as a base')} onClick={() => duplicate.mutate(c.id, {
+          onSuccess: (d) => toast.notify(t(`Cópia criada: ${d.sheet.identity.name}.`, `Copy created: ${d.sheet.identity.name}.`)),
           onError: (e) => toast.notify(problemMessage(e), 'error'),
         })}><Copy size={16} /></IconButton>
-        <IconButton label="Exportar para arquivo" onClick={() => downloadCharacter(c.id)}><Download size={16} /></IconButton>
-        <IconButton label="Excluir" onClick={() => setConfirming(true)}><Trash2 size={16} /></IconButton>
+        <IconButton label={t('Exportar para arquivo', 'Export to file')} onClick={() => downloadCharacter(c.id)}><Download size={16} /></IconButton>
+        <IconButton label={t('Excluir', 'Delete')} onClick={() => setConfirming(true)}><Trash2 size={16} /></IconButton>
       </div>
 
-      <Modal open={confirming} onClose={() => setConfirming(false)} title="Excluir personagem">
+      <Modal open={confirming} onClose={() => setConfirming(false)} title={t('Excluir personagem', 'Delete character')}>
         <div className={styles.panel} style={{ clipPath: 'none', border: 'none' }}>
-          <p>Excluir <strong>{c.name}</strong> e todo o histórico? Esta ação não pode ser desfeita.</p>
+          <p>{t('Excluir ', 'Delete ')}<strong>{tv(c.name)}</strong> {t('e todo o histórico? Esta ação não pode ser desfeita.', 'and all their history? This can\'t be undone.')}</p>
           <p className={styles.small}>
-            Para guardar uma cópia, <button type="button" className={styles.linkButton} onClick={() => downloadCharacter(c.id)}>exporte o personagem</button> antes.
+            {t('Para guardar uma cópia, ', 'To keep a copy, ')}<button type="button" className={styles.linkButton} onClick={() => downloadCharacter(c.id)}>{t('exporte o personagem', 'export the character')}</button> {t('antes.', 'first.')}
           </p>
           <div className={styles.row}>
             <Button variant="danger" icon={<Trash2 size={16} />} data-autofocus onClick={() => remove.mutate(c.id, {
-              onSuccess: () => { setConfirming(false); toast.notify(`${c.name} foi excluído.`); },
+              onSuccess: () => { setConfirming(false); toast.notify(t(`${c.name} foi excluído.`, `${c.name} was deleted.`)); },
               onError: (e) => toast.notify(problemMessage(e), 'error'),
-            })}>Excluir definitivamente</Button>
-            <Button variant="ghost" onClick={() => setConfirming(false)}>Cancelar</Button>
+            })}>{t('Excluir definitivamente', 'Delete for good')}</Button>
+            <Button variant="ghost" onClick={() => setConfirming(false)}>{t('Cancelar', 'Cancel')}</Button>
           </div>
         </div>
       </Modal>
@@ -170,66 +171,66 @@ export function NewCharacterModal({ open, onClose }: { open: boolean; onClose: (
 
   const submit = () => create.mutate({
     name, handle: handle || null, method, role, nativeLanguage: language || null, culturalRegion: region || null, home,
-    overrides: method === 'CompletePackage' && preset && preset !== cp?.statPoints ? { statPoints: preset, note: 'Escolhido na criação' } : null,
+    overrides: method === 'CompletePackage' && preset && preset !== cp?.statPoints ? { statPoints: preset, note: t('Escolhido na criação', 'Chosen at creation') } : null,
   }, {
     onSuccess: (detail) => {
       onClose();
-      toast.notify(`${detail.sheet.identity.name} criado. Siga os passos da criação.`);
+      toast.notify(t(`${detail.sheet.identity.name} criado. Siga os passos da criação.`, `${detail.sheet.identity.name} created. Follow the creation steps.`));
       navigate(`/characters/${detail.id}/criacao`);
     },
     onError: (e) => toast.notify(problemMessage(e), 'error'),
   });
 
   return (
-    <Modal open={open} onClose={onClose} title="Novo personagem" wide>
+    <Modal open={open} onClose={onClose} title={t('Novo personagem', 'New character')} wide>
       <div className={styles.panel} style={{ clipPath: 'none', border: 'none' }}>
         {!r ? <Spinner /> : (
           <>
-            <div className={styles.methods} role="radiogroup" aria-label="Método de criação">
+            <div className={styles.methods} role="radiogroup" aria-label={t('Método de criação', 'Creation method')}>
               {r.methods.map((m) => (
                 <button key={m.method} type="button" role="radio" aria-checked={method === m.method}
                   className={`${styles.choice} ${method === m.method ? styles.choiceActive : ''}`} onClick={() => setMethod(m.method)}>
                   <span className={styles.choiceTitle}>{METHOD_LABEL[m.method]}</span>
                   <span className={styles.small}>{METHOD_HINT[m.method]}</span>
-                  <span className={styles.source}>{m.summary} · {m.source}</span>
+                  <span className={styles.source}>{tv(m.summary)} · {m.source}</span>
                 </button>
               ))}
             </div>
 
             <div className={styles.formGrid}>
-              <Field label="Nome" htmlFor="nc-name">
+              <Field label={t('Nome', 'Name')} htmlFor="nc-name">
                 <input id="nc-name" className={styles.input} value={name} onChange={(e) => setName(e.target.value)} data-autofocus maxLength={80} />
               </Field>
-              <Field label="Handle (nome de rua)" htmlFor="nc-handle">
+              <Field label={t('Handle (nome de rua)', 'Handle (street name)')} htmlFor="nc-handle">
                 <input id="nc-handle" className={styles.input} value={handle} onChange={(e) => setHandle(e.target.value)} maxLength={80} />
               </Field>
-              <Field label="Role" htmlFor="nc-role" hint={`Habilidade: ${r.roles.find((x) => x.id === role)?.ability} (Rank 4)`}>
+              <Field label="Role" htmlFor="nc-role" hint={t(`Habilidade: ${r.roles.find((x) => x.id === role)?.ability} (Rank 4)`, `Ability: ${r.roles.find((x) => x.id === role)?.ability} (Rank 4)`)}>
                 <Select id="nc-role" value={role} onChange={(e) => setRole(e.target.value)}>
                   {r.roles.map((x) => <option key={x.id} value={x.id}>{x.id}</option>)}
                 </Select>
               </Field>
-              <Field label="Origem cultural" htmlFor="nc-region" hint="CP:R p.45">
+              <Field label={t('Origem cultural', 'Cultural origin')} htmlFor="nc-region" hint="CP:R p.45">
                 <Select id="nc-region" value={region} onChange={(e) => { setRegion(e.target.value); setLanguage(''); }}>
-                  <option value="">Escolha…</option>
+                  <option value="">{t('Escolha…', 'Choose…')}</option>
                   {r.culturalOrigins.map((o) => <option key={o.region} value={o.region}>{o.region}</option>)}
                 </Select>
               </Field>
-              <Field label="Idioma de origem" htmlFor="nc-lang" hint={`Language nível ${r.originLanguageLevel}, sem custo`}>
+              <Field label={t('Idioma de origem', 'Native language')} htmlFor="nc-lang" hint={t(`Language nível ${r.originLanguageLevel}, sem custo`, `Language level ${r.originLanguageLevel}, free`)}>
                 <Select id="nc-lang" value={language} onChange={(e) => setLanguage(e.target.value)}>
-                  <option value="">Escolha…</option>
+                  <option value="">{t('Escolha…', 'Choose…')}</option>
                   {withCurrent(languages, language).map((l) => <option key={l} value={l}>{l}</option>)}
                 </Select>
               </Field>
-              <Field label="Bairro (Local Expert)" htmlFor="nc-home">
+              <Field label={t('Bairro (Local Expert)', 'Neighborhood (Local Expert)')} htmlFor="nc-home">
                 <Select id="nc-home" value={home} onChange={(e) => setHome(e.target.value)}>
-                  {!home && <option value="">Escolha…</option>}
+                  {!home && <option value="">{t('Escolha…', 'Choose…')}</option>}
                   {withCurrent(r.homes, home).map((h) => <option key={h} value={h}>{h}</option>)}
                 </Select>
               </Field>
               {method === 'CompletePackage' && cp && (
-                <Field label="Pontos de STAT" htmlFor="nc-preset" hint="O livro recomenda o Starting Character (CP:R p.78)">
+                <Field label={t('Pontos de STAT', 'STAT points')} htmlFor="nc-preset" hint={t('O livro recomenda o Starting Character (CP:R p.78)', 'The book recommends the Starting Character (CP:R p.78)')}>
                   <Select id="nc-preset" value={preset ?? cp.statPoints ?? 62} onChange={(e) => setPreset(Number(e.target.value))}>
-                    {cp.statPresets.map((p) => <option key={p.points} value={p.points}>{p.label} ({p.points})</option>)}
+                    {cp.statPresets.map((p) => <option key={p.points} value={p.points}>{tv(p.label)} ({p.points})</option>)}
                   </Select>
                 </Field>
               )}
@@ -237,9 +238,9 @@ export function NewCharacterModal({ open, onClose }: { open: boolean; onClose: (
 
             <div className={styles.row}>
               <Button variant="primary" icon={<Plus size={16} />} disabled={!name.trim() || create.isPending} onClick={submit}>
-                Criar e continuar
+                {t('Criar e continuar', 'Create and continue')}
               </Button>
-              <Button variant="ghost" onClick={onClose}>Cancelar</Button>
+              <Button variant="ghost" onClick={onClose}>{t('Cancelar', 'Cancel')}</Button>
             </div>
           </>
         )}

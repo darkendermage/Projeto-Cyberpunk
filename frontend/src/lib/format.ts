@@ -1,6 +1,7 @@
 import type { AttributeValue, CategorySchema, FieldDescriptor, Item } from '../api/types';
+import { locale, t, tv } from '../i18n';
 
-const numberFormat = new Intl.NumberFormat('pt-BR');
+const numberFormat = new Intl.NumberFormat(locale);
 
 export function formatEb(value: number | null | undefined): string {
   return value === null || value === undefined ? '—' : numberFormat.format(value);
@@ -16,10 +17,10 @@ export const PRICE_CATEGORY_LABEL: Record<string, string> = {
 };
 
 export const DATA_ORIGIN_LABEL: Record<string, string> = {
-  Compendium: 'Compêndio importado (não verificado)',
-  Demo: 'Dados de demonstração',
-  Custom: 'Cadastro manual',
-  Verified: 'Conferido com PDF oficial',
+  Compendium: t('Compêndio importado (não verificado)', 'Imported compendium (not verified)'),
+  Demo: t('Dados de demonstração', 'Demo data'),
+  Custom: t('Cadastro manual', 'Manual entry'),
+  Verified: t('Conferido com PDF oficial', 'Checked against the official PDF'),
 };
 
 export const RULE_SYSTEM_LABEL: Record<string, string> = {
@@ -28,7 +29,7 @@ export const RULE_SYSTEM_LABEL: Record<string, string> = {
 };
 
 export function optionLabel(field: FieldDescriptor | undefined, value: string): string {
-  return field?.options?.find((o) => o.value === value)?.label ?? value;
+  return field?.options?.find((o) => o.value === value)?.label ?? tv(value);
 }
 
 export interface FormattedValue {
@@ -38,17 +39,17 @@ export interface FormattedValue {
 }
 
 const WEAPON_GROUPS: { label: string; classes: string[] }[] = [
-  { label: 'Pistolas', classes: ['MediumPistol', 'HeavyPistol', 'VeryHeavyPistol'] },
+  { label: t('Pistolas', 'Pistols'), classes: ['MediumPistol', 'HeavyPistol', 'VeryHeavyPistol'] },
   { label: 'SMGs', classes: ['Smg', 'HeavySmg'] },
-  { label: 'Escopetas', classes: ['Shotgun'] },
-  { label: 'Rifles de Assalto', classes: ['AssaultRifle'] },
-  { label: 'Rifles de Precisão', classes: ['SniperRifle'] },
-  { label: 'Metralhadoras', classes: ['MachineGun'] },
-  { label: 'Arcos e Bestas', classes: ['Bow', 'Crossbow'] },
-  { label: 'Lançadores', classes: ['GrenadeLauncher', 'RocketLauncher'] },
-  { label: 'Corpo a corpo', classes: ['LightMelee', 'MediumMelee', 'HeavyMelee', 'VeryHeavyMelee'] },
+  { label: t('Escopetas', 'Shotguns'), classes: ['Shotgun'] },
+  { label: t('Rifles de Assalto', 'Assault Rifles'), classes: ['AssaultRifle'] },
+  { label: t('Rifles de Precisão', 'Sniper Rifles'), classes: ['SniperRifle'] },
+  { label: t('Metralhadoras', 'Machine Guns'), classes: ['MachineGun'] },
+  { label: t('Arcos e Bestas', 'Bows & Crossbows'), classes: ['Bow', 'Crossbow'] },
+  { label: t('Lançadores', 'Launchers'), classes: ['GrenadeLauncher', 'RocketLauncher'] },
+  { label: t('Corpo a corpo', 'Melee'), classes: ['LightMelee', 'MediumMelee', 'HeavyMelee', 'VeryHeavyMelee'] },
 ];
-const RANGED_CLASSES = WEAPON_GROUPS.filter((g) => g.label !== 'Corpo a corpo').flatMap((g) => g.classes);
+const RANGED_CLASSES = WEAPON_GROUPS.filter((g) => g.label !== t('Corpo a corpo', 'Melee')).flatMap((g) => g.classes);
 
 /**
  * Compact labels for a set of weapon classes ("Pistolas", "Todas de longo alcance"...). A group is named when
@@ -58,11 +59,11 @@ export function weaponClassGroups(values: string[], field?: FieldDescriptor): st
   const set = new Set(values);
   const has = (classes: string[]) => classes.every((c) => set.has(c));
   const melee = WEAPON_GROUPS[WEAPON_GROUPS.length - 1].classes;
-  if (has(RANGED_CLASSES) && has(melee)) return ['Qualquer arma'];
+  if (has(RANGED_CLASSES) && has(melee)) return [t('Qualquer arma', 'Any weapon')];
   const labels: string[] = [];
   const covered = new Set<string>();
   if (has(RANGED_CLASSES)) {
-    labels.push('Todas de longo alcance');
+    labels.push(t('Todas de longo alcance', 'All ranged'));
     RANGED_CLASSES.forEach((c) => covered.add(c));
   }
   for (const g of WEAPON_GROUPS) {
@@ -85,7 +86,7 @@ export function formatAttribute(field: FieldDescriptor | undefined, value: Attri
 
   switch (field.kind) {
     case 'boolean':
-      return { text: value ? 'Sim' : 'Não', empty: false };
+      return { text: value ? t('Sim', 'Yes') : t('Não', 'No'), empty: false };
     case 'enum':
       return { text: optionLabel(field, String(value)), empty: false };
     case 'set':
@@ -95,11 +96,11 @@ export function formatAttribute(field: FieldDescriptor | undefined, value: Attri
       const n = Number(value);
       if (field.unit === 'penalty') return { text: n === 0 ? '0' : `−${n}`, empty: false };
       if (field.unit === 'd6') return { text: `${n}d6`, empty: false };
-      if (field.key === 'maxRange' && n === 0) return { text: 'Contato', empty: false };
+      if (field.key === 'maxRange' && n === 0) return { text: t('Contato', 'Contact'), empty: false };
       return { text: formatNumber(n), unit: field.unit ?? undefined, empty: false };
     }
     default:
-      return { text: String(value), empty: false };
+      return { text: tv(String(value)), empty: false };
   }
 }
 
@@ -124,36 +125,36 @@ export function cardStats(
 
 /** Short labels used in compact stat cells. */
 export const SHORT_LABELS: Record<string, string> = {
-  damage: 'Dano',
-  damageDice: 'Dano',
+  damage: t('Dano', 'Damage'),
+  damageDice: t('Dano', 'Damage'),
   autofire: 'Autofire',
-  hands: 'Mãos',
-  minBody: 'BODY mín.',
-  calibers: 'Munição',
-  quality: 'Qualidade',
-  skill: 'Perícia',
-  requiresItem: 'Requer',
-  foundational: 'Peça base',
-  requiresPair: 'Exige par',
-  hasPenalty: 'Penalidade',
-  hasSkillBonus: 'Dá bônus',
-  hasFunctionalEffect: 'Funcional',
-  exotic: 'Exótica',
-  armored: 'Blindado',
-  requirements: 'Requisitos',
-  kind: 'Tipo',
+  hands: t('Mãos', 'Hands'),
+  minBody: t('BODY mín.', 'Min. BODY'),
+  calibers: t('Munição', 'Ammo'),
+  quality: t('Qualidade', 'Quality'),
+  skill: t('Perícia', 'Skill'),
+  requiresItem: t('Requer', 'Requires'),
+  foundational: t('Peça base', 'Foundational'),
+  requiresPair: t('Exige par', 'Needs a pair'),
+  hasPenalty: t('Penalidade', 'Penalty'),
+  hasSkillBonus: t('Dá bônus', 'Gives a bonus'),
+  hasFunctionalEffect: t('Funcional', 'Functional'),
+  exotic: t('Exótica', 'Exotic'),
+  armored: t('Blindado', 'Armored'),
+  requirements: t('Requisitos', 'Requirements'),
+  kind: t('Tipo', 'Type'),
   rof: 'ROF',
-  maxRange: 'Alcance',
+  maxRange: t('Alcance', 'Range'),
   concealable: 'Conceal',
-  magazine: 'Pente',
-  quantityPerPack: 'Qtd.',
+  magazine: t('Pente', 'Magazine'),
+  quantityPerPack: t('Qtd.', 'Qty.'),
   resistDv: 'DV',
-  area: 'Área',
-  effectType: 'Efeito',
-  gearClass: 'Classe',
-  skillBonus: 'Bônus',
-  weightKg: 'Peso',
-  gearType: 'Tipo',
+  area: t('Área', 'Area'),
+  effectType: t('Efeito', 'Effect'),
+  gearClass: t('Classe', 'Class'),
+  skillBonus: t('Bônus', 'Bonus'),
+  weightKg: t('Peso', 'Weight'),
+  gearType: t('Tipo', 'Type'),
   sp: 'SP',
   shieldHp: 'HP',
   bodyValue: 'BODY',
@@ -162,36 +163,36 @@ export const SHORT_LABELS: Record<string, string> = {
   dexPenalty: 'DEX',
   movePenalty: 'MOVE',
   humanityLoss: 'HL',
-  clothingSlot: 'Peça',
-  clothingStyle: 'Estilo',
-  installLocation: 'Instalação',
+  clothingSlot: t('Peça', 'Piece'),
+  clothingStyle: t('Estilo', 'Style'),
+  installLocation: t('Instalação', 'Install'),
   slotsRequired: 'Slots',
-  slotsProvided: 'Oferece',
-  bodyLocation: 'Local',
-  compatibleClasses: 'Compatível',
-  eligibleWeapons: 'Restrições',
-  netType: 'Tipo',
-  programClass: 'Classe',
+  slotsProvided: t('Oferece', 'Provides'),
+  bodyLocation: t('Local', 'Location'),
+  compatibleClasses: t('Compatível', 'Compatible'),
+  eligibleWeapons: t('Restrições', 'Restrictions'),
+  netType: t('Tipo', 'Type'),
+  programClass: t('Classe', 'Class'),
   atk: 'ATK',
   def: 'DEF',
   rez: 'REZ',
   per: 'PER',
   spd: 'SPD',
-  totalSlots: 'Slots do deck',
-  sharedSlots: 'Livres',
-  programSlots: 'Programa',
+  totalSlots: t('Slots do deck', 'Deck slots'),
+  sharedSlots: t('Livres', 'Free'),
+  programSlots: t('Programa', 'Program'),
   hardwareSlots: 'Hardware',
   motoRank: 'Moto',
-  duration: 'Duração',
-  addictionRisk: 'Vício',
+  duration: t('Duração', 'Duration'),
+  addictionRisk: t('Vício', 'Addiction'),
   speedMove: 'MOVE',
-  topSpeedMph: 'Vel. máx.',
-  seats: 'Ocup.',
+  topSpeedMph: t('Vel. máx.', 'Top speed'),
+  seats: t('Ocup.', 'Seats'),
   sdp: 'SDP',
   armorSp: 'SP',
   improvementPoints: 'IP',
-  upgradeType: 'Tipo',
-  spaceRequired: 'Espaço',
+  upgradeType: t('Tipo', 'Type'),
+  spaceRequired: t('Espaço', 'Space'),
 };
 
 export function shortLabel(field: FieldDescriptor): string {

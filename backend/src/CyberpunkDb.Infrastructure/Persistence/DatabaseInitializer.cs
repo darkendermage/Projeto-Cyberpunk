@@ -1,3 +1,4 @@
+using CyberpunkDb.Application.Localization;
 using System.Security.Cryptography;
 using System.Text.Json;
 using CyberpunkDb.Application.Catalog;
@@ -44,7 +45,7 @@ public sealed class DatabaseInitializer(
         var files = seedSource.GetFiles();
         if (files.Count == 0)
         {
-            logger.LogWarning("Nenhum arquivo de seed encontrado; o catálogo começa vazio.");
+            logger.LogWarning(L.ForSystem("Nenhum arquivo de seed encontrado; o catálogo começa vazio.", "No seed file found; the catalog starts empty."));
             return;
         }
 
@@ -53,7 +54,7 @@ public sealed class DatabaseInitializer(
         var stored = await db.Set<AppMetadata>().FirstOrDefaultAsync(m => m.Key == SeedHashKey, ct);
         if (stored?.Value == hash) return;
 
-        logger.LogInformation(stored is null ? "Importando o catálogo..." : "Catálogo atualizado; reimportando...");
+        logger.LogInformation(stored is null ? L.ForSystem("Importando o catálogo...", "Importing the catalog...") : L.ForSystem("Catálogo atualizado; reimportando...", "Catalog updated; reimporting..."));
         var seeds = contents.Select(c => (c.Name, Rows: JsonSerializer.Deserialize<List<ItemUpsertDto>>(c.Bytes, JsonOptions) ?? [])).ToList();
         List<MovedItem> moved = stored is null ? [] : await DetachRecategorizedAsync(seeds.SelectMany(s => s.Rows), ct);
         var seededSlugs = new HashSet<string>(StringComparer.Ordinal);
@@ -61,7 +62,7 @@ public sealed class DatabaseInitializer(
         {
             seededSlugs.UnionWith(rows.Select(r => r.Slug).OfType<string>());
             var result = await writer.ImportAsync(rows, ct);
-            logger.LogInformation("Seed {File}: {Created} criados, {Updated} atualizados, {Failed} com erro.",
+            logger.LogInformation(L.ForSystem("Seed {File}: {Created} criados, {Updated} atualizados, {Failed} com erro.", "Seed {File}: {Created} created, {Updated} updated, {Failed} failed."),
                 name, result.Created, result.Updated, result.Failed);
             foreach (var error in result.Errors.Take(20))
                 logger.LogWarning("Seed {File} #{Index} ({Name}): {Errors}", name, error.Index, error.Name,
@@ -117,7 +118,7 @@ public sealed class DatabaseInitializer(
         }
         await db.SaveChangesAsync(ct);
         db.ChangeTracker.Clear();
-        logger.LogInformation("Catálogo: {Count} itens mudaram de categoria e serão recriados.", changed.Count);
+        logger.LogInformation(L.ForSystem("Catálogo: {Count} itens mudaram de categoria e serão recriados.", "Catalog: {Count} items changed category and will be recreated."), changed.Count);
         return moved;
     }
 
@@ -159,7 +160,7 @@ public sealed class DatabaseInitializer(
         }
         await db.SaveChangesAsync(ct);
         db.ChangeTracker.Clear();
-        logger.LogInformation("Catálogo: {Count} itens que saíram do catálogo foram removidos.", retired.Count);
+        logger.LogInformation(L.ForSystem("Catálogo: {Count} itens que saíram do catálogo foram removidos.", "Catalog: {Count} items that left the catalog were removed."), retired.Count);
     }
 
     private static byte[] ReadAll(SeedFile file)
@@ -182,7 +183,7 @@ public sealed class DatabaseInitializer(
         var backup = System.IO.Path.Combine(folder, $"{name}-backup-{DateTime.Now:yyyyMMdd-HHmmss}.db");
         SqliteConnection.ClearAllPools();
         File.Copy(path, backup, overwrite: true);
-        logger.LogInformation("Backup do banco antes da atualização: {Backup}", backup);
+        logger.LogInformation(L.ForSystem("Backup do banco antes da atualização: {Backup}", "Database backup before the update: {Backup}"), backup);
 
         foreach (var old in Directory.GetFiles(folder, $"{name}-backup-*.db").OrderDescending().Skip(BackupsToKeep))
             File.Delete(old);

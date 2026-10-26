@@ -2,6 +2,7 @@ using CyberpunkDb.Application.Characters.Rules;
 using CyberpunkDb.Application.Npcs;
 using CyberpunkDb.Application.Npcs.Rules;
 using CyberpunkDb.Domain.Enums;
+using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.Characters;
 
@@ -81,7 +82,7 @@ internal static class CharacterRulesMapper
         i.Rounds is { } r ? $"{i.Name} ({i.Caliber}) x{r}"
         : i.Qty > 1 ? $"{i.Name} x{i.Qty}"
         : i.Worn is { } w ? $"{i.Name} ({(w == ArmorSlot.Head ? "cabeça" : "corpo")})"
-        : i.MeatArm ? $"{i.Name} (braço de carne)"
+        : i.MeatArm ? L.T($"{i.Name} (braço de carne)", $"{i.Name} (meat arm)")
         : i.Name;
 
     private static CriticalInjuryDto Injury(InjuryLocation location, CriticalInjuryDefinition i) =>
@@ -95,20 +96,20 @@ internal static class CharacterRulesMapper
             new(key, label, value ?? r.Value?.ToString() ?? "", r.Source, r.Complementary, r.Note);
         return
         [
-            Fact("hp", "Pontos de Vida", shared.HpBase, "10 + 5 × média de BODY e WILL (arredondada para cima)"),
+            Fact("hp", L.T("Pontos de Vida", "Hit Points"), shared.HpBase, L.T("10 + 5 × média de BODY e WILL (arredondada para cima)", "10 + 5 × average of BODY and WILL (rounded up)")),
             Fact("seriously", "Seriously Wounded", d.Derived.SeriouslyWounded,
-                $"menos que metade do HP (arred. p/ cima): {d.Derived.SeriouslyWounded.Value.ActionPenalty} em todas as Ações"),
+                L.T($"menos que metade do HP (arred. p/ cima): {d.Derived.SeriouslyWounded.Value.ActionPenalty} em todas as Ações", $"less than half HP (rounded up): {d.Derived.SeriouslyWounded.Value.ActionPenalty} to all Actions")),
             Fact("mortally", "Mortally Wounded", d.Derived.MortallyWounded,
-                $"menos de 1 HP: {d.Derived.MortallyWounded.Value.ActionPenalty} em Ações, {d.Derived.MortallyWounded.Value.MovePenalty} em MOVE (mín. 1)"),
-            Fact("deathSave", "Death Save", d.Derived.DeathSave, "1d10 + penalidade abaixo de BODY; 10 natural sempre falha; +1 a cada Death Save"),
-            Fact("humanity", "Humanidade", d.Derived.HumanityPerEmp, "EMP × 10; EMP efetiva = dezena da Humanidade atual"),
-            Fact("therapy", "Terapia", d.Therapy.MaxHumanityPerPiece, "teto de Humanidade −2 por peça de cyberware, −4 por borgware"),
-            Fact("ablation", "Ablação", d.Combat.AblationPerDamagingHit, "−1 SP em toda armadura do local sempre que o dano passa"),
-            Fact("armorPenalty", "Penalidade de armadura", d.Combat.ArmorPenaltyOnce, "a mais pesada, aplicada uma vez"),
+                L.T($"menos de 1 HP: {d.Derived.MortallyWounded.Value.ActionPenalty} em Ações, {d.Derived.MortallyWounded.Value.MovePenalty} em MOVE (mín. 1)", $"less than 1 HP: {d.Derived.MortallyWounded.Value.ActionPenalty} to Actions, {d.Derived.MortallyWounded.Value.MovePenalty} to MOVE (min. 1)")),
+            Fact("deathSave", "Death Save", d.Derived.DeathSave, L.T("1d10 + penalidade abaixo de BODY; 10 natural sempre falha; +1 a cada Death Save", "1d10 + penalty under BODY; a natural 10 always fails; +1 per Death Save")),
+            Fact("humanity", "Humanidade", d.Derived.HumanityPerEmp, L.T("EMP × 10; EMP efetiva = dezena da Humanidade atual", "EMP × 10; effective EMP = current Humanity's tens digit")),
+            Fact("therapy", "Terapia", d.Therapy.MaxHumanityPerPiece, L.T("teto de Humanidade −2 por peça de cyberware, −4 por borgware", "Humanity cap −2 per cyberware piece, −4 per borgware")),
+            Fact("ablation", L.T("Ablação", "Ablation"), d.Combat.AblationPerDamagingHit, L.T("−1 SP em toda armadura do local sempre que o dano passa", "−1 SP to all armor on the location whenever damage gets through")),
+            Fact("armorPenalty", L.T("Penalidade de armadura", "Armor penalty"), d.Combat.ArmorPenaltyOnce, L.T("a mais pesada, aplicada uma vez", "the heaviest, applied once")),
             Fact("quickFix", "Quick Fix", d.Combat.QuickFix),
             Fact("treatment", "Treatment", d.Combat.Treatment),
-            Fact("ip", "Improvement Points", d.Progression.IpSkillPerLevel, "perícia: 20 × próximo nível (x2: 40); Role: 60 × próximo Rank"),
-            Fact("roleLifepath", "Lifepath da Role no multiclasse", d.Progression.RoleLifepathPerRole, "um por Role; o da Role nova é opcional"),
+            Fact("ip", "Improvement Points", d.Progression.IpSkillPerLevel, L.T("perícia: 20 × próximo nível (x2: 40); Role: 60 × próximo Rank", "skill: 20 × next level (x2: 40); Role: 60 × next Rank")),
+            Fact("roleLifepath", L.T("Lifepath da Role no multiclasse", "Role Lifepath when multiclassing"), d.Progression.RoleLifepathPerRole, L.T("um por Role; o da Role nova é opcional", "one per Role; the new Role's is optional")),
         ];
     }
 }

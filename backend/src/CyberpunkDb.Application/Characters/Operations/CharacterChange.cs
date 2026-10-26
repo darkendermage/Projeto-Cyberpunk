@@ -1,6 +1,7 @@
 using CyberpunkDb.Application.Common;
 using CyberpunkDb.Application.Npcs;
 using CyberpunkDb.Domain.Enums;
+using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.Characters.Operations;
 
@@ -27,7 +28,7 @@ public sealed class CharacterChange(CharacterSheet sheet, NpcCatalog catalog, Da
         Events.Add(new PendingEvent(kind, action, description, amount, before, after, manual));
 
     public CatalogItem Item(int id) =>
-        Catalog.Find(id) ?? throw new NotFoundException($"Item {id} não encontrado no catálogo.");
+        Catalog.Find(id) ?? throw new NotFoundException(L.T($"Item {id} não encontrado no catálogo.", $"Item {id} not found in the catalog."));
 
     /// <summary>Refuses the operation with a field error (HTTP 400); nothing is saved.</summary>
     public static RequestValidationException Refuse(string field, string message) => RequestValidationException.For(field, message);

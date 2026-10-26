@@ -2,6 +2,7 @@ using CyberpunkDb.Application.Characters.Rules;
 using CyberpunkDb.Application.Npcs;
 using CyberpunkDb.Application.Npcs.Rules;
 using CyberpunkDb.Domain.Enums;
+using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.Characters.Creation;
 
@@ -10,7 +11,7 @@ public sealed record EffectiveLimit(int Value, string Source, bool CampaignVaria
 {
     public static EffectiveLimit From(Ruled<int> rule, int? overrideValue) =>
         overrideValue is { } v && v != rule.Value
-            ? new EffectiveLimit(v, $"Variante de campanha (regra: {rule.Value}, {rule.Reference})", true)
+            ? new EffectiveLimit(v, L.T($"Variante de campanha (regra: {rule.Value}, {rule.Reference})", $"Campaign variant (rule: {rule.Value}, {rule.Reference})"), true)
             : new EffectiveLimit(rule.Value, rule.Reference, false);
 }
 

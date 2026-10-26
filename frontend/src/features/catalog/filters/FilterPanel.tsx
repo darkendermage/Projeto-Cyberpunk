@@ -11,6 +11,7 @@ import { NumberFilter } from './NumberFilter';
 import { PriceFilter } from './PriceFilter';
 import { asRange, BooleanSelect, RangeFilter, SelectFilter } from './SelectFilters';
 import styles from './Filters.module.css';
+import { t, tv } from '../../../i18n';
 
 interface Props {
   schema: CategorySchema;
@@ -61,23 +62,23 @@ export function FilterPanel({ schema, facets, criteria, q, onCriteria, onQuery, 
   return (
     <form className={styles.panel} onSubmit={(e) => { e.preventDefault(); apply(); }}>
       <header className={styles.header}>
-        <h2 className="hud-title">Filtros</h2>
+        <h2 className="hud-title">{t('Filtros', 'Filters')}</h2>
         <button type="button" className={styles.clearAll} onClick={() => { setDraft([]); onClear(); }}
           disabled={criteria.length === 0 && draft.length === 0 && !q}>
-          Limpar tudo
+          {t('Limpar tudo', 'Clear all')}
         </button>
       </header>
 
-      <SearchBox value={q} onChange={onQuery} placeholder={`Buscar em ${schema.label.toLowerCase()}...`} />
+      <SearchBox value={q} onChange={onQuery} placeholder={t(`Buscar em ${tv(schema.label).toLowerCase()}...`, `Search ${tv(schema.label).toLowerCase()}...`)} />
 
       {subtype && hasOptions(subtype) && (
-        <Block title={subtype.label}>
+        <Block title={tv(subtype.label)}>
           <EnumFilter field={subtype} facets={facets?.[subtype.key]} criteria={draft} onChange={setDraft} columns={2} limit={20} />
         </Block>
       )}
 
       {selects.filter((f) => f.key === 'manufacturer' && hasOptions(f)).map((f) => (
-        <Block key={f.key} title="Fabricante">
+        <Block key={f.key} title={t('Fabricante', 'Manufacturer')}>
           <SelectFilter field={f} facets={facets?.[f.key]} criteria={draft} onChange={setDraft} />
         </Block>
       ))}
@@ -90,19 +91,19 @@ export function FilterPanel({ schema, facets, criteria, q, onCriteria, onQuery, 
             return useOperators ? (
               <div key={f.key} className={styles.advancedRow}><NumberFilter field={f} criteria={draft} onChange={setDraft} /></div>
             ) : (
-              <Row key={f.key} label={shortLabel(f)} hint={f.description ?? f.label} active={Boolean(criterion)}>
+              <Row key={f.key} label={shortLabel(f)} hint={tv(f.description) ?? tv(f.label)} active={Boolean(criterion)}>
                 <RangeFilter field={f} criteria={draft} onChange={setDraft} />
               </Row>
             );
           })}
           <div className={styles.advancedToggle}>
-            <Switch checked={advanced} onChange={setAdvanced} label="Operadores avançados (=, ≠, >, <)" />
+            <Switch checked={advanced} onChange={setAdvanced} label={t('Operadores avançados (=, ≠, >, <)', 'Advanced operators (=, ≠, >, <)')} />
           </div>
         </div>
       )}
 
       {price && price.max != null && (
-        <Block title="Custo (eddies)">
+        <Block title={t('Custo (eddies)', 'Cost (eddies)')}>
           <PriceFilter field={price} criteria={draft} onChange={setDraft} />
         </Block>
       )}
@@ -110,12 +111,12 @@ export function FilterPanel({ schema, facets, criteria, q, onCriteria, onQuery, 
       {(booleans.length > 0 || selects.some((f) => f.key !== 'manufacturer')) && (
         <div className={styles.rows}>
           {booleans.map((f) => (
-            <Row key={f.key} label={f.key === 'concealable' ? 'Ocultabilidade' : shortLabel(f)} hint={f.label} active={Boolean(getCriterion(draft, f.key))}>
+            <Row key={f.key} label={f.key === 'concealable' ? t('Ocultabilidade', 'Concealability') : shortLabel(f)} hint={tv(f.label)} active={Boolean(getCriterion(draft, f.key))}>
               <BooleanSelect field={f} criteria={draft} onChange={setDraft} />
             </Row>
           ))}
           {selects.filter((f) => f.key !== 'manufacturer' && hasOptions(f)).map((f) => (
-            <Row key={f.key} label={f.key === 'calibers' ? 'Tipo de munição' : shortLabel(f)} hint={f.description ?? f.label}
+            <Row key={f.key} label={f.key === 'calibers' ? t('Tipo de munição', 'Ammunition type') : shortLabel(f)} hint={tv(f.description) ?? tv(f.label)}
               active={Boolean(getCriterion(draft, f.key))}>
               <SelectFilter field={f} facets={facets?.[f.key]} criteria={draft} onChange={setDraft} />
             </Row>
@@ -124,16 +125,16 @@ export function FilterPanel({ schema, facets, criteria, q, onCriteria, onQuery, 
       )}
 
       {tags && hasOptions(tags) && (
-        <Collapsible title={tags.label} active={getCriterion(draft, tags.key) ? 1 : 0}>
+        <Collapsible title={tv(tags.label)} active={getCriterion(draft, tags.key) ? 1 : 0}>
           <EnumFilter field={tags} facets={facets?.[tags.key]} criteria={draft} onChange={setDraft} columns={2} />
         </Collapsible>
       )}
 
       {sourceFields.length > 0 && (
-        <Collapsible title="Fonte, sistema & origem" active={sourceFields.filter((f) => getCriterion(draft, f.key)).length}>
+        <Collapsible title={t('Fonte, sistema & origem', 'Source, system & origin')} active={sourceFields.filter((f) => getCriterion(draft, f.key)).length}>
           <div className={styles.rows}>
             {sourceFields.filter(hasOptions).map((f) => (
-              <Row key={f.key} label={f.label} active={Boolean(getCriterion(draft, f.key))}>
+              <Row key={f.key} label={tv(f.label)} active={Boolean(getCriterion(draft, f.key))}>
                 <SelectFilter field={f} facets={facets?.[f.key]} criteria={draft} onChange={setDraft} />
               </Row>
             ))}
@@ -142,10 +143,10 @@ export function FilterPanel({ schema, facets, criteria, q, onCriteria, onQuery, 
       )}
 
       <div className={styles.applyBar}>
-        {dirty && <p className={styles.pending} role="status">Há alterações não aplicadas.</p>}
+        {dirty && <p className={styles.pending} role="status">{t('Há alterações não aplicadas.', 'There are unapplied changes.')}</p>}
         <button type="submit" className={clsx(styles.apply, dirty && styles.applyDirty)}>
           <Filter size={16} />
-          Aplicar Filtros
+          {t('Aplicar Filtros', 'Apply Filters')}
         </button>
       </div>
     </form>

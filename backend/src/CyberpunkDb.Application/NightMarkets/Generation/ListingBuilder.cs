@@ -1,5 +1,6 @@
 using CyberpunkDb.Application.NightMarkets.Rules;
 using CyberpunkDb.Domain.Enums;
+using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.NightMarkets.Generation;
 
@@ -57,11 +58,11 @@ internal sealed class ListingBuilder(NightMarketRuleBook rules, MarketCatalog ca
                 Quality = each ?? (item.CategoryKey == "weapons" ? item.Quality : null),
                 ForSale = forSale && price is not null,
                 Origin = origin, Group = group, GoodsId = goodsId, Source = Source(item),
-                Note = price is null ? $"Sem preço fixo no livro{(item.PriceNote is { } pn ? $": {pn}" : "")}. Ajuste o preço para vender." : note,
+                Note = price is null ? L.T("Sem preço fixo no livro", "No fixed price in the book") + (item.PriceNote is { } pn ? $": {pn}" : "") + L.T(". Ajuste o preço para vender.", ". Set the price to sell it.") : note,
             }));
         }
         if (rolled && item.RequiresItemId is { } requires && catalog.Find(requires) is { } foundation && !Has(foundation.Id, null))
-            added.AddRange(Item(foundation, stall, ListingOrigin.Foundational, $"Peça-base de {item.Name}", goodsId, rolled: true));
+            added.AddRange(Item(foundation, stall, ListingOrigin.Foundational, L.T($"Peça-base de {item.Name}", $"Foundational piece for {item.Name}"), goodsId, rolled: true));
         return added;
     }
 

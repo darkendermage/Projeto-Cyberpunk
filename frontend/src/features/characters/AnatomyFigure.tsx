@@ -1,6 +1,7 @@
 import type { CyberRegionReport } from '../../api/characterTypes';
 import { HOTSPOTS, type RegionKey } from './anatomy';
 import styles from './Cyberware.module.css';
+import { t, tv } from '../../i18n';
 
 const W = 400;
 
@@ -76,7 +77,7 @@ export function AnatomyFigure({ regions, selected, onSelect, fbc }: {
   ];
 
   return (
-    <svg className={styles.figure} viewBox={`0 0 ${W} 640`} role="group" aria-label="Modelo anatômico com as regiões de cyberware">
+    <svg className={styles.figure} viewBox={`0 0 ${W} 640`} role="group" aria-label={t('Modelo anatômico com as regiões de cyberware', 'Anatomical model with the cyberware regions')}>
       <defs>
         <linearGradient id="glassFill" gradientUnits="userSpaceOnUse" x1="0" y1="40" x2="0" y2="620">
           <stop offset="0" stopColor="#ff6f80" />
@@ -189,7 +190,7 @@ export function AnatomyFigure({ regions, selected, onSelect, fbc }: {
             <polyline points={`${h.x},${h.y} ${elbow},${h.y} ${edge},${h.y}`}
               className={`${styles.leader} ${count > 0 ? styles.leaderOn : ''} ${active ? styles.leaderActive : ''}`} />
             <g role="button" tabIndex={0} className={styles.hotspot}
-              aria-label={`${r?.label ?? key}: ${count} peça(s)${r?.slotsTotal != null ? `, ${r.slotsUsed} de ${r.slotsTotal} slots` : ''}`}
+              aria-label={t(`${tv(r?.label) ?? key}: ${count} peça(s)${r?.slotsTotal != null ? `, ${r.slotsUsed} de ${r.slotsTotal} slots` : ''}`, `${tv(r?.label) ?? key}: ${count} piece(s)${r?.slotsTotal != null ? `, ${r.slotsUsed} of ${r.slotsTotal} slots` : ''}`)}
               aria-pressed={active}
               onClick={() => onSelect(key)}
               onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onSelect(key); } }}>
@@ -209,8 +210,8 @@ function BodyShapes() {
   return (
     <>
       <path d={HEAD} />
-      {[undefined, MIRROR].map((t) => (
-        <g key={t ?? 'right'} transform={t}>
+      {[undefined, MIRROR].map((entry) => (
+        <g key={entry ?? 'right'} transform={entry}>
           <path d={EAR} /><path d={TORSO} /><path d={ARM} /><path d={LEG} />
         </g>
       ))}

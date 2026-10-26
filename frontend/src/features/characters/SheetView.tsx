@@ -13,6 +13,7 @@ import { ArmorPanel, HealthPanel, InjuriesPanel, type Run, WeaponsPanel } from '
 import { ProgressionPanel } from './ProgressionPanel';
 import type { SheetEditor } from './useSheetEditor';
 import styles from './Characters.module.css';
+import { t, tv } from '../../i18n';
 
 interface Props { detail: CharacterDetail; rules: CharacterRules; editor: SheetEditor }
 
@@ -70,8 +71,8 @@ function IdentityColumn({ detail, rules, editor, run, busy }: { detail: Characte
       <Portrait detail={detail} />
       <section className={styles.panel}>
         <label className={styles.idField}>
-          <span className={styles.idLabel}>Nome</span>
-          <input className={styles.input} value={id.name} onChange={(e) => set({ name: e.target.value })} aria-label="Nome" />
+          <span className={styles.idLabel}>{t('Nome', 'Name')}</span>
+          <input className={styles.input} value={id.name} onChange={(e) => set({ name: e.target.value })} aria-label={t('Nome', 'Name')} />
         </label>
         <label className={styles.idField}>
           <span className={styles.idLabel}>Handle</span>
@@ -79,38 +80,38 @@ function IdentityColumn({ detail, rules, editor, run, busy }: { detail: Characte
         </label>
         {r.roles.map((x) => (
           <div key={x.role} className={styles.idField}>
-            <span className={styles.idLabel}>{x.current ? 'Role' : 'Role anterior'}</span>
+            <span className={styles.idLabel}>{x.current ? 'Role' : t('Role anterior', 'Previous Role')}</span>
             <div className={styles.row}>
               <span className={styles.idValue}>{x.role}</span>
               <span className={styles.grow} />
-              <span className={styles.abilityRank} title={`Rank de ${x.ability}`}>{x.rank}</span>
+              <span className={styles.abilityRank} title={t(`Rank de ${x.ability}`, `${x.ability} Rank`)}>{x.rank}</span>
             </div>
             <span className={styles.small}>
-              Habilidade de Role: <RoleAbilityButton rules={rules} role={x.role} /> <span className={styles.source}>CP:R p.{x.abilityPage}</span>
+              {t('Habilidade de Role: ', 'Role Ability: ')}<RoleAbilityButton rules={rules} role={x.role} /> <span className={styles.source}>CP:R p.{x.abilityPage}</span>
             </span>
           </div>
         ))}
-        {!role && <span className={styles.muted}>Sem Role.</span>}
+        {!role && <span className={styles.muted}>{t('Sem Role.', 'No Role.')}</span>}
         <dl className={styles.kv}>
-          <dt>Idioma de origem</dt><dd>{id.nativeLanguage ?? '—'}</dd>
-          <dt>Bairro</dt><dd>{id.home}</dd>
-          <dt>Reputação</dt><dd>{id.reputation}</dd>
-          <dt>Saldo</dt><dd>{formatEb(detail.sheet.wallet.balance)}</dd>
+          <dt>{t('Idioma de origem', 'Native language')}</dt><dd>{id.nativeLanguage ?? '—'}</dd>
+          <dt>{t('Bairro', 'Neighborhood')}</dt><dd>{id.home}</dd>
+          <dt>{t('Reputação', 'Reputation')}</dt><dd>{id.reputation}</dd>
+          <dt>{t('Saldo', 'Balance')}</dt><dd>{formatEb(detail.sheet.wallet.balance)}</dd>
         </dl>
       </section>
 
-      <SheetPanel title="Humanidade" icon={<Brain size={16} />}>
+      <SheetPanel title={t('Humanidade', 'Humanity')} icon={<Brain size={16} />}>
         <div className={styles.bigNumbers}>
           <strong>{hum.current}</strong><span className={styles.muted}>/ {hum.max}</span>
           <span className={styles.grow} />
-          {hum.cyberpsychosis && <StateTag tone="bad">Cyberpsicose</StateTag>}
+          {hum.cyberpsychosis && <StateTag tone="bad">{t('Cyberpsicose', 'Cyberpsychosis')}</StateTag>}
         </div>
         <div className={styles.meter} aria-hidden><div className={styles.meterFill} style={{ width: `${humPct}%` }} /></div>
         <dl className={styles.kv}>
-          <dt>EMP efetiva</dt><dd>{hum.empEffective} <span className={styles.muted}>(base {hum.empBase})</span></dd>
-          <dt>Perdida</dt><dd>{hum.lost}</dd>
-          <dt>Recuperada</dt><dd>{hum.recovered}</dd>
-          <dt title="Máximo que a terapia recupera com o cyberware atual (CP:R p.230)">Teto da terapia</dt><dd>{hum.therapyCap}</dd>
+          <dt>{t('EMP efetiva', 'Effective EMP')}</dt><dd>{hum.empEffective} <span className={styles.muted}>(base {hum.empBase})</span></dd>
+          <dt>{t('Perdida', 'Lost')}</dt><dd>{hum.lost}</dd>
+          <dt>{t('Recuperada', 'Recovered')}</dt><dd>{hum.recovered}</dd>
+          <dt title={t('Máximo que a terapia recupera com o cyberware atual (CP:R p.230)', 'Most that therapy recovers with the current cyberware (CP:R p.230)')}>{t('Teto da terapia', 'Therapy cap')}</dt><dd>{hum.therapyCap}</dd>
         </dl>
       </SheetPanel>
 
@@ -120,8 +121,8 @@ function IdentityColumn({ detail, rules, editor, run, busy }: { detail: Characte
         <div className={styles.row}>
           <span className={styles.bigNumbers}><strong>{r.luckAvailable}</strong><span className={styles.muted}>/ {r.luck}</span></span>
           <span className={styles.grow} />
-          <Button disabled={busy || r.luckAvailable === 0} onClick={() => run('luck', { spent: detail.sheet.combat.luckSpent + 1 })}>Gastar 1</Button>
-          <Button variant="ghost" disabled={busy || detail.sheet.combat.luckSpent === 0} onClick={() => run('luck', { spent: 0 })}>Restaurar</Button>
+          <Button disabled={busy || r.luckAvailable === 0} onClick={() => run('luck', { spent: detail.sheet.combat.luckSpent + 1 })}>{t('Gastar 1', 'Spend 1')}</Button>
+          <Button variant="ghost" disabled={busy || detail.sheet.combat.luckSpent === 0} onClick={() => run('luck', { spent: 0 })}>{t('Restaurar', 'Restore')}</Button>
         </div>
       </SheetPanel>
     </div>
@@ -132,9 +133,9 @@ function IdentityColumn({ detail, rules, editor, run, busy }: { detail: Characte
 
 function StatColumn({ detail }: { detail: CharacterDetail }) {
   return (
-    <div className={`${styles.column} ${styles.statColumn}`} role="list" aria-label="Atributos">
+    <div className={`${styles.column} ${styles.statColumn}`} role="list" aria-label={t('Atributos', 'STATs')}>
       {detail.report.stats.map((s) => {
-        const tip = [`${STAT_LABEL[s.key] ?? s.key}: base ${s.base}`, ...s.parts.map((p) => `${p.label}: ${signed(p.value)}`)].join('\n');
+        const tip = [`${STAT_LABEL[s.key] ?? s.key}: base ${s.base}`, ...s.parts.map((p) => `${tv(p.label)}: ${signed(p.value)}`)].join('\n');
         return (
           <div key={s.key} className={styles.stat} role="listitem" title={tip}>
             <span className={styles.statKey}>{s.key}</span>
@@ -156,49 +157,49 @@ function SkillsPanel({ detail }: { detail: CharacterDetail }) {
   const penalty = detail.report.actionPenalty;
 
   return (
-    <SheetPanel title="Perícias" actions={penalty !== 0 && (
+    <SheetPanel title={t('Perícias', 'Skills')} actions={penalty !== 0 && (
       <span className={`${styles.small} ${styles.amber}`} title={detail.report.actionPenalties.map((p) => `${p.label}: ${signed(p.value)}`).join('\n')}>
-        {signed(penalty)} em todas as Ações
+        {signed(penalty)} {t('em todas as Ações', 'to all Actions')}
       </span>
     )}>
       <div className={styles.skillToolbar}>
         <label className={styles.search}>
           <Search size={15} aria-hidden />
-          <span className="visually-hidden">Buscar perícia</span>
-          <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Buscar perícia (PT ou EN)…" />
+          <span className="visually-hidden">{t('Buscar perícia', 'Search skill')}</span>
+          <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder={t('Buscar perícia (PT ou EN)…', 'Search skill (EN or PT)…')} />
         </label>
-        <Segmented ariaLabel="Filtro de perícias" size="sm" value={filter} onChange={setFilter} options={SKILL_FILTERS} />
+        <Segmented ariaLabel={t('Filtro de perícias', 'Skill filter')} size="sm" value={filter} onChange={setFilter} options={SKILL_FILTERS} />
       </div>
-      {groups.length === 0 && <p className={styles.muted}>Nenhuma perícia com esse filtro.</p>}
+      {groups.length === 0 && <p className={styles.muted}>{t('Nenhuma perícia com esse filtro.', 'No skills with this filter.')}</p>}
       <div className={styles.skillGrid}>
         {groups.map((g) => (
           <div key={g.key} className={styles.skillGroup}>
             <table className={styles.table}>
-              <caption>{g.label}</caption>
+              <caption>{tv(g.label)}</caption>
               <thead>
-                <tr><th>Perícia</th><th className={styles.num}>LVL</th><th className={styles.num}>MOD</th><th className={styles.num}>BASE</th></tr>
+                <tr><th>{t('Perícia', 'Skill')}</th><th className={styles.num}>LVL</th><th className={styles.num}>MOD</th><th className={styles.num}>BASE</th></tr>
               </thead>
               <tbody>
                 {g.lines.map((l) => (
                   <tr key={l.key} className={l.level === 0 ? styles.dim : undefined}>
-                    <td title={`${l.name}${l.specialization ? ` (${l.specialization})` : ''} · CP:R p.${l.page}`}>
+                    <td title={`${tv(l.name)}${l.specialization ? ` (${l.specialization})` : ''} · CP:R p.${l.page}`}>
                       {skillLabel(l)} <span className={styles.muted}>({l.stat})</span>
-                      {l.doubleCost && <span className={styles.tag} title="Custa o dobro para subir">x2</span>}
-                      {l.roleSkill && <span className={`${styles.tag} ${styles.tagRole}`} title="Perícia da Role">Role</span>}
+                      {l.doubleCost && <span className={styles.tag} title={t('Custa o dobro para subir', 'Costs double to raise')}>x2</span>}
+                      {l.roleSkill && <span className={`${styles.tag} ${styles.tagRole}`} title={t('Perícia da Role', 'Role skill')}>Role</span>}
                       {l.situational.length > 0 && (
-                        <span className={`${styles.tag} ${styles.tagCyber}`} title={`Só em certas situações (não está na BASE):\n${l.situational.join('\n')}`}>
-                          situacional
+                        <span className={`${styles.tag} ${styles.tagCyber}`} title={t(`Só em certas situações (não está na BASE):\n${l.situational.join('\n')}`, `Only in certain situations (not in BASE):\n${l.situational.join('\n')}`)}>
+                          {t('situacional', 'situational')}
                         </span>
                       )}
                     </td>
                     <td className={styles.num}>{l.level || '—'}</td>
                     <td className={styles.num} title={[
-                      ...l.modifierParts.map((p) => `${p.label}: ${signed(p.value)}`),
-                      ...(l.actionPenalty ? [`Todas as Ações: ${signed(l.actionPenalty)}`] : []),
+                      ...l.modifierParts.map((p) => `${tv(p.label)}: ${signed(p.value)}`),
+                      ...(l.actionPenalty ? [t(`Todas as Ações: ${signed(l.actionPenalty)}`, `All Actions: ${signed(l.actionPenalty)}`)] : []),
                     ].join('\n') || undefined}>
                       {l.modifier + l.actionPenalty ? signed(l.modifier + l.actionPenalty) : '—'}
                     </td>
-                    <td className={styles.total} title={`${l.stat} ${l.statValue} + nível ${l.level}${l.modifier ? ` ${signed(l.modifier)}` : ''}`}>{l.total}</td>
+                    <td className={styles.total} title={t(`${l.stat} ${l.statValue} + nível ${l.level}${l.modifier ? ` ${signed(l.modifier)}` : ''}`, `${l.stat} ${l.statValue} + level ${l.level}${l.modifier ? ` ${signed(l.modifier)}` : ''}`)}>{l.total}</td>
                   </tr>
                 ))}
               </tbody>
@@ -233,27 +234,27 @@ function ModifiersPanel({ detail, editor }: { detail: CharacterDetail; editor: S
   }));
 
   return (
-    <SheetPanel title="Modificadores temporários" icon={<SlidersHorizontal size={16} />}>
-      <p className={styles.small}>Drogas, equipamento e decisões do Mestre. Mudam o valor efetivo; o valor-base fica intacto.</p>
+    <SheetPanel title={t('Modificadores temporários', 'Temporary modifiers')} icon={<SlidersHorizontal size={16} />}>
+      <p className={styles.small}>{t('Drogas, equipamento e decisões do Mestre. Mudam o valor efetivo; o valor-base fica intacto.', 'Drugs, gear and GM rulings. They change the effective value; the base value stays untouched.')}</p>
       {mods.length > 0 && (
         <ul className={styles.list}>
           {mods.map((m) => (
             <li key={m.id} className={styles.listItem} data-tone={m.active ? 'warn' : undefined}>
               <span className={styles.grow}>
                 <strong className={styles.mono}>{signed(m.value)}</strong>{' '}
-                {m.target === 'AllActions' ? 'em todas as Ações' : m.key} — {m.source}
+                {m.target === 'AllActions' ? t('em todas as Ações', 'to all Actions') : m.key} — {m.source}
               </span>
-              <Button variant="ghost" onClick={() => update(m.id, { active: !m.active })}>{m.active ? 'Desativar' : 'Ativar'}</Button>
-              <IconButton label="Remover modificador" onClick={() => update(m.id, null)}><X size={14} /></IconButton>
+              <Button variant="ghost" onClick={() => update(m.id, { active: !m.active })}>{m.active ? t('Desativar', 'Turn off') : t('Ativar', 'Turn on')}</Button>
+              <IconButton label={t('Remover modificador', 'Remove modifier')} onClick={() => update(m.id, null)}><X size={14} /></IconButton>
             </li>
           ))}
         </ul>
       )}
       <div className={styles.row}>
-        <Select value={target} onChange={(e) => { setTarget(e.target.value as ModifierTarget); setKey(e.target.value === 'Skill' ? skills[0]?.key ?? '' : 'REF'); }} aria-label="Alvo">
+        <Select value={target} onChange={(e) => { setTarget(e.target.value as ModifierTarget); setKey(e.target.value === 'Skill' ? skills[0]?.key ?? '' : 'REF'); }} aria-label={t('Alvo', 'Target')}>
           <option value="Stat">STAT</option>
-          <option value="Skill">Perícia</option>
-          <option value="AllActions">Todas as Ações</option>
+          <option value="Skill">{t('Perícia', 'Skill')}</option>
+          <option value="AllActions">{t('Todas as Ações', 'All Actions')}</option>
         </Select>
         {target === 'Stat' && (
           <Select value={key} onChange={(e) => setKey(e.target.value)} aria-label="STAT">
@@ -261,13 +262,13 @@ function ModifiersPanel({ detail, editor }: { detail: CharacterDetail; editor: S
           </Select>
         )}
         {target === 'Skill' && (
-          <Select value={key} onChange={(e) => setKey(e.target.value)} aria-label="Perícia">
+          <Select value={key} onChange={(e) => setKey(e.target.value)} aria-label={t('Perícia', 'Skill')}>
             {skills.map((s) => <option key={s.key} value={s.key}>{skillLabel(s)}</option>)}
           </Select>
         )}
-        <input className={`${styles.input} ${styles.inputSmall}`} type="number" value={value} onChange={(e) => setValue(e.target.value)} aria-label="Valor" />
-        <input className={styles.input} style={{ maxWidth: 200 }} value={source} placeholder="Origem (ex.: Synthcoke)" onChange={(e) => setSource(e.target.value)} />
-        <IconButton label="Adicionar modificador" disabled={!Number(value) || !source.trim()} onClick={add}><Plus size={14} /></IconButton>
+        <input className={`${styles.input} ${styles.inputSmall}`} type="number" value={value} onChange={(e) => setValue(e.target.value)} aria-label={t('Valor', 'Value')} />
+        <input className={styles.input} style={{ maxWidth: 200 }} value={source} placeholder={t('Origem (ex.: Synthcoke)', 'Source (e.g. Synthcoke)')} onChange={(e) => setSource(e.target.value)} />
+        <IconButton label={t('Adicionar modificador', 'Add modifier')} disabled={!Number(value) || !source.trim()} onClick={add}><Plus size={14} /></IconButton>
       </div>
     </SheetPanel>
   );
@@ -275,20 +276,20 @@ function ModifiersPanel({ detail, editor }: { detail: CharacterDetail; editor: S
 
 // ------------------------------------------------------------ history
 
-const KIND_LABEL: Record<string, string> = { Ledger: 'Dinheiro', Humanity: 'Humanidade', Combat: 'Combate', Injury: 'Lesão', Progression: 'Progressão', Edit: 'Edição' };
+const KIND_LABEL: Record<string, string> = { Ledger: t('Dinheiro', 'Money'), Humanity: t('Humanidade', 'Humanity'), Combat: t('Combate', 'Combat'), Injury: t('Lesão', 'Injury'), Progression: t('Progressão', 'Progression'), Edit: t('Edição', 'Edit') };
 
 function HistoryPanel({ id }: { id: number }) {
   const [open, setOpen] = useState(false);
   const events = useCharacterEvents(id, open);
   return (
-    <SheetPanel title="Histórico" icon={<History size={16} />}
-      actions={<Button variant="ghost" onClick={() => setOpen(!open)}>{open ? 'Ocultar' : 'Mostrar'}</Button>}>
+    <SheetPanel title={t('Histórico', 'History')} icon={<History size={16} />}
+      actions={<Button variant="ghost" onClick={() => setOpen(!open)}>{open ? t('Ocultar', 'Hide') : t('Mostrar', 'Show')}</Button>}>
       {open && (events.data?.length ? (
         <ul className={styles.list}>
           {events.data.slice(0, 60).map((e) => (
             <li key={e.id} className={styles.listItem}>
               <div className={styles.grow}>
-                <div className={styles.small}>{e.description}</div>
+                <div className={styles.small}>{tv(e.description)}</div>
                 <div className={styles.source}>
                   {KIND_LABEL[e.kind]} · {formatDate(e.createdAt)}
                   {e.before != null && e.after != null && ` · ${e.before} → ${e.after}`}
@@ -299,7 +300,7 @@ function HistoryPanel({ id }: { id: number }) {
             </li>
           ))}
         </ul>
-      ) : <p className={styles.muted}>{events.isLoading ? 'Carregando…' : 'Sem registros.'}</p>)}
+      ) : <p className={styles.muted}>{events.isLoading ? t('Carregando…', 'Loading…') : t('Sem registros.', 'No entries.')}</p>)}
     </SheetPanel>
   );
 }

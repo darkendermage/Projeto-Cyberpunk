@@ -2,6 +2,7 @@ using System.Globalization;
 using System.Text;
 using CyberpunkDb.Application.NetArchitectures.Rules;
 using CyberpunkDb.Domain.Enums;
+using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.NetArchitectures;
 
@@ -20,14 +21,14 @@ public sealed class NetArchitectureExport(NetArchitectureRuleBook rules)
         var sb = new StringBuilder();
 
         sb.AppendLine(markdown ? $"# {name}" : name.ToUpperInvariant());
-        sb.AppendLine($"Dificuldade {difficulty.Label} (DV{difficulty.Dv}) · {state.FloorCount} andares · {location.Label} · seed {state.Seed}");
+        sb.AppendLine(L.T($"Dificuldade {difficulty.Label} (DV{difficulty.Dv}) · {state.FloorCount} andares · {location.Label} · seed {state.Seed}", $"Difficulty {L.D(difficulty.Label)} (DV{difficulty.Dv}) · {state.FloorCount} floors · {L.D(location.Label)} · seed {state.Seed}"));
         sb.AppendLine();
 
         foreach (var branch in state.Branches)
         {
             var title = branch.FromFloor is { } from
-                ? $"Ramo {branch.Id} (sai depois do andar {from} do tronco)"
-                : $"Tronco {branch.Id} (Lobby nos andares 1 e 2; o andar {branch.Floors[^1].Depth} é o fundo)";
+                ? L.T($"Ramo {branch.Id} (sai depois do andar {from} do tronco)", $"Branch {branch.Id} (leaves after trunk floor {from})")
+                : L.T($"Tronco {branch.Id} (Lobby nos andares 1 e 2; o andar {branch.Floors[^1].Depth} é o fundo)", $"Trunk {branch.Id} (Lobby on floors 1 and 2; floor {branch.Floors[^1].Depth} is the bottom)");
             sb.AppendLine(markdown ? $"## {title}" : title);
             var rows = branch.Floors.Select(f => (Floor: f.Depth.ToString(), Door: Door(f, state, ice), Dv: Dv(f))).ToList();
             Table(sb, ["Floor", "On the Other Side of the \"Door\"", "DV"], rows.Select(r => new[] { r.Floor, r.Door, r.Dv }).ToList(), markdown);
@@ -41,8 +42,8 @@ public sealed class NetArchitectureExport(NetArchitectureRuleBook rules)
             {
                 var rule = rules.Demons.FirstOrDefault(x => x.Id == d.Type);
                 var nodes = state.Contents.Where(c => c.Function?.DemonId == d.Id).Select(c => state.FloorOf(c.Id)?.Id).ToList();
-                sb.AppendLine($"{(markdown ? "- " : "")}{rule?.Name ?? d.Type} ({d.Id}, andar {d.FloorId}): REZ {rule?.Rez} · Interface {rule?.Interface} · {rule?.NetActions} NET Actions · Combat Number {rule?.CombatNumber}"
-                              + (nodes.Count > 0 ? $" · opera os Control Nodes de {string.Join(", ", nodes)}" : ""));
+                sb.AppendLine(L.T($"{(markdown ? "- " : "")}{rule?.Name ?? d.Type} ({d.Id}, andar {d.FloorId}): REZ {rule?.Rez} · Interface {rule?.Interface} · {rule?.NetActions} NET Actions · Combat Number {rule?.CombatNumber}", $"{(markdown ? "- " : "")}{rule?.Name ?? d.Type} ({d.Id}, floor {d.FloorId}): REZ {rule?.Rez} · Interface {rule?.Interface} · {rule?.NetActions} NET Actions · Combat Number {rule?.CombatNumber}")
+                              + (nodes.Count > 0 ? L.T($" · opera os Control Nodes de {string.Join(", ", nodes)}", $" · operates the Control Nodes on {string.Join(", ", nodes)}") : ""));
             }
             sb.AppendLine();
         }
@@ -52,7 +53,7 @@ public sealed class NetArchitectureExport(NetArchitectureRuleBook rules)
         {
             sb.AppendLine(markdown ? "## Watchers (Going Quiet)" : "WATCHERS (GOING QUIET)");
             foreach (var w in watchers)
-                sb.AppendLine($"{(markdown ? "- " : "")}{w.Name} · {w.Kind} · andar {w.FloorId} · Interface {w.Interface}{(w.PathfinderBonus > 0 ? $" · Pathfinder +{w.PathfinderBonus}" : "")}");
+                sb.AppendLine(L.T($"{(markdown ? "- " : "")}{w.Name} · {w.Kind} · andar {w.FloorId} · Interface {w.Interface}{(w.PathfinderBonus > 0 ? $" · Pathfinder +{w.PathfinderBonus}" : "")}", $"{(markdown ? "- " : "")}{w.Name} · {w.Kind} · floor {w.FloorId} · Interface {w.Interface}{(w.PathfinderBonus > 0 ? $" · Pathfinder +{w.PathfinderBonus}" : "")}"));
             sb.AppendLine();
         }
 
@@ -91,18 +92,18 @@ public sealed class NetArchitectureExport(NetArchitectureRuleBook rules)
         if (floor.Table.Length > 0 && floor.Table != NetArchitectureRuleBook.LobbyTable && floor.Table != state.Difficulty.ToString())
             text += " [Boss Floor]";
         var watchers = Watchers(state).Where(w => w.FloorId == floor.Id).Select(w => w.Name).ToList();
-        if (watchers.Count > 0) text += $" · aqui: {string.Join(", ", watchers)}";
+        if (watchers.Count > 0) text += L.T($" · aqui: {string.Join(", ", watchers)}", $" · here: {string.Join(", ", watchers)}");
         return text.Length > 0 ? text : "(vazio)";
     }
 
     private string NodeLabel(NetContent c)
     {
         var f = c.Function;
-        if (f is null) return "sem função";
+        if (f is null) return L.T("sem função", "no function");
         if (rules.FindDefense(f.DefenseId) is { } d)
             return d.Name + (f.Loadout.Count > 0 ? $": {string.Join(" + ", f.Loadout)}" : "") + (f.Label is { } extra ? $" — {extra}" : "");
         if (rules.FindDevice(f.DeviceId) is { } device) return f.Label ?? device.Label;
-        return f.Label ?? "sem função";
+        return f.Label ?? L.T("sem função", "no function");
     }
 
     /// <summary>"N/A" for Black ICE; the Interface Ability and DV otherwise, as in CP:R p.218 ("Backdoor DV8").</summary>

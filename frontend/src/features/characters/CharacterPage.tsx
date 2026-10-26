@@ -15,13 +15,14 @@ import { SaveIndicator, StateTag } from './CharacterUi';
 import { SheetView } from './SheetView';
 import { useSheetEditor } from './useSheetEditor';
 import styles from './Characters.module.css';
+import { t, tv } from '../../i18n';
 
 export type CharacterTab = 'criacao' | 'ficha' | 'caminho' | 'equipamento' | 'cyberware';
 
 const TABS: { tab: CharacterTab; label: string; ready: boolean }[] = [
-  { tab: 'ficha', label: 'Personagem', ready: true },
-  { tab: 'caminho', label: 'Caminho de Vida', ready: true },
-  { tab: 'equipamento', label: 'Equipamento', ready: true },
+  { tab: 'ficha', label: t('Personagem', 'Character'), ready: true },
+  { tab: 'caminho', label: t('Caminho de Vida', 'Lifepath'), ready: true },
+  { tab: 'equipamento', label: t('Equipamento', 'Gear'), ready: true },
   { tab: 'cyberware', label: 'Cyberware', ready: true },
 ];
 
@@ -109,38 +110,38 @@ function CharacterWorkspace({ detail, rules, tab, onTab }: {
   return (
     <div className={embedded ? styles.embedded : page.page}>
       <div className={styles.topbar}>
-        {!embedded && <Link to="/characters" className={styles.tab} aria-label="Voltar aos personagens"><ArrowLeft size={16} /></Link>}
+        {!embedded && <Link to="/characters" className={styles.tab} aria-label={t('Voltar aos personagens', 'Back to characters')}><ArrowLeft size={16} /></Link>}
         <div className={styles.topbarName}>
-          <strong>{identity.name || 'Sem nome'}{identity.handle && <span className={styles.muted}> “{identity.handle}”</span>}</strong>
+          <strong>{tv(identity.name) || t('Sem nome', 'Unnamed')}{identity.handle && <span className={styles.muted}> “{identity.handle}”</span>}</strong>
           <span className={styles.source}>{detail.sheet.roles[0]?.role} · {METHOD_LABEL[detail.sheet.creation.method]}</span>
         </div>
         <StateTag tone={tone}>{STATUS_LABEL[detail.status]}</StateTag>
 
-        <nav className={styles.tabs} aria-label="Seções da ficha (Alt+1 a Alt+4)">
-          {creating && tabLink('criacao', 'Criação')}
-          {TABS.map((t) => t.ready
-            ? tabLink(t.tab, t.label)
-            : <span key={t.tab} className={`${styles.tab} ${styles.tabDisabled}`} title="Chega nas próximas fases">{t.label}</span>)}
+        <nav className={styles.tabs} aria-label={t('Seções da ficha (Alt+1 a Alt+4)', 'Sheet sections (Alt+1 to Alt+4)')}>
+          {creating && tabLink('criacao', t('Criação', 'Creation'))}
+          {TABS.map((entry) => entry.ready
+            ? tabLink(entry.tab, entry.label)
+            : <span key={entry.tab} className={`${styles.tab} ${styles.tabDisabled}`} title={t('Chega nas próximas fases', 'Coming in a later phase')}>{tv(entry.label)}</span>)}
         </nav>
 
         <div className={styles.topbarRight}>
           {embedded ? (
-            <Link to={`/characters/${detail.id}/${tab}`} className={styles.tab} title="Abrir a ficha fora da mesa">
-              <ExternalLink size={14} /> Página da ficha
+            <Link to={`/characters/${detail.id}/${tab}`} className={styles.tab} title={t('Abrir a ficha fora da mesa', 'Open the sheet outside the table')}>
+              <ExternalLink size={14} /> {t('Página da ficha', 'Sheet page')}
             </Link>
           ) : (
             <>
-              <label className="visually-hidden" htmlFor="character-switch">Trocar de personagem</label>
+              <label className="visually-hidden" htmlFor="character-switch">{t('Trocar de personagem', 'Switch character')}</label>
               <Select id="character-switch" value={detail.id} onChange={(e) => void switchTo(Number(e.target.value))}>
-                {(list.data ?? [{ id: detail.id, name: identity.name }]).map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+                {(list.data ?? [{ id: detail.id, name: tv(identity.name) }]).map((c) => <option key={c.id} value={c.id}>{tv(c.name)}</option>)}
               </Select>
-              <IconButton label="Duplicar como base" onClick={() => duplicate.mutate(detail.id, {
-                onSuccess: (d) => { toast.notify(`Cópia criada: ${d.sheet.identity.name}.`); navigate(`/characters/${d.id}`); },
+              <IconButton label={t('Duplicar como base', 'Duplicate as a base')} onClick={() => duplicate.mutate(detail.id, {
+                onSuccess: (d) => { toast.notify(t(`Cópia criada: ${d.sheet.identity.name}.`, `Copy created: ${d.sheet.identity.name}.`)); navigate(`/characters/${d.id}`); },
                 onError: (e) => toast.notify(problemMessage(e), 'error'),
               })}><Copy size={16} /></IconButton>
             </>
           )}
-          <IconButton label="Exportar para arquivo" onClick={() => void editor.flush().then(() => downloadCharacter(detail.id))}>
+          <IconButton label={t('Exportar para arquivo', 'Export to file')} onClick={() => void editor.flush().then(() => downloadCharacter(detail.id))}>
             <Download size={16} />
           </IconButton>
           <SaveIndicator status={editor.status} />

@@ -3,6 +3,7 @@ using CyberpunkDb.Application.Characters.Rules;
 using CyberpunkDb.Application.Characters.Validation;
 using CyberpunkDb.Application.Npcs;
 using CyberpunkDb.Domain.Enums;
+using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.Characters.Operations;
 
@@ -44,10 +45,10 @@ public sealed class CyberwareOperations(CharacterRuleBook rules, CyberwareInstal
         var humanity = report.Humanity.Current;
 
         var warnings = new List<string>();
-        if (humanity - plan.HumanityLossMax < 0) warnings.Add("No pior resultado dos dados a Humanidade fica abaixo de zero: cyberpsicose (CP:R p.80).");
-        if (price > available) warnings.Add($"Falta {CharacterValidator.Eb(price - available)} para pagar.");
+        if (humanity - plan.HumanityLossMax < 0) warnings.Add(L.T("No pior resultado dos dados a Humanidade fica abaixo de zero: cyberpsicose (CP:R p.80).", "On the worst dice result Humanity drops below zero: cyberpsychosis (CP:R p.80)."));
+        if (price > available) warnings.Add(L.T($"Falta {CharacterValidator.Eb(price - available)} para pagar.", $"{CharacterValidator.Eb(price - available)} short to pay."));
         if (plan.TextRequirements.Count > 0 && !request.Acknowledge)
-            warnings.Add("Confirme os requisitos em texto: o sistema não consegue verificá-los.");
+            warnings.Add(L.T("Confirme os requisitos em texto: o sistema não consegue verificá-los.", "Confirm the text requirements: the system can't check them."));
 
         var names = sheet.Cyberware.Concat(plan.Pieces).ToDictionary(p => p.InstanceId, p => catalog.Find(p.ItemId)?.Name ?? "?");
         var pieces = plan.Pieces.Select(p =>
@@ -60,7 +61,7 @@ public sealed class CyberwareOperations(CharacterRuleBook rules, CyberwareInstal
         }).ToList();
 
         return new InstallPreviewDto(
-            price <= available, price > available ? $"Saldo insuficiente: custa {CharacterValidator.Eb(price)} e restam {CharacterValidator.Eb(available)}." : null,
+            price <= available, price > available ? L.T($"Saldo insuficiente: custa {CharacterValidator.Eb(price)} e restam {CharacterValidator.Eb(available)}.", $"Not enough money: it costs {CharacterValidator.Eb(price)} and {CharacterValidator.Eb(available)} are left.") : null,
             pieces, price, pool, available, available - price,
             humanity, plan.HumanityLossMin, plan.HumanityLossMax, !creating,
             report.Humanity.EmpEffective, Math.Max(0, humanity - plan.HumanityLossMax) / 10, after.TherapyCap,
@@ -84,7 +85,7 @@ public sealed class CyberwareOperations(CharacterRuleBook rules, CyberwareInstal
         var (plan, error) = installer.Plan(sheet, change.Catalog, item, Options(request, creating, roll: true));
         if (plan is null) throw CharacterChange.Refuse("itemId", error!);
         if (plan.TextRequirements.Count > 0 && !request.Acknowledge)
-            throw CharacterChange.Refuse("acknowledge", "Confirme que o personagem cumpre: " + string.Join("; ", plan.TextRequirements));
+            throw CharacterChange.Refuse("acknowledge", L.T("Confirme que o personagem cumpre: ", "Confirm the character meets: ") + string.Join("; ", plan.TextRequirements));
 
         var pool = Payments.PoolFor(rules, sheet, plan.Pieces.All(p => CharacterValidator.IsFashion(change.Item(p.ItemId))), request.Pool);
         var price = Price(plan, item, fromInventory is not null);
@@ -93,7 +94,7 @@ public sealed class CyberwareOperations(CharacterRuleBook rules, CyberwareInstal
         if (fromInventory is not null)
         {
             sheet = TakeFromInventory(sheet, fromInventory);
-            change.Log(CharacterEventKind.Edit, "install-from-inventory", $"{item.Name} retirado do inventário para instalação.");
+            change.Log(CharacterEventKind.Edit, "install-from-inventory", L.T($"{item.Name} retirado do inventário para instalação.", $"{item.Name} taken from the inventory for installation."));
         }
 
         var ownedPiece = fromInventory is null ? null : plan.Pieces.FirstOrDefault(p => p.ItemId == item.Id)?.InstanceId;
@@ -109,14 +110,14 @@ public sealed class CyberwareOperations(CharacterRuleBook rules, CyberwareInstal
             var i = change.Item(p.ItemId);
             change.Log(CharacterEventKind.Humanity, "install-cyberware",
                 $"{i.Name} instalado: Humanity Loss {p.HumanityLossApplied}" +
-                (p.HumanityLossRolled ? $" (rolado {i.Cyber?.HumanityLossDice})." : creating ? " (pré-definida na criação)." : "."),
+                (p.HumanityLossRolled ? $" (rolado {i.Cyber?.HumanityLossDice})." : creating ? L.T(" (pré-definida na criação).", " (preset at creation).") : "."),
                 -p.HumanityLossApplied);
         }
         if (plan.TextRequirements.Count > 0)
-            change.Log(CharacterEventKind.Edit, "requirements-confirmed", "Requisitos confirmados pelo jogador: " + string.Join("; ", plan.TextRequirements), manual: true);
+            change.Log(CharacterEventKind.Edit, "requirements-confirmed", L.T("Requisitos confirmados pelo jogador: ", "Requirements confirmed by the player: ") + string.Join("; ", plan.TextRequirements), manual: true);
         if (calculator.Calculate(sheet with { Cyberware = [.. sheet.Cyberware, .. pieces], Humanity = sheet.Humanity with { Lost = sheet.Humanity.Lost + plan.HumanityLoss } }, change.Catalog)
                 .Humanity.Cyberpsychosis)
-            change.Notices.Add("A Humanidade caiu abaixo de zero: cyberpsicose (CP:R p.80).");
+            change.Notices.Add(L.T("A Humanidade caiu abaixo de zero: cyberpsicose (CP:R p.80).", "Humanity dropped below zero: cyberpsychosis (CP:R p.80)."));
 
         return sheet with
         {
@@ -133,9 +134,9 @@ public sealed class CyberwareOperations(CharacterRuleBook rules, CyberwareInstal
     /// </summary>
     public CharacterSheet Remove(CharacterSheet sheet, RemoveCyberwareRequest request, CharacterChange change)
     {
-        if (!sheet.Creation.Finalized) throw CharacterChange.Refuse("creation", "Durante a criação, desfaça a compra em vez de remover.");
+        if (!sheet.Creation.Finalized) throw CharacterChange.Refuse("creation", L.T("Durante a criação, desfaça a compra em vez de remover.", "During creation, undo the purchase instead of removing."));
         var piece = sheet.Cyberware.FirstOrDefault(c => c.InstanceId == request.InstanceId)
-                    ?? throw CharacterChange.Refuse("instanceId", "Implante não encontrado.");
+                    ?? throw CharacterChange.Refuse("instanceId", L.T("Implante não encontrado.", "Implant not found."));
         var removed = Descendants(sheet, piece.InstanceId).Prepend(piece).ToList();
         var ids = removed.Select(r => r.InstanceId).ToHashSet();
         var capBefore = calculator.Calculate(sheet, change.Catalog).Humanity.TherapyCap;
@@ -150,7 +151,7 @@ public sealed class CyberwareOperations(CharacterRuleBook rules, CyberwareInstal
                 inventory.Add(new InventoryEntry
                 {
                     InstanceId = change.NewId("it"), ItemId = r.ItemId, Origin = ItemOrigin.Manual, PricePaid = 0, State = ItemState.Stored,
-                    Notes = $"Removido em {change.Now:dd/MM/yyyy}",
+                    Notes = L.T($"Removido em {change.Now:dd/MM/yyyy}", $"Removed on {change.Now:yyyy-MM-dd}"),
                 });
             }
             sheet = sheet with { Inventory = inventory };
@@ -158,8 +159,8 @@ public sealed class CyberwareOperations(CharacterRuleBook rules, CyberwareInstal
 
         var capAfter = calculator.Calculate(sheet, change.Catalog).Humanity.TherapyCap;
         change.Log(CharacterEventKind.Humanity, "remove-cyberware",
-            $"Removido: {string.Join(", ", removed.Select(r => change.Item(r.ItemId).Name))}. A Humanidade perdida não volta; " +
-            $"o teto da terapia sobe de {capBefore} para {capAfter} ({CharacterRuleBook.Page(rules.Document.Cyberware.RemovalRestoresHumanity.Reference)}).",
+            L.T($"Removido: {string.Join(", ", removed.Select(r => change.Item(r.ItemId).Name))}. A Humanidade perdida não volta; ", $"Removed: {string.Join(", ", removed.Select(r => change.Item(r.ItemId).Name))}. Lost Humanity doesn't come back; ") +
+            L.T($"o teto da terapia sobe de {capBefore} para {capAfter} ({CharacterRuleBook.Page(rules.Document.Cyberware.RemovalRestoresHumanity.Reference)}).", $"the therapy cap goes from {capBefore} to {capAfter} ({CharacterRuleBook.Page(rules.Document.Cyberware.RemovalRestoresHumanity.Reference)})."),
             0, capBefore.ToString(), capAfter.ToString());
         return sheet;
     }
@@ -181,30 +182,30 @@ public sealed class CyberwareOperations(CharacterRuleBook rules, CyberwareInstal
     /// </summary>
     public CharacterSheet Therapy(CharacterSheet sheet, TherapyRequest request, CharacterChange change)
     {
-        if (!sheet.Creation.Finalized) throw CharacterChange.Refuse("creation", "Conclua a criação antes de fazer terapia.");
+        if (!sheet.Creation.Finalized) throw CharacterChange.Refuse("creation", L.T("Conclua a criação antes de fazer terapia.", "Finish creation before doing therapy."));
         var kind = rules.Document.Therapy.Kinds.FirstOrDefault(k => k.Id.Equals(request.Kind, StringComparison.OrdinalIgnoreCase))
-                   ?? throw CharacterChange.Refuse("kind", "Tipo de terapia desconhecido.");
+                   ?? throw CharacterChange.Refuse("kind", L.T("Tipo de terapia desconhecido.", "Unknown therapy type."));
         if (!rules.Document.Therapy.Payment.Value.Contains(request.Payment, StringComparer.OrdinalIgnoreCase))
-            throw CharacterChange.Refuse("payment", "Forma de pagamento desconhecida.");
+            throw CharacterChange.Refuse("payment", L.T("Forma de pagamento desconhecida.", "Unknown payment method."));
 
         var humanity = calculator.Calculate(sheet, change.Catalog).Humanity;
         var room = humanity.TherapyCap - humanity.Current;
         if (room <= 0)
-            throw CharacterChange.Refuse("kind", $"A Humanidade ({humanity.Current}) já está no teto da terapia ({humanity.TherapyCap}). " +
-                                                 "Só remover cyberware libera mais (CP:R p.230).");
+            throw CharacterChange.Refuse("kind", L.T($"A Humanidade ({humanity.Current}) já está no teto da terapia ({humanity.TherapyCap}). ", $"Humanity ({humanity.Current}) is already at the therapy cap ({humanity.TherapyCap}). ") +
+                                                 L.T("Só remover cyberware libera mais (CP:R p.230).", "Only removing cyberware frees up more (CP:R p.230)."));
 
         var cost = request.Payment.ToLowerInvariant() switch { "clinic" => kind.Cost, "medtech" => kind.Materials, _ => 0 };
         if (cost > 0) sheet = Payments.Charge(rules, sheet, BudgetPool.Balance, cost, $"terapia {kind.Label}", change);
-        else change.Log(CharacterEventKind.Ledger, "therapy-free", $"Terapia {kind.Label} sem custo (decisão do Mestre).", 0, manual: true);
+        else change.Log(CharacterEventKind.Ledger, "therapy-free", L.T($"Terapia {kind.Label} sem custo (decisão do Mestre).", $"{kind.Label} therapy at no cost (GM's decision)."), 0, manual: true);
 
         var range = Dice.Range(kind.Recovery)!.Value;
         var roll = request.Roll ?? Dice.Roll(kind.Recovery, dice)!.Value;
         if (roll < range.Min || roll > range.Max)
-            throw CharacterChange.Refuse("roll", $"{kind.Recovery} vai de {range.Min} a {range.Max}.");
+            throw CharacterChange.Refuse("roll", L.T($"{kind.Recovery} vai de {range.Min} a {range.Max}.", $"{kind.Recovery} goes from {range.Min} to {range.Max}."));
         var gained = Math.Min(roll, room);
         change.Log(CharacterEventKind.Humanity, "therapy",
             $"Terapia {kind.Label} ({kind.Recovery} = {roll}): +{gained} Humanidade" +
-            (gained < roll ? $", limitada pelo teto de {humanity.TherapyCap}" : "") + $" ({CharacterRuleBook.Page(kind.Source)}).",
+            (gained < roll ? L.T($", limitada pelo teto de {humanity.TherapyCap}", $", limited by the cap of {humanity.TherapyCap}") : "") + $" ({CharacterRuleBook.Page(kind.Source)}).",
             gained, humanity.Current.ToString(), (humanity.Current + gained).ToString(), manual: request.Roll is not null);
         return sheet with { Humanity = sheet.Humanity with { Recovered = sheet.Humanity.Recovered + gained } };
     }
@@ -216,16 +217,16 @@ public sealed class CyberwareOperations(CharacterRuleBook rules, CyberwareInstal
         if (request.FromInventory is { } instance)
         {
             var entry = sheet.Inventory.FirstOrDefault(e => e.InstanceId == instance)
-                        ?? throw CharacterChange.Refuse("fromInventory", "Item não encontrado no inventário.");
-            var stored = catalog.Find(entry.ItemId) ?? throw CharacterChange.Refuse("fromInventory", "Item fora do catálogo.");
-            if (stored.Cyber is null) throw CharacterChange.Refuse("fromInventory", $"{stored.Name} não é cyberware.");
+                        ?? throw CharacterChange.Refuse("fromInventory", L.T("Item não encontrado no inventário.", "Item not found in the inventory."));
+            var stored = catalog.Find(entry.ItemId) ?? throw CharacterChange.Refuse("fromInventory", L.T("Item fora do catálogo.", "Item not in the catalog."));
+            if (stored.Cyber is null) throw CharacterChange.Refuse("fromInventory", L.T($"{stored.Name} não é cyberware.", $"{stored.Name} isn't cyberware."));
             if (entry.Quantity <= 1 && sheet.Inventory.FirstOrDefault(e => e.Wearable?.Options.Contains(entry.InstanceId) == true) is { } host)
-                throw CharacterChange.Refuse("fromInventory", $"{stored.Name} está em {catalog.Find(host.ItemId)?.Name}: retire de lá antes de implantar.");
+                throw CharacterChange.Refuse("fromInventory", L.T($"{stored.Name} está em {catalog.Find(host.ItemId)?.Name}: retire de lá antes de implantar.", $"{stored.Name} is in {catalog.Find(host.ItemId)?.Name}: take it out of there before implanting."));
             return (stored, entry);
         }
         var item = request.ItemId is { } id ? catalog.Find(id) : null;
-        if (item?.Cyber is null) throw CharacterChange.Refuse("itemId", "Escolha um implante do catálogo.");
-        if (item.Price is null) throw CharacterChange.Refuse("itemId", $"{item.Name} não tem preço de catálogo.");
+        if (item?.Cyber is null) throw CharacterChange.Refuse("itemId", L.T("Escolha um implante do catálogo.", "Pick an implant from the catalog."));
+        if (item.Price is null) throw CharacterChange.Refuse("itemId", L.T($"{item.Name} não tem preço de catálogo.", $"{item.Name} has no catalog price."));
         return (item, null);
     }
 

@@ -3,6 +3,7 @@ import type { FieldDescriptor } from '../../../api/types';
 import { type Criterion, getCriterion, setCriterion } from '../../../lib/filters';
 import { formatEb } from '../../../lib/format';
 import styles from './Filters.module.css';
+import { t } from '../../../i18n';
 
 interface Props {
   field: FieldDescriptor;
@@ -54,19 +55,19 @@ export function PriceFilter({ field, criteria, onChange }: Props) {
     <div className={styles.price}>
       <div className={styles.slider} style={{ '--low': `${lowPct}%`, '--high': `${highPct}%` } as React.CSSProperties}>
         <div className={styles.sliderTrack} />
-        <input type="range" min={0} max={1000} value={toPos(lowValue)} aria-label="Preço mínimo"
+        <input type="range" min={0} max={1000} value={toPos(lowValue)} aria-label={t('Preço mínimo', 'Minimum price')}
           onChange={(e) => setLow(String(Math.min(fromPos(Number(e.target.value)), highValue)))}
           onPointerUp={() => commit(low, high)} onKeyUp={() => commit(low, high)} />
-        <input type="range" min={0} max={1000} value={toPos(highValue)} aria-label="Preço máximo"
+        <input type="range" min={0} max={1000} value={toPos(highValue)} aria-label={t('Preço máximo', 'Maximum price')}
           onChange={(e) => setHigh(String(Math.max(fromPos(Number(e.target.value)), lowValue)))}
           onPointerUp={() => commit(low, high)} onKeyUp={() => commit(low, high)} />
       </div>
       <div className={styles.priceInputs}>
-        <input type="number" min={min} max={max} value={low} placeholder={formatEb(min)} aria-label="Preço mínimo (eddies)"
+        <input type="number" min={min} max={max} value={low} placeholder={formatEb(min)} aria-label={t('Preço mínimo (eddies)', 'Minimum price (eddies)')}
           onChange={(e) => setLow(e.target.value)} onBlur={() => commit(low, high)}
           onKeyDown={(e) => e.key === 'Enter' && commit(low, high)} />
         <span className={styles.until}>—</span>
-        <input type="number" min={min} max={max} value={high} placeholder={formatEb(max)} aria-label="Preço máximo (eddies)"
+        <input type="number" min={min} max={max} value={high} placeholder={formatEb(max)} aria-label={t('Preço máximo (eddies)', 'Maximum price (eddies)')}
           onChange={(e) => setHigh(e.target.value)} onBlur={() => commit(low, high)}
           onKeyDown={(e) => e.key === 'Enter' && commit(low, high)} />
       </div>

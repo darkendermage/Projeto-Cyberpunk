@@ -1,4 +1,5 @@
-// Range DV tables of the Cyberpunk RED Core Rulebook (p.173). The book itself measures areas in 2 m/yd squares
+
+import { t } from '../i18n';// Range DV tables of the Cyberpunk RED Core Rulebook (p.173). The book itself measures areas in 2 m/yd squares
 // (Shotgun Shell: "6m/yds (3 squares)"; explosives: "10m/yd by 10m/yd area (5 Square by 5 Square)", p.174),
 // so a tile here is one of those squares.
 
@@ -35,20 +36,20 @@ export interface RangeRow {
 
 /** Single Shot DVs Based on Range (CP:R p.173). */
 export const SINGLE_SHOT: RangeRow[] = [
-  { key: 'pistol', label: 'Pistola', dv: [13, 15, 20, 25, 30, 30, null, null] },
+  { key: 'pistol', label: t('Pistola', 'Pistol'), dv: [13, 15, 20, 25, 30, 30, null, null] },
   { key: 'smg', label: 'SMG', dv: [15, 13, 15, 20, 25, 25, 30, null] },
-  { key: 'shotgun', label: 'Escopeta (Slug)', dv: [13, 15, 20, 25, 30, 35, null, null] },
-  { key: 'assaultRifle', label: 'Rifle de Assalto', dv: [17, 16, 15, 13, 15, 20, 25, 30] },
-  { key: 'sniperRifle', label: 'Rifle de Precisão', dv: [30, 25, 25, 20, 15, 16, 17, 20] },
-  { key: 'bow', label: 'Arco e Besta', dv: [15, 13, 15, 17, 20, 22, null, null] },
-  { key: 'grenadeLauncher', label: 'Lança-Granadas', dv: [16, 15, 15, 17, 20, 22, 25, null] },
-  { key: 'rocketLauncher', label: 'Lança-Foguetes', dv: [17, 16, 15, 15, 20, 20, 25, 30] },
+  { key: 'shotgun', label: t('Escopeta (Slug)', 'Shotgun (Slug)'), dv: [13, 15, 20, 25, 30, 35, null, null] },
+  { key: 'assaultRifle', label: t('Rifle de Assalto', 'Assault Rifle'), dv: [17, 16, 15, 13, 15, 20, 25, 30] },
+  { key: 'sniperRifle', label: t('Rifle de Precisão', 'Sniper Rifle'), dv: [30, 25, 25, 20, 15, 16, 17, 20] },
+  { key: 'bow', label: t('Arco e Besta', 'Bows & Crossbows'), dv: [15, 13, 15, 17, 20, 22, null, null] },
+  { key: 'grenadeLauncher', label: t('Lança-Granadas', 'Grenade Launcher'), dv: [16, 15, 15, 17, 20, 22, 25, null] },
+  { key: 'rocketLauncher', label: t('Lança-Foguetes', 'Rocket Launcher'), dv: [17, 16, 15, 15, 20, 20, 25, 30] },
 ];
 
 /** Autofire DVs Based on Range (CP:R p.173). */
 export const AUTOFIRE: RangeRow[] = [
   { key: 'smg', label: 'SMG', dv: [20, 17, 20, 25, 30] },
-  { key: 'assaultRifle', label: 'Rifle de Assalto', dv: [22, 20, 17, 20, 25] },
+  { key: 'assaultRifle', label: t('Rifle de Assalto', 'Assault Rifle'), dv: [22, 20, 17, 20, 25] },
 ];
 
 /** Weapon class (catalog enum) to the row of the range table. Machine guns and melee weapons have no row. */

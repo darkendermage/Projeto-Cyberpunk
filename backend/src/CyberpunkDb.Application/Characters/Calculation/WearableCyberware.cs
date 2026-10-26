@@ -2,6 +2,7 @@ using CyberpunkDb.Application.Characters.Rules;
 using CyberpunkDb.Application.Npcs;
 using CyberpunkDb.Application.Npcs.Validation;
 using CyberpunkDb.Domain.Enums;
+using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.Characters.Calculation;
 
@@ -29,8 +30,8 @@ public static class WearableCyberware
     /// <summary>Why an option can't go in this host, or null. Slots and duplicates are checked by the caller.</summary>
     public static string? Incompatible(CharacterRuleBook rules, WearableHost host, string hostName, CatalogItem option, NpcCatalog catalog)
     {
-        if (option.Cyber is not { } c) return $"{option.Name} não é cyberware.";
-        if (c.Foundational) return $"{option.Name} é uma peça-base, não uma Option.";
+        if (option.Cyber is not { } c) return L.T($"{option.Name} não é cyberware.", $"{option.Name} isn't cyberware.");
+        if (c.Foundational) return L.T($"{option.Name} é uma peça-base, não uma Option.", $"{option.Name} is a foundational piece, not an Option.");
         var requires = c.RequiresItemId is { } r ? catalog.Find(r)?.Slug : null;
         var fits = host.Accepts switch
         {
@@ -42,13 +43,13 @@ public static class WearableCyberware
         {
             WearableAccepts.Cybereye => "Cybereye Options",
             WearableAccepts.Cyberaudio => "Cyberaudio Options",
-            _ => "Cyberarm ou Cyberlimb Options",
+            _ => L.T("Cyberarm ou Cyberlimb Options", "Cyberarm or Cyberlimb Options"),
         };
-        if (!fits) return $"{hostName} só recebe {kind} ({CharacterRuleBook.Page(host.Source)}).";
+        if (!fits) return L.T($"{hostName} só recebe {kind} ({CharacterRuleBook.Page(host.Source)}).", $"{hostName} only takes {kind} ({CharacterRuleBook.Page(host.Source)}).");
         if (c.Type == CyberwareType.Cyberfinger && host.Cyberfingers == 0)
-            return $"{hostName} não recebe Cyberfingers ({CharacterRuleBook.Page(host.Source)}).";
+            return L.T($"{hostName} não recebe Cyberfingers ({CharacterRuleBook.Page(host.Source)}).", $"{hostName} doesn't take Cyberfingers ({CharacterRuleBook.Page(host.Source)}).");
         if (c.RequiresPair && host.NoPaired)
-            return $"{option.Name} precisa de par e não pode ir em {hostName} ({CharacterRuleBook.Page(host.Source)}).";
+            return L.T($"{option.Name} precisa de par e não pode ir em {hostName} ({CharacterRuleBook.Page(host.Source)}).", $"{option.Name} needs a pair and can't go in {hostName} ({CharacterRuleBook.Page(host.Source)}).");
         return null;
     }
 
@@ -130,9 +131,9 @@ public static class WearableCyberware
             var warnings = new List<string>();
             if (worn && host.MaxWorn is { } max
                 && sheet.Inventory.Count(e => e.State == ItemState.Equipped && e.ItemId == entry.ItemId) > max)
-                warnings.Add($"Só dá para usar {max} de cada vez ({CharacterRuleBook.Page(host.Source)}).");
+                warnings.Add(L.T($"Só dá para usar {max} de cada vez ({CharacterRuleBook.Page(host.Source)}).", $"Only {max} can be used at a time ({CharacterRuleBook.Page(host.Source)})."));
             if (worn && host.CoversArm && entry.Wearable?.Side is null)
-                warnings.Add("Escolha a mão em que a luva está: as Options daquele braço ficam inacessíveis.");
+                warnings.Add(L.T("Escolha a mão em que a luva está: as Options daquele braço ficam inacessíveis.", "Pick the hand the glove is on: that arm's Options become inaccessible."));
             var coveredHere = worn
                 ? covered.Where(c => c.Value == item.Name && sheet.Cyberware.FirstOrDefault(p => p.InstanceId == c.Key)?.Side == entry.Wearable?.Side)
                     .Select(c => catalog.Find(sheet.Cyberware.First(p => p.InstanceId == c.Key).ItemId)?.Name ?? "?").ToList()

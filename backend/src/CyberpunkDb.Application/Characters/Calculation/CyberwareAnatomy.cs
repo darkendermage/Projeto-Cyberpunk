@@ -3,6 +3,7 @@ using CyberpunkDb.Application.Npcs;
 using CyberpunkDb.Application.Npcs.Rules;
 using CyberpunkDb.Application.Npcs.Validation;
 using CyberpunkDb.Domain.Enums;
+using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.Characters.Calculation;
 
@@ -31,10 +32,10 @@ public static class CyberwareAnatomy
     public static readonly (string Key, string Label)[] Regions =
     [
         ("neural", "Neuralware"),
-        ("eye-left", "Olho esquerdo"), ("eye-right", "Olho direito"),
+        ("eye-left", L.T("Olho esquerdo", "Left eye")), ("eye-right", L.T("Olho direito", "Right eye")),
         ("audio", "Cyberaudio"),
-        ("arm-left", "Braço esquerdo"), ("arm-right", "Braço direito"),
-        ("leg-left", "Perna esquerda"), ("leg-right", "Perna direita"),
+        ("arm-left", L.T("Braço esquerdo", "Left arm")), ("arm-right", L.T("Braço direito", "Right arm")),
+        ("leg-left", L.T("Perna esquerda", "Left leg")), ("leg-right", L.T("Perna direita", "Right leg")),
         ("internal", "Internal Cyberware"), ("external", "External Cyberware"), ("fashion", "Fashionware"),
         ("borgware", "Borgware"),
     ];

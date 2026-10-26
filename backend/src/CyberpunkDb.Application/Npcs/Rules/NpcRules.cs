@@ -1,6 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using CyberpunkDb.Domain.Enums;
+using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.Npcs.Rules;
 
@@ -17,7 +18,7 @@ public sealed record Ruled<T>
     /// <summary>Only for budgets: no limit at all (Hardened Boss cyberware).</summary>
     public bool Unlimited { get; init; }
 
-    public string Reference => Source ?? (Complementary ? $"Regra complementar da aplicação{(Note is null ? "" : $": {Note}")}" : "");
+    public string Reference => Source ?? (Complementary ? L.T($"Regra complementar da aplicação{(Note is null ? "" : $": {Note}")}", $"Complementary rule of the app{(Note is null ? "" : $": {L.D(Note)}")}") : "");
 }
 
 public sealed record IntRange(int Min, int Max)
@@ -152,7 +153,7 @@ public sealed record CapacityRule
     public string? Source { get; init; }
     public bool Complementary { get; init; }
     public string? Note { get; init; }
-    public string Reference => Source ?? $"Regra complementar da aplicação{(Note is null ? "" : $": {Note}")}";
+    public string Reference => Source ?? L.T($"Regra complementar da aplicação{(Note is null ? "" : $": {Note}")}", $"Complementary rule of the app{(Note is null ? "" : $": {L.D(Note)}")}");
 }
 
 public sealed record ExclusiveGroup(string Label, string[] Slugs, int Max, string Source);

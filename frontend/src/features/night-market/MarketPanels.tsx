@@ -8,42 +8,43 @@ import { formatEb, PRICE_CATEGORY_LABEL } from '../../lib/format';
 import { useToast } from '../../state/ToastContext';
 import { FEATURE_LABEL, ORIGIN_LABEL, wheelRotation, wheelSlices } from './nightMarket';
 import styles from './NightMarket.module.css';
+import { locale, t, tv } from '../../i18n';
 
-const dateTime = new Intl.DateTimeFormat('pt-BR', { dateStyle: 'short', timeStyle: 'short' });
+const dateTime = new Intl.DateTimeFormat(locale, { dateStyle: 'short', timeStyle: 'short' });
 
 export function MarketInfo({ market }: { market: NightMarketDetail }) {
   const p = market.preset;
   return (
-    <Collapsible title="O mercado" defaultOpen>
+    <Collapsible title={t('O mercado', 'The market')} defaultOpen>
       <dl className={styles.facts}>
-        <dt>Organizador</dt>
+        <dt>{t('Organizador', 'Organizer')}</dt>
         <dd>
-          {market.organizer.name}{market.organizer.role ? ` · ${market.organizer.role}` : ''}
+          {tv(market.organizer.name)}{market.organizer.role ? ` · ${market.organizer.role}` : ''}
           {market.organizer.operatorRank != null && <> · Operator {market.organizer.operatorRank}</>}
           {market.organizerReach && <> · Reach {PRICE_CATEGORY_LABEL[market.organizerReach]}</>}
         </dd>
-        {p.frequency && <><dt>Quando</dt><dd>{p.frequency}</dd></>}
-        {p.location && <><dt>Onde</dt><dd>{p.location}</dd></>}
-        {p.sells && <><dt>Vende</dt><dd>{p.sells}</dd></>}
-        {p.invite && <><dt>Convite</dt><dd>{p.invite}</dd></>}
-        {p.rules && <><dt>Regras</dt><dd>{p.rules}</dd></>}
+        {p.frequency && <><dt>{t('Quando', 'When')}</dt><dd>{p.frequency}</dd></>}
+        {p.location && <><dt>{t('Onde', 'Where')}</dt><dd>{tv(p.location)}</dd></>}
+        {p.sells && <><dt>{t('Vende', 'Sells')}</dt><dd>{tv(p.sells)}</dd></>}
+        {p.invite && <><dt>{t('Convite', 'Invitation')}</dt><dd>{p.invite}</dd></>}
+        {p.rules && <><dt>{t('Regras', 'Rules')}</dt><dd>{p.rules}</dd></>}
         {market.goods.length > 0 && (
           <>
-            <dt>Mercadorias</dt>
+            <dt>{t('Mercadorias', 'Goods')}</dt>
             <dd>
               {market.goods.map((g) => (
                 <div key={g.id}>
-                  <b>{g.name}</b>{g.roll != null ? ` (d6 ${g.roll})` : ''}: {g.lines} linha(s)
-                  <div className={styles.source}>d100 {g.rolls.map((r) => `${r.roll} ${r.label}`).join(' · ')}</div>
+                  <b>{tv(g.name)}</b>{g.roll != null ? ` (d6 ${g.roll})` : ''}: {g.lines} {t('linha(s)', 'line(s)')}
+                  <div className={styles.source}>d100 {g.rolls.map((r) => `${r.roll} ${tv(r.label)}`).join(' · ')}</div>
                 </div>
               ))}
             </dd>
           </>
         )}
-        <dt>Livros</dt><dd>{market.books.join(', ')}</dd>
+        <dt>{t('Livros', 'Books')}</dt><dd>{market.books.join(', ')}</dd>
         <dt>Seed</dt><dd className={styles.source}>{market.seed}</dd>
-        {p.features.length > 0 && <><dt>Extras</dt><dd className={styles.tags}>{p.features.map((f) => <Badge key={f} tone="amber">{FEATURE_LABEL[f]}</Badge>)}</dd></>}
-        <dt>Fonte</dt><dd className={styles.source}>{p.source}</dd>
+        {p.features.length > 0 && <><dt>{t('Extras', 'Extras')}</dt><dd className={styles.tags}>{p.features.map((f) => <Badge key={f} tone="amber">{FEATURE_LABEL[f]}</Badge>)}</dd></>}
+        <dt>{t('Fonte', 'Source')}</dt><dd className={styles.source}>{p.source}</dd>
       </dl>
     </Collapsible>
   );
@@ -52,12 +53,12 @@ export function MarketInfo({ market }: { market: NightMarketDetail }) {
 export function SlotsPanel({ market, onFill }: { market: NightMarketDetail; onFill: (slot: OpenSlot) => void }) {
   if (market.openSlots.length === 0) return null;
   return (
-    <Collapsible title="Escolhas do Mestre" active={market.openSlots.length} defaultOpen>
-      <p className={styles.muted}>Linhas "à escolha do Mestre" e itens do Midnight Market ainda sem item.</p>
+    <Collapsible title={t('Escolhas do Mestre', 'GM\'s choices')} active={market.openSlots.length} defaultOpen>
+      <p className={styles.muted}>{t('Linhas "à escolha do Mestre" e itens do Midnight Market ainda sem item.', '"GM\'s choice" lines and Midnight Market items with no item yet.')}</p>
       {market.openSlots.map((slot) => (
         <div key={slot.id} className={styles.slot}>
-          <span><b>{slot.label}</b> <span className={styles.source}>booth {slot.stall} · {ORIGIN_LABEL[slot.origin]}</span></span>
-          <Button onClick={() => onFill(slot)}>Escolher item</Button>
+          <span><b>{tv(slot.label)}</b> <span className={styles.source}>booth {slot.stall} · {ORIGIN_LABEL[slot.origin]}</span></span>
+          <Button onClick={() => onFill(slot)}>{t('Escolher item', 'Pick item')}</Button>
         </div>
       ))}
     </Collapsible>
@@ -67,9 +68,9 @@ export function SlotsPanel({ market, onFill }: { market: NightMarketDetail; onFi
 function PrizeLine({ prize }: { prize: PrizeResult }) {
   return (
     <span>
-      <strong>{prize.label}</strong>
+      <strong>{tv(prize.label)}</strong>
       {prize.quantity > 1 && !/x\d|\d+ /i.test(prize.label) ? ` ×${prize.quantity}` : ''}
-      {prize.loaded ? ' (carregada)' : ''}
+      {prize.loaded ? t(' (carregada)', ' (loaded)') : ''}
     </span>
   );
 }
@@ -110,7 +111,7 @@ function DoorPrize({ market, rules }: { market: NightMarketDetail; rules: NightM
                   fill={colors[i % colors.length]} stroke="#ff2a3d" strokeWidth="0.8" />
                 <text x={58 * Math.cos(mid)} y={58 * Math.sin(mid)} fill="#e9edf2" fontSize="7" textAnchor="middle" dominantBaseline="middle"
                   transform={`rotate(${(s.start + s.end) / 2} ${58 * Math.cos(mid)} ${58 * Math.sin(mid)})`}>
-                  {s.label.length > 18 ? `${s.label.slice(0, 17)}…` : s.label}
+                  {s.label.length > 18 ? `${tv(s.label).slice(0, 17)}…` : tv(s.label)}
                 </text>
               </g>
             );
@@ -120,15 +121,15 @@ function DoorPrize({ market, rules }: { market: NightMarketDetail; rules: NightM
         <span className={styles.pointer} aria-hidden />
       </div>
       <div className={styles.row}>
-        <input className={styles.text} value={winner} onChange={(e) => setWinner(e.target.value)} placeholder="Quem ganhou" aria-label="Ganhador" />
-        <Button icon={<Gift size={15} />} onClick={spin} disabled={command.isPending}>Girar a roleta</Button>
+        <input className={styles.text} value={winner} onChange={(e) => setWinner(e.target.value)} placeholder={t('Quem ganhou', 'Who won')} aria-label={t('Ganhador', 'Winner')} />
+        <Button icon={<Gift size={15} />} onClick={spin} disabled={command.isPending}>{t('Girar a roleta', 'Spin the wheel')}</Button>
       </div>
       {result && (
         <div className={styles.prize} role="status">
-          Roleta {result.roll}/{result.of}: <PrizeLine prize={result.prize} />. Mais: {result.bonus.map((b) => b.label).join(' e ')}.
+          {t('Roleta ', 'Wheel ')}{result.roll}/{result.of}: <PrizeLine prize={result.prize} />{t('. Mais: ', '. More: ')}{result.bonus.map((b) => tv(b.label)).join(' e ')}.
         </div>
       )}
-      <p className={styles.source}>{dp.arrival.reference}. {dp.slices.reference}. Bônus: {dp.bonus.reference}.</p>
+      <p className={styles.source}>{dp.arrival.reference}. {dp.slices.reference}{t('. Bônus: ', '. Bonus: ')}{dp.bonus.reference}.</p>
     </Collapsible>
   );
 }
@@ -154,11 +155,11 @@ function MysteryBox({ market, rules }: { market: NightMarketDetail; rules: Night
     onError: (e) => toast.notify(problemMessage(e), 'error'),
   });
   return (
-    <Collapsible title="Mystery Boxes do Mr. Amaze" defaultOpen>
-      <p className={styles.muted}>{rules.rules.mysteryBoxes.redemption.value}</p>
+    <Collapsible title={t('Mystery Boxes do Mr. Amaze', 'Mr. Amaze\'s Mystery Boxes')} defaultOpen>
+      <p className={styles.muted}>{tv(rules.rules.mysteryBoxes.redemption.value)}</p>
       <div className={styles.row}>
-        <input className={styles.text} value={recipient} onChange={(e) => setRecipient(e.target.value)} placeholder="Para quem" aria-label="Destinatário" />
-        <Button icon={<Package size={15} />} onClick={open} disabled={command.isPending}>Abrir uma caixa</Button>
+        <input className={styles.text} value={recipient} onChange={(e) => setRecipient(e.target.value)} placeholder={t('Para quem', 'For whom')} aria-label={t('Destinatário', 'Recipient')} />
+        <Button icon={<Package size={15} />} onClick={open} disabled={command.isPending}>{t('Abrir uma caixa', 'Open a box')}</Button>
       </div>
       {result && <MysteryBoxResultView result={result} />}
       <p className={styles.source}>{rules.rules.mysteryBoxes.redemption.reference}</p>
@@ -183,20 +184,20 @@ export function EventsPanel({ market, rules }: { market: NightMarketDetail; rule
     <>
       {features.includes('DoorPrize') && <DoorPrize market={market} rules={rules} />}
       {features.includes('MysteryBoxes') && <MysteryBox market={market} rules={rules} />}
-      <Collapsible title="Movimento" defaultOpen>
+      <Collapsible title={t('Movimento', 'Traffic')} defaultOpen>
         <div className={styles.row}>
-          <span>Visitantes: <b>{market.visitors}</b></span>
-          <NumberInput className={styles.number} min={1} max={10000} value={arrivals} onChange={setArrivals} aria-label="Chegaram" />
-          <Button icon={<UserPlus size={15} />} onClick={() => run('visitors', { count: arrivals ?? 1 })}>Chegaram</Button>
+          <span>{t('Visitantes: ', 'Visitors: ')}<b>{market.visitors}</b></span>
+          <NumberInput className={styles.number} min={1} max={10000} value={arrivals} onChange={setArrivals} aria-label={t('Chegaram', 'Arrived')} />
+          <Button icon={<UserPlus size={15} />} onClick={() => run('visitors', { count: arrivals ?? 1 })}>{t('Chegaram', 'Arrived')}</Button>
         </div>
-        {features.includes('DoorPrize') && <p className={styles.source}>Prêmio a cada {rules.rules.doorPrize.arrival.value} visitantes ({rules.rules.doorPrize.arrival.reference}).</p>}
+        {features.includes('DoorPrize') && <p className={styles.source}>{t('Prêmio a cada ', 'Prize every ')}{tv(rules.rules.doorPrize.arrival.value)} {t('visitantes (', 'visitors (')}{rules.rules.doorPrize.arrival.reference}).</p>}
         {canMidnight && (
           <Button icon={<Moon size={15} />} onClick={() => run('midnight')}>
-            Abrir um Midnight Market ({rules.rules.midnightMarket.items.value} itens)
+            {t('Abrir um Midnight Market (', 'Open a Midnight Market (')}{tv(rules.rules.midnightMarket.items.value)} {t('itens)', 'items)')}
           </Button>
         )}
         {!canMidnight && !hasMidnight && (
-          <p className={styles.source}>Midnight Market: só com organizador de Operator {op.midnightMarketRank.value}+ ({op.midnightMarketRank.reference}).</p>
+          <p className={styles.source}>{t('Midnight Market: só com organizador de Operator ', 'Midnight Market: only with an organizer of Operator ')}{tv(op.midnightMarketRank.value)}+ ({op.midnightMarketRank.reference}).</p>
         )}
       </Collapsible>
     </>
@@ -210,24 +211,23 @@ export function LedgerPanel({ market }: { market: NightMarketDetail }) {
   const revenue = market.sales.filter((s) => s.kind === 'sale' && !s.undone).reduce((sum, s) => sum + s.paidNow, 0);
   const due = market.sales.filter((s) => s.kind === 'sale' && !s.undone).reduce((sum, s) => sum + s.dueLater, 0);
   return (
-    <Collapsible title="Vendas e prêmios" active={market.sales.filter((s) => !s.undone).length}>
+    <Collapsible title={t('Vendas e prêmios', 'Sales and prizes')} active={market.sales.filter((s) => !s.undone).length}>
       <p className={styles.muted}>
-        Recebido: <b className={styles.saleTotal}>{formatEb(revenue)}eb</b>{due > 0 && <> · a receber em 1 mês: <b className={styles.saleTotal}>{formatEb(due)}eb</b></>}.
-        As compras ficam no mercado; nenhuma ficha é alterada.
+        {t('Recebido: ', 'Received: ')}<b className={styles.saleTotal}>{formatEb(revenue)}eb</b>{due > 0 && <> {t('· a receber em 1 mês: ', '· due in 1 month: ')}<b className={styles.saleTotal}>{formatEb(due)}eb</b></>}{t('. As compras ficam no mercado; nenhuma ficha é alterada.', '. Purchases stay in the market; no sheet is changed.')}
       </p>
       <div className={styles.ledger}>
-        {sales.length === 0 && <span className={styles.muted}>Nada vendido ainda.</span>}
+        {sales.length === 0 && <span className={styles.muted}>{t('Nada vendido ainda.', 'Nothing sold yet.')}</span>}
         {sales.map((s) => (
           <div key={s.id} className={`${styles.sale} ${s.undone ? styles.saleUndone : ''}`}>
             <span>
-              <b>{s.delivered}× {s.name}</b> · {s.buyer ?? 'Cliente'}
+              <b>{s.delivered}× {tv(s.name)}</b> · {s.buyer ?? t('Cliente', 'Customer')}
               {s.kind !== 'sale' && <> <Badge tone="amber">{s.kind === 'prize' ? 'Door Prize' : 'Mystery Box'}</Badge></>}
               {s.haggle && <div className={styles.source}>{s.haggle}</div>}
             </span>
             <span className={styles.saleTotal}>
               {s.kind === 'sale' ? `${formatEb(s.total)}eb` : '—'}
               {s.kind === 'sale' && !s.undone && (
-                <Button variant="ghost" icon={<Undo2 size={13} />} aria-label="Desfazer venda" title="Desfazer venda"
+                <Button variant="ghost" icon={<Undo2 size={13} />} aria-label={t('Desfazer venda', 'Undo sale')} title={t('Desfazer venda', 'Undo sale')}
                   onClick={() => command.mutate({ path: `sales/${s.id}/undo` }, { onError: (e) => toast.notify(problemMessage(e), 'error') })} />
               )}
             </span>
@@ -240,12 +240,12 @@ export function LedgerPanel({ market }: { market: NightMarketDetail }) {
 
 export function LogPanel({ market }: { market: NightMarketDetail }) {
   return (
-    <Collapsible title="Histórico">
+    <Collapsible title={t('Histórico', 'History')}>
       <div className={styles.events}>
         {[...market.events].reverse().map((e, i) => (
           <div key={i} className={styles.event}>
-            <span className={styles.source}>{dateTime.format(new Date(e.at))}</span> <b>{e.title}</b>
-            {e.detail && <div className={styles.muted}>{e.detail}</div>}
+            <span className={styles.source}>{dateTime.format(new Date(e.at))}</span> <b>{tv(e.title)}</b>
+            {e.detail && <div className={styles.muted}>{tv(e.detail)}</div>}
           </div>
         ))}
       </div>

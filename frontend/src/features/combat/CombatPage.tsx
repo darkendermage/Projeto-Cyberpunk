@@ -9,6 +9,7 @@ import { useToast } from '../../state/ToastContext';
 import page from '../../styles/Page.module.css';
 import { EncounterView } from './EncounterView';
 import styles from './Combat.module.css';
+import { t, tv } from '../../i18n';
 
 export function CombatPage() {
   const rules = useEncounterRules();
@@ -34,34 +35,32 @@ function Library() {
       <header className={page.header}>
         <h1>Friday Night Firefight</h1>
         <p className={page.lead}>
-          A mesa de combate do Core (p.168–188): PCs e inimigos na mesma fila de iniciativa, ataques resolvidos com a DV
-          do alcance, Autofire, tiro mirado, corpo a corpo com metade da armadura, cobertura com HP, Critical Injuries e Death Saves. O dano
-          nos PCs vai direto para a ficha deles.
+          {t('A mesa de combate do Core (p.168–188): PCs e inimigos na mesma fila de iniciativa, ataques resolvidos com a DV do alcance, Autofire, tiro mirado, corpo a corpo com metade da armadura, cobertura com HP, Critical Injuries e Death Saves. O dano nos PCs vai direto para a ficha deles.', 'The Core combat table (p.168–188): PCs and enemies in the same Initiative Queue, attacks resolved against the range DV, Autofire, aimed shots, melee against half armor, cover with HP, Critical Injuries and Death Saves. Damage to PCs goes straight to their sheets.')}
         </p>
       </header>
 
       <section className={styles.panel}>
-        <h2 className={styles.panelTitle}>Novo combate</h2>
+        <h2 className={styles.panelTitle}>{t('Novo combate', 'New fight')}</h2>
         <div className={styles.row}>
-          <input aria-label="Nome do combate" value={name} maxLength={80} onChange={(e) => setName(e.target.value)} placeholder="Ex.: Emboscada no Totentanz" />
+          <input aria-label={t('Nome do combate', 'Fight name')} value={name} maxLength={80} onChange={(e) => setName(e.target.value)} placeholder={t('Ex.: Emboscada no Totentanz', 'E.g. Ambush at the Totentanz')} />
           <Button variant="primary" icon={create.isPending ? <Spinner /> : <Plus size={15} />} disabled={create.isPending} onClick={() => create.mutate()}>
-            Abrir mesa
+            {t('Abrir mesa', 'Open table')}
           </Button>
         </div>
       </section>
 
       <section className={page.section}>
-        <h2>Combates salvos</h2>
+        <h2>{t('Combates salvos', 'Saved fights')}</h2>
         {list.isLoading ? <Spinner /> : (list.data ?? []).length === 0 ? (
-          <EmptyState title="Nenhum combate ainda" icon={<Crosshair size={30} />}>Abra uma mesa acima.</EmptyState>
+          <EmptyState title={t('Nenhum combate ainda', 'No fights yet')} icon={<Crosshair size={30} />}>{t('Abra uma mesa acima.', 'Open a table above.')}</EmptyState>
         ) : (
           <div className={styles.library}>
             {list.data!.map((e) => (
               <Link key={e.id} to={`/combat/${e.id}`} className={styles.card}>
-                <h3>{e.name}</h3>
-                <span className={styles.muted}>{e.allies} aliado(s) · {e.enemies} inimigo(s){e.down > 0 ? ` · ${e.down} fora de combate` : ''}</span>
+                <h3>{tv(e.name)}</h3>
+                <span className={styles.muted}>{e.allies} {t('aliado(s) · ', 'ally(ies) · ')}{e.enemies} {t('inimigo(s)', 'enemy(ies)')}{e.down > 0 ? t(` · ${e.down} fora de combate`, ` · ${e.down} out of the fight`) : ''}</span>
                 <span className={styles.row}>
-                  <Badge tone={e.status === 'Active' ? 'red' : 'default'}>{e.status === 'Active' ? `Rodada ${e.round}` : 'Encerrado'}</Badge>
+                  <Badge tone={e.status === 'Active' ? 'red' : 'default'}>{e.status === 'Active' ? t(`Rodada ${e.round}`, `Round ${e.round}`) : t('Encerrado', 'Ended')}</Badge>
                 </span>
               </Link>
             ))}

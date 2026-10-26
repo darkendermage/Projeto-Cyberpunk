@@ -1,6 +1,7 @@
 // Body regions of the cyberware screen. Placement of installed pieces comes from the server report; this module
 // only decides which catalog items to suggest first for the region the player selected.
 import type { StoreItem } from '../../api/characterTypes';
+import { t } from '../../i18n';
 
 export type RegionKey =
   | 'neural' | 'eye-left' | 'eye-right' | 'audio' | 'arm-left' | 'arm-right' | 'leg-left' | 'leg-right'
@@ -28,26 +29,26 @@ export const RIGHT_REGIONS: RegionKey[] = ['eye-left', 'audio', 'external', 'bor
 /** Whether a catalog item belongs in a region (catalog types follow CP:R p.110–117). */
 export function fitsRegion(item: Pick<StoreItem, 'cyberType' | 'bodyLocation'>, region: RegionKey | null): boolean {
   if (!region) return true;
-  const t = item.cyberType;
+  const entry = item.cyberType;
   const loc = item.bodyLocation;
   switch (region) {
-    case 'neural': return t === 'Neuralware';
-    case 'eye-left': case 'eye-right': return t === 'Cyberoptics';
-    case 'audio': return t === 'Cyberaudio';
+    case 'neural': return entry === 'Neuralware';
+    case 'eye-left': case 'eye-right': return entry === 'Cyberoptics';
+    case 'audio': return entry === 'Cyberaudio';
     case 'arm-left': case 'arm-right':
-      return (t === 'Cyberlimb' || t === 'LimbOption' || t === 'Cyberfinger') && loc !== 'Leg';
+      return (entry === 'Cyberlimb' || entry === 'LimbOption' || entry === 'Cyberfinger') && loc !== 'Leg';
     case 'leg-left': case 'leg-right':
-      return (t === 'Cyberlimb' || t === 'LimbOption') && (loc === 'Leg' || loc === 'FullBody');
-    case 'internal': return t === 'InternalBody';
-    case 'external': return t === 'ExternalBody';
-    case 'fashion': return t === 'Fashionware';
-    case 'borgware': return t === 'Borgware';
+      return (entry === 'Cyberlimb' || entry === 'LimbOption') && (loc === 'Leg' || loc === 'FullBody');
+    case 'internal': return entry === 'InternalBody';
+    case 'external': return entry === 'ExternalBody';
+    case 'fashion': return entry === 'Fashionware';
+    case 'borgware': return entry === 'Borgware';
   }
 }
 
 export const CYBER_TYPE_LABEL: Record<string, string> = {
   Neuralware: 'Neuralware', Cyberoptics: 'Cyberoptics', Cyberaudio: 'Cyberaudio', InternalBody: 'Internal',
-  ExternalBody: 'External', Cyberlimb: 'Cyberlimb', LimbOption: 'Opção de membro', Cyberfinger: 'Cyberfinger',
+  ExternalBody: 'External', Cyberlimb: 'Cyberlimb', LimbOption: t('Opção de membro', 'Limb option'), Cyberfinger: 'Cyberfinger',
   Borgware: 'Borgware', Bioexotic: 'Bioexotics', Fashionware: 'Fashionware',
 };
 

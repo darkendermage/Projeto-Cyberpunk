@@ -3,7 +3,7 @@ import { Chip } from '../../components/ui/ui';
 import { type Criterion, describeCriterion, setCriterion } from '../../lib/filters';
 import { optionLabel } from '../../lib/format';
 import styles from './CatalogPage.module.css';
-
+import { t } from '../../i18n';
 interface Props {
   schema: CategorySchema;
   facets: Record<string, FacetValue[]> | undefined;
@@ -22,14 +22,14 @@ export function ActiveFilters({ schema, facets, criteria, q, onCriteria, onQuery
     facets?.[field]?.find((f) => f.value === value)?.label ?? optionLabel(fields.get(field), value);
 
   return (
-    <div className={styles.activeFilters} aria-label="Filtros aplicados">
-      {q && <Chip onRemove={() => onQuery('')}>Busca: “{q}”</Chip>}
+    <div className={styles.activeFilters} aria-label={t('Filtros aplicados', 'Applied filters')}>
+      {q && <Chip onRemove={() => onQuery('')}>{t('Busca: “', 'Search: “')}{q}”</Chip>}
       {criteria.map((c) => {
         const text = describeCriterion(c, fields.get(c.field), labelFor);
         return <Chip key={c.field} title={text} onRemove={() => onCriteria(setCriterion(criteria, c.field, null))}>{text}</Chip>;
       })}
       {criteria.length + (q ? 1 : 0) > 1 && (
-        <button type="button" className={styles.clearChips} onClick={onClear}>Limpar todos</button>
+        <button type="button" className={styles.clearChips} onClick={onClear}>{t('Limpar todos', 'Clear all')}</button>
       )}
     </div>
   );

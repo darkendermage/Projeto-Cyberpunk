@@ -6,6 +6,7 @@ import { CatalogPage } from './features/catalog/CatalogPage';
 import { DEFAULT_CATEGORY } from './features/catalog/categoryMeta';
 import { CompareTray } from './features/compare/CompareTray';
 import page from './styles/Page.module.css';
+import { t } from './i18n';
 
 const FavoritesPage = lazy(() => import('./features/favorites/FavoritesPage').then((m) => ({ default: m.FavoritesPage })));
 const ListsPage = lazy(() => import('./features/lists/ListsPage').then((m) => ({ default: m.ListsPage })));
@@ -49,8 +50,8 @@ export default function App() {
           <Route path="/characters/:id/:tab" element={<CharacterPage />} />
           <Route path="*" element={
             <div className={page.page}>
-              <EmptyState title="Sinal perdido" action={<Link to="/" className={page.link}>Voltar ao catálogo</Link>}>
-                Esta rota não existe na rede de Night City.
+              <EmptyState title={t('Sinal perdido', 'Signal lost')} action={<Link to="/" className={page.link}>{t('Voltar ao catálogo', 'Back to the catalog')}</Link>}>
+                {t('Esta rota não existe na rede de Night City.', 'This route doesn\'t exist on the Night City net.')}
               </EmptyState>
             </div>
           } />

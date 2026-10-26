@@ -2,6 +2,7 @@ import { memo, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
 import clsx from 'clsx';
 import type { Item } from '../../api/types';
 import styles from './ItemArt.module.css';
+import { tv } from '../../i18n';
 
 /**
  * Procedural silhouettes for items without an image. Each class/subtype maps to a small
@@ -865,7 +866,7 @@ function ItemArtImpl({ item, size = 'card', className, children }: ItemArtProps)
         </svg>
       )}
       {(size === 'card' || size === 'detail') && item.manufacturer && (
-        <span className={styles.maker}>{item.manufacturer.name}</span>
+        <span className={styles.maker}>{tv(item.manufacturer.name)}</span>
       )}
       {children}
     </div>

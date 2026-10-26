@@ -2,6 +2,7 @@ using System.Text.Json;
 using CyberpunkDb.Application.Common;
 using CyberpunkDb.Application.Npcs.Rules;
 using CyberpunkDb.Domain.Enums;
+using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.NightMarkets.Rules;
 
@@ -68,13 +69,13 @@ public sealed class NightMarketRuleBook
 
     public GoodsType Good(string id) => _goods.TryGetValue(id, out var g)
         ? g
-        : throw RequestValidationException.For("goods", $"Tipo de mercadoria '{id}' não existe.");
+        : throw RequestValidationException.For("goods", L.T($"Tipo de mercadoria '{id}' não existe.", $"Type of goods '{id}' doesn't exist."));
 
     public GoodsType? GoodByRoll(int roll) => Goods.FirstOrDefault(g => g.Roll == roll);
 
     public MarketPreset Preset(string? id) => _presets.TryGetValue(id ?? "core", out var p)
         ? p
-        : throw RequestValidationException.For("presetId", $"Mercado '{id}' não existe.");
+        : throw RequestValidationException.For("presetId", L.T($"Mercado '{id}' não existe.", $"Market '{id}' doesn't exist."));
 
     public HaggleDeal? Deal(string? id) => id is null ? null : _deals.GetValueOrDefault(id);
 

@@ -7,6 +7,7 @@ import clsx from 'clsx';
 import { AlertTriangle, Check, ChevronDown, RefreshCw, SearchX, X } from 'lucide-react';
 import { parseWholeNumber } from '../../lib/numbers';
 import styles from './ui.module.css';
+import { t, tv } from '../../i18n';
 
 // ---------------------------------------------------------------- buttons
 
@@ -67,7 +68,7 @@ export function Segmented<T extends string>({
       {options.map((o) => (
         <button key={o.value} type="button" role="radio" aria-checked={value === o.value}
           className={clsx(value === o.value && styles.segmentActive)} onClick={() => onChange(o.value)}>
-          {o.label}
+          {tv(o.label)}
         </button>
       ))}
     </div>
@@ -145,7 +146,7 @@ export function ComboBox({ id, value, onChange, options, placeholder, className,
             setOpen(false);
           }
         }} />
-      <button type="button" tabIndex={-1} className={styles.comboToggle} aria-label="Mostrar opções" disabled={disabled}
+      <button type="button" tabIndex={-1} className={styles.comboToggle} aria-label={t('Mostrar opções', 'Show options')} disabled={disabled}
         onMouseDown={(e) => e.preventDefault()}
         onClick={() => { if (open) setOpen(false); else { show(); document.getElementById(inputId)?.focus(); } }}>
         <ChevronDown size={14} aria-hidden />
@@ -210,7 +211,7 @@ export function Field({ label, error, hint, children, htmlFor }: { label: ReactN
 
 // ---------------------------------------------------------------- feedback
 
-export function Spinner({ label = 'Carregando' }: { label?: string }) {
+export function Spinner({ label = t('Carregando', 'Loading') }: { label?: string }) {
   return (
     <span className={styles.spinner} role="status">
       <span className={styles.spinnerRing} aria-hidden />
@@ -235,13 +236,13 @@ export function EmptyState({ title, children, action, icon }: { title: string; c
 }
 
 export function ErrorState({ error, onRetry }: { error: unknown; onRetry?: () => void }) {
-  const message = error instanceof Error ? error.message : 'Falha ao carregar os dados.';
+  const message = error instanceof Error ? error.message : t('Falha ao carregar os dados.', 'Failed to load the data.');
   return (
     <div className={clsx(styles.empty, styles.errorBox)} role="alert">
       <div className={styles.emptyIcon}><AlertTriangle size={30} /></div>
-      <h3>Conexão interrompida</h3>
+      <h3>{t('Conexão interrompida', 'Connection lost')}</h3>
       <div className={styles.emptyText}>{message}</div>
-      {onRetry && <Button icon={<RefreshCw size={14} />} onClick={onRetry}>Tentar novamente</Button>}
+      {onRetry && <Button icon={<RefreshCw size={14} />} onClick={onRetry}>{t('Tentar novamente', 'Try again')}</Button>}
     </div>
   );
 }
@@ -255,7 +256,7 @@ export function Chip({ children, onRemove, title }: { children: ReactNode; onRem
     <span className={styles.chip} title={title}>
       <span>{children}</span>
       {onRemove && (
-        <button type="button" onClick={onRemove} aria-label={`Remover filtro ${typeof children === 'string' ? children : ''}`}>
+        <button type="button" onClick={onRemove} aria-label={t(`Remover filtro ${typeof children === 'string' ? children : ''}`, `Remove filter ${typeof children === 'string' ? children : ''}`)}>
           <X size={12} />
         </button>
       )}
@@ -376,7 +377,7 @@ export function Modal({
         {title && (
           <header className={styles.modalHeader}>
             <h2 id={titleId} className="hud-title">{title}</h2>
-            <IconButton label="Fechar" onClick={onClose}><X size={18} /></IconButton>
+            <IconButton label={t('Fechar', 'Close')} onClick={onClose}><X size={18} /></IconButton>
           </header>
         )}
         {children}

@@ -1,6 +1,7 @@
 using CyberpunkDb.Application.Common;
 using CyberpunkDb.Application.NightMarkets.Rules;
 using CyberpunkDb.Domain.Enums;
+using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.NightMarkets.Generation;
 
@@ -66,7 +67,7 @@ public sealed class NightMarketGenerator(NightMarketRuleBook rules)
             PresetId = preset.Id, Letter = preset.Letter, Kind = preset.Kind,
             Organizer = organizer, Seed = seed, Books = books, Options = options, Goods = goods,
             Stalls = stalls, Listings = listings, OpenSlots = slots, NextId = build.NextId,
-            Events = [new MarketEvent(now, "generated", $"Mercado gerado (seed {seed})", Describe(goods, listings, slots))],
+            Events = [new MarketEvent(now, "generated", L.T($"Mercado gerado (seed {seed})", $"Market generated (seed {seed})"), Describe(goods, listings, slots))],
         };
     }
 
@@ -84,19 +85,19 @@ public sealed class NightMarketGenerator(NightMarketRuleBook rules)
     {
         var op = rules.Document.Operator;
         if (organizer.OperatorRank is < 0 or > 10)
-            throw RequestValidationException.For("organizer.operatorRank", "O Operator Rank vai de 0 a 10.");
+            throw RequestValidationException.For("organizer.operatorRank", L.T("O Operator Rank vai de 0 a 10.", "Operator Rank goes from 0 to 10."));
         if (preset.Kind == MarketKind.NightMarket && organizer.OperatorRank is { } rank && rank < op.NightMarketRank.Value)
             throw RequestValidationException.For("organizer.operatorRank",
-                $"Só um Fixer de Operator {op.NightMarketRank.Value} ou mais organiza um Night Market ({op.NightMarketRank.Source}). Sem isso, ele encontra itens até {rules.Reach(rank)} peça por peça.");
+                L.T($"Só um Fixer de Operator {op.NightMarketRank.Value} ou mais organiza um Night Market ({op.NightMarketRank.Source}). Sem isso, ele encontra itens até {rules.Reach(rank)} peça por peça.", $"Only a Fixer with Operator {op.NightMarketRank.Value} or higher organizes a Night Market ({op.NightMarketRank.Source}). Without it, they find items up to {rules.Reach(rank)} piece by piece."));
         if (request.Midnight && organizer.OperatorRank is { } r && r < op.MidnightMarketRank.Value)
             throw RequestValidationException.For("midnight",
-                $"Só um Fixer de Operator {op.MidnightMarketRank.Value} ou mais monta um Midnight Market ({op.MidnightMarketRank.Source}).");
+                L.T($"Só um Fixer de Operator {op.MidnightMarketRank.Value} ou mais monta um Midnight Market ({op.MidnightMarketRank.Source}).", $"Only a Fixer with Operator {op.MidnightMarketRank.Value} or higher sets up a Midnight Market ({op.MidnightMarketRank.Source})."));
         if (options.DamagedPercent is < 0 or > 100)
-            throw RequestValidationException.For("options.damagedPercent", "Use uma chance de 0 a 100%.");
+            throw RequestValidationException.For("options.damagedPercent", L.T("Use uma chance de 0 a 100%.", "Use a chance from 0 to 100%."));
         if (options.BlackChromeLetter is { } l && (l.Length != 1 || l[0] is < 'A' or > 'F'))
-            throw RequestValidationException.For("options.blackChromeLetter", "Os mercados do Black Chrome vão de A a F (BC p.131).");
+            throw RequestValidationException.For("options.blackChromeLetter", L.T("Os mercados do Black Chrome vão de A a F (BC p.131).", "The Black Chrome markets go from A to F (BC p.131)."));
         if (request.Lines?.Values.Any(v => v is < 1 or > 10) == true)
-            throw RequestValidationException.For("lines", "O número de linhas é um 1d10: de 1 a 10.");
+            throw RequestValidationException.For("lines", L.T("O número de linhas é um 1d10: de 1 a 10.", "The number of lines is a 1d10: from 1 to 10."));
     }
 
     /// <summary>The generic Core market uses only the Core Rulebook unless the GM enables more books.</summary>
@@ -106,7 +107,7 @@ public sealed class NightMarketGenerator(NightMarketRuleBook rules)
         if (requested is { Count: > 0 })
         {
             var unknown = requested.FirstOrDefault(b => !all.Contains(b, StringComparer.OrdinalIgnoreCase));
-            if (unknown is not null) throw RequestValidationException.For("books", $"O livro '{unknown}' não está no catálogo.");
+            if (unknown is not null) throw RequestValidationException.For("books", L.T($"O livro '{unknown}' não está no catálogo.", $"The book '{unknown}' isn't in the catalog."));
             return requested.Distinct(StringComparer.OrdinalIgnoreCase).ToList();
         }
         return preset.Id is "core" ? [CoreBook] : all.OrderBy(b => b, StringComparer.OrdinalIgnoreCase).ToList();
@@ -120,7 +121,7 @@ public sealed class NightMarketGenerator(NightMarketRuleBook rules)
         return preset.Goods switch
         {
             GoodsMode.Suggested => preset.SuggestedGoods.Select(id => (rules.Good(id), (int?)null)).ToList(),
-            GoodsMode.Pick => throw RequestValidationException.For("goods", "Escolha os tipos de mercadoria ou peça para rolar."),
+            GoodsMode.Pick => throw RequestValidationException.For("goods", L.T("Escolha os tipos de mercadoria ou peça para rolar.", "Pick the types of goods or ask to roll.")),
             _ => [],
         };
     }
@@ -220,7 +221,7 @@ public sealed class NightMarketGenerator(NightMarketRuleBook rules)
             {
                 var pick = pool[rng.Next(pool.Count)];
                 pool.Remove(pick);
-                build.Item(pick, stall, ListingOrigin.Related, "Outros livros", good.Id, rolled: true);
+                build.Item(pick, stall, ListingOrigin.Related, L.T("Outros livros", "Other books"), good.Id, rolled: true);
             }
         }
     }
@@ -231,13 +232,13 @@ public sealed class NightMarketGenerator(NightMarketRuleBook rules)
         var count = rng.Next(1, 11) + 5;
         var stall = build.NewStallFor("Midnight Market");
         for (var i = 1; i <= count; i++)
-            build.Slot(stall, $"Item raro {i} (à escolha do Mestre)", new ItemQuery(), ListingOrigin.Midnight, null);
+            build.Slot(stall, L.T($"Item raro {i} (à escolha do Mestre)", $"Rare item {i} (GM's choice)"), new ItemQuery(), ListingOrigin.Midnight, null);
     }
 
     private static string Describe(List<RolledGoods> goods, List<MarketListing> listings, List<OpenSlot> slots)
     {
-        var parts = goods.Select(g => $"{g.Name}{(g.Roll is { } r ? $" (d6 {r})" : "")}: {g.Lines} linha(s), d100 {string.Join(", ", g.Rolls.Select(x => x.Roll))}");
+        var parts = goods.Select(g => L.T($"{g.Name}{(g.Roll is { } r ? $" (d6 {r})" : "")}: {g.Lines} linha(s), d100 {string.Join(", ", g.Rolls.Select(x => x.Roll))}", $"{g.Name}{(g.Roll is { } r2 ? $" (d6 {r2})" : "")}: {g.Lines} line(s), d100 {string.Join(", ", g.Rolls.Select(x => x.Roll))}"));
         var summary = string.Join(" · ", parts);
-        return $"{(summary.Length > 0 ? summary + ". " : "")}{listings.Count} listagens, {slots.Count} espaço(s) para o Mestre.";
+        return L.T($"{(summary.Length > 0 ? summary + ". " : "")}{listings.Count} listagens, {slots.Count} espaço(s) para o Mestre.", $"{(summary.Length > 0 ? summary + ". " : "")}{listings.Count} listings, {slots.Count} slot(s) for the GM.");
     }
 }

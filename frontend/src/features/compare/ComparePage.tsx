@@ -11,6 +11,7 @@ import { COMPARE_DIRECTION, DATA_ORIGIN_LABEL, formatAttribute, formatEb } from 
 import { useCompare } from '../../state/CompareContext';
 import page from '../../styles/Page.module.css';
 import styles from './ComparePage.module.css';
+import { t, tv } from '../../i18n';
 
 interface Row {
   key: string;
@@ -44,14 +45,14 @@ export function ComparePage() {
   return (
     <div className={page.page}>
       <header className={page.header}>
-        <h1 className="hud-title" data-glitch="Comparar">Comparar</h1>
-        <p className={page.lead}>Até 4 itens lado a lado. Os melhores valores numéricos de cada linha ficam destacados.</p>
+        <h1 className="hud-title" data-glitch={t('Comparar', 'Compare')}>{t('Comparar', 'Compare')}</h1>
+        <p className={page.lead}>{t('Até 4 itens lado a lado. Os melhores valores numéricos de cada linha ficam destacados.', 'Up to 4 items side by side. The best numeric values of each row are highlighted.')}</p>
       </header>
 
       {ids.length === 0 && (
-        <EmptyState title="Nada para comparar" icon={<GitCompareArrows size={28} />}
-          action={<Link to="/catalog/weapons" className={page.link}>Escolher itens no catálogo</Link>}>
-          Use o botão de comparação nos cards ou na ficha de um item.
+        <EmptyState title={t('Nada para comparar', 'Nothing to compare')} icon={<GitCompareArrows size={28} />}
+          action={<Link to="/catalog/weapons" className={page.link}>{t('Escolher itens no catálogo', 'Pick items in the catalog')}</Link>}>
+          {t('Use o botão de comparação nos cards ou na ficha de um item.', 'Use the compare button on the cards or on an item\'s page.')}
         </EmptyState>
       )}
       {items.isLoading && <Spinner />}
@@ -60,23 +61,23 @@ export function ComparePage() {
       {items.data && items.data.length > 0 && (
         <>
           {categories.size > 1 && (
-            <p className={page.note}>Itens de categorias diferentes: atributos que não se aplicam a um item aparecem como “n/a”.</p>
+            <p className={page.note}>{t('Itens de categorias diferentes: atributos que não se aplicam a um item aparecem como “n/a”.', 'Items from different categories: attributes that don\'t apply to an item show as “n/a”.')}</p>
           )}
           <div className={styles.wrap}>
             <table className={styles.table}>
               <thead>
                 <tr>
                   <th scope="col" className={styles.corner}>
-                    <Button onClick={() => { compare.clear(); setParams({}, { replace: true }); }}>Limpar</Button>
+                    <Button onClick={() => { compare.clear(); setParams({}, { replace: true }); }}>{t('Limpar', 'Clear')}</Button>
                   </th>
                   {items.data.map((item) => (
                     <th key={item.id} scope="col" className={styles.itemHead}>
                       <ItemArt item={item} size="card" />
                       <div className={styles.itemTitle}>
-                        <strong>{item.name}</strong>
-                        <IconButton label={`Remover ${item.name}`} onClick={() => removeItem(item.id)}><X size={14} /></IconButton>
+                        <strong>{tv(item.name)}</strong>
+                        <IconButton label={t(`Remover ${tv(item.name)}`, `Remove ${tv(item.name)}`)} onClick={() => removeItem(item.id)}><X size={14} /></IconButton>
                       </div>
-                      <span className={styles.itemSub}>{item.subtype?.label}</span>
+                      <span className={styles.itemSub}>{tv(item.subtype?.label)}</span>
                     </th>
                   ))}
                 </tr>
@@ -86,9 +87,9 @@ export function ComparePage() {
                   const best = bestIndexes(row);
                   return (
                     <tr key={row.key}>
-                      <th scope="row">{row.label}</th>
+                      <th scope="row">{tv(row.label)}</th>
                       {row.cells.map((cell, i) => (
-                        <td key={i} className={clsx(!cell.applies && styles.na, best.has(i) && styles.best)}>{cell.text}</td>
+                        <td key={i} className={clsx(!cell.applies && styles.na, best.has(i) && styles.best)}>{tv(cell.text)}</td>
                       ))}
                     </tr>
                   );
@@ -105,11 +106,11 @@ export function ComparePage() {
 function buildRows(items: Item[], schemas: Map<string, import('../../api/types').CategorySchema>): Row[] {
   const rows: Row[] = [
     {
-      key: 'price', label: 'Preço (eb)',
+      key: 'price', label: t('Preço (eb)', 'Price (eb)'),
       cells: items.map((i) => ({ text: i.price != null ? formatEb(i.price) : i.priceNote ?? '—', numeric: i.price ?? null, applies: true })),
     },
-    { key: 'manufacturer', label: 'Fabricante', cells: items.map((i) => ({ text: i.manufacturer?.name ?? '—', numeric: null, applies: true })) },
-    { key: 'source', label: 'Fonte', cells: items.map((i) => ({ text: i.source?.name ?? '—', numeric: null, applies: true })) },
+    { key: 'manufacturer', label: t('Fabricante', 'Manufacturer'), cells: items.map((i) => ({ text: i.manufacturer?.name ?? '—', numeric: null, applies: true })) },
+    { key: 'source', label: t('Fonte', 'Source'), cells: items.map((i) => ({ text: i.source?.name ?? '—', numeric: null, applies: true })) },
   ];
 
   const fields: FieldDescriptor[] = [];
@@ -136,7 +137,7 @@ function buildRows(items: Item[], schemas: Map<string, import('../../api/types')
     rows.push({ key: field.key, label: field.label, cells });
   }
 
-  rows.push({ key: 'origin', label: 'Origem dos dados', cells: items.map((i) => ({ text: DATA_ORIGIN_LABEL[i.dataOrigin], numeric: null, applies: true })) });
+  rows.push({ key: 'origin', label: t('Origem dos dados', 'Data origin'), cells: items.map((i) => ({ text: DATA_ORIGIN_LABEL[i.dataOrigin], numeric: null, applies: true })) });
   return rows;
 }
 

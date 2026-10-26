@@ -1,6 +1,7 @@
 using System.Text.Json;
 using CyberpunkDb.Application.Common;
 using CyberpunkDb.Domain.Enums;
+using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.NetArchitectures.Rules;
 
@@ -52,21 +53,21 @@ public sealed class NetArchitectureRuleBook
     public IReadOnlyList<TableRow> Table(string table) =>
         table == LobbyTable ? Document.LobbyTable.Value
         : Enum.TryParse<NetDifficulty>(table, out var d) && _bodies.TryGetValue(d, out var body) ? body.Rows
-        : throw RequestValidationException.For("table", $"Tabela '{table}' não existe.");
+        : throw RequestValidationException.For("table", L.T($"Tabela '{table}' não existe.", $"Table '{table}' doesn't exist."));
 
     public TableRow Row(string table, int roll) => Table(table).FirstOrDefault(r => r.Roll == roll)
-        ?? throw RequestValidationException.For("roll", $"A tabela {table} não tem a linha {roll}.");
+        ?? throw RequestValidationException.For("roll", L.T($"A tabela {table} não tem a linha {roll}.", $"Table {table} has no row {roll}."));
 
     public DemonRule Demon(string id) => _demons.TryGetValue(id, out var d)
         ? d
-        : throw RequestValidationException.For("demon", $"Demon '{id}' não existe.");
+        : throw RequestValidationException.For("demon", L.T($"Demon '{id}' não existe.", $"Demon '{id}' doesn't exist."));
 
     public DefenseRule? FindDefense(string? id) => id is null ? null : _defenses.GetValueOrDefault(id);
     public DeviceRule? FindDevice(string? id) => id is null ? null : _devices.GetValueOrDefault(id);
 
     public LocationRule Location(string? id) => _locations.TryGetValue(id ?? "generic", out var l)
         ? l
-        : throw RequestValidationException.For("locationId", $"Tipo de local '{id}' não existe.");
+        : throw RequestValidationException.For("locationId", L.T($"Tipo de local '{id}' não existe.", $"Location type '{id}' doesn't exist."));
 
     /// <summary>The purchase band for a floor count (CP:R p.217): portability, Control Node limit, price per floor.</summary>
     public FloorBand Band(int floors) =>

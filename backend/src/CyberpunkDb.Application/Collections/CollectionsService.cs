@@ -5,6 +5,7 @@ using CyberpunkDb.Application.Common;
 using CyberpunkDb.Domain.Entities;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.Collections;
 
@@ -51,7 +52,7 @@ public sealed class CollectionsService(
     public async Task<GearListDetailDto> GetListAsync(int id, CancellationToken ct)
     {
         var list = await db.GearLists.AsNoTracking().Include(l => l.Entries).FirstOrDefaultAsync(l => l.Id == id, ct)
-                   ?? throw new NotFoundException($"Lista {id} não encontrada.");
+                   ?? throw new NotFoundException(L.T($"Lista {id} não encontrada.", $"List {id} not found."));
         var items = (await catalog.GetItemsAsync(list.Entries.Select(e => e.ItemId).Distinct().ToList(), ct))
             .ToDictionary(i => i.Id);
 
@@ -100,7 +101,7 @@ public sealed class CollectionsService(
         await ValidateAsync(entryValidator, request, ct);
         await EnsureItemExistsAsync(request.ItemId, ct);
         var list = await db.GearLists.Include(l => l.Entries).FirstOrDefaultAsync(l => l.Id == listId, ct)
-                   ?? throw new NotFoundException($"Lista {listId} não encontrada.");
+                   ?? throw new NotFoundException(L.T($"Lista {listId} não encontrada.", $"List {listId} not found."));
 
         var existing = list.Entries.FirstOrDefault(e => e.ItemId == request.ItemId);
         if (existing is not null)
@@ -110,7 +111,7 @@ public sealed class CollectionsService(
         }
         else
         {
-            if (list.Entries.Count >= 500) throw RequestValidationException.For("itemId", "Uma lista aceita no máximo 500 itens.");
+            if (list.Entries.Count >= 500) throw RequestValidationException.For("itemId", L.T("Uma lista aceita no máximo 500 itens.", "A list takes at most 500 items."));
             list.Entries.Add(new GearListEntry
             {
                 ItemId = request.ItemId, Quantity = request.Quantity, Note = request.Note?.Trim(), AddedAt = DateTime.UtcNow,
@@ -125,7 +126,7 @@ public sealed class CollectionsService(
     {
         await ValidateAsync(entryUpdateValidator, request, ct);
         var entry = await db.GearListEntries.FirstOrDefaultAsync(e => e.Id == entryId && e.GearListId == listId, ct)
-                    ?? throw new NotFoundException("Item da lista não encontrado.");
+                    ?? throw new NotFoundException(L.T("Item da lista não encontrado.", "List item not found."));
         entry.Quantity = request.Quantity;
         entry.Note = request.Note?.Trim();
         await TouchAsync(listId, ct);
@@ -136,7 +137,7 @@ public sealed class CollectionsService(
     public async Task<GearListDetailDto> RemoveEntryAsync(int listId, int entryId, CancellationToken ct)
     {
         var entry = await db.GearListEntries.FirstOrDefaultAsync(e => e.Id == entryId && e.GearListId == listId, ct)
-                    ?? throw new NotFoundException("Item da lista não encontrado.");
+                    ?? throw new NotFoundException(L.T("Item da lista não encontrado.", "List item not found."));
         db.GearListEntries.Remove(entry);
         await TouchAsync(listId, ct);
         await db.SaveChangesAsync(ct);
@@ -146,13 +147,13 @@ public sealed class CollectionsService(
     // ------------------------------------------------------------ helpers
 
     private async Task<GearList> FindListAsync(int id, CancellationToken ct) =>
-        await db.GearLists.FirstOrDefaultAsync(l => l.Id == id, ct) ?? throw new NotFoundException($"Lista {id} não encontrada.");
+        await db.GearLists.FirstOrDefaultAsync(l => l.Id == id, ct) ?? throw new NotFoundException(L.T($"Lista {id} não encontrada.", $"List {id} not found."));
 
     private async Task TouchAsync(int listId, CancellationToken ct) => (await FindListAsync(listId, ct)).UpdatedAt = DateTime.UtcNow;
 
     private async Task EnsureItemExistsAsync(int itemId, CancellationToken ct)
     {
-        if (!await db.Items.AnyAsync(i => i.Id == itemId, ct)) throw new NotFoundException($"Item {itemId} não encontrado.");
+        if (!await db.Items.AnyAsync(i => i.Id == itemId, ct)) throw new NotFoundException(L.T($"Item {itemId} não encontrado.", $"Item {itemId} not found."));
     }
 
     private static async Task ValidateAsync<TRequest>(IValidator<TRequest> validator, TRequest request, CancellationToken ct)

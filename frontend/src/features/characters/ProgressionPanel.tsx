@@ -6,6 +6,7 @@ import { skillLabel } from './characterLabels';
 import { SheetPanel } from './CharacterUi';
 import type { Run } from './CombatPanels';
 import styles from './Characters.module.css';
+import { t } from '../../i18n';
 
 /**
  * Improvement Points (CP:R p.408–410): award, raise a skill or a Role Ability, and take up a new Role (CP:R p.142).
@@ -28,37 +29,37 @@ export function ProgressionPanel({ detail, rules, run, busy }: { detail: Charact
   if (!detail.sheet.creation.finalized) return null;
 
   return (
-    <SheetPanel title="Progressão" icon={<TrendingUp size={16} />} actions={<span className={styles.source}>CP:R p.408–410, p.142</span>}>
+    <SheetPanel title={t('Progressão', 'Progression')} icon={<TrendingUp size={16} />} actions={<span className={styles.source}>CP:R p.408–410, p.142</span>}>
       <div className={styles.bigNumbers}>
-        <strong>{ip}</strong><span className={styles.muted}>IP disponíveis · {detail.sheet.progress.ipEarned} ganhos</span>
+        <strong>{ip}</strong><span className={styles.muted}>{t('IP disponíveis · ', 'IP available · ')}{detail.sheet.progress.ipEarned} {t('ganhos', 'earned')}</span>
       </div>
 
       <div className={styles.row}>
         <input className={`${styles.input} ${styles.inputSmall}`} style={{ width: 80 }} type="number" value={amount} placeholder="IP"
-          aria-label="IP recebidos" onChange={(e) => setAmount(e.target.value)} />
-        <input className={`${styles.input} ${styles.grow}`} value={reason} placeholder="Sessão, missão…" aria-label="Motivo dos IP"
+          aria-label={t('IP recebidos', 'IP received')} onChange={(e) => setAmount(e.target.value)} />
+        <input className={`${styles.input} ${styles.grow}`} value={reason} placeholder={t('Sessão, missão…', 'Session, mission…')} aria-label={t('Motivo dos IP', 'Reason for the IP')}
           onChange={(e) => setReason(e.target.value)} />
         <Button disabled={busy || !Number(amount) || !reason.trim()} onClick={async () => {
-          if (await run('progression/ip', { amount: Number(amount), reason }, 'IP registrados.')) { setAmount(''); setReason(''); }
-        }}>Receber</Button>
+          if (await run('progression/ip', { amount: Number(amount), reason }, t('IP registrados.', 'IP recorded.'))) { setAmount(''); setReason(''); }
+        }}>{t('Receber', 'Receive')}</Button>
       </div>
 
       <div className={styles.row}>
-        <Select value={skill} onChange={(e) => setSkill(e.target.value)} aria-label="Perícia a melhorar">
-          <option value="">Melhorar perícia…</option>
+        <Select value={skill} onChange={(e) => setSkill(e.target.value)} aria-label={t('Perícia a melhorar', 'Skill to improve')}>
+          <option value="">{t('Melhorar perícia…', 'Improve skill…')}</option>
           {skills.map((s) => <option key={s.key} value={s.key}>{skillLabel(s)} {s.level} → {s.level + 1} ({s.ipToRaise} IP)</option>)}
         </Select>
         <Button disabled={busy || !picked || (picked.ipToRaise ?? Infinity) > ip}
-          onClick={async () => { if (await run('progression/skill', { skillKey: skill }, 'Perícia melhorada.')) setSkill(''); }}>
-          Subir{picked ? ` (${picked.ipToRaise} IP)` : ''}
+          onClick={async () => { if (await run('progression/skill', { skillKey: skill }, t('Perícia melhorada.', 'Skill improved.'))) setSkill(''); }}>
+          {t('Subir', 'Raise')}{picked ? ` (${picked.ipToRaise} IP)` : ''}
         </Button>
       </div>
       <div className={styles.row}>
-        <input className={styles.input} style={{ maxWidth: 260 }} value={newSkill} placeholder="Nova perícia (ex.: language:Japanese)"
-          aria-label="Nova perícia" onChange={(e) => setNewSkill(e.target.value)} />
+        <input className={styles.input} style={{ maxWidth: 260 }} value={newSkill} placeholder={t('Nova perícia (ex.: language:Japanese)', 'New skill (e.g. language:Japanese)')}
+          aria-label={t('Nova perícia', 'New skill')} onChange={(e) => setNewSkill(e.target.value)} />
         <Button variant="ghost" disabled={busy || !newSkill.trim() || ip < 20}
-          onClick={async () => { if (await run('progression/skill', { skillKey: newSkill.trim() }, 'Perícia aprendida.')) setNewSkill(''); }}>
-          Aprender no nível 1
+          onClick={async () => { if (await run('progression/skill', { skillKey: newSkill.trim() }, t('Perícia aprendida.', 'Skill learned.'))) setNewSkill(''); }}>
+          {t('Aprender no nível 1', 'Learn at level 1')}
         </Button>
       </div>
 
@@ -66,20 +67,20 @@ export function ProgressionPanel({ detail, rules, run, busy }: { detail: Charact
         <div key={r.role} className={styles.row}>
           <span className={styles.grow}>{r.ability} ({r.role}) — Rank {r.rank}</span>
           <Button disabled={busy || r.ipToRaise == null || r.ipToRaise > ip}
-            onClick={() => run('progression/role', { role: r.role }, `${r.ability} no Rank ${r.rank + 1}.`)}>
+            onClick={() => run('progression/role', { role: r.role }, t(`${r.ability} no Rank ${r.rank + 1}.`, `${r.ability} at Rank ${r.rank + 1}.`))}>
             Rank {r.rank + 1}{r.ipToRaise != null ? ` (${r.ipToRaise} IP)` : ''}
           </Button>
         </div>
       ))}
 
       <div className={styles.row}>
-        <Select value={newRole} onChange={(e) => setNewRole(e.target.value)} aria-label="Nova Role" disabled={!canMulticlass}>
-          <option value="">{canMulticlass ? 'Nova Role (multiclasse)…' : `Multiclasse exige ${current?.role ?? 'a Role atual'} no Rank 4`}</option>
+        <Select value={newRole} onChange={(e) => setNewRole(e.target.value)} aria-label={t('Nova Role', 'New Role')} disabled={!canMulticlass}>
+          <option value="">{canMulticlass ? t('Nova Role (multiclasse)…', 'New Role (multiclass)…') : t(`Multiclasse exige ${current?.role ?? 'a Role atual'} no Rank 4`, `Multiclassing requires ${current?.role ?? 'the current Role'} at Rank 4`)}</option>
           {others.map((r) => <option key={r.id} value={r.id}>{r.id} — {r.ability}</option>)}
         </Select>
         <Button disabled={busy || !newRole || ip < 60}
-          onClick={async () => { if (await run('progression/multiclass', { role: newRole }, `Agora também ${newRole}.`)) setNewRole(''); }}>
-          Assumir (Rank 1)
+          onClick={async () => { if (await run('progression/multiclass', { role: newRole }, t(`Agora também ${newRole}.`, `Now also ${newRole}.`))) setNewRole(''); }}>
+          {t('Assumir (Rank 1)', 'Take it (Rank 1)')}
         </Button>
       </div>
     </SheetPanel>

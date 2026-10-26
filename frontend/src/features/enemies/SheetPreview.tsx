@@ -4,6 +4,7 @@ import type { NpcRules, NpcSheet, NpcSummary, NpcValidationReport } from '../../
 import { Badge, IconButton } from '../../components/ui/ui';
 import { LEVEL_LABEL, STAT_KEYS } from './npcDraft';
 import styles from './EnemyGenerator.module.css';
+import { t, tv } from '../../i18n';
 
 const QUALITY_SHORT = { Poor: 'PQ ', Standard: '', Excellent: 'EQ ' } as const;
 
@@ -20,11 +21,11 @@ export function SheetPreview({ rules, sheet, report }: { rules: NpcRules; sheet:
   const optionsOf = (id: string) => report.cyberLines.filter((l) => l.parentInstanceId === id).map((l) => l.name);
 
   return (
-    <article className={styles.sheet} aria-label="Pré-visualização da ficha">
-      <div className={styles.sheetName}>{sheet.name || 'Sem nome'}</div>
-      <div className={styles.sheetConcept}>{sheet.concept ?? profile?.label ?? '—'}</div>
+    <article className={styles.sheet} aria-label={t('Pré-visualização da ficha', 'Sheet preview')}>
+      <div className={styles.sheetName}>{tv(sheet.name) || t('Sem nome', 'Unnamed')}</div>
+      <div className={styles.sheetConcept}>{sheet.concept ?? tv(profile?.label) ?? '—'}</div>
       <div className={styles.sheetRow}>
-        {gang && <span><b>Gangue</b> {gang.label}</span>}
+        {gang && <span><b>{t('Gangue', 'Gang')}</b> {tv(gang.label)}</span>}
         <span><b>Level</b> {sheet.hardened ? 'Hardened ' : ''}{LEVEL_LABEL[sheet.level]}</span>
         <span><b>Role</b> {sheet.role ? `${sheet.role} ${sheet.roleRank}` : '—'}</span>
         <span><b>HP</b> {d.hp}</span>
@@ -45,40 +46,40 @@ export function SheetPreview({ rules, sheet, report }: { rules: NpcRules; sheet:
         })}
       </div>
       <div className={styles.sheetSection}>
-        <h4>Armas</h4>
+        <h4>{t('Armas', 'Weapons')}</h4>
         {weapons.length === 0 ? 'Brawling' : weapons.map((w) => (
-          <div key={w.index}>{QUALITY_SHORT[w.quality ?? 'Standard']}{w.name}{w.summary ? ` · ${w.summary}` : ''}</div>
+          <div key={w.index}>{QUALITY_SHORT[w.quality ?? 'Standard']}{tv(w.name)}{w.summary ? ` · ${tv(w.summary)}` : ''}</div>
         ))}
       </div>
       <div className={styles.sheetSection}>
-        <h4>Armadura</h4>
-        {armor.length === 0 && d.spBody === 0 ? 'Nenhuma' : (
+        <h4>{t('Armadura', 'Armor')}</h4>
+        {armor.length === 0 && d.spBody === 0 ? t('Nenhuma', 'None') : (
           <>
-            {armor.map((a) => <div key={a.index}>{a.worn === 'Body' ? 'Corpo' : 'Cabeça'}: {a.name} {a.summary ? `(${a.summary})` : ''}</div>)}
-            <div>SP corpo {d.spBody} · cabeça {d.spHead}</div>
+            {armor.map((a) => <div key={a.index}>{a.worn === 'Body' ? t('Corpo', 'Body') : t('Cabeça', 'Head')}: {tv(a.name)} {a.summary ? `(${tv(a.summary)})` : ''}</div>)}
+            <div>{t('SP corpo ', 'Body SP ')}{d.spBody} {t('· cabeça ', '· head ')}{d.spHead}</div>
           </>
         )}
       </div>
       <div className={styles.sheetSection}>
         <h4>Skill Bases</h4>
-        {bases.map((s) => `${s.name}${s.specialization ? ` (${s.specialization})` : ''} ${s.base}`).join(' · ')}
+        {bases.map((s) => `${tv(s.name)}${s.specialization ? ` (${s.specialization})` : ''} ${s.base}`).join(' · ')}
       </div>
       {other.length > 0 && (
         <div className={styles.sheetSection}>
-          <h4>Equipamento</h4>
-          {other.map((g) => `${g.name}${g.quantity > 1 ? ` x${g.quantity}` : ''}`).join(' · ')}
+          <h4>{t('Equipamento', 'Gear')}</h4>
+          {other.map((g) => `${tv(g.name)}${g.quantity > 1 ? ` x${g.quantity}` : ''}`).join(' · ')}
         </div>
       )}
       <div className={styles.sheetSection}>
         <h4>Cyberware</h4>
-        {roots.length === 0 ? 'Nenhum' : roots.map((r) => {
+        {roots.length === 0 ? t('Nenhum', 'None') : roots.map((r) => {
           const opts = optionsOf(r.instanceId);
-          return `${r.name}${opts.length ? ` com ${opts.join(', ')}` : ''}`;
+          return t(`${tv(r.name)}${opts.length ? ` com ${opts.join(', ')}` : ''}`, `${tv(r.name)}${opts.length ? ` with ${opts.join(', ')}` : ''}`);
         }).join(' · ')}
       </div>
       {sheet.exceptions.length > 0 && (
         <div className={styles.sheetSection}>
-          <h4>Exceções do Mestre</h4>
+          <h4>{t('Exceções do Mestre', 'GM exceptions')}</h4>
           {sheet.exceptions.map((e) => <div key={e.key}>{e.justification}</div>)}
         </div>
       )}
@@ -86,7 +87,7 @@ export function SheetPreview({ rules, sheet, report }: { rules: NpcRules; sheet:
   );
 }
 
-const STATUS_LABEL = { Draft: 'Rascunho', Valid: 'Válido', ValidWithExceptions: 'Com exceções' } as const;
+const STATUS_LABEL = { Draft: t('Rascunho', 'Draft'), Valid: t('Válido', 'Valid'), ValidWithExceptions: t('Com exceções', 'With exceptions') } as const;
 const STATUS_TONE = { Draft: 'red', Valid: 'cyan', ValidWithExceptions: 'amber' } as const;
 
 export function NpcLibrary({
@@ -98,19 +99,19 @@ export function NpcLibrary({
   onDuplicate: (id: number) => void;
   onDelete: (npc: NpcSummary) => void;
 }) {
-  if (npcs.length === 0) return <p className={styles.muted}>Nenhum NPC salvo ainda.</p>;
+  if (npcs.length === 0) return <p className={styles.muted}>{t('Nenhum NPC salvo ainda.', 'No saved NPCs yet.')}</p>;
   return (
     <div className={styles.library}>
       {npcs.map((n) => (
         <div key={n.id} className={clsx(styles.libraryItem, n.id === currentId && styles.libraryItemActive)}>
           <button type="button" className={styles.libraryOpen} onClick={() => onOpen(n.id)}>
-            {n.name} <Badge tone={STATUS_TONE[n.status]}>{STATUS_LABEL[n.status]}</Badge>
+            {tv(n.name)} <Badge tone={STATUS_TONE[n.status]}>{STATUS_LABEL[n.status]}</Badge>
             <span>{n.hardened ? 'Hardened ' : ''}{LEVEL_LABEL[n.level]}{n.concept ? ` · ${n.concept}` : ''}</span>
           </button>
           <div className={styles.inline}>
-            <IconButton label="Abrir" onClick={() => onOpen(n.id)}><FolderOpen size={14} /></IconButton>
-            <IconButton label="Duplicar" onClick={() => onDuplicate(n.id)}><Copy size={14} /></IconButton>
-            <IconButton label="Excluir" onClick={() => onDelete(n)}><Trash2 size={14} /></IconButton>
+            <IconButton label={t('Abrir', 'Open')} onClick={() => onOpen(n.id)}><FolderOpen size={14} /></IconButton>
+            <IconButton label={t('Duplicar', 'Duplicate')} onClick={() => onDuplicate(n.id)}><Copy size={14} /></IconButton>
+            <IconButton label={t('Excluir', 'Delete')} onClick={() => onDelete(n)}><Trash2 size={14} /></IconButton>
           </div>
         </div>
       ))}

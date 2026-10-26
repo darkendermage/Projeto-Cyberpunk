@@ -12,6 +12,7 @@ using CyberpunkDb.Application.Npcs;
 using CyberpunkDb.Domain.Entities;
 using CyberpunkDb.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
+using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.Encounters;
 
@@ -78,7 +79,7 @@ public sealed class EncounterService(
 
     public Task<EncounterDetailDto> UpdateAsync(int id, UpdateEncounterRequest r, CancellationToken ct)
     {
-        if (string.IsNullOrWhiteSpace(r.Name)) throw RequestValidationException.For("name", "Dê um nome ao encontro.");
+        if (string.IsNullOrWhiteSpace(r.Name)) throw RequestValidationException.For("name", L.T("Dê um nome ao encontro.", "Give the encounter a name."));
         return MutateAsync(id, r.Version, (s, e, _) =>
         {
             e.Name = Truncate(r.Name.Trim(), 80);
@@ -90,7 +91,7 @@ public sealed class EncounterService(
         MutateAsync(id, r.Version, (s, e, _) =>
         {
             e.Status = e.Status == EncounterStatus.Active ? EncounterStatus.Ended : EncounterStatus.Active;
-            return Task.FromResult(Log(s, null, "end", e.Status == EncounterStatus.Ended ? "Combate encerrado." : "Combate reaberto."));
+            return Task.FromResult(Log(s, null, "end", e.Status == EncounterStatus.Ended ? L.T("Combate encerrado.", "Fight ended.") : L.T("Combate reaberto.", "Fight reopened.")));
         }, ct);
 
     public async Task DeleteAsync(int id, CancellationToken ct)
@@ -109,7 +110,7 @@ public sealed class EncounterService(
             if (r.CharacterId is { } characterId)
             {
                 if (s.Combatants.Any(c => c.CharacterId == characterId))
-                    throw RequestValidationException.For("characterId", "Esse personagem já está no combate.");
+                    throw RequestValidationException.For("characterId", L.T("Esse personagem já está no combate.", "That character is already in the fight."));
                 var pc = await characters.GetAsync(characterId, ct);
                 added.Add(new Combatant
                 {
@@ -143,9 +144,9 @@ public sealed class EncounterService(
                 var baseName = string.IsNullOrWhiteSpace(generic.Name) ? "Inimigo" : generic.Name.Trim();
                 for (var i = 0; i < count; i++) added.Add(Npc(s, added, NameOf(baseName, i, count), r.Side, CombatantKind.Generic, snapshot));
             }
-            else throw RequestValidationException.For("combatant", "Escolha um personagem, um NPC salvo, um gerado ou um genérico.");
+            else throw RequestValidationException.For("combatant", L.T("Escolha um personagem, um NPC salvo, um gerado ou um genérico.", "Pick a character, a saved NPC, a generated one or a generic one."));
 
-            notices.Add($"{added.Count} combatente(s) na mesa.");
+            notices.Add(L.T($"{added.Count} combatente(s) na mesa.", $"{added.Count} combatant(s) at the table."));
             return Log(s with { Combatants = [.. s.Combatants, .. added] }, null, "join", $"Entraram: {string.Join(", ", added.Select(a => a.Name))}.");
         }, ct);
 
@@ -154,7 +155,7 @@ public sealed class EncounterService(
         {
             var c = Require(s, combatantId);
             var next = s with { Combatants = s.Combatants.Where(x => x.Id != combatantId).ToList(), ActiveId = s.ActiveId == combatantId ? null : s.ActiveId };
-            return Task.FromResult(Log(next, null, "leave", $"{c.Name} saiu do combate."));
+            return Task.FromResult(Log(next, null, "leave", L.T($"{c.Name} saiu do combate.", $"{c.Name} left the fight.")));
         }, ct);
 
     // ------------------------------------------------------------------ initiative and turns
@@ -177,7 +178,7 @@ public sealed class EncounterService(
             list = BreakTies(list);
             var next = s with { Combatants = list };
             next = next with { ActiveId = s.ActiveId ?? next.Queue.FirstOrDefault()?.Id };
-            notices.Add("Iniciativa rolada.");
+            notices.Add(L.T("Iniciativa rolada.", "Initiative rolled."));
             return Log(next, null, "initiative", $"Iniciativa ({combat.Document.Initiative.Source}): {string.Join("; ", lines)}.");
         }, ct);
 
@@ -187,7 +188,7 @@ public sealed class EncounterService(
             var c = Require(s, combatantId);
             var next = Replace(s, c with { Initiative = r.Initiative, TieBreak = 0 });
             next = next with { Combatants = BreakTies(next.Combatants) };
-            return Task.FromResult(Log(next, c.Id, "initiative", $"{c.Name}: Iniciativa {r.Initiative} (ajuste manual)."));
+            return Task.FromResult(Log(next, c.Id, "initiative", L.T($"{c.Name}: Iniciativa {r.Initiative} (ajuste manual).", $"{c.Name}: Initiative {r.Initiative} (manual adjustment).")));
         }, ct);
 
     /// <summary>
@@ -201,18 +202,18 @@ public sealed class EncounterService(
             if (r.BeforeId == c.Id) return Task.FromResult(s);
             var order = s.Queue.Where(x => x.Id != c.Id).ToList();
             var at = r.BeforeId is null ? order.Count : order.FindIndex(x => x.Id == r.BeforeId);
-            if (at < 0) throw new NotFoundException("Combatente não encontrado.");
+            if (at < 0) throw new NotFoundException(L.T("Combatente não encontrado.", "Combatant not found."));
             order.Insert(at, c);
 
             var initiative = (at + 1 < order.Count ? order[at + 1].Initiative : null) ?? (at > 0 ? order[at - 1].Initiative : null)
-                ?? throw RequestValidationException.For("initiative", "Role a iniciativa primeiro.");
+                ?? throw RequestValidationException.For("initiative", L.T("Role a iniciativa primeiro.", "Roll initiative first."));
             order[at] = c with { Initiative = initiative };
             var group = order.Where(x => x.Initiative == initiative).ToList();
             var tieBreaks = group.Select((x, i) => (x.Id, TieBreak: group.Count == 1 ? 0 : group.Count - i)).ToDictionary(x => x.Id, x => x.TieBreak);
             var list = s.Combatants.Select(x => x.Id == c.Id ? order[at] : x)
                 .Select(x => tieBreaks.TryGetValue(x.Id, out var t) ? x with { TieBreak = t } : x).ToList();
             var next = s with { Combatants = list };
-            return Task.FromResult(Log(next, c.Id, "initiative", $"{c.Name}: movido na fila (Iniciativa {initiative}, ajuste manual)."));
+            return Task.FromResult(Log(next, c.Id, "initiative", L.T($"{c.Name}: movido na fila (Iniciativa {initiative}, ajuste manual).", $"{c.Name}: moved in the queue (Initiative {initiative}, manual adjustment).")));
         }, ct);
 
     public Task<EncounterDetailDto> SetActiveAsync(int id, string combatantId, EncounterVersionRequest r, CancellationToken ct) =>
@@ -225,7 +226,7 @@ public sealed class EncounterService(
     public Task<EncounterDetailDto> NextTurnAsync(int id, EncounterVersionRequest r, CancellationToken ct) =>
         MutateAsync(id, r.Version, async (s, entity, notices) =>
         {
-            if (s.Combatants.All(c => c.Initiative is null)) throw RequestValidationException.For("initiative", "Role a iniciativa primeiro.");
+            if (s.Combatants.All(c => c.Initiative is null)) throw RequestValidationException.For("initiative", L.T("Role a iniciativa primeiro.", "Roll initiative first."));
             if (s.Find(s.ActiveId) is { } current)
                 foreach (var burning in current.Conditions.Where(x => x.StartsWith("OnFire:")).ToList())
                     s = await EnvironmentOnAsync(s, current.Id, burning["OnFire:".Length..], null, notices, ct);
@@ -244,10 +245,10 @@ public sealed class EncounterService(
             var next = s with { ActiveId = actor.Id, Round = round };
             if (round != s.Round) next = Log(next, null, "round", $"Rodada {round}.");
             var view = fighters[actor.Id];
-            if (view.MustDeathSave) notices.Add($"{actor.Name} está Mortally Wounded: role o Death Save antes do turno (CP:R p.188).");
-            if (actor.Conditions.Contains("Prone")) notices.Add($"{actor.Name} está Prone: precisa do Get Up antes de mover (CP:R p.169).");
+            if (view.MustDeathSave) notices.Add(L.T($"{actor.Name} está Mortally Wounded: role o Death Save antes do turno (CP:R p.188).", $"{actor.Name} is Mortally Wounded: roll the Death Save before the turn (CP:R p.188)."));
+            if (actor.Conditions.Contains("Prone")) notices.Add(L.T($"{actor.Name} está Prone: precisa do Get Up antes de mover (CP:R p.169).", $"{actor.Name} is Prone: needs a Get Up before moving (CP:R p.169)."));
             entity.Round = round;
-            return Log(next, actor.Id, "turn", $"Turno de {actor.Name}.");
+            return Log(next, actor.Id, "turn", L.T($"Turno de {actor.Name}.", $"{actor.Name}'s turn."));
         }, ct);
 
     // ------------------------------------------------------------------ attacks
@@ -256,9 +257,9 @@ public sealed class EncounterService(
         MutateAsync(id, r.Version, async (s, _, notices) =>
         {
             var fighters = await ViewsAsync(s, ct);
-            var attacker = fighters.GetValueOrDefault(r.AttackerId) ?? throw new NotFoundException("Atacante não está no combate.");
-            if (attacker.Dead) throw RequestValidationException.For("attackerId", $"{attacker.Name} está morto.");
-            var targets = r.TargetIds.Distinct().Select(t => fighters.GetValueOrDefault(t) ?? throw new NotFoundException("Alvo não está no combate.")).ToList();
+            var attacker = fighters.GetValueOrDefault(r.AttackerId) ?? throw new NotFoundException(L.T("Atacante não está no combate.", "The attacker isn't in the fight."));
+            if (attacker.Dead) throw RequestValidationException.For("attackerId", L.T($"{attacker.Name} está morto.", $"{attacker.Name} is dead."));
+            var targets = r.TargetIds.Distinct().Select(t => fighters.GetValueOrDefault(t) ?? throw new NotFoundException(L.T("Alvo não está no combate.", "The target isn't in the fight."))).ToList();
             var plan = resolver.Resolve(r, attacker, targets, dice);
 
             // Ammunition first: if the magazine can't pay, nothing happens.
@@ -275,9 +276,9 @@ public sealed class EncounterService(
             _lastAttack = attack;
             var summary = plan.Mode == AttackMode.Suppressive
                 ? string.Join("; ", results.Select(t => $"{t.TargetName}: {t.Notes.FirstOrDefault()}"))
-                : string.Join("; ", results.Select(t => t.Hit ? $"{t.TargetName}: acertou, {t.Damage} de dano{(t.Through is { } th ? $", {th} no HP" : "")}{(t.CriticalInjury is { } ci ? $", {ci}" : "")}" : $"{t.TargetName}: errou"));
+                : string.Join("; ", results.Select(t => t.Hit ? L.T($"{t.TargetName}: acertou, {t.Damage} de dano{(t.Through is { } th ? $", {th} no HP" : "")}{(t.CriticalInjury is { } ci ? $", {ci}" : "")}", $"{t.TargetName}: hit, {t.Damage} damage{(t.Through is { } th2 ? $", {th2} to HP" : "")}{(t.CriticalInjury is { } ci2 ? $", {ci2}" : "")}") : $"{t.TargetName}: errou"));
             return Log(s, attacker.Id, "attack",
-                $"{attacker.Name} ataca com {plan.WeaponName} ({ModeLabel(plan.Mode)}): d10 {plan.AttackRoll} → {plan.AttackTotal}. {summary}.");
+                L.T($"{attacker.Name} ataca com {plan.WeaponName} ({ModeLabel(plan.Mode)}): d10 {plan.AttackRoll} → {plan.AttackTotal}. {summary}.", $"{attacker.Name} attacks with {plan.WeaponName} ({ModeLabel(plan.Mode)}): d10 {plan.AttackRoll} → {plan.AttackTotal}. {summary}."));
         }, ct);
 
     private AttackResult? _lastAttack;
@@ -295,7 +296,7 @@ public sealed class EncounterService(
         }
         var c = Require(s, attacker.Id);
         var left = c.Ammo.GetValueOrDefault(weapon.Key, weapon.Magazine.Value);
-        if (left < plan.Rounds) throw RequestValidationException.For("weapon", $"{weapon.Name} tem {left} bala(s); recarregue.");
+        if (left < plan.Rounds) throw RequestValidationException.For("weapon", L.T($"{weapon.Name} tem {left} bala(s); recarregue.", $"{weapon.Name} has {left} round(s); reload."));
         return Replace(s, c with { Ammo = new Dictionary<string, int>(c.Ammo) { [weapon.Key] = left - plan.Rounds } });
     }
 
@@ -303,7 +304,7 @@ public sealed class EncounterService(
         List<string> notices, CancellationToken ct)
     {
         var notes = new List<string>(hit.Notes);
-        string Loc() => hit.Location == InjuryLocation.Head ? "cabeça" : "corpo";
+        string Loc() => hit.Location == InjuryLocation.Head ? L.T("cabeça", "head") : "corpo";
         if (!hit.Hit || hit.Damage <= 0 && !hit.Critical)
             return (s, new TargetResult(target.Id, target.Name, hit.Hit, 0, hit.Dv, hit.DefenseRoll, hit.Defense, hit.Dice, 0, Loc(), null, false,
                 null, null, false, null, null, notes));
@@ -319,7 +320,7 @@ public sealed class EncounterService(
             absorbed = Math.Min(cover.Hp, amount);
             s = ReplaceCover(s, cover with { Hp = Math.Max(0, left) });
             if (destroyed) s = s with { Combatants = s.Combatants.Select(c => c.CoverId == cover.Id ? c with { CoverId = null } : c).ToList() };
-            notes.Add(destroyed ? $"{cover.Label} foi destruída." : $"{cover.Label} absorveu o golpe ({Math.Max(0, left)} HP restantes).");
+            notes.Add(destroyed ? L.T($"{cover.Label} foi destruída.", $"{L.D(cover.Label)} was destroyed.") : $"{cover.Label} absorveu o golpe ({Math.Max(0, left)} HP restantes).");
             if (!(hit.Explosive && destroyed))
                 return (s, new TargetResult(target.Id, target.Name, true, 0, hit.Dv, hit.DefenseRoll, hit.Defense, hit.Dice, amount, Loc(), absorbed, destroyed,
                     null, 0, false, null, target.WoundState.ToString(), notes));
@@ -332,7 +333,7 @@ public sealed class EncounterService(
         // CP:R p.170: aimed shots at a hand or a leg.
         if (hit.Mode == AttackMode.AimedLeg && through > 0)
             (s, crit) = await AddNamedCriticalAsync(s, target, "Broken Leg", notes, ct, crit);
-        if (hit.Mode == AttackMode.AimedHand && through > 0) notes.Add("O alvo derruba um item da mão, à escolha do atacante (CP:R p.170).");
+        if (hit.Mode == AttackMode.AimedHand && through > 0) notes.Add(L.T("O alvo derruba um item da mão, à escolha do atacante (CP:R p.170).", "The target drops a held item, of the attacker's choice (CP:R p.170)."));
 
         return (s, new TargetResult(target.Id, target.Name, true, 0, hit.Dv, hit.DefenseRoll, hit.Defense, hit.Dice, amount, Loc(), absorbed, destroyed,
             sp, through, crit is not null, crit, after.ToString(), notes));
@@ -343,13 +344,13 @@ public sealed class EncounterService(
     public Task<EncounterDetailDto> DamageCombatantAsync(int id, string combatantId, ManualDamageRequest r, CancellationToken ct) =>
         MutateAsync(id, r.Version, async (s, _, notices) =>
         {
-            if (r.Amount < 0) throw RequestValidationException.For("amount", "Dano não pode ser negativo.");
+            if (r.Amount < 0) throw RequestValidationException.For("amount", L.T("Dano não pode ser negativo.", "Damage can't be negative."));
             var fighters = await ViewsAsync(s, ct);
-            var target = fighters.GetValueOrDefault(combatantId) ?? throw new NotFoundException("Combatente não encontrado.");
+            var target = fighters.GetValueOrDefault(combatantId) ?? throw new NotFoundException(L.T("Combatente não encontrado.", "Combatant not found."));
             var notes = new List<string>();
             var (next, _, through, after, crit) = await DamageAsync(s, target, r.Amount, r.Location, r.HalveArmor, r.BypassArmor, r.Critical, null,
-                r.Description ?? "dano manual", fromAttack: r.Critical, notes, notices, ct);
-            return Log(next, target.Id, "damage", $"{target.Name}: {r.Amount} de dano ({(r.Location == InjuryLocation.Head ? "cabeça" : "corpo")}), {through} no HP"
+                r.Description ?? L.T("dano manual", "manual damage"), fromAttack: r.Critical, notes, notices, ct);
+            return Log(next, target.Id, "damage", L.T($"{target.Name}: {r.Amount} de dano ({(r.Location == InjuryLocation.Head ? "cabeça" : "corpo")}), {through} no HP", $"{target.Name}: {r.Amount} damage ({(r.Location == InjuryLocation.Head ? "head" : "body")}), {through} to HP")
                 + (crit is not null ? $", {crit}" : "") + $". {Translate(after)}.");
         }, ct);
 
@@ -361,13 +362,13 @@ public sealed class EncounterService(
         List<string> notices, CancellationToken ct)
     {
         var env = combat.Document.Environment.Value.FirstOrDefault(e => e.Id == environmentId)
-                  ?? throw RequestValidationException.For("environmentId", $"'{environmentId}' não existe.");
+                  ?? throw RequestValidationException.For("environmentId", L.T($"'{environmentId}' não existe.", $"'{environmentId}' doesn't exist."));
         var fighters = await ViewsAsync(s, ct);
-        var target = fighters.GetValueOrDefault(combatantId) ?? throw new NotFoundException("Combatente não encontrado.");
+        var target = fighters.GetValueOrDefault(combatantId) ?? throw new NotFoundException(L.T("Combatente não encontrado.", "Combatant not found."));
         var rolled = AttackResolver.RollDice(env.Damage, typed, dice);
         var (next, _, through, after, _) = await DamageAsync(s, target, rolled.Sum(), InjuryLocation.Body, false, env.BypassArmor, false, null,
             env.Label, fromAttack: false, [], notices, ct);
-        return Log(next, target.Id, "environment", $"{target.Name}: {env.Label}, {rolled.Sum()} de dano, {through} no HP. {Translate(after)}.");
+        return Log(next, target.Id, "environment", L.T($"{target.Name}: {env.Label}, {rolled.Sum()} de dano, {through} no HP. {Translate(after)}.", $"{target.Name}: {L.D(env.Label)}, {rolled.Sum()} damage, {through} to HP. {Translate(after)}."));
     }
 
     /// <summary>Applies damage to a PC (through its sheet) or to an NPC (in the encounter), with the Critical Injury if any.</summary>
@@ -390,7 +391,7 @@ public sealed class EncounterService(
                 var def = npcCombat.RollCritical(location, active, critRoll, dice);
                 after = await characters.AddInjuryAsync(id, new AddInjuryRequest(after.Version, location, def.Name), ct);
                 crit = def.Name;
-                notes.Add($"Critical Injury: {def.Name}. {def.Effect} (+{characterRules.Document.Combat.CriticalInjury.Value.BonusDamage} no HP)");
+                notes.Add(L.T($"Critical Injury: {def.Name}. {def.Effect} (+{characterRules.Document.Combat.CriticalInjury.Value.BonusDamage} no HP)", $"Critical Injury: {def.Name}. {L.D(def.Effect)} (+{characterRules.Document.Combat.CriticalInjury.Value.BonusDamage} to HP)"));
             }
             notices.AddRange(after.Notices);
             return (s, sp, through, after.Report.Health.WoundState, crit);
@@ -406,7 +407,7 @@ public sealed class EncounterService(
             var def = npcCombat.RollCritical(location, updated.Injuries.Where(i => i.Location == location).Select(i => i.Name), critRoll, dice);
             updated = npcCombat.AddCritical(updated, def, location);
             critName = def.Name;
-            notes.Add($"Critical Injury: {def.Name}. {def.Effect} (+{characterRules.Document.Combat.CriticalInjury.Value.BonusDamage} no HP)");
+            notes.Add(L.T($"Critical Injury: {def.Name}. {def.Effect} (+{characterRules.Document.Combat.CriticalInjury.Value.BonusDamage} no HP)", $"Critical Injury: {def.Name}. {L.D(def.Effect)} (+{characterRules.Document.Combat.CriticalInjury.Value.BonusDamage} to HP)"));
         }
         var after2 = npcCombat.Wound(updated);
         if (after2 != outcome.Before) notices.Add($"{c.Name}: {Translate(after2)}.");
@@ -429,7 +430,7 @@ public sealed class EncounterService(
             if (c.Injuries.Any(i => i.Name == name)) return (s, already);
             s = Replace(s, npcCombat.AddCritical(c, def, InjuryLocation.Body));
         }
-        notes.Add($"Tiro na perna: {name}. {def.Effect}");
+        notes.Add(L.T($"Tiro na perna: {name}. {def.Effect}", $"Shot to the leg: {name}. {L.D(def.Effect)}"));
         return (s, already is null ? name : $"{already}, {name}");
     }
 
@@ -440,7 +441,7 @@ public sealed class EncounterService(
             if (c.Kind == CombatantKind.Pc)
             {
                 var sheet = await characters.GetAsync(c.CharacterId!.Value, ct);
-                notices.AddRange((await characters.HealAsync(c.CharacterId.Value, new HealRequest(sheet.Version, r.Amount, "Mesa de combate"), ct)).Notices);
+                notices.AddRange((await characters.HealAsync(c.CharacterId.Value, new HealRequest(sheet.Version, r.Amount, L.T("Mesa de combate", "Combat table")), ct)).Notices);
                 return Log(s, c.Id, "heal", $"{c.Name} recuperou {r.Amount} HP.");
             }
             return Log(Replace(s, npcCombat.Heal(c, r.Amount)), c.Id, "heal", $"{c.Name} recuperou {r.Amount} HP.");
@@ -456,7 +457,7 @@ public sealed class EncounterService(
                 notices.AddRange((await characters.StabilizeAsync(c.CharacterId.Value, new VersionRequest(sheet.Version), ct)).Notices);
             }
             else s = Replace(s, npcCombat.Stabilize(c));
-            return Log(s, c.Id, "stabilize", $"{c.Name} foi estabilizado.");
+            return Log(s, c.Id, "stabilize", L.T($"{c.Name} foi estabilizado.", $"{c.Name} was stabilized."));
         }, ct);
 
     public Task<EncounterDetailDto> DeathSaveAsync(int id, string combatantId, DeathSaveCombatantRequest r, CancellationToken ct) =>
@@ -481,7 +482,7 @@ public sealed class EncounterService(
         MutateAsync(id, r.Version, (s, _, _) =>
         {
             var c = Require(s, combatantId);
-            if (string.IsNullOrWhiteSpace(r.Condition)) throw RequestValidationException.For("condition", "Informe a condição.");
+            if (string.IsNullOrWhiteSpace(r.Condition)) throw RequestValidationException.For("condition", L.T("Informe a condição.", "Enter the condition."));
             var condition = r.Condition.Trim();
             var list = r.On ? c.Conditions.Where(x => !x.StartsWith("OnFire:") || !condition.StartsWith("OnFire:")).Append(condition).Distinct().ToList()
                             : c.Conditions.Where(x => x != condition).ToList();
@@ -494,7 +495,7 @@ public sealed class EncounterService(
         MutateAsync(id, r.Version, (s, _, _) =>
         {
             var hp = r.Hp ?? combat.CoverHp(r.Material, r.Thick);
-            if (hp <= 0) throw RequestValidationException.For("material", $"Isso não para bala: não é cobertura ({combat.Document.CoverRules.Source}).");
+            if (hp <= 0) throw RequestValidationException.For("material", L.T($"Isso não para bala: não é cobertura ({combat.Document.CoverRules.Source}).", $"That doesn't stop bullets: it isn't cover ({combat.Document.CoverRules.Source})."));
             var cover = new CoverPiece
             {
                 Id = $"K{Enumerable.Range(1, 999).First(n => s.Covers.All(c => c.Id != $"K{n}"))}",
@@ -514,11 +515,11 @@ public sealed class EncounterService(
     public Task<EncounterDetailDto> DamageCoverAsync(int id, string coverId, CoverDamageRequest r, CancellationToken ct) =>
         MutateAsync(id, r.Version, (s, _, _) =>
         {
-            var cover = s.Covers.FirstOrDefault(c => c.Id == coverId) ?? throw new NotFoundException("Cobertura não encontrada.");
+            var cover = s.Covers.FirstOrDefault(c => c.Id == coverId) ?? throw new NotFoundException(L.T("Cobertura não encontrada.", "Cover not found."));
             var hp = Math.Max(0, cover.Hp - Math.Max(0, r.Amount));
             s = ReplaceCover(s, cover with { Hp = hp });
             if (hp == 0) s = s with { Combatants = s.Combatants.Select(c => c.CoverId == coverId ? c with { CoverId = null } : c).ToList() };
-            return Task.FromResult(Log(s, null, "cover", $"{cover.Label}: {r.Amount} de dano, {hp} HP{(hp == 0 ? " (destruída)" : "")}."));
+            return Task.FromResult(Log(s, null, "cover", L.T($"{cover.Label}: {r.Amount} de dano, {hp} HP{(hp == 0 ? " (destruída)" : "")}.", $"{L.D(cover.Label)}: {r.Amount} damage, {hp} HP{(hp == 0 ? " (destroyed)" : "")}.")));
         }, ct);
 
     public Task<EncounterDetailDto> TakeCoverAsync(int id, string combatantId, TakeCoverRequest r, CancellationToken ct) =>
@@ -526,10 +527,10 @@ public sealed class EncounterService(
         {
             var c = Require(s, combatantId);
             if (r.CoverId is { } coverId && s.Covers.FirstOrDefault(x => x.Id == coverId) is not { Hp: > 0 })
-                throw RequestValidationException.For("coverId", "Essa cobertura não existe ou já foi destruída.");
+                throw RequestValidationException.For("coverId", L.T("Essa cobertura não existe ou já foi destruída.", "That cover doesn't exist or was already destroyed."));
             var label = r.CoverId is null ? null : s.Covers.First(x => x.Id == r.CoverId).Label;
             return Task.FromResult(Log(Replace(s, c with { CoverId = r.CoverId }), c.Id, "cover",
-                label is null ? $"{c.Name} saiu da cobertura." : $"{c.Name} está atrás de {label}."));
+                label is null ? L.T($"{c.Name} saiu da cobertura.", $"{c.Name} left cover.") : L.T($"{c.Name} está atrás de {label}.", $"{c.Name} is behind {L.D(label)}.")));
         }, ct);
 
     // ------------------------------------------------------------------ plumbing
@@ -539,7 +540,7 @@ public sealed class EncounterService(
     {
         var entity = await FindAsync(id, ct);
         if (entity.Version != version)
-            throw new ConflictException("Este combate foi alterado em outra janela. Recarregue para ver a versão atual.");
+            throw new ConflictException(L.T("Este combate foi alterado em outra janela. Recarregue para ver a versão atual.", "This fight was changed in another window. Reload to see the current version."));
         var notices = new List<string>();
         _lastAttack = null;
         var state = await operation(Deserialize(entity.StateJson), entity, notices);
@@ -550,7 +551,7 @@ public sealed class EncounterService(
         }
         catch (DbUpdateConcurrencyException)
         {
-            throw new ConflictException("Este combate foi alterado ao mesmo tempo em outra janela. Recarregue e tente de novo.");
+            throw new ConflictException(L.T("Este combate foi alterado ao mesmo tempo em outra janela. Recarregue e tente de novo.", "This fight was changed at the same time in another window. Reload and try again."));
         }
         return await DetailAsync(entity, state, _lastAttack, notices, ct);
     }
@@ -575,7 +576,7 @@ public sealed class EncounterService(
             }
             catch (NotFoundException)
             {
-                result[c.Id] = new FighterView(c.Id, c.Kind, $"{c.Name} (ficha apagada)", c.Side, c.Initiative, 0, 0, WoundState.Unhurt, 0, null,
+                result[c.Id] = new FighterView(c.Id, c.Kind, L.T($"{c.Name} (ficha apagada)", $"{c.Name} (sheet deleted)"), c.Side, c.Initiative, 0, 0, WoundState.Unhurt, 0, null,
                     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, [], [], c.Conditions, 0, 0, false, true, false, c.CoverId, c.CharacterId, null, null);
             }
         }
@@ -618,7 +619,7 @@ public sealed class EncounterService(
 
     private static string NameOf(string name, int index, int count) => count > 1 ? $"{name} #{index + 1}" : name;
 
-    private static Combatant Require(EncounterState s, string id) => s.Find(id) ?? throw new NotFoundException("Combatente não encontrado.");
+    private static Combatant Require(EncounterState s, string id) => s.Find(id) ?? throw new NotFoundException(L.T("Combatente não encontrado.", "Combatant not found."));
 
     private static EncounterState Replace(EncounterState s, Combatant c) =>
         s with { Combatants = s.Combatants.Select(x => x.Id == c.Id ? c : x).ToList() };
@@ -632,9 +633,9 @@ public sealed class EncounterService(
     public static string ModeLabel(AttackMode mode) => mode switch
     {
         AttackMode.Autofire => "Autofire",
-        AttackMode.AimedHead => "mirado na cabeça",
-        AttackMode.AimedHand => "mirado na mão",
-        AttackMode.AimedLeg => "mirado na perna",
+        AttackMode.AimedHead => L.T("mirado na cabeça", "aimed at the head"),
+        AttackMode.AimedHand => L.T("mirado na mão", "aimed at the hand"),
+        AttackMode.AimedLeg => L.T("mirado na perna", "aimed at the leg"),
         AttackMode.ShotgunShell => "Shotgun Shell",
         AttackMode.Explosive => "explosivo",
         AttackMode.Suppressive => "Suppressive Fire",
@@ -644,9 +645,9 @@ public sealed class EncounterService(
     private static string Translate(WoundState w) => w switch
     {
         WoundState.Lightly => "Lightly Wounded",
-        WoundState.Seriously => "Seriously Wounded (−2 em tudo)",
-        WoundState.Mortally => "Mortally Wounded (−4 em tudo, Death Save todo turno)",
-        _ => "sem ferimentos",
+        WoundState.Seriously => L.T("Seriously Wounded (−2 em tudo)", "Seriously Wounded (−2 to everything)"),
+        WoundState.Mortally => L.T("Mortally Wounded (−4 em tudo, Death Save todo turno)", "Mortally Wounded (−4 to everything, Death Save every turn)"),
+        _ => L.T("sem ferimentos", "unhurt"),
     };
 
     private static void Apply(Encounter entity, EncounterState state, DateTime now)
@@ -661,7 +662,7 @@ public sealed class EncounterService(
         JsonSerializer.Deserialize<EncounterState>(json, StateJson) ?? new EncounterState();
 
     private async Task<Encounter> FindAsync(int id, CancellationToken ct) =>
-        await db.Encounters.FirstOrDefaultAsync(e => e.Id == id, ct) ?? throw new NotFoundException($"Combate {id} não encontrado.");
+        await db.Encounters.FirstOrDefaultAsync(e => e.Id == id, ct) ?? throw new NotFoundException(L.T($"Combate {id} não encontrado.", $"Fight {id} not found."));
 
     private static string Truncate(string value, int max) => value.Length <= max ? value : value[..max];
 }

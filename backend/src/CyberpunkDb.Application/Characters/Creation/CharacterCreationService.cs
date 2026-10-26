@@ -3,6 +3,7 @@ using CyberpunkDb.Application.Characters.Rules;
 using CyberpunkDb.Application.Characters.Validation;
 using CyberpunkDb.Application.Npcs;
 using CyberpunkDb.Domain.Enums;
+using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.Characters.Creation;
 
@@ -18,12 +19,12 @@ public sealed class CharacterCreationService(
 
     public CharacterSheet NewDraft(CreateCharacterRequest request, CharacterChange change)
     {
-        if (rules.FindRole(request.Role) is null) throw CharacterChange.Refuse("role", $"Role desconhecida: {request.Role}.");
-        if (string.IsNullOrWhiteSpace(request.Name)) throw CharacterChange.Refuse("name", "Informe o nome do personagem.");
+        if (rules.FindRole(request.Role) is null) throw CharacterChange.Refuse("role", L.T($"Role desconhecida: {request.Role}.", $"Unknown Role: {request.Role}."));
+        if (string.IsNullOrWhiteSpace(request.Name)) throw CharacterChange.Refuse("name", L.T("Informe o nome do personagem.", "Enter the character's name."));
         string? region = null;
         if (!string.IsNullOrWhiteSpace(request.CulturalRegion))
             region = rules.Document.Lifepath.CulturalOrigins.FirstOrDefault(o => o.Region.Equals(request.CulturalRegion.Trim(), StringComparison.OrdinalIgnoreCase))?.Region
-                     ?? throw CharacterChange.Refuse("culturalRegion", $"Origem cultural desconhecida: {request.CulturalRegion}.");
+                     ?? throw CharacterChange.Refuse("culturalRegion", L.T($"Origem cultural desconhecida: {request.CulturalRegion}.", $"Unknown cultural origin: {request.CulturalRegion}."));
 
         var identity = new CharacterIdentity
         {
@@ -48,9 +49,9 @@ public sealed class CharacterCreationService(
     public CharacterSheet Reset(CharacterSheet sheet, CreationMethod method, string role, CharacterChange change)
     {
         RequireCreating(sheet);
-        if (rules.FindRole(role) is null) throw CharacterChange.Refuse("role", $"Role desconhecida: {role}.");
+        if (rules.FindRole(role) is null) throw CharacterChange.Refuse("role", L.T($"Role desconhecida: {role}.", $"Unknown Role: {role}."));
         if (sheet.Inventory.Count > 0 || sheet.Cyberware.Count > 0)
-            change.Log(CharacterEventKind.Ledger, "creation-reset", "Compras da criação desfeitas ao reiniciar a criação.");
+            change.Log(CharacterEventKind.Ledger, "creation-reset", L.T("Compras da criação desfeitas ao reiniciar a criação.", "Creation purchases undone when restarting creation."));
         var clean = sheet with
         {
             Inventory = [],
@@ -94,7 +95,7 @@ public sealed class CharacterCreationService(
 
         if (cash > 0)
             change.Log(CharacterEventKind.Ledger, "starting-cash",
-                $"Dinheiro inicial do {MethodLabel(method)} ({CharacterRuleBook.Page(rules.Document.Creation.Methods.Streetrat.StartingCash.Reference)}).", cash, "0", cash.ToString());
+                L.T($"Dinheiro inicial do {MethodLabel(method)} ({CharacterRuleBook.Page(rules.Document.Creation.Methods.Streetrat.StartingCash.Reference)}).", $"Starting money for {MethodLabel(method)} ({CharacterRuleBook.Page(rules.Document.Creation.Methods.Streetrat.StartingCash.Reference)})."), cash, "0", cash.ToString());
 
         return sheet with
         {
@@ -112,13 +113,13 @@ public sealed class CharacterCreationService(
     {
         RequireCreating(sheet);
         if (sheet.Creation.Method != CreationMethod.Streetrat)
-            throw CharacterChange.Refuse("method", "Só o Streetrat usa uma linha inteira da tabela.");
+            throw CharacterChange.Refuse("method", L.T("Só o Streetrat usa uma linha inteira da tabela.", "Only Streetrat uses a whole table row."));
         var table = RoleRules(sheet).StatTable;
         var value = row ?? dice.Roll(table.Rows.Length);
-        if (value < 1 || value > table.Rows.Length) throw CharacterChange.Refuse("row", $"A linha deve estar entre 1 e {table.Rows.Length}.");
+        if (value < 1 || value > table.Rows.Length) throw CharacterChange.Refuse("row", L.T($"A linha deve estar entre 1 e {table.Rows.Length}.", $"The row must be between 1 and {table.Rows.Length}."));
 
         change.Log(CharacterEventKind.Edit, "template-row",
-            $"{(row is null ? "Rolou" : "Escolheu")} {value} na tabela de STATs de {sheet.PrimaryRole!.Role} ({table.Source}).", value, manual: row is not null);
+            L.T($"{(row is null ? "Rolou" : "Escolheu")} {value} na tabela de STATs de {sheet.PrimaryRole!.Role} ({table.Source}).", $"{(row is null ? "Rolled" : "Chose")} {value} on the {sheet.PrimaryRole!.Role} STAT table ({table.Source})."), value, manual: row is not null);
         return sheet with
         {
             Stats = rules.StatOrder.Select((k, i) => (k, table.Rows[value - 1][i])).ToDictionary(x => x.k, x => x.Item2, StringComparer.OrdinalIgnoreCase),
@@ -131,7 +132,7 @@ public sealed class CharacterCreationService(
     {
         RequireCreating(sheet);
         if (sheet.Creation.Method != CreationMethod.Edgerunner)
-            throw CharacterChange.Refuse("method", "Só o Edgerunner rola cada STAT separadamente.");
+            throw CharacterChange.Refuse("method", L.T("Só o Edgerunner rola cada STAT separadamente.", "Only Edgerunner rolls each STAT separately."));
         var table = RoleRules(sheet).StatTable;
         var rolls = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
         var stats = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
@@ -139,7 +140,7 @@ public sealed class CharacterCreationService(
         {
             var key = rules.StatOrder[i];
             var roll = given is not null && given.TryGetValue(key, out var g) ? g : dice.Roll(table.Rows.Length);
-            if (roll < 1 || roll > table.Rows.Length) throw CharacterChange.Refuse($"rolls.{key}", $"O dado de {key} deve estar entre 1 e {table.Rows.Length}.");
+            if (roll < 1 || roll > table.Rows.Length) throw CharacterChange.Refuse($"rolls.{key}", L.T($"O dado de {key} deve estar entre 1 e {table.Rows.Length}.", $"The {key} die must be between 1 and {table.Rows.Length}."));
             rolls[key] = roll;
             stats[key] = table.Rows[roll - 1][i];
         }
@@ -157,9 +158,9 @@ public sealed class CharacterCreationService(
         RequireCreating(sheet);
         specialization = specialization.Trim();
         if (specialization.Length == 0 || specialization.StartsWith('@'))
-            throw CharacterChange.Refuse("specialization", "Informe a especialização.");
+            throw CharacterChange.Refuse("specialization", L.T("Informe a especialização.", "Enter the specialization."));
         if (!rules.RoleChoiceSkills(sheet.PrimaryRole!.Role).Contains(skillId, StringComparer.OrdinalIgnoreCase))
-            throw CharacterChange.Refuse("skillId", "Essa perícia não tem especialização em aberto no template da Role.");
+            throw CharacterChange.Refuse("skillId", L.T("Essa perícia não tem especialização em aberto no template da Role.", "That skill has no open specialization in the Role template."));
 
         var skills = new Dictionary<string, int>(sheet.Skills, StringComparer.OrdinalIgnoreCase);
         var old = sheet.Creation.SkillChoices.TryGetValue(skillId, out var prev) ? SkillKey.Make(skillId, prev) : SkillKey.Make(skillId, CharacterRuleBook.ChooseToken);
@@ -209,7 +210,7 @@ public sealed class CharacterCreationService(
         if (!report.CanFinalize)
         {
             var first = report.Issues.Where(i => i.Severity == CharacterIssueSeverity.Error).Take(3).Select(i => i.Message);
-            throw CharacterChange.Refuse("creation", $"Ainda há {report.ErrorCount} pendência(s): " + string.Join(" ", first));
+            throw CharacterChange.Refuse("creation", L.T($"Ainda há {report.ErrorCount} pendência(s): ", $"There are still {report.ErrorCount} issue(s): ") + string.Join(" ", first));
         }
 
         if (sheet.Creation.Method is CreationMethod.Streetrat or CreationMethod.Edgerunner)
@@ -220,8 +221,8 @@ public sealed class CharacterCreationService(
         var housing = rules.StartingHousingFor(sheet.PrimaryRole!.Role);
         var lifestyle = rules.FindLifestyle(housing.Lifestyle);
         change.Log(CharacterEventKind.Ledger, "starting-housing",
-            $"Moradia inicial: {rules.FindHousing(housing.Housing)?.Label} e lifestyle {lifestyle?.Label}, primeiro mês pago ({CharacterRuleBook.Page(housing.Source)}).", 0);
-        change.Log(CharacterEventKind.Edit, "finalize", $"Criação concluída ({MethodLabel(sheet.Creation.Method)}).");
+            L.T($"Moradia inicial: {rules.FindHousing(housing.Housing)?.Label} e lifestyle {lifestyle?.Label}, primeiro mês pago ({CharacterRuleBook.Page(housing.Source)}).", $"Starting housing: {rules.FindHousing(housing.Housing)?.Label} and lifestyle {lifestyle?.Label}, first month paid ({CharacterRuleBook.Page(housing.Source)})."), 0);
+        change.Log(CharacterEventKind.Edit, "finalize", L.T($"Criação concluída ({MethodLabel(sheet.Creation.Method)}).", $"Creation complete ({MethodLabel(sheet.Creation.Method)})."));
 
         return sheet with
         {
@@ -246,7 +247,7 @@ public sealed class CharacterCreationService(
             foreach (var item in Picked(sheet, name, section))
             {
                 var catalogItem = change.Catalog.Find(item.Slug)
-                                  ?? throw CharacterChange.Refuse("creation", $"Item inicial {item.Slug} não está no catálogo.");
+                                  ?? throw CharacterChange.Refuse("creation", L.T($"Item inicial {item.Slug} não está no catálogo.", $"Starting item {item.Slug} isn't in the catalog."));
                 change.Sheet = sheet with { Inventory = inventory };
                 inventory.Add(new InventoryEntry
                 {
@@ -268,7 +269,7 @@ public sealed class CharacterCreationService(
         // Netrunner package) use the package's own foundation instead of making the planner add a second one.
         var cyber = Picked(sheet, "cyberware", role.Starting.Cyberware)
             .Select(i => (Item: i, Catalog: change.Catalog.Find(i.Slug)
-                                            ?? throw CharacterChange.Refuse("creation", $"Implante inicial {i.Slug} não está no catálogo.")))
+                                            ?? throw CharacterChange.Refuse("creation", L.T($"Implante inicial {i.Slug} não está no catálogo.", $"Starting implant {i.Slug} isn't in the catalog."))))
             .OrderByDescending(x => x.Catalog.Cyber?.Foundational == true)
             .ToList();
         var lost = 0;
@@ -282,7 +283,7 @@ public sealed class CharacterCreationService(
             {
                 lost += p.HumanityLossApplied;
                 change.Log(CharacterEventKind.Humanity, "install-cyberware",
-                    $"{change.Catalog.Find(p.ItemId)?.Name} instalado (pacote inicial, HL pré-definida).", -p.HumanityLossApplied);
+                    L.T($"{change.Catalog.Find(p.ItemId)?.Name} instalado (pacote inicial, HL pré-definida).", $"{change.Catalog.Find(p.ItemId)?.Name} installed (starting package, preset HL)."), -p.HumanityLossApplied);
             }
         }
         return sheet with { Humanity = sheet.Humanity with { Lost = sheet.Humanity.Lost + lost } };
@@ -294,12 +295,12 @@ public sealed class CharacterCreationService(
         if (report.Gear is { Remaining: > 0 } gear)
         {
             change.Log(CharacterEventKind.Ledger, "creation-budget-kept",
-                $"Sobra do orçamento de criação mantida ({CharacterRuleBook.Page(gear.Source)}).", gear.Remaining, balance.ToString(), (balance + gear.Remaining).ToString());
+                L.T($"Sobra do orçamento de criação mantida ({CharacterRuleBook.Page(gear.Source)}).", $"Creation budget leftover kept ({CharacterRuleBook.Page(gear.Source)})."), gear.Remaining, balance.ToString(), (balance + gear.Remaining).ToString());
             balance += gear.Remaining;
         }
         if (report.Fashion is { Remaining: > 0 } fashion)
             change.Log(CharacterEventKind.Ledger, "fashion-budget-lost",
-                $"{CharacterValidator.Eb(fashion.Remaining)} do orçamento de moda não gastos foram perdidos ({CharacterRuleBook.Page(fashion.Source)}).", 0);
+                L.T($"{CharacterValidator.Eb(fashion.Remaining)} do orçamento de moda não gastos foram perdidos ({CharacterRuleBook.Page(fashion.Source)}).", $"{CharacterValidator.Eb(fashion.Remaining)} of unspent fashion budget were lost ({CharacterRuleBook.Page(fashion.Source)})."), 0);
 
         // Purchases stay marked with the creation budget that paid them; from now on everything uses the balance.
         return sheet with { Wallet = sheet.Wallet with { Balance = balance } };
@@ -323,11 +324,11 @@ public sealed class CharacterCreationService(
     private RoleRules RoleRules(CharacterSheet sheet) =>
         sheet.PrimaryRole is { } r && rules.FindRole(r.Role) is { } role
             ? role
-            : throw CharacterChange.Refuse("role", "Escolha a Role antes.");
+            : throw CharacterChange.Refuse("role", L.T("Escolha a Role antes.", "Pick the Role first."));
 
     public static void RequireCreating(CharacterSheet sheet)
     {
-        if (sheet.Creation.Finalized) throw CharacterChange.Refuse("creation", "A criação deste personagem já foi concluída.");
+        if (sheet.Creation.Finalized) throw CharacterChange.Refuse("creation", L.T("A criação deste personagem já foi concluída.", "This character's creation is already complete."));
     }
 
     private string MethodLabel(CreationMethod method) => method switch

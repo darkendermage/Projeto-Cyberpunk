@@ -1,5 +1,6 @@
 using CyberpunkDb.Application.Npcs.Rules;
 using CyberpunkDb.Application.Npcs.Validation;
+using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.Npcs.Generation;
 
@@ -36,13 +37,13 @@ public sealed class CyberwarePlanner(NpcMechanics mechanics, NpcCatalog catalog)
     /// <summary>Installs an item and any missing foundational pieces. Returns an explanation on failure.</summary>
     public string? TryInstall(CatalogItem item, int? budget)
     {
-        if (_forbidden.Contains(item.Id)) return $"{item.Name} está proibido.";
+        if (_forbidden.Contains(item.Id)) return L.T($"{item.Name} está proibido.", $"{item.Name} is forbidden.");
         var plan = new List<NpcCyberwareEntry>();
         var error = Plan(item, plan, depth: 0);
         if (error is not null) return error;
         var cost = plan.Sum(e => catalog.Find(e.ItemId)?.Price ?? 0);
         if (budget is { } b && Spent + cost > b)
-            return $"{item.Name} custa {NpcValidator.Eb(cost)} com as dependências; sobram só {NpcValidator.Eb(Math.Max(0, b - Spent))}.";
+            return L.T($"{item.Name} custa {NpcValidator.Eb(cost)} com as dependências; sobram só {NpcValidator.Eb(Math.Max(0, b - Spent))}.", $"{item.Name} costs {NpcValidator.Eb(cost)} with its dependencies; only {NpcValidator.Eb(Math.Max(0, b - Spent))} left.");
         _entries.AddRange(plan);
         return null;
     }
@@ -80,7 +81,7 @@ public sealed class CyberwarePlanner(NpcMechanics mechanics, NpcCatalog catalog)
 
     private string? Plan(CatalogItem item, List<NpcCyberwareEntry> plan, int depth)
     {
-        if (depth > 4) return $"Cadeia de dependências de {item.Name} longa demais.";
+        if (depth > 4) return L.T($"Cadeia de dependências de {item.Name} longa demais.", $"Dependency chain of {item.Name} is too long.");
         var cy = item.Cyber!;
         var current = _entries.Concat(plan).ToList();
 
@@ -93,7 +94,7 @@ public sealed class CyberwarePlanner(NpcMechanics mechanics, NpcCatalog catalog)
         }
 
         var required = catalog.Find(rid);
-        if (required?.Cyber is null) return $"{item.Name} depende de uma peça que não está no catálogo.";
+        if (required?.Cyber is null) return L.T($"{item.Name} depende de uma peça que não está no catálogo.", $"{item.Name} depends on a piece that isn't in the catalog.");
         var (slots, _) = mechanics.SlotsRequired(item);
         var copies = cy.RequiresPair ? 2 : 1;
         var hosts = new List<string>();
@@ -108,12 +109,12 @@ public sealed class CyberwarePlanner(NpcMechanics mechanics, NpcCatalog catalog)
         while (hosts.Count < copies)
         {
             if (_forbidden.Contains(required.Id))
-                return $"{item.Name} depende de {required.Name}, que está proibido.";
+                return L.T($"{item.Name} depende de {required.Name}, que está proibido.", $"{item.Name} depends on {required.Name}, which is forbidden.");
             if ((mechanics.SlotsProvided(required) ?? 0) < slots)
-                return $"{required.Name} não tem Option Slots suficientes para {item.Name}.";
+                return L.T($"{required.Name} não tem Option Slots suficientes para {item.Name}.", $"{required.Name} doesn't have enough Option Slots for {item.Name}.");
             var before = plan.Count;
             var error = Plan(required, plan, depth + 1);
-            if (error is not null) return $"{item.Name} precisa de {required.Name}: {error}";
+            if (error is not null) return L.T($"{item.Name} precisa de {required.Name}: {error}", $"{item.Name} needs {required.Name}: {error}");
             hosts.Add(plan.Skip(before).Last(e => e.ItemId == required.Id).InstanceId);
         }
 
@@ -138,13 +139,13 @@ public sealed class CyberwarePlanner(NpcMechanics mechanics, NpcCatalog catalog)
         {
             if (!NpcMechanics.MatchesCapacity(rule, item)) continue;
             var count = items.Count(i => NpcMechanics.MatchesCapacity(rule, i));
-            if (count > rule.Max) return $"{rule.Label}: limite de {rule.Max}.";
+            if (count > rule.Max) return L.T($"{rule.Label}: limite de {rule.Max}.", $"{rule.Label}: limit of {rule.Max}.");
         }
         foreach (var group in _rules.Document.Cyberware.ExclusiveGroups)
         {
             if (!group.Slugs.Contains(item.Slug, StringComparer.OrdinalIgnoreCase)) continue;
             if (items.Count(i => group.Slugs.Contains(i.Slug, StringComparer.OrdinalIgnoreCase)) > group.Max)
-                return $"A combinação de implantes selecionada possui incompatibilidades: só {group.Max} {group.Label} por vez.";
+                return L.T($"A combinação de implantes selecionada possui incompatibilidades: só {group.Max} {group.Label} por vez.", $"The selected implant combination has conflicts: only {group.Max} {group.Label} at a time.");
         }
         return null;
     }
@@ -156,7 +157,7 @@ public sealed class CyberwarePlanner(NpcMechanics mechanics, NpcCatalog catalog)
             .Select(e => catalog.Find(e.ItemId))
             .Where(i => i is not null && mechanics.PoolFor(i)?.Key == pool.Key)
             .Sum(i => mechanics.SlotsRequired(i!).Slots);
-        return used + mechanics.SlotsRequired(item).Slots > mechanics.PoolSlots(pool) ? $"{pool.Label} sem slots livres." : null;
+        return used + mechanics.SlotsRequired(item).Slots > mechanics.PoolSlots(pool) ? L.T($"{pool.Label} sem slots livres.", $"{pool.Label} has no free slots.") : null;
     }
 
     private NpcCyberwareEntry NewEntry(CatalogItem item, string? parent)

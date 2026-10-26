@@ -3,6 +3,7 @@
 import type {
   ArchitectureState, DefenseRule, IceInfo, NetArchitectureRulesDocument, NetBranch, NetContent, NetDifficulty, NetFloor,
 } from '../../api/netArchitectureTypes';
+import { locale, t, tv } from '../../i18n';
 
 export const DIFFICULTY_TONE: Record<NetDifficulty, 'default' | 'cyan' | 'amber' | 'red'> = {
   Basic: 'default',
@@ -12,9 +13,9 @@ export const DIFFICULTY_TONE: Record<NetDifficulty, 'default' | 'cyan' | 'amber'
 };
 
 export const GROUP_LABEL: Record<DefenseRule['group'], string> = {
-  Active: 'Defesa ativa (drone)',
-  Emplaced: 'Defesa fixa',
-  Environmental: 'Defesa ambiental',
+  Active: t('Defesa ativa (drone)', 'Active defense (drone)'),
+  Emplaced: t('Defesa fixa', 'Emplaced defense'),
+  Environmental: t('Defesa ambiental', 'Environmental defense'),
 };
 
 export interface Lookups {
@@ -36,11 +37,11 @@ export function lookups(rules: NetArchitectureRulesDocument, ice: IceInfo[]): Lo
 /** What a Control Node runs, in a few words. */
 export function nodeLabel(content: NetContent, l: Lookups): string {
   const f = content.function;
-  if (!f) return 'sem função';
+  if (!f) return t('sem função', 'no function');
   const defense = f.defenseId ? l.defenses.get(f.defenseId) : undefined;
-  if (defense) return defense.label + (f.label ? ` (${f.label})` : '');
-  if (f.deviceId) return f.label ?? l.devices.get(f.deviceId) ?? f.deviceId;
-  return f.label ?? 'sem função';
+  if (defense) return tv(defense.label) + (f.label ? ` (${tv(f.label)})` : '');
+  if (f.deviceId) return tv(f.label ?? l.devices.get(f.deviceId)) ?? f.deviceId;
+  return tv(f.label) ?? t('sem função', 'no function');
 }
 
 /** One content as the floor list and the diagram show it ("Hellhound", "Password DV8", "Control Node DV8 · Torreta"). */
@@ -70,7 +71,7 @@ export const isBossFloor = (floor: NetFloor, state: ArchitectureState) =>
 
 /** "Andar 4 (ramo B)" */
 export function floorName(floor: NetFloor, state: ArchitectureState): string {
-  return state.branches.length > 1 && floor.branchId !== state.branches[0].id ? `Andar ${floor.depth} (ramo ${floor.branchId})` : `Andar ${floor.depth}`;
+  return state.branches.length > 1 && floor.branchId !== state.branches[0].id ? t(`Andar ${floor.depth} (ramo ${floor.branchId})`, `Floor ${floor.depth} (branch ${floor.branchId})`) : t(`Andar ${floor.depth}`, `Floor ${floor.depth}`);
 }
 
 // ---------------------------------------------------------------- diagram
@@ -131,4 +132,4 @@ export function layoutDiagram(branches: NetBranch[]): DiagramLayout {
   };
 }
 
-export const formatEbShort = (value: number) => `${value.toLocaleString('pt-BR')}eb`;
+export const formatEbShort = (value: number) => `${value.toLocaleString(locale)}eb`;

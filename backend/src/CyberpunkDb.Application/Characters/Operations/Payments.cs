@@ -2,6 +2,7 @@ using CyberpunkDb.Application.Characters.Creation;
 using CyberpunkDb.Application.Characters.Rules;
 using CyberpunkDb.Application.Characters.Validation;
 using CyberpunkDb.Domain.Enums;
+using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.Characters.Operations;
 
@@ -18,12 +19,12 @@ public static class Payments
         if (!completePackage)
         {
             if (requested is BudgetPool.CreationGear or BudgetPool.CreationFashion)
-                throw CharacterChange.Refuse("pool", "Os orçamentos de criação só existem durante a criação de um Complete Package.");
+                throw CharacterChange.Refuse("pool", L.T("Os orçamentos de criação só existem durante a criação de um Complete Package.", "Creation budgets only exist while creating a Complete Package."));
             return BudgetPool.Balance;
         }
         var pool = requested is null or BudgetPool.Balance ? (fashion ? BudgetPool.CreationFashion : BudgetPool.CreationGear) : requested.Value;
         if (pool == BudgetPool.CreationFashion && !fashion)
-            throw CharacterChange.Refuse("pool", "Esse item não é Fashion nem Fashionware: pague com o orçamento geral " +
+            throw CharacterChange.Refuse("pool", L.T("Esse item não é Fashion nem Fashionware: pague com o orçamento geral ", "That item is neither Fashion nor Fashionware: pay with the general budget ") +
                                                   $"({CharacterRuleBook.Page(rules.Document.Creation.Methods.CompletePackage.FashionBudget.Reference)}).");
         return pool;
     }
@@ -47,11 +48,11 @@ public static class Payments
         {
             var label = pool switch
             {
-                BudgetPool.CreationFashion => "do orçamento de moda",
-                BudgetPool.CreationGear => "do orçamento geral",
-                _ => "de saldo",
+                BudgetPool.CreationFashion => L.T("do orçamento de moda", "from the fashion budget"),
+                BudgetPool.CreationGear => L.T("do orçamento geral", "from the general budget"),
+                _ => L.T("de saldo", "of balance"),
             };
-            throw CharacterChange.Refuse("itemId", $"Saldo insuficiente: {what} custa {CharacterValidator.Eb(cost)} e restam {CharacterValidator.Eb(available)} {label}.");
+            throw CharacterChange.Refuse("itemId", L.T($"Saldo insuficiente: {what} custa {CharacterValidator.Eb(cost)} e restam {CharacterValidator.Eb(available)} {label}.", $"Not enough money: {what} costs {CharacterValidator.Eb(cost)} and {CharacterValidator.Eb(available)} {label} are left."));
         }
         if (cost == 0) return sheet;
 
@@ -60,8 +61,8 @@ public static class Payments
             change.Log(CharacterEventKind.Ledger, "purchase", $"Compra: {what}.", -cost, available.ToString(), (available - cost).ToString());
             return sheet with { Wallet = sheet.Wallet with { Balance = available - cost } };
         }
-        var budget = pool == BudgetPool.CreationFashion ? "orçamento de moda" : "orçamento geral";
-        change.Log(CharacterEventKind.Ledger, "purchase", $"Compra na criação ({budget}): {what}.", -cost, available.ToString(), (available - cost).ToString());
+        var budget = pool == BudgetPool.CreationFashion ? L.T("orçamento de moda", "fashion budget") : L.T("orçamento geral", "general budget");
+        change.Log(CharacterEventKind.Ledger, "purchase", L.T($"Compra na criação ({budget}): {what}.", $"Creation purchase ({budget}): {what}."), -cost, available.ToString(), (available - cost).ToString());
         return sheet;
     }
 }

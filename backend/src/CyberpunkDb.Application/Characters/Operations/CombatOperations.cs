@@ -2,6 +2,7 @@ using CyberpunkDb.Application.Characters.Calculation;
 using CyberpunkDb.Application.Characters.Rules;
 using CyberpunkDb.Application.Npcs;
 using CyberpunkDb.Domain.Enums;
+using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.Characters.Operations;
 
@@ -20,7 +21,7 @@ public sealed class CombatOperations(CharacterRuleBook rules, CharacterCalculato
     /// </summary>
     public CharacterSheet Damage(CharacterSheet sheet, DamageRequest request, CharacterChange change)
     {
-        if (request.Amount < 0) throw CharacterChange.Refuse("amount", "Dano não pode ser negativo.");
+        if (request.Amount < 0) throw CharacterChange.Refuse("amount", L.T("Dano não pode ser negativo.", "Damage can't be negative."));
         var before = calculator.Calculate(sheet, change.Catalog);
         var slot = request.Location == InjuryLocation.Head ? ArmorSlot.Head : ArmorSlot.Body;
         var sp = DamageMath.EffectiveSp(slot == ArmorSlot.Head ? before.Armor.Head.Sp : before.Armor.Body.Sp, request.HalveArmor, request.BypassArmor);
@@ -29,10 +30,10 @@ public sealed class CombatOperations(CharacterRuleBook rules, CharacterCalculato
 
         var hp = before.Health.CurrentHp;
         var after = Math.Max(0, hp - through);
-        var where = slot == ArmorSlot.Head ? "cabeça" : "corpo";
+        var where = slot == ArmorSlot.Head ? L.T("cabeça", "head") : "corpo";
         change.Log(CharacterEventKind.Combat, "damage",
             (request.Description is { Length: > 0 } d ? d + ": " : "") +
-            $"{request.Amount} de dano no {where}, SP {sp}{(request.BypassArmor ? " ignorado" : request.HalveArmor ? " (metade, corpo a corpo)" : "")}; {through} passaram.",
+            L.T($"{request.Amount} de dano no {where}, SP {sp}{(request.BypassArmor ? " ignorado" : request.HalveArmor ? " (metade, corpo a corpo)" : "")}; {through} passaram.", $"{request.Amount} damage to the {where}, SP {sp}{(request.BypassArmor ? " ignored" : request.HalveArmor ? " (half, melee)" : "")}; {through} got through."),
             -through, hp.ToString(), after.ToString());
 
         var combat = sheet.Combat with { CurrentHp = after, Stabilized = after >= 1 && sheet.Combat.Stabilized };
@@ -41,22 +42,22 @@ public sealed class CombatOperations(CharacterRuleBook rules, CharacterCalculato
             // CP:R p.187: a Mortally Wounded character damaged by an Attack suffers a Critical Injury and +1 Death Save Penalty.
             var penalty = rules.Document.Derived.DeathSave.Value.PenaltyPerDamageWhileMortal;
             combat = combat with { DeathSavePenalty = combat.DeathSavePenalty + penalty };
-            change.Log(CharacterEventKind.Combat, "death-save-penalty", $"Dano enquanto Mortally Wounded: penalidade de Death Save +{penalty}.", penalty);
-            change.Notices.Add("Mortally Wounded e atingido: registre uma Critical Injury (CP:R p.187).");
+            change.Log(CharacterEventKind.Combat, "death-save-penalty", L.T($"Dano enquanto Mortally Wounded: penalidade de Death Save +{penalty}.", $"Damage while Mortally Wounded: Death Save penalty +{penalty}."), penalty);
+            change.Notices.Add(L.T("Mortally Wounded e atingido: registre uma Critical Injury (CP:R p.187).", "Mortally Wounded and hit: record a Critical Injury (CP:R p.187)."));
         }
         sheet = sheet with { Combat = combat };
 
         if (through > 0 && !request.BypassArmor)
-            sheet = Ablate(sheet, slot, rules.Document.Combat.AblationPerDamagingHit.Value, "dano que passou do SP", change);
+            sheet = Ablate(sheet, slot, rules.Document.Combat.AblationPerDamagingHit.Value, L.T("dano que passou do SP", "damage that got past SP"), change);
 
         var now = calculator.WoundStateFor(after, before.Health.MaxHp);
         if (now != before.Health.WoundState)
             change.Notices.Add(now switch
             {
-                WoundState.Seriously => "Seriously Wounded: -2 em todas as Ações (CP:R p.186).",
-                WoundState.Mortally => "Mortally Wounded: -4 em todas as Ações, -6 em MOVE e Death Save no início de cada turno (CP:R p.186).",
-                WoundState.Lightly => "Lightly Wounded: sem penalidade; estabilizar DV10 (CP:R p.186).",
-                _ => "Sem ferimentos.",
+                WoundState.Seriously => L.T("Seriously Wounded: -2 em todas as Ações (CP:R p.186).", "Seriously Wounded: -2 to all Actions (CP:R p.186)."),
+                WoundState.Mortally => L.T("Mortally Wounded: -4 em todas as Ações, -6 em MOVE e Death Save no início de cada turno (CP:R p.186).", "Mortally Wounded: -4 to all Actions, -6 to MOVE and a Death Save at the start of each turn (CP:R p.186)."),
+                WoundState.Lightly => L.T("Lightly Wounded: sem penalidade; estabilizar DV10 (CP:R p.186).", "Lightly Wounded: no penalty; stabilize DV10 (CP:R p.186)."),
+                _ => L.T("Sem ferimentos.", "Unhurt."),
             });
         return sheet;
     }
@@ -66,10 +67,10 @@ public sealed class CombatOperations(CharacterRuleBook rules, CharacterCalculato
     /// </summary>
     public CharacterSheet Heal(CharacterSheet sheet, HealRequest request, CharacterChange change)
     {
-        if (request.Amount <= 0) throw CharacterChange.Refuse("amount", "Informe quanto HP recuperar.");
+        if (request.Amount <= 0) throw CharacterChange.Refuse("amount", L.T("Informe quanto HP recuperar.", "Enter how much HP to recover."));
         var report = calculator.Calculate(sheet, change.Catalog);
         if (report.Health.WoundState == WoundState.Mortally)
-            throw CharacterChange.Refuse("amount", $"Mortally Wounded: estabilize primeiro (DV{report.Health.StabilizationDv}, CP:R p.186).");
+            throw CharacterChange.Refuse("amount", L.T($"Mortally Wounded: estabilize primeiro (DV{report.Health.StabilizationDv}, CP:R p.186).", $"Mortally Wounded: stabilize first (DV{report.Health.StabilizationDv}, CP:R p.186)."));
         var after = Math.Min(report.Health.MaxHp, report.Health.CurrentHp + request.Amount);
         change.Log(CharacterEventKind.Combat, "heal",
             (request.Description is { Length: > 0 } d ? d + ": " : "") + $"recuperou {after - report.Health.CurrentHp} HP.",
@@ -94,11 +95,11 @@ public sealed class CombatOperations(CharacterRuleBook rules, CharacterCalculato
                 Conditions = combat.Conditions.Append("Inconsciente").Distinct().ToList(),
             };
             change.Log(CharacterEventKind.Combat, "stabilize",
-                "Estabilizado: 1 HP, inconsciente por 1 minuto; penalidade de Death Save volta à base.", 1 - report.Health.CurrentHp,
+                L.T("Estabilizado: 1 HP, inconsciente por 1 minuto; penalidade de Death Save volta à base.", "Stabilized: 1 HP, unconscious for 1 minute; the Death Save penalty goes back to base."), 1 - report.Health.CurrentHp,
                 report.Health.CurrentHp.ToString(), "1");
         }
         else
-            change.Log(CharacterEventKind.Combat, "stabilize", "Estabilizado: a cura natural pode começar.");
+            change.Log(CharacterEventKind.Combat, "stabilize", L.T("Estabilizado: a cura natural pode começar.", "Stabilized: natural healing can begin."));
         return sheet with { Combat = combat };
     }
 
@@ -110,10 +111,10 @@ public sealed class CombatOperations(CharacterRuleBook rules, CharacterCalculato
     {
         var report = calculator.Calculate(sheet, change.Catalog);
         if (!report.Health.MustRollDeathSave)
-            throw CharacterChange.Refuse("roll", "Death Save só é rolado por quem está Mortally Wounded (CP:R p.188).");
-        if (sheet.Combat.Conditions.Contains("Morto")) throw CharacterChange.Refuse("roll", "O personagem já falhou um Death Save.");
+            throw CharacterChange.Refuse("roll", L.T("Death Save só é rolado por quem está Mortally Wounded (CP:R p.188).", "Only someone Mortally Wounded rolls a Death Save (CP:R p.188)."));
+        if (sheet.Combat.Conditions.Contains("Morto")) throw CharacterChange.Refuse("roll", L.T("O personagem já falhou um Death Save.", "The character already failed a Death Save."));
         var roll = request.Roll ?? dice.Roll(10);
-        if (roll is < 1 or > 10) throw CharacterChange.Refuse("roll", "O d10 vai de 1 a 10.");
+        if (roll is < 1 or > 10) throw CharacterChange.Refuse("roll", L.T("O d10 vai de 1 a 10.", "The d10 goes from 1 to 10."));
 
         var rule = rules.Document.Derived.DeathSave.Value;
         var penalty = report.Health.DeathSavePenalty;
@@ -124,9 +125,9 @@ public sealed class CombatOperations(CharacterRuleBook rules, CharacterCalculato
 
         change.Log(CharacterEventKind.Combat, "death-save",
             $"Death Save: d10 {roll} + {penalty} = {total} contra BODY {report.Health.DeathSave}: {(success ? "sobreviveu" : "falhou")}." +
-            (roll == 10 ? " (10 natural sempre falha)" : ""),
+            (roll == 10 ? L.T(" (10 natural sempre falha)", " (a natural 10 always fails)") : ""),
             rule.PenaltyPerSave, penalty.ToString(), (penalty + rule.PenaltyPerSave).ToString(), manual: request.Roll is not null);
-        change.Notices.Add(success ? $"Sobreviveu. Próximo Death Save com +{penalty + rule.PenaltyPerSave}." : "Falhou o Death Save: o personagem morreu (CP:R p.188).");
+        change.Notices.Add(success ? L.T($"Sobreviveu. Próximo Death Save com +{penalty + rule.PenaltyPerSave}.", $"Survived. Next Death Save at +{penalty + rule.PenaltyPerSave}.") : "Falhou o Death Save: o personagem morreu (CP:R p.188).");
         return sheet with { Combat = combat };
     }
 
@@ -134,8 +135,8 @@ public sealed class CombatOperations(CharacterRuleBook rules, CharacterCalculato
 
     public CharacterSheet AblateManual(CharacterSheet sheet, AblateRequest request, CharacterChange change)
     {
-        if (request.Amount < 1) throw CharacterChange.Refuse("amount", "Informe quanto SP reduzir.");
-        return Ablate(sheet, request.Location, request.Amount, request.Description ?? "ablação manual", change);
+        if (request.Amount < 1) throw CharacterChange.Refuse("amount", L.T("Informe quanto SP reduzir.", "Enter how much SP to reduce."));
+        return Ablate(sheet, request.Location, request.Amount, request.Description ?? L.T("ablação manual", "manual ablation"), change);
     }
 
     /// <summary>All armor on the location is ablated together (CP:R p.184), worn pieces and armor implants alike.</summary>
@@ -168,16 +169,16 @@ public sealed class CombatOperations(CharacterRuleBook rules, CharacterCalculato
     {
         if (sheet.Inventory.FirstOrDefault(e => e.InstanceId == request.InstanceId) is { } entry)
         {
-            var max = change.Item(entry.ItemId).Armor?.Sp ?? throw CharacterChange.Refuse("instanceId", "Esse item não tem SP.");
+            var max = change.Item(entry.ItemId).Armor?.Sp ?? throw CharacterChange.Refuse("instanceId", L.T("Esse item não tem SP.", "That item has no SP."));
             var sp = Bounded(request.Sp, max);
             change.Log(CharacterEventKind.Combat, "repair", $"{change.Item(entry.ItemId).Name} reparada.", sp - (entry.CurrentSp ?? max),
                 (entry.CurrentSp ?? max).ToString(), sp.ToString());
             return sheet with { Inventory = sheet.Inventory.Select(e => e.InstanceId == entry.InstanceId ? e with { CurrentSp = sp == max ? null : sp } : e).ToList() };
         }
         var piece = sheet.Cyberware.FirstOrDefault(c => c.InstanceId == request.InstanceId)
-                    ?? throw CharacterChange.Refuse("instanceId", "Armadura não encontrada.");
+                    ?? throw CharacterChange.Refuse("instanceId", L.T("Armadura não encontrada.", "Armor not found."));
         var item = change.Item(piece.ItemId);
-        var implantMax = rules.Shared.CyberwareStoppingPower(item.Slug) ?? throw CharacterChange.Refuse("instanceId", "Esse implante não tem SP.");
+        var implantMax = rules.Shared.CyberwareStoppingPower(item.Slug) ?? throw CharacterChange.Refuse("instanceId", L.T("Esse implante não tem SP.", "That implant has no SP."));
         var value = Bounded(request.Sp, implantMax);
         change.Log(CharacterEventKind.Combat, "repair", $"{item.Name} recuperado.", value - (piece.CurrentSp ?? implantMax),
             (piece.CurrentSp ?? implantMax).ToString(), value.ToString());
@@ -195,9 +196,9 @@ public sealed class CombatOperations(CharacterRuleBook rules, CharacterCalculato
     public CharacterSheet AddInjury(CharacterSheet sheet, AddInjuryRequest request, CharacterChange change)
     {
         var def = rules.FindCriticalInjury(request.Location, request.Name)
-                  ?? throw CharacterChange.Refuse("name", $"{request.Name} não está na tabela de Critical Injuries {(request.Location == InjuryLocation.Head ? "da cabeça" : "do corpo")}.");
+                  ?? throw CharacterChange.Refuse("name", L.T($"{request.Name} não está na tabela de Critical Injuries {(request.Location == InjuryLocation.Head ? "da cabeça" : "do corpo")}.", $"{request.Name} isn't on the {(request.Location == InjuryLocation.Head ? "head" : "body")} Critical Injury table."));
         if (sheet.Injuries.Any(i => i.Status != InjuryStatus.Healed && i.Location == request.Location && i.Name.Equals(def.Name, StringComparison.OrdinalIgnoreCase)))
-            throw CharacterChange.Refuse("name", $"O personagem já sofre de {def.Name}; role de novo na tabela (CP:R p.187).");
+            throw CharacterChange.Refuse("name", L.T($"O personagem já sofre de {def.Name}; role de novo na tabela (CP:R p.187).", $"The character already has {def.Name}; roll again on the table (CP:R p.187)."));
 
         change.Sheet = sheet;
         var record = new CriticalInjuryRecord
@@ -212,7 +213,7 @@ public sealed class CombatOperations(CharacterRuleBook rules, CharacterCalculato
             var bonus = rules.Document.Combat.CriticalInjury.Value.BonusDamage;
             var report = calculator.Calculate(sheet, change.Catalog);
             var after = Math.Max(0, report.Health.CurrentHp - bonus);
-            change.Log(CharacterEventKind.Combat, "critical-bonus-damage", $"Dano bônus de {def.Name}, direto no HP ({CharacterRuleBook.Page(rules.Document.Combat.CriticalInjury.Reference)}).",
+            change.Log(CharacterEventKind.Combat, "critical-bonus-damage", L.T($"Dano bônus de {def.Name}, direto no HP ({CharacterRuleBook.Page(rules.Document.Combat.CriticalInjury.Reference)}).", $"{def.Name} bonus damage, straight to HP ({CharacterRuleBook.Page(rules.Document.Combat.CriticalInjury.Reference)})."),
                 after - report.Health.CurrentHp, report.Health.CurrentHp.ToString(), after.ToString());
             sheet = sheet with { Combat = sheet.Combat with { CurrentHp = after, Stabilized = after >= 1 && sheet.Combat.Stabilized } };
         }
@@ -225,14 +226,14 @@ public sealed class CombatOperations(CharacterRuleBook rules, CharacterCalculato
     /// </summary>
     public CharacterSheet UpdateInjury(CharacterSheet sheet, string id, UpdateInjuryRequest request, CharacterChange change)
     {
-        var record = sheet.Injuries.FirstOrDefault(i => i.Id == id) ?? throw CharacterChange.Refuse("id", "Lesão não encontrada.");
+        var record = sheet.Injuries.FirstOrDefault(i => i.Id == id) ?? throw CharacterChange.Refuse("id", L.T("Lesão não encontrada.", "Injury not found."));
         var def = rules.FindCriticalInjury(record.Location, record.Name);
-        if (record.Status == InjuryStatus.Healed) throw CharacterChange.Refuse("status", "Essa lesão já foi tratada.");
+        if (record.Status == InjuryStatus.Healed) throw CharacterChange.Refuse("status", L.T("Essa lesão já foi tratada.", "That injury was already treated."));
 
         var updated = request.Status switch
         {
             InjuryStatus.QuickFixed when def?.QuickFix is null =>
-                throw CharacterChange.Refuse("status", $"{record.Name} não tem Quick Fix; só Treatment ({def?.Treatment})."),
+                throw CharacterChange.Refuse("status", L.T($"{record.Name} não tem Quick Fix; só Treatment ({def?.Treatment}).", $"{record.Name} has no Quick Fix; Treatment only ({def?.Treatment}).")),
             InjuryStatus.QuickFixed when def!.QuickFixHeals =>
                 record with { Status = InjuryStatus.Healed, QuickFixedAt = change.Now, ResolvedAt = change.Now, QuickFixNote = request.Note },
             InjuryStatus.QuickFixed => record with { Status = InjuryStatus.QuickFixed, QuickFixedAt = change.Now, QuickFixNote = request.Note },
@@ -241,10 +242,10 @@ public sealed class CombatOperations(CharacterRuleBook rules, CharacterCalculato
         };
         change.Log(CharacterEventKind.Injury, "injury-status", updated.Status switch
         {
-            InjuryStatus.Healed when request.Status == InjuryStatus.QuickFixed => $"{record.Name}: o Quick Fix removeu o efeito de vez.",
+            InjuryStatus.Healed when request.Status == InjuryStatus.QuickFixed => L.T($"{record.Name}: o Quick Fix removeu o efeito de vez.", $"{record.Name}: the Quick Fix removed the effect for good."),
             InjuryStatus.Healed => $"{record.Name}: tratada ({def?.Treatment}).",
-            InjuryStatus.QuickFixed => $"{record.Name}: Quick Fix ({def?.QuickFix}); efeito suspenso pelo resto do dia.",
-            _ => $"{record.Name}: efeito ativo de novo.",
+            InjuryStatus.QuickFixed => L.T($"{record.Name}: Quick Fix ({def?.QuickFix}); efeito suspenso pelo resto do dia.", $"{record.Name}: Quick Fix ({def?.QuickFix}); effect suspended for the rest of the day."),
+            _ => L.T($"{record.Name}: efeito ativo de novo.", $"{record.Name}: effect active again."),
         }, manual: true);
         return sheet with { Injuries = sheet.Injuries.Select(i => i.Id == id ? updated : i).ToList() };
     }
@@ -252,15 +253,15 @@ public sealed class CombatOperations(CharacterRuleBook rules, CharacterCalculato
     /// <summary>Removes an injury entered by mistake (logged as a manual change).</summary>
     public static CharacterSheet RemoveInjury(CharacterSheet sheet, string id, CharacterChange change)
     {
-        var record = sheet.Injuries.FirstOrDefault(i => i.Id == id) ?? throw CharacterChange.Refuse("id", "Lesão não encontrada.");
-        change.Log(CharacterEventKind.Injury, "injury-removed", $"{record.Name} removida do registro (lançamento corrigido).", manual: true);
+        var record = sheet.Injuries.FirstOrDefault(i => i.Id == id) ?? throw CharacterChange.Refuse("id", L.T("Lesão não encontrada.", "Injury not found."));
+        change.Log(CharacterEventKind.Injury, "injury-removed", L.T($"{record.Name} removida do registro (lançamento corrigido).", $"{record.Name} removed from the record (entry corrected)."), manual: true);
         return sheet with { Injuries = sheet.Injuries.Where(i => i.Id != id).ToList() };
     }
 
     public static CharacterSheet ClearConditions(CharacterSheet sheet, CharacterChange change)
     {
         if (sheet.Combat.Conditions.Count == 0) return sheet;
-        change.Log(CharacterEventKind.Combat, "conditions-cleared", $"Condições removidas: {string.Join(", ", sheet.Combat.Conditions)}.", manual: true);
+        change.Log(CharacterEventKind.Combat, "conditions-cleared", L.T($"Condições removidas: {string.Join(", ", sheet.Combat.Conditions)}.", $"Conditions removed: {string.Join(", ", sheet.Combat.Conditions)}."), manual: true);
         return sheet with { Combat = sheet.Combat with { Conditions = [] } };
     }
 }

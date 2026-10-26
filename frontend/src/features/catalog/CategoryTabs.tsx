@@ -3,15 +3,16 @@ import clsx from 'clsx';
 import type { CategorySummary } from '../../api/types';
 import { CategoryIcon } from '../../components/art/CategoryIcon';
 import styles from './CategoryTabs.module.css';
+import { t, tv } from '../../i18n';
 
 export function CategoryTabs({ categories, view }: { categories: CategorySummary[]; view: string }) {
   return (
-    <nav className={styles.tabs} aria-label="Categorias">
+    <nav className={styles.tabs} aria-label={t('Categorias', 'Categories')}>
       {categories.map((c) => (
         <NavLink key={c.key} to={`/catalog/${c.key}?view=${view}`} className={({ isActive }) => clsx(styles.tab, isActive && styles.active)}
-          title={`${c.label} — ${c.itemCount} itens`}>
+          title={t(`${tv(c.label)} — ${c.itemCount} itens`, `${tv(c.label)} — ${c.itemCount} items`)}>
           <CategoryIcon icon={c.icon} size={26} className={styles.icon} />
-          <span className={styles.label}>{c.label}</span>
+          <span className={styles.label}>{tv(c.label)}</span>
           {c.sublabel && <span className={styles.sublabel}>{c.sublabel}</span>}
           <span className={styles.count}>{c.itemCount}</span>
         </NavLink>

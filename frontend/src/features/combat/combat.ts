@@ -1,9 +1,10 @@
 // Pure helpers for the combat table: labels and which attack modes a weapon offers. The rules themselves (DVs,
 // damage, armor, Critical Injuries) are applied by the server (POST /api/encounters/{id}/attack).
 import type { AttackMode, FighterView, WeaponView, WoundState } from '../../api/encounterTypes';
+import { t } from '../../i18n';
 
 export const WOUND_LABEL: Record<WoundState, string> = {
-  Unhurt: 'Inteiro',
+  Unhurt: t('Inteiro', 'Unhurt'),
   Lightly: 'Lightly Wounded',
   Seriously: 'Seriously Wounded',
   Mortally: 'Mortally Wounded',
@@ -17,13 +18,13 @@ export const WOUND_TONE: Record<WoundState, 'default' | 'cyan' | 'amber' | 'red'
 };
 
 export const MODE_LABEL: Record<AttackMode, string> = {
-  Single: 'Ataque normal',
+  Single: t('Ataque normal', 'Normal attack'),
   Autofire: 'Autofire',
-  AimedHead: 'Mirado: cabeça (−8)',
-  AimedHand: 'Mirado: item na mão (−8)',
-  AimedLeg: 'Mirado: perna (−8)',
+  AimedHead: t('Mirado: cabeça (−8)', 'Aimed: head (−8)'),
+  AimedHand: t('Mirado: item na mão (−8)', 'Aimed: held item (−8)'),
+  AimedLeg: t('Mirado: perna (−8)', 'Aimed: leg (−8)'),
   ShotgunShell: 'Shotgun Shell',
-  Explosive: 'Explosivo (área)',
+  Explosive: t('Explosivo (área)', 'Explosive (area)'),
   Suppressive: 'Suppressive Fire',
 };
 

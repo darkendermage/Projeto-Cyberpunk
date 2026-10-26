@@ -1,6 +1,7 @@
 using CyberpunkDb.Application.Common;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Api.Infrastructure;
 
@@ -19,11 +20,11 @@ public sealed class ApiExceptionHandler(IProblemDetailsService problemDetails, I
             NotFoundException n => new ProblemDetails { Status = StatusCodes.Status404NotFound, Title = n.Message },
             ConflictException c => new ProblemDetails { Status = StatusCodes.Status409Conflict, Title = c.Message },
             BadHttpRequestException b => new ProblemDetails { Status = StatusCodes.Status400BadRequest, Title = b.Message },
-            OperationCanceledException => new ProblemDetails { Status = 499, Title = "Requisição cancelada." },
+            OperationCanceledException => new ProblemDetails { Status = 499, Title = L.T("Requisição cancelada.", "Request canceled.") },
             _ => new ProblemDetails
             {
                 Status = StatusCodes.Status500InternalServerError,
-                Title = "Falha inesperada no servidor. Tente novamente.",
+                Title = L.T("Falha inesperada no servidor. Tente novamente.", "Unexpected server failure. Try again."),
             },
         };
 

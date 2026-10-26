@@ -15,8 +15,8 @@ const lines = [
 ];
 
 describe('skill helpers', () => {
-  it('labels skills in Portuguese with the specialization', () => {
-    expect(skillLabel(lines[1])).toBe('Idioma (Streetslang)');
+  it('labels skills with the book name and the specialization (English is the default)', () => {
+    expect(skillLabel(lines[1])).toBe('Language (Streetslang)');
     expect(skillLabel(line({ name: 'Brawling' }))).toBe('Brawling');
   });
 

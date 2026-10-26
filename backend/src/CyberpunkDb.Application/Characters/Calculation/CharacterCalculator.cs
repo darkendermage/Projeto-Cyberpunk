@@ -2,6 +2,7 @@ using CyberpunkDb.Application.Characters.Rules;
 using CyberpunkDb.Application.Npcs;
 using CyberpunkDb.Application.Npcs.Validation;
 using CyberpunkDb.Domain.Enums;
+using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.Characters.Calculation;
 
@@ -309,7 +310,7 @@ public sealed class CharacterCalculator(CharacterRuleBook rules)
         WoundState.Seriously => "Seriously Wounded",
         WoundState.Mortally => "Mortally Wounded",
         WoundState.Lightly => "Lightly Wounded",
-        _ => "Sem ferimentos",
+        _ => L.T("Sem ferimentos", "Unhurt"),
     };
 
     // ------------------------------------------------------------ Humanity

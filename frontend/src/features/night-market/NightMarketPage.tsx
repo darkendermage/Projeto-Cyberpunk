@@ -16,6 +16,7 @@ import { FEATURE_LABEL, KIND_LABEL } from './nightMarket';
 import { SourcesView } from './SourcesView';
 import { ToolsView } from './ToolsView';
 import styles from './NightMarket.module.css';
+import { t, tv } from '../../i18n';
 
 type Tab = 'markets' | 'index' | 'tools' | 'sources';
 
@@ -35,15 +36,14 @@ function Home({ rules }: { rules: NightMarketRules }) {
       <header className={page.header}>
         <h1>Night Market</h1>
         <p className={page.lead}>
-          Monte a feira da noite pelas tabelas do Core (p.338–339), visite os seis mercados do Black Chrome ou as bancas dos Interface RED,
-          compre pelo CBK com Haggle e acompanhe Door Prizes e Mystery Boxes. Itens Damaged e Destroyed seguem o Interface RED 5.
+          {t('Monte a feira da noite pelas tabelas do Core (p.338–339), visite os seis mercados do Black Chrome ou as bancas dos Interface RED, compre pelo CBK com Haggle e acompanhe Door Prizes e Mystery Boxes. Itens Damaged e Destroyed seguem o Interface RED 5.', 'Build tonight\'s market with the Core tables (p.338–339), visit the six Black Chrome markets or the Interface RED stalls, buy through the CBK with Haggle and track Door Prizes and Mystery Boxes. Damaged and Destroyed items follow Interface RED 5.')}
         </p>
       </header>
-      <Segmented ariaLabel="Seção" value={tab} onChange={(t) => setParams(t === 'markets' ? {} : { tab: t })} options={[
-        { value: 'markets', label: 'Mercados' },
+      <Segmented ariaLabel={t('Seção', 'Section')} value={tab} onChange={(entry) => setParams(entry === 'markets' ? {} : { tab: entry })} options={[
+        { value: 'markets', label: t('Mercados', 'Markets') },
         { value: 'index', label: 'Night Market Index' },
-        { value: 'tools', label: 'Ferramentas do Fixer' },
-        { value: 'sources', label: 'Fontes e parâmetros' },
+        { value: 'tools', label: t('Ferramentas do Fixer', 'Fixer tools') },
+        { value: 'sources', label: t('Fontes e parâmetros', 'Sources and parameters') },
       ]} />
       {tab === 'markets' && <Markets rules={rules} />}
       {tab === 'index' && <IndexView rules={rules} />}
@@ -58,18 +58,18 @@ function Markets({ rules }: { rules: NightMarketRules }) {
   return (
     <>
       <section className={page.section}>
-        <h2>Mercados salvos</h2>
+        <h2>{t('Mercados salvos', 'Saved markets')}</h2>
         {markets.isLoading ? <Spinner /> : (markets.data ?? []).length === 0 ? (
-          <EmptyState title="Nenhum mercado aberto" icon={<Store size={30} />}>Gere o primeiro abaixo.</EmptyState>
+          <EmptyState title={t('Nenhum mercado aberto', 'No markets open')} icon={<Store size={30} />}>{t('Gere o primeiro abaixo.', 'Generate the first one below.')}</EmptyState>
         ) : (
           <div className={styles.library}>
             {markets.data!.map((m) => (
               <Link key={m.id} to={`/night-market/${m.id}`} className={styles.marketCard}>
-                <h3>{m.name}</h3>
+                <h3>{tv(m.name)}</h3>
                 <span className={styles.muted}>{m.presetName} · {m.organizer}{m.operatorRank != null ? ` (Operator ${m.operatorRank})` : ''}</span>
                 <span className={styles.row}>
-                  <Badge tone={m.status === 'Open' ? 'cyan' : 'default'}>{m.status === 'Open' ? 'Aberto' : 'Encerrado'}</Badge>
-                  <span className={styles.source}>{m.listings} listagens · {m.sales} vendas · {formatEb(m.revenue)}eb</span>
+                  <Badge tone={m.status === 'Open' ? 'cyan' : 'default'}>{m.status === 'Open' ? t('Aberto', 'Open') : t('Encerrado', 'Closed')}</Badge>
+                  <span className={styles.source}>{m.listings} {t('listagens · ', 'listings · ')}{m.sales} {t('vendas · ', 'sales · ')}{formatEb(m.revenue)}eb</span>
                 </span>
               </Link>
             ))}
@@ -84,7 +84,7 @@ function Markets({ rules }: { rules: NightMarketRules }) {
 const GROUPS: { title: string; ids: (p: MarketPreset) => boolean }[] = [
   { title: 'Core Rulebook', ids: (p) => p.id === 'core' || p.id === 'custom' },
   { title: 'Black Chrome (BC p.131–156)', ids: (p) => p.id.startsWith('bc-') },
-  { title: 'Interface RED e DLCs', ids: (p) => !p.id.startsWith('bc-') && p.id !== 'core' && p.id !== 'custom' },
+  { title: t('Interface RED e DLCs', 'Interface RED and DLCs'), ids: (p) => !p.id.startsWith('bc-') && p.id !== 'core' && p.id !== 'custom' },
 ];
 
 type GoodsChoice = 'preset' | 'roll' | 'pick';
@@ -143,7 +143,7 @@ function CreateMarket({ rules }: { rules: NightMarketRules }) {
     mutationFn: () => marketApi.create(body()),
     onSuccess: (market) => {
       store(market);
-      toast.notify(`${market.name} montado (seed ${market.seed}).`);
+      toast.notify(t(`${market.name} montado (seed ${market.seed}).`, `${market.name} set up (seed ${market.seed}).`));
       navigate(`/night-market/${market.id}`);
     },
     onError: (e) => toast.notify(problemMessage(e), 'error'),
@@ -154,17 +154,17 @@ function CreateMarket({ rules }: { rules: NightMarketRules }) {
 
   return (
     <section className={page.section}>
-      <h2>Novo mercado</h2>
+      <h2>{t('Novo mercado', 'New market')}</h2>
       {GROUPS.map((g) => (
         <div key={g.title} className={styles.presetGroup}>
-          <p className={styles.label}>{g.title}</p>
+          <p className={styles.label}>{tv(g.title)}</p>
           <div className={styles.presets}>
             {rules.presets.filter(g.ids).map((p) => (
               <button key={p.id} type="button" className={clsx(styles.preset, p.id === presetId && styles.presetActive)} onClick={() => pick(p)}>
                 <span className={styles.presetLetter}>{p.letter}</span>
-                <span className={styles.presetName}>{p.name}</span>
+                <span className={styles.presetName}>{tv(p.name)}</span>
                 <span className={styles.presetMeta}>
-                  {KIND_LABEL[p.kind]} · {p.organizer.name}{p.organizer.operatorRank != null ? ` (Op ${p.organizer.operatorRank})` : ''}
+                  {KIND_LABEL[p.kind]} · {tv(p.organizer.name)}{p.organizer.operatorRank != null ? ` (Op ${p.organizer.operatorRank})` : ''}
                 </span>
                 <span className={styles.source}>{p.source}</span>
               </button>
@@ -176,10 +176,10 @@ function CreateMarket({ rules }: { rules: NightMarketRules }) {
       <div className={styles.details} style={{ marginTop: 16 }}>
         <div className={styles.dialog}>
           <div className={styles.grid3}>
-            <Field label="Nome (opcional)"><input className={styles.text} value={name} onChange={(e) => setName(e.target.value)} placeholder={`${preset.name} — hoje`} /></Field>
-            <Field label="Organizador"><input className={styles.text} value={organizer} onChange={(e) => setOrganizer(e.target.value)} /></Field>
+            <Field label={t('Nome (opcional)', 'Name (optional)')}><input className={styles.text} value={name} onChange={(e) => setName(e.target.value)} placeholder={t(`${tv(preset.name)} — hoje`, `${tv(preset.name)} — tonight`)} /></Field>
+            <Field label={t('Organizador', 'Organizer')}><input className={styles.text} value={organizer} onChange={(e) => setOrganizer(e.target.value)} /></Field>
             <div className={styles.row}>
-              <Field label="Operator Rank" hint={preset.kind === 'NightMarket' ? `Night Market: ${op.nightMarketRank.value}+ (${op.nightMarketRank.reference})` : undefined}>
+              <Field label="Operator Rank" hint={preset.kind === 'NightMarket' ? `Night Market: ${tv(op.nightMarketRank.value)}+ (${op.nightMarketRank.reference})` : undefined}>
                 <NumberInput className={styles.number} min={0} max={10} allowEmpty value={rank} onChange={setRank} />
               </Field>
               <Field label="COOL + Trading">
@@ -188,17 +188,17 @@ function CreateMarket({ rules }: { rules: NightMarketRules }) {
             </div>
           </div>
 
-          <Field label="Tipos de mercadoria" hint={`${rules.rules.generator.goodsRolls.reference}: 1d6 duas vezes, sem repetir; ${rules.rules.generator.linesPerType.value} linhas por tipo.`}>
-            <Segmented ariaLabel="Mercadorias" value={choice} onChange={setChoice} options={[
-              { value: 'preset', label: preset.goods === 'Roll' ? 'Rolar (Core)' : preset.goods === 'Suggested' ? 'Sugeridas pelo livro' : preset.goods === 'None' ? 'Só o estoque' : 'Escolher' },
-              ...(preset.goods !== 'Roll' ? [{ value: 'roll' as const, label: 'Rolar 1d6 ×2' }] : []),
-              { value: 'pick', label: 'Escolher' },
+          <Field label={t('Tipos de mercadoria', 'Types of goods')} hint={t(`${rules.rules.generator.goodsRolls.reference}: 1d6 duas vezes, sem repetir; ${tv(rules.rules.generator.linesPerType.value)} linhas por tipo.`, `${rules.rules.generator.goodsRolls.reference}: 1d6 twice, no repeats; ${tv(rules.rules.generator.linesPerType.value)} lines per type.`)}>
+            <Segmented ariaLabel={t('Mercadorias', 'Goods')} value={choice} onChange={setChoice} options={[
+              { value: 'preset', label: preset.goods === 'Roll' ? t('Rolar (Core)', 'Roll (Core)') : preset.goods === 'Suggested' ? t('Sugeridas pelo livro', 'Suggested by the book') : preset.goods === 'None' ? t('Só o estoque', 'Stock only') : t('Escolher', 'Choose') },
+              ...(preset.goods !== 'Roll' ? [{ value: 'roll' as const, label: t('Rolar 1d6 ×2', 'Roll 1d6 ×2') }] : []),
+              { value: 'pick', label: t('Escolher', 'Choose') },
             ]} />
           </Field>
           {choice === 'pick' && (
             <div className={styles.row}>
               {goodsTypes.map((g) => (
-                <Checkbox key={g.id} checked={goods.includes(g.id)} label={`${g.roll}. ${g.name}`}
+                <Checkbox key={g.id} checked={goods.includes(g.id)} label={`${g.roll}. ${tv(g.name)}`}
                   onChange={(v) => setGoods(v ? [...goods, g.id] : goods.filter((x) => x !== g.id))} />
               ))}
             </div>
@@ -208,7 +208,7 @@ function CreateMarket({ rules }: { rules: NightMarketRules }) {
               {goodsForLines.map((id) => {
                 const g = goodsTypes.find((x) => x.id === id)!;
                 return (
-                  <Field key={id} label={`Linhas: ${g.name}`} hint="Vazio: 1d10.">
+                  <Field key={id} label={t(`Linhas: ${tv(g.name)}`, `Lines: ${tv(g.name)}`)} hint={t('Vazio: 1d10.', 'Empty: 1d10.')}>
                     <NumberInput className={styles.number} min={1} max={10} allowEmpty value={lines[id] ?? null}
                       onChange={(v) => setLines({ ...lines, [id]: v })} />
                   </Field>
@@ -217,58 +217,58 @@ function CreateMarket({ rules }: { rules: NightMarketRules }) {
             </div>
           )}
 
-          <Field label={`Livros do acervo (${chosenBooks.length})`} hint={presetId === 'core' ? 'O mercado do Core usa só o Core Rulebook; ligue outros livros para variar as linhas "de X eb".' : 'Vale para as linhas que descrevem um tipo de item.'}>
+          <Field label={t(`Livros do acervo (${chosenBooks.length})`, `Books in the collection (${chosenBooks.length})`)} hint={presetId === 'core' ? t('O mercado do Core usa só o Core Rulebook; ligue outros livros para variar as linhas "de X eb".', 'The Core market uses only the Core Rulebook; turn on other books to vary the "X eb" lines.') : t('Vale para as linhas que descrevem um tipo de item.', 'Applies to lines that describe a type of item.')}>
             <div className={styles.row}>
               {rules.books.map((b) => (
-                <Checkbox key={b.name} checked={chosenBooks.includes(b.name)} count={b.items} label={b.name}
+                <Checkbox key={b.name} checked={chosenBooks.includes(b.name)} count={b.items} label={tv(b.name)}
                   onChange={(v) => setBooks(v ? [...chosenBooks, b.name] : chosenBooks.filter((x) => x !== b.name))} />
               ))}
             </div>
           </Field>
 
           <div className={styles.grid3}>
-            <Field label="Seed (opcional)" hint="A mesma seed monta o mesmo mercado.">
+            <Field label={t('Seed (opcional)', 'Seed (optional)')} hint={t('A mesma seed monta o mesmo mercado.', 'The same seed builds the same market.')}>
               <NumberInput className={styles.number} min={1} max={2147483646} allowEmpty value={seed} onChange={setSeed} />
             </Field>
-            <Field label="Itens Damaged (%)" hint={`Segunda mão: chance por listagem (regra complementar). Preço: ${rules.rules.condition.damagedSteps.reference}.`}>
+            <Field label={t('Itens Damaged (%)', 'Damaged items (%)')} hint={t(`Segunda mão: chance por listagem (regra complementar). Preço: ${rules.rules.condition.damagedSteps.reference}.`, `Second hand: chance per listing (complementary rule). Price: ${rules.rules.condition.damagedSteps.reference}.`)}>
               <NumberInput className={styles.number} min={0} max={100} value={damaged} onChange={setDamaged} />
             </Field>
             {!preset.id.startsWith('bc-') && (
-              <Field label="Itens do Black Chrome" hint={rules.rules.blackChrome.booths.reference}>
+              <Field label={t('Itens do Black Chrome', 'Black Chrome items')} hint={rules.rules.blackChrome.booths.reference}>
                 <Select value={bcLetter} onChange={(e) => setBcLetter(e.target.value)}>
-                  <option value="">Nenhum</option>
-                  {rules.presets.filter((p) => p.id.startsWith('bc-')).map((p) => <option key={p.letter} value={p.letter}>{p.letter} · {p.name}</option>)}
+                  <option value="">{t('Nenhum', 'None')}</option>
+                  {rules.presets.filter((p) => p.id.startsWith('bc-')).map((p) => <option key={p.letter} value={p.letter}>{p.letter} · {tv(p.name)}</option>)}
                 </Select>
               </Field>
             )}
           </div>
           <div className={styles.row}>
-            {(damaged ?? 0) > 0 && <Switch checked={scam} onChange={setScam} label="Golpe: vender os Damaged como novos" />}
-            <Switch checked={related} onChange={setRelated} label="Itens de outros livros por tipo (regra complementar)" />
+            {(damaged ?? 0) > 0 && <Switch checked={scam} onChange={setScam} label={t('Golpe: vender os Damaged como novos', 'Scam: sell the Damaged ones as new')} />}
+            <Switch checked={related} onChange={setRelated} label={t('Itens de outros livros por tipo (regra complementar)', 'Items from other books by type (complementary rule)')} />
             {preset.kind !== 'MidnightMarket' && (
-              <Switch checked={midnight} onChange={setMidnight} label={`Midnight Market (Operator ${op.midnightMarketRank.value}+)`} />
+              <Switch checked={midnight} onChange={setMidnight} label={`Midnight Market (Operator ${tv(op.midnightMarketRank.value)}+)`} />
             )}
           </div>
           <div className={styles.row}>
             <Button variant="primary" icon={<Dices size={15} />} onClick={() => create.mutate()}
               disabled={create.isPending || (choice === 'pick' && goods.length === 0 && preset.goods === 'Pick')}>
-              Gerar mercado
+              {t('Gerar mercado', 'Generate market')}
             </Button>
           </div>
         </div>
 
         <aside className={styles.dialog}>
           <dl className={styles.facts}>
-            <dt>Tipo</dt><dd>{KIND_LABEL[preset.kind]} · letra {preset.letter}</dd>
-            <dt>Quem</dt><dd>{preset.organizer.name} · {preset.organizer.role}</dd>
-            {preset.summary && <><dt>Resumo</dt><dd>{preset.summary}</dd></>}
-            {preset.frequency && <><dt>Quando</dt><dd>{preset.frequency}</dd></>}
-            {preset.location && <><dt>Onde</dt><dd>{preset.location}</dd></>}
-            {preset.sells && <><dt>Vende</dt><dd>{preset.sells}</dd></>}
-            {preset.invite && <><dt>Convite</dt><dd>{preset.invite}</dd></>}
-            {preset.admission && <><dt>Entrada</dt><dd>{formatEb(preset.admission.price)}eb · {preset.admission.label}</dd></>}
-            {preset.features.length > 0 && <><dt>Extras</dt><dd className={styles.tags}>{preset.features.map((f) => <Badge key={f} tone="amber">{FEATURE_LABEL[f]}</Badge>)}</dd></>}
-            <dt>Fonte</dt><dd className={styles.source}>{preset.source}</dd>
+            <dt>{t('Tipo', 'Type')}</dt><dd>{KIND_LABEL[preset.kind]} {t('· letra ', '· letter ')}{preset.letter}</dd>
+            <dt>{t('Quem', 'Who')}</dt><dd>{tv(preset.organizer.name)} · {preset.organizer.role}</dd>
+            {preset.summary && <><dt>{t('Resumo', 'Summary')}</dt><dd>{tv(preset.summary)}</dd></>}
+            {preset.frequency && <><dt>{t('Quando', 'When')}</dt><dd>{preset.frequency}</dd></>}
+            {preset.location && <><dt>{t('Onde', 'Where')}</dt><dd>{tv(preset.location)}</dd></>}
+            {preset.sells && <><dt>{t('Vende', 'Sells')}</dt><dd>{tv(preset.sells)}</dd></>}
+            {preset.invite && <><dt>{t('Convite', 'Invitation')}</dt><dd>{preset.invite}</dd></>}
+            {preset.admission && <><dt>{t('Entrada', 'Admission')}</dt><dd>{formatEb(preset.admission.price)}eb · {tv(preset.admission.label)}</dd></>}
+            {preset.features.length > 0 && <><dt>{t('Extras', 'Extras')}</dt><dd className={styles.tags}>{preset.features.map((f) => <Badge key={f} tone="amber">{FEATURE_LABEL[f]}</Badge>)}</dd></>}
+            <dt>{t('Fonte', 'Source')}</dt><dd className={styles.source}>{preset.source}</dd>
           </dl>
         </aside>
       </div>

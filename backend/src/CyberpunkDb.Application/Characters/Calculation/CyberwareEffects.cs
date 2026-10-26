@@ -1,5 +1,6 @@
 using CyberpunkDb.Application.Characters.Rules;
 using CyberpunkDb.Application.Npcs;
+using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.Characters.Calculation;
 
@@ -48,11 +49,15 @@ public static class CyberwareEffects
     private static string Describe(CharacterRuleBook rules, ActiveCyberwareEffect a)
     {
         var e = a.Effect;
-        if (e.Note is { Length: > 0 } note) return note;
+        if (e.Note is { Length: > 0 } note) return L.D(note);
         if (e.Stat is { } stat)
-            return $"{stat} +{e.Add}{(e.Stacks ? " por instalação" : "")}{(e.Max is { } max ? $", até {max}" : "")}" +
-                   (e.Stacks && a.Count > 1 ? $" ({a.Count} instaladas)" : "") + ".";
-        var skills = string.Join(", ", e.Skills.Select(id => rules.FindSkill(id) is { } s ? s.NamePt ?? s.Name : id));
-        return $"+{e.Add} em {skills}{(e.Condition is { Length: > 0 } c ? $" ({c})" : "")}.";
+        {
+            var perInstallation = e.Stacks ? L.T(" por instalação", " per installation") : "";
+            var upTo = e.Max is { } max ? L.T($", até {max}", $", up to {max}") : "";
+            var installed = e.Stacks && a.Count > 1 ? L.T($" ({a.Count} instaladas)", $" ({a.Count} installed)") : "";
+            return $"{stat} +{e.Add}{perInstallation}{upTo}{installed}.";
+        }
+        var skills = string.Join(", ", e.Skills.Select(id => rules.FindSkill(id) is { } s ? L.SkillName(s.Name, s.NamePt) : id));
+        return L.T($"+{e.Add} em {skills}", $"+{e.Add} to {skills}") + (e.Condition is { Length: > 0 } c ? $" ({L.D(c)})" : "") + ".";
     }
 }

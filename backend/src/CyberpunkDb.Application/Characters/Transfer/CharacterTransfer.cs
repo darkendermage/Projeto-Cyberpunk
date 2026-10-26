@@ -2,6 +2,7 @@ using System.Text.RegularExpressions;
 using CyberpunkDb.Application.Common;
 using CyberpunkDb.Application.Npcs;
 using CyberpunkDb.Domain.Enums;
+using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.Characters.Transfer;
 
@@ -74,7 +75,7 @@ public static partial class CharacterTransfer
             if (w.LoadedAmmoItemId is { } loaded)
             {
                 ammo = Map(loaded);
-                if (ammo is null) missing.Add($"{Label(loaded)} (munição carregada)");
+                if (ammo is null) missing.Add(L.T($"{Label(loaded)} (munição carregada)", $"{Label(loaded)} (loaded ammo)"));
             }
             return e with { Weapon = w with { LoadedAmmoItemId = ammo, Attachments = (w.Attachments ?? []).Where(owned.Contains).ToList() } };
         }).ToList();
@@ -87,7 +88,7 @@ public static partial class CharacterTransfer
             foreach (var o in orphans)
             {
                 dropped.Add(o.InstanceId);
-                missing.Add($"{Label(o.ItemId)} (instalado numa peça que ficou de fora)");
+                missing.Add(L.T($"{Label(o.ItemId)} (instalado numa peça que ficou de fora)", $"{Label(o.ItemId)} (installed in a piece that was left out)"));
             }
             grew = orphans.Count > 0;
         }

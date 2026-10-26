@@ -3,6 +3,7 @@ import type { DefenseRule, NetArchitectureDetail, NetArchitectureRules, NetConte
 import { Badge, Button, Checkbox, Modal, Select } from '../../components/ui/ui';
 import { contentLabel, floorName, formatEbShort, GROUP_LABEL, type Lookups } from './netArchitecture';
 import styles from './NetArchitecture.module.css';
+import { t, tv } from '../../i18n';
 
 type Run = (path: string, body?: Record<string, unknown>, method?: 'POST' | 'PUT', done?: string) => void;
 
@@ -32,28 +33,28 @@ function Editor({ floor, detail, rules, lookups, busy, run }: {
     ? [{ id: 'Lobby', label: `Lobby (${r.lobbyTable.source})`, rows: r.lobbyTable.value }]
     : [own, harder].filter(Boolean).map((d) => ({
       id: d!,
-      label: d === own ? `Tabela ${r.difficulties.value.find((x) => x.id === d)!.label}` : `Boss Floor: ${r.difficulties.value.find((x) => x.id === d)!.label}`,
-      rows: r.bodyTables.value.find((t) => t.difficulty === d)!.rows,
+      label: d === own ? t(`Tabela ${r.difficulties.value.find((x) => x.id === d)!.label}`, `${r.difficulties.value.find((x) => x.id === d)!.label} table`) : `Boss Floor: ${r.difficulties.value.find((x) => x.id === d)!.label}`,
+      rows: r.bodyTables.value.find((entry) => entry.difficulty === d)!.rows,
     }));
-  const [table, setTable] = useState(floor.table && tables.some((t) => t.id === floor.table) ? floor.table : tables[0].id);
-  const rows = tables.find((t) => t.id === table)!.rows;
+  const [table, setTable] = useState(floor.table && tables.some((entry) => entry.id === floor.table) ? floor.table : tables[0].id);
+  const rows = tables.find((entry) => entry.id === table)!.rows;
 
   return (
     <div className={styles.dialog}>
       <section>
-        <h3 className={styles.label}>Conteúdo atual</h3>
-        {floor.contents.length === 0 && <p className={styles.muted}>Andar vazio.</p>}
+        <h3 className={styles.label}>{t('Conteúdo atual', 'Current content')}</h3>
+        {floor.contents.length === 0 && <p className={styles.muted}>{t('Andar vazio.', 'Empty floor.')}</p>}
         {floor.contents.map((c) => (
           <ContentEditor key={c.id} content={c} detail={detail} rules={rules} lookups={lookups} busy={busy} run={run} />
         ))}
       </section>
 
       <section>
-        <h3 className={styles.label}>Trocar pela linha de uma tabela</h3>
+        <h3 className={styles.label}>{t('Trocar pela linha de uma tabela', 'Replace with a table row')}</h3>
         {tables.length > 1 && (
           <div className={styles.row}>
-            <Select aria-label="Tabela" value={table} onChange={(e) => setTable(e.target.value)}>
-              {tables.map((t) => <option key={t.id} value={t.id}>{t.label}</option>)}
+            <Select aria-label={t('Tabela', 'Table')} value={table} onChange={(e) => setTable(e.target.value)}>
+              {tables.map((entry) => <option key={entry.id} value={entry.id}>{tv(entry.label)}</option>)}
             </Select>
             <span className={styles.source}>{table === own ? r.bodyTables.source : r.bossFloor.source}</span>
           </div>
@@ -62,7 +63,7 @@ function Editor({ floor, detail, rules, lookups, busy, run }: {
           {rows.map((row) => (
             <button key={row.roll} type="button" className={styles.rowOption} disabled={busy}
               aria-pressed={floor.table === table && floor.roll === row.roll}
-              onClick={() => run(`floors/${floor.id}/set`, { table, roll: row.roll }, 'POST', `${floor.id}: linha ${row.roll}.`)}>
+              onClick={() => run(`floors/${floor.id}/set`, { table, roll: row.roll }, 'POST', t(`${floor.id}: linha ${row.roll}.`, `${floor.id}: row ${row.roll}.`))}>
               <span className={styles.rollNumber}>{row.roll}</span>
               <span>{rowLabel(row, lookups)}</span>
             </button>
@@ -85,11 +86,11 @@ function ContentEditor({ content, detail, rules, lookups, busy, run }: {
     return (
       <div className={styles.contentEditor}>
         <span className={styles.kind}>{contentLabel(content, lookups)}</span>
-        <Select aria-label="Trocar Black ICE" value={content.slug ?? ''} disabled={busy}
-          onChange={(e) => run(`contents/${content.id}/ice`, { slug: e.target.value }, 'POST', 'Black ICE trocada.')}>
-          {same.map((i) => <option key={i.slug} value={i.slug}>{i.name} ({i.class === 'AntiProgram' ? 'Anti-Program' : 'Anti-Personnel'})</option>)}
+        <Select aria-label={t('Trocar Black ICE', 'Swap Black ICE')} value={content.slug ?? ''} disabled={busy}
+          onChange={(e) => run(`contents/${content.id}/ice`, { slug: e.target.value }, 'POST', t('Black ICE trocada.', 'Black ICE swapped.'))}>
+          {same.map((i) => <option key={i.slug} value={i.slug}>{tv(i.name)} ({i.class === 'AntiProgram' ? 'Anti-Program' : 'Anti-Personnel'})</option>)}
         </Select>
-        <span className={styles.source}>Só Programs de mesmo custo ({current?.price != null ? formatEbShort(current.price) : '?'}): {rules.rules.sameCostSwap.source}</span>
+        <span className={styles.source}>{t('Só Programs de mesmo custo (', 'Only Programs of the same cost (')}{current?.price != null ? formatEbShort(current.price) : '?'}): {rules.rules.sameCostSwap.source}</span>
       </div>
     );
   }
@@ -132,40 +133,40 @@ function NodeEditor({ content, detail, rules, lookups, busy, run }: {
     deviceId: choice.startsWith('v:') ? choice.slice(2) : null,
     label: label.trim() || null,
     demonId: demonId || null,
-  }, 'POST', 'Control Node atualizado.');
+  }, 'POST', t('Control Node atualizado.', 'Control Node updated.'));
 
   return (
     <div className={styles.contentEditor}>
       <span className={styles.kind}>Control Node DV{content.dv}</span>
       <div className={styles.row}>
-        <Select aria-label="Função do Control Node" value={choice} onChange={(e) => pick(e.target.value)}>
-          <option value="">Só descrição livre</option>
+        <Select aria-label={t('Função do Control Node', 'Control Node function')} value={choice} onChange={(e) => pick(e.target.value)}>
+          <option value="">{t('Só descrição livre', 'Free description only')}</option>
           {groups.map(({ g, items }) => (
             <optgroup key={g} label={GROUP_LABEL[g]}>
-              {items.map((d) => <option key={d.id} value={`d:${d.id}`}>{d.label} ({d.name})</option>)}
+              {items.map((d) => <option key={d.id} value={`d:${d.id}`}>{tv(d.label)} ({tv(d.name)})</option>)}
             </optgroup>
           ))}
-          <optgroup label="Dispositivo civil (CP:R p.199, p.210)">
-            {rules.rules.devices.value.map((d) => <option key={d.id} value={`v:${d.id}`}>{d.label}</option>)}
+          <optgroup label={t('Dispositivo civil (CP:R p.199, p.210)', 'Civilian device (CP:R p.199, p.210)')}>
+            {rules.rules.devices.value.map((d) => <option key={d.id} value={`v:${d.id}`}>{tv(d.label)}</option>)}
           </optgroup>
         </Select>
-        <Select aria-label="Demon que opera" value={demonId} onChange={(e) => setDemonId(e.target.value)}>
-          <option value="">Sem Demon</option>
-          {demons.map((d) => <option key={d.id} value={d.id}>{lookups.demons.get(d.type) ?? d.type} ({d.id})</option>)}
+        <Select aria-label={t('Demon que opera', 'Operating Demon')} value={demonId} onChange={(e) => setDemonId(e.target.value)}>
+          <option value="">{t('Sem Demon', 'No Demon')}</option>
+          {demons.map((d) => <option key={d.id} value={d.id}>{lookups.demons.get(d.type) ?? tv(d.type)} ({d.id})</option>)}
         </Select>
       </div>
       {defense && (
         <div className={styles.defenseInfo}>
           <span className={styles.row}>
             <Badge tone={defense.requiresDemon ? 'red' : 'default'}>{GROUP_LABEL[defense.group]}</Badge>
-            <span className={styles.source}>CP:R p.{defense.page} · neutralizar: DV{defense.counterDv} ({defense.counterTime})</span>
+            <span className={styles.source}>CP:R p.{defense.page} {t('· neutralizar: DV', '· neutralize: DV')}{defense.counterDv} ({tv(defense.counterTime)})</span>
           </span>
-          <span className={styles.stats}>{defense.description}</span>
-          <span className={styles.stats}><strong>Gatilho:</strong> {defense.trigger} · {defense.data}</span>
-          {defense.requiresDemon && demons.length === 0 && <span className={styles.warn}>Precisa de um Demon: adicione um no painel de Demons.</span>}
+          <span className={styles.stats}>{tv(defense.description)}</span>
+          <span className={styles.stats}><strong>{t('Gatilho:', 'Trigger:')}</strong> {tv(defense.trigger)} · {defense.data}</span>
+          {defense.requiresDemon && demons.length === 0 && <span className={styles.warn}>{t('Precisa de um Demon: adicione um no painel de Demons.', 'Needs a Demon: add one in the Demons panel.')}</span>}
           {defense.loadoutPicks > 0 && (
             <>
-              <span className={styles.label}>Armamento: escolha {defense.loadoutPicks}</span>
+              <span className={styles.label}>{t('Armamento: escolha ', 'Armament: pick ')}{defense.loadoutPicks}</span>
               {defense.loadoutOptions.map((o) => (
                 <Checkbox key={o} checked={loadout.includes(o)} onChange={() => toggle(o)} label={o} />
               ))}
@@ -173,10 +174,10 @@ function NodeEditor({ content, detail, rules, lookups, busy, run }: {
           )}
         </div>
       )}
-      <input aria-label="Descrição livre" value={label} maxLength={120} onChange={(e) => setLabel(e.target.value)}
-        placeholder="Detalhe opcional: 'portas do cofre', 'câmeras do saguão'…" />
+      <input aria-label={t('Descrição livre', 'Free description')} value={label} maxLength={120} onChange={(e) => setLabel(e.target.value)}
+        placeholder={t('Detalhe opcional: \'portas do cofre\', \'câmeras do saguão\'…', 'Optional detail: \'vault doors\', \'lobby cameras\'…')} />
       <div className={styles.row}>
-        <Button variant="primary" disabled={busy || (!choice && !label.trim())} onClick={save}>Salvar Control Node</Button>
+        <Button variant="primary" disabled={busy || (!choice && !label.trim())} onClick={save}>{t('Salvar Control Node', 'Save Control Node')}</Button>
       </div>
     </div>
   );

@@ -22,6 +22,13 @@ public sealed class ApiFactory : WebApplicationFactory<Program>
     /// <summary>Keeps the database file when this instance is disposed (used to simulate a restart).</summary>
     public bool KeepDatabase { get; init; }
 
+    /// <summary>The tests read the messages in Portuguese, the language the texts were written in.</summary>
+    protected override void ConfigureClient(HttpClient client)
+    {
+        base.ConfigureClient(client);
+        client.DefaultRequestHeaders.AcceptLanguage.ParseAdd("pt-BR");
+    }
+
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.UseEnvironment("Testing");

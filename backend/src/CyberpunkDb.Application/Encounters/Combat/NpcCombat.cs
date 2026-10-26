@@ -3,6 +3,7 @@ using CyberpunkDb.Application.Characters.Calculation;
 using CyberpunkDb.Application.Characters.Operations;
 using CyberpunkDb.Application.Characters.Rules;
 using CyberpunkDb.Application.Common;
+using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.Encounters.Combat;
 
@@ -35,7 +36,7 @@ public sealed class NpcCombat(CharacterRuleBook rules, CharacterCalculator calcu
         {
             var penalty = rules.Document.Derived.DeathSave.Value.PenaltyPerDamageWhileMortal;
             next = next with { DeathSavePenalty = next.DeathSavePenalty + penalty };
-            notes.Add($"Atingido enquanto Mortally Wounded: penalidade de Death Save +{penalty} e Critical Injury (CP:R p.187).");
+            notes.Add(L.T($"Atingido enquanto Mortally Wounded: penalidade de Death Save +{penalty} e Critical Injury (CP:R p.187).", $"Hit while Mortally Wounded: Death Save penalty +{penalty} and a Critical Injury (CP:R p.187)."));
         }
         var after = calculator.WoundStateFor(next.Hp, c.Snapshot!.MaxHp);
         return new DamageOutcome(next, sp, through, before, after, notes);
@@ -48,10 +49,10 @@ public sealed class NpcCombat(CharacterRuleBook rules, CharacterCalculator calcu
     {
         var table = location == InjuryLocation.Head ? rules.Document.Combat.CriticalInjuries.Head : rules.Document.Combat.CriticalInjuries.Body;
         var taken = active.ToHashSet(StringComparer.OrdinalIgnoreCase);
-        if (table.All(i => taken.Contains(i.Name))) throw RequestValidationException.For("critical", "O alvo já sofre todas as Critical Injuries dessa tabela.");
+        if (table.All(i => taken.Contains(i.Name))) throw RequestValidationException.For("critical", L.T("O alvo já sofre todas as Critical Injuries dessa tabela.", "The target already has every Critical Injury on that table."));
         if (typed is { } t)
         {
-            var pick = table.FirstOrDefault(i => i.Roll == t) ?? throw RequestValidationException.For("critRoll", "O 2d6 vai de 2 a 12.");
+            var pick = table.FirstOrDefault(i => i.Roll == t) ?? throw RequestValidationException.For("critRoll", L.T("O 2d6 vai de 2 a 12.", "The 2d6 goes from 2 to 12."));
             if (!taken.Contains(pick.Name)) return pick;
         }
         for (var i = 0; i < 200; i++)
@@ -74,21 +75,21 @@ public sealed class NpcCombat(CharacterRuleBook rules, CharacterCalculator calcu
     /// <summary>d10 + penalty under BODY; a natural 10 fails; each save adds +1 (CP:R p.188).</summary>
     public (Combatant Combatant, bool Survived, string Text) DeathSave(Combatant c, int roll)
     {
-        if (Wound(c) != WoundState.Mortally) throw RequestValidationException.For("roll", "Death Save só para quem está Mortally Wounded (CP:R p.188).");
-        if (c.Dead) throw RequestValidationException.For("roll", $"{c.Name} já morreu.");
+        if (Wound(c) != WoundState.Mortally) throw RequestValidationException.For("roll", L.T("Death Save só para quem está Mortally Wounded (CP:R p.188).", "Death Saves only for someone Mortally Wounded (CP:R p.188)."));
+        if (c.Dead) throw RequestValidationException.For("roll", L.T($"{c.Name} já morreu.", $"{c.Name} is already dead."));
         var rule = rules.Document.Derived.DeathSave.Value;
         var penalty = c.Injuries.Count(i => i.DeathSave) + c.DeathSavePenalty;
         var total = roll + penalty;
         var survived = !(rule.NaturalTenFails && roll == 10) && total < c.Snapshot!.Body;
         var next = c with { DeathSavePenalty = c.DeathSavePenalty + rule.PenaltyPerSave, Dead = !survived };
-        var text = $"Death Save: d10 {roll} + {penalty} = {total} contra BODY {c.Snapshot.Body}: {(survived ? "sobreviveu" : "morreu")}." + (roll == 10 ? " (10 natural sempre falha)" : "");
+        var text = $"Death Save: d10 {roll} + {penalty} = {total} contra BODY {c.Snapshot.Body}: {(survived ? "sobreviveu" : "morreu")}." + (roll == 10 ? L.T(" (10 natural sempre falha)", " (a natural 10 always fails)") : "");
         return (next, survived, text);
     }
 
     /// <summary>A Mortally Wounded target goes to 1 HP, unconscious, and the Death Save Penalty resets (CP:R p.188, p.222).</summary>
     public Combatant Stabilize(Combatant c)
     {
-        if (c.Dead) throw RequestValidationException.For("target", $"{c.Name} já morreu.");
+        if (c.Dead) throw RequestValidationException.For("target", L.T($"{c.Name} já morreu.", $"{c.Name} is already dead."));
         return Wound(c) == WoundState.Mortally
             ? c with { Hp = 1, DeathSavePenalty = 0, Stabilized = true, Conditions = c.Conditions.Append("Inconsciente").Distinct().ToList() }
             : c with { Stabilized = true };
@@ -96,8 +97,8 @@ public sealed class NpcCombat(CharacterRuleBook rules, CharacterCalculator calcu
 
     public Combatant Heal(Combatant c, int amount)
     {
-        if (amount <= 0) throw RequestValidationException.For("amount", "Informe quanto HP recuperar.");
-        if (Wound(c) == WoundState.Mortally) throw RequestValidationException.For("amount", "Mortally Wounded: estabilize primeiro (CP:R p.186).");
+        if (amount <= 0) throw RequestValidationException.For("amount", L.T("Informe quanto HP recuperar.", "Enter how much HP to recover."));
+        if (Wound(c) == WoundState.Mortally) throw RequestValidationException.For("amount", L.T("Mortally Wounded: estabilize primeiro (CP:R p.186).", "Mortally Wounded: stabilize first (CP:R p.186)."));
         return c with { Hp = Math.Min(c.Snapshot!.MaxHp, c.Hp + amount) };
     }
 }

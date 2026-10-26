@@ -8,6 +8,7 @@ import { ItemCard } from '../catalog/ItemCard';
 import { ItemDetailModal } from '../catalog/ItemDetailModal';
 import catalogStyles from '../catalog/CatalogPage.module.css';
 import page from '../../styles/Page.module.css';
+import { t } from '../../i18n';
 
 export function FavoritesPage() {
   const favorites = useFavorites();
@@ -17,16 +18,16 @@ export function FavoritesPage() {
   return (
     <div className={page.page}>
       <header className={page.header}>
-        <h1 className="hud-title" data-glitch="Favoritos">Favoritos</h1>
-        <p className={page.lead}>Itens marcados com a estrela, de qualquer categoria.</p>
+        <h1 className="hud-title" data-glitch={t('Favoritos', 'Favorites')}>{t('Favoritos', 'Favorites')}</h1>
+        <p className={page.lead}>{t('Itens marcados com a estrela, de qualquer categoria.', 'Items marked with the star, from any category.')}</p>
       </header>
 
       {favorites.isLoading && <Spinner />}
       {favorites.isError && <ErrorState error={favorites.error} onRetry={() => favorites.refetch()} />}
       {favorites.data?.length === 0 && (
-        <EmptyState title="Nenhum favorito ainda" icon={<Star size={28} />}
-          action={<Link to="/catalog/weapons" className={page.link}>Explorar o catálogo</Link>}>
-          Use a estrela nos cards ou na ficha de um item para guardá-lo aqui.
+        <EmptyState title={t('Nenhum favorito ainda', 'No favorites yet')} icon={<Star size={28} />}
+          action={<Link to="/catalog/weapons" className={page.link}>{t('Explorar o catálogo', 'Explore the catalog')}</Link>}>
+          {t('Use a estrela nos cards ou na ficha de um item para guardá-lo aqui.', 'Use the star on the cards or on an item\'s page to keep it here.')}
         </EmptyState>
       )}
       {favorites.data && favorites.data.length > 0 && (

@@ -1,6 +1,7 @@
 using CyberpunkDb.Application.Characters.Calculation;
 using CyberpunkDb.Application.Characters.Rules;
 using CyberpunkDb.Domain.Enums;
+using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.Characters.Operations;
 
@@ -20,22 +21,22 @@ public sealed class WearableOperations(CharacterRuleBook rules, InventoryOperati
         var hostEntry = Find(sheet, request.WearableInstanceId);
         var hostItem = change.Item(hostEntry.ItemId);
         var host = rules.FindWearable(hostItem.Slug)
-                   ?? throw CharacterChange.Refuse("wearableInstanceId", $"{hostItem.Name} não tem Option Slots.");
+                   ?? throw CharacterChange.Refuse("wearableInstanceId", L.T($"{hostItem.Name} não tem Option Slots.", $"{hostItem.Name} has no Option Slots."));
         if (request.ItemId is null == request.OptionInstanceId is null)
-            throw CharacterChange.Refuse("itemId", "Escolha uma Option para comprar ou uma do inventário.");
+            throw CharacterChange.Refuse("itemId", L.T("Escolha uma Option para comprar ou uma do inventário.", "Pick an Option to buy or one from the inventory."));
 
         var option = request.ItemId is { } itemId ? change.Item(itemId) : change.Item(Find(sheet, request.OptionInstanceId!).ItemId);
         if (WearableCyberware.Incompatible(rules, host, hostItem.Name, option, change.Catalog) is { } problem)
             throw CharacterChange.Refuse("itemId", problem);
         var installed = WearableCyberware.OptionItems(sheet, change.Catalog, hostEntry).ToList();
         if (installed.Any(i => i.Id == option.Id) || host.BuiltIn.Contains(option.Slug, StringComparer.OrdinalIgnoreCase))
-            throw CharacterChange.Refuse("itemId", $"{hostItem.Name} já tem {option.Name}.");
+            throw CharacterChange.Refuse("itemId", L.T($"{hostItem.Name} já tem {option.Name}.", $"{hostItem.Name} already has {option.Name}."));
         var (slots, fingers) = WearableCyberware.Used(rules, change.Catalog, host, [.. installed, option]);
         if (fingers > host.Cyberfingers && option.Cyber?.Type == CyberwareType.Cyberfinger)
-            throw CharacterChange.Refuse("itemId", $"{hostItem.Name} recebe até {host.Cyberfingers} Cyberfingers ({CharacterRuleBook.Page(host.Source)}).");
+            throw CharacterChange.Refuse("itemId", L.T($"{hostItem.Name} recebe até {host.Cyberfingers} Cyberfingers ({CharacterRuleBook.Page(host.Source)}).", $"{hostItem.Name} takes up to {host.Cyberfingers} Cyberfingers ({CharacterRuleBook.Page(host.Source)})."));
         if (slots > host.Slots)
             throw CharacterChange.Refuse("itemId",
-                $"{hostItem.Name} tem {host.Slots} Option Slots e {option.Name} não cabe nos que sobram ({CharacterRuleBook.Page(host.Source)}).");
+                L.T($"{hostItem.Name} tem {host.Slots} Option Slots e {option.Name} não cabe nos que sobram ({CharacterRuleBook.Page(host.Source)}).", $"{hostItem.Name} has {host.Slots} Option Slots and {option.Name} doesn't fit in the ones left ({CharacterRuleBook.Page(host.Source)})."));
 
         InventoryEntry entry;
         if (request.ItemId is not null)
@@ -49,7 +50,7 @@ public sealed class WearableOperations(CharacterRuleBook rules, InventoryOperati
         }
         else entry = Find(sheet, request.OptionInstanceId!);
         if (Holder(sheet, entry.InstanceId) is { } other && entry.Quantity <= 1)
-            throw CharacterChange.Refuse("optionInstanceId", $"{option.Name} já está em {change.Item(other.ItemId).Name}.");
+            throw CharacterChange.Refuse("optionInstanceId", L.T($"{option.Name} já está em {change.Item(other.ItemId).Name}.", $"{option.Name} is already in {change.Item(other.ItemId).Name}."));
 
         // One unit of a stack is split off, so the rest stays available.
         if (entry.Quantity > 1)
@@ -64,7 +65,7 @@ public sealed class WearableOperations(CharacterRuleBook rules, InventoryOperati
         hostEntry = Find(sheet, hostEntry.InstanceId);
         var state = hostEntry.Wearable ?? new WearableState();
         change.Log(CharacterEventKind.Edit, "wearable-install",
-            $"{option.Name} instalado em {hostItem.Name}: vestível, sem Humanity Loss ({rules.Document.Cyberware.WearableHumanityLoss.Reference}).");
+            L.T($"{option.Name} instalado em {hostItem.Name}: vestível, sem Humanity Loss ({rules.Document.Cyberware.WearableHumanityLoss.Reference}).", $"{option.Name} installed in {hostItem.Name}: wearable, no Humanity Loss ({rules.Document.Cyberware.WearableHumanityLoss.Reference})."));
         return Replace(sheet, hostEntry with { Wearable = state with { Options = [.. state.Options, entry.InstanceId] } });
     }
 
@@ -74,9 +75,9 @@ public sealed class WearableOperations(CharacterRuleBook rules, InventoryOperati
         var hostEntry = Find(sheet, request.WearableInstanceId);
         var state = hostEntry.Wearable ?? new WearableState();
         if (!state.Options.Contains(request.OptionInstanceId))
-            throw CharacterChange.Refuse("optionInstanceId", "Essa Option não está nesse item.");
+            throw CharacterChange.Refuse("optionInstanceId", L.T("Essa Option não está nesse item.", "That Option isn't in that item."));
         var entry = Find(sheet, request.OptionInstanceId);
-        change.Log(CharacterEventKind.Edit, "wearable-remove", $"{change.Item(entry.ItemId).Name} retirado de {change.Item(hostEntry.ItemId).Name}.");
+        change.Log(CharacterEventKind.Edit, "wearable-remove", L.T($"{change.Item(entry.ItemId).Name} retirado de {change.Item(hostEntry.ItemId).Name}.", $"{change.Item(entry.ItemId).Name} taken out of {change.Item(hostEntry.ItemId).Name}."));
         sheet = Replace(sheet, entry with { State = ItemState.Carried });
         return Replace(sheet, Find(sheet, hostEntry.InstanceId) with
         {
@@ -90,7 +91,7 @@ public sealed class WearableOperations(CharacterRuleBook rules, InventoryOperati
         var hostEntry = Find(sheet, request.WearableInstanceId);
         var item = change.Item(hostEntry.ItemId);
         if (rules.FindWearable(item.Slug) is not { CoversArm: true })
-            throw CharacterChange.Refuse("wearableInstanceId", $"{item.Name} não é usado numa mão.");
+            throw CharacterChange.Refuse("wearableInstanceId", L.T($"{item.Name} não é usado numa mão.", $"{item.Name} isn't used in a hand."));
         return Replace(sheet, hostEntry with { Wearable = (hostEntry.Wearable ?? new WearableState()) with { Side = request.Side } });
     }
 
@@ -114,7 +115,7 @@ public sealed class WearableOperations(CharacterRuleBook rules, InventoryOperati
         sheet.Inventory.FirstOrDefault(e => e.Wearable?.Options.Contains(optionInstanceId) == true);
 
     private static InventoryEntry Find(CharacterSheet sheet, string instanceId) =>
-        sheet.Inventory.FirstOrDefault(e => e.InstanceId == instanceId) ?? throw CharacterChange.Refuse("instanceId", "Item não encontrado no inventário.");
+        sheet.Inventory.FirstOrDefault(e => e.InstanceId == instanceId) ?? throw CharacterChange.Refuse("instanceId", L.T("Item não encontrado no inventário.", "Item not found in the inventory."));
 
     private static CharacterSheet Replace(CharacterSheet sheet, InventoryEntry entry) =>
         sheet with { Inventory = sheet.Inventory.Select(e => e.InstanceId == entry.InstanceId ? entry : e).ToList() };

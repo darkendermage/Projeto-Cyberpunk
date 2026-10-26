@@ -1,6 +1,7 @@
 using CyberpunkDb.Application.Common;
 using CyberpunkDb.Application.NetArchitectures.Rules;
 using CyberpunkDb.Domain.Enums;
+using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.NetArchitectures.Generation;
 
@@ -24,9 +25,9 @@ public sealed class NetArchitectureGenerator(NetArchitectureRuleBook rules)
         var dice = rules.Document.Shape.FloorDice.Value;
         var floors = request.Floors ?? Enumerable.Range(0, dice.Count).Sum(_ => rng.Next(1, dice.Sides + 1));
         if (floors is < 3 or > 18)
-            throw RequestValidationException.For("floors", $"Uma Arquitetura tem de 3 a 18 andares ({rules.Document.Shape.FloorDice.Source}).");
+            throw RequestValidationException.For("floors", L.T($"Uma Arquitetura tem de 3 a 18 andares ({rules.Document.Shape.FloorDice.Source}).", $"An Architecture has 3 to 18 floors ({rules.Document.Shape.FloorDice.Source})."));
         var branches = request.Branches ?? RollBranches(rng);
-        if (branches is < 0 or > 8) throw RequestValidationException.For("branches", "Use de 0 a 8 ramos.");
+        if (branches is < 0 or > 8) throw RequestValidationException.For("branches", L.T("Use de 0 a 8 ramos.", "Use 0 to 8 branches."));
 
         var state = new ArchitectureState
         {
@@ -44,7 +45,7 @@ public sealed class NetArchitectureGenerator(NetArchitectureRuleBook rules)
             state.Netrunners.Add(new NetWatcher
             {
                 Id = "N1",
-                Name = "Netrunner de plantão",
+                Name = L.T("Netrunner de plantão", "Netrunner on duty"),
                 Interface = rules.Difficulty(difficulty).FightingChance,
                 FloorId = state.Main.Floors[^1].Id,
             });

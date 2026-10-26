@@ -4,6 +4,7 @@ using CyberpunkDb.Application.Npcs;
 using CyberpunkDb.Application.Npcs.Generation;
 using CyberpunkDb.Application.Npcs.Validation;
 using CyberpunkDb.Domain.Enums;
+using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.Characters.Operations;
 
@@ -42,7 +43,7 @@ public sealed class CyberwareInstaller(CharacterRuleBook rules, IDiceRoller dice
 
     public (InstallPlan? Plan, string? Error) Plan(CharacterSheet sheet, NpcCatalog catalog, CatalogItem item, InstallOptions options)
     {
-        if (item.Cyber is null) return (null, $"{item.Name} não é cyberware.");
+        if (item.Cyber is null) return (null, L.T($"{item.Name} não é cyberware.", $"{item.Name} isn't cyberware."));
         var mechanics = Mechanics(sheet, catalog);
 
         var (added, error) = rules.FindAnyLimbOption(item.Slug) is { } anyLimb
@@ -108,11 +109,11 @@ public sealed class CyberwareInstaller(CharacterRuleBook rules, IDiceRoller dice
     {
         var leg = rules.IsMeatLegOption(item.Slug);
         if (!leg && !rules.IsMeatArmOption(item.Slug))
-            return (null, $"{item.Name} não pode ser instalado num membro de carne ({CharacterRuleBook.Page(rules.Document.Cyberware.MeatArmOptions.Reference)}).");
+            return (null, L.T($"{item.Name} não pode ser instalado num membro de carne ({CharacterRuleBook.Page(rules.Document.Cyberware.MeatArmOptions.Reference)}).", $"{item.Name} can't be installed in a meat limb ({CharacterRuleBook.Page(rules.Document.Cyberware.MeatArmOptions.Reference)})."));
         var limb = leg ? CyberwareAnatomy.Limb.Leg : CyberwareAnatomy.Limb.Arm;
         var side = CyberwareAnatomy.FreeSide(sheet.Cyberware, catalog, limb, preferred);
         if (side is null)
-            return (null, $"Não há {(leg ? "perna" : "braço")} de carne livre: cada um aceita uma única peça de cyberware.");
+            return (null, L.T($"Não há {(leg ? "perna" : "braço")} de carne livre: cada um aceita uma única peça de cyberware.", $"There's no free meat {(leg ? "leg" : "arm")}: each takes a single piece of cyberware."));
         return ([new CharacterCyberware { InstanceId = NextId(sheet), ItemId = item.Id, MeatLimb = true, Side = side }], null);
     }
 
@@ -123,19 +124,19 @@ public sealed class CyberwareInstaller(CharacterRuleBook rules, IDiceRoller dice
         var limbs = sheet.Cyberware
             .Where(c => catalog.Find(c.ItemId)?.Cyber is { Type: CyberwareType.Cyberlimb, Foundational: true })
             .ToList();
-        if (limbs.Count == 0) return (null, $"{item.Name} precisa de um Cyberarm ou Cyberleg instalado (CP:R p.116).");
+        if (limbs.Count == 0) return (null, L.T($"{item.Name} precisa de um Cyberarm ou Cyberleg instalado (CP:R p.116).", $"{item.Name} needs an installed Cyberarm or Cyberleg (CP:R p.116)."));
 
         var slots = option.Covering ? 0 : mechanics.SlotsRequired(item).Slots;
         string? Problem(CharacterCyberware host)
         {
             var children = sheet.Cyberware.Where(c => c.ParentInstanceId == host.InstanceId).ToList();
-            if (children.Any(c => c.ItemId == item.Id)) return $"{item.Name} já está nesse membro.";
+            if (children.Any(c => c.ItemId == item.Id)) return L.T($"{item.Name} já está nesse membro.", $"{item.Name} is already on that limb.");
             if (option.Covering && rules.Document.Cyberware.OneCoveringPerLimb.Value
                 && children.Any(c => catalog.Find(c.ItemId) is { } ci && rules.FindAnyLimbOption(ci.Slug)?.Covering == true))
-                return "Esse membro já tem uma cobertura.";
+                return L.T("Esse membro já tem uma cobertura.", "That limb already has a covering.");
             var free = (mechanics.SlotsProvided(catalog.Find(host.ItemId)!) ?? 0)
                        - children.Sum(c => catalog.Find(c.ItemId) is { } ci ? (rules.FindAnyLimbOption(ci.Slug)?.Covering == true ? 0 : mechanics.SlotsRequired(ci).Slots) : 1);
-            return free < slots ? "Esse membro não tem Option Slots livres." : null;
+            return free < slots ? L.T("Esse membro não tem Option Slots livres.", "That limb has no free Option Slots.") : null;
         }
 
         CharacterCyberware? chosen;
@@ -144,7 +145,7 @@ public sealed class CyberwareInstaller(CharacterRuleBook rules, IDiceRoller dice
         if (hostId is not null)
         {
             chosen = limbs.FirstOrDefault(l => l.InstanceId == hostId);
-            if (chosen is null) return (null, "Escolha um Cyberarm ou Cyberleg instalado.");
+            if (chosen is null) return (null, L.T("Escolha um Cyberarm ou Cyberleg instalado.", "Pick an installed Cyberarm or Cyberleg."));
             if (Problem(chosen) is { } p) return (null, p);
         }
         else

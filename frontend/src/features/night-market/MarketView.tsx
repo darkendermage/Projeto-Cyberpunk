@@ -21,6 +21,7 @@ import {
   CBK_CATEGORIES, cbkCategoryOf, CONDITION_LABEL, filterListings, KIND_LABEL, ORIGIN_LABEL, qualityLabel, shownCondition, sortStalls,
 } from './nightMarket';
 import styles from './NightMarket.module.css';
+import { t, tv } from '../../i18n';
 
 const PAGE = 24;
 
@@ -64,42 +65,42 @@ function Market({ market, rules }: { market: NightMarketDetail; rules: NightMark
   const setStatus = (status: 'Open' | 'Closed') =>
     marketApi.update(market.id, { version: market.version, name: market.name, notes: market.notes, status }).then(store, fail);
   const rename = () => {
-    const name = window.prompt('Nome do mercado', market.name)?.trim();
+    const name = window.prompt(t('Nome do mercado', 'Market name'), market.name)?.trim();
     if (name) marketApi.update(market.id, { version: market.version, name, notes: market.notes, status: market.status }).then(store, fail);
   };
   const remove = () => {
-    if (!window.confirm(`Apagar "${market.name}"? As vendas registradas também somem.`)) return;
+    if (!window.confirm(t(`Apagar "${market.name}"? As vendas registradas também somem.`, `Delete "${market.name}"? The recorded sales go too.`))) return;
     marketApi.remove(market.id).then(() => navigate('/night-market'), fail);
   };
   const regenerate = () => {
-    if (!window.confirm('Rolar o mercado de novo com uma seed nova? As listagens atuais saem; o livro de vendas fica.')) return;
-    command.mutate({ path: 'regenerate' }, { onSuccess: () => toast.notify('Mercado rolado de novo.'), onError: fail });
+    if (!window.confirm(t('Rolar o mercado de novo com uma seed nova? As listagens atuais saem; o livro de vendas fica.', 'Roll the market again with a new seed? The current listings go; the sales book stays.'))) return;
+    command.mutate({ path: 'regenerate' }, { onSuccess: () => toast.notify(t('Mercado rolado de novo.', 'Market rolled again.')), onError: fail });
   };
 
   return (
     <div className={page.page}>
       <header className={page.header}>
         <Link to="/night-market" className={page.link}><ArrowLeft size={14} /> Night Markets</Link>
-        <h1>{market.name}</h1>
+        <h1>{tv(market.name)}</h1>
         <p className={page.lead}>
-          {market.preset.name} · {KIND_LABEL[market.preset.kind]} · letra {market.preset.letter}
-          {market.preset.summary ? ` · ${market.preset.summary}` : ''}
+          {tv(market.preset.name)} · {KIND_LABEL[market.preset.kind]} {t('· letra ', '· letter ')}{market.preset.letter}
+          {market.preset.summary ? ` · ${tv(market.preset.summary)}` : ''}
         </p>
       </header>
 
       <div className={styles.toolbar}>
         <div className={styles.row}>
-          <Switch checked={gm} onChange={setGm} label="Visão do Mestre" />
-          <Switch checked={onlyForSale} onChange={(v) => { setOnlyForSale(v); reset(); }} label="Só o que está à venda" />
+          <Switch checked={gm} onChange={setGm} label={t('Visão do Mestre', 'GM view')} />
+          <Switch checked={onlyForSale} onChange={(v) => { setOnlyForSale(v); reset(); }} label={t('Só o que está à venda', 'Only what\'s for sale')} />
         </div>
         <div className={styles.row}>
-          {gm && <Button icon={<Plus size={15} />} onClick={() => setAdding(true)}>Listagem</Button>}
-          {gm && <Button icon={<RefreshCw size={15} />} onClick={regenerate} disabled={command.isPending}>Rolar de novo</Button>}
+          {gm && <Button icon={<Plus size={15} />} onClick={() => setAdding(true)}>{t('Listagem', 'Listing')}</Button>}
+          {gm && <Button icon={<RefreshCw size={15} />} onClick={regenerate} disabled={command.isPending}>{t('Rolar de novo', 'Roll again')}</Button>}
           <Button icon={open ? <Lock size={15} /> : <LockOpen size={15} />} onClick={() => setStatus(open ? 'Closed' : 'Open')}>
-            {open ? 'Encerrar' : 'Reabrir'}
+            {open ? t('Encerrar', 'Close') : t('Reabrir', 'Reopen')}
           </Button>
-          <IconButton label="Renomear" onClick={rename}><Pencil size={15} /></IconButton>
-          <IconButton label="Apagar mercado" onClick={remove}><Trash2 size={15} /></IconButton>
+          <IconButton label={t('Renomear', 'Rename')} onClick={rename}><Pencil size={15} /></IconButton>
+          <IconButton label={t('Apagar mercado', 'Delete market')} onClick={remove}><Trash2 size={15} /></IconButton>
         </div>
       </div>
 
@@ -110,36 +111,36 @@ function Market({ market, rules }: { market: NightMarketDetail; rules: NightMark
           <div className={styles.cbkBar}>
             <span className={styles.cbkLogo}>CBK<small>night market companion</small></span>
             <span className={clsx(styles.live, !open && styles.closed)}>
-              {open ? `Conectado ao banco de dados de ${market.organizer.name}` : 'Mercado encerrado'}
+              {open ? t(`Conectado ao banco de dados de ${tv(market.organizer.name)}`, `Connected to ${tv(market.organizer.name)}'s database`) : t('Mercado encerrado', 'Market closed')}
             </span>
             <input className={styles.search} value={q} onChange={(e) => { setQ(e.target.value); reset(); }}
-              placeholder="Buscar por nome, fabricante ou linha" aria-label="Buscar" />
+              placeholder={t('Buscar por nome, fabricante ou linha', 'Search by name, manufacturer or line')} aria-label={t('Buscar', 'Search')} />
           </div>
-          <nav className={styles.tabs} aria-label="Categorias">
+          <nav className={styles.tabs} aria-label={t('Categorias', 'Categories')}>
             <button type="button" className={clsx(styles.tab, category === null && styles.tabActive)} onClick={() => { setCategory(null); reset(); }}>
-              tudo<span className={styles.tabCount}>{market.listings.length}</span>
+              {t('tudo', 'all')}<span className={styles.tabCount}>{market.listings.length}</span>
             </button>
             {CBK_CATEGORIES.filter((c) => (counts.get(c.key) ?? 0) > 0).map((c) => (
               <button key={c.key} type="button" className={clsx(styles.tab, category === c.key && styles.tabActive)}
                 onClick={() => { setCategory(c.key); reset(); }}>
-                {c.label}<span className={styles.tabCount}>{counts.get(c.key)}</span>
+                {tv(c.label)}<span className={styles.tabCount}>{counts.get(c.key)}</span>
               </button>
             ))}
           </nav>
           <div className={styles.map} aria-label="Booths">
             <button type="button" className={clsx(styles.booth, stall === null && styles.boothActive)} onClick={() => { setStall(null); reset(); }}>
-              Todos os booths
+              {t('Todos os booths', 'All booths')}
             </button>
             {sortStalls(market.stalls).map((s) => (
               <button key={s.code} type="button" className={clsx(styles.booth, stall === s.code && styles.boothActive)}
-                onClick={() => { setStall(stall === s.code ? null : s.code); reset(); }} title={`${s.listings} listagem(ns)`}>
-                <b>@{s.code}</b> {s.label}
+                onClick={() => { setStall(stall === s.code ? null : s.code); reset(); }} title={t(`${s.listings} listagem(ns)`, `${s.listings} listing(s)`)}>
+                <b>@{s.code}</b> {tv(s.label)}
               </button>
             ))}
           </div>
 
           {visible.length === 0 ? (
-            <EmptyState title="Nada nesta busca">O banco de dados do CBK não tem listagens com esses filtros.</EmptyState>
+            <EmptyState title={t('Nada nesta busca', 'Nothing in this search')}>{t('O banco de dados do CBK não tem listagens com esses filtros.', 'The CBK database has no listings with these filters.')}</EmptyState>
           ) : (
             <div className={styles.listings}>
               {visible.map((l) => (
@@ -150,9 +151,9 @@ function Market({ market, rules }: { market: NightMarketDetail; rules: NightMark
           )}
           {pages > 1 && (
             <div className={clsx(styles.pager, styles.cbkBar)}>
-              <Button disabled={current === 0} onClick={() => setPageIndex(current - 1)}>Anterior</Button>
-              <span className={styles.source}>{current + 1} / {pages} · {filtered.length} listagens</span>
-              <Button disabled={current >= pages - 1} onClick={() => setPageIndex(current + 1)}>Próxima</Button>
+              <Button disabled={current === 0} onClick={() => setPageIndex(current - 1)}>{t('Anterior', 'Previous')}</Button>
+              <span className={styles.source}>{current + 1} / {pages} · {filtered.length} {t('listagens', 'listings')}</span>
+              <Button disabled={current >= pages - 1} onClick={() => setPageIndex(current + 1)}>{t('Próxima', 'Next')}</Button>
             </div>
           )}
         </section>
@@ -194,9 +195,9 @@ function ListingCard({ listing, item, gm, open, onBuy, onEdit, onDetail }: {
       )}
       <div className={styles.listingBody}>
         {onDetail ? (
-          <button type="button" className={styles.listingName} onClick={onDetail}>{listing.name}</button>
+          <button type="button" className={styles.listingName} onClick={onDetail}>{tv(listing.name)}</button>
         ) : (
-          <span className={styles.listingName}>{listing.name}</span>
+          <span className={styles.listingName}>{tv(listing.name)}</span>
         )}
         <span className={styles.maker}>
           {[quality, listing.manufacturer].filter(Boolean).join(' · ') || ORIGIN_LABEL[listing.origin]}
@@ -208,22 +209,22 @@ function ListingCard({ listing, item, gm, open, onBuy, onEdit, onDetail }: {
         </span>
         <div className={styles.tags}>
           {condition !== 'Normal' && <Badge tone="red">{CONDITION_LABEL[condition]}</Badge>}
-          {gm && listing.conditionHidden && <Badge tone="amber" title="Vendido como novo">golpe</Badge>}
-          {listing.stock != null && <Badge>{listing.stock} em estoque</Badge>}
-          {gm && <Badge tone="cyan" title={listing.group ?? undefined}>{ORIGIN_LABEL[listing.origin]}</Badge>}
+          {gm && listing.conditionHidden && <Badge tone="amber" title={t('Vendido como novo', 'Sold as new')}>{t('golpe', 'scam')}</Badge>}
+          {listing.stock != null && <Badge>{listing.stock} {t('em estoque', 'in stock')}</Badge>}
+          {gm && <Badge tone="cyan" title={tv(listing.group) ?? undefined}>{ORIGIN_LABEL[listing.origin]}</Badge>}
         </div>
-        {listing.description && <p className={styles.pitch}>{listing.description}</p>}
-        {listing.note && <p className={styles.muted}>{listing.note}</p>}
+        {listing.description && <p className={styles.pitch}>{tv(listing.description)}</p>}
+        {listing.note && <p className={styles.muted}>{tv(listing.note)}</p>}
         {gm && listing.warnings.map((w, i) => <p key={i} className={styles.warn}>{w}</p>)}
         <div className={styles.listingFoot}>
           <button type="button" className={styles.buyNow} onClick={onBuy} disabled={!open || !listing.forSale || soldOut}>
-            {!listing.forSale ? (listing.origin === 'Preset' ? 'Só para uso no local' : 'Fora de venda') : soldOut ? 'Esgotado' : 'Buy Now!!!'}
+            {!listing.forSale ? (listing.origin === 'Preset' ? t('Só para uso no local', 'On-site use only') : t('Fora de venda', 'Not for sale')) : soldOut ? t('Esgotado', 'Sold out') : 'Buy Now!!!'}
           </button>
           <span className={styles.pickup}>Pick-up or Browse at Booth <b>{listing.stall}</b></span>
           {listing.source && <span className={styles.source}>{listing.source}</span>}
           {gm && (
             <div className={styles.gmTools}>
-              <Button variant="ghost" icon={<Pencil size={13} />} onClick={onEdit}>Editar</Button>
+              <Button variant="ghost" icon={<Pencil size={13} />} onClick={onEdit}>{t('Editar', 'Edit')}</Button>
             </div>
           )}
         </div>

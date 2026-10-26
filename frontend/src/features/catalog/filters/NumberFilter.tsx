@@ -4,7 +4,7 @@ import { Select, Segmented } from '../../../components/ui/ui';
 import { type Criterion, getCriterion, OP_LABELS, setCriterion } from '../../../lib/filters';
 import { useDebouncedValue } from '../../../lib/hooks';
 import styles from './Filters.module.css';
-
+import { t, tv } from '../../../i18n';
 interface Props {
   field: FieldDescriptor;
   criteria: Criterion[];
@@ -39,31 +39,31 @@ export function NumberFilter({ field, criteria, onChange }: Props) {
   }, [debounced]);
 
   const ops = NUMBER_OPS.filter((o) => field.operators.includes(o));
-  const placeholderMin = field.min != null ? String(field.min) : 'mín.';
-  const placeholderMax = field.max != null ? String(field.max) : 'máx.';
+  const placeholderMin = field.min != null ? String(field.min) : t('mín.', 'min.');
+  const placeholderMax = field.max != null ? String(field.max) : t('máx.', 'max.');
   const needsValue = op !== '' && op !== 'isnull' && op !== 'notnull';
   const unit = field.unit && field.unit !== 'penalty' ? field.unit : undefined;
 
   return (
     <div className={styles.numberRow}>
-      <span className={styles.numberLabel} title={field.description ?? field.label}>
-        {field.label}{unit && <small> ({unit})</small>}
+      <span className={styles.numberLabel} title={tv(field.description) ?? tv(field.label)}>
+        {tv(field.label)}{unit && <small> ({unit})</small>}
       </span>
-      <Select value={op} highlighted={op !== ''} aria-label={`Operador para ${field.label}`}
+      <Select value={op} highlighted={op !== ''} aria-label={t(`Operador para ${tv(field.label)}`, `Operator for ${tv(field.label)}`)}
         onChange={(e) => setOp(e.target.value as FilterOp | '')}>
-        <option value="">Qualquer</option>
+        <option value="">{t('Qualquer', 'Any')}</option>
         {ops.map((o) => <option key={o} value={o}>{o === 'between' ? 'entre' : OP_LABELS[o]}</option>)}
       </Select>
       {needsValue && (
         <div className={styles.numberInputs}>
           <input type="number" inputMode="decimal" value={a} placeholder={op === 'between' ? placeholderMin : placeholderMin}
-            min={field.min ?? undefined} max={field.max ?? undefined} aria-label={`${field.label}: valor${op === 'between' ? ' mínimo' : ''}`}
+            min={field.min ?? undefined} max={field.max ?? undefined} aria-label={t(`${tv(field.label)}: valor${op === 'between' ? ' mínimo' : ''}`, `${tv(field.label)}: ${op === 'between' ? 'minimum ' : ''}value`)}
             onChange={(e) => setA(e.target.value)} />
           {op === 'between' && (
             <>
-              <span className={styles.until}>até</span>
+              <span className={styles.until}>{t('até', 'to')}</span>
               <input type="number" inputMode="decimal" value={b} placeholder={placeholderMax}
-                min={field.min ?? undefined} max={field.max ?? undefined} aria-label={`${field.label}: valor máximo`}
+                min={field.min ?? undefined} max={field.max ?? undefined} aria-label={t(`${tv(field.label)}: valor máximo`, `${tv(field.label)}: maximum value`)}
                 onChange={(e) => setB(e.target.value)} />
             </>
           )}
@@ -86,10 +86,10 @@ export function BooleanFilter({ field, criteria, onChange }: Props) {
   const value = criterion ? criterion.values[0] : 'any';
   return (
     <div className={styles.boolRow}>
-      <span>{field.label}</span>
+      <span>{tv(field.label)}</span>
       <Segmented size="sm" ariaLabel={field.label} value={value as 'any' | 'true' | 'false'}
         onChange={(v) => onChange(setCriterion(criteria, field.key, v === 'any' ? null : { field: field.key, op: 'eq', values: [v] }))}
-        options={[{ value: 'any', label: 'Todos' }, { value: 'true', label: 'Sim' }, { value: 'false', label: 'Não' }]} />
+        options={[{ value: 'any', label: t('Todos', 'All') }, { value: 'true', label: t('Sim', 'Yes') }, { value: 'false', label: t('Não', 'No') }]} />
     </div>
   );
 }

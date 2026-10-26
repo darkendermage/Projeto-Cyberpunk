@@ -9,6 +9,7 @@ using CyberpunkDb.Application.NightMarkets.Trading;
 using CyberpunkDb.Domain.Entities;
 using CyberpunkDb.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
+using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.NightMarkets;
 
@@ -74,11 +75,11 @@ public sealed class NightMarketService(
         var catalog = await catalogs.GetAsync(ct);
         if (request.ItemId is { } id)
         {
-            var item = catalog.Find(id) ?? throw new NotFoundException($"Item {id} não encontrado.");
-            if (item.Price is not { } price) throw RequestValidationException.For("itemId", $"{item.Name} não tem preço fixo no livro.");
+            var item = catalog.Find(id) ?? throw new NotFoundException(L.T($"Item {id} não encontrado.", $"Item {id} not found."));
+            if (item.Price is not { } price) throw RequestValidationException.For("itemId", L.T($"{item.Name} não tem preço fixo no livro.", $"{item.Name} has no fixed price in the book."));
             return pricing.SellQuote(item.Name, price, item.PriceCategory ?? rules.CategoryOf(price), request, dice);
         }
-        if (request.Price is not ({ } p and >= 0)) throw RequestValidationException.For("price", "Informe um item do catálogo ou o preço de mercado.");
+        if (request.Price is not ({ } p and >= 0)) throw RequestValidationException.For("price", L.T("Informe um item do catálogo ou o preço de mercado.", "Enter a catalog item or the market price."));
         return pricing.SellQuote(null, p, rules.CategoryOf(p), request, dice);
     }
 
@@ -143,7 +144,7 @@ public sealed class NightMarketService(
 
     public async Task<NightMarketDetailDto> UpdateAsync(int id, UpdateMarketRequest request, CancellationToken ct)
     {
-        if (string.IsNullOrWhiteSpace(request.Name)) throw RequestValidationException.For("name", "Dê um nome ao mercado.");
+        if (string.IsNullOrWhiteSpace(request.Name)) throw RequestValidationException.For("name", L.T("Dê um nome ao mercado.", "Give the market a name."));
         return await MutateAsync(id, request.Version, change =>
         {
             change.State = change.State with { Notes = string.IsNullOrWhiteSpace(request.Notes) ? null : request.Notes.Trim() };
@@ -163,7 +164,7 @@ public sealed class NightMarketService(
     public async Task<NightMarketDetailDto> PurchaseAsync(int id, PurchaseRequest r, CancellationToken ct)
     {
         var entity = await FindAsync(id, ct);
-        if (entity.Status == NightMarketStatus.Closed) throw new ConflictException("Este mercado está encerrado. Reabra-o para vender.");
+        if (entity.Status == NightMarketStatus.Closed) throw new ConflictException(L.T("Este mercado está encerrado. Reabra-o para vender.", "This market is closed. Reopen it to sell."));
         return await MutateAsync(id, r.Version, c => operations.Purchase(c, r), ct);
     }
 
@@ -212,7 +213,7 @@ public sealed class NightMarketService(
     {
         var entity = await FindAsync(id, ct);
         if (entity.Version != version)
-            throw new ConflictException("Este mercado foi alterado em outra janela. Recarregue para ver a versão atual.");
+            throw new ConflictException(L.T("Este mercado foi alterado em outra janela. Recarregue para ver a versão atual.", "This market was changed in another window. Reload to see the current version."));
         var catalog = await catalogs.GetAsync(ct);
         var now = DateTime.UtcNow;
         var change = new MarketChange(Deserialize(entity.StateJson), catalog, now);
@@ -225,7 +226,7 @@ public sealed class NightMarketService(
         }
         catch (DbUpdateConcurrencyException)
         {
-            throw new ConflictException("Este mercado foi alterado ao mesmo tempo em outra janela. Recarregue e tente de novo.");
+            throw new ConflictException(L.T("Este mercado foi alterado ao mesmo tempo em outra janela. Recarregue e tente de novo.", "This market was changed at the same time in another window. Reload and try again."));
         }
         return Detail(entity, change.State, catalog, change.Notices);
     }
@@ -265,7 +266,7 @@ public sealed class NightMarketService(
         p.Location, p.Sells, p.Invite, p.Rules, p.Goods, p.SuggestedGoods, p.Features, p.Admission, p.ForSale, p.Source);
 
     private async Task<NightMarket> FindAsync(int id, CancellationToken ct) =>
-        await db.NightMarkets.FirstOrDefaultAsync(m => m.Id == id, ct) ?? throw new NotFoundException($"Night Market {id} não encontrado.");
+        await db.NightMarkets.FirstOrDefaultAsync(m => m.Id == id, ct) ?? throw new NotFoundException(L.T($"Night Market {id} não encontrado.", $"Night Market {id} not found."));
 
     private static MarketState Deserialize(string json) =>
         JsonSerializer.Deserialize<MarketState>(json, StateJson) ?? new MarketState();

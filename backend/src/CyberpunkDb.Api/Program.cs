@@ -2,6 +2,7 @@ using System.Text.Json.Serialization;
 using CyberpunkDb.Api.Desktop;
 using CyberpunkDb.Api.Infrastructure;
 using CyberpunkDb.Application;
+using CyberpunkDb.Application.Localization;
 using CyberpunkDb.Infrastructure;
 using CyberpunkDb.Infrastructure.Persistence;
 
@@ -51,6 +52,13 @@ var app = builder.Build();
 // Frontend embedded in the executable (desktop build) replaces the wwwroot folder.
 if (EmbeddedBundle.HasWebRoot) app.Environment.WebRootFileProvider = new EmbeddedWebRootProvider();
 
+// Messages follow the interface language: Accept-Language, or ?lang= on plain links (exports). Runs first so the
+// exception handler answers in the same language.
+app.Use(async (context, next) =>
+{
+    L.Use(context.Request.Query["lang"].FirstOrDefault() ?? context.Request.Headers.AcceptLanguage.FirstOrDefault());
+    await next();
+});
 app.UseExceptionHandler();
 if (app.Environment.IsDevelopment())
 {
@@ -72,7 +80,7 @@ app.MapPost("/api/app/update", async (ApplyUpdateRequest body, AppUpdater update
     });
     return Results.Ok(new { restarting = true });
 });
-app.Map("/api/{**rest}", () => Results.Problem(statusCode: 404, title: "Rota da API não encontrada."));
+app.Map("/api/{**rest}", () => Results.Problem(statusCode: 404, title: L.T("Rota da API não encontrada.", "API route not found.")));
 
 // Built frontend served by the API itself (wwwroot folder or embedded bundle).
 app.UseDefaultFiles();

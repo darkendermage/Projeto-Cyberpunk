@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
     <ProjectReference Include="..\CyberpunkDb.Domain\CyberpunkDb.Domain.csproj" />
@@ -20,6 +20,8 @@
     <!-- extracted from the PDFs by tools/night-market/extract.mjs -->
     <EmbeddedResource Include="..\..\..\data\source\night-market-index.json" LogicalName="CyberpunkDb.Application.NightMarkets.night-market-index.json" />
     <EmbeddedResource Include="..\..\..\data\source\black-chrome-booths.json" LogicalName="CyberpunkDb.Application.NightMarkets.black-chrome-booths.json" />
+    <!-- English for the Portuguese data texts, shared with the frontend (see Localization/L.cs). -->
+    <EmbeddedResource Include="..\..\..\frontend\src\i18n\data-en.json" LogicalName="i18n.data-en.json" />
   </ItemGroup>
 
   <PropertyGroup>

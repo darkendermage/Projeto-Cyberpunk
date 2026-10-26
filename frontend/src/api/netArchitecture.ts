@@ -3,6 +3,7 @@ import { API_BASE, ApiError, request } from './client';
 import type {
   GenerateArchitectureRequest, NetArchitectureDetail, NetArchitectureRules, NetArchitectureSummary,
 } from './netArchitectureTypes';
+import { locale, t } from '../i18n';
 
 const json = (body: unknown) => JSON.stringify(body);
 
@@ -15,10 +16,10 @@ export const netApi = {
   /** Every edit: POST (or PUT) /net-architectures/{id}/{path} with the version the client last saw. */
   command: (id: number, path: string, body: Record<string, unknown>, method: 'POST' | 'PUT' = 'POST') =>
     request<NetArchitectureDetail>(`/net-architectures/${id}${path ? `/${path}` : ''}`, { method, body: json(body) }),
-  exportUrl: (id: number, format: 'text' | 'markdown') => `${API_BASE}/net-architectures/${id}/export?format=${format}`,
+  exportUrl: (id: number, format: 'text' | 'markdown') => `${API_BASE}/net-architectures/${id}/export?format=${format}&lang=${locale}`,
   exportText: async (id: number, format: 'text' | 'markdown') => {
-    const response = await fetch(netApi.exportUrl(id, format));
-    if (!response.ok) throw new ApiError(response.status, { title: `Erro ${response.status}` });
+    const response = await fetch(netApi.exportUrl(id, format), { headers: { 'Accept-Language': locale } });
+    if (!response.ok) throw new ApiError(response.status, { title: t(`Erro ${response.status}`, `Error ${response.status}`) });
     return response.text();
   },
 };

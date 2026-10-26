@@ -8,6 +8,7 @@ import { PortraitError, preparePortrait } from '../../lib/portrait';
 import { useToast } from '../../state/ToastContext';
 import type { SaveStatus } from './useSheetEditor';
 import styles from './Characters.module.css';
+import { t, tv } from '../../i18n';
 
 /** A Role Ability name that opens what the ability does (summary, main mechanics and pages). */
 export function RoleAbilityButton({ rules, role, className }: { rules: CharacterRules; role: string; className?: string }) {
@@ -17,16 +18,16 @@ export function RoleAbilityButton({ rules, role, className }: { rules: Character
   return (
     <>
       <button type="button" className={`${styles.linkButton} ${styles.abilityLink} ${className ?? ''}`} onClick={() => setOpen(true)}
-        title={`O que ${info.name} faz`}>
-        {info.name}
+        title={t(`O que ${tv(info.name)} faz`, `What ${tv(info.name)} does`)}>
+        {tv(info.name)}
       </button>
-      <Modal open={open} onClose={() => setOpen(false)} title={`${info.name} · ${role}`}>
+      <Modal open={open} onClose={() => setOpen(false)} title={`${tv(info.name)} · ${role}`}>
         <div className={styles.panel} style={{ clipPath: 'none', border: 'none' }}>
-          <p>{info.summary}</p>
+          <p>{tv(info.summary)}</p>
           <ul className={styles.abilityPoints}>
             {info.points.map((p) => <li key={p}>{p}</li>)}
           </ul>
-          <p className={styles.source}>Resumo de {info.source}. Em caso de dúvida, vale o livro.</p>
+          <p className={styles.source}>{t('Resumo de ', 'Summary of ')}{info.source}{t('. Em caso de dúvida, vale o livro.', '. When in doubt, the book wins.')}</p>
         </div>
       </Modal>
     </>
@@ -38,11 +39,11 @@ export function CyberEffectsPanel({ detail }: { detail: CharacterDetail }) {
   const effects = detail.report.cyberwareEffects;
   if (effects.length === 0) return null;
   return (
-    <SheetPanel title="Efeitos do cyberware" icon={<Cpu size={16} />}>
+    <SheetPanel title={t('Efeitos do cyberware', 'Cyberware effects')} icon={<Cpu size={16} />}>
       <ul className={styles.list}>
         {effects.map((e) => (
           <li key={`${e.item}-${e.description}`} className={styles.listItem}>
-            <span className={styles.small}><strong>{e.item}</strong>: {e.description} <span className={styles.source}>{e.source}</span></span>
+            <span className={styles.small}><strong>{e.item}</strong>: {tv(e.description)} <span className={styles.source}>{e.source}</span></span>
           </li>
         ))}
       </ul>
@@ -65,10 +66,10 @@ export function SheetPanel({ title, icon, actions, children, className }: {
 }
 
 const SAVE_TEXT: Record<SaveStatus, string> = {
-  saved: 'Salvo',
-  pending: 'Alterações pendentes',
-  saving: 'Salvando…',
-  error: 'Falha ao salvar',
+  saved: t('Salvo', 'Saved'),
+  pending: t('Alterações pendentes', 'Pending changes'),
+  saving: t('Salvando…', 'Saving…'),
+  error: t('Falha ao salvar', 'Save failed'),
 };
 
 /** Save state with icon and text (never color alone). Ctrl+S saves at once. */
@@ -78,7 +79,7 @@ export function SaveIndicator({ status }: { status: SaveStatus }) {
       : status === 'error' ? <XCircle size={14} />
         : <CircleDot size={14} />;
   return (
-    <span className={styles.saveState} data-state={status} title="Ctrl+S salva na hora" role="status" aria-live="polite">
+    <span className={styles.saveState} data-state={status} title={t('Ctrl+S salva na hora', 'Ctrl+S saves right away')} role="status" aria-live="polite">
       {icon}{SAVE_TEXT[status]}
     </span>
   );
@@ -90,25 +91,25 @@ export function BudgetBar({ label, budget, money }: { label: string; budget: Cre
   return (
     <div className={styles.budget} data-exceeded={budget.exceeded} title={budget.source}>
       <div className={styles.budgetHead}>
-        <span>{label}{budget.campaignVariant && <span className={styles.tag}>variante</span>}</span>
+        <span>{label}{budget.campaignVariant && <span className={styles.tag}>{t('variante', 'variant')}</span>}</span>
         <strong>{show(budget.used)} / {show(budget.total)}</strong>
       </div>
       <div className={styles.budgetBar}><div className={styles.budgetFill} style={{ width: `${pct}%` }} /></div>
       <span className={styles.source}>
-        {budget.exceeded ? `Excedido em ${show(-budget.remaining)}` : `Restam ${show(budget.remaining)}`} · {budget.source}
+        {budget.exceeded ? t(`Excedido em ${show(-budget.remaining)}`, `Over by ${show(-budget.remaining)}`) : t(`Restam ${show(budget.remaining)}`, `${show(budget.remaining)} left`)} · {budget.source}
       </span>
     </div>
   );
 }
 
 const ISSUE_ICON = {
-  Error: <XCircle size={15} aria-label="Erro" />,
-  Warning: <AlertTriangle size={15} aria-label="Aviso" />,
-  Info: <Info size={15} aria-label="Informação" />,
+  Error: <XCircle size={15} aria-label={t('Erro', 'Error')} />,
+  Warning: <AlertTriangle size={15} aria-label={t('Aviso', 'Warning')} />,
+  Info: <Info size={15} aria-label={t('Informação', 'Info')} />,
 };
 const ISSUE_TONE = { Error: 'bad', Warning: 'warn', Info: 'ok' } as const;
 
-export function IssueList({ issues, empty = 'Nenhuma pendência.' }: { issues: CharacterIssue[]; empty?: string }) {
+export function IssueList({ issues, empty = t('Nenhuma pendência.', 'Nothing pending.') }: { issues: CharacterIssue[]; empty?: string }) {
   if (issues.length === 0) return <p className={`${styles.muted} ${styles.small}`}>{empty}</p>;
   return (
     <ul className={styles.list}>
@@ -118,8 +119,8 @@ export function IssueList({ issues, empty = 'Nenhuma pendência.' }: { issues: C
             {ISSUE_ICON[i.severity]}
           </span>
           <div className={styles.grow}>
-            <div className={styles.small}>{i.message}</div>
-            {i.suggestion && <div className={`${styles.small} ${styles.muted}`}>{i.suggestion}</div>}
+            <div className={styles.small}>{tv(i.message)}</div>
+            {i.suggestion && <div className={`${styles.small} ${styles.muted}`}>{tv(i.suggestion)}</div>}
             {i.source && <div className={styles.source}>{i.source}</div>}
           </div>
         </li>
@@ -134,9 +135,9 @@ export function NumberStepper({ label, value, min, max, onChange, title }: {
   return (
     <div className={styles.stepper} title={title}>
       <span className={styles.statKey}>{label}</span>
-      <IconButton label="Diminuir" onClick={() => onChange(Math.max(min, value - 1))} disabled={value <= min}><Minus size={14} /></IconButton>
+      <IconButton label={t('Diminuir', 'Decrease')} onClick={() => onChange(Math.max(min, value - 1))} disabled={value <= min}><Minus size={14} /></IconButton>
       <strong>{value}</strong>
-      <IconButton label="Aumentar" onClick={() => onChange(Math.min(max, value + 1))} disabled={value >= max}><Plus size={14} /></IconButton>
+      <IconButton label={t('Aumentar', 'Increase')} onClick={() => onChange(Math.min(max, value + 1))} disabled={value >= max}><Plus size={14} /></IconButton>
     </div>
   );
 }
@@ -180,12 +181,12 @@ export function Portrait({ detail, compact }: { detail: CharacterDetail; compact
   return (
     <div className={styles.portrait} style={compact ? { aspectRatio: '1' } : undefined}>
       {detail.hasPortrait
-        ? <img src={characterApi.portraitUrl(detail.id, detail.updatedAt)} alt={`Retrato de ${detail.sheet.identity.name}`} />
+        ? <img src={characterApi.portraitUrl(detail.id, detail.updatedAt)} alt={t(`Retrato de ${tv(detail.sheet.identity.name)}`, `Portrait of ${tv(detail.sheet.identity.name)}`)} />
         : <div className={styles.portraitEmpty}><UserRound size={compact ? 32 : 72} /></div>}
       <div className={styles.portraitActions}>
         <input ref={input} type="file" accept="image/png,image/jpeg,image/webp,image/gif" hidden onChange={(e) => upload(e.target.files?.[0])} />
-        <IconButton label="Trocar retrato (imagens grandes são reduzidas)" onClick={() => input.current?.click()} disabled={busy}><ImagePlus size={16} /></IconButton>
-        {detail.hasPortrait && <IconButton label="Remover retrato" onClick={remove} disabled={busy}><Trash2 size={16} /></IconButton>}
+        <IconButton label={t('Trocar retrato (imagens grandes são reduzidas)', 'Change portrait (large images are shrunk)')} onClick={() => input.current?.click()} disabled={busy}><ImagePlus size={16} /></IconButton>
+        {detail.hasPortrait && <IconButton label={t('Remover retrato', 'Remove portrait')} onClick={remove} disabled={busy}><Trash2 size={16} /></IconButton>}
       </div>
     </div>
   );

@@ -395,6 +395,15 @@ Todo item tocado pela errata recebe a origem `Verified`. As notas de cada um diz
 
 Ao reimportar um catálogo atualizado, a aplicação apaga os itens que vieram de um seed anterior e não estão mais no atual (origens `Compendium`, `Verified` e `Demo`). Itens `Custom` nunca são apagados.
 
+## Idiomas
+
+A interface tem inglês (padrão) e português do Brasil. A escolha fica no `localStorage` (`ncdb.lang`), e trocar recarrega a página.
+
+- **Textos da interface:** `t('texto em pt', 'text in en')` ([frontend/src/i18n/index.ts](../frontend/src/i18n/index.ts)). O idioma é fixo durante a sessão, então `t` pode ser chamado fora de componentes, inclusive em constantes de módulo.
+- **Dados do servidor** (catálogo, regras, schema das categorias, rótulos dos enums) continuam canônicos em português no banco e nos arquivos de regras. O frontend traduz na exibição com `tv(texto)`, que consulta [frontend/src/i18n/data-en.json](../frontend/src/i18n/data-en.json) (texto pt → en). O que não estiver no dicionário aparece em português. Ao adicionar itens ou regras com texto novo, acrescente as traduções nesse arquivo.
+- **Mensagens da API:** o cliente manda `Accept-Language` (`pt-BR` ou `en-US`), e um middleware em `Program.cs` chama `L.Use(...)`. O parâmetro `?lang=` também funciona, por exemplo para downloads abertos direto no navegador. No backend, use `L.T("pt", "en")` para mensagens e `L.D(texto)` para um texto das regras ou do catálogo que entra numa mensagem; `L.D` lê o mesmo `data-en.json`, embutido no assembly `CyberpunkDb.Application`. Sem requisição (testes unitários), `L` fica em português. Os testes de integração mandam `pt-BR` (`ApiFactory`). A janela do console e os logs seguem o idioma do Windows (`L.ForSystem`).
+- **Não traduzir** valores que o código compara ou grava: ids, valores de enum, as condições `Morto` e `Inconsciente` e os slugs.
+
 ## Observações
 
 - Não há autenticação. Os favoritos, as listas, os personagens, os Night Markets e as Arquiteturas de NET servem a um único perfil local. Coloque a API atrás de autenticação antes de expô-la publicamente.

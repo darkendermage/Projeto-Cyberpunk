@@ -2,6 +2,7 @@ using CyberpunkDb.Application.Characters.Creation;
 using CyberpunkDb.Application.Characters.Rules;
 using CyberpunkDb.Application.Npcs;
 using CyberpunkDb.Domain.Enums;
+using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.Characters.Validation;
 
@@ -60,24 +61,24 @@ public sealed class CharacterValidator(CharacterRuleBook rules, Roles.RoleModule
     private void ValidateIdentity(Context c)
     {
         if (string.IsNullOrWhiteSpace(c.Sheet.Identity.Name))
-            c.Error("NAME_REQUIRED", "O personagem precisa de um nome.", null, null, "identity.name");
+            c.Error("NAME_REQUIRED", L.T("O personagem precisa de um nome.", "The character needs a name."), null, null, "identity.name");
         if (c.Sheet.Identity.NativeLanguage is null)
-            c.Error("NATIVE_LANGUAGE_REQUIRED", "Escolha o idioma de origem cultural.",
-                "Ele entra como Language no nível 4, sem custo.", rules.Document.Creation.OriginLanguageLevel.Reference, "identity.nativeLanguage");
+            c.Error("NATIVE_LANGUAGE_REQUIRED", L.T("Escolha o idioma de origem cultural.", "Pick the cultural origin language."),
+                L.T("Ele entra como Language no nível 4, sem custo.", "It comes in as Language at level 4, free."), rules.Document.Creation.OriginLanguageLevel.Reference, "identity.nativeLanguage");
         else if (CreationCosts.NativeLanguageKey(c.Sheet) is not { } key)
-            c.Error("NATIVE_LANGUAGE_STREETSLANG", "Streetslang já é perícia básica de todos; o idioma de origem é outro.",
-                "Escolha a língua da sua região cultural.", rules.Document.Creation.OriginLanguageLevel.Reference, "identity.nativeLanguage");
+            c.Error("NATIVE_LANGUAGE_STREETSLANG", L.T("Streetslang já é perícia básica de todos; o idioma de origem é outro.", "Streetslang is already everyone's basic skill; the native language is another one."),
+                L.T("Escolha a língua da sua região cultural.", "Pick the language of your cultural region."), rules.Document.Creation.OriginLanguageLevel.Reference, "identity.nativeLanguage");
         else
         {
             var min = rules.Document.Creation.OriginLanguageLevel.Value;
             if (c.Sheet.Skills.GetValueOrDefault(key) < min)
-                c.Error("NATIVE_LANGUAGE_LEVEL", $"Language ({c.Sheet.Identity.NativeLanguage}) deve estar no nível {min} ou mais.",
+                c.Error("NATIVE_LANGUAGE_LEVEL", L.T($"Language ({c.Sheet.Identity.NativeLanguage}) deve estar no nível {min} ou mais.", $"Language ({c.Sheet.Identity.NativeLanguage}) must be at level {min} or more."),
                     null, rules.Document.Creation.OriginLanguageLevel.Reference, $"skills.{key}");
             var region = rules.Document.Lifepath.CulturalOrigins.FirstOrDefault(o =>
                 o.Region.Equals(c.Sheet.Lifepath.CulturalRegion, StringComparison.OrdinalIgnoreCase));
             if (region is not null && !region.Languages.Contains(c.Sheet.Identity.NativeLanguage, StringComparer.OrdinalIgnoreCase))
-                c.Info("NATIVE_LANGUAGE_OUTSIDE_REGION", $"{c.Sheet.Identity.NativeLanguage} não está na lista de {region.Region}.",
-                    "O livro permite outra língua se fizer sentido para o personagem.", rules.Document.Lifepath.CustomLanguageAllowed.Reference, "identity.nativeLanguage");
+                c.Info("NATIVE_LANGUAGE_OUTSIDE_REGION", L.T($"{c.Sheet.Identity.NativeLanguage} não está na lista de {region.Region}.", $"{c.Sheet.Identity.NativeLanguage} isn't on the {region.Region} list."),
+                    L.T("O livro permite outra língua se fizer sentido para o personagem.", "The book allows another language if it makes sense for the character."), rules.Document.Lifepath.CustomLanguageAllowed.Reference, "identity.nativeLanguage");
         }
     }
 
@@ -86,26 +87,26 @@ public sealed class CharacterValidator(CharacterRuleBook rules, Roles.RoleModule
         var roles = c.Sheet.Roles;
         if (roles.Count == 0)
         {
-            c.Error("ROLE_REQUIRED", "Escolha a Role do personagem.", null, null, "roles");
+            c.Error("ROLE_REQUIRED", L.T("Escolha a Role do personagem.", "Pick the character's Role."), null, null, "roles");
             return;
         }
         foreach (var r in roles.Where(r => rules.FindRole(r.Role) is null))
-            c.Error("ROLE_UNKNOWN", $"Role desconhecida: {r.Role}.", null, null, "roles");
+            c.Error("ROLE_UNKNOWN", L.T($"Role desconhecida: {r.Role}.", $"Unknown Role: {r.Role}."), null, null, "roles");
         if (roles.Select(r => r.Role).Distinct(StringComparer.OrdinalIgnoreCase).Count() != roles.Count)
-            c.Error("ROLE_DUPLICATED", "A mesma Role aparece duas vezes.", null, null, "roles");
+            c.Error("ROLE_DUPLICATED", L.T("A mesma Role aparece duas vezes.", "The same Role appears twice."), null, null, "roles");
 
         var maxRank = rules.Document.Progression.MaxRank.Value;
         foreach (var r in roles.Where(r => r.Rank < 1 || r.Rank > maxRank))
-            c.Error("ROLE_RANK_RANGE", $"Rank de {r.Role} fora de 1–{maxRank}.", null, rules.Document.Progression.MaxRank.Reference, "roles");
+            c.Error("ROLE_RANK_RANGE", L.T($"Rank de {r.Role} fora de 1–{maxRank}.", $"{r.Role} Rank outside 1–{maxRank}."), null, rules.Document.Progression.MaxRank.Reference, "roles");
 
         if (!c.Sheet.Creation.Finalized)
         {
             if (roles.Count > 1 && !rules.Document.Creation.MulticlassAtCreation.Value)
-                c.Error("MULTICLASS_AT_CREATION", "Não é possível começar com duas Roles.",
-                    "Adicione outra Role depois de concluir a criação, com Improvement Points.", rules.Document.Creation.MulticlassAtCreation.Reference, "roles");
+                c.Error("MULTICLASS_AT_CREATION", L.T("Não é possível começar com duas Roles.", "You can't start with two Roles."),
+                    L.T("Adicione outra Role depois de concluir a criação, com Improvement Points.", "Add another Role after completing creation, with Improvement Points."), rules.Document.Creation.MulticlassAtCreation.Reference, "roles");
             var start = rules.Document.Creation.RoleAbilityStartRank;
             if (roles[0].Rank != start.Value)
-                c.Error("ROLE_START_RANK", $"A habilidade de Role começa no Rank {start.Value}.", null, start.Reference, "roles");
+                c.Error("ROLE_START_RANK", L.T($"A habilidade de Role começa no Rank {start.Value}.", $"The Role Ability starts at Rank {start.Value}."), null, start.Reference, "roles");
             return;
         }
 
@@ -120,9 +121,9 @@ public sealed class CharacterValidator(CharacterRuleBook rules, Roles.RoleModule
         foreach (var key in rules.StatOrder)
         {
             if (!c.Sheet.Stats.TryGetValue(key, out var v))
-                c.Error("STAT_MISSING", $"{key} sem valor.", null, null, $"stats.{key}");
+                c.Error("STAT_MISSING", L.T($"{key} sem valor.", $"{key} has no value."), null, null, $"stats.{key}");
             else if (v < 0 || v > TechnicalStatMax)
-                c.Error("STAT_INVALID", $"{key} = {v} não é um valor válido.", null, null, $"stats.{key}");
+                c.Error("STAT_INVALID", L.T($"{key} = {v} não é um valor válido.", $"{key} = {v} isn't a valid value."), null, null, $"stats.{key}");
         }
         foreach (var key in c.Sheet.Stats.Keys.Where(k => !rules.StatOrder.Contains(k, StringComparer.OrdinalIgnoreCase)))
             c.Error("STAT_UNKNOWN", $"STAT desconhecido: {key}.", null, null, "stats");
@@ -135,7 +136,7 @@ public sealed class CharacterValidator(CharacterRuleBook rules, Roles.RoleModule
         var source = rules.Document.Creation.Methods.Streetrat.Stats.Reference;
         if (c.Sheet.Creation.TemplateRow is not { } row || row < 1 || row > table.Rows.Length)
         {
-            c.Error("TEMPLATE_ROW_REQUIRED", "Role 1d10 ou escolha a linha da tabela de STATs da Role.", null, source, "creation.templateRow");
+            c.Error("TEMPLATE_ROW_REQUIRED", L.T("Role 1d10 ou escolha a linha da tabela de STATs da Role.", "Roll 1d10 or pick the row of the Role's STAT table."), null, source, "creation.templateRow");
             return;
         }
         var values = table.Rows[row - 1];
@@ -143,8 +144,8 @@ public sealed class CharacterValidator(CharacterRuleBook rules, Roles.RoleModule
         {
             var key = rules.StatOrder[i];
             if (c.Sheet.Stat(key) != values[i])
-                c.Error("STAT_TEMPLATE_MISMATCH", $"{key} deve ser {values[i]} (linha {row} da tabela {c.Sheet.PrimaryRole!.Role}).",
-                    "No Streetrat os STATs são copiados da tabela sem trocas.", source, $"stats.{key}");
+                c.Error("STAT_TEMPLATE_MISMATCH", L.T($"{key} deve ser {values[i]} (linha {row} da tabela {c.Sheet.PrimaryRole!.Role}).", $"{key} must be {values[i]} (row {row} of the {c.Sheet.PrimaryRole!.Role} table)."),
+                    L.T("No Streetrat os STATs são copiados da tabela sem trocas.", "In Streetrat the STATs are copied from the table with no swaps."), source, $"stats.{key}");
         }
     }
 
@@ -158,12 +159,12 @@ public sealed class CharacterValidator(CharacterRuleBook rules, Roles.RoleModule
             var key = rules.StatOrder[i];
             if (!c.Sheet.Creation.StatRolls.TryGetValue(key, out var roll) || roll < 1 || roll > table.Rows.Length)
             {
-                c.Error("STAT_ROLL_REQUIRED", $"Role 1d10 para {key}.", null, source, $"creation.statRolls.{key}");
+                c.Error("STAT_ROLL_REQUIRED", L.T($"Role 1d10 para {key}.", $"Roll 1d10 for {key}."), null, source, $"creation.statRolls.{key}");
                 continue;
             }
             var expected = table.Rows[roll - 1][i];
             if (c.Sheet.Stat(key) != expected)
-                c.Error("STAT_ROLL_MISMATCH", $"{key} deve ser {expected} (rolagem {roll} na coluna {key}).", null, source, $"stats.{key}");
+                c.Error("STAT_ROLL_MISMATCH", L.T($"{key} deve ser {expected} (rolagem {roll} na coluna {key}).", $"{key} must be {expected} (roll of {roll} in the {key} column)."), null, source, $"stats.{key}");
         }
     }
 
@@ -175,17 +176,17 @@ public sealed class CharacterValidator(CharacterRuleBook rules, Roles.RoleModule
         {
             var v = c.Sheet.Stat(key);
             if (v < l.StatMin.Value)
-                c.Error("STAT_BELOW_MIN", $"{key} = {v}; o mínimo é {l.StatMin.Value}.", null, l.StatMin.Source, $"stats.{key}");
+                c.Error("STAT_BELOW_MIN", L.T($"{key} = {v}; o mínimo é {l.StatMin.Value}.", $"{key} = {v}; the minimum is {l.StatMin.Value}."), null, l.StatMin.Source, $"stats.{key}");
             if (v > l.StatMax.Value)
-                c.Error("STAT_ABOVE_MAX", $"{key} = {v}; o máximo é {l.StatMax.Value}.", null, l.StatMax.Source, $"stats.{key}");
+                c.Error("STAT_ABOVE_MAX", L.T($"{key} = {v}; o máximo é {l.StatMax.Value}.", $"{key} = {v}; the maximum is {l.StatMax.Value}."), null, l.StatMax.Source, $"stats.{key}");
         }
         var used = CreationCosts.StatPoints(rules, c.Sheet);
         var budget = new CreationBudget(used, l.StatPoints.Value, l.StatPoints.Source, l.StatPoints.CampaignVariant);
         if (budget.Exceeded)
-            c.Error("STAT_BUDGET_EXCEEDED", $"{used} pontos de STAT gastos; o limite é {budget.Total}.",
+            c.Error("STAT_BUDGET_EXCEEDED", L.T($"{used} pontos de STAT gastos; o limite é {budget.Total}.", $"{used} STAT points spent; the limit is {budget.Total}."),
                 $"Tire {used - budget.Total} ponto(s).", budget.Source, "stats");
         else if (budget.Remaining > 0)
-            c.Warn("STAT_BUDGET_UNSPENT", $"Ainda há {budget.Remaining} ponto(s) de STAT para distribuir.", null, budget.Source, "stats");
+            c.Warn("STAT_BUDGET_UNSPENT", L.T($"Ainda há {budget.Remaining} ponto(s) de STAT para distribuir.", $"There are still {budget.Remaining} STAT point(s) to spend."), null, budget.Source, "stats");
         return budget;
     }
 
@@ -203,15 +204,15 @@ public sealed class CharacterValidator(CharacterRuleBook rules, Roles.RoleModule
             var def = rules.FindSkill(id);
             if (def is null)
             {
-                c.Error("SKILL_UNKNOWN", $"Perícia desconhecida: {key}.", null, null, $"skills.{key}");
+                c.Error("SKILL_UNKNOWN", L.T($"Perícia desconhecida: {key}.", $"Unknown skill: {key}."), null, null, $"skills.{key}");
                 continue;
             }
             if (spec == CharacterRuleBook.ChooseToken)
-                c.Error("SKILL_CHOICE_REQUIRED", $"Escolha a especialização de {def.Name}.", null, null, $"skills.{key}");
+                c.Error("SKILL_CHOICE_REQUIRED", L.T($"Escolha a especialização de {def.Name}.", $"Pick the {def.Name} specialization."), null, null, $"skills.{key}");
             else if (def.Specialized && spec is null)
-                c.Error("SKILL_SPECIALIZATION_REQUIRED", $"{def.Name} precisa de especialização.", null, $"CP:R p.{def.Page}", $"skills.{key}");
+                c.Error("SKILL_SPECIALIZATION_REQUIRED", L.T($"{def.Name} precisa de especialização.", $"{def.Name} needs a specialization."), null, $"CP:R p.{def.Page}", $"skills.{key}");
             if (level < 0 || level > maxInput)
-                c.Error("SKILL_LEVEL_INVALID", $"{key} no nível {level}; o máximo é {maxInput}.", null,
+                c.Error("SKILL_LEVEL_INVALID", L.T($"{key} no nível {level}; o máximo é {maxInput}.", $"{key} at level {level}; the maximum is {maxInput}."), null,
                     rules.Shared.Document.SkillCost.MaxLevelInput.Reference, $"skills.{key}");
         }
     }
@@ -228,9 +229,9 @@ public sealed class CharacterValidator(CharacterRuleBook rules, Roles.RoleModule
 
         foreach (var (key, level) in expected)
             if (c.Sheet.Skills.GetValueOrDefault(key) != level)
-                c.Error("SKILL_TEMPLATE_MISMATCH", $"{key} deve estar no nível {level}.", "No Streetrat as perícias vêm do template.", source, $"skills.{key}");
+                c.Error("SKILL_TEMPLATE_MISMATCH", L.T($"{key} deve estar no nível {level}.", $"{key} must be at level {level}."), L.T("No Streetrat as perícias vêm do template.", "In Streetrat the skills come from the template."), source, $"skills.{key}");
         foreach (var key in c.Sheet.Skills.Keys.Where(k => !expected.ContainsKey(k)))
-            c.Error("SKILL_NOT_IN_TEMPLATE", $"{key} não faz parte do template da Role.", null, source, $"skills.{key}");
+            c.Error("SKILL_NOT_IN_TEMPLATE", L.T($"{key} não faz parte do template da Role.", $"{key} isn't part of the Role template."), null, source, $"skills.{key}");
     }
 
     /// <summary>Edgerunner (CP:R p.88) and Complete Package (CP:R p.90) skill points.</summary>
@@ -248,9 +249,9 @@ public sealed class CharacterValidator(CharacterRuleBook rules, Roles.RoleModule
             allowed = rules.RoleSkillLevels(role.Role, home, c.Sheet.Creation.SkillChoices).Keys.ToHashSet(StringComparer.OrdinalIgnoreCase);
             var source = rules.Document.Creation.Methods.Edgerunner.RoleSkillsOnly.Reference;
             foreach (var key in c.Sheet.Skills.Keys.Where(k => !allowed.Contains(k) && !k.Equals(native, StringComparison.OrdinalIgnoreCase)))
-                c.Error("SKILL_NOT_IN_ROLE", $"{key} não é uma perícia da Role {role.Role}.", "No Edgerunner só as 20 perícias da Role recebem pontos.", source, $"skills.{key}");
+                c.Error("SKILL_NOT_IN_ROLE", L.T($"{key} não é uma perícia da Role {role.Role}.", $"{key} isn't a {role.Role} Role skill."), L.T("No Edgerunner só as 20 perícias da Role recebem pontos.", "In Edgerunner only the 20 Role skills get points."), source, $"skills.{key}");
             if (native is not null && c.Sheet.Skills.GetValueOrDefault(native) > rules.Document.Creation.OriginLanguageLevel.Value && !allowed.Contains(native))
-                c.Error("SKILL_NOT_IN_ROLE", $"No Edgerunner o idioma de origem fica no nível {rules.Document.Creation.OriginLanguageLevel.Value}.",
+                c.Error("SKILL_NOT_IN_ROLE", L.T($"No Edgerunner o idioma de origem fica no nível {rules.Document.Creation.OriginLanguageLevel.Value}.", $"In Edgerunner the native language stays at level {rules.Document.Creation.OriginLanguageLevel.Value}."),
                     null, source, $"skills.{native}");
         }
 
@@ -258,24 +259,24 @@ public sealed class CharacterValidator(CharacterRuleBook rules, Roles.RoleModule
         {
             var isNative = key.Equals(native, StringComparison.OrdinalIgnoreCase);
             if (level > l.SkillMax.Value && !(isNative && level <= rules.Document.Creation.OriginLanguageLevel.Value))
-                c.Error("SKILL_ABOVE_MAX", $"{key} no nível {level}; o máximo na criação é {l.SkillMax.Value}.", null, l.SkillMax.Source, $"skills.{key}");
+                c.Error("SKILL_ABOVE_MAX", L.T($"{key} no nível {level}; o máximo na criação é {l.SkillMax.Value}.", $"{key} at level {level}; the maximum at creation is {l.SkillMax.Value}."), null, l.SkillMax.Source, $"skills.{key}");
         }
 
         // Every Role skill must be at least the method minimum (Edgerunner), and the Basic Skills at least 2 (both).
         if (allowed is not null && l.SkillMin is not null)
             foreach (var key in allowed.Where(k => c.Sheet.Skills.GetValueOrDefault(k) < l.SkillMin.Value))
-                c.Error("SKILL_BELOW_MIN", $"{key} precisa estar no nível {l.SkillMin.Value} ou mais.", null, l.SkillMin.Source, $"skills.{key}");
+                c.Error("SKILL_BELOW_MIN", L.T($"{key} precisa estar no nível {l.SkillMin.Value} ou mais.", $"{key} must be at level {l.SkillMin.Value} or more."), null, l.SkillMin.Source, $"skills.{key}");
         foreach (var key in basic.Where(k => c.Sheet.Skills.GetValueOrDefault(k) < l.BasicSkillMin.Value))
             if (allowed is null || !allowed.Contains(key) || l.SkillMin is null)
-                c.Error("BASIC_SKILL_BELOW_MIN", $"Perícia básica {key} precisa estar no nível {l.BasicSkillMin.Value} ou mais.", null, l.BasicSkillMin.Source, $"skills.{key}");
+                c.Error("BASIC_SKILL_BELOW_MIN", L.T($"Perícia básica {key} precisa estar no nível {l.BasicSkillMin.Value} ou mais.", $"Basic skill {key} must be at level {l.BasicSkillMin.Value} or more."), null, l.BasicSkillMin.Source, $"skills.{key}");
 
         var used = CreationCosts.SkillPoints(rules, c.Sheet);
         var budget = new CreationBudget(used, l.SkillPoints.Value, l.SkillPoints.Source, l.SkillPoints.CampaignVariant);
         if (budget.Exceeded)
-            c.Error("SKILL_BUDGET_EXCEEDED", $"{used} pontos de perícia gastos; o limite é {budget.Total}.",
-                $"Tire {used - budget.Total} ponto(s). Perícias (x2) custam 2 por nível.", budget.Source, "skills");
+            c.Error("SKILL_BUDGET_EXCEEDED", L.T($"{used} pontos de perícia gastos; o limite é {budget.Total}.", $"{used} skill points spent; the limit is {budget.Total}."),
+                L.T($"Tire {used - budget.Total} ponto(s). Perícias (x2) custam 2 por nível.", $"Remove {used - budget.Total} point(s). (x2) skills cost 2 per level."), budget.Source, "skills");
         else if (budget.Remaining > 0)
-            c.Warn("SKILL_BUDGET_UNSPENT", $"Ainda há {budget.Remaining} ponto(s) de perícia para distribuir.", null, budget.Source, "skills");
+            c.Warn("SKILL_BUDGET_UNSPENT", L.T($"Ainda há {budget.Remaining} ponto(s) de perícia para distribuir.", $"There are still {budget.Remaining} skill point(s) to spend."), null, budget.Source, "skills");
         return budget;
     }
 
@@ -291,13 +292,13 @@ public sealed class CharacterValidator(CharacterRuleBook rules, Roles.RoleModule
                 if (section.Groups[g].Length < 2) continue;
                 var key = $"{name}:{g}";
                 if (!c.Sheet.Creation.StartingChoices.TryGetValue(key, out var pick) || pick < 0 || pick >= section.Groups[g].Length)
-                    c.Error("STARTING_CHOICE_REQUIRED", $"Escolha uma das opções do equipamento inicial ({Describe(section.Groups[g], c.Catalog)}).",
-                        "Escolha uma e apenas uma opção.", section.Source, $"creation.startingChoices.{key}");
+                    c.Error("STARTING_CHOICE_REQUIRED", L.T($"Escolha uma das opções do equipamento inicial ({Describe(section.Groups[g], c.Catalog)}).", $"Pick one of the starting gear options ({Describe(section.Groups[g], c.Catalog)})."),
+                        L.T("Escolha uma e apenas uma opção.", "Pick one and only one option."), section.Source, $"creation.startingChoices.{key}");
             }
     }
 
     private static string Describe(StartingItem[][] options, NpcCatalog catalog) =>
-        string.Join(" ou ", options.Select(o => string.Join(" + ", o.Select(i => catalog.Find(i.Slug)?.Name ?? i.Slug))));
+        string.Join(L.T(" ou ", " or "), options.Select(o => string.Join(" + ", o.Select(i => catalog.Find(i.Slug)?.Name ?? i.Slug))));
 
     /// <summary>Complete Package: 2,550eb for anything and 800eb only for Fashion and Fashionware (CP:R p.104–105).</summary>
     private (CreationBudget? Gear, CreationBudget? Fashion) ValidateCreationBudgets(Context c)
@@ -313,17 +314,17 @@ public sealed class CharacterValidator(CharacterRuleBook rules, Roles.RoleModule
 
         foreach (var s in spent.Where(s => s.PaidFrom == BudgetPool.CreationFashion))
             if (c.Catalog.Find(s.ItemId) is { } item && !IsFashion(item))
-                c.Error("FASHION_BUDGET_MISUSE", $"{item.Name} não é Fashion nem Fashionware e não pode sair do orçamento de moda.",
-                    "Pague com o orçamento geral.", rules.Document.Creation.Methods.CompletePackage.FashionBudget.Reference, "inventory");
+                c.Error("FASHION_BUDGET_MISUSE", L.T($"{item.Name} não é Fashion nem Fashionware e não pode sair do orçamento de moda.", $"{item.Name} is neither Fashion nor Fashionware and can't come out of the fashion budget."),
+                    L.T("Pague com o orçamento geral.", "Pay with the general budget."), rules.Document.Creation.Methods.CompletePackage.FashionBudget.Reference, "inventory");
 
         var gear = new CreationBudget(gearUsed, l.GearBudget.Value, l.GearBudget.Source, l.GearBudget.CampaignVariant);
         var fashion = new CreationBudget(fashionUsed, l.FashionBudget.Value, l.FashionBudget.Source, l.FashionBudget.CampaignVariant);
         if (gear.Exceeded)
-            c.Error("GEAR_BUDGET_EXCEEDED", $"{Eb(gearUsed)} gastos do orçamento geral de {Eb(gear.Total)}.", null, gear.Source, "inventory");
+            c.Error("GEAR_BUDGET_EXCEEDED", L.T($"{Eb(gearUsed)} gastos do orçamento geral de {Eb(gear.Total)}.", $"{Eb(gearUsed)} spent of the {Eb(gear.Total)} general budget."), null, gear.Source, "inventory");
         if (fashion.Exceeded)
-            c.Error("FASHION_BUDGET_EXCEEDED", $"{Eb(fashionUsed)} gastos do orçamento de moda de {Eb(fashion.Total)}.", null, fashion.Source, "inventory");
+            c.Error("FASHION_BUDGET_EXCEEDED", L.T($"{Eb(fashionUsed)} gastos do orçamento de moda de {Eb(fashion.Total)}.", $"{Eb(fashionUsed)} spent of the {Eb(fashion.Total)} fashion budget."), null, fashion.Source, "inventory");
         else if (fashion.Remaining > 0 && !rules.Document.Creation.Methods.CompletePackage.UnspentFashionKept.Value)
-            c.Info("FASHION_BUDGET_UNSPENT", $"{Eb(fashion.Remaining)} do orçamento de moda sobram e serão perdidos ao concluir.",
+            c.Info("FASHION_BUDGET_UNSPENT", L.T($"{Eb(fashion.Remaining)} do orçamento de moda sobram e serão perdidos ao concluir.", $"{Eb(fashion.Remaining)} of the fashion budget are left and will be lost on completion."),
                 null, rules.Document.Creation.Methods.CompletePackage.UnspentFashionKept.Reference, "inventory");
         return (gear, fashion);
     }
@@ -335,11 +336,11 @@ public sealed class CharacterValidator(CharacterRuleBook rules, Roles.RoleModule
     private static void ValidateWallet(Context c)
     {
         if (c.Sheet.Wallet.Balance < 0)
-            c.Error("BALANCE_NEGATIVE", "O saldo está negativo.", null, null, "wallet.balance");
+            c.Error("BALANCE_NEGATIVE", L.T("O saldo está negativo.", "The balance is negative."), null, null, "wallet.balance");
         foreach (var e in c.Sheet.Inventory.Where(e => c.Catalog.Find(e.ItemId) is null))
-            c.Error("ITEM_MISSING", $"Item {e.ItemId} do inventário não existe mais no catálogo.", null, null, "inventory");
+            c.Error("ITEM_MISSING", L.T($"Item {e.ItemId} do inventário não existe mais no catálogo.", $"Inventory item {e.ItemId} no longer exists in the catalog."), null, null, "inventory");
         foreach (var e in c.Sheet.Cyberware.Where(e => c.Catalog.Find(e.ItemId) is null))
-            c.Error("ITEM_MISSING", $"Implante {e.ItemId} não existe mais no catálogo.", null, null, "cyberware");
+            c.Error("ITEM_MISSING", L.T($"Implante {e.ItemId} não existe mais no catálogo.", $"Implant {e.ItemId} no longer exists in the catalog."), null, null, "cyberware");
     }
 
     public static string Eb(int value) => $"{value:N0}eb".Replace(',', '.');

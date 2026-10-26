@@ -12,6 +12,7 @@ using CyberpunkDb.Application.Npcs;
 using CyberpunkDb.Domain.Entities;
 using CyberpunkDb.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
+using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.Characters;
 
@@ -79,11 +80,11 @@ public sealed class CharacterService(
 
     private static string? StoreSummary(CatalogItem i) => i switch
     {
-        { Weapon: { } w } => $"{w.Damage} · ROF {w.Rof}{(w.Magazine is { } m ? $" · pente {m}" : "")}",
+        { Weapon: { } w } => L.T($"{w.Damage} · ROF {w.Rof}{(w.Magazine is { } m ? $" · pente {m}" : "")}", $"{w.Damage} · ROF {w.Rof}{(w.Magazine is { } m2 ? $" · magazine {m2}" : "")}"),
         { Armor: { Sp: { } sp } a } => $"SP {sp}" + (a.RefPenalty > 0 ? $" · -{a.RefPenalty} REF/DEX/MOVE" : ""),
         { Cyber: { } c } => $"{c.Type} · HL {c.HumanityLoss}{(c.HumanityLossDice is { } d ? $" ({d})" : "")}",
-        { Ammo: { PerPack: { } p } } => $"pacote com {p}",
-        { Attachment: { } a } => $"{a.Type} · {(a.SlotsRequired == 0 ? "sem slot" : $"{a.SlotsRequired} slot(s)")}{(a.ExoticAllowed ? " · aceita exóticas" : "")}",
+        { Ammo: { PerPack: { } p } } => L.T($"pacote com {p}", $"pack of {p}"),
+        { Attachment: { } a } => L.T($"{a.Type} · {(a.SlotsRequired == 0 ? "sem slot" : $"{a.SlotsRequired} slot(s)")}{(a.ExoticAllowed ? " · aceita exóticas" : "")}", $"{a.Type} · {(a.SlotsRequired == 0 ? "no slot" : $"{a.SlotsRequired} slot(s)")}{(a.ExoticAllowed ? " · takes exotics" : "")}"),
         _ => null,
     };
 
@@ -131,7 +132,7 @@ public sealed class CharacterService(
         var now = DateTime.UtcNow;
         var change = new CharacterChange(new CharacterSheet(), catalog, now);
         var sheet = creation.NewDraft(request, change).Normalize();
-        change.Log(CharacterEventKind.Edit, "create", $"Personagem criado ({request.Method}, {request.Role}).");
+        change.Log(CharacterEventKind.Edit, "create", L.T($"Personagem criado ({request.Method}, {request.Role}).", $"Character created ({request.Method}, {request.Role})."));
 
         var entity = new Character { CreatedAt = now };
         Apply(entity, sheet, catalog, now);
@@ -147,13 +148,13 @@ public sealed class CharacterService(
         var catalog = await catalogs.GetAsync(ct);
         var now = DateTime.UtcNow;
         var sheet = Deserialize(source.SheetJson);
-        sheet = sheet with { Identity = sheet.Identity with { Name = $"{sheet.Identity.Name} (cópia)".Trim() } };
+        sheet = sheet with { Identity = sheet.Identity with { Name = L.T($"{sheet.Identity.Name} (cópia)", $"{sheet.Identity.Name} (copy)").Trim() } };
 
         var copy = new Character { CreatedAt = now };
         Apply(copy, sheet, catalog, now);
         if (source.Portrait is { } p)
             copy.Portrait = new CharacterPortrait { ContentType = p.ContentType, Data = p.Data, UpdatedAt = now };
-        AddEvents(copy, [new PendingEvent(CharacterEventKind.Edit, "duplicate", $"Cópia de \"{Deserialize(source.SheetJson).Identity.Name}\" (#{source.Id}); o histórico não foi copiado.", null, null, null, false)], now);
+        AddEvents(copy, [new PendingEvent(CharacterEventKind.Edit, "duplicate", L.T($"Cópia de \"{Deserialize(source.SheetJson).Identity.Name}\" (#{source.Id}); o histórico não foi copiado.", $"Copy of \"{Deserialize(source.SheetJson).Identity.Name}\" (#{source.Id}); the history wasn't copied."), null, null, null, false)], now);
         db.Characters.Add(copy);
         await db.SaveChangesAsync(ct);
         return Detail(copy, sheet, catalog, copy.Portrait is not null, []);
@@ -196,21 +197,21 @@ public sealed class CharacterService(
     public async Task<CharacterDetailDto> ImportAsync(CharacterExportFile file, CancellationToken ct)
     {
         if (file.Format != CharacterExportFile.FormatName)
-            throw RequestValidationException.For("format", "Este arquivo não é um personagem exportado por este aplicativo.");
+            throw RequestValidationException.For("format", L.T("Este arquivo não é um personagem exportado por este aplicativo.", "This file isn't a character exported by this app."));
         if (file.FormatVersion is < 1 or > CharacterExportFile.CurrentVersion)
             throw RequestValidationException.For("formatVersion",
-                $"O arquivo usa a versão {file.FormatVersion} do formato; este aplicativo lê até a {CharacterExportFile.CurrentVersion}. Atualize o aplicativo.");
-        if (file.Sheet is null) throw RequestValidationException.For("sheet", "O arquivo não traz a ficha do personagem.");
+                L.T($"O arquivo usa a versão {file.FormatVersion} do formato; este aplicativo lê até a {CharacterExportFile.CurrentVersion}. Atualize o aplicativo.", $"The file uses format version {file.FormatVersion}; this app reads up to {CharacterExportFile.CurrentVersion}. Update the app."));
+        if (file.Sheet is null) throw RequestValidationException.For("sheet", L.T("O arquivo não traz a ficha do personagem.", "The file doesn't contain the character sheet."));
 
         var catalog = await catalogs.GetAsync(ct);
         var now = DateTime.UtcNow;
         var (sheet, missing) = CharacterTransfer.Rebind(file.Sheet.Normalize(), file.Items ?? [], catalog);
-        if (sheet.Roles.Count == 0) throw RequestValidationException.For("sheet", "A ficha não tem Role.");
+        if (sheet.Roles.Count == 0) throw RequestValidationException.For("sheet", L.T("A ficha não tem Role.", "The sheet has no Role."));
         if (sheet.Roles.FirstOrDefault(r => rules.FindRole(r.Role) is null) is { } unknown)
-            throw RequestValidationException.For("sheet", $"Role desconhecida na ficha: {unknown.Role}.");
+            throw RequestValidationException.For("sheet", L.T($"Role desconhecida na ficha: {unknown.Role}.", $"Unknown Role on the sheet: {unknown.Role}."));
 
         // Same name as a character already here: "(importado)", then "(importado 2)"... so they stay apart in lists.
-        var name = string.IsNullOrWhiteSpace(sheet.Identity.Name) ? "Sem nome" : sheet.Identity.Name;
+        var name = string.IsNullOrWhiteSpace(sheet.Identity.Name) ? L.T("Sem nome", "Unnamed") : sheet.Identity.Name;
         var taken = (await db.Characters.Where(c => c.Name.StartsWith(name)).Select(c => c.Name).ToListAsync(ct)).ToHashSet(StringComparer.OrdinalIgnoreCase);
         if (taken.Contains(name))
         {
@@ -219,7 +220,7 @@ public sealed class CharacterService(
             sheet = sheet with { Identity = sheet.Identity with { Name = renamed } };
         }
 
-        var notices = missing.Select(m => $"Fora do catálogo deste banco, não importado: {m}.").ToList();
+        var notices = missing.Select(m => L.T($"Fora do catálogo deste banco, não importado: {m}.", $"Not in this database's catalog, not imported: {m}.")).ToList();
         var entity = new Character { CreatedAt = now };
         Apply(entity, sheet, catalog, now);
 
@@ -229,7 +230,7 @@ public sealed class CharacterService(
             try { data = Convert.FromBase64String(portrait.Data ?? ""); } catch (FormatException) { }
             if (data is { Length: > 0 and <= PortraitMaxBytes } && PortraitTypes.Contains(portrait.ContentType, StringComparer.OrdinalIgnoreCase))
                 entity.Portrait = new CharacterPortrait { ContentType = portrait.ContentType, Data = data, UpdatedAt = now };
-            else notices.Add("O retrato do arquivo é inválido e ficou de fora.");
+            else notices.Add(L.T("O retrato do arquivo é inválido e ficou de fora.", "The file's portrait is invalid and was left out."));
         }
 
         foreach (var e in (file.History ?? []).TakeLast(CharacterTransfer.MaxHistory))
@@ -240,8 +241,8 @@ public sealed class CharacterService(
                 CreatedAt = e.CreatedAt.Kind == DateTimeKind.Unspecified ? DateTime.SpecifyKind(e.CreatedAt, DateTimeKind.Utc) : e.CreatedAt.ToUniversalTime(),
             });
         AddEvents(entity, [new PendingEvent(CharacterEventKind.Edit, "import",
-            $"Importado de arquivo exportado em {file.ExportedAt:dd/MM/yyyy}." +
-            (missing.Count > 0 ? $" Fora do catálogo, não importado: {string.Join(", ", missing)}." : ""), null, null, null, false)], now);
+            L.T($"Importado de arquivo exportado em {file.ExportedAt:dd/MM/yyyy}.", $"Imported from a file exported on {file.ExportedAt:yyyy-MM-dd}.") +
+            (missing.Count > 0 ? L.T($" Fora do catálogo, não importado: {string.Join(", ", missing)}.", $" Not in the catalog, not imported: {string.Join(", ", missing)}.") : ""), null, null, null, false)], now);
 
         db.Characters.Add(entity);
         await db.SaveChangesAsync(ct);
@@ -299,13 +300,13 @@ public sealed class CharacterService(
                 var changes = Differences(current, incoming);
                 if (changes.Count > 0 && !manual)
                     throw CharacterChange.Refuse("sheet",
-                        $"Depois da criação, {string.Join(", ", changes)} só mudam por ação de regra (IP, compra, instalação). " +
-                        "Para um ajuste do Mestre, informe o motivo.");
+                        L.T($"Depois da criação, {string.Join(", ", changes)} só mudam por ação de regra (IP, compra, instalação). ", $"After creation, {string.Join(", ", changes)} only change through a rule action (IP, purchase, install). ") +
+                        L.T("Para um ajuste do Mestre, informe o motivo.", "For a GM adjustment, give the reason."));
                 if (changes.Count > 0)
                 {
                     merged = merged with { Stats = incoming.Stats, Skills = incoming.Skills, Roles = incoming.Roles };
                     change.Log(CharacterEventKind.Edit, "manual-adjustment",
-                        $"Ajuste manual ({string.Join(", ", changes)}): {request.ManualReason!.Trim()}", manual: true);
+                        L.T($"Ajuste manual ({string.Join(", ", changes)}): {request.ManualReason!.Trim()}", $"Manual adjustment ({string.Join(", ", changes)}): {request.ManualReason!.Trim()}"), manual: true);
                 }
             }
             return merged;
@@ -315,7 +316,7 @@ public sealed class CharacterService(
     {
         var list = new List<string>();
         if (!SameMap(a.Stats, b.Stats)) list.Add("STATs");
-        if (!SameMap(a.Skills, b.Skills)) list.Add("perícias");
+        if (!SameMap(a.Skills, b.Skills)) list.Add(L.T("perícias", "skills"));
         if (a.Roles.Count != b.Roles.Count || a.Roles.Zip(b.Roles).Any(p => p.First.Role != p.Second.Role || p.First.Rank != p.Second.Rank))
             list.Add("Roles");
         return list;
@@ -444,23 +445,23 @@ public sealed class CharacterService(
         MutateAsync(id, r.Version, c => CombatOperations.ClearConditions(c.Sheet, c), ct);
 
     private static CharacterSheet RequireFinalized(CharacterSheet sheet) =>
-        sheet.Creation.Finalized ? sheet : throw CharacterChange.Refuse("creation", "Conclua a criação antes de usar o painel de combate.");
+        sheet.Creation.Finalized ? sheet : throw CharacterChange.Refuse("creation", L.T("Conclua a criação antes de usar o painel de combate.", "Finish creation before using the combat panel."));
 
     // ------------------------------------------------------------ portrait
 
     public async Task<(byte[] Data, string ContentType, DateTime UpdatedAt)> GetPortraitAsync(int id, CancellationToken ct)
     {
         var p = await db.CharacterPortraits.AsNoTracking().FirstOrDefaultAsync(x => x.CharacterId == id, ct)
-                ?? throw new NotFoundException("Este personagem não tem retrato.");
+                ?? throw new NotFoundException(L.T("Este personagem não tem retrato.", "This character has no portrait."));
         return (p.Data, p.ContentType, p.UpdatedAt);
     }
 
     public async Task SetPortraitAsync(int id, string contentType, Stream content, long length, CancellationToken ct)
     {
         if (!PortraitTypes.Contains(contentType, StringComparer.OrdinalIgnoreCase))
-            throw RequestValidationException.For("file", "Use uma imagem PNG, JPEG, WebP ou GIF.");
+            throw RequestValidationException.For("file", L.T("Use uma imagem PNG, JPEG, WebP ou GIF.", "Use a PNG, JPEG, WebP or GIF image."));
         if (length <= 0 || length > PortraitMaxBytes)
-            throw RequestValidationException.For("file", "A imagem deve ter até 2 MB.");
+            throw RequestValidationException.For("file", L.T("A imagem deve ter até 2 MB.", "The image must be 2 MB or less."));
         var entity = await db.Characters.Include(c => c.Portrait).FirstOrDefaultAsync(c => c.Id == id, ct) ?? throw NotFound(id);
         using var buffer = new MemoryStream();
         await content.CopyToAsync(buffer, ct);
@@ -490,7 +491,7 @@ public sealed class CharacterService(
     {
         var entity = await db.Characters.FirstOrDefaultAsync(c => c.Id == id, ct) ?? throw NotFound(id);
         if (entity.Version != version)
-            throw new ConflictException("Esta ficha foi alterada em outra janela. Recarregue para ver a versão atual.");
+            throw new ConflictException(L.T("Esta ficha foi alterada em outra janela. Recarregue para ver a versão atual.", "This sheet was changed in another window. Reload to see the current version."));
 
         var catalog = await catalogs.GetAsync(ct);
         var now = DateTime.UtcNow;
@@ -505,7 +506,7 @@ public sealed class CharacterService(
         }
         catch (DbUpdateConcurrencyException)
         {
-            throw new ConflictException("Esta ficha foi alterada ao mesmo tempo em outra janela. Recarregue e tente de novo.");
+            throw new ConflictException(L.T("Esta ficha foi alterada ao mesmo tempo em outra janela. Recarregue e tente de novo.", "This sheet was changed at the same time in another window. Reload and try again."));
         }
         var hasPortrait = await db.CharacterPortraits.AnyAsync(p => p.CharacterId == id, ct);
         return Detail(entity, sheet, catalog, hasPortrait, change.Notices);
@@ -514,7 +515,7 @@ public sealed class CharacterService(
     private void Apply(Character entity, CharacterSheet sheet, NpcCatalog catalog, DateTime now)
     {
         var status = validator.Validate(sheet, catalog).Status;
-        entity.Name = Truncate(string.IsNullOrWhiteSpace(sheet.Identity.Name) ? "Sem nome" : sheet.Identity.Name, 80)!;
+        entity.Name = Truncate(string.IsNullOrWhiteSpace(sheet.Identity.Name) ? L.T("Sem nome", "Unnamed") : sheet.Identity.Name, 80)!;
         entity.Handle = Truncate(sheet.Identity.Handle, 80);
         entity.Role = sheet.PrimaryRole?.Role;
         entity.CreationMethod = sheet.Creation.Method;
@@ -541,7 +542,7 @@ public sealed class CharacterService(
     internal static CharacterSheet Deserialize(string json) =>
         (JsonSerializer.Deserialize<CharacterSheet>(json, SheetJson) ?? new CharacterSheet()).Normalize();
 
-    private static NotFoundException NotFound(int id) => new($"Personagem {id} não encontrado.");
+    private static NotFoundException NotFound(int id) => new(L.T($"Personagem {id} não encontrado.", $"Character {id} not found."));
 
     private static string? Truncate(string? s, int max) => s is null || s.Length <= max ? s : s[..max];
 }

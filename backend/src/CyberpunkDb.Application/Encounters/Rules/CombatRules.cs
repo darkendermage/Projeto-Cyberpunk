@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 using CyberpunkDb.Application.Common;
 using CyberpunkDb.Application.Npcs.Rules;
 using CyberpunkDb.Domain.Enums;
+using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.Encounters.Rules;
 
@@ -102,9 +103,9 @@ public sealed class CombatRuleBook
     /// <summary>The DV of a single shot at this range, or an explanation of why the shot can't be made.</summary>
     public int SingleShotDv(RangeRow row, int meters)
     {
-        var band = Band(meters) ?? throw RequestValidationException.For("range", $"{meters} m está além da tabela de alcance ({Document.SingleShot.Source}).");
+        var band = Band(meters) ?? throw RequestValidationException.For("range", L.T($"{meters} m está além da tabela de alcance ({Document.SingleShot.Source}).", $"{meters} m is beyond the range table ({Document.SingleShot.Source})."));
         return row.Dv[band] ?? throw RequestValidationException.For("range",
-            $"{row.Label} não alcança {meters} m (N/A na tabela, {Document.SingleShot.Source}).");
+            L.T($"{row.Label} não alcança {meters} m (N/A na tabela, {Document.SingleShot.Source}).", $"{L.D(row.Label)} doesn't reach {meters} m (N/A on the table, {Document.SingleShot.Source})."));
     }
 
     /// <summary>Brawling and Martial Arts damage by BODY (CP:R p.176, p.178); a Cyberarm makes Brawling at least 2d6.</summary>
@@ -117,7 +118,7 @@ public sealed class CombatRuleBook
     public int CoverHp(string material, bool thick)
     {
         var m = Document.CoverMaterials.Value.FirstOrDefault(c => c.Id == material)
-                ?? throw RequestValidationException.For("material", $"Material '{material}' não existe.");
+                ?? throw RequestValidationException.For("material", L.T($"Material '{material}' não existe.", $"Material '{material}' doesn't exist."));
         return thick ? m.Thick : m.Thin;
     }
 

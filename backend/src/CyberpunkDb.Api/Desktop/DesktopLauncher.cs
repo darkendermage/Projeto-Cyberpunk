@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Api.Desktop;
 
@@ -26,7 +27,7 @@ public static class DesktopLauncher
             return false; // nothing running: normal startup
         }
 
-        Console.WriteLine($"O {Title} já está aberto em {url}.");
+        Console.WriteLine(L.ForSystem($"O {Title} já está aberto em {url}.", $"{Title} is already open at {url}."));
         Open(url);
         return true;
     }
@@ -52,9 +53,9 @@ public static class DesktopLauncher
         app.Lifetime.ApplicationStarted.Register(() =>
         {
             Console.WriteLine();
-            if (afterUpdate) Console.WriteLine($"  Atualizado para a versão {AppVersion.Current}.");
-            Console.WriteLine($"  {Title} rodando em {url}");
-            Console.WriteLine("  Feche esta janela para encerrar.");
+            if (afterUpdate) Console.WriteLine(L.ForSystem($"  Atualizado para a versão {AppVersion.Current}.", $"  Updated to version {AppVersion.Current}."));
+            Console.WriteLine(L.ForSystem($"  {Title} rodando em {url}", $"  {Title} running at {url}"));
+            Console.WriteLine(L.ForSystem("  Feche esta janela para encerrar.", "  Close this window to quit."));
             Console.WriteLine();
             // After an update the tab that asked for it reloads by itself.
             if (!afterUpdate && app.Configuration.GetValue("Desktop:OpenBrowser", true)) Open(url);
@@ -92,12 +93,12 @@ public static class DesktopLauncher
                 UseShellExecute = true,
                 Arguments = $"--{AfterUpdateKey}=true --{WaitPidKey}={Environment.ProcessId}",
             });
-            Console.WriteLine("  Atualização instalada. Reiniciando...");
+            Console.WriteLine(L.ForSystem("  Atualização instalada. Reiniciando...", "  Update installed. Restarting..."));
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"  Atualização instalada, mas não foi possível reabrir o programa: {ex.Message}");
-            Console.WriteLine("  Abra o NightCityItemDB.exe de novo.");
+            Console.WriteLine(L.ForSystem($"  Atualização instalada, mas não foi possível reabrir o programa: {ex.Message}", $"  Update installed, but the program couldn't be reopened: {ex.Message}"));
+            Console.WriteLine(L.ForSystem("  Abra o NightCityItemDB.exe de novo.", "  Open NightCityItemDB.exe again."));
         }
         app.Lifetime.StopApplication();
     }
@@ -109,9 +110,9 @@ public static class DesktopLauncher
         var portInUse = exception is IOException or System.Net.Sockets.SocketException ||
                         exception.InnerException is System.Net.Sockets.SocketException;
         Console.WriteLine(portInUse
-            ? $"  Não foi possível abrir {AppUrl(configuration)}: a porta já está em uso por outro programa."
-            : $"  O programa não conseguiu iniciar: {exception.Message}");
-        Console.WriteLine("  Pressione Enter para fechar.");
+            ? L.ForSystem($"  Não foi possível abrir {AppUrl(configuration)}: a porta já está em uso por outro programa.", $"  Couldn't open {AppUrl(configuration)}: the port is already in use by another program.")
+            : L.ForSystem($"  O programa não conseguiu iniciar: {exception.Message}", $"  The program couldn't start: {exception.Message}"));
+        Console.WriteLine(L.ForSystem("  Pressione Enter para fechar.", "  Press Enter to close."));
         try { Console.ReadLine(); } catch (Exception) { /* no console */ }
     }
 
@@ -123,7 +124,7 @@ public static class DesktopLauncher
         }
         catch (Exception)
         {
-            Console.WriteLine($"Abra no navegador: {url}");
+            Console.WriteLine(L.ForSystem($"Abra no navegador: {url}", $"Open in the browser: {url}"));
         }
     }
 }

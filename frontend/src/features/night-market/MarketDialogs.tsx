@@ -11,6 +11,7 @@ import { useDebouncedValue } from '../../lib/hooks';
 import { useToast } from '../../state/ToastContext';
 import { CONDITION_LABEL, type HaggleState, initialHaggle, qualityLabel, toHaggleRequest } from './nightMarket';
 import styles from './NightMarket.module.css';
+import { t, tv } from '../../i18n';
 
 // ------------------------------------------------------------------ Haggle
 
@@ -18,7 +19,7 @@ import styles from './NightMarket.module.css';
  * The Haggle opposed check of CP:R p.159: COOL + Trading + Operator Rank + 1d10 on each side. The result lists the
  * deals of the buyer's Rank or lower; `onDeal` receives the chosen one with the dice that were rolled.
  */
-export function HagglePanel({ rules, state, onChange, result, onResult, deal, onDeal, buyerLabel = 'Quem pechincha', sellerLabel = 'Outro lado' }: {
+export function HagglePanel({ rules, state, onChange, result, onResult, deal, onDeal, buyerLabel = t('Quem pechincha', 'Who haggles'), sellerLabel = t('Outro lado', 'Other side') }: {
   rules: NightMarketRules;
   state: HaggleState;
   onChange: (s: HaggleState) => void;
@@ -43,42 +44,42 @@ export function HagglePanel({ rules, state, onChange, result, onResult, deal, on
         <NumberInput className={styles.number} min={0} max={40} value={state[key].trading}
           onChange={(v) => { onChange({ ...state, [key]: { ...state[key], trading: v ?? 0 } }); onResult(null); }} />
       </Field>
-      <Field label="Operator Rank" hint={key === 'buyer' ? 'Só um Fixer (Rank 1+) faz acordos.' : '0 se não for Fixer.'}>
+      <Field label="Operator Rank" hint={key === 'buyer' ? t('Só um Fixer (Rank 1+) faz acordos.', 'Only a Fixer (Rank 1+) makes deals.') : t('0 se não for Fixer.', '0 if not a Fixer.')}>
         <NumberInput className={styles.number} min={0} max={10} value={state[key].rank}
           onChange={(v) => { onChange({ ...state, [key]: { ...state[key], rank: v ?? 0 } }); onResult(null); }} />
       </Field>
-      <Field label="d10 (opcional)" hint="Dados físicos: o d10 e, se der 10 ou 1, o extra. Vazio: o servidor rola.">
-        <input className={styles.text} value={state[dice]} placeholder="ex.: 7 ou 10 4"
+      <Field label={t('d10 (opcional)', 'd10 (optional)')} hint={t('Dados físicos: o d10 e, se der 10 ou 1, o extra. Vazio: o servidor rola.', 'Physical dice: the d10 and, on a 10 or 1, the extra one. Empty: the server rolls.')}>
+        <input className={styles.text} value={state[dice]} placeholder={t('ex.: 7 ou 10 4', 'e.g. 7 or 10 4')}
           onChange={(e) => { onChange({ ...state, [dice]: e.target.value }); onResult(null); }} />
       </Field>
     </div>
   );
   return (
     <div className={styles.dialog}>
-      <p className={styles.muted}>{op.haggleFormula.value} <span className={styles.source}>({op.haggleFormula.reference})</span></p>
+      <p className={styles.muted}>{tv(op.haggleFormula.value)} <span className={styles.source}>({op.haggleFormula.reference})</span></p>
       <div className={styles.haggle}>
         {side('buyer', buyerLabel, 'buyerDice')}
         {side('seller', sellerLabel, 'sellerDice')}
       </div>
       <div className={styles.row}>
-        <Button icon={<Dices size={15} />} onClick={() => roll.mutate()} disabled={roll.isPending}>Rolar Haggle</Button>
-        <span className={styles.source}>Empate fica com o Defensor ({op.haggleTie.reference}). {op.criticals.reference}</span>
+        <Button icon={<Dices size={15} />} onClick={() => roll.mutate()} disabled={roll.isPending}>{t('Rolar Haggle', 'Roll Haggle')}</Button>
+        <span className={styles.source}>{t('Empate fica com o Defensor (', 'Ties go to the Defender (')}{op.haggleTie.reference}). {op.criticals.reference}</span>
       </div>
       {result && (
         <>
           <div className={`${styles.result} ${result.success ? styles.resultWin : ''}`}>
-            <b>{result.buyerTotal}</b> (d10 {result.buyerRolls.join(' + ')}) contra <b>{result.sellerTotal}</b> (d10 {result.sellerRolls.join(' + ')}). {result.summary}
+            <b>{result.buyerTotal}</b> (d10 {result.buyerRolls.join(' + ')}{t(') contra ', ') versus ')}<b>{result.sellerTotal}</b> (d10 {result.sellerRolls.join(' + ')}). {tv(result.summary)}
           </div>
           {result.deals.length > 0 && (
-            <div className={styles.deals} role="radiogroup" aria-label="Acordo">
+            <div className={styles.deals} role="radiogroup" aria-label={t('Acordo', 'Deal')}>
               <label className={styles.deal}>
                 <input type="radio" name="deal" checked={deal === null} onChange={() => onDeal(null)} />
-                <span>Sem acordo (preço de mercado)</span>
+                <span>{t('Sem acordo (preço de mercado)', 'No deal (market price)')}</span>
               </label>
               {result.deals.map((d) => (
-                <label key={d.id} className={`${styles.deal} ${d.applies ? '' : styles.dealOff}`} title={d.text}>
+                <label key={d.id} className={`${styles.deal} ${d.applies ? '' : styles.dealOff}`} title={tv(d.text)}>
                   <input type="radio" name="deal" disabled={!d.applies} checked={deal === d.id} onChange={() => onDeal(d.id)} />
-                  <span><b>Rank {d.minRank}+ · {d.label}</b>{d.reason ? <><br /><span className={styles.muted}>{d.reason}</span></> : null}</span>
+                  <span><b>Rank {d.minRank}+ · {tv(d.label)}</b>{d.reason ? <><br /><span className={styles.muted}>{tv(d.reason)}</span></> : null}</span>
                 </label>
               ))}
             </div>
@@ -115,7 +116,7 @@ export function BuyDialog({ market, listing, rules, onClose }: {
   }, {
     onSuccess: (answer) => {
       const detail = 'market' in answer ? answer.market : answer;
-      toast.notify(`Comprado: ${quantity}× ${listing.name}. Retire no booth ${listing.stall}.`);
+      toast.notify(t(`Comprado: ${quantity}× ${listing.name}. Retire no booth ${listing.stall}.`, `Bought: ${quantity}× ${listing.name}. Pick it up at booth ${listing.stall}.`));
       detail.notices.forEach((n) => toast.notify(n, 'info'));
       onClose();
     },
@@ -123,33 +124,33 @@ export function BuyDialog({ market, listing, rules, onClose }: {
   });
 
   return (
-    <Modal open onClose={onClose} title={<>Buy Now!!! · {listing.name}{quality ? ` (${quality})` : ''}</>} wide>
+    <Modal open onClose={onClose} title={<>Buy Now!!! · {tv(listing.name)}{quality ? ` (${quality})` : ''}</>} wide>
       <div className={styles.dialog}>
         <div className={styles.row}>
           <span className={styles.price}>{formatEb(listing.price)}eb <small>{PRICE_CATEGORY_LABEL[listing.priceCategory]}</small></span>
           <span className={styles.pickup}>Pick-up or Browse at Booth <b>{listing.stall}</b></span>
         </div>
         <div className={styles.grid2}>
-          <Field label="Quantidade" hint={listing.stock != null ? `${listing.stock} em estoque` : 'Estoque não controlado (CP:R p.338)'}>
+          <Field label={t('Quantidade', 'Quantity')} hint={listing.stock != null ? t(`${listing.stock} em estoque`, `${listing.stock} in stock`) : t('Estoque não controlado (CP:R p.338)', 'Stock not tracked (CP:R p.338)')}>
             <NumberInput className={styles.number} min={1} max={max} value={quantity} onChange={(v) => setQuantity(v ?? 1)} />
           </Field>
-          <Field label="Comprador">
-            <input className={styles.text} value={buyer} onChange={(e) => setBuyer(e.target.value)} placeholder="Nome ou handle" data-autofocus />
+          <Field label={t('Comprador', 'Buyer')}>
+            <input className={styles.text} value={buyer} onChange={(e) => setBuyer(e.target.value)} placeholder={t('Nome ou handle', 'Name or handle')} data-autofocus />
           </Field>
         </div>
         <Checkbox checked={haggling} onChange={(v) => { setHaggling(v); setResult(null); setDeal(null); }}
-          label="Pechinchar (Haggle de um Fixer)" />
+          label={t('Pechinchar (Haggle de um Fixer)', 'Haggle (a Fixer\'s Haggle)')} />
         {haggling && (
           <HagglePanel rules={rules} state={haggle} onChange={setHaggle} result={result} onResult={setResult} deal={deal} onDeal={setDeal}
-            buyerLabel="Comprador (Fixer)" sellerLabel={`Vendedor: ${market.organizer.name}`} />
+            buyerLabel={t('Comprador (Fixer)', 'Buyer (Fixer)')} sellerLabel={t(`Vendedor: ${market.organizer.name}`, `Seller: ${market.organizer.name}`)} />
         )}
-        <p className={styles.source}>{rules.rules.blackChrome.buyNow.value} ({rules.rules.blackChrome.buyNow.reference})</p>
+        <p className={styles.source}>{tv(rules.rules.blackChrome.buyNow.value)} ({rules.rules.blackChrome.buyNow.reference})</p>
         <div className={styles.row}>
           <Button variant="primary" icon={<ShoppingCart size={15} />} onClick={buy}
             disabled={command.isPending || (haggling && !result)}>
-            Comprar {quantity > 1 ? `${quantity}× ` : ''}por {formatEb(listing.price * quantity)}eb{deal ? ' (com acordo)' : ''}
+            {t('Comprar ', 'Buy ')}{quantity > 1 ? `${quantity}× ` : ''}{t('por ', 'for ')}{formatEb(listing.price * quantity)}eb{deal ? t(' (com acordo)', ' (with a deal)') : ''}
           </Button>
-          <Button variant="ghost" onClick={onClose}>Cancelar</Button>
+          <Button variant="ghost" onClick={onClose}>{t('Cancelar', 'Cancel')}</Button>
         </div>
       </div>
     </Modal>
@@ -192,37 +193,37 @@ export function EditListingDialog({ market, listing, rules, onClose }: {
   const remove = () => command.mutate({ path: `listings/${listing.id}/remove` }, { onSuccess: onClose, onError: fail });
 
   return (
-    <Modal open onClose={onClose} title={<>Listagem · {listing.name}</>} wide>
+    <Modal open onClose={onClose} title={<>{t('Listagem · ', 'Listing · ')}{tv(listing.name)}</>} wide>
       <div className={styles.dialog}>
-        <Field label="Condição" hint={`Damaged: ${c.damagedSteps.value} categoria abaixo; Destroyed: ${c.destroyedSteps.value} (${c.damagedSteps.reference}).`}>
-          <Segmented ariaLabel="Condição" value={condition} onChange={setCondition}
+        <Field label={t('Condição', 'Condition')} hint={t(`Damaged: ${tv(c.damagedSteps.value)} categoria abaixo; Destroyed: ${tv(c.destroyedSteps.value)} (${c.damagedSteps.reference}).`, `Damaged: ${tv(c.damagedSteps.value)} category lower; Destroyed: ${tv(c.destroyedSteps.value)} (${c.damagedSteps.reference}).`)}>
+          <Segmented ariaLabel={t('Condição', 'Condition')} value={condition} onChange={setCondition}
             options={CONDITIONS.map((x) => ({ value: x, label: CONDITION_LABEL[x] }))} />
         </Field>
         {condition !== 'Normal' && (
           <Checkbox checked={hidden} onChange={setHidden}
-            label={`Golpe: vender como novo, a preço cheio (${c.sellingIsGmCall.reference}). Fixers de Operator ${c.detectRank.value}+ percebem.`} />
+            label={t(`Golpe: vender como novo, a preço cheio (${c.sellingIsGmCall.reference}). Fixers de Operator ${tv(c.detectRank.value)}+ percebem.`, `Scam: sell as new, at full price (${c.sellingIsGmCall.reference}). Fixers with Operator ${tv(c.detectRank.value)}+ notice.`)} />
         )}
         <div className={styles.grid3}>
-          <Field label="Booth" hint={`Letra do mercado (${market.preset.letter}) + número.`}>
+          <Field label="Booth" hint={t(`Letra do mercado (${market.preset.letter}) + número.`, `Market letter (${market.preset.letter}) + number.`)}>
             <Select value={stall} onChange={(e) => setStall(e.target.value)}>
-              {market.stalls.map((s) => <option key={s.code} value={s.code}>{s.code} · {s.label}</option>)}
+              {market.stalls.map((s) => <option key={s.code} value={s.code}>{s.code} · {tv(s.label)}</option>)}
             </Select>
           </Field>
-          <Field label="Estoque" hint="Vazio: não controlado.">
+          <Field label={t('Estoque', 'Stock')} hint={t('Vazio: não controlado.', 'Empty: not tracked.')}>
             <NumberInput className={styles.number} min={0} max={9999} allowEmpty value={stock} onChange={setStock} />
           </Field>
-          <Field label="Preço base (eb)" hint="Preço combinado na mesa (CP:R p.385).">
+          <Field label={t('Preço base (eb)', 'Base price (eb)')} hint={t('Preço combinado na mesa (CP:R p.385).', 'Price agreed at the table (CP:R p.385).')}>
             <NumberInput className={styles.number} min={0} max={10_000_000} value={price} onChange={setPrice} />
           </Field>
         </div>
-        <Checkbox checked={forSale} onChange={setForSale} label="À venda" />
-        <Field label="Nota">
+        <Checkbox checked={forSale} onChange={setForSale} label={t('À venda', 'For sale')} />
+        <Field label={t('Nota', 'Note')}>
           <input className={styles.text} value={note} onChange={(e) => setNote(e.target.value)} />
         </Field>
         <div className={styles.row}>
-          <Button variant="primary" onClick={submit} disabled={command.isPending}>Salvar</Button>
-          <Button variant="danger" onClick={remove} disabled={command.isPending}>Remover do mercado</Button>
-          <Button variant="ghost" onClick={onClose}>Cancelar</Button>
+          <Button variant="primary" onClick={submit} disabled={command.isPending}>{t('Salvar', 'Save')}</Button>
+          <Button variant="danger" onClick={remove} disabled={command.isPending}>{t('Remover do mercado', 'Remove from the market')}</Button>
+          <Button variant="ghost" onClick={onClose}>{t('Cancelar', 'Cancel')}</Button>
         </div>
       </div>
     </Modal>
@@ -244,18 +245,18 @@ export function AddListingDialog({ market, onClose }: { market: NightMarketDetai
   const [price, setPrice] = useState<number | null>(null);
 
   const add = (body: Record<string, unknown>) => command.mutate({ path: 'listings', body: { stall, ...body } }, {
-    onSuccess: () => { toast.notify('Listagem adicionada.'); onClose(); },
+    onSuccess: () => { toast.notify(t('Listagem adicionada.', 'Listing added.')); onClose(); },
     onError: (e) => toast.notify(problemMessage(e), 'error'),
   });
 
   return (
-    <Modal open onClose={onClose} title="Adicionar listagem" wide>
+    <Modal open onClose={onClose} title={t('Adicionar listagem', 'Add listing')} wide>
       <div className={styles.dialog}>
         <div className={styles.row}>
-          <Segmented ariaLabel="Origem" value={source} onChange={setSource} options={[
-            { value: 'catalog', label: 'Catálogo' },
-            { value: 'index', label: 'Só no Night Market Index' },
-            { value: 'free', label: 'Nome e preço' },
+          <Segmented ariaLabel={t('Origem', 'Source')} value={source} onChange={setSource} options={[
+            { value: 'catalog', label: t('Catálogo', 'Catalog') },
+            { value: 'index', label: t('Só no Night Market Index', 'Only in the Night Market Index') },
+            { value: 'free', label: t('Nome e preço', 'Name and price') },
           ]} />
           <Field label="Booth">
             <input className={styles.number} value={stall} onChange={(e) => setStall(e.target.value.toUpperCase())} />
@@ -265,20 +266,20 @@ export function AddListingDialog({ market, onClose }: { market: NightMarketDetai
           <>
             <div className={styles.row}>
               <Search size={15} aria-hidden />
-              <input className={styles.search} value={q} onChange={(e) => setQ(e.target.value)} placeholder="Buscar pelo nome" data-autofocus />
+              <input className={styles.search} value={q} onChange={(e) => setQ(e.target.value)} placeholder={t('Buscar pelo nome', 'Search by name')} data-autofocus />
             </div>
             <div className={styles.picker}>
               {source === 'catalog'
                 ? (catalog.data ?? []).flatMap((g) => g.items).map((item) => (
                   <button key={item.id} type="button" className={styles.pickRow} onClick={() => add({ itemId: item.id })}>
-                    <span>{item.name}</span>
-                    <span className={styles.source}>{item.price != null ? `${formatEb(item.price)}eb` : '—'} · {item.source?.name}</span>
+                    <span>{tv(item.name)}</span>
+                    <span className={styles.source}>{item.price != null ? `${formatEb(item.price)}eb` : '—'} · {tv(item.source?.name)}</span>
                   </button>
                 ))
                 : (index.data?.rows ?? []).map((row) => (
                   <button key={row.row} type="button" className={styles.pickRow} onClick={() => add({ indexRow: row.row })}
                     disabled={row.priceEb == null}>
-                    <span>{row.name} <span className={styles.muted}>· {row.group}</span></span>
+                    <span>{tv(row.name)} <span className={styles.muted}>· {tv(row.group)}</span></span>
                     <span className={styles.source}>{row.cost} · {row.sources.map((s) => `${s.book} ${s.page ?? ''}`).join(', ')}</span>
                   </button>
                 ))}
@@ -286,11 +287,11 @@ export function AddListingDialog({ market, onClose }: { market: NightMarketDetai
           </>
         ) : (
           <div className={styles.grid2}>
-            <Field label="Nome"><input className={styles.text} value={name} onChange={(e) => setName(e.target.value)} /></Field>
-            <Field label="Preço (eb)">
+            <Field label={t('Nome', 'Name')}><input className={styles.text} value={name} onChange={(e) => setName(e.target.value)} /></Field>
+            <Field label={t('Preço (eb)', 'Price (eb)')}>
               <NumberInput className={styles.number} min={0} max={10_000_000} allowEmpty value={price} onChange={setPrice} />
             </Field>
-            <Button variant="primary" disabled={!name.trim() || price === null} onClick={() => add({ name, price })}>Adicionar</Button>
+            <Button variant="primary" disabled={!name.trim() || price === null} onClick={() => add({ name, price })}>{t('Adicionar', 'Add')}</Button>
           </div>
         )}
       </div>
@@ -319,25 +320,25 @@ export function FillSlotDialog({ market, slot, onClose }: { market: NightMarketD
   });
 
   return (
-    <Modal open onClose={onClose} title={<>{slot.label} · booth {slot.stall}</>} wide>
+    <Modal open onClose={onClose} title={<>{tv(slot.label)} {t('· booth ', '· booth ')}{slot.stall}</>} wide>
       <div className={styles.dialog}>
         <div className={styles.row}>
-          <Button icon={<Dices size={15} />} onClick={() => fill({ draw: true })} disabled={command.isPending}>Sortear do acervo</Button>
-          <span className={styles.muted}>ou escolha um item:</span>
+          <Button icon={<Dices size={15} />} onClick={() => fill({ draw: true })} disabled={command.isPending}>{t('Sortear do acervo', 'Draw from the collection')}</Button>
+          <span className={styles.muted}>{t('ou escolha um item:', 'or pick an item:')}</span>
         </div>
-        <input className={styles.search} value={q} onChange={(e) => setQ(e.target.value)} placeholder="Buscar no catálogo" data-autofocus />
+        <input className={styles.search} value={q} onChange={(e) => setQ(e.target.value)} placeholder={t('Buscar no catálogo', 'Search the catalog')} data-autofocus />
         <div className={styles.picker}>
           {(search.data ?? []).flatMap((g) => g.items).map((item) => (
             <button key={item.id} type="button" className={`${styles.pickRow} ${picked === item.id ? styles.pickActive : ''}`}
               onClick={() => setPicked(item.id)}>
-              <span>{item.name}</span>
-              <span className={styles.source}>{item.price != null ? `${formatEb(item.price)}eb` : '—'} · {item.source?.name}</span>
+              <span>{tv(item.name)}</span>
+              <span className={styles.source}>{item.price != null ? `${formatEb(item.price)}eb` : '—'} · {tv(item.source?.name)}</span>
             </button>
           ))}
         </div>
-        {detail.data && <p className={styles.pitch}>{detail.data.item.description}</p>}
+        {detail.data && <p className={styles.pitch}>{tv(detail.data.item.description)}</p>}
         <Button variant="primary" disabled={picked === null || command.isPending} onClick={() => fill({ itemId: picked })}>
-          Pôr à venda
+          {t('Pôr à venda', 'Put on sale')}
         </Button>
       </div>
     </Modal>

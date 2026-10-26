@@ -1,6 +1,7 @@
 using System.Text.RegularExpressions;
 using CyberpunkDb.Application.Npcs.Rules;
 using CyberpunkDb.Domain.Enums;
+using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.Npcs.Validation;
 
@@ -25,12 +26,12 @@ public sealed partial class NpcMechanics(NpcRuleBook rules, int slotMultiplier =
     {
         if (item.Weapon is not { } w || requested is null || requested == w.Quality) return (item.Price, item.Weapon?.Quality, null);
         if (w.Exotic)
-            return (null, requested, $"{item.Name} é uma arma exótica e só existe na qualidade cadastrada ({Rules.Document.WeaponQualityPricing.ExoticRule.Source}).");
+            return (null, requested, L.T($"{item.Name} é uma arma exótica e só existe na qualidade cadastrada ({Rules.Document.WeaponQualityPricing.ExoticRule.Source}).", $"{item.Name} is an exotic weapon and only exists in its catalog quality ({Rules.Document.WeaponQualityPricing.ExoticRule.Source})."));
         if (w.Quality != WeaponQuality.Standard)
-            return (null, requested, $"{item.Name} já é uma variante de qualidade {Label(w.Quality)}; escolha a versão padrão para trocar a qualidade.");
+            return (null, requested, L.T($"{item.Name} já é uma variante de qualidade {Label(w.Quality)}; escolha a versão padrão para trocar a qualidade.", $"{item.Name} is already a {Label(w.Quality)} quality variant; pick the standard version to change the quality."));
         var row = Rules.Document.WeaponQualityPricing.Rows.FirstOrDefault(r => r.Standard == item.Price);
         if (row is null)
-            return (null, requested, $"Não há preço oficial de {Label(requested.Value)} para uma arma de {item.Price}eb ({Rules.Document.WeaponQualityPricing.Source} cobre só 50, 100 e 500eb).");
+            return (null, requested, L.T($"Não há preço oficial de {Label(requested.Value)} para uma arma de {item.Price}eb ({Rules.Document.WeaponQualityPricing.Source} cobre só 50, 100 e 500eb).", $"There's no official {Label(requested.Value)} price for a {item.Price}eb weapon ({Rules.Document.WeaponQualityPricing.Source} only covers 50, 100 and 500eb)."));
         return (requested == WeaponQuality.Poor ? row.Poor : row.Excellent, requested, null);
     }
 

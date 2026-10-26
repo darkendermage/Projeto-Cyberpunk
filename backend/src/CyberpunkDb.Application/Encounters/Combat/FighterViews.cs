@@ -6,6 +6,7 @@ using CyberpunkDb.Application.Npcs;
 using CyberpunkDb.Application.Npcs.Rules;
 using CyberpunkDb.Application.Npcs.Validation;
 using CyberpunkDb.Domain.Enums;
+using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.Encounters.Combat;
 
@@ -73,7 +74,7 @@ public sealed class FighterViews(CharacterRuleBook characterRules, CharacterCalc
 
     public FighterView ForNpc(Combatant c)
     {
-        var s = c.Snapshot ?? throw new InvalidOperationException($"{c.Name} não tem ficha de combate.");
+        var s = c.Snapshot ?? throw new InvalidOperationException(L.T($"{c.Name} não tem ficha de combate.", $"{c.Name} has no combat sheet."));
         var wound = calculator.WoundStateFor(c.Hp, s.MaxHp);
         var d = characterRules.Document.Derived;
         var (woundAction, woundMove) = wound switch
@@ -176,7 +177,7 @@ public sealed class FighterViews(CharacterRuleBook characterRules, CharacterCalc
         var melee = weaponClass is WeaponClass.LightMelee or WeaponClass.MediumMelee or WeaponClass.HeavyMelee or WeaponClass.VeryHeavyMelee;
         return new CombatSnapshot
         {
-            Source = "genérico",
+            Source = L.T("genérico", "generic"),
             MaxHp = r.Hp ?? g.Hp,
             Body = r.Body ?? g.Body,
             Stats = new(StringComparer.OrdinalIgnoreCase)

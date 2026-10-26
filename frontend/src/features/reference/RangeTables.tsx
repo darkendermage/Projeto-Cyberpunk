@@ -5,11 +5,12 @@ import {
 } from '../../lib/rangeTable';
 import page from '../../styles/Page.module.css';
 import styles from './ReferencePages.module.css';
+import { t, tv } from '../../i18n';
 
 export function RangeUnitToggle({ unit, onChange }: { unit: RangeUnit; onChange: (unit: RangeUnit) => void }) {
   return (
-    <Segmented<RangeUnit> size="sm" ariaLabel="Unidade de distância" value={unit} onChange={onChange}
-      options={[{ value: 'meters', label: 'Metros / jardas' }, { value: 'tiles', label: 'Tiles (2 m)' }]} />
+    <Segmented<RangeUnit> size="sm" ariaLabel={t('Unidade de distância', 'Distance unit')} value={unit} onChange={onChange}
+      options={[{ value: 'meters', label: t('Metros / jardas', 'Meters / yards') }, { value: 'tiles', label: t('Tiles (2 m)', 'Tiles (2 m)') }]} />
   );
 }
 
@@ -21,14 +22,14 @@ export function RangeDvTable({
       <table className={clsx(page.table, styles.dvTable)}>
         <thead>
           <tr>
-            <th>Arma</th>
+            <th>{t('Arma', 'Weapon')}</th>
             {bands.map((_, i) => <th key={i}>{bandLabel(i, unit, bands)}<small>{unit === 'tiles' ? ' tiles' : ' m'}</small></th>)}
           </tr>
         </thead>
         <tbody>
           {rows.map((row) => (
             <tr key={row.key} className={clsx(highlight === row.key && styles.highlightRow)}>
-              <td>{row.label}</td>
+              <td>{tv(row.label)}</td>
               {row.dv.map((dv, i) => <td key={i} className={styles.dv}>{dv === null ? 'N/A' : dv}</td>)}
             </tr>
           ))}

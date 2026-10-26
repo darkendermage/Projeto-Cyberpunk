@@ -17,7 +17,7 @@
 [![Baixar](https://img.shields.io/badge/BAIXAR-WINDOWS-ff2a3d?style=for-the-badge&labelColor=0a0204)](https://github.com/darkendermage/Projeto-Cyberpunk/releases/latest/download/NightCityItemDB-win-x64.zip)
 [![Versão](https://img.shields.io/github/v/release/darkendermage/Projeto-Cyberpunk?style=for-the-badge&label=VERS%C3%83O&color=ffcf3a&labelColor=0a0204)](https://github.com/darkendermage/Projeto-Cyberpunk/releases/latest)
 ![Cyberpunk RED](https://img.shields.io/badge/CYBERPUNK-RED%20%2F%202020-3de0ff?style=for-the-badge&labelColor=0a0204)
-![Idioma](https://img.shields.io/badge/IDIOMA-PORTUGU%C3%8AS-3dff9a?style=for-the-badge&labelColor=0a0204)
+![Idioma](https://img.shields.io/badge/IDIOMA-ENGLISH%20%2F%20PORTUGU%C3%8AS-3dff9a?style=for-the-badge&labelColor=0a0204)
 
 `> THE CITY NEVER FORGETS_`
 
@@ -123,6 +123,12 @@ O prédio que o seu Netrunner vai invadir, montado em segundos.
 ### ✨ Visual Night City
 
 Neon, scanlines, glitch e o skyline da cidade no topo da tela. Se cansar, a engrenagem no canto desliga cada efeito.
+
+### 🌐 English / Português
+
+O programa abre em **inglês**. Para usar em português, clique na engrenagem no canto e escolha **Português (BR)** em *Language / Idioma*. A escolha fica salva no navegador.
+
+A tradução cobre a interface, as mensagens, as regras e as descrições do catálogo. Os termos do livro (nomes de itens, Roles, STATs, programas e Black ICE) continuam em inglês nos dois idiomas, como na mesa. As skills aparecem com o nome em português quando o idioma é português.
 
 ---
 

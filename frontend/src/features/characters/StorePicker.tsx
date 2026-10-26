@@ -10,6 +10,7 @@ import { useDebouncedValue } from '../../lib/hooks';
 import { Pagination } from '../catalog/Pagination';
 import { CATEGORY_LABEL } from './characterLabels';
 import styles from './Characters.module.css';
+import { t, tv } from '../../i18n';
 
 export interface PurchaseInput {
   itemId: number;
@@ -25,7 +26,7 @@ export interface PurchaseInput {
 }
 
 type Received = 'Trade' | 'Gift' | 'Loot';
-const RECEIVED_LABEL: Record<Received, string> = { Gift: 'Presente', Trade: 'Troca', Loot: 'Saque' };
+const RECEIVED_LABEL: Record<Received, string> = { Gift: t('Presente', 'Gift'), Trade: t('Troca', 'Trade'), Loot: t('Saque', 'Loot') };
 
 /**
  * Catalog search with a confirmation step per item: price, quantity, budget now and after, and the explicit choice
@@ -64,23 +65,23 @@ export function StorePicker({ onBuy, busy, creationBudgets, available, creating,
       <div className={styles.skillToolbar}>
         <label className={styles.search}>
           <Search size={15} aria-hidden />
-          <span className="visually-hidden">Buscar no catálogo</span>
-          <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Buscar no catálogo…" />
+          <span className="visually-hidden">{t('Buscar no catálogo', 'Search the catalog')}</span>
+          <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder={t('Buscar no catálogo…', 'Search the catalog…')} />
         </label>
-        <Select value={category} onChange={(e) => setCategory(e.target.value)} aria-label="Categoria">
-          <option value="">Todas as categorias</option>
+        <Select value={category} onChange={(e) => setCategory(e.target.value)} aria-label={t('Categoria', 'Category')}>
+          <option value="">{t('Todas as categorias', 'All categories')}</option>
           {Object.entries(CATEGORY_LABEL).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
         </Select>
       </div>
       {results.isLoading && <Spinner />}
-      {data && data.items.length === 0 && <p className={styles.muted}>Nada encontrado.</p>}
+      {data && data.items.length === 0 && <p className={styles.muted}>{t('Nada encontrado.', 'Nothing found.')}</p>}
       {data && data.items.length > 0 && (
         <>
           <p className={styles.small}>
-            {data.total} {data.total === 1 ? 'item' : 'itens'} · página {data.page} de {totalPages}. Clique no nome para ver a descrição.
+            {data.total} {data.total === 1 ? 'item' : 'itens'} {t('· página ', '· page ')}{data.page} {t('de ', 'of ')}{totalPages}{t('. Clique no nome para ver a descrição.', '. Click the name to see the description.')}
           </p>
           <table className={styles.table}>
-            <thead><tr><th>Item</th><th>Categoria</th><th className={styles.num}>Preço</th><th /></tr></thead>
+            <thead><tr><th>Item</th><th>{t('Categoria', 'Category')}</th><th className={styles.num}>{t('Preço', 'Price')}</th><th /></tr></thead>
             <tbody>
               {data.items.map((item) => (
                 <StoreRow key={item.id} item={item} onBuy={onBuy} busy={busy} creationBudgets={creationBudgets} available={available}
@@ -126,67 +127,67 @@ function StoreRow({ item, onBuy, busy, creationBudgets, available, creating, rec
         <td>
           <div>
             <button type="button" className={styles.storeName} aria-expanded={info || open} onClick={() => setInfo(!info)}
-              title={item.description ? 'Ver a descrição' : 'Sem descrição no catálogo'}>
-              {info || open ? <ChevronDown size={13} aria-hidden /> : <ChevronRight size={13} aria-hidden />}{item.name}
+              title={item.description ? t('Ver a descrição', 'See the description') : t('Sem descrição no catálogo', 'No description in the catalog')}>
+              {info || open ? <ChevronDown size={13} aria-hidden /> : <ChevronRight size={13} aria-hidden />}{tv(item.name)}
             </button>
-            {item.fashion && <span className={styles.tag} title="Fashion/Fashionware"><Sparkles size={10} /> moda</span>}
+            {item.fashion && <span className={styles.tag} title="Fashion/Fashionware"><Sparkles size={10} /> {t('moda', 'fashion')}</span>}
           </div>
-          <div className={styles.source}>{item.summary}{item.source ? ` · ${item.source}${item.page ? ` p.${item.page}` : ''}` : ''}</div>
+          <div className={styles.source}>{tv(item.summary)}{item.source ? ` · ${item.source}${item.page ? ` p.${item.page}` : ''}` : ''}</div>
         </td>
         <td className={styles.small}>{CATEGORY_LABEL[item.category] ?? item.category}</td>
         <td className={styles.total}>{formatEb(item.price)}</td>
         <td>
           <Button icon={free ? <Gift size={14} /> : <ShoppingCart size={14} />} active={open} onClick={() => setOpen(!open)}>
-            {open ? 'Fechar' : free ? 'Receber' : 'Comprar'}
+            {open ? t('Fechar', 'Close') : free ? t('Receber', 'Receive') : t('Comprar', 'Buy')}
           </Button>
         </td>
       </tr>
       {(info || open) && (
         <tr>
           <td colSpan={4}>
-            <p className={styles.storeDescription}>{item.description ?? 'O catálogo não tem descrição para este item.'}</p>
+            <p className={styles.storeDescription}>{tv(item.description) ?? t('O catálogo não tem descrição para este item.', 'The catalog has no description for this item.')}</p>
             {open && <div className={styles.row} style={{ padding: '6px 0' }}>
               {free && (
-                <Select value={how} onChange={(e) => setHow(e.target.value as Received)} aria-label="Como o item chega">
+                <Select value={how} onChange={(e) => setHow(e.target.value as Received)} aria-label={t('Como o item chega', 'How the item arrives')}>
                   {(Object.keys(RECEIVED_LABEL) as Received[]).map((k) => <option key={k} value={k}>{RECEIVED_LABEL[k]}</option>)}
                 </Select>
               )}
               {!item.cyberware && (
                 <label className={styles.small}>
-                  Qtd{item.perPack ? ` (pacotes de ${item.perPack})` : ''}{' '}
+                  {t('Qtd', 'Qty')}{item.perPack ? t(` (pacotes de ${item.perPack})`, ` (packs of ${item.perPack})`) : ''}{' '}
                   <NumberInput className={`${styles.input} ${styles.inputSmall}`} min={1} max={99} value={quantity}
                     onChange={(v) => setQuantity(v ?? 1)} />
                 </label>
               )}
               {needsCaliber && (
-                <Select value={caliber} onChange={(e) => setCaliber(e.target.value)} aria-label="Calibre">
-                  <option value="">Calibre…</option>
+                <Select value={caliber} onChange={(e) => setCaliber(e.target.value)} aria-label={t('Calibre', 'Caliber')}>
+                  <option value="">{t('Calibre…', 'Caliber…')}</option>
                   {item.calibers.map((c) => <option key={c} value={c}>{c}</option>)}
                 </Select>
               )}
-              {item.cyberware && <Checkbox checked={install} onChange={setInstall} label="Instalar agora" />}
-              {equippable && <Checkbox checked={equip} onChange={setEquip} label="Equipar" />}
+              {item.cyberware && <Checkbox checked={install} onChange={setInstall} label={t('Instalar agora', 'Install now')} />}
+              {equippable && <Checkbox checked={equip} onChange={setEquip} label={t('Equipar', 'Equip')} />}
               {equippable && equip && isBodyArmor && (
-                <Select value={worn} onChange={(e) => setWorn(e.target.value as ArmorSlot)} aria-label="Onde vestir">
-                  <option value="Body">Corpo</option>
-                  <option value="Head">Cabeça</option>
+                <Select value={worn} onChange={(e) => setWorn(e.target.value as ArmorSlot)} aria-label={t('Onde vestir', 'Where to wear')}>
+                  <option value="Body">{t('Corpo', 'Body')}</option>
+                  <option value="Head">{t('Cabeça', 'Head')}</option>
                 </Select>
               )}
               {free && (
                 <input className={`${styles.input} ${styles.grow}`} style={{ minWidth: 160 }} value={note} onChange={(e) => setNote(e.target.value)}
-                  placeholder={how === 'Loot' ? 'De onde veio…' : 'De quem veio…'} aria-label="Observação" />
+                  placeholder={how === 'Loot' ? t('De onde veio…', 'Where it came from…') : t('De quem veio…', 'Who it came from…')} aria-label={t('Observação', 'Note')} />
               )}
               <span className={styles.grow} />
               {free
-                ? <span className={styles.small}><Gift size={12} aria-hidden /> sem custo{item.cyberware && install ? ' (peças-base e Humanity Loss continuam valendo)' : ''}</span>
+                ? <span className={styles.small}><Gift size={12} aria-hidden /> {t('sem custo', 'free')}{item.cyberware && install ? t(' (peças-base e Humanity Loss continuam valendo)', ' (foundational pieces and Humanity Loss still apply)') : ''}</span>
                 : (
                   <span className={styles.small}>
-                    {formatEb(total)} · {pool === 'CreationFashion' ? 'moda' : pool === 'CreationGear' ? 'orçamento geral' : 'saldo'} {formatEb(budgetNow)} →{' '}
+                    {formatEb(total)} · {pool === 'CreationFashion' ? 'moda' : pool === 'CreationGear' ? t('orçamento geral', 'general budget') : t('saldo', 'balance')} {formatEb(budgetNow)} →{' '}
                     <strong className={total > budgetNow ? styles.red : styles.cyan}>{formatEb(budgetNow - total)}</strong>
                   </span>
                 )}
               <Button variant="primary" disabled={busy || (needsCaliber && !caliber) || total > budgetNow}
-                title={total > budgetNow ? 'Saldo insuficiente' : undefined}
+                title={total > budgetNow ? t('Saldo insuficiente', 'Not enough money') : undefined}
                 onClick={async () => {
                   await onBuy({
                     itemId: item.id, quantity: qty, caliber: caliber || null, pool,
@@ -197,10 +198,10 @@ function StoreRow({ item, onBuy, busy, creationBudgets, available, creating, rec
                     note: free && note.trim() ? note.trim() : null,
                   }, item);
                   setOpen(false);
-                }}>{free ? 'Receber' : 'Confirmar'}</Button>
+                }}>{free ? t('Receber', 'Receive') : t('Confirmar', 'Confirm')}</Button>
             </div>}
             {open && item.cyberware && install && (
-              <p className={styles.source}>O plano completo (peças-base, lado, faixa de Humanity Loss) aparece na aba Cyberware.</p>
+              <p className={styles.source}>{t('O plano completo (peças-base, lado, faixa de Humanity Loss) aparece na aba Cyberware.', 'The full plan (foundational pieces, side, Humanity Loss range) shows on the Cyberware tab.')}</p>
             )}
           </td>
         </tr>
