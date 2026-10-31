@@ -124,6 +124,8 @@ Regras do formato:
 - `armoredStats` guarda os valores entre parênteses, como `REF 8(6)`, que são os valores com a penalidade da armadura. Fica vazio quando o livro não os traz.
 - `skills` guarda a Skill Base impressa, sem recalcular.
 - `attackBase` é o total de ataque impresso (STAT + perícia + bônus).
+- `damage` guarda os dados que o motor rola. Arma "Autofire only" imprime "See Type" no DMG: fica com o dano de Autofire do livro (`2d6`), `autofireMultiplier` com o multiplicador impresso (`x5` vira `5`) e `notes` registra o "See Type".
+- `spVsMelee` em `armor` é opcional e guarda a coluna "SP vs Melee/Charged Tech Weapons" quando o livro a imprime.
 - `class` é um valor do enum `WeaponClass` quando a arma do livro corresponde a um. O campo fica `null` em armas fora da tabela, como os punhos do Smasher, e nesses casos `melee` diz como a arma se comporta.
 - Regras especiais são parafraseadas em poucas frases, com a mecânica preservada.
 
