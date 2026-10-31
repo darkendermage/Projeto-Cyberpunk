@@ -6092,5 +6092,950 @@
         }
       ]
     }
+  },
+  {
+    "id": "endo",
+    "name": "Endo",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Nomad",
+    "roleRank": 4,
+    "rep": 3,
+    "affiliation": "Sightseers",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 100 }, { "book": "Danger Gal Dossier", "page": 99 }],
+    "summary": {
+      "pt": "Atirador certeiro de bom coração e armadura subdérmica, ex-segurança de uma gangue protetora de Santo Domingo. Acredita que as comunidades locais devem se abastecer e se policiar, e por isso leva cromo e armas recuperados do centro para os subúrbios pobres, via o Fixer Woodchipper. Foi o catalisador dos Sightseers e hoje está preso pela NCPD, espancado depois de ajudar Swirl.",
+      "en": "A kind-hearted crack shot in subdermal armor, once an enforcer for a guardian gang in Santo Domingo. He believes local communities should supply and police themselves, so he moves scavenged chrome and guns from downtown to the poor outskirts through the Fixer Woodchipper. He was the spark behind the Sightseers and is now in NCPD custody, beaten after helping Swirl."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 40,
+      "seriouslyWounded": 20,
+      "deathSave": 6,
+      "stats": { "INT": 5, "REF": 6, "DEX": 7, "TECH": 4, "COOL": 5, "WILL": 5, "MOVE": 4, "BODY": 6, "EMP": 5 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Heavy Pistol", "skill": "Handgun", "attackBase": 14, "damage": "3d6", "rof": 2, "magazine": null, "class": "HeavyPistol", "melee": false, "notes": null },
+        { "name": "Popup Grenade Launcher", "skill": "Heavy Weapons", "attackBase": 14, "damage": "6d6", "rof": 1, "magazine": null, "class": "GrenadeLauncher", "melee": false, "notes": null }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Subdermal Armor", "sp": 11 },
+        { "location": "Body", "name": "Subdermal Armor", "sp": 11 }
+      ],
+      "skills": {
+        "Athletics": 12, "Basic Tech": 8, "Brawling": 14, "Concentration": 7, "Conversation": 7, "Drive Land Vehicle": 14,
+        "Education": 7, "Evasion": 10, "First Aid": 6, "Handgun": 14, "Heavy Weapons": 14, "Human Perception": 9,
+        "Land Vehicle Tech": 8, "Language (Spanish)": 9, "Language (Streetslang)": 7, "Local Expert (Santo Domingo)": 7, "Perception": 7, "Persuasion": 10,
+        "Stealth": 10, "Wilderness Survival": 10
+      },
+      "gear": ["Armor-Piercing H Pistol Ammo x8", "Armor-Piercing Grenade", "Flashbang Grenade", "Agent", "Inflatable Bed & Sleep-bag", "Radio Communicator", "Techtool", "Tent & Camping Equipment", "Roadbike w/ NOS x2 & Smuggling Upgrade"],
+      "cyberware": ["Contraceptive Implant", "Cybereye w/ Targeting Scope", "Cyberarm w/ Popup Grenade Launcher", "Neural Link w/ Interface Plugs", "Subdermal Armor"],
+      "specials": [
+        {
+          "name": "Moto",
+          "text": {
+            "pt": "Role Ability Moto no Rank 4. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Moto at Rank 4. Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Cyberarm lança-granadas",
+          "text": {
+            "pt": "Cyberarm com Popup Grenade Launcher (6d6, ROF 1), mais Subdermal Armor, Heavy Pistol com munição Armor-Piercing e uma Roadbike com NOS x2 e Smuggling Upgrade.",
+            "en": "A cyberarm with a Popup Grenade Launcher (6d6, ROF 1), plus Subdermal Armor, a Heavy Pistol with Armor-Piercing ammo and a Roadbike with NOS x2 and a Smuggling Upgrade."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "gaze",
+    "name": "Gaze",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Solo",
+    "roleRank": 4,
+    "rep": 2,
+    "affiliation": "Sightseers",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 101 }, { "book": "Danger Gal Dossier", "page": 99 }],
+    "summary": {
+      "pt": "Brutamontes de poucas palavras que ganhou o nome pelo cybereye com mira. Cuida da segurança dos Sightseers, acompanha cargas valiosas e solta o rifle quando Racer aponta um alvo. É leal ao grupo, mas tolera Endo e os outros só na superfície, e a prisão de Endo e Swirl pode mudar a opinião dele sobre a polícia.",
+      "en": "A big, taciturn enforcer who got his handle from a cybereye with a targeting scope. He handles Sightseers security, rides along with valuable cargo and unleashes his rifle when Racer points at a target. He is loyal to the Pack but barely tolerates Endo and the others, and the arrest of Endo and Swirl may change how he sees the police."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 40,
+      "seriouslyWounded": 20,
+      "deathSave": 7,
+      "stats": { "INT": 4, "REF": 7, "DEX": 5, "TECH": 4, "COOL": 4, "WILL": 5, "MOVE": 4, "BODY": 7, "EMP": 4 },
+      "armoredStats": { "REF": 5, "DEX": 3, "MOVE": 2 },
+      "weapons": [
+        { "name": "Assault Rifle", "skill": "Shoulder Arms", "attackBase": 14, "damage": "5d6", "rof": 1, "magazine": null, "class": "AssaultRifle", "melee": false, "notes": null },
+        { "name": "Very Heavy Pistol", "skill": "Handgun", "attackBase": 14, "damage": "4d6", "rof": 1, "magazine": null, "class": "VeryHeavyPistol", "melee": false, "notes": null }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Medium Armorjack", "sp": 12 },
+        { "location": "Body", "name": "Medium Armorjack", "sp": 12 }
+      ],
+      "skills": {
+        "Athletics": 10, "Autofire": 14, "Brawling": 10, "Concentration": 7, "Conversation": 6, "Education": 6,
+        "Evasion": 14, "First Aid": 6, "Handgun": 14, "Human Perception": 6, "Language (English)": 8, "Language (Streetslang)": 6,
+        "Local Expert (Santo Domingo)": 6, "Melee Weapon": 11, "Perception": 12, "Persuasion": 6, "Shoulder Arms": 14, "Stealth": 7,
+        "Weaponstech": 11
+      },
+      "gear": ["Basic Rifle Ammo x50", "Basic VH Pistol Ammo x8", "Armor-Piercing Grenade", "Agent", "Binoculars", "Flashlight", "Radio Communicator"],
+      "cyberware": ["Cybereye w/ Targeting Scope", "Big Knucks (ROF2, 2d6)"],
+      "specials": [
+        {
+          "name": "Combat Awareness",
+          "text": {
+            "pt": "Role Ability Combat Awareness no Rank 4. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Combat Awareness at Rank 4. Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Big Knucks",
+          "text": {
+            "pt": "Lista Big Knucks (ROF 2, 2d6) no cyberware, além da Assault Rifle e da Very Heavy Pistol; Cybereye com Targeting Scope.",
+            "en": "Lists Big Knucks (ROF 2, 2d6) among his cyberware, besides the Assault Rifle and Very Heavy Pistol; a Cybereye with a Targeting Scope."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "racer",
+    "name": "Racer",
+    "aliases": ["Racer Rajavi"],
+    "kind": "sheet",
+    "role": "Nomad",
+    "roleRank": 4,
+    "rep": 3,
+    "affiliation": "Sightseers",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 102 }, { "book": "Danger Gal Dossier", "page": 99 }],
+    "summary": {
+      "pt": "Fundadora e líder dos Sightseers, ex-edgerunner de escolta e extração que decidiu montar uma família do zero. Vive na Kombi e leva comida, remédios e equipamento médico entre Packs e Reclaimers, deixando as viagens fáceis para os mais novos. Ignora as cargas duvidosas dos companheiros desde que Corps e polícia fiquem longe.",
+      "en": "Founder and leader of the Sightseers, a former escort and extraction Edgerunner who chose to build a family from scratch. She lives in her Kombi and moves food, medicine and medical tech between Packs and Reclaimers, giving easy runs to the juniors. She looks away from her crew's shadier cargo as long as Corps and cops stay out."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 35,
+      "seriouslyWounded": 18,
+      "deathSave": 5,
+      "stats": { "INT": 4, "REF": 6, "DEX": 8, "TECH": 3, "COOL": 4, "WILL": 5, "MOVE": 4, "BODY": 5, "EMP": 5 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Shotgun", "skill": "Shoulder Arms", "attackBase": 14, "damage": "5d6", "rof": 1, "magazine": null, "class": "Shotgun", "melee": false, "notes": null },
+        { "name": "Very Heavy Pistol", "skill": "Handgun", "attackBase": 12, "damage": "4d6", "rof": 1, "magazine": null, "class": "VeryHeavyPistol", "melee": false, "notes": null }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Light Armorjack", "sp": 11 },
+        { "location": "Body", "name": "Light Armorjack", "sp": 11 }
+      ],
+      "skills": {
+        "Animal Handling": 10, "Athletics": 10, "Brawling": 10, "Concentration": 7, "Conversation": 7, "Drive Land Vehicle": 12,
+        "Education": 6, "Evasion": 14, "First Aid": 9, "Handgun": 12, "Human Perception": 7, "Language (Hindi)": 8,
+        "Language (Streetslang)": 6, "Local Expert (Badlands)": 8, "Local Expert (Santo Domingo)": 6, "Perception": 8, "Persuasion": 6, "Shoulder Arms": 14,
+        "Stealth": 12, "Tracking": 10, "Trading": 10, "Wilderness Survival": 10
+      },
+      "gear": ["Basic Shotgun Slug Ammo x8", "Basic Shotgun Shell Ammo x4", "Basic VH Pistol Ammo x8", "Smoke Grenade", "Agent", "Carryall", "Grapple Gun", "Radio Communicator", "Techtool", "Compact Groundcar w/ Heavy Chassis, Housing Capacity & Seating Upgrade"],
+      "cyberware": ["Contraceptive Implant", "EMP Threading", "Neural Link w/ Interface Plugs"],
+      "specials": [
+        {
+          "name": "Moto",
+          "text": {
+            "pt": "Role Ability Moto no Rank 4. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Moto at Rank 4. Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Veículo do Pack",
+          "text": {
+            "pt": "Groundcar Compacto com Heavy Chassis, Housing Capacity e Seating Upgrade; Grapple Gun, Shotgun e Very Heavy Pistol.",
+            "en": "A Compact Groundcar with Heavy Chassis, Housing Capacity and Seating Upgrade; a Grapple Gun, Shotgun and Very Heavy Pistol."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "glare",
+    "name": "Glare",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Solo",
+    "roleRank": 2,
+    "rep": 2,
+    "affiliation": "Sightseers",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 103 }, { "book": "Danger Gal Dossier", "page": 99 }],
+    "summary": {
+      "pt": "Solo que perdeu os olhos para a Red Chrome Legion, trocou-os por cybereyes médicos e voltou horas depois para eliminar os captores com uma pistola de pinos. Passou a trabalhar como mercenário de aluguel e, depois de impressionar Racer contra scavs, virou membro dos Sightseers. Faz reconhecimento, cobertura e comunicação nas viagens.",
+      "en": "A Solo who lost his eyes to the Red Chrome Legion, swapped them for medical-grade cybereyes and came back within a day to pick off his captors with a bolt gun. He turned into a streetmerc and guard for hire, and after impressing Racer against scavs he became a full Sightseer. He scouts, provides overwatch and relays information during runs."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 30,
+      "seriouslyWounded": 15,
+      "deathSave": 4,
+      "stats": { "INT": 5, "REF": 7, "DEX": 6, "TECH": 3, "COOL": 3, "WILL": 4, "MOVE": 3, "BODY": 4, "EMP": 4 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Nomad Pneumatic Bolt Gun", "skill": "Shoulder Arms", "attackBase": 12, "damage": "4d6", "rof": 1, "magazine": null, "class": "SniperRifle", "melee": false, "notes": "Tech-upgraded (TUp): +1 Slot; Book wording: \"Exotic Sniper Rifle\" that fires Arrows; w/ Infrared Nightvision Scope" }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Kevlar®", "sp": 7 },
+        { "location": "Body", "name": "Kevlar®", "sp": 7 }
+      ],
+      "skills": {
+        "Athletics": 10, "Brawling": 10, "Concentration": 9, "Conversation": 6, "Education": 7, "Evasion": 12,
+        "First Aid": 5, "Handgun": 10, "Human Perception": 6, "Language (English)": 9, "Language (Streetslang)": 7, "Local Expert (Santo Domingo)": 7,
+        "Perception": 10, "Persuasion": 5, "Shoulder Arms": 12, "Stealth": 10, "Tracking": 11
+      },
+      "gear": ["Armor-Piercing Arrow x10", "Basic Arrow x10", "Basic H Pistol Ammo x8", "PQ Heavy Pistol (ROF2, 3d6)", "Disposable Cell Phone", "Grapple Gun"],
+      "cyberware": ["Contraceptive Implant", "Cyberaudio Suite w/ Radio Communicator", "Medical Grade Cybereye x2", "Kiroshi OptiShield"],
+      "specials": [
+        {
+          "name": "Combat Awareness",
+          "text": {
+            "pt": "Role Ability Combat Awareness no Rank 2. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Combat Awareness at Rank 2. Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Pneumatic Bolt Gun",
+          "text": {
+            "pt": "Nomad Pneumatic Bolt Gun, Sniper Rifle Exótica de 8 tiros que dispara flechas (4d6) e aceita munição não básica; aqui é tech-upgraded (+1 Slot) e tem mira de visão noturna infravermelha.",
+            "en": "The Nomad Pneumatic Bolt Gun, an Exotic Sniper Rifle with 8 shots that fires arrows (4d6) and accepts non-basic ammo; this one is tech-upgraded (+1 Slot) and has an infrared nightvision scope."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "swirl",
+    "name": "Swirl",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Nomad",
+    "roleRank": 2,
+    "rep": 1,
+    "affiliation": "Sightseers",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 104 }, { "book": "Danger Gal Dossier", "page": 99 }],
+    "summary": {
+      "pt": "A caçula e mais recente dos Sightseers, ladra de coisas brilhantes que pulou de Pack em Pack sem se encaixar. Endo a ajudou a fugir da NCPD e a levou para o grupo como mentor, mas um furto numa entrega atraiu Sarge e levou os dois à prisão. Ganhou o apelido pelos padrões de suas Shift Tacts.",
+      "en": "The youngest and newest Sightseer, a thief of shiny things who drifted from Pack to Pack without fitting in. Endo helped her escape the NCPD and mentored her inside the group, but pocketing goods on a run drew Sarge's attention and landed both in custody. Her nickname comes from the swirling patterns of her Shift Tacts."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 25,
+      "seriouslyWounded": 13,
+      "deathSave": 3,
+      "stats": { "INT": 6, "REF": 6, "DEX": 6, "TECH": 4, "COOL": 3, "WILL": 3, "MOVE": 4, "BODY": 3, "EMP": 4 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Heavy Pistol", "skill": "Handgun", "attackBase": 10, "damage": "3d6", "rof": 2, "magazine": null, "class": "HeavyPistol", "melee": false, "notes": "Poor Quality" },
+        { "name": "Heavy Melee Weapon", "skill": "Melee Weapon", "attackBase": 12, "damage": "3d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": "Poor Quality" }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Skinweave", "sp": 7 },
+        { "location": "Body", "name": "Skinweave", "sp": 7 }
+      ],
+      "skills": {
+        "Athletics": 8, "Brawling": 8, "Concentration": 5, "Conversation": 6, "Drive Land Vehicle": 10, "Education": 8,
+        "Evasion": 10, "First Aid": 6, "Handgun": 10, "Human Perception": 6, "Language (English)": 10, "Language (Streetslang)": 8,
+        "Local Expert (Santo Domingo)": 8, "Melee Weapon": 12, "Perception": 8, "Persuasion": 5, "Pick Lock": 10, "Pick Pocket": 10,
+        "Stealth": 8, "Wilderness Survival": 8
+      },
+      "gear": ["Junk H Pistol Ammo x16", "Disposable Cell Phone", "Flashlight", "Radio Communicator", "Techtool", "Roadbike w/ NOS"],
+      "cyberware": ["Contraceptive Implant", "EMP Threading", "Neural Link w/ Interface Plugs", "Shift Tacts x2", "Skinweave"],
+      "specials": [
+        {
+          "name": "Moto",
+          "text": {
+            "pt": "Role Ability Moto no Rank 2. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Moto at Rank 2. Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Estilo e moto",
+          "text": {
+            "pt": "Skinweave, Shift Tacts x2, EMP Threading, Neural Link com Interface Plugs e uma Roadbike com NOS; armas de Qualidade Ruim e munição Junk.",
+            "en": "Skinweave, two Shift Tacts, EMP Threading, a Neural Link with Interface Plugs and a Roadbike with NOS; Poor Quality weapons and Junk ammo."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "cereal",
+    "name": "Cereal",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Netrunner",
+    "roleRank": 5,
+    "rep": 3,
+    "affiliation": "Team Monster",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 106 }, { "book": "Danger Gal Dossier", "page": 105 }],
+    "summary": {
+      "pt": "Netrunner imprevisível que começou com travessuras, evoluiu para hackear corporações e hoje vive de gigs para Fixers. Segue o próprio código ético, é leal a quem ama, sobretudo Nox, e anima o grupo. Ataca com lâminas e patins nos pés e é quem mais questiona os planos do Mr. Fixit.",
+      "en": "An unpredictable Netrunner who started with pranks, grew into hacking Corporations and now lives on Fixer gigs. He follows his own ethics, is loyal to those close to him, above all Nox, and keeps morale up. He fights with blades and skate feet and is the one most likely to question Mr. Fixit's plans."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 40,
+      "seriouslyWounded": 20,
+      "deathSave": 6,
+      "stats": { "INT": 7, "REF": 6, "DEX": 6, "TECH": 7, "COOL": 3, "WILL": 5, "MOVE": 3, "BODY": 6, "EMP": 5 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Heavy Melee Weapon", "skill": "Melee Weapon", "attackBase": 13, "damage": "3d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null },
+        { "name": "Brawling Attack", "skill": "Brawling", "attackBase": 8, "damage": "2d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Light Armorjack", "sp": 11 },
+        { "location": "Body", "name": "Light Armorjack", "sp": 11 }
+      ],
+      "skills": {
+        "Athletics": 12, "Basic Tech": 13, "Brawling": 8, "Conceal/Reveal Object": 12, "Concentration": 7, "Conversation": 7,
+        "Cryptography": 13, "Cybertech": 12, "Education": 13, "Electronics/Security Tech": 13, "Evasion": 13, "First Aid": 10,
+        "Human Perception": 7, "Language (English)": 11, "Language (Streetslang)": 9, "Library Search": 10, "Local Expert (Little China)": 9, "Melee Weapon": 13,
+        "Perception": 9, "Persuasion": 5, "Stealth": 10
+      },
+      "gear": ["Agent", "Carryall", "Flashlight", "Rope (60 m/yds)", "Techtool", "Virtuality Goggles", "Cyberdeck w/ Armor, Banhammer, Killer, Speedy Gonzalves & Worm"],
+      "cyberware": ["Contraceptive Implant", "Cyberleg x2 w/ Skate Foot x2", "Neural Link w/ Interface Plugs"],
+      "specials": [
+        {
+          "name": "Interface",
+          "text": {
+            "pt": "Role Ability Interface no Rank 5. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Interface at Rank 5. Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Cyberdeck e patins",
+          "text": {
+            "pt": "Cyberdeck com Armor, Banhammer, Killer, Speedy Gonzalvez e Worm; Virtuality Goggles; cyberlegs com Skate Feet.",
+            "en": "A Cyberdeck loaded with Armor, Banhammer, Killer, Speedy Gonzalvez and Worm; Virtuality Goggles; cyberlegs with Skate Feet."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "isolate",
+    "name": "Isolate",
+    "aliases": ["Red Shirt"],
+    "kind": "sheet",
+    "role": "Solo",
+    "roleRank": 4,
+    "rep": 3,
+    "affiliation": "Team Monster",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 107 }, { "book": "Danger Gal Dossier", "page": 105 }],
+    "summary": {
+      "pt": "Filho de um líder guerrilheiro da Geórgia, treinado em guerra constante contra a SovOil e especialista em tiro de longa distância. Chegou a Night City após a queda da célula do pai e foi acolhido por Mr. Fixit, o \"tio\". Ainda é novato como edgerunner, e Paladin o chama de Red Shirt, mas já provou que prioriza vidas, até largando uma missão para levar uma mulher em trabalho de parto.",
+      "en": "Son of a Georgian insurgent leader, raised in constant war against SovOil and gifted with long-range firearms. He came to Night City after his father's cell fell and was taken in by Mr. Fixit, his \"uncle\". Still green as an Edgerunner, which earned him Paladin's nickname Red Shirt, he has shown he puts lives first, once leaving a job to get a woman in labor to a hospital."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 40,
+      "seriouslyWounded": 20,
+      "deathSave": 6,
+      "stats": { "INT": 5, "REF": 7, "DEX": 6, "TECH": 4, "COOL": 5, "WILL": 5, "MOVE": 6, "BODY": 6, "EMP": 4 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Sniper Rifle w/ Smartgun Link", "skill": "Shoulder Arms", "attackBase": 13, "damage": "5d6", "rof": 1, "magazine": null, "class": "SniperRifle", "melee": false, "notes": null },
+        { "name": "Heavy Melee Weapon", "skill": "Melee Weapon", "attackBase": 12, "damage": "3d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Light Armorjack", "sp": 11 },
+        { "location": "Body", "name": "Light Armorjack", "sp": 11 }
+      ],
+      "skills": {
+        "Athletics": 10, "Concentration": 7, "Conversation": 6, "Education": 7, "Evasion": 13, "First Aid": 10,
+        "Handgun": 13, "Human Perception": 6, "Interrogation": 10, "Language (Russian)": 9, "Language (Streetslang)": 7, "Local Expert (Little China)": 7,
+        "Melee Weapon": 12, "Perception": 12, "Persuasion": 11, "Resist Torture/Drugs": 11, "Shoulder Arms": 13, "Stealth": 12,
+        "Tactics": 12
+      },
+      "gear": ["Armor-Piercing Rifle Ammo x12", "Agent", "Duct Tape", "Grapple Gun", "Rope (60 m/yds)"],
+      "cyberware": ["Contraceptive Implant", "Medical Grade Cyberarm", "Cybereye x2 w/ Low Light/Infrared/UV x2", "Cybereye w/ Targeting Scope & TeleOptics", "MultiOptic Mount", "Neural Link w/ Interface Plugs"],
+      "specials": [
+        {
+          "name": "Combat Awareness",
+          "text": {
+            "pt": "Role Ability Combat Awareness no Rank 4. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Combat Awareness at Rank 4. Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Visão de sniper",
+          "text": {
+            "pt": "Sniper Rifle com Smartgun Link e munição Armor-Piercing; cybereyes com Low Light/Infrared/UV, um com Targeting Scope e TeleOptics, e MultiOptic Mount; cyberarm médico.",
+            "en": "A Sniper Rifle with a Smartgun Link and Armor-Piercing ammo; cybereyes with Low Light/Infrared/UV, one with a Targeting Scope and TeleOptics, and a MultiOptic Mount; a medical-grade cyberarm."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "lucky",
+    "name": "Lucky",
+    "aliases": ["Luciano Galanti"],
+    "kind": "sheet",
+    "role": "Medtech",
+    "roleRank": 5,
+    "rep": 3,
+    "affiliation": "Team Monster",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 108 }, { "book": "Danger Gal Dossier", "page": 105 }],
+    "summary": {
+      "pt": "Piloto e médico da Team Monster, vindo de uma equipe de salvage e da Trauma Team antes de virar edgerunner. É conhecido por tirar equipes de enrascadas e mantê-las vivas, e a sorte já salvou o grupo, como no voo sob fogo antiaéreo no assalto ao Anne Boleyn.",
+      "en": "The pilot and medic of Team Monster, who came from a salvage crew and Trauma Team before becoming an Edgerunner. Known for getting crews in and out and keeping them alive, his luck has saved the group before, as on the Anne Boleyn heist when anti-air fire nearly downed them."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 35,
+      "seriouslyWounded": 18,
+      "deathSave": 5,
+      "stats": { "INT": 6, "REF": 7, "DEX": 6, "TECH": 6, "COOL": 3, "WILL": 5, "MOVE": 5, "BODY": 5, "EMP": 5 },
+      "armoredStats": { "REF": 6, "DEX": 5, "MOVE": 4 },
+      "weapons": [
+        { "name": "Very Heavy Pistol", "skill": "Handgun", "attackBase": 14, "damage": "4d6", "rof": 1, "magazine": null, "class": "VeryHeavyPistol", "melee": false, "notes": null },
+        { "name": "Brawling Attack", "skill": "Brawling", "attackBase": 8, "damage": "2d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
+      ],
+      "armor": [
+        { "location": "Head", "name": "TUp Medium Armorjack", "sp": 12 },
+        { "location": "Body", "name": "TUp Medium Armorjack", "sp": 12 }
+      ],
+      "skills": {
+        "Athletics": 8, "Brawling": 8, "Concentration": 7, "Conversation": 10, "Cybertech": 10, "Deduction": 10,
+        "Education": 12, "Evasion": 13, "First Aid": 8, "Handgun": 14, "Human Perception": 10, "Language (Italian)": 10,
+        "Language (Streetslang)": 8, "Local Expert (Watson Development)": 8, "Medical Tech": 9, "Perception": 8, "Persuasion": 5, "Pilot Air Vehicle": 12,
+        "Resist Torture/Drugs": 9, "Science (Anatomy)": 10, "Stealth": 8, "Surgery": 10
+      },
+      "gear": ["Armor-Piercing VH Pistol Ammo x16", "Agent", "Airhypo", "Battleglove w/ Medscanner", "Cryopump", "Leisurewear", "Mirrorshades", "Medtech Bag"],
+      "cyberware": ["Contraceptive Implant", "Cyberaudio Suite w/ Amplified Hearing", "Cybereye w/ MicroOptics"],
+      "specials": [
+        {
+          "name": "Medicine",
+          "text": {
+            "pt": "Role Ability Medicine no Rank 5 (Surgery 2, Pharmaceuticals 1, Cryosystem Operation 2). Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Medicine at Rank 5 (Surgery 2, Pharmaceuticals 1, Cryosystem Operation 2). Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Kit médico",
+          "text": {
+            "pt": "Cryopump, Airhypo, Medtech Bag e uma Battleglove com Medscanner; munição Armor-Piercing para a Very Heavy Pistol.",
+            "en": "A Cryopump, Airhypo, Medtech Bag and a Battleglove with a Medscanner; Armor-Piercing ammo for his Very Heavy Pistol."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "nox",
+    "name": "Nox",
+    "aliases": ["Nox Arya"],
+    "kind": "sheet",
+    "role": "Rockerboy",
+    "roleRank": 5,
+    "rep": 5,
+    "affiliation": "Team Monster",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 109 }, { "book": "Danger Gal Dossier", "page": 105 }],
+    "summary": {
+      "pt": "Jovem Rockerboy em ascensão que toca em clubes famosos com um synth pop \"extraterrestre\" de shows alucinógenos. Fora do palco é mais humilde, e há suspeita de que a habilidade de coletar informações a levou ao radar de Mr. Fixit. Tem encanto para chegar a quase qualquer pessoa e é ligada a Cereal.",
+      "en": "A rising young Rockerboy who plays well-known clubs with an \"extraterrestrial\" synth pop and hallucinogenic shows. Off-stage she is humbler, and she probably caught Mr. Fixit's eye through her knack for gathering intel. She has the charm to reach almost anyone and is close to Cereal."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 35,
+      "seriouslyWounded": 18,
+      "deathSave": 5,
+      "stats": { "INT": 6, "REF": 6, "DEX": 6, "TECH": 3, "COOL": 7, "WILL": 4, "MOVE": 5, "BODY": 5, "EMP": 6 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Heavy Pistol", "skill": "Handgun", "attackBase": 13, "damage": "3d6", "rof": 2, "magazine": null, "class": "HeavyPistol", "melee": false, "notes": null },
+        { "name": "Heavy Pistol", "skill": "Handgun", "attackBase": 13, "damage": "3d6", "rof": 2, "magazine": null, "class": "HeavyPistol", "melee": false, "notes": null }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Subdermal Armor", "sp": 11 },
+        { "location": "Body", "name": "Subdermal Armor", "sp": 11 }
+      ],
+      "skills": {
+        "Athletics": 8, "Brawling": 12, "Composition": 10, "Concentration": 6, "Conversation": 8, "Education": 8,
+        "Evasion": 13, "First Aid": 5, "Handgun": 13, "Human Perception": 12, "Language (English)": 10, "Language (Streetslang)": 8,
+        "Local Expert (Upper Marina)": 10, "Perception": 8, "Personal Grooming": 11, "Persuasion": 12, "Play Instrument (Guitar)": 12, "Play Instrument (Singing)": 12,
+        "Stealth": 8, "Streetwise": 12, "Wardrobe & Style": 11
+      },
+      "gear": ["Armor-Piercing H Pistol Ammo x8", "Incendiary Ammo x8", "Agent", "Disposable Cell Phone x2", "Electric Guitar", "Glow Stick x5", "Pocket Amplifier"],
+      "cyberware": ["AudioVox", "Biomonitor", "Contraceptive Implant", "Subdermal Armor", "Techhair"],
+      "specials": [
+        {
+          "name": "Charismatic Impact",
+          "text": {
+            "pt": "Role Ability Charismatic Impact no Rank 5. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Charismatic Impact at Rank 5. Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Equipamento de palco",
+          "text": {
+            "pt": "AudioVox, Electric Guitar, Pocket Amplifier e Glow Sticks; duas Heavy Pistols com munição Armor-Piercing e Incendiary.",
+            "en": "An AudioVox, Electric Guitar, Pocket Amplifier and Glow Sticks; two Heavy Pistols loaded with Armor-Piercing and Incendiary ammo."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "paladin",
+    "name": "Paladin",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Solo",
+    "roleRank": 5,
+    "rep": 4,
+    "affiliation": "Team Monster",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 110 }, { "book": "Danger Gal Dossier", "page": 105 }],
+    "summary": {
+      "pt": "Veterano calado que saiu da Combat Zone, serviu a Militech e virou freelancer por mais dinheiro. Segue o plano à risca, sem emoção, e gosta de ver os mais novos errarem. Lidera o combate da Team Monster e é o \"bastão\" que os colegas ameaçam usar nos interrogatórios.",
+      "en": "A quiet veteran who climbed out of the Combat Zone, served Militech and went freelance for better pay. He follows the plan to the letter without emotion and enjoys watching the youngsters mess up. He runs point on Team Monster's combat ops and is the \"stick\" the crew threatens interrogations with."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 45,
+      "seriouslyWounded": 23,
+      "deathSave": 7,
+      "stats": { "INT": 5, "REF": 7, "DEX": 7, "TECH": 4, "COOL": 4, "WILL": 6, "MOVE": 5, "BODY": 7, "EMP": 3 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Assault Rifle", "skill": "Shoulder Arms", "attackBase": 13, "damage": "5d6", "rof": 1, "magazine": null, "class": "AssaultRifle", "melee": false, "notes": "Excellent Quality" },
+        { "name": "Shotgun", "skill": "Shoulder Arms", "attackBase": 13, "damage": "5d6", "rof": 1, "magazine": null, "class": "Shotgun", "melee": false, "notes": "Excellent Quality" }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Light Armorjack", "sp": 11 },
+        { "location": "Body", "name": "Light Armorjack", "sp": 11 }
+      ],
+      "skills": {
+        "Athletics": 10, "Autofire": 13, "Brawling": 9, "Concentration": 8, "Conversation": 5, "Education": 7,
+        "Evasion": 13, "First Aid": 6, "Handgun": 13, "Heavy Weapons": 12, "Human Perception": 5, "Language (English)": 9,
+        "Language (Streetslang)": 7, "Local Expert (Old Combat Zone)": 7, "Melee Weapon": 12, "Perception": 8, "Persuasion": 6, "Resist Torture/Drugs": 10,
+        "Shoulder Arms": 13, "Stealth": 9, "Tactics": 10
+      },
+      "gear": ["Basic Rifle Ammo x50", "Basic Shotgun Shell Ammo x8", "Agent", "Binoculars", "Carryall", "Disposable Cell Phone", "Handcuffs", "Flashlight"],
+      "cyberware": ["Contraceptive Implant", "Neural Link w/ Chipware Socket, Pain Editor & Reflex Co-Processor"],
+      "specials": [
+        {
+          "name": "Combat Awareness",
+          "text": {
+            "pt": "Role Ability Combat Awareness no Rank 5. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Combat Awareness at Rank 5. Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Arsenal",
+          "text": {
+            "pt": "Assault Rifle e Shotgun de Qualidade Excelente, com munições Basic; Neural Link com Chipware Socket, Pain Editor e Reflex Co-Processor.",
+            "en": "Excellent Quality Assault Rifle and Shotgun with Basic ammo; a Neural Link with a Chipware Socket, Pain Editor and Reflex Co-Processor."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "too-tall",
+    "name": "Too Tall",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Nomad",
+    "roleRank": 5,
+    "rep": 3,
+    "affiliation": "Team Monster",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 111 }, { "book": "Danger Gal Dossier", "page": 105 }, { "book": "Danger Gal Dossier", "page": 112 }],
+    "summary": {
+      "pt": "Gigante de quase dois metros e especialista em armas pesadas e em embarcações, valorizado entre os Aldecaldos por mover cargas discretamente pela água. Acompanha a Team Monster, cuja família é dona do AV, e dá cobertura com o lançador de foguetes enquanto Lucky pilota.",
+      "en": "A near-seven-foot giant and expert in heavy weapons and watercraft, valued among the Aldecaldos for moving cargo quietly across water. He rides with Team Monster, whose AV belongs to his family, and covers the crew with his rocket launcher while Lucky flies."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 45,
+      "seriouslyWounded": 23,
+      "deathSave": 7,
+      "stats": { "INT": 5, "REF": 6, "DEX": 5, "TECH": 6, "COOL": 4, "WILL": 6, "MOVE": 5, "BODY": 7, "EMP": 4 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Rocket Launcher", "skill": "Heavy Weapons", "attackBase": 12, "damage": "8d6", "rof": 1, "magazine": null, "class": "RocketLauncher", "melee": false, "notes": "w/ TUp (+1 Ammo) Drum Magazine" }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Light Armorjack", "sp": 11 },
+        { "location": "Body", "name": "Light Armorjack", "sp": 11 }
+      ],
+      "skills": {
+        "Animal Handling": 10, "Athletics": 7, "Brawling": 11, "Concentration": 8, "Conversation": 6, "Evasion": 10,
+        "First Aid": 8, "Heavy Weapons": 12, "Human Perception": 6, "Language (English)": 9, "Language (Streetslang)": 7, "Local Expert (Night City Harbor)": 7,
+        "Melee Weapon": 11, "Persuasion": 6, "Pilot Sea Vehicle": 12, "Sea Vehicle Tech": 10, "Stealth": 7, "Tracking": 11,
+        "Trading": 10, "Wilderness Survival": 11
+      },
+      "gear": ["Armor-Piercing Rocket x4", "Heavy Melee Weapon (ROF2, 3d6)", "Agent", "Binoculars", "Carryall", "Radio Communicator", "Techtool", "Herakles AV (see page 112)"],
+      "cyberware": ["Cyberarm x2 w/ Hardened Shielding x2"],
+      "specials": [
+        {
+          "name": "Moto",
+          "text": {
+            "pt": "Role Ability Moto no Rank 5. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Moto at Rank 5. Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Lançador e Herakles",
+          "text": {
+            "pt": "Rocket Launcher (8d6) com tambor tech-upgraded (+1 Ammo) e quatro Armor-Piercing Rockets; cyberarms com Hardened Shielding. O AV da equipe é um Zetatech Herakles (AV-4) com várias melhorias, descrito na p.112.",
+            "en": "A Rocket Launcher (8d6) with a tech-upgraded (+1 Ammo) drum and four Armor-Piercing Rockets; cyberarms with Hardened Shielding. The team's AV is a Zetatech Herakles (AV-4) with many upgrades, described on p.112."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "cazadora",
+    "name": "Cazadora",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Solo",
+    "roleRank": 4,
+    "rep": 5,
+    "affiliation": "Trauma Team (Squad NC4-2)",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 114 }, { "book": "Danger Gal Dossier", "page": 113 }],
+    "summary": {
+      "pt": "Líder do esquadrão NC4-2, espanhola de uma família de caçadores de recompensa que a treinou em anatomia e combate. Foi mandada a Night City numa missão solo e sobreviveu à demolição do prédio onde se escondia, guiando os sobreviventes por um esgoto. A culpa de sobrevivente a transformou numa líder rápida e dedicada à equipe, talvez demais.",
+      "en": "Leader of Squad NC4-2, a Spaniard from a family of bounty hunters who taught her anatomy along with combat. Sent to Night City on a solo job, she survived the demolition of the building she was hiding in and led the survivors out through a sewer. Survivor's guilt made her a fast, team-devoted leader, perhaps to a fault."
+    },
+    "sheetNote": {
+      "pt": "A ficha lista duas Role Abilities: Combat Awareness 4 (Role principal) e Medicine 2.",
+      "en": "The sheet lists two Role Abilities: Combat Awareness 4 (main Role) and Medicine 2."
+    },
+    "sheet": {
+      "hp": 40,
+      "seriouslyWounded": 20,
+      "deathSave": 4,
+      "stats": { "INT": 4, "REF": 8, "DEX": 7, "TECH": 8, "COOL": 6, "WILL": 7, "MOVE": 5, "BODY": 4, "EMP": 5 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Heavy SMG", "skill": "Handgun", "attackBase": 16, "damage": "3d6", "rof": 1, "magazine": null, "class": "HeavySmg", "melee": false, "notes": "Excellent Quality" },
+        { "name": "Heavy Melee Weapon", "skill": "Melee Weapon", "attackBase": 7, "damage": "3d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": "No Skill Base printed for this weapon; STAT only." }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Light Armorjack", "sp": 11 },
+        { "location": "Body", "name": "Light Armorjack", "sp": 11 }
+      ],
+      "skills": {
+        "Athletics": 12, "Autofire": 16, "Brawling": 15, "Bureaucracy": 7, "Business": 7, "Concentration": 11,
+        "Conversation": 7, "Drive Land Vehicle": 10, "Education": 6, "Evasion": 15, "First Aid": 10, "Handgun": 16,
+        "Human Perception": 9, "Language (Spanish)": 12, "Language (Streetslang)": 8, "Local Expert (Watson Development)": 6, "Medical Tech": 9, "Paramedic": 9,
+        "Perception": 6, "Personal Grooming": 8, "Persuasion": 9, "Pilot Air Vehicle": 12, "Stealth": 15, "Surgery": 10,
+        "Wardrobe & Style": 10, "Wilderness Survival": 6
+      },
+      "gear": ["Armor-Piercing H Pistol Ammo x30", "Incendiary H Pistol Ammo x30", "EMP Grenade", "Flashbang Grenade", "Agent", "Cryopump", "Medtech Bag", "Radio Communicator", "Scrambler/Descrambler", "Smart Lens w/ Chyron", "Trauma Team (Silver)"],
+      "cyberware": ["Biomonitor", "Contraceptive Implant", "Enhanced Antibodies", "Independent Air Supply", "Toxin Binders"],
+      "specials": [
+        {
+          "name": "Combat Awareness",
+          "text": {
+            "pt": "Role Ability Combat Awareness no Rank 4. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Combat Awareness at Rank 4. Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Medicine",
+          "text": {
+            "pt": "Role Ability Medicine no Rank 2 (Surgery 1, Cryosystem Operation 1). Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Medicine at Rank 2 (Surgery 1, Cryosystem Operation 1). Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Equipamento de resgate",
+          "text": {
+            "pt": "Heavy SMG de Qualidade Excelente, Cryopump, Medtech Bag, Smart Lens com Chyron, Trauma Team Silver e granadas EMP e Flashbang; Independent Air Supply e Toxin Binders.",
+            "en": "An Excellent Quality Heavy SMG, Cryopump, Medtech Bag, Smart Lens with Chyron, Trauma Team Silver coverage and EMP and Flashbang grenades; Independent Air Supply and Toxin Binders."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "penitent",
+    "name": "Penitent",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Solo",
+    "roleRank": 4,
+    "rep": 3,
+    "affiliation": "Trauma Team (Squad NC4-2)",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 115 }, { "book": "Danger Gal Dossier", "page": 113 }],
+    "summary": {
+      "pt": "Atirador do esquadrão, novo na equipe. Foi músculo de aluguel azarado e quase morreu numa guerra de gangues em North Heywood, onde atacou dois alvos que eram executivos fantasiados. Impressionado com o esquadrão que chegou atirando, procurou Paddles e conquistou Cazadora com entusiasmo, e é melhor que Paddles com as armas do AV.",
+      "en": "The squad's gunner, new to the team. He was unlucky hired muscle who fled a booster-gang turf war in North Heywood after attacking two targets who turned out to be cosplaying Execs. Awed by the squad that shot its way in, he tracked down Paddles and won Cazadora over with puppy enthusiasm, and he handles the AV's mounted weapons better than Paddles."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 40,
+      "seriouslyWounded": 20,
+      "deathSave": 7,
+      "stats": { "INT": 4, "REF": 7, "DEX": 6, "TECH": 5, "COOL": 4, "WILL": 4, "MOVE": 6, "BODY": 7, "EMP": 5 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Heavy Pistol", "skill": "Handgun", "attackBase": 14, "damage": "3d6", "rof": 2, "magazine": null, "class": "HeavyPistol", "melee": false, "notes": "Excellent Quality" },
+        { "name": "Brawling Attack", "skill": "Brawling", "attackBase": 8, "damage": "3d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Light Armorjack", "sp": 11 },
+        { "location": "Body", "name": "Light Armorjack", "sp": 11 }
+      ],
+      "skills": {
+        "Athletics": 12, "Autofire": 14, "Brawling": 8, "Concentration": 6, "Conversation": 7, "Drive Land Vehicle": 10,
+        "Education": 6, "Evasion": 10, "First Aid": 11, "Handgun": 14, "Heavy Weapons": 14, "Human Perception": 7,
+        "Language (English)": 8, "Language (Streetslang)": 6, "Local Expert (North Heywood)": 6, "Perception": 6, "Persuasion": 6, "Pilot Air Vehicle": 10,
+        "Stealth": 8, "Streetwise": 8, "Tactics": 8
+      },
+      "gear": ["Basic H Pistol Ammo x16", "Disposable Cell Phone", "Radio Communicator", "Scrambler/Descrambler", "Smart Glasses w/ Anti-Dazzle (in helmet)"],
+      "cyberware": ["Biomonitor", "Neural Link w/ Interface Plugs", "Skinwatch"],
+      "specials": [
+        {
+          "name": "Combat Awareness",
+          "text": {
+            "pt": "Role Ability Combat Awareness no Rank 4. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Combat Awareness at Rank 4. Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Equipamento",
+          "text": {
+            "pt": "Heavy Pistol de Qualidade Excelente, Neural Link com Interface Plugs, Skinwatch, Biomonitor e Smart Glasses com Anti-Dazzle no capacete.",
+            "en": "An Excellent Quality Heavy Pistol, a Neural Link with Interface Plugs, a Skinwatch, Biomonitor and Smart Glasses with Anti-Dazzle in the helmet."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "stick",
+    "name": "Stick",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Medtech",
+    "roleRank": 4,
+    "rep": 3,
+    "affiliation": "Trauma Team (Squad NC4-2)",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 116 }, { "book": "Danger Gal Dossier", "page": 113 }],
+    "summary": {
+      "pt": "Médica do esquadrão, especialista em lesões de carne. Filha de pais marroquinos e sobrinha de um gerente da Trauma Team, largou o treinamento com Paddles para ir à REO Meatwagon, voltando depois do desabamento do prédio. Deve muito a Cazadora e só confia na família, de sangue ou escolhida.",
+      "en": "The squad's medic, specializing in meat injuries. Daughter of Moroccan parents and niece of a Trauma Team manager, she quit training with Paddles to work for REO Meatwagon, then came back after the building collapse. She owes Cazadora a lot and trusts only family, by blood or by choice."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 30,
+      "seriouslyWounded": 15,
+      "deathSave": 4,
+      "stats": { "INT": 6, "REF": 6, "DEX": 4, "TECH": 8, "COOL": 5, "WILL": 4, "MOVE": 5, "BODY": 4, "EMP": 6 },
+      "armoredStats": { "REF": 5, "DEX": 3, "MOVE": 4 },
+      "weapons": [
+        { "name": "Assault Rifle", "skill": "Shoulder Arms", "attackBase": 13, "damage": "5d6", "rof": 1, "magazine": null, "class": "AssaultRifle", "melee": false, "notes": "Excellent Quality" },
+        { "name": "Brawling Attack", "skill": "Brawling", "attackBase": 10, "damage": "2d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
+      ],
+      "armor": [
+        { "location": "Head", "name": "TUp Heavy Armorjack", "sp": 13 },
+        { "location": "Body", "name": "TUp Heavy Armorjack", "sp": 13 }
+      ],
+      "skills": {
+        "Athletics": 10, "Brawling": 10, "Concentration": 12, "Conversation": 8, "Education": 8, "Evasion": 12,
+        "First Aid": 10, "Human Perception": 9, "Language (English)": 10, "Language (Streetslang)": 8, "Local Expert (Watson Development)": 12, "Medical Tech": 9,
+        "Paramedic": 14, "Perception": 12, "Persuasion": 7, "Resist Torture/Drugs": 12, "Shoulder Arms": 13, "Stealth": 6,
+        "Streetwise": 12, "Surgery": 14
+      },
+      "gear": ["Basic Rifle Ammo x25", "Agent", "Airhypo", "Medtech Bag", "Radio Communicator", "Scrambler/Descrambler", "Smart Lens w/ Chyron", "Trauma Team (Silver)"],
+      "cyberware": ["Biomonitor", "Contraceptive Implant", "Cyberarm", "Cyberarm w/ Medscanner"],
+      "specials": [
+        {
+          "name": "Medicine",
+          "text": {
+            "pt": "Role Ability Medicine no Rank 4 (Surgery 3, Pharmaceuticals 1). Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Medicine at Rank 4 (Surgery 3, Pharmaceuticals 1). Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Equipamento médico",
+          "text": {
+            "pt": "Assault Rifle de Qualidade Excelente, Airhypo, Medtech Bag, Smart Lens com Chyron, Trauma Team Silver, Armorjack pesada tech-upgraded e um cyberarm com Medscanner.",
+            "en": "An Excellent Quality Assault Rifle, Airhypo, Medtech Bag, Smart Lens with Chyron, Trauma Team Silver, tech-upgraded Heavy Armorjack and a cyberarm with a Medscanner."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "twist",
+    "name": "Twist",
+    "aliases": ["Flashes"],
+    "kind": "sheet",
+    "role": "Media",
+    "roleRank": 2,
+    "rep": 4,
+    "affiliation": "Trauma Team (Squad NC4-2)",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 117 }, { "book": "Danger Gal Dossier", "page": 113 }],
+    "summary": {
+      "pt": "Irmão de Stick que trocou a medicina pela fama como repórter independente chamado Flashes. Expôs a piloto Rockabye por entregar os explosivos que derrubaram o prédio, sofreu dois atentados e fugiu para a Trauma Team com nova aparência, levando Rockabye consigo. Tem aptidão para reparos cibernéticos e acha corpos de carne nojentos.",
+      "en": "Stick's brother, who traded medicine for stardom as an independent reporter called Flashes. He exposed the pilot Rockabye for delivering the explosives that brought the building down, survived two assassination attempts and hid in Trauma Team under a new look, bringing Rockabye with him. He has a knack for cybernetic repair and finds meat bodies icky."
+    },
+    "sheetNote": {
+      "pt": "A ficha lista duas Role Abilities: Credibility 2 e Medicine 2.",
+      "en": "The sheet lists two Role Abilities: Credibility 2 and Medicine 2."
+    },
+    "sheet": {
+      "hp": 35,
+      "seriouslyWounded": 18,
+      "deathSave": 5,
+      "stats": { "INT": 6, "REF": 6, "DEX": 4, "TECH": 8, "COOL": 7, "WILL": 4, "MOVE": 4, "BODY": 5, "EMP": 4 },
+      "armoredStats": { "REF": 5, "DEX": 3, "MOVE": 3 },
+      "weapons": [
+        { "name": "Assault Rifle", "skill": "Shoulder Arms", "attackBase": 13, "damage": "5d6", "rof": 1, "magazine": null, "class": "AssaultRifle", "melee": false, "notes": "Excellent Quality" },
+        { "name": "Brawling Attack", "skill": "Brawling", "attackBase": 6, "damage": "2d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
+      ],
+      "armor": [
+        { "location": "Head", "name": "TUp Heavy Armorjack", "sp": 13 },
+        { "location": "Body", "name": "TUp Heavy Armorjack", "sp": 13 }
+      ],
+      "skills": {
+        "Athletics": 6, "Brawling": 6, "Composition": 10, "Concentration": 7, "Conversation": 10, "Cybertech": 12,
+        "Deduction": 8, "Education": 8, "Evasion": 12, "First Aid": 10, "Human Perception": 12, "Language (English)": 10,
+        "Language (Streetslang)": 8, "Local Expert (Watson Development)": 8, "Medical Tech": 10, "Paramedic": 12, "Perception": 10, "Persuasion": 9,
+        "Photography/Film": 10, "Resist Torture/Drugs": 10, "Shoulder Arms": 13, "Stealth": 6, "Streetwise": 12, "Wardrobe & Style": 10
+      },
+      "gear": ["Expansive Rifle Ammo x25", "Agent", "Cryopump", "Memory Chip x3", "Radio Communicator", "Scrambler/Descrambler", "Smart Lens w/ Chyron", "Tech Bag", "Trauma Team (Silver)", "Video Camera"],
+      "cyberware": ["Biomonitor", "Contraceptive Implant", "Cyberarm w/ Techscanner", "Cyberarm w/ Tool Hand", "Techhair"],
+      "specials": [
+        {
+          "name": "Credibility",
+          "text": {
+            "pt": "Role Ability Credibility no Rank 2. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Credibility at Rank 2. Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Medicine",
+          "text": {
+            "pt": "Role Ability Medicine no Rank 2 (Cryosystem Operation 2). Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Medicine at Rank 2 (Cryosystem Operation 2). Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Cyberarms de técnico",
+          "text": {
+            "pt": "Cyberarm com Techscanner e outro com Tool Hand, Cryopump, Tech Bag, Video Camera e Assault Rifle de Qualidade Excelente.",
+            "en": "A cyberarm with a Techscanner and another with a Tool Hand, a Cryopump, Tech Bag, Video Camera and an Excellent Quality Assault Rifle."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "rockabye",
+    "name": "Rockabye",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Nomad",
+    "roleRank": 4,
+    "rep": 3,
+    "affiliation": "Trauma Team (Squad NC4-2)",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 118 }, { "book": "Danger Gal Dossier", "page": 113 }, { "book": "Danger Gal Dossier", "page": 120 }],
+    "summary": {
+      "pt": "Piloto do esquadrão, da família Nomad Gavilan, que entregou os explosivos usados no desabamento e carrega a culpa disso. Raramente sai da Bay 4-2, cuida da manutenção do AV e dirige com suavidade para os feridos e agressividade rumo ao perigo. Segue pagando uma dívida de culpa e recusa propostas de outras equipes.",
+      "en": "The squad's pilot, from the Gavilan Nomad Pack, who delivered the explosives used in the collapse and carries the guilt of it. She rarely leaves Bay 4-2 except on calls, maintains the AV, and flies smoothly for casualties but dives into trouble spots like a demon. She is working off a debt of guilt and turns down offers from other crews."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 35,
+      "seriouslyWounded": 18,
+      "deathSave": 4,
+      "stats": { "INT": 6, "REF": 7, "DEX": 4, "TECH": 7, "COOL": 6, "WILL": 5, "MOVE": 4, "BODY": 4, "EMP": 5 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Heavy Pistol", "skill": "Handgun", "attackBase": 14, "damage": "3d6", "rof": 2, "magazine": null, "class": "HeavyPistol", "melee": false, "notes": "Excellent Quality" },
+        { "name": "Brawling Attack", "skill": "Brawling", "attackBase": 6, "damage": "1d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Light Armorjack", "sp": 11 },
+        { "location": "Body", "name": "Light Armorjack", "sp": 11 }
+      ],
+      "skills": {
+        "Air Vehicle Tech": 13, "Athletics": 6, "Basic Tech": 11, "Brawling": 6, "Concentration": 7, "Conversation": 7,
+        "Drive Land Vehicle": 12, "Education": 8, "Evasion": 12, "First Aid": 9, "Handgun": 14, "Heavy Weapons": 10,
+        "Human Perception": 7, "Language (Spanish)": 10, "Language (Streetslang)": 8, "Local Expert (Santo Domingo)": 12, "Paramedic": 10, "Perception": 8,
+        "Persuasion": 8, "Pilot Air Vehicle": 13, "Stealth": 6, "Wilderness Survival": 10
+      },
+      "gear": ["Armor-Piercing H Pistol Ammo x16", "Agent", "Radio Communicator", "Scrambler/Descrambler", "Smart Lens w/ Chyron", "Tech Bag"],
+      "cyberware": ["Biomonitor", "Contraceptive Implant", "Light Tattoo", "Neural Link w/ Interface Plugs"],
+      "specials": [
+        {
+          "name": "Moto",
+          "text": {
+            "pt": "Role Ability Moto no Rank 4. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Moto at Rank 4. Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "AV do esquadrão",
+          "text": {
+            "pt": "Mantém o SovOil Mi-60 (AV-4) do esquadrão, reformado com peças Nomad, com NOS, metralhadora e foguetes (p.120). Usa Heavy Pistol de Qualidade Excelente e um Light Tattoo.",
+            "en": "She maintains the squad's SovOil Mi-60 (AV-4), rebuilt with Nomad parts, with NOS, a machine gun and a rocket pod (p.120). She uses an Excellent Quality Heavy Pistol and a Light Tattoo."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "paddles",
+    "name": "Paddles",
+    "aliases": [],
+    "kind": "sheet",
+    "role": null,
+    "roleRank": null,
+    "rep": 2,
+    "affiliation": "Trauma Team (Squad NC4-2)",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 119 }, { "book": "Danger Gal Dossier", "page": 113 }],
+    "summary": {
+      "pt": "Especialista em desfibrilador que usa as pás como arma e adora derrubar obstáculos orgânicos. Convenceu Stick a ir para a REO Meatwagon e ficou com um bônus que ela nunca soube, e foi ele que provavelmente matou o chefe de turno Marek Lewis. Polonês de Cracóvia, simpático e bom de lábia, usa os resgates para vender contratos extras.",
+      "en": "A defibrillator specialist who uses the paddles as a weapon and enjoys flattening organic obstacles. He talked Stick into defecting to REO Meatwagon and kept a signing bonus she never knew about, and he likely killed the shift boss Marek Lewis. A Polish native of Krakow, friendly and silver-tongued, he signs casualties up for extra contracts during rescues."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 30,
+      "seriouslyWounded": 15,
+      "deathSave": 4,
+      "stats": { "INT": 3, "REF": 8, "DEX": 6, "TECH": 5, "COOL": 3, "WILL": 3, "MOVE": 4, "BODY": 4, "EMP": 3 },
+      "armoredStats": { "REF": 6, "DEX": 4, "MOVE": 2 },
+      "weapons": [
+        { "name": "Heavy Pistol", "skill": "Handgun", "attackBase": 6, "damage": "3d6", "rof": 2, "magazine": null, "class": "HeavyPistol", "melee": false, "notes": "No Skill Base printed for this weapon; STAT only." },
+        { "name": "Stun Baton (Defib Paddle)", "skill": "Melee Weapon", "attackBase": 12, "damage": "2d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Medium Armorjack", "sp": 12 },
+        { "location": "Body", "name": "Medium Armorjack", "sp": 12 }
+      ],
+      "skills": {
+        "Athletics": 8, "Brawling": 12, "Concentration": 5, "Conversation": 5, "Cybertech": 8, "Education": 5,
+        "Evasion": 8, "First Aid": 7, "Human Perception": 5, "Language (Polish)": 7, "Language (Streetslang)": 5, "Local Expert (Heywood Industrial Zone)": 5,
+        "Melee Weapon": 12, "Paramedic": 10, "Perception": 5, "Persuasion": 12, "Stealth": 8
+      },
+      "gear": ["H Pistol Ammo x12", "Disposable Cell Phone", "Radio Communicator", "Scrambler/Descrambler", "Smart Lens w/ Chyron"],
+      "cyberware": ["Biomonitor", "Contraceptive Implant", "Medical Grade Cyberarm x2"],
+      "specials": [
+        {
+          "name": "Pás de desfibrilador",
+          "text": {
+            "pt": "A Stun Baton (Defib Paddle) é a arma corpo a corpo (2d6); leva também uma Heavy Pistol, Smart Lens com Chyron e cyberarms médicos x2.",
+            "en": "A Stun Baton (Defib Paddle) is his melee weapon (2d6); he also carries a Heavy Pistol, a Smart Lens with Chyron and two medical-grade cyberarms."
+          }
+        }
+      ]
+    }
   }
 ]
