@@ -1974,5 +1974,797 @@
     },
     "sheetNote": null,
     "sheet": null
+  },
+  {
+    "id": "arbiter",
+    "name": "Arbiter",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Lawman",
+    "roleRank": 4,
+    "rep": 5,
+    "affiliation": "6th Street",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 10 }],
+    "summary": {
+      "pt": "Filho do chefe \"X\" e líder do Davis Squad da 6th Street; há quem fale em nepotismo, até vê-lo em ação. Criado entre veteranos de guerra, aprendeu tática com eles e virou um dos melhores snipers de Night City, mantendo a equipe unida na base da conversa fiada pelo rádio.",
+      "en": "Son of the boss \"X\" and leader of 6th Street's Davis Squad; some whisper nepotism until they watch him work. Raised among the gang's war veterans, he picked up their tactics and became one of the best snipers in Night City, keeping his squad together with constant radio banter."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 40,
+      "seriouslyWounded": 20,
+      "deathSave": 5,
+      "stats": { "INT": 7, "REF": 8, "DEX": 5, "TECH": 4, "COOL": 8, "WILL": 6, "MOVE": 4, "BODY": 5, "EMP": 4 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Sniper Rifle w/Sniping Scope", "skill": "Shoulder Arms", "attackBase": 16, "damage": "5d6", "rof": 1, "magazine": null, "class": "SniperRifle", "melee": false, "notes": "Excellent Quality" },
+        { "name": "Heavy Pistol", "skill": "Handgun", "attackBase": 8, "damage": "3d6", "rof": 2, "magazine": null, "class": "HeavyPistol", "melee": false, "notes": "No Skill Base printed for this weapon; STAT only." }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Kevlar®", "sp": 7 },
+        { "location": "Body", "name": "Light Armorjack", "sp": 11 }
+      ],
+      "skills": {
+        "Athletics": 12, "Brawling": 7, "Concentration": 11, "Conversation": 7, "Criminology": 12, "Deduction": 12,
+        "Education": 11, "Evasion": 14, "First Aid": 6, "Human Perception": 12, "Language (English)": 13, "Language (Japanese)": 10,
+        "Language (Spanish)": 10, "Language (Streetslang)": 11, "Lip Reading": 11, "Local Expert (North Heywood)": 13, "Personal Grooming": 13, "Perception": 13,
+        "Persuasion": 15, "Shoulder Arms": 16, "Stealth": 10, "Tactics": 12, "Tracking": 12, "Wardrobe & Style": 13
+      },
+      "gear": ["Armor-Piercing Rifle Ammo x10", "Basic H Pistol Ammo x16", "Agent", "Flashlight", "Handcuffs x2", "Homing Tracer", "Radio Communicator", "Road Flares x3"],
+      "cyberware": ["Contraceptive Implant", "Cybereye x2 w/ Anti-Dazzle x2 & Image Enhance x2", "Cyberarm w/ Grapple Hand", "Techhair", "Skinwatch"],
+      "specials": [
+        {
+          "name": "Backup",
+          "text": {
+            "pt": "Role Ability Backup no Rank 4. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Backup at Rank 4. Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Lucille",
+          "text": {
+            "pt": "O rifle de precisão dele, de Qualidade Excelente e com mira de sniper. Arbiter passa o tempo livre na oficina da base cuidando dela.",
+            "en": "His Excellent Quality sniper rifle with a sniping scope. Arbiter spends his off hours in the maintenance bay looking after it."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "coldfire",
+    "name": "Coldfire",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Solo",
+    "roleRank": 4,
+    "rep": 3,
+    "affiliation": "6th Street",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 11 }],
+    "summary": {
+      "pt": "Agente da 6th Street que combateu no lado derrotado da 4ª Guerra Corporativa. Filha de gerentes da Arasaka, sumiu depois da guerra e ressurgiu como Coldfire; ninguém sabe se ainda tem ligação com a corporação, e o chefe talvez a mantenha marcada para eliminação. Em combate é a ponta de lança do esquadrão, avançando e atirando.",
+      "en": "A 6th Street operative who fought on the losing side of the 4th Corporate War. The daughter of Arasaka middle managers, she vanished after the war and resurfaced as Coldfire; nobody knows whether she still has ties to the corp, and the boss may have her flagged for removal. In a fight she is the squad's spear, charging forward and shooting."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 45,
+      "seriouslyWounded": 23,
+      "deathSave": 7,
+      "stats": { "INT": 5, "REF": 8, "DEX": 6, "TECH": 3, "COOL": 3, "WILL": 6, "MOVE": 6, "BODY": 7, "EMP": 4 },
+      "armoredStats": { "REF": 6, "DEX": 4, "MOVE": 4 },
+      "weapons": [
+        { "name": "Arasaka WAA Bullpup Assault Weapon", "skill": "Shoulder Arms", "attackBase": 14, "damage": "5d6", "rof": 1, "magazine": null, "class": "AssaultRifle", "melee": false, "notes": null },
+        { "name": "Heavy Melee Weapon", "skill": "Melee Weapon", "attackBase": 12, "damage": "3d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Light Armorjack", "sp": 11 },
+        { "location": "Body", "name": "Heavy Armorjack", "sp": 13 }
+      ],
+      "skills": {
+        "Athletics": 12, "Autofire": 14, "Brawling": 8, "Bureaucracy": 9, "Concentration": 8, "Conversation": 6,
+        "Education": 10, "Evasion": 12, "First Aid": 5, "Human Perception": 8, "Language (English)": 8, "Language (Japanese)": 10,
+        "Language (Streetslang)": 7, "Local Expert (North Heywood)": 10, "Melee Weapon": 12, "Perception": 10, "Persuasion": 5, "Resist Torture/Drugs": 12,
+        "Shoulder Arms": 14, "Stealth": 11
+      },
+      "gear": ["Basic Rifle Ammo x50", "Flashbang Grenade", "Incendiary Grenade", "Smoke Grenade", "Teargas Grenade", "Disposable Cell Phone", "Flashlight", "Handcuffs", "Road Flare x3"],
+      "cyberware": ["Contraceptive Implant", "Cyberleg x2 w/ Jump Booster x2", "Neural Link w/ Interface Plugs & Sandevistan"],
+      "specials": [
+        {
+          "name": "Combat Awareness",
+          "text": {
+            "pt": "Role Ability Combat Awareness no Rank 4. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Combat Awareness at Rank 4. Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Neural Link com Sandevistan",
+          "text": {
+            "pt": "Tem Neural Link com Interface Plugs e Sandevistan. Bônus de cyberware não entram nos stats impressos.",
+            "en": "Neural Link with Interface Plugs and a Sandevistan. Cyberware bonuses are not included in the printed stats."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "breacher",
+    "name": "Breacher",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Solo",
+    "roleRank": 4,
+    "rep": 3,
+    "affiliation": "6th Street",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 12 }],
+    "summary": {
+      "pt": "Ex-boxeador profissional da Cidade do México que a guerra transformou em soldado, e que tem o lema \"Fuck Arasaka\" desde que viu o empresário morrer. Segundo no comando do Davis Squad, infiltra locais para plantar explosivos ou fazer reconhecimento, e pode criar atrito com Coldfire.",
+      "en": "A former pro boxer from Mexico City whom the war turned into a soldier, carrying a \"Fuck Arasaka\" motto since seeing their manager die. Second in command of the Davis Squad, Breacher sneaks into locations to plant explosives or scout, and may clash with Coldfire."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 40,
+      "seriouslyWounded": 20,
+      "deathSave": 7,
+      "stats": { "INT": 4, "REF": 4, "DEX": 8, "TECH": 4, "COOL": 5, "WILL": 4, "MOVE": 4, "BODY": 7, "EMP": 4 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Heavy Pistol", "skill": "Handgun", "attackBase": 10, "damage": "3d6", "rof": 2, "magazine": null, "class": "HeavyPistol", "melee": false, "notes": null },
+        { "name": "Heavy Melee Weapon", "skill": "Melee Weapon", "attackBase": 12, "damage": "3d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Light Armorjack", "sp": 11 },
+        { "location": "Body", "name": "Light Armorjack", "sp": 11 }
+      ],
+      "skills": {
+        "Athletics": 14, "Brawling": 14, "Concentration": 6, "Conversation": 6, "Education": 6, "Endurance": 7,
+        "Evasion": 14, "First Aid": 6, "Handgun": 10, "Human Perception": 8, "Interrogation": 9, "Language (English)": 6,
+        "Language (Spanish)": 10, "Language (Streetslang)": 6, "Local Expert (North Heywood)": 6, "Martial Arts (Judo)": 12, "Melee Weapon": 12, "Perception": 8,
+        "Personal Grooming": 8, "Persuasion": 10, "Resist Torture/Drugs": 8, "Stealth": 10, "Streetwise": 10
+      },
+      "gear": ["Basic H Pistol Ammo x16", "Carryall", "Flashlight", "Handcuffs", "Radio Communicator", "Road Flare", "Rope (60 m/yds)"],
+      "cyberware": ["Contraceptive Implant", "Neural Link w/ Kerenzikov"],
+      "specials": [
+        {
+          "name": "Combat Awareness",
+          "text": {
+            "pt": "Role Ability Combat Awareness no Rank 4. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Combat Awareness at Rank 4. Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Neural Link com Kerenzikov",
+          "text": {
+            "pt": "Neural Link com Kerenzikov; o bônus de speedware não está incluído nos stats.",
+            "en": "Neural Link with a Kerenzikov; the speedware bonus is not included in the stats."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "knock-knock",
+    "name": "Knock!Knock!",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Solo",
+    "roleRank": 2,
+    "rep": 2,
+    "affiliation": "6th Street",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 13 }],
+    "summary": {
+      "pt": "O membro mais velho do Davis Squad, veterano das quatro Guerras Corporativas que nunca tira a máscara diante de câmeras. Só luta de perto, sai quase ileso das batalhas e põe a vida de civis acima da da própria equipe. Trata a gangue como emprego, não como vocação, e é pago em dinheiro vivo após cada missão.",
+      "en": "The oldest member of the Davis Squad, a veteran of all four Corporate Wars who never unmasks on camera. He fights only up close, walks out of most battles nearly unscathed, and puts civilian lives ahead of his team's. He treats the gang as a job, not a calling, and is paid in cash after each mission."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 40,
+      "seriouslyWounded": 20,
+      "deathSave": 9,
+      "stats": { "INT": 6, "REF": 5, "DEX": 4, "TECH": 3, "COOL": 4, "WILL": 3, "MOVE": 4, "BODY": 9, "EMP": 3 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Shotgun", "skill": "Shoulder Arms", "attackBase": 10, "damage": "5d6", "rof": 1, "magazine": null, "class": "Shotgun", "melee": false, "notes": "Poor Quality" },
+        { "name": "Heavy Melee Weapon", "skill": "Melee Weapon", "attackBase": 10, "damage": "3d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Kevlar®", "sp": 7 },
+        { "location": "Body", "name": "Kevlar®", "sp": 7 }
+      ],
+      "skills": {
+        "Athletics": 10, "Brawling": 6, "Concentration": 5, "Conversation": 5, "Education": 8, "Evasion": 10,
+        "First Aid": 8, "Human Perception": 5, "Language (English)": 10, "Language (Streetslang)": 8, "Local Expert (North Heywood)": 8, "Melee Weapon": 10,
+        "Perception": 10, "Persuasion": 6, "Shoulder Arms": 10, "Stealth": 6, "Streetwise": 10
+      },
+      "gear": ["Junk Shotgun Slug Ammo x8", "Basic Shotgun Shell Ammo x8", "Anti-Smog Breathing Mask", "Disposable Cell Phone", "Flashlight", "Handcuffs", "Radio Communicator", "Road Flare x3"],
+      "cyberware": ["Grafted Muscle and Bone Lace"],
+      "specials": [
+        {
+          "name": "Combat Awareness",
+          "text": {
+            "pt": "Role Ability Combat Awareness no Rank 2. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Combat Awareness at Rank 2. Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Grafted Muscle and Bone Lace",
+          "text": {
+            "pt": "A única cyberware dele é o Grafted Muscle and Bone Lace, que sustenta o BODY 9.",
+            "en": "His only cyberware is Grafted Muscle and Bone Lace, which backs his BODY 9."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "roof-diver",
+    "name": "Roof Diver",
+    "aliases": ["Roof Jumper"],
+    "kind": "sheet",
+    "role": "Lawman",
+    "roleRank": 2,
+    "rep": 1,
+    "affiliation": "6th Street",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 14 }],
+    "summary": {
+      "pt": "Nativo do corredor BosWash (um \"BosWasher\") que voltou da guerra sem amparo e acabou entrando na 6th Street em Night City, atraído por uma estrutura militar sem militares. Perdeu um braço ao salvar um colega que caía de um prédio e ganhou um cyberarm de agradecimento. Fora do serviço, vive em North Heywood com a família.",
+      "en": "A BosWasher native who came home from the war to no support and ended up joining 6th Street in Night City, drawn to a military structure without a real military. They lost an arm saving a squadmate who fell from a building, and got a cyberarm as thanks. Off duty, they live in North Heywood with their family."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 30,
+      "seriouslyWounded": 15,
+      "deathSave": 4,
+      "stats": { "INT": 4, "REF": 4, "DEX": 4, "TECH": 3, "COOL": 3, "WILL": 4, "MOVE": 3, "BODY": 4, "EMP": 4 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Assault Rifle", "skill": "Shoulder Arms", "attackBase": 12, "damage": "5d6", "rof": 1, "magazine": null, "class": "AssaultRifle", "melee": false, "notes": "Poor Quality" }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Kevlar®", "sp": 7 },
+        { "location": "Body", "name": "Kevlar®", "sp": 7 }
+      ],
+      "skills": {
+        "Athletics": 8, "Concentration": 6, "Conversation": 9, "Education": 6, "Evasion": 10, "First Aid": 10,
+        "Handgun": 10, "Human Perception": 6, "Language (English)": 8, "Language (Streetslang)": 6, "Local Expert (North Heywood)": 6, "Perception": 8,
+        "Persuasion": 5, "Shoulder Arms": 12, "Stealth": 6
+      },
+      "gear": ["Junk Rifle Ammo x50", "Disposable Cell Phone", "Flashlight", "Handcuffs", "Radio Communicator", "Road Flare x3"],
+      "cyberware": ["Contraceptive Implant", "Cyberarm w/ Popup Microwaver"],
+      "specials": [
+        {
+          "name": "Backup",
+          "text": {
+            "pt": "Role Ability Backup no Rank 2. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Backup at Rank 2. Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Popup Microwaver",
+          "text": {
+            "pt": "O cyberarm tem um Microwaver embutido (Popup). Não causa dano; em vez disso força o alvo a testar contra o DV de Cybertech da arma e desliga cyberware ou eletrônicos. Por isso não aparece em armas.",
+            "en": "The cyberarm hides a Popup Microwaver. It deals no damage; it forces a Cybertech check against the weapon's DV and shuts down cyberware or electronics. That is why it is not listed under weapons."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "big-top",
+    "name": "Big Top",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Medtech",
+    "roleRank": 8,
+    "rep": 6,
+    "affiliation": "The Bozos",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 16 }, { "book": "Danger Gal Dossier", "page": 15 }],
+    "summary": {
+      "pt": "Chefe de um dos circos Bozo e o rebelde que provocou a guerra civil da gangue, ao detonar o evento Hilaria 2045 com civis sequestrados, bodyesculpidos e lobotomizados em braindance. Medtech de formação, usa os braços extras de cyberware para \"melhorar\" a própria equipe e colher peças dos inimigos. Despreza o Grande Bozo como ultrapassado.",
+      "en": "Leader of one Bozo circus and the rebel who started the gang's civil war with the Hilaria 2045 incident, using kidnapped civilians he bodysculpted and braindance-brainwashed. A trained Medtech, he uses his extra cyberarms to \"improve\" his own crew and harvest enemy parts. He scorns the Great Bozo as stale."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 50,
+      "seriouslyWounded": 25,
+      "deathSave": 8,
+      "stats": { "INT": 6, "REF": 8, "DEX": 6, "TECH": 7, "COOL": 8, "WILL": 7, "MOVE": 7, "BODY": 8, "EMP": 0 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Militech Tactical Umbrella w/ Smart Link", "skill": "Handgun", "attackBase": 16, "damage": "3d6", "rof": 2, "magazine": null, "class": "HeavyPistol", "melee": false, "notes": "Tech-upgraded (TUp)" },
+        { "name": "Popup IMI Chainknife x4", "skill": "Melee Weapon", "attackBase": 16, "damage": "2d6", "rof": 1, "magazine": null, "class": null, "melee": true, "notes": "Printed damage: 2d6 (4d6)" }
+      ],
+      "armor": [
+        { "location": "Head", "name": "TUp Light Armorjack", "sp": 12 },
+        { "location": "Body", "name": "TUp Light Armorjack", "sp": 12 }
+      ],
+      "skills": {
+        "Athletics": 10, "Brawling": 12, "Bribery": 12, "Conceal/Reveal Object": 10, "Concentration": 12, "Conversation": 6,
+        "Cybertech": 16, "Education": 10, "Electronics/Security Tech": 15, "Endurance": 12, "Evasion": 12, "Handgun": 16,
+        "Human Perception": 4, "Interrogation": 14, "Language (English)": 10, "Language (Streetslang)": 8, "Lip Reading": 8, "Local Expert (Unknown)": 10,
+        "Medical Tech": 10, "Melee Weapon": 16, "Personal Grooming": 10, "Paramedic": 14, "Perception": 12, "Persuasion": 14,
+        "Resist Torture/Drugs": 13, "Streetwise": 12, "Surgery": 17, "Tactics": 11, "Trading": 12, "Wardrobe & Style": 12
+      },
+      "gear": ["Armor-Piercing H Pistol Ammo x6", "Biotoxin Grenade", "Flashbang Grenade", "Agent", "Duct Tape", "Glow Paint", "Handcuffs", "Medtech Bag", "Rope (60 m/yds)", "Techtool"],
+      "cyberware": ["Exotic Bodysculpting", "TUp (+2 limbs) Artificial Shoulder Mount", "Chemskin", "Cyberarm x2 w/ Hardened Shielding x2 & Popup IMI Chainknife x2", "Cyberarm w/ Hardened Shielding, Popup IMI Chainknife & Medscanner", "Cyberarm w/ Hardened Shielding, Popup IMI Chainknife & Raven Microcybernetics MicroWaldo", "Cyberaudio Suite w/ Amplified Hearing, Homing Tracer & Voice Stress Analyzer", "Cybereye w/ Anti-Dazzle & MicroOptics", "Cybereye w/ Anti-Dazzle & Targeting Scope", "Enhanced Antibodies", "Nasal Filters", "Neural Link w/ Braindance Recorder, Chipware Socket, Interface Plugs & Pain Editor", "Sycust FleshWeave"],
+      "specials": [
+        {
+          "name": "Medicine",
+          "text": {
+            "pt": "Role Ability Medicine no Rank 8 (Surgery 5, MedTech [Pharm] 3). Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Medicine at Rank 8 (Surgery 5, MedTech [Pharm] 3). Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Militech Tactical Umbrella",
+          "text": {
+            "pt": "A arma principal dele. Está em armas como pistola de 3d6; o guarda-chuva também é uma arma corpo a corpo.",
+            "en": "His signature weapon, listed under weapons as a 3d6 pistol; the umbrella is also a melee weapon."
+          }
+        },
+        {
+          "name": "Braços extras",
+          "text": {
+            "pt": "TUp (+2 membros) Artificial Shoulder Mount e três cyberarms com Hardened Shielding e IMI Chainknife embutidas, uma com Medscanner e outra com MicroWaldo. Cada Chainknife imprime 2d6 (4d6) e ROF 1.",
+            "en": "A TUp (+2 limbs) Artificial Shoulder Mount and three cyberarms with Hardened Shielding and Popup IMI Chainknives, one with a Medscanner and one with a MicroWaldo. Each Chainknife prints 2d6 (4d6) and ROF 1."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "blammo",
+    "name": "Blammo",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Solo",
+    "roleRank": 6,
+    "rep": 5,
+    "affiliation": "The Bozos",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 17 }],
+    "summary": {
+      "pt": "Bozo da velha guarda, lenda que já estava lá quando a gangue tomou as lojas de piada. Recusa-se a chefiar um circo e prefere instigar os mais novos a levar o caos mais longe, talvez inclusive soprando ideias a Big Top. Em combate usa explosivos para encurralar inimigos, sem se importar com os próprios palhaços na linha de tiro.",
+      "en": "A Bozo of the old guard, a legend who was there when the gang took over the joke shops. He refuses to run a circus and instead goads the young ones to push chaos further, possibly whispering ideas in Big Top's ear. In a fight he uses explosives to corral enemies, caring little if his own clowns are in the way."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 45,
+      "seriouslyWounded": 23,
+      "deathSave": 8,
+      "stats": { "INT": 7, "REF": 8, "DEX": 8, "TECH": 5, "COOL": 5, "WILL": 5, "MOVE": 8, "BODY": 8, "EMP": 0 },
+      "armoredStats": { "REF": 6, "DEX": 6, "MOVE": 6 },
+      "weapons": [
+        { "name": "Rocket Launcher w/Extended Clip", "skill": "Heavy Weapons", "attackBase": 16, "damage": "8d6", "rof": 1, "magazine": null, "class": "RocketLauncher", "melee": false, "notes": "Excellent Quality" },
+        { "name": "Shotgun", "skill": "Shoulder Arms", "attackBase": 16, "damage": "5d6", "rof": 1, "magazine": null, "class": "Shotgun", "melee": false, "notes": "Excellent Quality" }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Kevlar®", "sp": 7 },
+        { "location": "Body", "name": "TUp Heavy Armorjack", "sp": 14 }
+      ],
+      "skills": {
+        "Athletics": 15, "Brawling": 16, "Bribery": 14, "Conceal/Reveal Object": 14, "Concentration": 11, "Conversation": 2,
+        "Dance": 10, "Demolitions": 10, "Education": 9, "Endurance": 10, "Evasion": 16, "First Aid": 7,
+        "Heavy Weapons": 16, "Human Perception": 2, "Interrogation": 14, "Language (English)": 11, "Language (Streetslang)": 9, "Local Expert (Unknown)": 12,
+        "Melee Weapon": 14, "Perception": 12, "Persuasion": 10, "Resist Torture/Drugs": 12, "Shoulder Arms": 16, "Stealth": 10,
+        "Tactics": 11, "Trading": 10
+      },
+      "gear": ["Armor-Piercing Rocket x2", "Armor-Piercing Shotgun Slug Ammo x4", "Flashbang Grenade x2", "Incendiary Grenade x3", "Disposable Cell Phone"],
+      "cyberware": ["Exotic Bodysculpting", "AudioVox", "Cyberaudio Suite w/ Audio Recorder, Level Damper & Voice Stress Analyzer", "Cybereye x2 w/ Anti-Dazzle x2 & Low Light/Infrared/UV x2", "Neural Link w/ Chipware Socket, Pain Editor & Reflex Co-Processor", "Subdermal Pocket x5"],
+      "specials": [
+        {
+          "name": "Combat Awareness",
+          "text": {
+            "pt": "Role Ability Combat Awareness no Rank 6. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Combat Awareness at Rank 6. Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Armamento pesado",
+          "text": {
+            "pt": "Lança-foguetes de Qualidade Excelente com carregador estendido, além de uma escopeta de Qualidade Excelente, mais Armor-Piercing Rockets e granadas incendiárias e de efeito atordoante.",
+            "en": "An Excellent Quality rocket launcher with extended clip plus an Excellent Quality shotgun, with Armor-Piercing Rockets and incendiary and flashbang grenades."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "jester",
+    "name": "Jester",
+    "aliases": ["Jade Sky"],
+    "kind": "sheet",
+    "role": "Rockerboy",
+    "roleRank": 4,
+    "rep": 4,
+    "affiliation": "The Bozos",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 18 }],
+    "summary": {
+      "pt": "Jade Sky foi uma grande acrobata de fogo até um incêndio com balões de hélio matar noventa e quatro pessoas e custar-lhe as pernas. Voltou como Bozo, com pernas cibernéticas instaladas por Big Top, e vive para o espetáculo: quanto maior a plateia, mais riscos corre. Ainda teme fogo de hélio.",
+      "en": "Jade Sky was a top acrobatic fire-spinner until a helium balloon fire killed ninety-four people and took her legs. She returned as a Bozo, with cyberlegs installed by Big Top, and lives for spectacle: the bigger the audience, the bigger the risks. She still fears helium fire."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 40,
+      "seriouslyWounded": 20,
+      "deathSave": 6,
+      "stats": { "INT": 4, "REF": 8, "DEX": 7, "TECH": 3, "COOL": 6, "WILL": 5, "MOVE": 8, "BODY": 6, "EMP": 3 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Heavy Pistol", "skill": "Handgun", "attackBase": 16, "damage": "3d6", "rof": 1, "magazine": null, "class": "HeavyPistol", "melee": false, "notes": "Excellent Quality" },
+        { "name": "IMI Chainknife", "skill": "Melee Weapon", "attackBase": 16, "damage": "2d6", "rof": 1, "magazine": null, "class": null, "melee": true, "notes": "Printed damage: 2d6 (4d6)" }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Light Armorjack", "sp": 11 },
+        { "location": "Body", "name": "Light Armorjack", "sp": 11 }
+      ],
+      "skills": {
+        "Acting": 14, "Athletics": 14, "Brawling": 14, "Conceal/Reveal Object": 9, "Concentration": 7, "Contortionist": 14,
+        "Conversation": 5, "Dance": 13, "Education": 6, "Endurance": 10, "Evasion": 16, "First Aid": 5,
+        "Handgun": 16, "Human Perception": 7, "Interrogation": 10, "Language (English)": 8, "Language (Streetslang)": 6, "Local Expert (Little Europe)": 6,
+        "Melee Weapon": 16, "Perception": 8, "Personal Grooming": 10, "Persuasion": 8, "Resist Torture/Drugs": 10, "Stealth": 9,
+        "Wardrobe & Style": 10
+      },
+      "gear": ["Armor-Piercing H Pistol Ammunition x16", "Smoke Grenade x2", "Agent", "Vial of Biotoxin"],
+      "cyberware": ["Chemskin", "Contraceptive Implant", "Cyberleg x2 w/ Jump Booster x2 & Talon Foot (ROF2, 1d6) x2", "Neural Link w/ Sandevistan", "Light Tattoo x3"],
+      "specials": [
+        {
+          "name": "Charismatic Impact",
+          "text": {
+            "pt": "Role Ability Charismatic Impact no Rank 4. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Charismatic Impact at Rank 4. Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Talon Foot",
+          "text": {
+            "pt": "As pernas têm Talon Foot x2 e Jump Booster x2. Cada pé causa 1d6 com ROF 2.",
+            "en": "Her cyberlegs have two Talon Feet and two Jump Boosters. Each foot deals 1d6 at ROF 2."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "tomfool",
+    "name": "Tomfool",
+    "aliases": ["Tom Smart", "Tom Fool"],
+    "kind": "sheet",
+    "role": "Solo",
+    "roleRank": 4,
+    "rep": 3,
+    "affiliation": "The Bozos",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 19 }],
+    "summary": {
+      "pt": "Lutador do circuito clandestino que já usava visual de palhaço antes de virar Bozo; só entrou depois que Big Top o visitou, e ninguém sabe o que foi oferecido. Abre as lutas com um canhão de ar e depois parte para o corpo a corpo, derrubando adversários com judô.",
+      "en": "An underground-ring fighter who already wore the clown look before becoming a Bozo; he joined only after Big Top paid him a visit, and nobody knows what was offered. He opens fights with an air cannon and then closes in, throwing opponents with judo."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 40,
+      "seriouslyWounded": 20,
+      "deathSave": 7,
+      "stats": { "INT": 4, "REF": 7, "DEX": 7, "TECH": 3, "COOL": 6, "WILL": 5, "MOVE": 6, "BODY": 7, "EMP": 3 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Martial Arts Attack", "skill": "Martial Arts (Judo)", "attackBase": 14, "damage": "3d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Subdermal Armor", "sp": 11 },
+        { "location": "Body", "name": "Subdermal Armor", "sp": 11 }
+      ],
+      "skills": {
+        "Acting": 10, "Athletics": 14, "Concentration": 7, "Conversation": 5, "Education": 6, "Endurance": 11,
+        "Evasion": 14, "First Aid": 5, "Human Perception": 7, "Language (French)": 8, "Language (Streetslang)": 6, "Local Expert (Old Combat Zone)": 6,
+        "Martial Arts (Judo)": 14, "Perception": 10, "Persuasion": 10, "Resist Torture/Drugs": 10, "Shoulder Arms": 13, "Stealth": 9,
+        "Wardrobe & Style": 8
+      },
+      "gear": ["Agent", "Duct Tape", "Glow Paint", "Vial of Poison x3"],
+      "cyberware": ["Exotic Bodysculpting", "Contraceptive Implant", "Cyberarm", "Light Tattoo", "Subdermal Armor"],
+      "specials": [
+        {
+          "name": "Combat Awareness",
+          "text": {
+            "pt": "Role Ability Combat Awareness no Rank 4. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Combat Awareness at Rank 4. Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Nomad Air Cannon",
+          "text": {
+            "pt": "Arma de ar que lança líquido (por exemplo ácido) e não causa dano em pontos; por isso fica fora de armas. Ele a usa para amaciar os alvos antes de atacar de perto.",
+            "en": "A liquid-launching air weapon (acid, for instance) that deals no point damage, so it is not listed under weapons. He uses it to soften targets before closing in."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "centwit",
+    "name": "Centwit",
+    "aliases": ["Terry Claymora"],
+    "kind": "sheet",
+    "role": "Solo",
+    "roleRank": 4,
+    "rep": 3,
+    "affiliation": "The Bozos",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 20 }],
+    "summary": {
+      "pt": "Terry Claymora vem de uma família de palhaços de circo e fugiu para a Combat Zone depois que o pai foi morto pelos Voodoo Boys por engano. Os Bozos o acolheram e ele passou a atormentar os Voodoo Boys. Biosculpt como o pai, aliado informal de Big Top, usa explosivos disfarçados de balões e pompons.",
+      "en": "Terry Claymora comes from a family of circus clowns and fled into the Combat Zone after his father was mistakenly killed by the Voodoo Boys. The Bozos took him in and he has been haunting the Voodoo Boys ever since. Sculpted into his father's likeness and an informal ally of Big Top, he hides explosives in balloons and pom-poms."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 40,
+      "seriouslyWounded": 20,
+      "deathSave": 6,
+      "stats": { "INT": 4, "REF": 7, "DEX": 6, "TECH": 3, "COOL": 4, "WILL": 5, "MOVE": 6, "BODY": 6, "EMP": 3 },
+      "armoredStats": { "REF": 6, "DEX": 5, "MOVE": 5 },
+      "weapons": [
+        { "name": "Heavy Pistol", "skill": "Handgun", "attackBase": 13, "damage": "3d6", "rof": 2, "magazine": null, "class": "HeavyPistol", "melee": false, "notes": null },
+        { "name": "Brawling Attack", "skill": "Brawling", "attackBase": 12, "damage": "2d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
+      ],
+      "armor": [
+        { "location": "Head", "name": "TUp Medium Armorjack", "sp": 12 },
+        { "location": "Body", "name": "TUp Medium Armorjack", "sp": 12 }
+      ],
+      "skills": {
+        "Acting": 10, "Athletics": 13, "Brawling": 12, "Conceal/Reveal Object": 9, "Concentration": 9, "Contortionist": 10,
+        "Conversation": 7, "Dance": 8, "Education": 8, "Endurance": 10, "Evasion": 12, "First Aid": 5,
+        "Handgun": 13, "Human Perception": 5, "Language (Louisiana Creole)": 8, "Language (Streetslang)": 6, "Local Expert (Unknown)": 8, "Perception": 8,
+        "Persuasion": 8, "Resist Torture/Drugs": 10, "Stealth": 8, "Trading": 6
+      },
+      "gear": ["Basic H Pistol Ammo x8", "Armor-Piercing Grenade x2", "Flashbang Grenade x2", "Teargas Grenade x2", "Agent", "Rope (60 m/yds)"],
+      "cyberware": ["Exotic Bodysculpting", "Cybereye x2 w/ Low Light/Infrared/UV x2", "Neural Link w/ Kerenzikov"],
+      "specials": [
+        {
+          "name": "Combat Awareness",
+          "text": {
+            "pt": "Role Ability Combat Awareness no Rank 4. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Combat Awareness at Rank 4. Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Explosivos de palco",
+          "text": {
+            "pt": "Granadas perfurantes, de efeito atordoante e de gás lacrimogêneo disfarçadas no figurino, usadas com truques e misdirecão.",
+            "en": "Armor-Piercing, flashbang and teargas grenades hidden in his costume, used with trick shots and misdirection."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "dead-ringer-blue",
+    "name": "Dead Ringer (The Blue One)",
+    "aliases": ["The Blue One"],
+    "kind": "sheet",
+    "role": null,
+    "roleRank": null,
+    "rep": 3,
+    "affiliation": "The Bozos",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 21 }],
+    "summary": {
+      "pt": "Uma das gêmeas Dead Ringers, a de cabelo azul: a barulhenta, que distrai o inimigo com piadas, malabarismo de granadas venenosas e fogo. Passa veneno nos Scratchers e prefere saquear corpos caídos. Nas redes, só perde para Jester e Tomfool em popularidade entre os fãs de Bozo.",
+      "en": "One of the Dead Ringer twins, the blue-haired one: the loud one who distracts foes with jokes, juggled poison grenades and fire. She laces her Scratchers with poison and prefers looting bodies on the ground. Among Bozo fans she ranks just behind Jester and Tomfool."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 35,
+      "seriouslyWounded": 18,
+      "deathSave": 5,
+      "stats": { "INT": 4, "REF": 6, "DEX": 6, "TECH": 4, "COOL": 6, "WILL": 4, "MOVE": 6, "BODY": 5, "EMP": 3 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Very Heavy Pistol", "skill": "Handgun", "attackBase": 6, "damage": "4d6", "rof": 1, "magazine": null, "class": "VeryHeavyPistol", "melee": false, "notes": "No Skill Base printed for this weapon; STAT only." },
+        { "name": "Scratchers", "skill": "Melee Weapon", "attackBase": 12, "damage": "1d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
+      ],
+      "armor": [
+        { "location": "Body", "name": "Scavenged Armor", "sp": 11 }
+      ],
+      "skills": {
+        "Acting": 11, "Athletics": 13, "Brawling": 8, "Conceal/Reveal Object": 6, "Concentration": 6, "Contortionist": 11,
+        "Conversation": 6, "Dance": 8, "Education": 6, "Endurance": 7, "Evasion": 13, "First Aid": 6,
+        "Human Perception": 5, "Language (English)": 8, "Language (Streetslang)": 6, "Library Search": 12, "Lip Reading": 10, "Local Expert (South Night City)": 6,
+        "Melee Weapon": 12, "Personal Grooming": 10, "Perception": 7, "Persuasion": 11, "Resist Torture/Drugs": 8, "Stealth": 8,
+        "Wardrobe & Style": 10
+      },
+      "gear": ["Incendiary VH Pistol Ammo x8", "Poison Grenade", "Carryall", "Disposable Cell Phone", "Vial of Poison"],
+      "cyberware": ["Exotic Biosculpting", "Contraceptive Implant", "Neural Link w/ Reflex Co-Processor", "Scratchers"],
+      "specials": [
+        {
+          "name": "Veneno",
+          "text": {
+            "pt": "Carrega Poison Grenade e um frasco de veneno; os Scratchers são envenenados.",
+            "en": "Carries a Poison Grenade and a vial of poison; her Scratchers are poisoned."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "dead-ringer-pink",
+    "name": "Dead Ringer (The Pink One)",
+    "aliases": ["The Pink One"],
+    "kind": "sheet",
+    "role": null,
+    "roleRank": null,
+    "rep": 3,
+    "affiliation": "The Bozos",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 22 }],
+    "summary": {
+      "pt": "A outra gêmea Dead Ringer, de cabelo rosa: silenciosa, nunca diz uma palavra, só ri baixinho enquanto bate carteiras. Gosta de passar as armas do alvo a outros Bozos para que sejam usadas contra ele. Usa granadas tóxicas e Scratchers com a mesma substância da irmã.",
+      "en": "The other Dead Ringer twin, the pink-haired one: silent, never speaks, only giggles as she picks pockets. She likes handing a mark's own weapons to other Bozos so they get used against him. Like her sister she carries toxin grenades and coats her Scratchers with the same substance."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 35,
+      "seriouslyWounded": 18,
+      "deathSave": 5,
+      "stats": { "INT": 4, "REF": 6, "DEX": 6, "TECH": 6, "COOL": 4, "WILL": 4, "MOVE": 6, "BODY": 5, "EMP": 3 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Light Melee Weapon", "skill": "Melee Weapon", "attackBase": 12, "damage": "1d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": "Excellent Quality" },
+        { "name": "Scratchers", "skill": "Melee Weapon", "attackBase": 12, "damage": "1d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
+      ],
+      "armor": [
+        { "location": "Body", "name": "Scavenged Armor", "sp": 11 }
+      ],
+      "skills": {
+        "Athletics": 12, "Brawling": 8, "Conceal/Reveal Object": 6, "Concentration": 6, "Contortionist": 10, "Conversation": 5,
+        "Education": 6, "Endurance": 6, "Evasion": 12, "First Aid": 8, "Human Perception": 5, "Language (English)": 8,
+        "Language (Streetslang)": 6, "Lip Reading": 6, "Local Expert (South Night City)": 6, "Melee Weapon": 12, "Perception": 10, "Personal Grooming": 9,
+        "Persuasion": 6, "Pick Lock": 14, "Pick Pocket": 15, "Resist Torture/Drugs": 7, "Stealth": 12, "Wardrobe & Style": 9
+      },
+      "gear": ["Flashbang Grenade", "Smoke Grenade", "Carryall", "Disposable Cell Phone", "Lock Picking Set", "Vial of Biotoxin"],
+      "cyberware": ["Exotic Bodysculpting", "Contraceptive Implant", "Neural Link w/ Reflex Co-Processor", "Scratchers"],
+      "specials": [
+        {
+          "name": "Larápia",
+          "text": {
+            "pt": "Frasco de Biotoxin, Lock Picking Set e granadas de efeito atordoante e de fumaça; seu estilo é furtar e escapar.",
+            "en": "A vial of Biotoxin, a Lock Picking Set, and flashbang and smoke grenades; her style is to steal and slip away."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "finale",
+    "name": "Finale",
+    "aliases": ["Kane Nove"],
+    "kind": "sheet",
+    "role": null,
+    "roleRank": null,
+    "rep": 3,
+    "affiliation": "The Bozos",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 23 }],
+    "summary": {
+      "pt": "Kane Nove, um punk que tentou morder um ripperdoc e ficou com a mandíbula amarrada por fios, só consegue grunhir. Pescado da baía pelo circo de Big Top, virou Finale: ri-se dele, ele se enfurece, e os Bozos apontam essa raiva para um alvo. Big Top promete soltar-lhe a mandíbula quando \"merecer a língua\".",
+      "en": "Kane Nove, a street punk who mouthed off at a ripperdoc and had his jaw wired shut, can only grunt. Fished out of the bay by Big Top's circus, he became Finale: they laugh, he rages, and the Bozos aim that rage at a target. Big Top promises to free his jaw once he has \"earned his tongue\"."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 35,
+      "seriouslyWounded": 18,
+      "deathSave": 6,
+      "stats": { "INT": 4, "REF": 7, "DEX": 7, "TECH": 3, "COOL": 4, "WILL": 4, "MOVE": 6, "BODY": 6, "EMP": 3 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Assault Rifle", "skill": "Shoulder Arms", "attackBase": 13, "damage": "5d6", "rof": 2, "magazine": null, "class": "AssaultRifle", "melee": false, "notes": null },
+        { "name": "Brawling Attack", "skill": "Brawling", "attackBase": 15, "damage": "2d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
+      ],
+      "armor": [
+        { "location": "Body", "name": "Scavenged Armor", "sp": 11 }
+      ],
+      "skills": {
+        "Athletics": 13, "Autofire": 13, "Brawling": 15, "Conceal/Reveal Object": 8, "Concentration": 7, "Conversation": 5,
+        "Dance": 12, "Demolitions": 5, "Education": 6, "Endurance": 8, "Evasion": 13, "First Aid": 5,
+        "Handgun": 9, "Human Perception": 5, "Language (English)": 8, "Language (Streetslang)": 6, "Lip Reading": 6, "Local Expert (Old Combat Zone)": 6,
+        "Perception": 7, "Persuasion": 6, "Resist Torture/Drugs": 6, "Shoulder Arms": 13, "Stealth": 9, "Streetwise": 7
+      },
+      "gear": ["Armor-Piercing Rifle Ammo x25", "Smoke Grenade", "Agent"],
+      "cyberware": ["Cybereye x2 w/ Low Light/Infrared/UV x2"],
+      "specials": [
+        {
+          "name": "Fúria dirigida",
+          "text": {
+            "pt": "Os Bozos o provocam de propósito e o soltam contra um alvo; ele evita atacar os palhaços diretamente.",
+            "en": "The Bozos taunt him on purpose and set him loose on a target; he avoids attacking the clowns directly."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "burt-the-squirt",
+    "name": "Burt the Squirt",
+    "aliases": ["Burt Batail"],
+    "kind": "sheet",
+    "role": null,
+    "roleRank": null,
+    "rep": 1,
+    "affiliation": "The Bozos",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 24 }],
+    "summary": {
+      "pt": "Burt Batail perdeu o cabelo num acidente industrial e ficou obcecado por ácido: quer causar calvície permanente em Night City. Entrou nos Bozos pela promessa de estoque ilimitado de químicos. Atira balas de ácido e sempre ataca quem tiver o cabelo mais bonito, mesmo que seja tech hair.",
+      "en": "Burt Batail lost his hair in an industrial accident and became obsessed with acid; he wants to inflict permanent baldness on Night City. He joined the Bozos for the promise of unlimited chemicals. He fires acid rounds and always goes for the target with the best hair, even tech hair."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 40,
+      "seriouslyWounded": 20,
+      "deathSave": 7,
+      "stats": { "INT": 3, "REF": 6, "DEX": 4, "TECH": 5, "COOL": 5, "WILL": 5, "MOVE": 5, "BODY": 7, "EMP": 1 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Heavy Pistol", "skill": "Handgun", "attackBase": 12, "damage": "3d6", "rof": 2, "magazine": null, "class": "HeavyPistol", "melee": false, "notes": "Poor Quality" }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Kevlar®", "sp": 7 },
+        { "location": "Body", "name": "Kevlar®", "sp": 7 }
+      ],
+      "skills": {
+        "Athletics": 10, "Basic Tech": 8, "Brawling": 7, "Concentration": 6, "Conversation": 3, "Education": 5,
+        "Evasion": 12, "First Aid": 7, "Handgun": 12, "Human Perception": 3, "Interrogation": 10, "Language (English)": 7,
+        "Language (Streetslang)": 5, "Local Expert (Heywood Industrial Zone)": 5, "Perception": 5, "Persuasion": 6, "Resist Torture/Drugs": 10, "Stealth": 6
+      },
+      "gear": ["Acid Paintball x24", "Basic H Pistol Ammo x8", "Agent"],
+      "cyberware": ["Exotic Bodysculpting", "Contraceptive Implant", "Cybereye x2 w/ Color Shift x2"],
+      "specials": [
+        {
+          "name": "Acid Paintballs",
+          "text": {
+            "pt": "Usa uma Air Pistol com 24 Acid Paintballs. A arma não causa dano; cada acerto com ácido reduz o SP da armadura do local atingido em 1. Por isso a Air Pistol fica fora de armas.",
+            "en": "He uses an Air Pistol with 24 Acid Paintballs. The weapon deals no damage; each acid hit lowers the SP of the armor at the hit location by 1. That is why the Air Pistol is not listed under weapons."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "dunce",
+    "name": "Dunce",
+    "aliases": ["Sion Bannerkin"],
+    "kind": "sheet",
+    "role": null,
+    "roleRank": null,
+    "rep": 3,
+    "affiliation": "The Bozos",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 25 }],
+    "summary": {
+      "pt": "Sion Bannerkin, antes um Fool sem sorte, sobreviveu a Hilaria 2045 com um buraco no peito e um taco de beisebol cheio de pontas. Big Top o consertou, soldou-lhe uma máscara ao rosto e o promoveu a Bozo de verdade. Luta de perto, sempre mirando o nariz, e usa uma pistola ruim quando não alcança o alvo.",
+      "en": "Sion Bannerkin, once an unlucky Fool, survived Hilaria 2045 with a hole in his chest and a spiked baseball bat. Big Top patched him up, melted a mask onto his face, and made him a full Bozo. He fights up close, always going for the nose, and fires a lousy pistol when he cannot reach his target."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 30,
+      "seriouslyWounded": 15,
+      "deathSave": 5,
+      "stats": { "INT": 2, "REF": 4, "DEX": 5, "TECH": 2, "COOL": 4, "WILL": 3, "MOVE": 5, "BODY": 5, "EMP": 3 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Heavy Pistol", "skill": "Handgun", "attackBase": 8, "damage": "2d6", "rof": 2, "magazine": null, "class": "HeavyPistol", "melee": false, "notes": "Poor Quality" },
+        { "name": "Heavy Melee Weapon", "skill": "Melee Weapon", "attackBase": 12, "damage": "3d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Kevlar®", "sp": 7 },
+        { "location": "Body", "name": "Leathers", "sp": 4 }
+      ],
+      "skills": {
+        "Athletics": 7, "Brawling": 12, "Conceal/Reveal Object": 4, "Concentration": 7, "Conversation": 5, "Dance": 7,
+        "Education": 4, "Endurance": 6, "Evasion": 12, "First Aid": 4, "Handgun": 8, "Human Perception": 5,
+        "Language (English)": 6, "Language (Streetslang)": 4, "Local Expert (Sewers of Little China)": 4, "Melee Weapon": 12, "Perception": 4, "Persuasion": 6,
+        "Stealth": 7
+      },
+      "gear": ["Basic H Pistol Ammo x8", "Disposable Cell Phone"],
+      "cyberware": [],
+      "specials": [
+        {
+          "name": "Taco com pontas",
+          "text": {
+            "pt": "Usa um Heavy Melee Weapon (o taco), listado nas armas com 3d6.",
+            "en": "Wields a Heavy Melee Weapon (the bat), listed under weapons at 3d6."
+          }
+        }
+      ]
+    }
   }
 ]

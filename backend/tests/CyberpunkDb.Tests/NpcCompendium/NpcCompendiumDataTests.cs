@@ -92,8 +92,9 @@ public class NpcCompendiumDataTests
     [Fact]
     public void Skills_map_to_the_rule_book()
     {
-        // Printed skills the rule book has no entry for; none today.
-        string[] knownExceptions = [];
+        // Printed skills the rule book has no entry for.
+        // "Medical Tech" and "Surgery": printed on Danger Gal Dossier Medtech sheets; the rule book lists only Paramedic.
+        string[] knownExceptions = ["Medical Tech", "Surgery"];
         var rules = NpcRuleBook.LoadEmbedded();
         foreach (var sheet in Compendium.All.Select(n => n.Sheet).OfType<CompendiumSheet>())
             foreach (var name in sheet.Skills.Keys.Concat(sheet.Weapons.Select(w => w.Skill)).Except(knownExceptions))
