@@ -1937,7 +1937,8 @@
     "rep": null,
     "affiliation": null,
     "sources": [
-      { "book": "Core Book", "page": 308 }
+      { "book": "Core Book", "page": 308 },
+      { "book": "Interface RED Volume 3", "page": 26 }
     ],
     "summary": {
       "pt": "Nomad dona da garagem nos arredores onde as Famílias nômades levam seus conflitos. Faz as vezes de juíza, detetive e conselheira, e armas não são permitidas lá. Quem quer briga é removido pelos 270 libras de blindagem subdérmica dela.",
@@ -11776,5 +11777,24 @@
         }
       ]
     }
+  },
+  {
+    "id": "the-upload",
+    "name": "The Upload",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": null,
+    "sources": [
+      {"book": "Interface RED Volume 3", "page": 38}
+    ],
+    "summary": {
+      "pt": "Vendedor de cyberdecks e hardware do Midnight Market, com quatro olhos cibernéticos e um terceiro cyberarm saindo do colarinho. Compra gravações de flatline e circula o boato de ser cultista de R.A.B.I.D.S. ou agente infiltrado da Netwatch.",
+      "en": "Cyberdeck and hardware dealer at the Midnight Market, with four cybereyes and a third cyberarm rising from the collar. He buys flatline recordings, and rumor has him as either a R.A.B.I.D.S. cultist or an undercover Netwatch agent."
+    },
+    "sheetNote": null,
+    "sheet": null
   }
 ]
