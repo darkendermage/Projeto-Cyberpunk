@@ -10489,6 +10489,26 @@
     "sheet": null
   },
   {
+    "id": "delphine",
+    "name": "Delphine",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": null,
+    "sources": [
+      { "book": "Tales of the RED", "page": 184 },
+      { "book": "Tales of the RED", "page": 79 }
+    ],
+    "summary": {
+      "pt": "Vidente de rua neo-hippie que monta barraca em vários Night Markets. Em Haven't Got a Stitch to Wear, a recompensa dela é uma leitura de tarô para um dos personagens, e o conselho pode servir de prévia para as próximas missões.",
+      "en": "A neo-hippie street psychic who sets up stalls at several Night Markets. In Haven't Got a Stitch to Wear her reward is a Tarot reading for one of the Crew, and her advice is a handy way to hint at missions to come."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
     "id": "doc-stoic",
     "name": "Doc Stoic",
     "aliases": [],
@@ -10584,6 +10604,46 @@
     "sheet": null
   },
   {
+    "id": "freki",
+    "name": "Freki",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Vargitmmen",
+    "sources": [
+      { "book": "Tales of the RED", "page": 186 },
+      { "book": "Tales of the RED", "page": 42 }
+    ],
+    "summary": {
+      "pt": "Dona do Vargitmmen, um salão viking de araque com \"meadery\", em Watson. Em A Bucket of Popcorn-Flavored Kibble, ela é uma das fornecedoras que a Crew pode procurar e tenta empurrar um acordo para vender seu \"hidromel\" no set.",
+      "en": "Runs Vargitmmen in Watson, a Viking-themed hall that is mostly show, complete with a \"meadery\". In A Bucket of Popcorn-Flavored Kibble she is one of the suppliers the Crew can approach, and she tries to land a deal to sell her \"mead\" on the film lot."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "george-rhinemeyer",
+    "name": "George Edward Rhinemeyer",
+    "aliases": ["George Rhinemeyer"],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Rocklin Augmentics",
+    "sources": [
+      { "book": "Tales of the RED", "page": 186 },
+      { "book": "Tales of the RED", "page": 6 }
+    ],
+    "summary": {
+      "pt": "Engenheiro-executivo da Rocklin Augmentics e pai de Lucy, estudante da Night City University e vítima de uma onda de sequestros. Em A Night at the Opera é quem paga a Crew por meio de um intermediário.",
+      "en": "An Executive Engineer at Rocklin Augmentics and father of Lucy, a Night City University student caught up in a string of kidnappings. In A Night at the Opera he is the patron who pays the Crew through an intermediary."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
     "id": "grace-steel",
     "name": "Grace Steel",
     "aliases": [],
@@ -10641,6 +10701,46 @@
     "sheet": null
   },
   {
+    "id": "juri-mccullough",
+    "name": "Juri McCullough",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Senait Sisters' production company",
+    "sources": [
+      { "book": "Tales of the RED", "page": 187 },
+      { "book": "Tales of the RED", "page": 49 }
+    ],
+    "summary": {
+      "pt": "Pessoa que atua como produtora local em Night City e representa as diretoras de Addiswood, as irmãs Senait. Em A Bucket of Popcorn-Flavored Kibble deixa um cartão de visita com o número de trabalho, porta de entrada para novos serviços ligados ao filme.",
+      "en": "A local Night City producer who represents the Addiswood directors the Senait Sisters. In A Bucket of Popcorn-Flavored Kibble they leave a calling card with a work number, a doorway to more movie-related jobs for the Crew."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "kenneth-dahl",
+    "name": "Kenneth Dahl",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Network 54",
+    "sources": [
+      { "book": "Tales of the RED", "page": 187 },
+      { "book": "Tales of the RED", "page": 11 }
+    ],
+    "summary": {
+      "pt": "Marido da âncora da Network 54 Barbara Dahl, morto em 2044. Em A Night at the Opera, uma checagem DV13 de Criminology, Library Search ou Streetwise revela que a cabeça decepada encontrada pelo grupo era dele.",
+      "en": "Husband of Network 54 anchor Barbara Dahl, who died in 2044. In A Night at the Opera, a DV13 Criminology, Library Search or Streetwise check reveals that the severed head the Crew finds was his."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
     "id": "layla-deckard",
     "name": "Layla Deckard",
     "aliases": [],
@@ -10674,6 +10774,26 @@
     "summary": {
       "pt": "Técnico de figurino da produtora das irmãs Senait que gosta de acompanhar as fofocas.",
       "en": "A costume technician at the Senait Sisters' production company who likes keeping up with gossip."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "lily",
+    "name": "Lily",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Stems & Seeds",
+    "sources": [
+      { "book": "Tales of the RED", "page": 188 },
+      { "book": "Tales of the RED", "page": 42 }
+    ],
+    "summary": {
+      "pt": "Jardineira-chefe do Stems & Seeds, coletivo de jardinagem de guerrilha perto da Night City University. Em A Bucket of Popcorn-Flavored Kibble, a complicação dela é querer um autógrafo de Mael Cartaret.",
+      "en": "Head gardener at Stems & Seeds, a guerrilla gardening group based near Night City University. In A Bucket of Popcorn-Flavored Kibble her complication is that she wants Mael Cartaret's autograph."
     },
     "sheetNote": null,
     "sheet": null
@@ -10788,6 +10908,106 @@
     "summary": {
       "pt": "Co-dona e bartender-chefe do Forlorn Hope há décadas, de humor ferino. Trata os Edgerunners de que gosta como \"seus filhos\" e é especialmente maternal, com sarcasmo, com clientes trans.",
       "en": "Co-owner and head bartender of the Forlorn Hope for decades, with a wicked sense of humor. She treats the Edgerunners she likes as \"her kids\" and is, sarcastically, especially motherly to her transgender patrons."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "mr-suzuki",
+    "name": "Mr. Suzuki",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Suzuki's General Goods",
+    "sources": [
+      { "book": "Tales of the RED", "page": 190 },
+      { "book": "Tales of the RED", "page": 79 }
+    ],
+    "summary": {
+      "pt": "Dono de uma mercearia móvel de comida nipo-americana. A sobrinha dele, Mio, é uma Rockerboy em começo de carreira, com uma banda de crianças adoráveis do ensino fundamental que compõe e lança uma música sobre a Crew como recompensa.",
+      "en": "Owner of a mobile bodega selling Japanese-American food. His niece Mio is a budding Rockerboy fronting a band of adorable middle-schoolers, and as a reward they write and release a song about the Crew."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "myrtle",
+    "name": "Myrtle",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Myrtle's Mini-Livestock",
+    "sources": [
+      { "book": "Tales of the RED", "page": 190 },
+      { "book": "Tales of the RED", "page": 79 }
+    ],
+    "summary": {
+      "pt": "Velhinha minúscula de cabelo azul, doutora em entomologia, dona da Myrtle's Mini-Livestock, loja que vende insetos como proteína e para outros usos. Como recompensa dá dois formigueiros em potes de vidro, cheios de formigas furiosas para quebrar na cabeça de alguém.",
+      "en": "A very small old woman with blue hair and a doctorate in entomology, who runs Myrtle's Mini-Livestock, a shop selling bugs as protein and for other purposes. Her reward is two ant farms in mason jars, full of stinging ants meant to be smashed over somebody's head."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "nana-meow",
+    "name": "Nana Meow",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Nana Meow's Nursery",
+    "sources": [
+      { "book": "Tales of the RED", "page": 190 },
+      { "book": "Tales of the RED", "page": 42 }
+    ],
+    "summary": {
+      "pt": "Dona do Nana Meow's Nursery, negócio familiar no baixo Heywood que vende equipamento de aquaponia e sementes. Aparece em A Bucket of Popcorn-Flavored Kibble como uma das fontes de insumos para a lista de iguarias do set.",
+      "en": "Runs Nana Meow's Nursery, a business in lower Heywood owned by her family that sells aquaponic equipment and seeds. She shows up in A Bucket of Popcorn-Flavored Kibble as one of the sources for the film set's list of rare delicacies."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "richard",
+    "name": "Richard",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Richard's Remainders",
+    "sources": [
+      { "book": "Tales of the RED", "page": 191 },
+      { "book": "Tales of the RED", "page": 79 }
+    ],
+    "summary": {
+      "pt": "Dono da Richard's Remainders, banca de outlet que vende itens encalhados da Vendits. Como recompensa, entrega a um edgerunner um caixote com 5 itens Vendit à escolha do GM.",
+      "en": "Owner of Richard's Remainders, an outlet stall selling clearance items from Vendits. His reward is a large crate holding 5 Vendit items of the GM's choice."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "sandy-sheldon",
+    "name": "Sandy Sheldon",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Coronado Ceramics",
+    "sources": [
+      { "book": "Tales of the RED", "page": 192 },
+      { "book": "Tales of the RED", "page": 79 }
+    ],
+    "summary": {
+      "pt": "Ceramista, dona do Coronado Ceramics, estúdio independente que vende em vários Night Markets. As peças levam cacos de para-brisa, dourado de placas de circuito e esmalte de cinza de osso. Como favor a um edgerunner, ela usa os fornos grandes uma vez para sumir com um corpo, sem perguntas, e ainda dá canecas de brinde.",
+      "en": "A potter who owns Coronado Ceramics, an independent studio that sells at various Night Markets. Her pieces are decorated with broken windshield glass, circuit-board gilding and bone-ash glaze. Once, as a favor to an Edgerunner, she will run her big kilns to dispose of a body, no questions asked, and throws in matching mugs."
     },
     "sheetNote": null,
     "sheet": null
@@ -11054,6 +11274,26 @@
     "summary": {
       "pt": "Major da Militech, ex-aprendiz de uma wrangler e depois veterana das forças especiais. Perdeu o marido numa operação e a filha Jezz, e, sem apoio dos superiores para a teoria da IA rebelde, gastou economias e favores para destruir o Reaper.",
       "en": "A Militech Major, once a wrangler's apprentice and later a special-forces veteran. She lost her husband on an operation and then her daughter Jezz, and with no backing from her superiors for her rogue-AI theory she has spent savings and favors to flatline the Reaper."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "vesper",
+    "name": "Vesper",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": null,
+    "sources": [
+      { "book": "Tales of the RED", "page": 193 },
+      { "book": "Tales of the RED", "page": 79 }
+    ],
+    "summary": {
+      "pt": "Artista de tatuagem de rua, de gênero neutro, e ripperdoc estético que às vezes atende no RC Night Market. Como recompensa, faz um Light Tattoo sob medida para a Crew, ou uma tatuagem tradicional, se preferirem.",
+      "en": "A gender-neutral tattoo artist from the streets and cosmetic ripperdoc, occasionally found at the RC Night Market. As a reward Vesper will do a custom Light Tattoo for the Crew, or a traditional tattoo if they would rather."
     },
     "sheetNote": null,
     "sheet": null
@@ -12114,7 +12354,7 @@
     "roleRank": 6,
     "rep": 6,
     "affiliation": null,
-    "sources": [{"book": "Black Chrome", "page": 149}, {"book": "Black Chrome", "page": 148}],
+    "sources": [{"book": "Black Chrome", "page": 149}, {"book": "Black Chrome", "page": 148}, {"book": "Tales of the RED", "page": 190}, {"book": "Tales of the RED", "page": 74}, {"book": "Tales of the RED", "page": 76}],
     "summary": {
       "pt": "Fixer de Rancho Coronado conhecida pelo bodysculpt de feições de pássaro. Faz o Night Market dela, todo dia 5, no antigo shopping Minimallism, inspirada nos bazares que a avó descrevia em Mumbai: roupas sob medida, comida e convidados escolhidos a dedo.",
       "en": "A Rancho Coronado Fixer known for her bird-like bodysculpt. She holds her Night Market on the fifth of every month in the old Minimallism mall, modeled on the bazaars her grandmother described in Mumbai: tailored clothes, food and carefully chosen guests."
