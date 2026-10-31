@@ -123,6 +123,7 @@ Regras do formato:
 - `stats` guarda o valor impresso. Campo `—` no livro vira `null`.
 - `armoredStats` guarda os valores entre parênteses, como `REF 8(6)`, que são os valores com a penalidade da armadura. Fica vazio quando o livro não os traz.
 - `skills` guarda a Skill Base impressa, sem recalcular.
+- `armoredSkills` é opcional e guarda o valor entre parênteses de perícias como `Athletics 13 (11)`, que já traz a penalidade da armadura. O combate usa esse valor, e `attackBase` também, quando o livro o imprime.
 - `attackBase` é o total de ataque impresso (STAT + perícia + bônus).
 - `damage` guarda os dados que o motor rola. Arma "Autofire only" imprime "See Type" no DMG: fica com o dano de Autofire do livro (`2d6`), `autofireMultiplier` com o multiplicador impresso (`x5` vira `5`) e `notes` registra o "See Type".
 - `rangeDv` em `weapons` é opcional: oito valores, das faixas de 0-6 a 401-800 m/yds, copiados da tabela que a ficha imprime para a arma, com `null` nas faixas `—`. Quando existe, o combate usa essa tabela no lugar da tabela geral de alcance, nos ataques normais e em Autofire.
