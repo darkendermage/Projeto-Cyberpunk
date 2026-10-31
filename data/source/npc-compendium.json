@@ -1508,9 +1508,7 @@
     "roleRank": null,
     "rep": null,
     "affiliation": null,
-    "sources": [
-      { "book": "Core Book", "page": 305 }
-    ],
+    "sources": [{"book": "Core Book", "page": 305}, {"book": "Hornet’s Pharmacy", "page": 2}],
     "summary": {
       "pt": "Fixer respeitado e cheio de inimigos, ex-falsificador de Heywood que trabalhou com a Arasaka fornecendo armas químicas. Hoje controla cybertech, biotech e drogas, e viaja sempre com a guarda-costas Fox. A casa que perdeu é assunto proibido.",
       "en": "Respected Fixer with a score of enemies, a former Heywood forger who worked with Arasaka supplying chemical weapons. He now deals in cybertech, biotech and drugs, and always travels with his bodyguard Fox. Asking about his old house is a mistake."
@@ -1540,21 +1538,68 @@
   {
     "id": "mister-kernaghan",
     "name": "Mister Kernaghan",
-    "aliases": [],
-    "kind": "profile",
+    "aliases": ["Mister Kernighan", "Mister K"],
+    "kind": "sheet",
     "role": "Fixer",
-    "roleRank": null,
-    "rep": null,
+    "roleRank": 9,
+    "rep": 5,
     "affiliation": null,
     "sources": [
-      { "book": "Core Book", "page": 305 }
+      {"book": "Black Chrome", "page": 145},
+      {"book": "Black Chrome", "page": 144},
+      {"book": "Core Book", "page": 305}
     ],
     "summary": {
       "pt": "Ex-TI do porto de Night City que levou os dados de embarque quando a bomba caiu e construiu um império vendendo suprimentos. Hoje rico, comanda com o gato Kosmos os Midnight Markets trimestrais de itens de luxo.",
       "en": "Former Night City Port Authority IT worker who took the shipping data when the nuke hit and built an empire selling supplies. Now wealthy, he and his cat Kosmos run quarterly Midnight Markets of luxury goods."
     },
-    "sheetNote": null,
-    "sheet": null
+    "sheetNote": {
+      "pt": "Black Chrome escreve o nome como Kernighan no cabeçalho da ficha. Language (Swahili) aparece sem valor e ficou de fora, e Perception é impressa duas vezes, ambas com 14.",
+      "en": "Black Chrome spells the name Kernighan on the sheet heading. Language (Swahili) is printed without a value and was left out, and Perception is printed twice, both at 14."
+    },
+    "sheet": {
+      "hp": 45,
+      "seriouslyWounded": 23,
+      "deathSave": 6,
+      "stats": {"INT": 8, "REF": 5, "DEX": 6, "TECH": 7, "COOL": 8, "WILL": 8, "MOVE": 5, "BODY": 6, "EMP": 4},
+      "armoredStats": {},
+      "weapons": [
+        {"name": "Militech Fox Dual Ammo Pistol", "skill": "Handgun", "attackBase": 10, "damage": "3d6", "rof": 2, "magazine": 10, "class": "HeavyPistol", "melee": false, "notes": "Excellent Quality; Exotic Heavy Pistol with two 10-round magazines (one per ammo type)"}
+      ],
+      "armor": [{"location": "Body", "name": "T&C Executive Armor", "sp": 11}],
+      "skills": {
+        "Accounting": 14, "Athletics": 8, "Basic Tech": 10, "Brawling": 8, "Bribery": 14, "Bureaucracy": 16,
+        "Business": 14, "Concentration": 10, "Conversation": 12, "Deduction": 10, "Drive Land Vehicle": 10, "Education": 14,
+        "Evasion": 14, "First Aid": 9, "Handgun": 10, "Human Perception": 12, "Interrogation": 12, "Language (English)": 12,
+        "Language (Japanese)": 12, "Language (Polish)": 12, "Language (Russian)": 12, "Language (Spanish)": 12, "Language (Streetslang)": 10, "Language (Yurok)": 12,
+        "Local Expert (Night City)": 16, "Personal Grooming": 12, "Perception": 14, "Persuasion": 16, "Resist Torture/Drugs": 12, "Stealth": 8,
+        "Streetwise": 14, "Wardrobe & Style": 12
+      },
+      "gear": [
+        "Armor-Piercing Heavy Pistol Ammo x20",
+        "Incendiary Heavy Pistol Ammo x20",
+        "Bug Detector",
+        "Disposable Cellphone x2",
+        "Grapple Gun",
+        "Smart Glasses w/ Anti-Dazzle and Chyron",
+        "Street King Combat Vehicle",
+        "Trauma Team (Executive)"
+      ],
+      "cyberware": [
+        "Biomonitor",
+        "Contraceptive Implant",
+        "Enhanced Antibodies",
+        "Nasal Filters",
+        "Neural Link w/ Sandevistan",
+        "Toxin Binders"
+      ],
+      "specials": [
+        {
+          "name": "Operator 9",
+          "text": {"pt": "Habilidade de Role Fixer (Operator 9).", "en": "Fixer Role Ability (Operator 9)."}
+        }
+      ]
+    }
   },
   {
     "id": "nostradamus",
@@ -1641,18 +1686,23 @@
     "kind": "sheet",
     "role": "Fixer",
     "roleRank": 8,
-    "rep": null,
+    "rep": 7,
     "affiliation": null,
     "sources": [
       {"book": "Interface RED Volume 2", "page": 28},
       {"book": "Interface RED Volume 2", "page": 24},
-      {"book": "Core Book", "page": 306}
+      {"book": "Core Book", "page": 306},
+      {"book": "Black Chrome", "page": 153},
+      {"book": "Black Chrome", "page": 152}
     ],
     "summary": {
       "pt": "Fixer da borda da Combat Zone que cobra proteção com seus Community Solos, a meio caminho entre extorsão e serviço público. Realmente cuida da vizinhança e organiza até café da manhã de panqueca, mas não faz caridade.",
       "en": "Fixer of the Combat Zone edge who sells protection through his Community Solos, halfway between racket and public service. He truly cares about the neighborhood and even organizes pancake breakfasts, but he is not a charity."
     },
-    "sheetNote": null,
+    "sheetNote": {
+      "pt": "Black Chrome imprime outra versão: EMP 4, Kendachi Mono-Three e um Westwood Tech Upgraded de qualidade excelente, Subdermal Armor na cabeça (SP 11) e Nu-Tek Corp Isle Tech Upgraded no corpo (SP 12). Esta ficha segue a de Interface RED Volume 2, mais recente.",
+      "en": "Black Chrome prints another version: EMP 4, a Kendachi Mono-Three and an Excellent Quality Tech Upgraded Westwood, Subdermal Armor on the head (SP 11) and a Tech Upgraded Nu-Tek Corp Isle on the body (SP 12). This sheet follows Interface RED Volume 2, the more recent book."
+    },
     "sheet": {
       "hp": 40,
       "seriouslyWounded": 20,
@@ -1668,47 +1718,25 @@
         {"location": "Body", "name": "Light Armorjack", "sp": 11}
       ],
       "skills": {
-        "Athletics": 9,
-        "Brawling": 13,
-        "Bribery": 12,
-        "Conceal/Reveal Object": 13,
-        "Concentration": 8,
-        "Conversation": 8,
-        "Education": 9,
-        "Evasion": 13,
-        "First Aid": 6,
-        "Gamble": 13,
-        "Handgun": 13,
-        "Human Perception": 8,
-        "Language (Chinese)": 11,
-        "Language (English)": 11,
-        "Language (Italian)": 11,
-        "Language (Japanese)": 11,
-        "Language (Korean)": 11,
-        "Language (Russian)": 11,
-        "Language (Streetslang)": 9,
-        "Language (Spanish)": 11,
-        "Local Expert (South Night City)": 13,
-        "Local Expert (University District)": 13,
-        "Local Expert (Your Home)": 13,
-        "Melee Weapons": 16,
-        "Perception": 9,
-        "Persuasion": 14,
-        "Resist Torture/Drugs": 10,
-        "Stealth": 9,
-        "Streetwise": 14,
-        "Trading": 16,
+        "Athletics": 9, "Brawling": 13, "Bribery": 12, "Conceal/Reveal Object": 13, "Concentration": 8, "Conversation": 8,
+        "Education": 9, "Evasion": 13, "First Aid": 6, "Gamble": 13, "Handgun": 13, "Human Perception": 8,
+        "Language (Chinese)": 11, "Language (English)": 11, "Language (Italian)": 11, "Language (Japanese)": 11, "Language (Korean)": 11, "Language (Russian)": 11,
+        "Language (Streetslang)": 9, "Language (Spanish)": 11, "Local Expert (South Night City)": 13, "Local Expert (University District)": 13, "Local Expert (Your Home)": 13, "Melee Weapons": 16,
+        "Perception": 9, "Persuasion": 14, "Resist Torture/Drugs": 10, "Stealth": 9, "Streetwise": 14, "Trading": 16,
         "Wardrobe & Style": 10
       },
-      "gear": ["Armor Piercing Very Heavy Pistol Ammo x16", "Smoke Grenade x2", "Agent", "Disposable Cell Phone x2", "Smart Glasses w/ Low Light/Infrared/UV"],
+      "gear": [
+        "Armor Piercing Very Heavy Pistol Ammo x16",
+        "Smoke Grenade x2",
+        "Agent",
+        "Disposable Cell Phone x2",
+        "Smart Glasses w/ Low Light/Infrared/UV"
+      ],
       "cyberware": [],
       "specials": [
         {
           "name": "Operator 8",
-          "text": {
-            "pt": "Habilidade de Role Fixer (Operator 8).",
-            "en": "Fixer Role Ability (Operator 8)."
-          }
+          "text": {"pt": "Habilidade de Role Fixer (Operator 8).", "en": "Fixer Role Ability (Operator 8)."}
         },
         {
           "name": "Mono-Three",
@@ -1717,13 +1745,7 @@
             "en": "Excellent Quality exotic melee weapon. With the right biometric key its damage ignores armor below SP11 (Core Book rule)."
           }
         },
-        {
-          "name": "Nível / Tier",
-          "text": {
-            "pt": "Mini-Boss.",
-            "en": "Mini-Boss."
-          }
-        }
+        {"name": "Nível / Tier", "text": {"pt": "Mini-Boss.", "en": "Mini-Boss."}}
       ]
     }
   },
@@ -1837,9 +1859,7 @@
     "roleRank": null,
     "rep": null,
     "affiliation": null,
-    "sources": [
-      { "book": "Core Book", "page": 307 }
-    ],
+    "sources": [{"book": "Core Book", "page": 307}, {"book": "Hornet’s Pharmacy", "page": 2}],
     "summary": {
       "pt": "Alta e esguia, sempre de preto e com o rosto escondido por uma rede no capuz, fala pouco. Foi por anos a guarda-costas de Hornet e hoje é respeitada. Prefere matar de modo discreto e treina jovens Solos, dizem.",
       "en": "Tall and slender, always in black with her face hidden behind a net in the hood, and speaking little. For years she was Hornet's bodyguard and is now well respected. She prefers quiet killing and reportedly trains young Solos."
@@ -1931,21 +1951,80 @@
     "id": "woodchipper",
     "name": "Woodchipper",
     "aliases": [],
-    "kind": "profile",
-    "role": "Nomad",
-    "roleRank": null,
-    "rep": null,
-    "affiliation": null,
+    "kind": "sheet",
+    "role": "Fixer",
+    "roleRank": 5,
+    "rep": 7,
+    "affiliation": "Aldecaldos",
     "sources": [
-      { "book": "Core Book", "page": 308 },
-      { "book": "Interface RED Volume 3", "page": 26 }
+      {"book": "Black Chrome", "page": 137},
+      {"book": "Black Chrome", "page": 136},
+      {"book": "Woodchipper’s Garage", "page": 2},
+      {"book": "Core Book", "page": 308},
+      {"book": "Interface RED Volume 3", "page": 26}
     ],
     "summary": {
       "pt": "Nomad dona da garagem nos arredores onde as Famílias nômades levam seus conflitos. Faz as vezes de juíza, detetive e conselheira, e armas não são permitidas lá. Quem quer briga é removido pelos 270 libras de blindagem subdérmica dela.",
       "en": "Nomad owner of the outskirts garage where Nomad Families bring their disputes. She acts as extralegal judge, investigator and counselor, and weapons are not allowed. Anyone seeking violence is removed by her 270 lbs of subdermally armored frame."
     },
-    "sheetNote": null,
-    "sheet": null
+    "sheetNote": {
+      "pt": "Black Chrome imprime Fixer (Operator 5) e Nomad (Moto 4), com o bônus de Moto já somado às Skill Bases. O Core a trata como Nomad e a entrevista de Woodchipper’s Garage a chama de mediadora, não Fixer.",
+      "en": "Black Chrome prints Fixer (Operator 5) and Nomad (Moto 4), with the Moto bonus already added to the Skill Bases. The Core treats her as a Nomad and the Woodchipper’s Garage interview calls her a mediator rather than a Fixer."
+    },
+    "sheet": {
+      "hp": 70,
+      "seriouslyWounded": 35,
+      "deathSave": 15,
+      "stats": {"INT": 5, "REF": 4, "DEX": 8, "TECH": 6, "COOL": 7, "WILL": 8, "MOVE": 5, "BODY": 15, "EMP": 6},
+      "armoredStats": {},
+      "weapons": [
+        {"name": "Martial Arts Attack", "skill": "Martial Arts (Akido)", "attackBase": 16, "damage": "4d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null}
+      ],
+      "armor": [
+        {"location": "Head", "name": "Tech Upgraded Subdermal Armor", "sp": 12},
+        {"location": "Body", "name": "Tech Upgraded Subdermal Armor", "sp": 12}
+      ],
+      "skills": {
+        "Air Vehicle Tech": 10, "Athletics": 12, "Brawling": 16, "Bribery": 12, "Concentration": 10, "Conversation": 11,
+        "Deduction": 10, "Drive Land Vehicle": 11, "Endurance": 12, "Education": 10, "Evasion": 14, "First Aid": 10,
+        "Handgun": 10, "Heavy Weapons": 10, "Human Perception": 13, "Land Vehicle Tech": 10, "Language (English)": 11, "Language (Japanese)": 9,
+        "Language (Mandarin)": 9, "Language (Spanish)": 11, "Language (Streetslang)": 10, "Local Expert (Badlands)": 12, "Local Expert (Santo Domingo)": 12, "Martial Arts (Akido)": 16,
+        "Perception": 11, "Persuasion": 13, "Pilot Air Vehicle": 10, "Pilot Sea Vehicle": 10, "Resist Torture/Drugs": 12, "Sea Vehicle Tech": 10,
+        "Stealth": 10, "Streetwise": 11, "Tracking": 10, "Trading": 12, "Wilderness Survival": 10
+      },
+      "gear": [
+        "Basic Heavy Pistol Ammo x16",
+        "Agent",
+        "Anti-Smog Breathing Mask",
+        "Disposable Cellphone",
+        "Compact Groundcar w/ Heavy Chassis and Housing Capacity",
+        "Diego Motors Range Trike",
+        "Urban Flash Footwear"
+      ],
+      "cyberware": [
+        "Contraceptive Implant",
+        "Grafted Muscle and Bone Lace x2",
+        "Neural Link w/ Reflex Co-Processor",
+        "Tech Upgraded Implanted Linear Frame Beta (BODY 15) w/ Borgware Hardened Shielding",
+        "Tech Upgraded Subdermal Armor (SP 12)"
+      ],
+      "specials": [
+        {
+          "name": "Operator 5 / Moto 4",
+          "text": {
+            "pt": "Habilidades de Role Fixer (Operator 5) e Nomad (Moto 4). O bônus de Moto já está incluído nas Skill Bases.",
+            "en": "Fixer Role Ability (Operator 5) and Nomad Role Ability (Moto 4). The Moto bonus is already included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Tech Upgraded",
+          "text": {
+            "pt": "Os itens marcados como Tech Upgraded foram melhorados com a habilidade Maker de um Tech; o Linear Frame Beta dela é o que leva o BODY a 15.",
+            "en": "Items marked Tech Upgraded were improved with a Tech's Maker ability; her Linear Frame Beta is what lifts BODY to 15."
+          }
+        }
+      ]
+    }
   },
   {
     "id": "trace-santiago",
@@ -11305,7 +11384,8 @@
     "sources": [
       {"book": "Interface RED Volume 2", "page": 27},
       {"book": "Interface RED Volume 2", "page": 22},
-      {"book": "Interface RED Volume 2", "page": 23}
+      {"book": "Interface RED Volume 2", "page": 23},
+      {"book": "Black Chrome", "page": 152}
     ],
     "summary": {
       "pt": "Vizinho Solo de The Apartment, parceiro de cerveja no bar do bairro. A conversão só quer que ele traia a Crew em It's Just Business se houver um Solo entre os jogadores.",
@@ -11318,7 +11398,15 @@
       "deathSave": 6,
       "stats": {"INT": 7, "REF": 8, "DEX": 8, "TECH": 3, "COOL": 4, "WILL": 6, "MOVE": 6, "BODY": 6, "EMP": 4},
       "armoredStats": {"REF": 6, "DEX": 6, "MOVE": 4},
-      "armoredSkills": {"Athletics": 12, "Autofire": 12, "Brawling": 12, "Evasion": 12, "Handgun": 12, "Shoulder Arms": 12, "Stealth": 12},
+      "armoredSkills": {
+        "Athletics": 12,
+        "Autofire": 12,
+        "Brawling": 12,
+        "Evasion": 12,
+        "Handgun": 12,
+        "Shoulder Arms": 12,
+        "Stealth": 12
+      },
       "weapons": [
         {"name": "Very Heavy Pistol", "skill": "Handgun", "attackBase": 12, "damage": "4d6", "rof": 1, "magazine": null, "class": "VeryHeavyPistol", "melee": false, "notes": null},
         {"name": "Assault Rifle w/ Drum Magazine", "skill": "Shoulder Arms", "attackBase": 12, "damage": "5d6", "rof": 1, "magazine": null, "class": "AssaultRifle", "melee": false, "notes": "Drum Magazine"}
@@ -11328,36 +11416,17 @@
         {"location": "Body", "name": "Heavy Armorjack", "sp": 13}
       ],
       "skills": {
-        "Athletics": 14,
-        "Autofire": 14,
-        "Brawling": 14,
-        "Concentration": 8,
-        "Conversation": 6,
-        "Education": 9,
-        "Evasion": 14,
-        "First Aid": 9,
-        "Gamble": 4,
-        "Handgun": 14,
-        "Human Perception": 6,
-        "Language (Korean)": 11,
-        "Language (Streetslang)": 9,
-        "Local Expert": 9,
-        "Perception": 13,
-        "Persuasion": 6,
-        "Shoulder Arms": 14,
-        "Stealth": 14,
-        "Tactics": 11,
-        "Tracking": 11
+        "Athletics": 14, "Autofire": 14, "Brawling": 14, "Concentration": 8, "Conversation": 6, "Education": 9,
+        "Evasion": 14, "First Aid": 9, "Gamble": 4, "Handgun": 14, "Human Perception": 6, "Language (Korean)": 11,
+        "Language (Streetslang)": 9, "Local Expert": 9, "Perception": 13, "Persuasion": 6, "Shoulder Arms": 14, "Stealth": 14,
+        "Tactics": 11, "Tracking": 11
       },
       "gear": ["Rifle Ammo x45", "Very Heavy Pistol Ammo x8", "Agent"],
       "cyberware": ["Techhair"],
       "specials": [
         {
           "name": "Combat Awareness 4",
-          "text": {
-            "pt": "Habilidade de Role Solo (Combat Awareness 4).",
-            "en": "Solo Role Ability (Combat Awareness 4)."
-          }
+          "text": {"pt": "Habilidade de Role Solo (Combat Awareness 4).", "en": "Solo Role Ability (Combat Awareness 4)."}
         },
         {
           "name": "Penalidade da armadura",
@@ -11368,10 +11437,7 @@
         },
         {
           "name": "Nível / Tier",
-          "text": {
-            "pt": "Tenente Endurecido (Hardened Lieutenant).",
-            "en": "Hardened Lieutenant."
-          }
+          "text": {"pt": "Tenente Endurecido (Hardened Lieutenant).", "en": "Hardened Lieutenant."}
         }
       ]
     }
@@ -11387,13 +11453,19 @@
     "affiliation": "Anderson Family",
     "sources": [
       {"book": "Interface RED Volume 2", "page": 27},
-      {"book": "Interface RED Volume 2", "page": 22}
+      {"book": "Interface RED Volume 2", "page": 22},
+      {"book": "Black Chrome", "page": 141},
+      {"book": "Black Chrome", "page": 140},
+      {"book": "Black Chrome+", "page": 2}
     ],
     "summary": {
       "pt": "Fixer à frente da família Anderson, vizinhos de The Apartment que usam o statblock de Boosterganger. Reaparece como a vendedora de equipamento extra em Black Chrome+ (Interface RED Volume 4).",
       "en": "Fixer at the head of the Anderson family, The Apartment's neighbors who use the Boosterganger statblock. She returns as the seller of bonus gear in Black Chrome+ (Interface RED Volume 4)."
     },
-    "sheetNote": null,
+    "sheetNote": {
+      "pt": "Black Chrome imprime uma versão diferente: Operator 6, REP 5, Shuriken Tornado Grenade (6d6) e a jaqueta Tech Upgraded Laser Light St (SP 12). Esta ficha segue a de Interface RED Volume 2, mais recente.",
+      "en": "Black Chrome prints a different version: Operator 6, REP 5, a Shuriken Tornado Grenade (6d6) and a Tech Upgraded Laser Light St Jacket (SP 12). This sheet follows Interface RED Volume 2, the more recent book."
+    },
     "sheet": {
       "hp": 40,
       "seriouslyWounded": 20,
@@ -11409,44 +11481,19 @@
         {"location": "Body", "name": "Light Armorjack", "sp": 11}
       ],
       "skills": {
-        "Athletics": 14,
-        "Brawling": 14,
-        "Concentration": 9,
-        "Conversation": 6,
-        "Demolitions": 10,
-        "Education": 9,
-        "Endurance": 13,
-        "Evasion": 14,
-        "First Aid": 7,
-        "Human Perception": 10,
-        "Language (English)": 11,
-        "Language (German)": 11,
-        "Language (Streetslang)": 13,
-        "Local Expert (Your Home)": 13,
-        "Perception": 9,
-        "Persuasion": 8,
-        "Pick Lock": 11,
-        "Stealth": 10,
-        "Streetwise": 10,
-        "Trading": 12
+        "Athletics": 14, "Brawling": 14, "Concentration": 9, "Conversation": 6, "Demolitions": 10, "Education": 9,
+        "Endurance": 13, "Evasion": 14, "First Aid": 7, "Human Perception": 10, "Language (English)": 11, "Language (German)": 11,
+        "Language (Streetslang)": 13, "Local Expert (Your Home)": 13, "Perception": 9, "Persuasion": 8, "Pick Lock": 11, "Stealth": 10,
+        "Streetwise": 10, "Trading": 12
       },
       "gear": ["Incendiary Grenade x2", "Smoke Grenade x2", "Disposable Cell Phone"],
       "cyberware": ["Cyberarm w/ Realskinn Covering", "Cyberleg x2 w/ Realskinn Covering", "Light Tattoo x2"],
       "specials": [
         {
           "name": "Operator 4",
-          "text": {
-            "pt": "Habilidade de Role Fixer (Operator 4).",
-            "en": "Fixer Role Ability (Operator 4)."
-          }
+          "text": {"pt": "Habilidade de Role Fixer (Operator 4).", "en": "Fixer Role Ability (Operator 4)."}
         },
-        {
-          "name": "Nível / Tier",
-          "text": {
-            "pt": "Tenente.",
-            "en": "Lieutenant."
-          }
-        }
+        {"name": "Nível / Tier", "text": {"pt": "Tenente.", "en": "Lieutenant."}}
       ]
     }
   },
@@ -11787,9 +11834,7 @@
     "roleRank": null,
     "rep": null,
     "affiliation": null,
-    "sources": [
-      {"book": "Interface RED Volume 3", "page": 38}
-    ],
+    "sources": [{"book": "Interface RED Volume 3", "page": 38}, {"book": "Midnight with the Upload", "page": 2}],
     "summary": {
       "pt": "Vendedor de cyberdecks e hardware do Midnight Market, com quatro olhos cibernéticos e um terceiro cyberarm saindo do colarinho. Compra gravações de flatline e circula o boato de ser cultista de R.A.B.I.D.S. ou agente infiltrado da Netwatch.",
       "en": "Cyberdeck and hardware dealer at the Midnight Market, with four cybereyes and a third cyberarm rising from the collar. He buys flatline recordings, and rumor has him as either a R.A.B.I.D.S. cultist or an undercover Netwatch agent."
@@ -11973,6 +12018,132 @@
     "summary": {
       "pt": "Líder de guerra dos Sinful Adams, a gangue goth do Boneyard. Contrata a Crew como segurança extra do Carnaval de Halloween, pedindo o mínimo de força para expulsar os Philharmonic Vampyres, e fica ocupada com as lutas do Ring of Wrath.",
       "en": "War-leader of the Sinful Adams, the goth gang of the Boneyard. She hires the Crew as extra security for the Halloween Carnival, asking for as little force as possible in driving off the Philharmonic Vampyres, while she runs the Ring of Wrath bouts."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "3-piece",
+    "name": "3-Piece",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Fixer",
+    "roleRank": 5,
+    "rep": 5,
+    "affiliation": null,
+    "sources": [
+      {"book": "Black Chrome", "page": 133},
+      {"book": "Black Chrome", "page": 132},
+      {"book": "All About Agents", "page": 2}
+    ],
+    "summary": {
+      "pt": "Fixer de Little Europe que toca o Night Market dele no andar de cima do Short Circuit, o bar que ele tem com o marido, Brain, e a filha, Bug. Vende só equipamento de tech, decks e programas completos e revisados, e quem decide quem entra é a pequena Bug. Também apresenta um canal sobre finanças na Garden.",
+      "en": "A Little Europe Fixer who runs his Night Market from the top floor of Short Circuit, the bar he owns with his husband Brain and their daughter Bug. He sells tech, decks and programs that are always complete and refurbished, and little Bug decides who gets in. He also hosts a finance channel on the Garden."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 35,
+      "seriouslyWounded": 18,
+      "deathSave": 4,
+      "stats": {"INT": 7, "REF": 5, "DEX": 6, "TECH": 6, "COOL": 8, "WILL": 6, "MOVE": 4, "BODY": 4, "EMP": 5},
+      "armoredStats": {},
+      "weapons": [
+        {"name": "Excellent Quality Heavy Pistol", "skill": "Handgun", "attackBase": 7, "damage": "3d6", "rof": 2, "magazine": null, "class": "HeavyPistol", "melee": false, "notes": "Excellent Quality"},
+        {"name": "Light Melee Weapon", "skill": "Melee Weapon", "attackBase": 10, "damage": "1d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null}
+      ],
+      "armor": [{"location": "Body", "name": "T&C Executive Armor", "sp": 11}],
+      "skills": {
+        "Accounting": 10, "Acting": 10, "Athletics": 8, "Basic Tech": 10, "Brawling": 8, "Bribery": 12,
+        "Bureaucracy": 10, "Business": 12, "Composition": 10, "Concentration": 8, "Conversation": 10, "Education": 10,
+        "Electronics/Security Tech": 8, "Evasion": 8, "First Aid": 8, "Handgun": 7, "Human Perception": 10, "Language (English)": 12,
+        "Language (Portuguese)": 12, "Language (Spanish)": 12, "Language (Streetslang)": 12, "Language (Swahili)": 12, "Library Search": 10, "Lip Reading": 10,
+        "Local Expert (Little Europe)": 10, "Melee Weapon": 10, "Personal Grooming": 12, "Perception": 10, "Persuasion": 12, "Photography/Film": 10,
+        "Stealth": 8, "Streetwise": 12, "Trading": 14, "Wardrobe & Style": 12
+      },
+      "gear": [
+        "Basic Heavy Pistol Ammo x20",
+        "Agent",
+        "Computer",
+        "Disposable Cellphone x2",
+        "Skill Chip (Language of GM’s choice, not slotted) x2",
+        "Techtool",
+        "Tech Upgraded Vial of Biotoxin (DV17 Resist Torture/Drugs)",
+        "Video Camera"
+      ],
+      "cyberware": ["AudioVox", "Biomonitor", "Neuralware w/ Chipware Socket", "Techhair"],
+      "specials": [
+        {
+          "name": "Operator 5",
+          "text": {"pt": "Habilidade de Role Fixer (Operator 5).", "en": "Fixer Role Ability (Operator 5)."}
+        },
+        {
+          "name": "Credibility 2",
+          "text": {"pt": "Habilidade de Role Media (Credibility 2).", "en": "Media Role Ability (Credibility 2)."}
+        }
+      ]
+    }
+  },
+  {
+    "id": "ms-mynah",
+    "name": "Ms. Mynah",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Fixer",
+    "roleRank": 6,
+    "rep": 6,
+    "affiliation": null,
+    "sources": [{"book": "Black Chrome", "page": 149}, {"book": "Black Chrome", "page": 148}],
+    "summary": {
+      "pt": "Fixer de Rancho Coronado conhecida pelo bodysculpt de feições de pássaro. Faz o Night Market dela, todo dia 5, no antigo shopping Minimallism, inspirada nos bazares que a avó descrevia em Mumbai: roupas sob medida, comida e convidados escolhidos a dedo.",
+      "en": "A Rancho Coronado Fixer known for her bird-like bodysculpt. She holds her Night Market on the fifth of every month in the old Minimallism mall, modeled on the bazaars her grandmother described in Mumbai: tailored clothes, food and carefully chosen guests."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 40,
+      "seriouslyWounded": 20,
+      "deathSave": 5,
+      "stats": {"INT": 6, "REF": 5, "DEX": 5, "TECH": 3, "COOL": 7, "WILL": 8, "MOVE": 8, "BODY": 5, "EMP": 6},
+      "armoredStats": {},
+      "weapons": [
+        {"name": "Martial Arts Attack", "skill": "Martial Arts (Taekwondo)", "attackBase": 12, "damage": "2d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null}
+      ],
+      "armor": [{"location": "Body", "name": "Tech Upgraded Montage Variable", "sp": 12}],
+      "skills": {
+        "Athletics": 7, "Basic Tech": 6, "Brawling": 7, "Bribery": 13, "Bureaucracy": 10, "Business": 13,
+        "Concentration": 10, "Conversation": 9, "Dance": 8, "Human Perception": 12, "Language (English)": 12, "Language (Hindi)": 12,
+        "Language (Spanish)": 12, "Language (Streetslang)": 10, "Language (Urdu)": 12, "Local Expert (Rancho Coronado)": 15, "Martial Arts (Taekwondo)": 12, "Personal Grooming": 10,
+        "Resist Torture/Drugs": 12, "Stealth": 7, "Streetwise": 12, "Trading": 15, "Wardrobe & Style": 12
+      },
+      "gear": [
+        "Agent",
+        "Bug Detector",
+        "Computer",
+        "Disposable Cellphone x3",
+        "Memory Chips x5",
+        "Radio Communicator w/ Scambler/Descrambler"
+      ],
+      "cyberware": ["Contraceptive Implant", "Cybereye x2 w/ Chyron and Low Light/Infrared/UV"],
+      "specials": [
+        {
+          "name": "Operator 6",
+          "text": {"pt": "Habilidade de Role Fixer (Operator 6).", "en": "Fixer Role Ability (Operator 6)."}
+        }
+      ]
+    }
+  },
+  {
+    "id": "brain",
+    "name": "Brain",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Short Circuit",
+    "sources": [{"book": "All About Agents", "page": 2}, {"book": "Black Chrome", "page": 132}],
+    "summary": {
+      "pt": "Marido de 3-Piece e coproprietário do Short Circuit. No térreo ele serve drinks e recolhe fofoca; no vídeo de 3-Piece sobre Agents, explica com empolgação como o brinquedo da Segotari virou o assistente que todo mundo carrega.",
+      "en": "3-Piece's husband and co-owner of Short Circuit. On the ground floor he pours drinks and collects gossip; in 3-Piece's video on Agents he happily lays out how a Segotari toy became the assistant everyone carries."
     },
     "sheetNote": null,
     "sheet": null
