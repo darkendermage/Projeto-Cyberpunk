@@ -49,6 +49,29 @@ public class NpcCompendiumDataTests
     }
 
     [Fact]
+    public void Sheets_print_the_core_stats()
+    {
+        // EMP and LUCK may be absent or null; every other stat must be printed.
+        string[] core = ["INT", "REF", "DEX", "TECH", "COOL", "WILL", "MOVE", "BODY"];
+        foreach (var npc in Compendium.All.Where(n => n.Sheet != null))
+            foreach (var key in core)
+            {
+                npc.Sheet!.Stats.Should().ContainKey(key, npc.Id);
+                npc.Sheet.Stats[key].Should().NotBeNull($"{npc.Id} {key}");
+            }
+    }
+
+    [Fact]
+    public void Names_have_no_markup() =>
+        Compendium.All.Should().OnlyContain(n => !n.Name.Contains('*'));
+
+    [Fact]
+    public void Mission_Kit_pages_exist() =>
+        Compendium.All.SelectMany(n => n.Sources)
+            .Where(s => s.Book.StartsWith("Edgerunners Mission Kit:"))
+            .Should().OnlyContain(s => s.Page <= 40);
+
+    [Fact]
     public void Armored_skills_are_printed_skills()
     {
         foreach (var sheet in Compendium.All.Select(n => n.Sheet).OfType<CompendiumSheet>())
