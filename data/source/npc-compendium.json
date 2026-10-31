@@ -7037,5 +7037,1122 @@
         }
       ]
     }
+  },
+  {
+    "id": "shinobu-the-second",
+    "name": "Shinobu the Second",
+    "aliases": ["Hayato Nakagawa"],
+    "kind": "sheet",
+    "role": "Solo",
+    "roleRank": 4,
+    "rep": 6,
+    "affiliation": "Tyger Claws",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 122 }, { "book": "Danger Gal Dossier", "page": 121 }],
+    "summary": {
+      "pt": "Líder dos Tyger Claws, filho adotivo do ator Shinobu Nakagawa, que venceu a disputa pela herança e assumiu o nome do pai. Sem talento para o teatro Kabuki, faz das ruas o seu palco, com corpo cromado e desfiles que o tornam herói da juventude de Kabuki. Sua esposa Ryoko controla o dinheiro da Fundação, e ele sente o império escorrer e usa cibernéticos para aliviar a dor.",
+      "en": "Leader of the Tyger Claws and adopted son of the actor Shinobu Nakagawa, who won the inheritance fight and took his father's name. Lacking talent for Kabuki theater, he treats the streets as his stage, with a polished chrome body and parades that make him a hero to Kabuki youth. His wife Ryoko controls the Foundation's money, and he feels the empire slipping and numbs the pain with cybernetics."
+    },
+    "sheetNote": {
+      "pt": "A ficha lista duas Role Abilities: Combat Awareness 4 (Role principal) e Charismatic Impact 4.",
+      "en": "The sheet lists two Role Abilities: Combat Awareness 4 (main Role) and Charismatic Impact 4."
+    },
+    "sheet": {
+      "hp": 60,
+      "seriouslyWounded": 30,
+      "deathSave": 12,
+      "stats": { "INT": 6, "REF": 8, "DEX": 8, "TECH": 7, "COOL": 8, "WILL": 7, "MOVE": 7, "BODY": 12, "EMP": 2 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "ConArms Hurricane", "skill": "Shoulder Arms", "attackBase": 16, "damage": "5d6", "rof": 2, "magazine": null, "class": "Shotgun", "melee": false, "notes": "Tech-upgraded (TUp): +1 Ammo Type; Book wording: \"Shotgun w/ 2 ROF\"; class Shotgun used" },
+        { "name": "Kendachi Mono-Three", "skill": "Melee Weapon", "attackBase": 16, "damage": "4d6", "rof": 1, "magazine": null, "class": null, "melee": true, "notes": null }
+      ],
+      "armor": [
+        { "location": "Head", "name": "TUp Subdermal Armor", "sp": 12 },
+        { "location": "Body", "name": "TUp Subdermal Armor", "sp": 12 }
+      ],
+      "skills": {
+        "Accounting": 10, "Acting": 13, "Athletics": 14, "Brawling": 14, "Bureaucracy": 10, "Business": 10,
+        "Composition": 10, "Concentration": 9, "Conversation": 8, "Dance": 10, "Drive Land Vehicle": 10, "Education": 10,
+        "Evasion": 16, "First Aid": 9, "Human Perception": 4, "Language (English)": 8, "Language (Japanese)": 10, "Language (Streetslang)": 8,
+        "Local Expert (Kabuki)": 12, "Martial Arts (Judo)": 16, "Melee Weapon": 16, "Paint/Draw/Sculpt": 10, "Perception": 13, "Personal Grooming": 12,
+        "Persuasion": 13, "Play Instrument (Shamisen)": 10, "Play Instrument (Singing)": 10, "Resist Torture/Drugs": 10, "Shoulder Arms": 16, "Stealth": 10,
+        "Streetwise": 10, "Tactics": 12, "Wardrobe & Style": 13
+      },
+      "gear": ["Basic Shotgun Shell Ammo x16", "Armor-Piercing Shotgun Slug Ammo x16", "Agent", "Disposable Cell Phone x2", "Kabuki Outfit", "Shamisen", "Trauma Team (Executive)"],
+      "cyberware": ["Biomonitor", "Contraceptive Implant", "Cyberaudio Suite w/ Internal Agent", "Cyberarm x2 w/ Hardened Shielding x2, Popup Shield x2 & Superchrome® Covering x2", "Cybereye w/ Chyron & Color Shift", "Cybereye w/ Color Shift & Targeting Scope", "Cyberleg x2 w/ Hardened Shielding x2, Jump Booster x2 & Superchrome® Covering x2", "EMP Threading", "Grafted Muscle and Bone Lace", "Implanted Linear Frame Sigma", "Neural Link w/ Chipware Socket, Kerenzikov & Pain Editor", "Subdermal Armor", "Techhair"],
+      "specials": [
+        {
+          "name": "Combat Awareness",
+          "text": {
+            "pt": "Role Ability Combat Awareness no Rank 4. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Combat Awareness at Rank 4. Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Charismatic Impact",
+          "text": {
+            "pt": "Role Ability Charismatic Impact no Rank 4. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Charismatic Impact at Rank 4. Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Hurricane e Mono-Three",
+          "text": {
+            "pt": "ConArms Hurricane tech-upgraded (+1 Ammo Type) com 5d6 e ROF 2, e a espada Kendachi Mono-Three (4d6); cyberarms e cyberlegs com Hardened Shielding, Popup Shield, Jump Booster e Superchrome® Covering.",
+            "en": "A tech-upgraded (+1 Ammo Type) ConArms Hurricane at 5d6, ROF 2, and the Kendachi Mono-Three blade (4d6); cyberarms and cyberlegs with Hardened Shielding, Popup Shields, Jump Boosters and Superchrome® Covering."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "zen",
+    "name": "Zen",
+    "aliases": ["Zenjyu-bou"],
+    "kind": "sheet",
+    "role": "Solo",
+    "roleRank": 4,
+    "rep": 1,
+    "affiliation": "Tyger Claws",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 123 }, { "book": "Danger Gal Dossier", "page": 121 }],
+    "summary": {
+      "pt": "Franco-atirador mascarado que protege Shinobu the Second dos telhados de Kabuki, sem que os líderes saibam quem ele é. Deve um favor ao Shinobu original e serve ao filho adotivo para pagá-lo. Um relatório da Danger Gal revela que foi assassino pessoal de Kei Arasaka e hoje vive como o monge Zenjyu-bou, com motivos desconhecidos.",
+      "en": "A helmeted sniper who guards Shinobu the Second from Kabuki's rooftops while the leaders never learn his identity. He owes a debt to the original Shinobu and serves the adopted son to repay it. A Danger Gal source reveals he was one of Kei Arasaka's personal assassins and now lives as the monk Zenjyu-bou, with unknown motives."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 40,
+      "seriouslyWounded": 20,
+      "deathSave": 5,
+      "stats": { "INT": 5, "REF": 8, "DEX": 7, "TECH": 5, "COOL": 6, "WILL": 6, "MOVE": 6, "BODY": 5, "EMP": 4 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Sniper Rifle", "skill": "Shoulder Arms", "attackBase": 15, "damage": "5d6", "rof": 1, "magazine": null, "class": "SniperRifle", "melee": false, "notes": "Excellent Quality" },
+        { "name": "Heavy Melee Weapon x2", "skill": "Melee Weapon", "attackBase": 13, "damage": "3d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": "Excellent Quality" }
+      ],
+      "armor": [
+        { "location": "Head", "name": "TUp Light Armorjack", "sp": 12 },
+        { "location": "Body", "name": "TUp Light Armorjack", "sp": 12 }
+      ],
+      "skills": {
+        "Athletics": 13, "Brawling": 10, "Composition": 8, "Concentration": 8, "Conversation": 6, "Education": 10,
+        "Evasion": 13, "First Aid": 7, "Forgery": 11, "Human Perception": 10, "Language (Japanese)": 7, "Language (Sanskrit)": 7,
+        "Language (Streetslang)": 7, "Lip Reading": 10, "Local Expert (Old Japantown)": 10, "Local Expert (Watson Development)": 10, "Melee Weapon": 13, "Paint/Draw/Sculpt": 10,
+        "Perception": 7, "Persuasion": 10, "Play Instrument (Biwa)": 10, "Play Instrument (Singing)": 10, "Resist Torture/Drugs": 14, "Shoulder Arms": 15,
+        "Stealth": 13, "Tracking": 13
+      },
+      "gear": ["Smart Rifle Ammo x8", "Agent", "Biwa", "Grapple Gun", "Smart Glasses w/ Targeting Scope (in helmet)"],
+      "cyberware": [],
+      "specials": [
+        {
+          "name": "Combat Awareness",
+          "text": {
+            "pt": "Role Ability Combat Awareness no Rank 4. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Combat Awareness at Rank 4. Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Armamento",
+          "text": {
+            "pt": "Sniper Rifle de Qualidade Excelente com munição Smart, duas armas corpo a corpo pesadas de Qualidade Excelente, Grapple Gun e um biwa; sem cyberware.",
+            "en": "An Excellent Quality Sniper Rifle with Smart ammo, two Excellent Quality heavy melee weapons, a Grapple Gun and a biwa; no cyberware."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "burai",
+    "name": "Burai",
+    "aliases": ["Takeru Akagi"],
+    "kind": "sheet",
+    "role": "Solo",
+    "roleRank": 4,
+    "rep": 5,
+    "affiliation": "Tyger Claws",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 124 }, { "book": "Danger Gal Dossier", "page": 121 }],
+    "summary": {
+      "pt": "Capitão dos Kimen-Gumi, o braço \"policial\" dos Tyger Claws, de máscara vermelha e comandante estável, sem os floreios do chefe. Filho de veteranos do Tyger's Claw original, é um dos mais confiáveis de Shinobu the Second e ignora quem queria vê-lo no comando. Os pais aposentados, leais à Arasaka, doutrinam os netos em segredo.",
+      "en": "Captain of the Kimen-Gumi, the \"police\" arm of the Tyger Claws, wearing a red mask and acting as a steady commander without his boss's showmanship. The son of veterans of the original Tyger's Claw, he is one of Shinobu the Second's most trusted companions and ignores those who want him to lead. His retired parents, still loyal to Arasaka, secretly indoctrinate his children."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 40,
+      "seriouslyWounded": 20,
+      "deathSave": 5,
+      "stats": { "INT": 5, "REF": 7, "DEX": 7, "TECH": 4, "COOL": 4, "WILL": 7, "MOVE": 5, "BODY": 5, "EMP": 4 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Very Heavy Pistol", "skill": "Handgun", "attackBase": 13, "damage": "4d6", "rof": 1, "magazine": null, "class": "VeryHeavyPistol", "melee": false, "notes": null },
+        { "name": "Very Heavy Melee Weapon", "skill": "Melee Weapon", "attackBase": 14, "damage": "4d6", "rof": 1, "magazine": null, "class": null, "melee": true, "notes": "Excellent Quality" }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Light Armorjack", "sp": 11 },
+        { "location": "Body", "name": "Light Armorjack", "sp": 11 }
+      ],
+      "skills": {
+        "Athletics": 12, "Brawling": 13, "Concentration": 9, "Conversation": 6, "Criminology": 10, "Deduction": 8,
+        "Education": 8, "Evasion": 14, "First Aid": 6, "Handgun": 13, "Human Perception": 6, "Language (Japanese)": 9,
+        "Language (Streetslang)": 7, "Local Expert (Kabuki)": 10, "Local Expert (Old Japantown)": 7, "Martial Arts (Judo)": 14, "Melee Weapon": 14, "Perception": 10,
+        "Persuasion": 6, "Play Instrument (Taiko)": 9, "Stealth": 9
+      },
+      "gear": ["Basic VH Pistol Ammo x8", "EMP Grenade", "Flashbang Grenade", "Agent", "Anti-Smog Breathing Mask", "Handcuffs", "Radio Communicator", "Scrambler/Descrambler", "Taiko"],
+      "cyberware": ["Contraceptive Implant", "Neural Link w/ Chipware Socket, Kerenzikov & Skill Chip (Drive Land Vehicle)"],
+      "specials": [
+        {
+          "name": "Combat Awareness",
+          "text": {
+            "pt": "Role Ability Combat Awareness no Rank 4. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Combat Awareness at Rank 4. Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Equipamento Kimen-Gumi",
+          "text": {
+            "pt": "Very Heavy Pistol, arma corpo a corpo muito pesada de Qualidade Excelente, granadas EMP e Flashbang, máscara anti-smog e um taiko; Neural Link com Kerenzikov e Skill Chip de Drive Land Vehicle.",
+            "en": "A Very Heavy Pistol, an Excellent Quality very heavy melee weapon, EMP and Flashbang grenades, an anti-smog mask and a taiko; a Neural Link with a Kerenzikov and a Drive Land Vehicle Skill Chip."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "wakako-okada-tyger-claws",
+    "name": "Wakako Okada (Tyger Claws)",
+    "aliases": ["Wakako"],
+    "kind": "sheet",
+    "role": "Medtech",
+    "roleRank": 4,
+    "rep": 3,
+    "affiliation": "Tyger Claws",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 125 }, { "book": "Danger Gal Dossier", "page": 121 }],
+    "summary": {
+      "pt": "Médica de laboratório da Kiroshi nascida em Kansai, viúva de Hiroto Miyamoto, amigo de infância de Hayato Nakagawa. O marido morreu defendendo a casa na briga pela herança e Hayato a fez membro dos Tyger Claws por obrigação. Hoje confidente de Ryoko Fujiwara, recusa o convite para trabalhar na Fundação.",
+      "en": "A Kiroshi lab medtech born in Kansai, widow of Hiroto Miyamoto, childhood friend of Hayato Nakagawa. Her husband died defending their home in the inheritance fight, and Hayato made her a Tyger Claws member whether she liked it or not. Now a confidant of Ryoko Fujiwara, she has declined an offer to join the Foundation."
+    },
+    "sheetNote": {
+      "pt": "Mesmo nome que a Wakako Okada do Edgerunners Mission Kit (dona de pachinko e Fixer), mas biografia e papel diferentes: tratada como outra personagem.",
+      "en": "Shares a name with the Edgerunners Mission Kit's Wakako Okada (pachinko owner and Fixer), but biography and Role differ: treated as a different character."
+    },
+    "sheet": {
+      "hp": 35,
+      "seriouslyWounded": 18,
+      "deathSave": 4,
+      "stats": { "INT": 8, "REF": 4, "DEX": 3, "TECH": 7, "COOL": 7, "WILL": 6, "MOVE": 4, "BODY": 4, "EMP": 5 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Shotgun w/ Extended Magazine", "skill": "Shoulder Arms", "attackBase": 12, "damage": "5d6", "rof": 1, "magazine": null, "class": "Shotgun", "melee": false, "notes": "Excellent Quality" },
+        { "name": "Heavy Melee Weapon", "skill": "Melee Weapon", "attackBase": 3, "damage": "3d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": "Excellent Quality; No Skill Base printed for this weapon; STAT only." }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Light Armorjack", "sp": 11 },
+        { "location": "Body", "name": "Light Armorjack", "sp": 11 }
+      ],
+      "skills": {
+        "Accounting": 10, "Athletics": 5, "Basic Tech": 10, "Brawling": 6, "Concentration": 8, "Conversation": 10,
+        "Cybertech": 10, "Education": 12, "Evasion": 10, "First Aid": 9, "Human Perception": 10, "Language (English)": 10,
+        "Language (Japanese)": 12, "Language (Streetslang)": 10, "Library Search": 10, "Local Expert (Watson Development)": 10, "Local Expert (University District)": 10, "Medical Tech": 11,
+        "Paramedic": 10, "Perception": 10, "Personal Grooming": 10, "Persuasion": 10, "Play Instrument (Piano)": 10, "Play Instrument (Singing)": 10,
+        "Resist Torture/Drugs": 10, "Science (Biochemistry)": 10, "Shoulder Arms": 12, "Stealth": 5, "Trading": 10, "Wardrobe & Style": 10
+      },
+      "gear": ["Armor-Piercing Shotgun Slug Ammo x8", "Basic Shotgun Shell Ammo x8", "Incendiary Shotgun Shell Ammo x8", "Agent", "Cryopump", "Disposable Cell Phone", "Medtech Bag", "Techtool"],
+      "cyberware": ["Biomonitor", "Contraceptive Implant", "Cybereye w/ Chyron & MicroOptics", "Neural Link w/ Interface Plugs", "Techhair"],
+      "specials": [
+        {
+          "name": "Medicine",
+          "text": {
+            "pt": "Role Ability Medicine no Rank 4 (Pharmaceuticals 2, Cryosystem Operation 2). Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Medicine at Rank 4 (Pharmaceuticals 2, Cryosystem Operation 2). Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Equipamento médico",
+          "text": {
+            "pt": "Shotgun de Qualidade Excelente com Extended Magazine e três tipos de munição, Cryopump, Medtech Bag e um Cybereye com Chyron e MicroOptics.",
+            "en": "An Excellent Quality Shotgun with an Extended Magazine and three ammo types, a Cryopump, Medtech Bag and a Cybereye with Chyron and MicroOptics."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "hamada",
+    "name": "Hamada",
+    "aliases": ["Kouichi Hamada"],
+    "kind": "sheet",
+    "role": "Fixer",
+    "roleRank": 4,
+    "rep": 4,
+    "affiliation": "Tyger Claws",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 126 }, { "book": "Danger Gal Dossier", "page": 121 }],
+    "summary": {
+      "pt": "Chefe dos Tekiya, os vendedores de rua de Kabuki, e cozinheiro veterano de comida de rua japonesa. Forma aprendizes e os Fixers dos Claws exigem o seu selo para qualquer barraca nova. Budista devoto, fofoqueiro e à moda dos antigos yakuza, cobra lealdade e dívida de quem passa nos testes dele.",
+      "en": "Boss of the Tekiya, Kabuki's street vendors, and a veteran cook of classic Japanese street food. He trains apprentices, and the Claws' Fixers demand his seal for any new stall. A devout Buddhist, a gossip and old-school yakuza in temperament, he insists on loyalty and obligation from anyone who passes his tests."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 35,
+      "seriouslyWounded": 18,
+      "deathSave": 5,
+      "stats": { "INT": 5, "REF": 5, "DEX": 5, "TECH": 4, "COOL": 5, "WILL": 5, "MOVE": 5, "BODY": 5, "EMP": 5 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Very Heavy Pistol w/ Infrared Nightvision Scope", "skill": "Handgun", "attackBase": 10, "damage": "4d6", "rof": 1, "magazine": null, "class": "VeryHeavyPistol", "melee": false, "notes": null },
+        { "name": "Heavy Melee Weapon", "skill": "Melee Weapon", "attackBase": 13, "damage": "3d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": "Excellent Quality" }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Kevlar®", "sp": 7 },
+        { "location": "Body", "name": "Kevlar®", "sp": 7 }
+      ],
+      "skills": {
+        "Accounting": 10, "Athletics": 7, "Business": 8, "Concentration": 7, "Conversation": 11, "Drive Land Vehicle": 10,
+        "Education": 7, "Evasion": 11, "First Aid": 6, "Handgun": 10, "Human Perception": 10, "Language (Japanese)": 9,
+        "Language (Streetslang)": 7, "Local Expert (Kabuki)": 10, "Melee Weapon": 13, "Perception": 7, "Persuasion": 10, "Play Instrument (Sanshin)": 8,
+        "Science (Culinary)": 12, "Stealth": 7, "Streetwise": 10
+      },
+      "gear": ["Basic VH Pistol Ammo x16", "Agent", "Sanshin", "Scrambler/Descrambler", "Smart Glasses w/ Chyron & Image Enhance"],
+      "cyberware": ["Contraceptive Implant", "Neural Link w/ Chemical Analyzer, Chipware Socket & TUp (+1 Skill LVL) Skill Chip (Language [English])"],
+      "specials": [
+        {
+          "name": "Operator",
+          "text": {
+            "pt": "Role Ability Operator no Rank 4. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Operator at Rank 4. Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Equipamento",
+          "text": {
+            "pt": "Very Heavy Pistol com mira infravermelha, arma corpo a corpo pesada de Qualidade Excelente, Kevlar®, Smart Glasses com Chyron, um sanshin e Skill Chip tech-upgraded de Language (English).",
+            "en": "A Very Heavy Pistol with an infrared nightvision scope, an Excellent Quality heavy melee weapon, Kevlar®, Smart Glasses with Chyron, a sanshin and a tech-upgraded Language (English) Skill Chip."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "masa",
+    "name": "Masa",
+    "aliases": ["Masashi Miyamoto"],
+    "kind": "sheet",
+    "role": null,
+    "roleRank": null,
+    "rep": 2,
+    "affiliation": "Tyger Claws",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 127 }, { "book": "Danger Gal Dossier", "page": 121 }],
+    "summary": {
+      "pt": "Jovem Kimen-Gumi (Hanmen) do esquadrão de Burai, criado no pachinko da família em Kabuki. Enxerga os Tyger Claws como um clube de bairro, conhece os moradores e repara em estranhos. Sem a máscara tem cara de ídolo pop e a simpatia desarma quem teme os Kimen-Gumi.",
+      "en": "A young Kimen-Gumi Hanmen in Burai's squad, raised in his family's pachinko parlor in Kabuki. He regards the Tyger Claws as a local neighborhood club, knows the locals and spots strangers. Unmasked he looks like a J-pop idol, and his friendliness disarms people who fear the Kimen-Gumi."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 30,
+      "seriouslyWounded": 15,
+      "deathSave": 4,
+      "stats": { "INT": 5, "REF": 4, "DEX": 4, "TECH": 4, "COOL": 4, "WILL": 4, "MOVE": 5, "BODY": 4, "EMP": 5 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Very Heavy Pistol", "skill": "Handgun", "attackBase": 9, "damage": "4d6", "rof": 1, "magazine": null, "class": "VeryHeavyPistol", "melee": false, "notes": "Poor Quality" },
+        { "name": "Heavy Melee Weapon", "skill": "Melee Weapon", "attackBase": 12, "damage": "3d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Kevlar®", "sp": 7 },
+        { "location": "Body", "name": "TUp Kevlar®", "sp": 8 }
+      ],
+      "skills": {
+        "Athletics": 6, "Brawling": 6, "Concentration": 6, "Conversation": 13, "Education": 7, "Evasion": 10,
+        "First Aid": 6, "Gamble": 12, "Handgun": 9, "Human Perception": 7, "Interrogation": 6, "Language (Japanese)": 9,
+        "Language (Streetslang)": 7, "Local Expert (Kabuki)": 9, "Local Expert (Old Japantown)": 7, "Melee Weapon": 12, "Perception": 7, "Persuasion": 6,
+        "Stealth": 6
+      },
+      "gear": ["Basic VH Pistol Ammo x8", "Agent", "Anti-Smog Breathing Mask", "Flashlight", "Handcuffs", "Radio Communicator", "Road Flare x3"],
+      "cyberware": ["Contraceptive Implant", "Enhanced Antibodies", "Toxin Binders"],
+      "specials": [
+        {
+          "name": "Equipamento",
+          "text": {
+            "pt": "Very Heavy Pistol de Qualidade Ruim, arma corpo a corpo pesada, Kevlar® tech-upgraded no corpo, Enhanced Antibodies e Toxin Binders.",
+            "en": "A Poor Quality Very Heavy Pistol, a heavy melee weapon, tech-upgraded Kevlar® on the body, Enhanced Antibodies and Toxin Binders."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "yasu",
+    "name": "Yasu",
+    "aliases": ["Yasunori Tamada"],
+    "kind": "sheet",
+    "role": "Fixer",
+    "roleRank": 2,
+    "rep": 2,
+    "affiliation": "Tyger Claws",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 128 }, { "book": "Danger Gal Dossier", "page": 121 }],
+    "summary": {
+      "pt": "Vendedor da Matsura Food Products e Fixer esperto, que equilibra a lealdade entre os Tyger Claws e o empregador. Importa itens para os Night Markets e leilões e finge ser otaku para impressionar posergangs, sem sucesso. Está sendo ameaçado pela Continental Brands e busca uma saída.",
+      "en": "A Matsura Food Products salesman and clever Fixer who walks a careful line between the Tyger Claws and his employer. He imports goods for the Night Markets and online auctions and fakes otaku credentials to impress posergangs, without success. Continental Brands is threatening him and he is looking for a way out."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 25,
+      "seriouslyWounded": 13,
+      "deathSave": 3,
+      "stats": { "INT": 5, "REF": 5, "DEX": 4, "TECH": 4, "COOL": 3, "WILL": 3, "MOVE": 7, "BODY": 3, "EMP": 5 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Assault Rifle", "skill": "Shoulder Arms", "attackBase": 11, "damage": "5d6", "rof": 1, "magazine": null, "class": "AssaultRifle", "melee": false, "notes": "Poor Quality" },
+        { "name": "Brawling Attack", "skill": "Brawling", "attackBase": 7, "damage": "1d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
+      ],
+      "armor": [
+        { "location": "Body", "name": "Scavenged Armor", "sp": 11 }
+      ],
+      "skills": {
+        "Athletics": 6, "Brawling": 7, "Business": 10, "Concentration": 5, "Conversation": 7, "Education": 7,
+        "Evasion": 10, "First Aid": 6, "Human Perception": 10, "Language (Japanese)": 9, "Language (Streetslang)": 7, "Local Expert (Kabuki)": 9,
+        "Perception": 7, "Persuasion": 5, "Pilot Sea Vehicle": 10, "Shoulder Arms": 11, "Stealth": 6, "Trading": 10
+      },
+      "gear": ["Basic Rifle Ammo x25", "Agent", "Boost", "Carryall", "Random Anime/Manga Merch", "Scrambler/Descrambler", "Synthcoke"],
+      "cyberware": ["Neural Link w/ Chipware Socket & TUp (+1 Skill LVL) Skill Chip (Language [Streetslang])", "Mr. Studd Sexual Implant"],
+      "specials": [
+        {
+          "name": "Operator",
+          "text": {
+            "pt": "Role Ability Operator no Rank 2. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Operator at Rank 2. Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Equipamento",
+          "text": {
+            "pt": "Assault Rifle de Qualidade Ruim, Scavenged Armor no corpo (SP 11), Boost, Synthcoke e Skill Chip tech-upgraded de Language (Streetslang).",
+            "en": "A Poor Quality Assault Rifle, Scavenged Armor on the body (SP 11), Boost, Synthcoke and a tech-upgraded Language (Streetslang) Skill Chip."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "shinmai",
+    "name": "Shinmai",
+    "aliases": ["Shinkichi Yoneda"],
+    "kind": "sheet",
+    "role": null,
+    "roleRank": null,
+    "rep": 0,
+    "affiliation": "Tyger Claws",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 129 }, { "book": "Danger Gal Dossier", "page": 121 }],
+    "summary": {
+      "pt": "Adolescente espadachim recrutado no Tyger Dojo e mudado de Old Japantown para Kabuki, apelidado de \"arroz novo\" até sobreviver um ano. Admira lendas da espada, treina no dojo avançado Tora-no-Ana e é visto como irmão mais novo, mas ninguém se apega, pois sempre há outro aprendiz para substituí-lo.",
+      "en": "A teenage swordsman recruited from the Tyger Dojo and sponsored from Old Japantown to Kabuki, nicknamed \"new rice\" until he survives a year. He admires legendary swordsmen, trains at the advanced dojo Tora-no-Ana and is seen as a little brother, but nobody bonds, since another recruit can always replace him."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 25,
+      "seriouslyWounded": 13,
+      "deathSave": 3,
+      "stats": { "INT": 2, "REF": 5, "DEX": 6, "TECH": 2, "COOL": 3, "WILL": 2, "MOVE": 7, "BODY": 3, "EMP": 3 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Heavy Melee Weapon x2", "skill": "Melee Weapon", "attackBase": 13, "damage": "3d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": "Poor Quality" },
+        { "name": "Heavy Melee Weapon x2", "skill": "Melee Weapon", "attackBase": 13, "damage": "3d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": "Poor Quality" }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Leathers", "sp": 4 },
+        { "location": "Body", "name": "Leathers", "sp": 4 }
+      ],
+      "skills": {
+        "Athletics": 10, "Brawling": 10, "Concentration": 4, "Conversation": 5, "Education": 4, "Evasion": 11,
+        "First Aid": 4, "Human Perception": 5, "Language (Japanese)": 6, "Language (Streetslang)": 4, "Local Expert (Old Japantown)": 4, "Martial Arts (Karate)": 11,
+        "Melee Weapon": 13, "Perception": 6, "Persuasion": 5, "Stealth": 13
+      },
+      "gear": ["Anti-Smog Breathing Mask", "Bicycle", "Disposable Cell Phone", "Synthcoke"],
+      "cyberware": [],
+      "specials": [
+        {
+          "name": "Duas lâminas",
+          "text": {
+            "pt": "Duas armas corpo a corpo pesadas de Qualidade Ruim (3d6) e Leathers; cyberware nenhum.",
+            "en": "Two Poor Quality heavy melee weapons (3d6) and Leathers; no cyberware."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "vanisher",
+    "name": "Vanisher",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Solo",
+    "roleRank": 6,
+    "rep": 2,
+    "affiliation": "Zoners",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 132 }, { "book": "Danger Gal Dossier", "page": 131 }],
+    "summary": {
+      "pt": "Solo de identidade, gênero e financiamento desconhecidos, que opera em Night City há cinco anos e exige em contrato que o cliente nunca revele seu nome. Faz extrações, assassinatos dirigidos e recuperações para todas as grandes Corps, mata o alvo, santo ou pecador, e poupa civis. Pelo código de honra, parece trabalhar de graça para os Zoners, que talvez nem saibam.",
+      "en": "A Solo of unknown identity, gender and funding who has worked Night City for five years and demands in every contract that clients never reveal who they hired. They run extractions, targeted wetwork and retrievals for every major Corp, kill the target saint or sinner, and spare civilians. Their code of honor seems to be why they work free for the Zoners, who may not even know."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 50,
+      "seriouslyWounded": 25,
+      "deathSave": 10,
+      "stats": { "INT": 7, "REF": 8, "DEX": 8, "TECH": 5, "COOL": 6, "WILL": 6, "MOVE": 6, "BODY": 10, "EMP": 3 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Heavy SMG x2", "skill": "Handgun", "attackBase": 16, "damage": "3d6", "rof": 1, "magazine": null, "class": "HeavySmg", "melee": false, "notes": "Excellent Quality" },
+        { "name": "Martial Arts Attack", "skill": "Martial Arts (Judo)", "attackBase": 16, "damage": "3d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
+      ],
+      "armor": [
+        { "location": "Head", "name": "TUp Light Armorjack", "sp": 12 },
+        { "location": "Body", "name": "TUp Light Armorjack", "sp": 12 }
+      ],
+      "skills": {
+        "Athletics": 14, "Autofire": 16, "Basic Tech": 10, "Brawling": 10, "Conceal/Reveal Object": 12, "Concentration": 10,
+        "Conversation": 5, "Drive Land Vehicle": 14, "Education": 9, "Electronics/Security Tech": 10, "Evasion": 16, "First Aid": 12,
+        "Handgun": 16, "Human Perception": 10, "Language (Arapaho)": 11, "Language (English)": 9, "Language (Spanish)": 9, "Language (Streetslang)": 9,
+        "Local Expert (Unknown)": 9, "Martial Arts (Judo)": 16, "Perception": 12, "Persuasion": 13, "Pilot Air Vehicle": 10, "Pilot Sea Vehicle": 10,
+        "Resist Torture/Drugs": 10, "Stealth": 16, "Tracking": 11
+      },
+      "gear": ["Armor-Piercing H Pistol Ammo x40", "TUp (can trigger on any Critical Injury) Expansive H Pistol Ammo x40", "Sleep Grenade x3", "Carryall", "Disposable Cell Phone", "Grapple Gun", "Rope (60 m/yds)"],
+      "cyberware": ["TUp (+1 Slot) Cyberaudio Suite w/ Amplified Hearing, Level Damper, Radio Scanner/Music Player & Scrambler/Descrambler", "Cybereye x2 w/ Anti-Dazzle x2 & Image Enhance x2", "Gills", "Grafted Muscle and Bone Lace", "Independent Air Supply", "Nasal Filters", "Neural Link w/ Chipware Socket, Kerenzikov & Pain Editor", "Toxin Binders"],
+      "specials": [
+        {
+          "name": "Combat Awareness",
+          "text": {
+            "pt": "Role Ability Combat Awareness no Rank 6. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Combat Awareness at Rank 6. Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Duas Heavy SMGs",
+          "text": {
+            "pt": "Duas Heavy SMGs de Qualidade Excelente (ROF 1, 3d6), munição Armor-Piercing e Expansive (esta, tech-upgraded para ativar com qualquer Critical Injury), três Sleep Grenades e Martial Arts Attack de 3d6.",
+            "en": "Two Excellent Quality Heavy SMGs (ROF 1, 3d6), Armor-Piercing and Expansive ammo (the latter tech-upgraded to trigger on any Critical Injury), three Sleep Grenades and a 3d6 Martial Arts Attack."
+          }
+        },
+        {
+          "name": "Cromo furtivo",
+          "text": {
+            "pt": "Cyberaudio com Level Damper, Cybereyes com Anti-Dazzle e Image Enhance, Gills, Independent Air Supply, Nasal Filters, Toxin Binders e Neural Link com Kerenzikov e Pain Editor.",
+            "en": "A Cyberaudio Suite with a Level Damper, Cybereyes with Anti-Dazzle and Image Enhance, Gills, Independent Air Supply, Nasal Filters, Toxin Binders and a Neural Link with a Kerenzikov and Pain Editor."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "tearjerker",
+    "name": "Tearjerker",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Lawman",
+    "roleRank": 4,
+    "rep": 5,
+    "affiliation": "Zoners",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 133 }, { "book": "Danger Gal Dossier", "page": 131 }],
+    "summary": {
+      "pt": "Capitã do corpo de bombeiros voluntário de South Night City, criado com Forty Mike-Mike com moradores e até gangueiros. Ex-policial militar da Petrochem na 4ª Guerra Corporativa, defende um movimento pacífico, mas, quando a NCPD usou armas pesadas num protesto, trocou o gás lacrimogêneo por munição perfurante e matou dois policiais.",
+      "en": "Captain of South Night City's volunteer fire department, which she built with Forty Mike-Mike from residents and even gangers. A former Petrochem military police officer from the 4th Corporate War, she backs a peaceful movement, but when the NCPD turned heavy weapons on a protest she swapped her teargas for armor-piercing rounds and killed two cops."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 55,
+      "seriouslyWounded": 28,
+      "deathSave": 12,
+      "stats": { "INT": 5, "REF": 8, "DEX": 7, "TECH": 4, "COOL": 6, "WILL": 6, "MOVE": 6, "BODY": 12, "EMP": 4 },
+      "armoredStats": { "REF": 6, "DEX": 5, "MOVE": 4 },
+      "weapons": [
+        { "name": "Grenade Launcher", "skill": "Heavy Weapons", "attackBase": 16, "damage": "6d6", "rof": 1, "magazine": null, "class": "GrenadeLauncher", "melee": false, "notes": "w/ TUp (can mix ammo types) Drum Mag" }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Heavy Armorjack", "sp": 13 },
+        { "location": "Body", "name": "Heavy Armorjack", "sp": 13 }
+      ],
+      "skills": {
+        "Athletics": 14, "Autofire": 12, "Brawling": 14, "Concentration": 11, "Conversation": 6, "Deduction": 13,
+        "Drive Land Vehicle": 10, "Education": 9, "Evasion": 14, "First Aid": 6, "Heavy Weapons": 16, "Human Perception": 8,
+        "Interrogation": 13, "Language (Spanish)": 9, "Language (Streetslang)": 7, "Local Expert (South Night City)": 11, "Paramedic": 10, "Perception": 13,
+        "Persuasion": 8, "Stealth": 9, "Tactics": 10
+      },
+      "gear": ["Armor-Piercing Grenade x3", "Teargas Grenade x3", "Agent", "Anti-Smog Breathing Mask", "Flashlight", "Medtech Bag", "Radio Communicator", "Road Flare x10"],
+      "cyberware": ["Contraceptive Implant", "Cybereye x2 w/ Low Light/Infrared/UV x2", "Grafted Muscle and Bone Lace", "Implanted Linear Frame Sigma", "Nasal Filters", "Toxin Binders"],
+      "specials": [
+        {
+          "name": "Backup",
+          "text": {
+            "pt": "Role Ability Backup no Rank 4. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Backup at Rank 4. Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Lança-granadas",
+          "text": {
+            "pt": "Grenade Launcher (6d6, ROF 1) com tambor tech-upgraded que mistura tipos de munição; Armor-Piercing e Teargas Grenades x3, Linear Frame Sigma, Muscle and Bone Lace e filtros nasais.",
+            "en": "A Grenade Launcher (6d6, ROF 1) with a tech-upgraded drum that can mix ammo types; three Armor-Piercing and three Teargas grenades, a Linear Frame Sigma, Muscle and Bone Lace and nasal filters."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "forty-mike-mike",
+    "name": "Forty Mike-Mike",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Lawman",
+    "roleRank": 4,
+    "rep": 4,
+    "affiliation": "Zoners",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 134 }, { "book": "Danger Gal Dossier", "page": 131 }],
+    "summary": {
+      "pt": "Cofundadora e segunda no comando dos bombeiros voluntários de South Night City, ex-policial militar na 4ª Guerra Corporativa. Ensina armas, combate, resgate e até táticas TAC a bombeiros e Zoners e já enfrentou um ciberpsicopata por mais de um minuto enquanto resgatavam moradores. O maior talento dela é ensinar.",
+      "en": "Co-founder and second-in-command of South Night City's volunteer fire department, a former military police officer from the 4th Corporate War. She teaches firearms, combat, rescue and even TAC tactics to firefighters and Zoners, and once held off a cyberpsycho for over a minute while residents were rescued. Her real talent is teaching."
+    },
+    "sheetNote": {
+      "pt": "Diferente de Forty, a Rockerboy da p.48.",
+      "en": "Not the same person as Forty, the Rockerboy on p.48."
+    },
+    "sheet": {
+      "hp": 40,
+      "seriouslyWounded": 20,
+      "deathSave": 8,
+      "stats": { "INT": 5, "REF": 8, "DEX": 6, "TECH": 5, "COOL": 5, "WILL": 4, "MOVE": 5, "BODY": 8, "EMP": 4 },
+      "armoredStats": { "REF": 6, "DEX": 4, "MOVE": 3 },
+      "weapons": [
+        { "name": "Brawling Attack", "skill": "Brawling", "attackBase": 8, "damage": "3d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Heavy Armorjack", "sp": 13 },
+        { "location": "Body", "name": "Heavy Armorjack", "sp": 13 }
+      ],
+      "skills": {
+        "Athletics": 13, "Brawling": 8, "Concentration": 6, "Conversation": 8, "Drive Land Vehicle": 12, "Education": 10,
+        "Endurance": 10, "Evasion": 13, "First Aid": 12, "Heavy Weapons": 14, "Human Perception": 9, "Land Vehicle Tech": 10,
+        "Language (English)": 9, "Language (Streetslang)": 7, "Local Expert (South Night City)": 10, "Perception": 10, "Persuasion": 12, "Stealth": 8
+      },
+      "gear": ["Armor-Piercing Grenade x2", "Smoke Grenade x6", "Agent", "Anti-Smog Breathing Mask", "Carryall", "Flashlight", "Medtech Bag", "Radio Communicator", "Road Flare x10"],
+      "cyberware": ["Contraceptive Implant", "Cybereye x2 w/ Low Light/Infrared/UV x2", "Grafted Muscle and Bone Lace", "Nasal Filters"],
+      "specials": [
+        {
+          "name": "Backup",
+          "text": {
+            "pt": "Role Ability Backup no Rank 4. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Backup at Rank 4. Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "TearJerker",
+          "text": {
+            "pt": "Pursuit Security Incorporated TearJerker, Grenade Launcher Exótico de Qualidade Excelente com 3 tiros que só usa Smoke ou Teargas; aqui com tambor tech-upgraded (+1 Slot), sem dado de dano impresso. Leva Smoke Grenades x6 e Armor-Piercing Grenades x2.",
+            "en": "The Pursuit Security Incorporated TearJerker, an Excellent Quality Exotic Grenade Launcher with 3 shots that only takes Smoke or Teargas; here with a tech-upgraded (+1 Slot) drum, and no damage dice printed. She carries six Smoke Grenades and two Armor-Piercing Grenades."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "mister-studd",
+    "name": "Mister Studd",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Rockerboy",
+    "roleRank": 4,
+    "rep": 5,
+    "affiliation": "Zoners",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 135 }, { "book": "Danger Gal Dossier", "page": 131 }],
+    "summary": {
+      "pt": "Chefe de uma trupe de pornô artístico e astro de Braindances, que mora num andar inteiro de um conjunto habitacional de South Night City com seu harém. Também atira bem de escopeta e defendeu o prédio sozinho contra cinco gangueiros enviados pela Zhirafa, gravando tudo do seu ponto de vista e distribuindo os chips de graça.",
+      "en": "Head of an artistic porn troupe and Braindance star, who lives on a whole floor of a South Night City housing complex with his harem. He is also a fine shotgun shot and defended the building alone against five gangers sent by Zhirafa, recording it all from his point of view and giving the chips away free."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 45,
+      "seriouslyWounded": 23,
+      "deathSave": 8,
+      "stats": { "INT": 4, "REF": 7, "DEX": 7, "TECH": 3, "COOL": 5, "WILL": 5, "MOVE": 5, "BODY": 8, "EMP": 4 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Shotgun", "skill": "Shoulder Arms", "attackBase": 13, "damage": "5d6", "rof": 1, "magazine": null, "class": "Shotgun", "melee": false, "notes": "Excellent Quality" },
+        { "name": "Brawling Attack", "skill": "Brawling", "attackBase": 12, "damage": "3d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Light Armorjack", "sp": 11 },
+        { "location": "Body", "name": "Light Armorjack", "sp": 11 }
+      ],
+      "skills": {
+        "Acting": 8, "Athletics": 13, "Brawling": 12, "Contortionist": 10, "Conversation": 8, "Education": 8,
+        "Evasion": 13, "First Aid": 7, "Human Perception": 10, "Language (English)": 8, "Language (Streetslang)": 6, "Local Expert (The Glen)": 6,
+        "Local Expert (South Night City)": 6, "Perception": 8, "Personal Grooming": 10, "Persuasion": 10, "Photography/Film": 10, "Resist Torture/Drugs": 10,
+        "Shoulder Arms": 13, "Stealth": 9, "Wardrobe & Style": 10
+      },
+      "gear": ["Armor-Piercing Shotgun Slug Ammo x8", "Agent", "Anti-Smog Breathing Mask", "Computer", "Boost x2", "Blue Glass x2", "Braindance Viewer", "Smash x5", "Synthcoke x2"],
+      "cyberware": ["Biomonitor", "Chemskin", "Contraceptive Implant", "Enhanced Antibodies", "TUp Mr. Studd Sexual Implant", "Neural Link w/ Braindance Recorder"],
+      "specials": [
+        {
+          "name": "Charismatic Impact",
+          "text": {
+            "pt": "Role Ability Charismatic Impact no Rank 4. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Charismatic Impact at Rank 4. Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Estrela de BD",
+          "text": {
+            "pt": "Shotgun de Qualidade Excelente com munição Armor-Piercing Slug, Neural Link com Braindance Recorder, Mr. Studd Sexual Implant tech-upgraded e Chemskin; carrega Smash, Blue Glass, Boost e Synthcoke.",
+            "en": "An Excellent Quality Shotgun with Armor-Piercing Slug ammo, a Neural Link with a Braindance Recorder, a tech-upgraded Mr. Studd Sexual Implant and Chemskin; he carries Smash, Blue Glass, Boost and Synthcoke."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "freefall",
+    "name": "FreeFall",
+    "aliases": ["Nigel Benson"],
+    "kind": "sheet",
+    "role": "Netrunner",
+    "roleRank": 4,
+    "rep": 3,
+    "affiliation": "Zoners",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 136 }, { "book": "Danger Gal Dossier", "page": 131 }],
+    "summary": {
+      "pt": "Líder dos Zoners e redator de boa parte do material do grupo, nascido na Combat Zone e irmão de Drop, da Maelstrom. Aprendeu ativismo e netrunning como operador de computador das cozinhas comunitárias da Night Corp. Prefere soluções não violentas, mas atira bem e usa um balaclava com filtro e granadas de fumaça para cobrir a fuga dos colegas.",
+      "en": "A Zoners leader who writes much of the movement's messaging, born in the Combat Zone and sibling of Drop of Maelstrom. They picked up activism and Netrunning as a computer operator at Night Corp's soup stations. They favor nonviolent solutions but shoot well, and wear a filter balaclava and throw smoke grenades to cover fellow Zoners' escape."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 35,
+      "seriouslyWounded": 18,
+      "deathSave": 5,
+      "stats": { "INT": 6, "REF": 4, "DEX": 6, "TECH": 6, "COOL": 4, "WILL": 4, "MOVE": 5, "BODY": 5, "EMP": 4 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Very Heavy Pistol", "skill": "Handgun", "attackBase": 13, "damage": "4d6", "rof": 1, "magazine": null, "class": "VeryHeavyPistol", "melee": false, "notes": null },
+        { "name": "Brawling Attack", "skill": "Brawling", "attackBase": 8, "damage": "2d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Light Armorjack", "sp": 11 },
+        { "location": "Body", "name": "Light Armorjack", "sp": 11 }
+      ],
+      "skills": {
+        "Athletics": 13, "Brawling": 8, "Composition": 10, "Conceal/Reveal Object": 8, "Concentration": 9, "Conversation": 6,
+        "Cybertech": 10, "Education": 11, "Electronics/Security Tech": 10, "Evasion": 10, "First Aid": 8, "Handgun": 13,
+        "Human Perception": 9, "Language (English)": 10, "Language (Streetslang)": 8, "Library Search": 11, "Local Expert (South Night City)": 8, "Perception": 12,
+        "Persuasion": 10, "Stealth": 10
+      },
+      "gear": ["Rubber VH Pistol Ammo x8", "Smoke Grenade", "Teargas Grenade", "Agent", "Anti-Smog Breathing Mask", "Carryall", "Virtuality Goggles", "PQ Cyberdeck w/ Armor, Eraser, Sword, Worm & Hardened Circuitry"],
+      "cyberware": ["Contraceptive Implant", "Neural Link w/ Interface Plugs"],
+      "specials": [
+        {
+          "name": "Interface",
+          "text": {
+            "pt": "Role Ability Interface no Rank 4. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Interface at Rank 4. Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Deck e granadas",
+          "text": {
+            "pt": "Cyberdeck de Qualidade Ruim com Armor, Eraser, Sword, Worm e Hardened Circuitry; Virtuality Goggles, Smoke e Teargas Grenades, munição de borracha na Very Heavy Pistol e máscara anti-smog.",
+            "en": "A Poor Quality Cyberdeck with Armor, Eraser, Sword, Worm and Hardened Circuitry; Virtuality Goggles, Smoke and Teargas grenades, rubber ammo in the Very Heavy Pistol and an anti-smog mask."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "nemo",
+    "name": "Nemo",
+    "aliases": ["Mason Price"],
+    "kind": "sheet",
+    "role": "Solo",
+    "roleRank": 3,
+    "rep": 1,
+    "affiliation": "Zoners",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 137 }, { "book": "Danger Gal Dossier", "page": 131 }],
+    "summary": {
+      "pt": "Soldado que desertou da 4ª Guerra Corporativa e foi dado como morto, vivendo em acampamentos de barracas. Em South Night City decidiu ficar e hoje faz pequenos serviços de segurança, escolta e \"entregas\" para Fixers. Parece estar comprando imóveis na região e procurando candidatos políticos para apoiar.",
+      "en": "A soldier who deserted the 4th Corporate War and was believed killed in action, living in tent cities. In South Night City he chose to stay, and now takes small security, escort and \"delivery\" jobs for Fixers. He appears to be buying property in the area and looking for political candidates to back."
+    },
+    "sheetNote": {
+      "pt": "A ficha lista duas Role Abilities: Combat Awareness 3 (Role principal) e Operator 1.",
+      "en": "The sheet lists two Role Abilities: Combat Awareness 3 (main Role) and Operator 1."
+    },
+    "sheet": {
+      "hp": 35,
+      "seriouslyWounded": 18,
+      "deathSave": 6,
+      "stats": { "INT": 4, "REF": 6, "DEX": 6, "TECH": 4, "COOL": 4, "WILL": 4, "MOVE": 5, "BODY": 6, "EMP": 3 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Heavy SMG", "skill": "Handgun", "attackBase": 13, "damage": "3d6", "rof": 1, "magazine": null, "class": "HeavySmg", "melee": false, "notes": "Poor Quality" },
+        { "name": "Light Melee Weapon", "skill": "Melee Weapon", "attackBase": 13, "damage": "1d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Kevlar®", "sp": 7 },
+        { "location": "Body", "name": "Kevlar®", "sp": 7 }
+      ],
+      "skills": {
+        "Accounting": 11, "Athletics": 11, "Autofire": 14, "Brawling": 8, "Business": 11, "Concentration": 6,
+        "Conversation": 5, "Education": 8, "Evasion": 13, "First Aid": 6, "Handgun": 13, "Human Perception": 7,
+        "Language (English)": 10, "Language (Streetslang)": 8, "Local Expert (South Night City)": 8, "Melee Weapon": 13, "Perception": 8, "Persuasion": 6,
+        "Stealth": 11, "Tactics": 7, "Trading": 10
+      },
+      "gear": ["Basic H Pistol Ammo x40", "Agent", "Carryall", "Inflatable Bed & Sleep-bag", "Tent & Camping Equipment"],
+      "cyberware": ["Medical Grade Cyberarm x2", "Neural Link w/ Chipware Socket & TUp (+1 Skill LVL) Skill Chip (Language [Spanish])"],
+      "specials": [
+        {
+          "name": "Combat Awareness",
+          "text": {
+            "pt": "Role Ability Combat Awareness no Rank 3. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Combat Awareness at Rank 3. Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Operator",
+          "text": {
+            "pt": "Role Ability Operator no Rank 1. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Operator at Rank 1. Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Equipamento",
+          "text": {
+            "pt": "Heavy SMG de Qualidade Ruim com munição Heavy Pistol x40, cyberarms médicos x2 e Skill Chip tech-upgraded de Language (Spanish); equipamento de acampamento.",
+            "en": "A Poor Quality Heavy SMG with 40 rounds of Heavy Pistol ammo, two medical-grade cyberarms and a tech-upgraded Language (Spanish) Skill Chip; camping gear."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "speed-demon",
+    "name": "Speed Demon",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Nomad",
+    "roleRank": 4,
+    "rep": 3,
+    "affiliation": "Jodes",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 138 }, { "book": "Danger Gal Dossier", "page": 131 }, { "book": "Danger Gal Dossier", "page": 139 }],
+    "summary": {
+      "pt": "Motorista excepcional dos Jodes enviada como representante aos Zoners, cujas corridas sustentam o Pack. Irrompeu com um Chupacabra pelo bloqueio da NCPD e permitiu que quase todos os Zoners fugissem, gesto que pode causar problemas aos Jodes se for descoberto. Prefere duas rodas e armas automáticas.",
+      "en": "An exceptional driver of the Jodes sent as their envoy to the Zoners, whose street-race winnings fund her Pack. She crashed a Chupacabra through the NCPD blockade and let most of the Zoners escape, a move that could cause the Jodes trouble if discovered. She prefers two wheels and automatic weapons."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 40,
+      "seriouslyWounded": 20,
+      "deathSave": 6,
+      "stats": { "INT": 4, "REF": 8, "DEX": 4, "TECH": 4, "COOL": 5, "WILL": 5, "MOVE": 4, "BODY": 6, "EMP": 4 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Heavy SMG", "skill": "Handgun", "attackBase": 13, "damage": "3d6", "rof": 1, "magazine": null, "class": "HeavySmg", "melee": false, "notes": null },
+        { "name": "Medium Melee Weapon", "skill": "Melee Weapon", "attackBase": 8, "damage": "2d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Light Armorjack", "sp": 11 },
+        { "location": "Body", "name": "Light Armorjack", "sp": 11 }
+      ],
+      "skills": {
+        "Athletics": 10, "Autofire": 13, "Brawling": 6, "Concentration": 7, "Conversation": 10, "Drive Land Vehicle": 12,
+        "Education": 6, "Evasion": 10, "First Aid": 6, "Handgun": 13, "Human Perception": 10, "Language (English)": 8,
+        "Language (Streetslang)": 6, "Local Expert (Old Combat Zone)": 8, "Melee Weapon": 8, "Perception": 10, "Persuasion": 10, "Streetwise": 8,
+        "Trading": 10, "Wilderness Survival": 10
+      },
+      "gear": ["Basic H Pistol Ammo x80", "Agent", "Bug Detector", "Radio Communicator", "Techtool", "Roadbike w/ NOS x2", "Diego Motors Chupacabra (see page 139)"],
+      "cyberware": ["Contraceptive Implant", "Neural Link w/ Interface Plugs"],
+      "specials": [
+        {
+          "name": "Moto",
+          "text": {
+            "pt": "Role Ability Moto no Rank 4. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Moto at Rank 4. Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Chupacabra e Harvey",
+          "text": {
+            "pt": "Dirige um Diego Motors Chupacabra (Groundcar Compacto com Combat Plow, NOS, Heavy Chassis e Seating Upgrade, p.139), sem as marcas dos Jodes; a moto pessoal é uma Harvey 100 com dois NOS.",
+            "en": "She drives a Diego Motors Chupacabra (Compact Groundcar with a Combat Plow, NOS, Heavy Chassis and Seating Upgrade, p.139) stripped of Jodes markings; her personal bike is a Harvey 100 with two NOS."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "alpha",
+    "name": "Alpha",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Solo",
+    "roleRank": 2,
+    "rep": 1,
+    "affiliation": "Zoners",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 140 }, { "book": "Danger Gal Dossier", "page": 131 }],
+    "summary": {
+      "pt": "Catador de South Night City que vê a região como oportunidade: observa as lutas, aprende com os vencedores e saqueia os mortos, vendendo cromo a Fixers e ripperdocs. Atirador com gosto por matar e pouca culpa, anda com os Zoners provavelmente para limpar os corpos depois da polícia.",
+      "en": "A South Night City scavver who sees the area as opportunity: he watches the fights, learns from the winners and picks over the dead, selling chrome to Fixers and ripperdocs. A gunfighter with a taste for killing and few qualms, he probably hangs with the Zoners to loot protesters' bodies after the police roll in."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 30,
+      "seriouslyWounded": 15,
+      "deathSave": 3,
+      "stats": { "INT": 6, "REF": 6, "DEX": 3, "TECH": 5, "COOL": 5, "WILL": 4, "MOVE": 6, "BODY": 3, "EMP": 1 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Heavy Pistol", "skill": "Handgun", "attackBase": 10, "damage": "3d6", "rof": 2, "magazine": null, "class": "HeavyPistol", "melee": false, "notes": "Poor Quality" },
+        { "name": "Brawling Attack", "skill": "Brawling", "attackBase": 5, "damage": "1d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Kevlar®", "sp": 7 },
+        { "location": "Body", "name": "Scavenged Armor", "sp": 11 }
+      ],
+      "skills": {
+        "Athletics": 5, "Basic Tech": 10, "Brawling": 5, "Bribery": 7, "Concentration": 6, "Conversation": 3,
+        "Education": 8, "Evasion": 5, "First Aid": 7, "Handgun": 10, "Human Perception": 5, "Language (Italian)": 10,
+        "Language (Streetslang)": 8, "Local Expert (South Night City)": 10, "Paramedic": 7, "Perception": 9, "Persuasion": 7, "Stealth": 5,
+        "Streetwise": 10, "Trading": 10
+      },
+      "gear": ["Basic H Pistol Ammo x16", "Disposable Cell Phone x2", "Random Piece of Still Bloody Cyberware", "Techtool"],
+      "cyberware": ["Contraceptive Implant", "Enhanced Antibodies"],
+      "specials": [
+        {
+          "name": "Combat Awareness",
+          "text": {
+            "pt": "Role Ability Combat Awareness no Rank 2. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Combat Awareness at Rank 2. Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Saque",
+          "text": {
+            "pt": "Heavy Pistol de Qualidade Ruim, Kevlar® na cabeça e Scavenged Armor (SP 11) no corpo, uma peça de cyberware ainda ensanguentada e dois celulares descartáveis.",
+            "en": "A Poor Quality Heavy Pistol, Kevlar® on the head and Scavenged Armor (SP 11) on the body, a still-bloody piece of cyberware and two disposable cell phones."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "blaze",
+    "name": "Blaze",
+    "aliases": ["Johnny Hammond"],
+    "kind": "sheet",
+    "role": "Exec",
+    "roleRank": 2,
+    "rep": 1,
+    "affiliation": "Zoners",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 141 }, { "book": "Danger Gal Dossier", "page": 131 }],
+    "summary": {
+      "pt": "Ex-pesquisador canadense da Militech rebaixado depois de um incidente, que virou incendiário e espião dos Zoners dentro do mundo corporativo. Um colega mora com ele como suposto namorado para vigiá-lo. Passa informação útil aos poucos, mas é descuidado: foi identificado pelas digitais em um copo.",
+      "en": "A Canadian-born Militech R&D employee demoted after an incident, now an arsonist and undercover spy for the Zoners. A fellow Zoner lives with him posing as a boyfriend to check his sincerity. He passes on a trickle of useful intel but is careless: he was identified by fingerprints on a cup."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 25,
+      "seriouslyWounded": 13,
+      "deathSave": 3,
+      "stats": { "INT": 5, "REF": 3, "DEX": 5, "TECH": 5, "COOL": 3, "WILL": 3, "MOVE": 4, "BODY": 3, "EMP": 2 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Light Melee Weapon", "skill": "Melee Weapon", "attackBase": 5, "damage": "1d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": "No Skill Base printed for this weapon; STAT only." },
+        { "name": "Brawling Attack", "skill": "Brawling", "attackBase": 7, "damage": "1d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Kevlar®", "sp": 7 },
+        { "location": "Body", "name": "Kevlar®", "sp": 7 }
+      ],
+      "skills": {
+        "Athletics": 11, "Brawling": 7, "Business": 7, "Concentration": 5, "Conversation": 4, "Demolitions": 10,
+        "Evasion": 9, "First Aid": 7, "Human Perception": 4, "Language (English)": 9, "Language (French)": 7, "Language (Streetslang)": 9,
+        "Library Search": 7, "Local Expert (South Night City)": 7, "Perception": 9, "Persuasion": 7, "Science (Chemistry)": 9, "Stealth": 11
+      },
+      "gear": ["Armor-Piercing Grenade x2", "Molotov Cocktail", "Smoke Grenade", "Agent", "Carryall", "Disposable Cell Phone", "Duct Tape", "Techtool"],
+      "cyberware": ["Subdermal Pocket"],
+      "specials": [
+        {
+          "name": "Teamwork",
+          "text": {
+            "pt": "Role Ability Teamwork no Rank 2. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Teamwork at Rank 2. Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Incendiário",
+          "text": {
+            "pt": "Molotov Cocktail (5d6 incendiário), Armor-Piercing Grenades x2 e Smoke Grenade; Subdermal Pocket.",
+            "en": "A Molotov Cocktail (5d6 incendiary), two Armor-Piercing Grenades and a Smoke Grenade; a Subdermal Pocket."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "wrecker",
+    "name": "Wrecker",
+    "aliases": ["Scarlet Harris"],
+    "kind": "sheet",
+    "role": "Media",
+    "roleRank": 2,
+    "rep": 2,
+    "affiliation": "Zoners",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 142 }, { "book": "Danger Gal Dossier", "page": 131 }],
+    "summary": {
+      "pt": "Estudante de jornalismo e ciência política da Night City University que escapa todas as noites para apoiar os Zoners. Quando foi presa, advogados de elite a soltaram em duas horas, e as imagens do Syndrome parecem vir do cybereye dela. Num tumulto usa o pé de cabra com eficiência.",
+      "en": "A Night City University journalism and political science student who sneaks out nightly to support the Zoners. When she was arrested, elite lawyers freed her within two hours, and the Syndrome videos seem to be filmed through her cybereye. In a riot she swings her crowbar effectively."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 30,
+      "seriouslyWounded": 15,
+      "deathSave": 4,
+      "stats": { "INT": 4, "REF": 3, "DEX": 4, "TECH": 3, "COOL": 4, "WILL": 4, "MOVE": 3, "BODY": 4, "EMP": 4 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Heavy Melee Weapon", "skill": "Melee Weapon", "attackBase": 12, "damage": "3d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": "Poor Quality" },
+        { "name": "Brawling Attack", "skill": "Brawling", "attackBase": 6, "damage": "1d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Kevlar®", "sp": 7 },
+        { "location": "Body", "name": "Kevlar®", "sp": 7 }
+      ],
+      "skills": {
+        "Athletics": 6, "Brawling": 6, "Composition": 8, "Concentration": 6, "Conversation": 7, "Education": 8,
+        "Evasion": 10, "First Aid": 5, "Human Perception": 8, "Language (English)": 8, "Language (Streetslang)": 6, "Lip Reading": 6,
+        "Local Expert (South Night City)": 6, "Local Expert (University District)": 6, "Melee Weapon": 12, "Perception": 8, "Persuasion": 6, "Photography/Film": 10,
+        "Stealth": 6
+      },
+      "gear": ["Smoke Grenade", "Agent", "Anti-Smog Breathing Mask", "Computer", "Memory Chips x5"],
+      "cyberware": ["Contraceptive Implant", "Cybereye w/ MicroVideo", "EMP Threading"],
+      "specials": [
+        {
+          "name": "Credibility",
+          "text": {
+            "pt": "Role Ability Credibility no Rank 2. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Credibility at Rank 2. Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Pé de cabra",
+          "text": {
+            "pt": "Arma corpo a corpo pesada de Qualidade Ruim (o pé de cabra, 3d6); Cybereye com MicroVideo, EMP Threading, Computer e Memory Chips x5.",
+            "en": "A Poor Quality heavy melee weapon (the crowbar, 3d6); a Cybereye with MicroVideo, EMP Threading, a Computer and five Memory Chips."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "darius",
+    "name": "Darius",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Netrunner",
+    "roleRank": 4,
+    "rep": 1,
+    "affiliation": "Arasaka",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 165 }],
+    "summary": {
+      "pt": "Netrunner anglo-persa-japonês infiltrado em Night City pela Arasaka, onde busca informações sobre o desaparecimento dos pais, que sumiram na 4ª Guerra Corporativa. Crente fervoroso na corporação como família substituta, culpa Michiko Sanderson, traidora, pelo destino deles.",
+      "en": "A British-Persian-Japanese Netrunner planted in Night City by Arasaka, hoping to learn what happened to his parents, who vanished during the 4th Corporate War. A true believer who treats the Corp as his surrogate family, he blames the traitor Michiko Sanderson for their fate."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 30,
+      "seriouslyWounded": 15,
+      "deathSave": 4,
+      "stats": { "INT": 7, "REF": 6, "DEX": 6, "TECH": 7, "COOL": 5, "WILL": 4, "MOVE": 6, "BODY": 4, "EMP": 3 },
+      "armoredStats": { "REF": 5, "DEX": 5, "MOVE": 5 },
+      "weapons": [
+        { "name": "Very Heavy Pistol", "skill": "Handgun", "attackBase": 14, "damage": "4d6", "rof": 1, "magazine": null, "class": "VeryHeavyPistol", "melee": false, "notes": null },
+        { "name": "Brawling Attack", "skill": "Brawling", "attackBase": 8, "damage": "1d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
+      ],
+      "armor": [
+        { "location": "Head", "name": "TUp Medium Armorjack", "sp": 12 },
+        { "location": "Body", "name": "TUp Medium Armorjack", "sp": 12 }
+      ],
+      "skills": {
+        "Athletics": 8, "Brawling": 8, "Bribery": 11, "Concentration": 6, "Education": 12, "Electronics/Security Tech": 12,
+        "Evasion": 12, "First Aid": 9, "Handgun": 14, "Human Perception": 10, "Language (English)": 11, "Language (Japanese)": 11,
+        "Language (Streetslang)": 9, "Library Search": 13, "Lip Reading": 11, "Local Expert (Watson Development)": 9, "Perception": 9, "Persuasion": 10,
+        "Resist Torture/Drugs": 10, "Stealth": 8, "Streetwise": 9
+      },
+      "gear": ["Basic VH Pistol Ammo x16", "Disposable Cell Phone", "Photograph", "TUp (+1 Slot) Smart Glasses w/ Low Light/Infrared/UV & Virtuality", "Cyberdeck w/ Armor, Eraser, Sword, Vrizzbolt & Worm"],
+      "cyberware": ["Contraceptive Implant", "Cortex Bomb", "EMP Threading", "Neural Link w/ Interface Plugs x2 & Reflex Co-Processor"],
+      "specials": [
+        {
+          "name": "Interface",
+          "text": {
+            "pt": "Role Ability Interface no Rank 4. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Interface at Rank 4. Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Equipamento",
+          "text": {
+            "pt": "Cyberdeck com Armor, Eraser, Sword, Vrizzbolt e Worm, Smart Glasses com Virtuality (tech-upgraded), Cortex Bomb e Neural Link com Interface Plugs x2 e Reflex Co-Processor.",
+            "en": "A Cyberdeck with Armor, Eraser, Sword, Vrizzbolt and Worm, tech-upgraded Smart Glasses with Virtuality, a Cortex Bomb and a Neural Link with two Interface Plugs and a Reflex Co-Processor."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "nymph",
+    "name": "Nymph",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Solo",
+    "roleRank": 4,
+    "rep": 1,
+    "affiliation": "Arasaka",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 166 }, { "book": "Danger Gal Dossier", "page": 165 }],
+    "summary": {
+      "pt": "Ex-membro de uma unidade de proteção de Hong Kong que perdeu a família num ataque bioterrorista enquanto estava fora. Perdeu o senso de dever, virou mercenária e agora trabalha para a Arasaka como parceira de Darius. Não crê na Arasaka como ele, apenas cumpre o trabalho sujo, e essa indiferença pode ser sua fraqueza.",
+      "en": "A former member of a Hong Kong protection unit who lost her family to a bioterror attack while she was away. She lost her sense of duty, became a mercenary and now works for Arasaka as Darius's partner. She does not share his faith in the Corp and simply does the dirty work, and that indifference may be her weakness."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 40,
+      "seriouslyWounded": 20,
+      "deathSave": 8,
+      "stats": { "INT": 5, "REF": 8, "DEX": 8, "TECH": 4, "COOL": 4, "WILL": 4, "MOVE": 8, "BODY": 8, "EMP": 3 },
+      "armoredStats": { "REF": 6, "DEX": 6, "MOVE": 6 },
+      "weapons": [
+        { "name": "Assault Rifle", "skill": "Shoulder Arms", "attackBase": 16, "damage": "5d6", "rof": 1, "magazine": null, "class": "AssaultRifle", "melee": false, "notes": "Excellent Quality" },
+        { "name": "Very Heavy Pistol", "skill": "Handgun", "attackBase": 14, "damage": "4d6", "rof": 1, "magazine": null, "class": "VeryHeavyPistol", "melee": false, "notes": null }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Heavy Armorjack", "sp": 13 },
+        { "location": "Body", "name": "Heavy Armorjack", "sp": 13 }
+      ],
+      "skills": {
+        "Athletics": 16, "Autofire": 16, "Brawling": 16, "Concentration": 10, "Conversation": 5, "Education": 7,
+        "Endurance": 8, "Evasion": 16, "First Aid": 12, "Handgun": 14, "Human Perception": 5, "Language (Cantonese)": 9,
+        "Language (English)": 7, "Language (Streetslang)": 7, "Local Expert (Watson Development)": 10, "Perception": 12, "Persuasion": 6, "Resist Torture/Drugs": 12,
+        "Shoulder Arms": 16, "Stealth": 12, "Tactics": 13
+      },
+      "gear": ["Armor-Piercing Rifle Ammo x50", "Basic VH Pistol Ammo x8", "Anti-Smog Breathing Mask (in helmet)", "Disposable Cell Phone", "Smart Glasses w/ Low Light/Infrared/UV (in helmet)"],
+      "cyberware": ["Neural Link w/ Chipware Socket, Kerenzikov, Pain Editor & Reflex Co-Processor"],
+      "specials": [
+        {
+          "name": "Combat Awareness",
+          "text": {
+            "pt": "Role Ability Combat Awareness no Rank 4. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Combat Awareness at Rank 4. Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Armamento",
+          "text": {
+            "pt": "Assault Rifle de Qualidade Excelente com munição Armor-Piercing x50 e Very Heavy Pistol; Neural Link com Kerenzikov, Pain Editor, Reflex Co-Processor e Chipware Socket.",
+            "en": "An Excellent Quality Assault Rifle with 50 rounds of Armor-Piercing ammo and a Very Heavy Pistol; a Neural Link with a Kerenzikov, Pain Editor, Reflex Co-Processor and Chipware Socket."
+          }
+        }
+      ]
+    }
   }
 ]
