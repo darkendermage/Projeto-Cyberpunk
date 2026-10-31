@@ -1689,19 +1689,20 @@
     "rep": 7,
     "affiliation": null,
     "sources": [
-      {"book": "Interface RED Volume 2", "page": 28},
-      {"book": "Interface RED Volume 2", "page": 24},
-      {"book": "Core Book", "page": 306},
-      {"book": "Black Chrome", "page": 153},
-      {"book": "Black Chrome", "page": 152}
+      { "book": "Interface RED Volume 2", "page": 28 },
+      { "book": "Interface RED Volume 2", "page": 22 },
+      { "book": "Interface RED Volume 2", "page": 23 },
+      { "book": "Core Book", "page": 306 },
+      { "book": "Black Chrome", "page": 153 },
+      { "book": "Black Chrome", "page": 152 }
     ],
     "summary": {
       "pt": "Fixer da borda da Combat Zone que cobra proteção com seus Community Solos, a meio caminho entre extorsão e serviço público. Realmente cuida da vizinhança e organiza até café da manhã de panqueca, mas não faz caridade.",
       "en": "Fixer of the Combat Zone edge who sells protection through his Community Solos, halfway between racket and public service. He truly cares about the neighborhood and even organizes pancake breakfasts, but he is not a charity."
     },
     "sheetNote": {
-      "pt": "Black Chrome imprime outra versão: EMP 4, Kendachi Mono-Three e um Westwood Tech Upgraded de qualidade excelente, Subdermal Armor na cabeça (SP 11) e Nu-Tek Corp Isle Tech Upgraded no corpo (SP 12). Esta ficha segue a de Interface RED Volume 2, mais recente.",
-      "en": "Black Chrome prints another version: EMP 4, a Kendachi Mono-Three and an Excellent Quality Tech Upgraded Westwood, Subdermal Armor on the head (SP 11) and a Tech Upgraded Nu-Tek Corp Isle on the body (SP 12). This sheet follows Interface RED Volume 2, the more recent book."
+      "pt": "Black Chrome imprime outra versão: EMP 4, Kendachi Mono-Three e um Westwood Tech Upgraded de qualidade excelente, Subdermal Armor na cabeça (SP 11) e Nu-Tek Corp Isle Tech Upgraded no corpo (SP 12). Esta ficha segue a de Interface RED Volume 2, mais recente. Black Chrome imprime Gamble 17 e Handgun 16.",
+      "en": "Black Chrome prints another version: EMP 4, a Kendachi Mono-Three and an Excellent Quality Tech Upgraded Westwood, Subdermal Armor on the head (SP 11) and a Tech Upgraded Nu-Tek Corp Isle on the body (SP 12). This sheet follows Interface RED Volume 2, the more recent book. Black Chrome prints Gamble 17 and Handgun 16."
     },
     "sheet": {
       "hp": 40,
@@ -3669,7 +3670,7 @@
       "stats": { "INT": 5, "REF": 6, "DEX": 5, "TECH": 6, "COOL": 6, "WILL": 7, "MOVE": 6, "BODY": 8, "EMP": 5 },
       "armoredStats": {},
       "weapons": [
-        { "name": "Constitutional Arms Multiammo Pistol", "skill": "Handgun", "attackBase": 14, "damage": "4d6", "rof": 1, "magazine": null, "class": "VeryHeavyPistol", "melee": false, "notes": null },
+        { "name": "Constitutional Arms Multiammo Pistol", "skill": "Handgun", "attackBase": 14, "damage": "4d6", "rof": 1, "magazine": null, "class": "VeryHeavyPistol", "melee": false, "notes": "The book lists it as an Exotic Very Heavy Pistol with 5 shots that can be loaded with a mix of up to five kinds of Very Heavy Pistol ammunition." },
         { "name": "Martial Arts Attack", "skill": "Martial Arts (Aikido)", "attackBase": 15, "damage": "3d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
       ],
       "armor": [
@@ -4430,7 +4431,7 @@
     "roleRank": 2,
     "rep": 1,
     "affiliation": "Generation Red",
-    "sources": [{ "book": "Danger Gal Dossier", "page": 58 }, { "book": "Danger Gal Dossier", "page": 57 }],
+    "sources": [{ "book": "Danger Gal Dossier", "page": 58 }],
     "summary": {
       "pt": "Garota de rua desde pequena, que perdeu o olho e as pernas lutando contra catadores. A Danger Gal pagou pelas cyberlegs com pés de skate para ganhar confiança, e Tigress pede que ela convença a Generation Red a se aliar. Tetra a idolatra, o que Blades não sabe como lidar.",
       "en": "A street kid since early childhood who lost an eye and her legs fighting off scavengers. Danger Gal paid for her cyberlegs with skate feet as a goodwill gesture, and Tigress wants her to persuade Generation Red to work with the company. Tetra idolizes her, which Blades does not know how to handle."
@@ -4553,7 +4554,7 @@
       "stats": { "INT": 3, "REF": 6, "DEX": 5, "TECH": 3, "COOL": 4, "WILL": 4, "MOVE": 4, "BODY": 5, "EMP": 5 },
       "armoredStats": {},
       "weapons": [
-        { "name": "Midnight Arms SDF-45", "skill": "Heavy Weapons", "attackBase": 10, "damage": "8d6", "rof": 1, "magazine": null, "class": "RocketLauncher", "melee": false, "notes": null },
+        { "name": "Midnight Arms SDF-45", "skill": "Heavy Weapons", "attackBase": 10, "damage": "8d6", "rof": 1, "magazine": null, "class": "RocketLauncher", "melee": false, "notes": "The book lists it as an Exotic Rocket Launcher that fires two Armor Piercing Rockets at once; the GM decides where they land." },
         { "name": "Martial Arts Attack", "skill": "Martial Arts (Taekwondo)", "attackBase": 10, "damage": "2d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
       ],
       "armor": [
@@ -4912,8 +4913,8 @@
       "stats": { "INT": 7, "REF": 7, "DEX": 7, "TECH": 3, "COOL": 8, "WILL": 8, "MOVE": 6, "BODY": 12, "EMP": 2 },
       "armoredStats": {},
       "weapons": [
-        { "name": "Militech Crusher", "skill": "Handgun", "attackBase": 15, "damage": "3d6", "rof": 1, "magazine": null, "class": "VeryHeavyPistol", "melee": false, "notes": null },
-        { "name": "Popup Magnum Opus Hellbringer", "skill": "Handgun", "attackBase": 15, "damage": "5d6", "rof": 1, "magazine": null, "class": "VeryHeavyPistol", "melee": false, "notes": null }
+        { "name": "Militech Crusher", "skill": "Handgun", "attackBase": 15, "damage": "3d6", "rof": 1, "magazine": null, "class": "VeryHeavyPistol", "melee": false, "notes": "The book lists it as an Exotic Very Heavy Pistol with 6 shots that fires only Shotgun Shell Ammunition." },
+        { "name": "Popup Magnum Opus Hellbringer", "skill": "Handgun", "attackBase": 15, "damage": "5d6", "rof": 1, "magazine": null, "class": "VeryHeavyPistol", "melee": false, "notes": "The book lists it as an Exotic Very Heavy Pistol with 3 shots and 5d6 damage; it jams after every shot unless the user has BODY 10 or higher." }
       ],
       "armor": [
         { "location": "Head", "name": "Subdermal Armor", "sp": 11 },
@@ -5024,7 +5025,7 @@
       "armoredStats": {},
       "weapons": [
         { "name": "Very Heavy Melee Weapon", "skill": "Melee Weapon", "attackBase": 16, "damage": "4d6", "rof": 1, "magazine": null, "class": null, "melee": true, "notes": "Excellent Quality" },
-        { "name": "Popup Magnum Opus Hellbringer", "skill": "Handgun", "attackBase": 16, "damage": "5d6", "rof": 1, "magazine": null, "class": "VeryHeavyPistol", "melee": false, "notes": null }
+        { "name": "Popup Magnum Opus Hellbringer", "skill": "Handgun", "attackBase": 16, "damage": "5d6", "rof": 1, "magazine": null, "class": "VeryHeavyPistol", "melee": false, "notes": "The book lists it as an Exotic Very Heavy Pistol with 3 shots and 5d6 damage; it jams after every shot unless the user has BODY 10 or higher." }
       ],
       "armor": [
         { "location": "Head", "name": "Subdermal Armor", "sp": 11 },
@@ -5725,7 +5726,10 @@
       "pt": "Sargento com mais de trinta anos de NCPD, anterior à Nuke, que protege seus policiais e faz favores de olho na aposentadoria. Recebe propina de gangues e Corps e desvia itens do depósito de provas. Para a Danger Gal é fonte paga, mas o abuso de Pitbull contra os Nomads Sightseers pode trazer retaliação e deixá-lo precisando de ajuda.",
       "en": "A sergeant with over thirty years on the NCPD, predating the Nuke, who looks after his officers and trades favors with an eye on retirement. He takes payoffs from gangs and Corps and skims the evidence lockers. He is a paid Danger Gal source, but Pitbull's abuse of the Sightseers Nomads may bring retaliation and leave him in need of help."
     },
-    "sheetNote": null,
+    "sheetNote": {
+      "pt": "O livro descreve a Militech Crusher como Exotic Very Heavy Pistol; a ficha imprime 3d6.",
+      "en": "The book calls the Militech Crusher an Exotic Very Heavy Pistol; the sheet prints 3d6."
+    },
     "sheet": {
       "hp": 35,
       "seriouslyWounded": 18,
@@ -5734,7 +5738,7 @@
       "armoredStats": { "REF": 4, "DEX": 3, "MOVE": 2 },
       "armoredSkills": { "Athletics": 5, "Brawling": 5, "Drive Land Vehicle": 8, "Evasion": 7, "Handgun": 13, "Shoulder Arms": 8, "Stealth": 5 },
       "weapons": [
-        { "name": "Militech Crusher", "skill": "Handgun", "attackBase": 13, "damage": "3d6", "rof": 1, "magazine": null, "class": "VeryHeavyPistol", "melee": false, "notes": null },
+        { "name": "Militech Crusher", "skill": "Handgun", "attackBase": 13, "damage": "3d6", "rof": 1, "magazine": null, "class": "VeryHeavyPistol", "melee": false, "notes": "The book lists it as an Exotic Very Heavy Pistol with 6 shots that fires only Shotgun Shell Ammunition." },
         { "name": "Medium Pistol", "skill": "Handgun", "attackBase": 13, "damage": "2d6", "rof": 2, "magazine": null, "class": "MediumPistol", "melee": false, "notes": null }
       ],
       "armor": [
@@ -7397,7 +7401,7 @@
     "roleRank": 4,
     "rep": 3,
     "affiliation": "Tyger Claws",
-    "sources": [{ "book": "Danger Gal Dossier", "page": 125 }, { "book": "Danger Gal Dossier", "page": 121 }],
+    "sources": [{ "book": "Danger Gal Dossier", "page": 125 }],
     "summary": {
       "pt": "Médica de laboratório da Kiroshi nascida em Kansai, viúva de Hiroto Miyamoto, amigo de infância de Hayato Nakagawa. O marido morreu defendendo a casa na briga pela herança e Hayato a fez membro dos Tyger Claws por obrigação. Hoje confidente de Ryoko Fujiwara, recusa o convite para trabalhar na Fundação.",
       "en": "A Kiroshi lab medtech born in Kansai, widow of Hiroto Miyamoto, childhood friend of Hayato Nakagawa. Her husband died defending their home in the inheritance fight, and Hayato made her a Tyger Claws member whether she liked it or not. Now a confidant of Ryoko Fujiwara, she has declined an offer to join the Foundation."
@@ -7777,7 +7781,7 @@
     "roleRank": 4,
     "rep": 4,
     "affiliation": "Zoners",
-    "sources": [{ "book": "Danger Gal Dossier", "page": 134 }, { "book": "Danger Gal Dossier", "page": 131 }],
+    "sources": [{ "book": "Danger Gal Dossier", "page": 134 }],
     "summary": {
       "pt": "Cofundadora e segunda no comando dos bombeiros voluntários de South Night City, ex-policial militar na 4ª Guerra Corporativa. Ensina armas, combate, resgate e até táticas TAC a bombeiros e Zoners e já enfrentou um ciberpsicopata por mais de um minuto enquanto resgatavam moradores. O maior talento dela é ensinar.",
       "en": "Co-founder and second-in-command of South Night City's volunteer fire department, a former military police officer from the 4th Corporate War. She teaches firearms, combat, rescue and even TAC tactics to firefighters and Zoners, and once held off a cyberpsycho for over a minute while residents were rescued. Her real talent is teaching."
@@ -8407,7 +8411,7 @@
       { "book": "Tales of the RED", "page": 188 }
     ],
     "summary": {
-      "pt": "Ex-Inquisidor que abandonou a gangue para servir Lord Ruthven como tenente, levando parte dos seus seguidores. É o atirador mais preciso do trio, com uma pistola pesada de qualidade excelente.",
+      "pt": "Ex-Inquisidor que abandonou a gangue para servir Lord Ruthven como tenente, levando parte dos seus seguidores. É o atirador mais preciso da dupla, com uma pistola pesada de qualidade excelente.",
       "en": "A former Inquisitor who left his gang to serve Lord Ruthven as a lieutenant, bringing some of his followers. He is the sharper shot of the pair, with an Excellent Quality heavy pistol."
     },
     "sheetNote": null,
@@ -10035,8 +10039,8 @@
       "en": "CEO of Cactus Water, the Petrochem spin-off that sells tap water as \"homeopathic\". She wanted a quiet suburban life, but her husband vanished and Red Knight drove both her children to their deaths. She has money and power and has never felt so powerless."
     },
     "sheetNote": {
-      "pt": "A ficha imprime \"Subermal (Head)\" nas duas linhas de armadura; registrado como Subdermal Armor na cabeça e no corpo, pois o implante cobre os dois.",
-      "en": "The sheet prints \"Subermal (Head)\" on both armor rows; entered as Subdermal Armor on Head and Body, since the implant covers both."
+      "pt": "A ficha imprime \"Subermal (Head)\" nas duas linhas de armadura; registrado como Subdermal Armor na cabeça e no corpo, pois o implante cobre os dois. A Medium Pistol imprime 3d6, acima dos 2d6 de costume.",
+      "en": "The sheet prints \"Subermal (Head)\" on both armor rows; entered as Subdermal Armor on Head and Body, since the implant covers both. The Medium Pistol prints 3d6, above the usual 2d6."
     },
     "sheet": {
       "hp": 40,
@@ -10276,8 +10280,8 @@
       "en": "The identity a bored Deckard heir took on after a prank ended with his sister and her boyfriend dead. Sunk in Black Lace and Cyberpsychosis, he means to punish the whole Deckard family."
     },
     "sheetNote": {
-      "pt": "A ficha lista duas Role Abilities: Netrunner Interface 6 (Role principal) e Solo Combat Awareness 2. A ficha imprime \"Electronic/Security Tech\"; registrado como Electronics/Security Tech.",
-      "en": "The sheet lists two Role Abilities: Netrunner Interface 6 (main Role) and Solo Combat Awareness 2. The sheet prints \"Electronic/Security Tech\"; entered as Electronics/Security Tech."
+      "pt": "A ficha lista duas Role Abilities: Netrunner Interface 6 (Role principal) e Solo Combat Awareness 2. A ficha imprime \"Electronic/Security Tech\"; registrado como Electronics/Security Tech. O livro se contradiz sobre ele ser mesmo Roman Deckard.",
+      "en": "The sheet lists two Role Abilities: Netrunner Interface 6 (main Role) and Solo Combat Awareness 2. The sheet prints \"Electronic/Security Tech\"; entered as Electronics/Security Tech. The book contradicts itself on whether he is Roman Deckard."
     },
     "sheet": {
       "hp": 45,
@@ -11159,8 +11163,8 @@
     "rep": null,
     "affiliation": "Yellow Brick Road",
     "sources": [
-      {"book": "Interface RED Volume 2", "page": 25},
-      {"book": "Interface RED Volume 2", "page": 22}
+      { "book": "Interface RED Volume 2", "page": 25 },
+      { "book": "Interface RED Volume 2", "page": 24 }
     ],
     "summary": {
       "pt": "Tech vaidosa e cheia de estilo que lidera a gangue Yellow Brick Road no cenário Definitely Not Kansas da conversão do Jumpstart Kit. O guia lhe dá uma NET Architecture privada própria.",
@@ -11468,7 +11472,7 @@
     "kind": "sheet",
     "role": "Fixer",
     "roleRank": 4,
-    "rep": null,
+    "rep": 5,
     "affiliation": "Anderson Family",
     "sources": [
       {"book": "Interface RED Volume 2", "page": 27},
@@ -11977,7 +11981,7 @@
       {"book": "Interface RED Volume 4", "page": 62}
     ],
     "summary": {
-      "pt": "Influenciadora de paranormal que trabalha de zeladora no turno da noite do Megabuilding H10. O vídeo do falso lobisomem virou o de maior audiência dela, mas ela não quer construir a carreira em cima de uma mentira e planeja desmentir o caso.",
+      "pt": "Influenciadora de conteúdo paranormal que trabalha de zeladora no turno da noite do Megabuilding H10. O vídeo do falso lobisomem virou o de maior audiência dela, mas ela não quer construir a carreira em cima de uma mentira e planeja desmentir o caso.",
       "en": "Paranormal influencer who works second-shift custodian at Megabuilding H10. The fake-werewolf video became her highest rated, but she refuses to base her career on a hoax and plans to expose it."
     },
     "sheetNote": null,
@@ -12012,8 +12016,7 @@
     "rep": null,
     "affiliation": "Militech (former)",
     "sources": [
-      {"book": "Interface RED Volume 4", "page": 63},
-      {"book": "Interface RED Volume 4", "page": 62}
+      { "book": "Interface RED Volume 4", "page": 63 }
     ],
     "summary": {
       "pt": "Veterano sem-teto da 4ª Guerra Corporativa, ex-Militech, transformado no falso lobisomem de Watson com bodysculpt e um Audiovox que só emite uivos. Morre baleado por seguranças de folga da SovOil, mas já estava condenado pelas infecções.",
@@ -12481,8 +12484,8 @@
     "affiliation": null,
     "sources": [{"book": "Mixing Drinks, Changing Lives", "page": 10}],
     "summary": {
-      "pt": "Filha de um alto executivo da Night Corp que nasceu como exótica por causa da cura genética para uma síndrome rara. Perdeu um olho no mesmo ataque que feriu Sei Asagiri, cuja versão oficial a MAX-TAC maquiou. Hoje é bem ajustada, generosa, faz caridade e vai disfarçada aos shows de *Kira* Miki.",
-      "en": "Daughter of a senior Night Corp exec, born an Exotic because of the genetic cure for a rare syndrome. She lost an eye in the same attack that hurt Sei Asagiri, whose official story MAX-TAC covered up. Today she is well adjusted and generous, does charity work and sneaks into *Kira* Miki concerts in disguise."
+      "pt": "Filha de um alto executivo da Night Corp que nasceu como exótica por causa da cura genética para uma síndrome rara. Perdeu um olho no mesmo ataque que feriu Sei Asagiri, cuja versão oficial a MAX-TAC maquiou. Hoje é bem ajustada, generosa, faz caridade e vai disfarçada aos shows de Kira Miki.",
+      "en": "Daughter of a senior Night Corp exec, born an Exotic because of the genetic cure for a rare syndrome. She lost an eye in the same attack that hurt Sei Asagiri, whose official story MAX-TAC covered up. Today she is well adjusted and generous, does charity work and sneaks into Kira Miki concerts in disguise."
     },
     "sheetNote": null,
     "sheet": {
@@ -12550,8 +12553,8 @@
   },
   {
     "id": "kira-miki",
-    "name": "*Kira* Miki",
-    "aliases": ["Kira Miki"],
+    "name": "Kira Miki",
+    "aliases": ["*Kira* Miki"],
     "kind": "profile",
     "role": "Rockerboy",
     "roleRank": 7,
@@ -12847,7 +12850,7 @@
     "roleRank": null,
     "rep": null,
     "affiliation": "Bouncing Benny’s",
-    "sources": [{"book": "Karaoke Night", "page": 4}, {"book": "Karaoke Night", "page": 3}],
+    "sources": [{ "book": "Karaoke Night", "page": 4 }, { "book": "Karaoke Night", "page": 2 }],
     "summary": {
       "pt": "Ex-nômade que deixou a família para tentar a sorte como cantora em Night City e hoje serve no Bouncing Benny's. Não é da Maelstrom e pode ajudar o grupo se receber um bom motivo, mas nunca se expõe a perigo real e foge de moto assim que os tiros começam.",
       "en": "Former Nomad who left her family to try making it as a singer in Night City and now tends bar at Bouncing Benny's. She is not Maelstrom and may help the crew for a good reason, but she never risks real danger and rides off the moment shooting starts."
