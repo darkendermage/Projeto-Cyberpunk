@@ -58,6 +58,16 @@ public class NpcCompendiumDataTests
     }
 
     [Fact]
+    public void Autofire_multiplier_and_melee_sp_are_sane()
+    {
+        var sheets = Compendium.All.Select(n => n.Sheet).OfType<CompendiumSheet>().ToList();
+        foreach (var weapon in sheets.SelectMany(s => s.Weapons).Where(w => w.AutofireMultiplier != null))
+            weapon.AutofireMultiplier.Should().BeGreaterThanOrEqualTo(2, weapon.Name);
+        foreach (var armor in sheets.SelectMany(s => s.Armor).Where(a => a.SpVsMelee != null))
+            armor.SpVsMelee.Should().BeInRange(0, armor.Sp, armor.Name);
+    }
+
+    [Fact]
     public void Find_returns_entries_by_id()
     {
         Compendium.Find("adam-smasher")!.Name.Should().Be("Adam Smasher");

@@ -65,12 +65,15 @@ public sealed record CompendiumWeapon
     public string Damage { get; init; } = "";
     public int Rof { get; init; }
     public int? Magazine { get; init; }
+    /// <summary>Printed "Autofire (xN)" multiplier; null when the weapon has no Autofire.</summary>
+    public int? AutofireMultiplier { get; init; }
     /// <summary>Null for weapons outside the catalog classes (a borg's fists).</summary>
     public WeaponClass? Class { get; init; }
     public bool Melee { get; init; }
     public string? Notes { get; init; }
 }
 
-public sealed record CompendiumArmor(string Location, string Name, int Sp);
+/// <summary>SpVsMelee is the printed "SP vs Melee/Charged Tech Weapons" column; null when the book has none.</summary>
+public sealed record CompendiumArmor(string Location, string Name, int Sp, int? SpVsMelee = null);
 
 public sealed record CompendiumSpecial(string Name, LocalizedText Text);
