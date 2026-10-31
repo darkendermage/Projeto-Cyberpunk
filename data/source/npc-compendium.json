@@ -1638,20 +1638,94 @@
     "id": "rex-royale",
     "name": "Rex Royale",
     "aliases": [],
-    "kind": "profile",
+    "kind": "sheet",
     "role": "Fixer",
-    "roleRank": null,
+    "roleRank": 8,
     "rep": null,
     "affiliation": null,
     "sources": [
-      { "book": "Core Book", "page": 306 }
+      {"book": "Interface RED Volume 2", "page": 28},
+      {"book": "Interface RED Volume 2", "page": 24},
+      {"book": "Core Book", "page": 306}
     ],
     "summary": {
       "pt": "Fixer da borda da Combat Zone que cobra proteção com seus Community Solos, a meio caminho entre extorsão e serviço público. Realmente cuida da vizinhança e organiza até café da manhã de panqueca, mas não faz caridade.",
       "en": "Fixer of the Combat Zone edge who sells protection through his Community Solos, halfway between racket and public service. He truly cares about the neighborhood and even organizes pancake breakfasts, but he is not a charity."
     },
     "sheetNote": null,
-    "sheet": null
+    "sheet": {
+      "hp": 40,
+      "seriouslyWounded": 20,
+      "deathSave": 6,
+      "stats": {"INT": 7, "REF": 7, "DEX": 7, "TECH": 4, "COOL": 8, "WILL": 6, "MOVE": 4, "BODY": 6, "EMP": 6},
+      "armoredStats": {},
+      "weapons": [
+        {"name": "Heavy Pistol", "skill": "Handgun", "attackBase": 13, "damage": "3d6", "rof": 2, "magazine": null, "class": "HeavyPistol", "melee": false, "notes": "Excellent Quality"},
+        {"name": "Kendachi Mono-Three", "skill": "Melee Weapon", "attackBase": 16, "damage": "4d6", "rof": 1, "magazine": null, "class": null, "melee": true, "notes": "Excellent Quality; Exotic Very Heavy Melee Weapon"}
+      ],
+      "armor": [
+        {"location": "Head", "name": "Light Armorjack", "sp": 11},
+        {"location": "Body", "name": "Light Armorjack", "sp": 11}
+      ],
+      "skills": {
+        "Athletics": 9,
+        "Brawling": 13,
+        "Bribery": 12,
+        "Conceal/Reveal Object": 13,
+        "Concentration": 8,
+        "Conversation": 8,
+        "Education": 9,
+        "Evasion": 13,
+        "First Aid": 6,
+        "Gamble": 13,
+        "Handgun": 13,
+        "Human Perception": 8,
+        "Language (Chinese)": 11,
+        "Language (English)": 11,
+        "Language (Italian)": 11,
+        "Language (Japanese)": 11,
+        "Language (Korean)": 11,
+        "Language (Russian)": 11,
+        "Language (Streetslang)": 9,
+        "Language (Spanish)": 11,
+        "Local Expert (South Night City)": 13,
+        "Local Expert (University District)": 13,
+        "Local Expert (Your Home)": 13,
+        "Melee Weapons": 16,
+        "Perception": 9,
+        "Persuasion": 14,
+        "Resist Torture/Drugs": 10,
+        "Stealth": 9,
+        "Streetwise": 14,
+        "Trading": 16,
+        "Wardrobe & Style": 10
+      },
+      "gear": ["Armor Piercing Very Heavy Pistol Ammo x16", "Smoke Grenade x2", "Agent", "Disposable Cell Phone x2", "Smart Glasses w/ Low Light/Infrared/UV"],
+      "cyberware": [],
+      "specials": [
+        {
+          "name": "Operator 8",
+          "text": {
+            "pt": "Habilidade de Role Fixer (Operator 8).",
+            "en": "Fixer Role Ability (Operator 8)."
+          }
+        },
+        {
+          "name": "Mono-Three",
+          "text": {
+            "pt": "Arma corpo a corpo exótica de qualidade excelente. Com a chave biométrica certa, o dano ignora armaduras abaixo de SP11 (regra do Core Book).",
+            "en": "Excellent Quality exotic melee weapon. With the right biometric key its damage ignores armor below SP11 (Core Book rule)."
+          }
+        },
+        {
+          "name": "Nível / Tier",
+          "text": {
+            "pt": "Mini-Boss.",
+            "en": "Mini-Boss."
+          }
+        }
+      ]
+    }
   },
   {
     "id": "billy-joe-brentwood",
@@ -10899,5 +10973,808 @@
     },
     "sheetNote": null,
     "sheet": null
+  },
+  {
+    "id": "crunch",
+    "name": "Crunch",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Netrunner",
+    "roleRank": 4,
+    "rep": null,
+    "affiliation": null,
+    "sources": [
+      {"book": "Interface RED Volume 2", "page": 25},
+      {"book": "Interface RED Volume 2", "page": 23}
+    ],
+    "summary": {
+      "pt": "Netrunner que comanda a equipe de ataque de Hack Attack na conversão do Jumpstart Kit. Também pode voltar como uma das assassinas que um Fixer contrata para punir uma Crew traidora.",
+      "en": "Netrunner who heads the strike team in Hack Attack in the Jumpstart Kit conversion. She can also return as one of the assassins a Fixer hires to punish a crew that double-crosses them."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 40,
+      "seriouslyWounded": 20,
+      "deathSave": 4,
+      "stats": {"INT": 8, "REF": 6, "DEX": 5, "TECH": 7, "COOL": 5, "WILL": 7, "MOVE": 5, "BODY": 4, "EMP": 3},
+      "armoredStats": {},
+      "weapons": [
+        {"name": "Heavy Pistol", "skill": "Handgun", "attackBase": 12, "damage": "3d6", "rof": 2, "magazine": null, "class": "HeavyPistol", "melee": false, "notes": null},
+        {"name": "Brawling Attack", "skill": "Brawling", "attackBase": 7, "damage": "1d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null}
+      ],
+      "armor": [
+        {"location": "Head", "name": "Light Armorjack", "sp": 11},
+        {"location": "Body", "name": "Light Armorjack", "sp": 11}
+      ],
+      "skills": {
+        "Accounting": 12,
+        "Athletics": 11,
+        "Brawling": 7,
+        "Bureaucracy": 12,
+        "Concentration": 9,
+        "Conversation": 5,
+        "Drive Land Vehicle": 10,
+        "Education": 10,
+        "Electronics/Security Tech": 13,
+        "Evasion": 11,
+        "First Aid": 11,
+        "Forgery": 13,
+        "Handgun": 12,
+        "Human Perception": 5,
+        "Language (Finnish)": 12,
+        "Language (Streetslang)": 10,
+        "Library Search": 14,
+        "Local Expert (Your Home)": 10,
+        "Perception": 10,
+        "Persuasion": 7,
+        "Pick Lock": 13,
+        "Stealth": 11
+      },
+      "gear": ["Heavy Pistol Ammo x20", "Cyberdeck w/ Insulated Wiring", "Virtuality Goggles", "Program: Armor", "Program: DeckKrash", "Program: Hellbolt x2", "Program: Shield", "Program: Sword"],
+      "cyberware": ["Neural Link w/ Interface Plugs"],
+      "specials": [
+        {
+          "name": "Netrunner (Interface 4)",
+          "text": {
+            "pt": "Habilidade de Role Netrunner com Interface 4. A ficha traz o deck e os programas já carregados.",
+            "en": "Netrunner Role Ability at Interface 4. The sheet lists her deck and the programs already loaded."
+          }
+        },
+        {
+          "name": "Nível / Tier",
+          "text": {
+            "pt": "Tenente, no mesmo nível de Dorothy.",
+            "en": "Lieutenant, the same tier as Dorothy."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "dorothy",
+    "name": "Dorothy",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Tech",
+    "roleRank": 4,
+    "rep": null,
+    "affiliation": "Yellow Brick Road",
+    "sources": [
+      {"book": "Interface RED Volume 2", "page": 25},
+      {"book": "Interface RED Volume 2", "page": 22}
+    ],
+    "summary": {
+      "pt": "Tech vaidosa e cheia de estilo que lidera a gangue Yellow Brick Road no cenário Definitely Not Kansas da conversão do Jumpstart Kit. O guia lhe dá uma NET Architecture privada própria.",
+      "en": "Stylish, fashion-obsessed Tech who leads the Yellow Brick Road gang in the Definitely Not Kansas scenario of the Jumpstart Kit conversion. The guide gives her a private NET Architecture of her own."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 35,
+      "seriouslyWounded": 18,
+      "deathSave": 5,
+      "stats": {"INT": 6, "REF": 6, "DEX": 4, "TECH": 8, "COOL": 7, "WILL": 5, "MOVE": 4, "BODY": 5, "EMP": 6},
+      "armoredStats": {},
+      "weapons": [
+        {"name": "Very Heavy Pistol", "skill": "Handgun", "attackBase": 12, "damage": "4d6", "rof": 1, "magazine": null, "class": "VeryHeavyPistol", "melee": false, "notes": null},
+        {"name": "Brawling Attack", "skill": "Brawling", "attackBase": 6, "damage": "2d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null}
+      ],
+      "armor": [
+        {"location": "Head", "name": "Subdermal", "sp": 11},
+        {"location": "Body", "name": "Subdermal", "sp": 11}
+      ],
+      "skills": {
+        "Acting": 13,
+        "Air Vehicle Tech": 10,
+        "Athletics": 6,
+        "Basic Tech": 10,
+        "Brawling": 6,
+        "Concentration": 7,
+        "Conversation": 8,
+        "Cybertech": 10,
+        "Education": 8,
+        "Electronics/Security Tech": 16,
+        "Evasion": 10,
+        "First Aid": 14,
+        "Handgun": 12,
+        "Human Perception": 8,
+        "Land Vehicle Tech": 10,
+        "Language (Italian)": 10,
+        "Language (Streetslang)": 8,
+        "Local Expert (Your Home)": 8,
+        "Library Search": 14,
+        "Perception": 8,
+        "Personal Grooming": 15,
+        "Persuasion": 13,
+        "Sea Vehicle Tech": 10,
+        "Stealth": 6,
+        "Streetwise": 9,
+        "Wardrobe & Style": 17,
+        "Weaponstech": 10
+      },
+      "gear": ["Very Heavy Pistol Ammo x8", "Agent", "High Fashion Footwear", "Techscanner", "Tech Bag"],
+      "cyberware": ["Biomonitor", "Chemskin", "Light Tattoo x3", "Subdermal Armor", "Techhair"],
+      "specials": [
+        {
+          "name": "Maker 4",
+          "text": {
+            "pt": "Habilidade de Role Tech (Maker 4) com Fabrication Expertise 4 e Field Expertise 4.",
+            "en": "Tech Role Ability (Maker 4) with Fabrication Expertise 4 and Field Expertise 4."
+          }
+        },
+        {
+          "name": "Nível / Tier",
+          "text": {
+            "pt": "Tenente, no mesmo nível de Crunch.",
+            "en": "Lieutenant, the same tier as Crunch."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "dr-george-carver",
+    "name": "Dr. George Carver",
+    "aliases": ["George Carver"],
+    "kind": "sheet",
+    "role": "Medtech",
+    "roleRank": 2,
+    "rep": null,
+    "affiliation": null,
+    "sources": [
+      {"book": "Interface RED Volume 2", "page": 26},
+      {"book": "Interface RED Volume 2", "page": 22},
+      {"book": "Interface RED Volume 2", "page": 24}
+    ],
+    "summary": {
+      "pt": "Médico e tech que a conversão sugere como dono do prédio de The Apartment, alugando estúdios aos PCs por 1.500eb ao mês. Se o prédio sobreviver, perdoa o mês seguinte e costura a Crew de graça.",
+      "en": "Doctor and tinkerer whom the conversion proposes as the owner of The Apartment's building, renting studios to the PCs at 1,500eb a month. If the building survives he waives next month's rent and patches the Crew up for free."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 40,
+      "seriouslyWounded": 20,
+      "deathSave": 5,
+      "stats": {"INT": 8, "REF": 6, "DEX": 5, "TECH": 8, "COOL": 4, "WILL": 6, "MOVE": 5, "BODY": 5, "EMP": 4},
+      "armoredStats": {},
+      "weapons": [
+        {"name": "Heavy Pistol", "skill": "Handgun", "attackBase": 12, "damage": "3d6", "rof": 2, "magazine": null, "class": "HeavyPistol", "melee": false, "notes": null},
+        {"name": "Stun Gun", "skill": "Handgun", "attackBase": 12, "damage": "3d6", "rof": 2, "magazine": null, "class": "HeavyPistol", "melee": false, "notes": "Exotic Heavy Pistol; a hit that would drop the target below 1 HP leaves them Unconscious at 1 HP"}
+      ],
+      "armor": [
+        {"location": "Head", "name": "Light Armorjack", "sp": 11},
+        {"location": "Body", "name": "Light Armorjack", "sp": 11}
+      ],
+      "skills": {
+        "Air Vehicle Tech": 12,
+        "Athletics": 11,
+        "Brawling": 7,
+        "Concentration": 8,
+        "Conversation": 6,
+        "Cybertech": 14,
+        "Deduction": 12,
+        "Education": 10,
+        "Electronics/Security Tech": 14,
+        "Evasion": 11,
+        "First Aid": 10,
+        "Handgun": 12,
+        "Human Perception": 6,
+        "Language (English)": 12,
+        "Language (Streetslang)": 10,
+        "Library Search": 10,
+        "Local Expert (Your Home)": 10,
+        "Paramedic": 14,
+        "Perception": 10,
+        "Persuasion": 6,
+        "Pilot Air Vehicle": 10,
+        "Stealth": 7,
+        "Surgery": 12
+      },
+      "gear": ["Expansive Heavy Pistol Ammo x10", "Agent", "Medtech Bag"],
+      "cyberware": ["Nasal Filters", "Tool Hand"],
+      "specials": [
+        {
+          "name": "Medtech 2 e Maker 2",
+          "text": {
+            "pt": "Medicine 2 com Surgery Base 12 (valor impresso na linha de Role) e Maker 2 com Fabrication Expertise 2 e Field Expertise 2.",
+            "en": "Medicine 2 with Surgery Base 12 (printed on the Role line) and Maker 2 with Fabrication Expertise 2 and Field Expertise 2."
+          }
+        },
+        {
+          "name": "Nível / Tier",
+          "text": {
+            "pt": "Tenente, junto com Gina Zeppada.",
+            "en": "Lieutenant, alongside Gina Zeppada."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "gina-zeppada",
+    "name": "Gina Zeppada",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Nomad",
+    "roleRank": 4,
+    "rep": null,
+    "affiliation": null,
+    "sources": [
+      {"book": "Interface RED Volume 2", "page": 26},
+      {"book": "Interface RED Volume 2", "page": 22}
+    ],
+    "summary": {
+      "pt": "Vizinha Nomad do prédio de The Apartment, que a conversão manda apresentar aos PCs em vez de sorteá-la. Uma cena sugerida é ajudá-la a subir as compras até o apartamento.",
+      "en": "Nomad neighbor in The Apartment's building whom the conversion has the GM introduce to the PCs rather than roll up. One suggested scene is helping her carry groceries upstairs."
+    },
+    "sheetNote": {
+      "pt": "O livro imprime \"Language (Education)\" na lista de perícias dela, provável erro de impressão. Mantido como impresso.",
+      "en": "The book prints \"Language (Education)\" in her skill list, probably a typo. Kept as printed."
+    },
+    "sheet": {
+      "hp": 35,
+      "seriouslyWounded": 18,
+      "deathSave": 4,
+      "stats": {"INT": 8, "REF": 7, "DEX": 4, "TECH": 5, "COOL": 5, "WILL": 6, "MOVE": 6, "BODY": 4, "EMP": 7},
+      "armoredStats": {},
+      "weapons": [
+        {"name": "Very Heavy Pistol", "skill": "Handgun", "attackBase": 11, "damage": "4d6", "rof": 1, "magazine": null, "class": "VeryHeavyPistol", "melee": false, "notes": null},
+        {"name": "Shotgun", "skill": "Shoulder Arms", "attackBase": 13, "damage": "5d6", "rof": 1, "magazine": null, "class": "Shotgun", "melee": false, "notes": null}
+      ],
+      "armor": [
+        {"location": "Head", "name": "Light Armorjack", "sp": 11},
+        {"location": "Body", "name": "Light Armorjack", "sp": 11}
+      ],
+      "skills": {
+        "Acting": 9,
+        "Animal Handling": 14,
+        "Athletics": 6,
+        "Brawling": 6,
+        "Concentration": 8,
+        "Conversation": 9,
+        "Education": 10,
+        "Evasion": 10,
+        "First Aid": 11,
+        "Forgery": 11,
+        "Gamble": 12,
+        "Handgun": 11,
+        "Human Perception": 9,
+        "Language (Education)": 12,
+        "Language (Spanish)": 12,
+        "Language (Streetslang)": 10,
+        "Library Search": 10,
+        "Local Expert (Your Home)": 12,
+        "Perception": 10,
+        "Persuasion": 7,
+        "Resist Torture/Drugs": 10,
+        "Riding": 11,
+        "Shoulder Arms": 13,
+        "Stealth": 6,
+        "Tracking": 12,
+        "Wilderness Survival": 12
+      },
+      "gear": ["Very Heavy Pistol Ammo x40", "Shotgun Ammo x40", "Agent", "Roadbike w/ Bulletproof Glass x2 and NOS"],
+      "cyberware": ["Biomonitor", "Techhair"],
+      "specials": [
+        {
+          "name": "Moto 4",
+          "text": {
+            "pt": "Habilidade de Role Nomad (Moto 4).",
+            "en": "Nomad Role Ability (Moto 4)."
+          }
+        },
+        {
+          "name": "Nível / Tier",
+          "text": {
+            "pt": "Tenente, junto com o Dr. George Carver.",
+            "en": "Lieutenant, alongside Dr. George Carver."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "royal",
+    "name": "Royal",
+    "aliases": ["Grant Jung"],
+    "kind": "sheet",
+    "role": "Solo",
+    "roleRank": 4,
+    "rep": null,
+    "affiliation": null,
+    "sources": [
+      {"book": "Interface RED Volume 2", "page": 27},
+      {"book": "Interface RED Volume 2", "page": 22},
+      {"book": "Interface RED Volume 2", "page": 23}
+    ],
+    "summary": {
+      "pt": "Vizinho Solo de The Apartment, parceiro de cerveja no bar do bairro. A conversão só quer que ele traia a Crew em It's Just Business se houver um Solo entre os jogadores.",
+      "en": "Solo neighbor in The Apartment, a beer buddy at the local bar. The conversion only has him betray the Crew in It's Just Business when a Solo is among the players."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 40,
+      "seriouslyWounded": 20,
+      "deathSave": 6,
+      "stats": {"INT": 7, "REF": 8, "DEX": 8, "TECH": 3, "COOL": 4, "WILL": 6, "MOVE": 6, "BODY": 6, "EMP": 4},
+      "armoredStats": {"REF": 6, "DEX": 6, "MOVE": 4},
+      "armoredSkills": {"Athletics": 12, "Autofire": 12, "Brawling": 12, "Evasion": 12, "Handgun": 12, "Shoulder Arms": 12, "Stealth": 12},
+      "weapons": [
+        {"name": "Very Heavy Pistol", "skill": "Handgun", "attackBase": 12, "damage": "4d6", "rof": 1, "magazine": null, "class": "VeryHeavyPistol", "melee": false, "notes": null},
+        {"name": "Assault Rifle w/ Drum Magazine", "skill": "Shoulder Arms", "attackBase": 12, "damage": "5d6", "rof": 1, "magazine": null, "class": "AssaultRifle", "melee": false, "notes": "Drum Magazine"}
+      ],
+      "armor": [
+        {"location": "Head", "name": "Heavy Armorjack", "sp": 13},
+        {"location": "Body", "name": "Heavy Armorjack", "sp": 13}
+      ],
+      "skills": {
+        "Athletics": 14,
+        "Autofire": 14,
+        "Brawling": 14,
+        "Concentration": 8,
+        "Conversation": 6,
+        "Education": 9,
+        "Evasion": 14,
+        "First Aid": 9,
+        "Gamble": 4,
+        "Handgun": 14,
+        "Human Perception": 6,
+        "Language (Korean)": 11,
+        "Language (Streetslang)": 9,
+        "Local Expert": 9,
+        "Perception": 13,
+        "Persuasion": 6,
+        "Shoulder Arms": 14,
+        "Stealth": 14,
+        "Tactics": 11,
+        "Tracking": 11
+      },
+      "gear": ["Rifle Ammo x45", "Very Heavy Pistol Ammo x8", "Agent"],
+      "cyberware": ["Techhair"],
+      "specials": [
+        {
+          "name": "Combat Awareness 4",
+          "text": {
+            "pt": "Habilidade de Role Solo (Combat Awareness 4).",
+            "en": "Solo Role Ability (Combat Awareness 4)."
+          }
+        },
+        {
+          "name": "Penalidade da armadura",
+          "text": {
+            "pt": "A Heavy Armorjack reduz REF, DEX e MOVE e as perícias ligadas a eles; a ficha imprime o valor com a penalidade entre parênteses.",
+            "en": "The Heavy Armorjack lowers REF, DEX and MOVE and the skills tied to them; the sheet prints the penalized value in parentheses."
+          }
+        },
+        {
+          "name": "Nível / Tier",
+          "text": {
+            "pt": "Tenente Endurecido (Hardened Lieutenant).",
+            "en": "Hardened Lieutenant."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "molly-anderson",
+    "name": "Molly Anderson",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Fixer",
+    "roleRank": 4,
+    "rep": null,
+    "affiliation": "Anderson Family",
+    "sources": [
+      {"book": "Interface RED Volume 2", "page": 27},
+      {"book": "Interface RED Volume 2", "page": 22}
+    ],
+    "summary": {
+      "pt": "Fixer à frente da família Anderson, vizinhos de The Apartment que usam o statblock de Boosterganger. Reaparece como a vendedora de equipamento extra em Black Chrome+ (Interface RED Volume 4).",
+      "en": "Fixer at the head of the Anderson family, The Apartment's neighbors who use the Boosterganger statblock. She returns as the seller of bonus gear in Black Chrome+ (Interface RED Volume 4)."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 40,
+      "seriouslyWounded": 20,
+      "deathSave": 4,
+      "stats": {"INT": 7, "REF": 5, "DEX": 8, "TECH": 5, "COOL": 6, "WILL": 7, "MOVE": 6, "BODY": 4, "EMP": 4},
+      "armoredStats": {},
+      "weapons": [
+        {"name": "Brawling Attack", "skill": "Brawling", "attackBase": 14, "damage": "1d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null},
+        {"name": "Light Melee Weapon", "skill": "Melee Weapon", "attackBase": 8, "damage": "1d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": "No Skill Base printed for this weapon; STAT only."}
+      ],
+      "armor": [
+        {"location": "Head", "name": "Light Armorjack", "sp": 11},
+        {"location": "Body", "name": "Light Armorjack", "sp": 11}
+      ],
+      "skills": {
+        "Athletics": 14,
+        "Brawling": 14,
+        "Concentration": 9,
+        "Conversation": 6,
+        "Demolitions": 10,
+        "Education": 9,
+        "Endurance": 13,
+        "Evasion": 14,
+        "First Aid": 7,
+        "Human Perception": 10,
+        "Language (English)": 11,
+        "Language (German)": 11,
+        "Language (Streetslang)": 13,
+        "Local Expert (Your Home)": 13,
+        "Perception": 9,
+        "Persuasion": 8,
+        "Pick Lock": 11,
+        "Stealth": 10,
+        "Streetwise": 10,
+        "Trading": 12
+      },
+      "gear": ["Incendiary Grenade x2", "Smoke Grenade x2", "Disposable Cell Phone"],
+      "cyberware": ["Cyberarm w/ Realskinn Covering", "Cyberleg x2 w/ Realskinn Covering", "Light Tattoo x2"],
+      "specials": [
+        {
+          "name": "Operator 4",
+          "text": {
+            "pt": "Habilidade de Role Fixer (Operator 4).",
+            "en": "Fixer Role Ability (Operator 4)."
+          }
+        },
+        {
+          "name": "Nível / Tier",
+          "text": {
+            "pt": "Tenente.",
+            "en": "Lieutenant."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "officer-lantz",
+    "name": "Officer Lantz",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Lawman",
+    "roleRank": 4,
+    "rep": null,
+    "affiliation": null,
+    "sources": [
+      {"book": "Interface RED Volume 2", "page": 28},
+      {"book": "Interface RED Volume 2", "page": 24}
+    ],
+    "summary": {
+      "pt": "Policial da simulação de academia em Just Like Real, que entrega à Crew um Rocket Launcher de qualidade excelente com um único foguete. O guia fornece a ficha caso ele precise aparecer de novo.",
+      "en": "Police officer of the academy simulation in Just Like Real, who hands the Crew an Excellent Quality Rocket Launcher with a single rocket. The guide supplies his sheet in case he is needed again."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 45,
+      "seriouslyWounded": 23,
+      "deathSave": 7,
+      "stats": {"INT": 7, "REF": 4, "DEX": 8, "TECH": 4, "COOL": 5, "WILL": 6, "MOVE": 5, "BODY": 7, "EMP": 5},
+      "armoredStats": {},
+      "weapons": [
+        {"name": "Very Heavy Pistol", "skill": "Handgun", "attackBase": 10, "damage": "4d6", "rof": 1, "magazine": null, "class": "VeryHeavyPistol", "melee": false, "notes": null},
+        {"name": "Martial Arts Attack", "skill": "Martial Arts (Judo)", "attackBase": 14, "damage": "3d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null}
+      ],
+      "armor": [
+        {"location": "Head", "name": "Light Armorjack", "sp": 11},
+        {"location": "Body", "name": "Light Armorjack", "sp": 11}
+      ],
+      "skills": {
+        "Acting": 7,
+        "Athletics": 10,
+        "Brawling": 14,
+        "Concentration": 8,
+        "Conversation": 7,
+        "Criminology": 13,
+        "Deduction": 9,
+        "Drive Land Vehicle": 10,
+        "Education": 9,
+        "Evasion": 14,
+        "First Aid": 6,
+        "Handgun": 10,
+        "Human Perception": 7,
+        "Interrogation": 11,
+        "Language (English)": 11,
+        "Language (French)": 9,
+        "Language (Streetslang)": 9,
+        "Library Search": 9,
+        "Local Expert (Your Home)": 9,
+        "Martial Arts (Judo)": 14,
+        "Perception": 9,
+        "Persuasion": 7,
+        "Play Instrument (Singing)": 10,
+        "Resist Torture/Drugs": 8,
+        "Riding": 10,
+        "Stealth": 10,
+        "Tracking": 9,
+        "Wardrobe & Style": 7
+      },
+      "gear": ["Armor Piercing Very Heavy Pistol Ammo x8", "Agent"],
+      "cyberware": ["Audiovox", "Enhanced Antibodies", "Toxin Binders"],
+      "specials": [
+        {
+          "name": "Backup 4",
+          "text": {
+            "pt": "Habilidade de Role Lawman (Backup 4).",
+            "en": "Lawman Role Ability (Backup 4)."
+          }
+        },
+        {
+          "name": "Nível / Tier",
+          "text": {
+            "pt": "Tenente Endurecido (Hardened Lieutenant).",
+            "en": "Hardened Lieutenant."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "rico-rico",
+    "name": "Rico Rico",
+    "aliases": ["Rico Robinson"],
+    "kind": "sheet",
+    "role": "Rockerboy",
+    "roleRank": 4,
+    "rep": null,
+    "affiliation": null,
+    "sources": [
+      {"book": "Interface RED Volume 2", "page": 29},
+      {"book": "Interface RED Volume 2", "page": 22}
+    ],
+    "summary": {
+      "pt": "Rockerboy vizinho em The Apartment, conhecido pelo nome artístico. A conversão sugere cenas como a Crew fazendo a segurança de um de seus shows.",
+      "en": "Rockerboy neighbor in The Apartment, known by his stage name. The conversion suggests scenes such as the Crew working security at one of his gigs."
+    },
+    "sheetNote": {
+      "pt": "A ficha imprime \"Melee Weapons\" (no plural) na lista de perícias. Mantido como impresso.",
+      "en": "The sheet prints \"Melee Weapons\" (plural) in the skill list. Kept as printed."
+    },
+    "sheet": {
+      "hp": 45,
+      "seriouslyWounded": 23,
+      "deathSave": 7,
+      "stats": {"INT": 6, "REF": 4, "DEX": 6, "TECH": 7, "COOL": 7, "WILL": 5, "MOVE": 4, "BODY": 6, "EMP": 6},
+      "armoredStats": {},
+      "weapons": [
+        {"name": "Heavy Melee Weapon", "skill": "Melee Weapon", "attackBase": 12, "damage": "3d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null},
+        {"name": "Brawling Attack", "skill": "Brawling", "attackBase": 8, "damage": "2d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null}
+      ],
+      "armor": [
+        {"location": "Head", "name": "Light Armorjack", "sp": 11},
+        {"location": "Body", "name": "Light Armorjack", "sp": 11}
+      ],
+      "skills": {
+        "Acting": 11,
+        "Athletics": 8,
+        "Brawling": 8,
+        "Bribery": 11,
+        "Composition": 12,
+        "Concentration": 7,
+        "Conversation": 8,
+        "Dance": 12,
+        "Education": 8,
+        "Evasion": 12,
+        "First Aid": 9,
+        "Human Perception": 8,
+        "Language (English)": 10,
+        "Language (Spanish)": 10,
+        "Language (Streetslang)": 8,
+        "Library Search": 8,
+        "Local Expert (Your Home)": 12,
+        "Melee Weapons": 12,
+        "Perception": 8,
+        "Persuasion": 9,
+        "Pick Pocket": 11,
+        "Play Instrument (Guitar)": 13,
+        "Stealth": 8,
+        "Streetwise": 13,
+        "Wardrobe & Style": 15
+      },
+      "gear": ["Agent", "Electric Guitar", "Pocket Amplifier"],
+      "cyberware": ["Cyberaudio Suite w/ Audio Recorder"],
+      "specials": [
+        {
+          "name": "Charismatic Impact 4",
+          "text": {
+            "pt": "Habilidade de Role Rockerboy (Charismatic Impact 4).",
+            "en": "Rockerboy Role Ability (Charismatic Impact 4)."
+          }
+        },
+        {
+          "name": "Nível / Tier",
+          "text": {
+            "pt": "Tenente.",
+            "en": "Lieutenant."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "streamline",
+    "name": "Streamline",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Solo",
+    "roleRank": 4,
+    "rep": null,
+    "affiliation": null,
+    "sources": [
+      {"book": "Interface RED Volume 2", "page": 29},
+      {"book": "Interface RED Volume 2", "page": 23}
+    ],
+    "summary": {
+      "pt": "Solo que comanda a equipe de ataque de Unknown Caller, com Security Operatives de Light Armorjack e uma tirolesa. Se virar antagonista fixo, escapa pela janela amortecendo a queda com as cyberlegs.",
+      "en": "Solo who commands the strike team in Unknown Caller, backed by Security Operatives in Light Armorjack and a zipline. If kept as a recurring antagonist he escapes through a window, cushioning the fall with his cyberlegs."
+    },
+    "sheetNote": {
+      "pt": "A ficha imprime \"Melee Weapons\" (no plural) na lista de perícias. Mantido como impresso.",
+      "en": "The sheet prints \"Melee Weapons\" (plural) in the skill list. Kept as printed."
+    },
+    "sheet": {
+      "hp": 40,
+      "seriouslyWounded": 20,
+      "deathSave": 7,
+      "stats": {"INT": 4, "REF": 7, "DEX": 8, "TECH": 4, "COOL": 4, "WILL": 5, "MOVE": 8, "BODY": 7, "EMP": 2},
+      "armoredStats": {},
+      "weapons": [
+        {"name": "Assault Rifle", "skill": "Shoulder Arms", "attackBase": 13, "damage": "5d6", "rof": 1, "magazine": null, "class": "AssaultRifle", "melee": false, "notes": null},
+        {"name": "Wolvers", "skill": "Melee Weapon", "attackBase": 14, "damage": "3d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null}
+      ],
+      "armor": [
+        {"location": "Head", "name": "Light Armorjack", "sp": 11},
+        {"location": "Body", "name": "Light Armorjack", "sp": 11}
+      ],
+      "skills": {
+        "Acting": 10,
+        "Athletics": 14,
+        "Brawling": 14,
+        "Bureaucracy": 8,
+        "Concentration": 7,
+        "Contortionist": 14,
+        "Conversation": 4,
+        "Education": 6,
+        "Evasion": 14,
+        "First Aid": 6,
+        "Human Perception": 4,
+        "Language (Russian)": 8,
+        "Language (Streetslang)": 6,
+        "Local Expert (Your Home)": 6,
+        "Melee Weapons": 14,
+        "Perception": 10,
+        "Persuasion": 6,
+        "Resist Torture/Drugs": 11,
+        "Shoulder Arms": 13,
+        "Stealth": 14,
+        "Tactics": 10
+      },
+      "gear": ["Rifle Ammunition x15", "Agent", "Grapple Gun"],
+      "cyberware": ["Cybereye w/ Targeting Scope", "Cyberleg x2", "Wolvers"],
+      "specials": [
+        {
+          "name": "Combat Awareness 4",
+          "text": {
+            "pt": "Habilidade de Role Solo (Combat Awareness 4).",
+            "en": "Solo Role Ability (Combat Awareness 4)."
+          }
+        },
+        {
+          "name": "Esquadrão de ataque",
+          "text": {
+            "pt": "Sua equipe é ele mais Security Operatives de Light Armorjack com Autofire 12. Notá-lo antes que revele a posição exige Perception DV17.",
+            "en": "His crew is Security Operatives in Light Armorjack with Autofire 12, plus himself. Catching sight of him before he reveals where he stands is a DV17 Perception Check."
+          }
+        },
+        {
+          "name": "Nível / Tier",
+          "text": {
+            "pt": "Tenente Endurecido (Hardened Lieutenant).",
+            "en": "Hardened Lieutenant."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "ten-gallon",
+    "name": "Ten Gallon",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Lawman",
+    "roleRank": 4,
+    "rep": null,
+    "affiliation": null,
+    "sources": [
+      {"book": "Interface RED Volume 2", "page": 30},
+      {"book": "Interface RED Volume 2", "page": 24}
+    ],
+    "summary": {
+      "pt": "Policial da simulação de Just Like Real, que aparece num Gyrocopter com chassi blindado (SP13) durante a invasão final. O guia dá uma ficha própria para ele.",
+      "en": "Cop of the simulation in Just Like Real, who turns up in a Gyrocopter with Armored Chassis (SP13) during the final raid. The guide gives him his own statblock."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 40,
+      "seriouslyWounded": 20,
+      "deathSave": 6,
+      "stats": {"INT": 5, "REF": 8, "DEX": 6, "TECH": 6, "COOL": 4, "WILL": 6, "MOVE": 5, "BODY": 6, "EMP": 4},
+      "armoredStats": {},
+      "weapons": [
+        {"name": "Assault Rifle w/ Infrared Nightvision Scope", "skill": "Shoulder Arms", "attackBase": 14, "damage": "5d6", "rof": 1, "magazine": null, "class": "AssaultRifle", "melee": false, "notes": null},
+        {"name": "Stun Baton", "skill": "Melee Weapon", "attackBase": 6, "damage": "3d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": "No Skill Base printed for this weapon; STAT only."}
+      ],
+      "armor": [
+        {"location": "Head", "name": "Light Armorjack", "sp": 11},
+        {"location": "Body", "name": "Light Armorjack", "sp": 11}
+      ],
+      "skills": {
+        "Animal Handling": 10,
+        "Athletics": 8,
+        "Brawling": 12,
+        "Concentration": 8,
+        "Conversation": 6,
+        "Criminology": 10,
+        "Deduction": 10,
+        "Drive Land Vehicle": 14,
+        "Education": 7,
+        "Evasion": 8,
+        "First Aid": 8,
+        "Handgun": 14,
+        "Human Perception": 6,
+        "Land Vehicle Tech": 12,
+        "Language (English)": 9,
+        "Language (Spanish)": 9,
+        "Language (Streetslang)": 7,
+        "Local Expert (Your Home)": 7,
+        "Perception": 11,
+        "Persuasion": 6,
+        "Pilot Air Vehicle": 11,
+        "Riding": 12,
+        "Shoulder Arms": 14,
+        "Stealth": 8,
+        "Tracking": 8
+      },
+      "gear": ["Rifle Ammo x25", "Agent", "Grapple Gun", "Smart Glasses w/ Targeting Scope and TeleOptics"],
+      "cyberware": [],
+      "specials": [
+        {
+          "name": "Backup 4",
+          "text": {
+            "pt": "Habilidade de Role Lawman (Backup 4).",
+            "en": "Lawman Role Ability (Backup 4)."
+          }
+        },
+        {
+          "name": "Nível / Tier",
+          "text": {
+            "pt": "Tenente Endurecido (Hardened Lieutenant).",
+            "en": "Hardened Lieutenant."
+          }
+        }
+      ]
+    }
   }
 ]

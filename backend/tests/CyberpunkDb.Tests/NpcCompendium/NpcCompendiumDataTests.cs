@@ -94,7 +94,8 @@ public class NpcCompendiumDataTests
     {
         // Printed skills the rule book has no entry for.
         // "Medical Tech" and "Surgery": printed on Danger Gal Dossier Medtech sheets; the rule book lists only Paramedic.
-        string[] knownExceptions = ["Medical Tech", "Surgery"];
+        // "Melee Weapons": printed (plural) on Interface RED Volume 2 sheets; the rule book skill is Melee Weapon.
+        string[] knownExceptions = ["Medical Tech", "Surgery", "Melee Weapons"];
         var rules = NpcRuleBook.LoadEmbedded();
         foreach (var sheet in Compendium.All.Select(n => n.Sheet).OfType<CompendiumSheet>())
             foreach (var name in sheet.Skills.Keys.Concat(sheet.Weapons.Select(w => w.Skill)).Except(knownExceptions))
