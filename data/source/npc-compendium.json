@@ -8,7 +8,7 @@
     "roleRank": 9,
     "rep": 10,
     "affiliation": "Arasaka",
-    "sources": [{ "book": "Edgerunners Mission Kit", "page": 38 }, { "book": "Edgerunners Mission Kit", "page": 39 }, { "book": "Edgerunners Mission Kit", "page": 34 }, { "book": "Edgerunners Mission Kit", "page": 28 }],
+    "sources": [{ "book": "Edgerunners Mission Kit: The Jacket", "page": 38 }, { "book": "Edgerunners Mission Kit: The Jacket", "page": 39 }, { "book": "Edgerunners Mission Kit: Rule Book", "page": 34 }, { "book": "Edgerunners Mission Kit: The Jacket", "page": 28 }],
     "summary": {
       "pt": "Veterano de guerra com quase um século de vida, mercenário e depois soldado vitalício da Arasaka dentro de um corpo borg completo. Voltou a Night City depois de anos sumido. Há quem duvide que seja o Smasher original, mas ninguém duvida do estrago que ele faz.",
       "en": "A war veteran nearly a century old, once a mercenary and now a lifetime Arasaka soldier inside a full borg body. He is back in Night City after years off the radar. Some doubt he is the original Smasher, but nobody doubts the damage he does."
@@ -126,7 +126,7 @@
     "roleRank": 6,
     "rep": 7,
     "affiliation": null,
-    "sources": [{ "book": "Edgerunners Mission Kit", "page": 33 }, { "book": "Edgerunners Mission Kit", "page": 37 }, { "book": "Edgerunners Mission Kit", "page": 5 }],
+    "sources": [{ "book": "Edgerunners Mission Kit: The Jacket", "page": 33 }, { "book": "Edgerunners Mission Kit: Rule Book", "page": 37 }, { "book": "Edgerunners Mission Kit: The Jacket", "page": 5 }],
     "summary": {
       "pt": "Texano que trocou o trator por carros de corrida, depois pelas corridas de rua de Night City e por fim por gigs de edgerunner. Calado e de cabeça fria, é o piloto de fuga que contrata a Crew em The Jacket.",
       "en": "A Texan who traded tractors for race cars, then Night City street racing, and finally edgerunner gigs. Laconic and cool-headed, he is the getaway driver who hires the Crew in The Jacket."
@@ -181,7 +181,7 @@
     "roleRank": 4,
     "rep": 1,
     "affiliation": "Valentinos",
-    "sources": [{ "book": "Edgerunners Mission Kit", "page": 34 }, { "book": "Edgerunners Mission Kit", "page": 5 }, { "book": "Edgerunners Mission Kit", "page": 24 }],
+    "sources": [{ "book": "Edgerunners Mission Kit: The Jacket", "page": 34 }, { "book": "Edgerunners Mission Kit: The Jacket", "page": 5 }, { "book": "Edgerunners Mission Kit: The Jacket", "page": 24 }],
     "summary": {
       "pt": "Mecânico de baixo escalão dos Valentinos que só queria uma família. Roubou um depósito da gangue, ficou com uma jaqueta amarela e agora está marcado para morrer, tentando tirar a parceira da cidade.",
       "en": "A low-level Valentino mechanic who only wanted a family. He robbed a gang storage unit, ended up with a yellow jacket, and is now marked for death while trying to get his partner out of town."
@@ -235,7 +235,7 @@
     "roleRank": 6,
     "rep": 5,
     "affiliation": "Valentinos",
-    "sources": [{ "book": "Edgerunners Mission Kit", "page": 40 }, { "book": "Edgerunners Mission Kit", "page": 13 }, { "book": "Edgerunners Mission Kit", "page": 14 }],
+    "sources": [{ "book": "Edgerunners Mission Kit: The Jacket", "page": 40 }, { "book": "Edgerunners Mission Kit: The Jacket", "page": 13 }, { "book": "Edgerunners Mission Kit: The Jacket", "page": 14 }],
     "summary": {
       "pt": "Tenente de Gustavo Orta nos Valentinos, com ordens de matar Dalton. Os dois braços foram trocados por cyberarms com Mantis Blades. É o chefe da luta final de The Jacket, quando Smasher não entra.",
       "en": "Gustavo Orta's lieutenant in the Valentinos, ordered to kill Dalton. Both arms were replaced with Mantis Blade cyberarms. She is the boss of The Jacket's final fight when Smasher stays out of it."
@@ -298,9 +298,9 @@
     "rep": null,
     "affiliation": null,
     "sources": [
-      { "book": "Cyberpunk RED Core Rulebook", "page": 121 },
-      { "book": "Cyberpunk RED Core Rulebook", "page": 240 },
-      { "book": "Cyberpunk RED Core Rulebook", "page": 293 }
+      { "book": "Edgerunners Mission Kit: The Jacket", "page": 121 },
+      { "book": "Edgerunners Mission Kit: The Jacket", "page": 240 },
+      { "book": "Edgerunners Mission Kit: The Jacket", "page": 293 }
     ],
     "summary": {
       "pt": "Lenda entre os Solos. Liderou a incursão à Arasaka Tower em 2023, ao lado de Johnny Silverhand, quando a bomba explodiu em Night City. Ninguém o viu, vivo ou morto, desde então, e os boatos o dão como espião do governo e visto em cidades da Primeira Onda.",
@@ -319,10 +319,10 @@
     "rep": null,
     "affiliation": "Maine's crew",
     "sources": [
-      { "book": "Edgerunners Mission Kit", "page": 35 },
-      { "book": "Edgerunners Mission Kit", "page": 6 },
-      { "book": "Edgerunners Mission Kit", "page": 5 },
-      { "book": "Edgerunners Mission Kit", "page": 2 }
+      { "book": "Edgerunners Mission Kit: Rule Book", "page": 35 },
+      { "book": "Edgerunners Mission Kit: Rule Book", "page": 6 },
+      { "book": "Edgerunners Mission Kit: The Jacket", "page": 5 },
+      { "book": "Edgerunners Mission Kit: Rule Book", "page": 2 }
     ],
     "summary": {
       "pt": "Garoto de Santo Domingo, filho de uma socorrista, que sempre sentiu que nascera para algo maior e vivia atrás de chrome e confusão. Virou o edgerunner mais comentado da cidade e caiu no último confronto contra Adam Smasher e a Arasaka. A jaqueta amarela dele é o motivo de The Jacket.",
@@ -341,9 +341,9 @@
     "rep": null,
     "affiliation": "REO Meatwagon",
     "sources": [
-      { "book": "Edgerunners Mission Kit", "page": 35 },
-      { "book": "Edgerunners Mission Kit", "page": 5 },
-      { "book": "Edgerunners Mission Kit", "page": 2 }
+      { "book": "Edgerunners Mission Kit: Rule Book", "page": 35 },
+      { "book": "Edgerunners Mission Kit: The Jacket", "page": 5 },
+      { "book": "Edgerunners Mission Kit: Rule Book", "page": 2 }
     ],
     "summary": {
       "pt": "Paramédica de ambulância que deu à luz David na própria maca, em plena corrida para o hospital, e passou a vida protegendo o filho. Trabalhava na REO Meatwagon, cuja jaqueta de campo ela deixou de herança para ele.",
@@ -364,7 +364,7 @@
     "rep": null,
     "affiliation": "Maine's crew",
     "sources": [
-      { "book": "Edgerunners Mission Kit", "page": 36 }
+      { "book": "Edgerunners Mission Kit: Rule Book", "page": 36 }
     ],
     "summary": {
       "pt": "Islandesa criada para ser atleta de elite. Quando o pai morreu no fogo cruzado entre Animals e Voodoo Boys, abandonou os halteres e passou a odiar as gangues de Night City. Maine a salvou no meio de uma vingança e a recrutou para a equipe dele.",
@@ -383,8 +383,8 @@
     "rep": null,
     "affiliation": "Maine's crew",
     "sources": [
-      { "book": "Edgerunners Mission Kit", "page": 37 },
-      { "book": "Edgerunners Mission Kit", "page": 2 }
+      { "book": "Edgerunners Mission Kit: Rule Book", "page": 37 },
+      { "book": "Edgerunners Mission Kit: Rule Book", "page": 2 }
     ],
     "summary": {
       "pt": "Vendida a uma fábrica corporativa ainda criança e depois a um bordel, aprendeu eletrônica e netrunning para sobreviver e acabou incendiando os dois lugares com os donos dentro. Usa uma máscara sobre a mandíbula perdida. Conheceu Rebecca em Night City e entrou na equipe de Maine.",
@@ -405,8 +405,8 @@
     "rep": null,
     "affiliation": "Maine's crew",
     "sources": [
-      { "book": "Edgerunners Mission Kit", "page": 38 },
-      { "book": "Edgerunners Mission Kit", "page": 2 }
+      { "book": "Edgerunners Mission Kit: Rule Book", "page": 38 },
+      { "book": "Edgerunners Mission Kit: Rule Book", "page": 2 }
     ],
     "summary": {
       "pt": "Netrunner talentosa nascida em Varsóvia, filha de um veterano da Arasaka e de uma ex-hacker. Foi forçada a trabalhar para a corporação, fugiu quando os colegas começaram a morrer e juntou eddies em Night City para escapar para a Lua. Kiwi a levou para a equipe de Maine.",
@@ -425,8 +425,8 @@
     "rep": null,
     "affiliation": "Maine's crew",
     "sources": [
-      { "book": "Edgerunners Mission Kit", "page": 39 },
-      { "book": "Edgerunners Mission Kit", "page": 2 }
+      { "book": "Edgerunners Mission Kit: Rule Book", "page": 39 },
+      { "book": "Edgerunners Mission Kit: Rule Book", "page": 2 }
     ],
     "summary": {
       "pt": "Filho de uma cantora de jazz, cresceu franzino e apanhando, então ficou enorme, lutou boxe clandestino e instalou chrome nas mãos. Serviu dois anos na NUSA SpecOps, saiu enojado e montou a própria equipe de edgerunners em Night City.",
@@ -445,8 +445,8 @@
     "rep": null,
     "affiliation": "Maine's crew",
     "sources": [
-      { "book": "Edgerunners Mission Kit", "page": 40 },
-      { "book": "Edgerunners Mission Kit", "page": 2 }
+      { "book": "Edgerunners Mission Kit: Rule Book", "page": 40 },
+      { "book": "Edgerunners Mission Kit: Rule Book", "page": 2 }
     ],
     "summary": {
       "pt": "Irmão mais velho de Rebecca e fã número um do pai, o edgerunner Papa Sunrise, que sumiu sem deixar rastro. Jurou achar os culpados, cuidou da irmã na rua e entrou na equipe de Maine para conter o caos que ela causava nas missões.",
@@ -467,8 +467,8 @@
     "rep": null,
     "affiliation": "Maine's crew",
     "sources": [
-      { "book": "Edgerunners Mission Kit", "page": 40 },
-      { "book": "Edgerunners Mission Kit", "page": 2 }
+      { "book": "Edgerunners Mission Kit: Rule Book", "page": 40 },
+      { "book": "Edgerunners Mission Kit: Rule Book", "page": 2 }
     ],
     "summary": {
       "pt": "Nascida e criada em Night City, filha de Papa Sunrise. É emotiva, imprevisível e compassiva demais, e isso atrapalha as missões dela. Pilar a apresentou a Maine depois de meses em dúvida sobre ser edgerunner.",
@@ -489,9 +489,9 @@
     "rep": null,
     "affiliation": "Nomads",
     "sources": [
-      { "book": "Edgerunners Mission Kit", "page": 27 },
-      { "book": "Edgerunners Mission Kit", "page": 4 },
-      { "book": "Edgerunners Mission Kit", "page": 5 }
+      { "book": "Edgerunners Mission Kit: Rule Book", "page": 27 },
+      { "book": "Edgerunners Mission Kit: The Jacket", "page": 4 },
+      { "book": "Edgerunners Mission Kit: The Jacket", "page": 5 }
     ],
     "summary": {
       "pt": "Fixer nômade conhecida como Mad Coyote, que opera de uma garagem nos Badlands, fora de Night City, e cuida dos trabalhos ligados aos nômades. Em The Jacket é ela quem passa o serviço de Falco para a Crew.",
@@ -512,7 +512,7 @@
     "rep": null,
     "affiliation": null,
     "sources": [
-      { "book": "Edgerunners Mission Kit", "page": 27 }
+      { "book": "Edgerunners Mission Kit: Rule Book", "page": 27 }
     ],
     "summary": {
       "pt": "Fixer que oferece vários tipos de serviço, mas é especialista em carros: publica recompensas por marcas e modelos específicos e revende o que chega através do negócio de autofixer dele.",
@@ -533,7 +533,7 @@
     "rep": null,
     "affiliation": "Afterlife",
     "sources": [
-      { "book": "Edgerunners Mission Kit", "page": 27 }
+      { "book": "Edgerunners Mission Kit: Rule Book", "page": 27 }
     ],
     "summary": {
       "pt": "Chamada de Rainha dos Fixers, é dona do Afterlife, o bar de edgerunners mais famoso da cidade. Foi uma das melhores solos de aluguel de Night City e hoje, quase aposentada das armas, monta equipes de elite para clientes ricos.",
@@ -554,8 +554,8 @@
     "rep": null,
     "affiliation": null,
     "sources": [
-      { "book": "Edgerunners Mission Kit", "page": 27 },
-      { "book": "Edgerunners Mission Kit", "page": 2 }
+      { "book": "Edgerunners Mission Kit: Rule Book", "page": 27 },
+      { "book": "Edgerunners Mission Kit: Rule Book", "page": 2 }
     ],
     "summary": {
       "pt": "Ex-padre que largou o clero para ser fixer, o que ele considera um chamado mais nobre. Os serviços dele parecem peças de uma partida de xadrez para manter algum equilíbrio em Heywood.",
@@ -574,9 +574,9 @@
     "rep": null,
     "affiliation": null,
     "sources": [
-      { "book": "Edgerunners Mission Kit", "page": 27 },
-      { "book": "Edgerunners Mission Kit", "page": 2 },
-      { "book": "Edgerunners Mission Kit", "page": 40 }
+      { "book": "Edgerunners Mission Kit: Rule Book", "page": 27 },
+      { "book": "Edgerunners Mission Kit: Rule Book", "page": 2 },
+      { "book": "Edgerunners Mission Kit: Rule Book", "page": 40 }
     ],
     "summary": {
       "pt": "Conhecida como a Dama de Westbrook, comanda um pachinko em Jig-Jig Street, em Japantown. A comunidade a respeita, ou a teme, e os serviços dela cobrem todo tipo de trabalho. Pilar a chama de tia e ela ajudou os filhos de Papa Sunrise.",
@@ -595,8 +595,8 @@
     "rep": null,
     "affiliation": null,
     "sources": [
-      { "book": "Edgerunners Mission Kit", "page": 12 },
-      { "book": "Edgerunners Mission Kit", "page": 5 }
+      { "book": "Edgerunners Mission Kit: Rule Book", "page": 12 },
+      { "book": "Edgerunners Mission Kit: Rule Book", "page": 5 }
     ],
     "summary": {
       "pt": "Considerado o netrunner mais brilhante do mundo, plantou o DataKrash dentro do IGTA como uma chave de segurança que dependia de ele fazer check-ins. Quando foi morto, o vírus embaralhou quase toda a Net e soltou os R.A.B.I.D.s, e a Old Net acabou isolada.",
@@ -615,7 +615,7 @@
     "rep": null,
     "affiliation": "Valentinos",
     "sources": [
-      { "book": "Edgerunners Mission Kit", "page": 13 }
+      { "book": "Edgerunners Mission Kit: The Jacket", "page": 13 }
     ],
     "summary": {
       "pt": "Valentino que virou edgerunner, simpático e de olho aberto, frequenta o El Coyote Cojo. Só fala com quem paga uma bebida e conta à Crew como Dalton foi parar na lista de Gustavo Orta. Aparece em The Jacket como personagem querido de Cyberpunk 2077.",
@@ -634,7 +634,7 @@
     "rep": null,
     "affiliation": "Mox",
     "sources": [
-      { "book": "Edgerunners Mission Kit", "page": 14 }
+      { "book": "Edgerunners Mission Kit: The Jacket", "page": 14 }
     ],
     "summary": {
       "pt": "Mainline de Dalton, integrante das Mox, que toca violão como busker numa estação da NCART. Gosta de verdade dele e foge gritando por socorro se achar que a Crew quer machucá-lo. Fica ao lado de Dalton até a fuga para os nômades.",
@@ -655,8 +655,8 @@
     "rep": null,
     "affiliation": "Steel Vaqueros",
     "sources": [
-      { "book": "Edgerunners Mission Kit", "page": 28 },
-      { "book": "Edgerunners Mission Kit", "page": 30 }
+      { "book": "Edgerunners Mission Kit: The Jacket", "page": 28 },
+      { "book": "Edgerunners Mission Kit: The Jacket", "page": 30 }
     ],
     "summary": {
       "pt": "Lola Blaine comanda a caravana nômade Steel Vaqueros. Exige que Dalton prove seu valor recuperando a torre de um AV da Arasaka, e depois dá lugar no bando a ele, a Summer e, se merecerem, à Crew.",
@@ -675,7 +675,7 @@
     "rep": null,
     "affiliation": null,
     "sources": [
-      { "book": "Edgerunners Mission Kit", "page": 22 }
+      { "book": "Edgerunners Mission Kit: The Jacket", "page": 22 }
     ],
     "summary": {
       "pt": "Bartender mais velho, de cabelo loiro arrepiado, dono de um bar nos Badlands. Só abre o jogo com a Crew se for convencido ou se ela gastar com bebida, e então conta que Dalton perguntou pelos Steel Vaqueros.",
@@ -696,8 +696,8 @@
     "rep": null,
     "affiliation": null,
     "sources": [
-      { "book": "Edgerunners Mission Kit", "page": 21 },
-      { "book": "Edgerunners Mission Kit", "page": 22 }
+      { "book": "Edgerunners Mission Kit: The Jacket", "page": 21 },
+      { "book": "Edgerunners Mission Kit: The Jacket", "page": 22 }
     ],
     "summary": {
       "pt": "Velho maltrapilho que devora um Burrito XXL ao lado de uma máquina de venda e fala sem precisar de teste. Explica à Crew, com a metáfora da Escada e Cobras, a ideia de que encontros aparentemente aleatórios têm razão de ser, e diz que indicou a Dalton o caminho dos nômades.",
@@ -716,30 +716,11 @@
     "rep": null,
     "affiliation": null,
     "sources": [
-      { "book": "Edgerunners Mission Kit", "page": 10 }
+      { "book": "Edgerunners Mission Kit: The Jacket", "page": 10 }
     ],
     "summary": {
       "pt": "Funcionário do Tom's Diner que toca o balcão sozinho num dia de folga de Tom, porque o cozinheiro faltou. Está de mau humor e só fala com a Crew se for tratado bem ou receber boa gorjeta.",
       "en": "A Tom's Diner employee running the diner alone on Tom's day off because the cook didn't show. He is in a bad mood and only talks to the Crew if treated well or tipped decently."
-    },
-    "sheetNote": null,
-    "sheet": null
-  },
-  {
-    "id": "saito",
-    "name": "Saito",
-    "aliases": [],
-    "kind": "profile",
-    "role": null,
-    "roleRank": null,
-    "rep": null,
-    "affiliation": "Zetatech",
-    "sources": [
-      { "book": "Edgerunners Mission Kit", "page": 9 }
-    ],
-    "summary": {
-      "pt": "Empresário simpático de terno, vendedor da Zetatech, que come um hambúrguer de scop numa mesa do Tom's Diner. Não sabe de nada útil, mas dá seu cartão e adora falar de eletrodomésticos de cozinha.",
-      "en": "A friendly businessman in a sharp suit, a Zetatech salesman eating a scop burger in a Tom's Diner booth. He knows nothing useful but hands out his card and loves chatting about kitchen appliances."
     },
     "sheetNote": null,
     "sheet": null
