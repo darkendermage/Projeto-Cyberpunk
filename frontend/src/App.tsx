@@ -15,6 +15,7 @@ const QuickRulesPage = lazy(() => import('./features/reference/ReferencePages').
 const TablesPage = lazy(() => import('./features/reference/ReferencePages').then((m) => ({ default: m.TablesPage })));
 const GlossaryPage = lazy(() => import('./features/reference/ReferencePages').then((m) => ({ default: m.GlossaryPage })));
 const EnemyGeneratorPage = lazy(() => import('./features/enemies/EnemyGeneratorPage').then((m) => ({ default: m.EnemyGeneratorPage })));
+const NpcCompendiumPage = lazy(() => import('./features/npc-compendium/NpcCompendiumPage').then((m) => ({ default: m.NpcCompendiumPage })));
 const CharactersPage = lazy(() => import('./features/characters/CharactersPage').then((m) => ({ default: m.CharactersPage })));
 const CharacterPage = lazy(() => import('./features/characters/CharacterPage').then((m) => ({ default: m.CharacterPage })));
 const MartialArtsPage = lazy(() => import('./features/reference/MartialArtsPage').then((m) => ({ default: m.MartialArtsPage })));
@@ -39,6 +40,7 @@ export default function App() {
           <Route path="/glossary" element={<GlossaryPage />} />
           <Route path="/martial-arts" element={<MartialArtsPage />} />
           <Route path="/enemies" element={<EnemyGeneratorPage />} />
+          <Route path="/npcs" element={<NpcCompendiumPage />} />
           <Route path="/night-market" element={<NightMarketPage />} />
           <Route path="/night-market/:id" element={<NightMarketPage />} />
           <Route path="/combat" element={<CombatPage />} />
