@@ -79,6 +79,16 @@ Precisa de uma gangue para emboscar o grupo daqui a cinco minutos?
 - **Três modos:** automático (um clique), semiautomático (você trava o que quer e ele completa o resto) e manual (você monta e ele confere).
 - Toda ficha é conferida com as regras e avisa o que está fora do padrão. O Mestre sempre pode aceitar uma exceção.
 
+### 🗂️ Compêndio de NPCs
+
+Os personagens com nome dos livros, num lugar só. Página **Compêndio de NPCs**, no menu **Outros**.
+
+- **Mais de 300 NPCs** de 20 livros: Adam Smasher, Rache Bartmoss, as Danger Gals e muitos outros. Busque pelo nome, filtre por livro, Role ou ficha oficial, e cada NPC traz a página de onde veio.
+- **Ficha ou perfil:** quem tem ficha impressa no livro mostra STATs, HP, armas, armadura, perícias, equipamento, cyberware e regras especiais. Quem não tem (Morgan Blackhand, por exemplo: os livros não imprimem ficha para ele) aparece como perfil, só com a biografia e as fontes.
+- **Direto para a mesa:** um clique põe a ficha no Friday Night Firefight, com as armas, a armadura (inclusive o SP contra armas corpo a corpo) e as tabelas de alcance da própria ficha.
+- **Só o que o livro imprime:** nenhum número foi inventado. Biografias e resumos das regras especiais foram reescritos com palavras nossas, em português e em inglês.
+- **Regras especiais não são aplicadas pelo app.** O combate cuida de ataque, dano, armadura, Autofire e ferimentos; habilidades como a de uma Role ou de um corpo borg aparecem como texto na ficha, e o Mestre as aplica na mesa.
+
 ### ⚔️ Friday Night Firefight
 
 A antiga Mesa de Combate, com o nome do capítulo de combate do livro. O tiroteio inteiro sem calculadora na mão.

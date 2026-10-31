@@ -95,8 +95,8 @@ Para produção, rode `npm run build` e copie `frontend/dist` para `backend/src/
 ### Testes
 
 ```bash
-cd backend && dotnet test     # 404 testes: filtros, validação, gerador de NPCs e gangues, regras de personagem, Night Market, Arquiteturas de NET, Friday Night Firefight (mesa de combate), atualização automática e integração da API (SQLite + seed real)
-cd frontend && npm test       # filtros, URL, editor de NPCs, tabela de alcance, perícias, Lifepath, anatomia do cyberware e Night Market
+cd backend && dotnet test     # 434 testes: filtros, validação, gerador de NPCs e gangues, Compêndio de NPCs (dados e API), regras de personagem, Night Market, Arquiteturas de NET, Friday Night Firefight (mesa de combate), atualização automática e integração da API (SQLite + seed real)
+cd frontend && npm test       # filtros, URL, editor de NPCs, Compêndio de NPCs, tabela de alcance, perícias, Lifepath, anatomia do cyberware e Night Market
 ```
 
 ## Arquitetura
@@ -207,6 +207,84 @@ A seção `gangs` de `npc-rules.json` traz 23 gangues: as da era RED, de 2045 (C
 Descrição, estética, território e o que os livros dizem que cada gangue carrega têm página. O equipamento vem principalmente das tabelas de encontro do Core (p.418–424) e das fichas de membros do DGD. Os pesos do gerador (`bias`) são interpretação da aplicação e ficam marcados como complementares. Na página, o painel da gangue mostra tudo isso em **Nos livros e no gerador**. A ficha guarda o `gangId` no JSON, sem coluna própria.
 
 **Divergência registrada:** o catálogo marca o Chipware Socket com 0 slot. O validador segue o Core (p.359), via `cyberware.overrides` em `npc-rules.json`.
+
+## Compêndio de NPCs
+
+Páginas `/npcs` e `/npcs/{id}`. Os dados ficam em `data/source/npc-compendium.json`, embutido no assembly `CyberpunkDb.Application` (`Npcs/Compendium/NpcCompendium.cs` carrega e indexa por `id`, como singleton). A API é só leitura: `GET /api/npc-compendium` (lista) e `GET /api/npc-compendium/{id}` (ficha completa; 404 se não existir). Não há tabela nova nem migração. O frontend só mostra o que a API devolve; as regras de combate continuam no servidor.
+
+### Quem entra
+
+Entra quem tem nome próprio e atende a uma destas condições:
+
+- tem ficha no livro (`kind: "sheet"`);
+- tem pelo menos um parágrafo próprio sobre a pessoa (`kind: "profile"`).
+
+Não entram: nome citado de passagem, autor de citação ou de artigo fictício, marca ou mascote, ficha genérica (mesmo com apelido de categoria) e PC pré-gerado que o livro não trate como personagem da história. "The Clown" e "Boom-Boom" entram (rótulo de uma pessoa só); "Road Ganger" não (tipo). Um NPC em vários livros é uma entrada só, com todas as fontes; havendo mais de uma ficha, vale a mais recente e `sheetNote` registra a diferença.
+
+Morgan Blackhand, Rogue, Johnny Silverhand e outros são `profile` porque os livros não imprimem ficha para eles. Nada é inventado para preencher essa lacuna.
+
+### Formato do JSON
+
+Uma lista de entradas. Números e nomes de armas, equipamentos e perícias ficam em inglês, como nos livros. Só `summary`, `specials[].text` e `sheetNote` têm `{ "pt", "en" }`, e são escritos por nós (nunca copiados do livro).
+
+```json
+{
+  "id": "adam-smasher", "name": "Adam Smasher", "aliases": [],
+  "kind": "sheet", "role": "Solo", "roleRank": 9, "rep": 10, "affiliation": "Arasaka",
+  "sources": [{ "book": "Edgerunners Mission Kit: The Jacket", "page": 38 }],
+  "summary": { "pt": "...", "en": "..." }, "sheetNote": null,
+  "sheet": {
+    "hp": 75, "seriouslyWounded": null, "deathSave": 17,
+    "stats": { "INT": 6, "REF": 8, "...": 0, "EMP": null },
+    "armoredStats": {},
+    "weapons": [{ "name": "...", "skill": "Heavy Weapons", "attackBase": 18, "damage": "2d6", "rof": 1, "magazine": 80,
+                  "class": "MachineGun", "autofireMultiplier": 5, "rangeDv": [22, 20, 17, 20, 25, null, null, null],
+                  "melee": false, "notes": "..." }],
+    "armor": [{ "location": "Body", "name": "...", "sp": 18, "spVsMelee": 18 }],
+    "skills": { "Evasion": 0 }, "armoredSkills": { "Athletics": 0 },
+    "gear": [], "cyberware": [],
+    "specials": [{ "name": "...", "text": { "pt": "...", "en": "..." } }]
+  }
+}
+```
+
+(Os `0` acima são só ilustração; o teste de dados recusa página 0.)
+
+- `id` é o slug único do nome. `kind` é `sheet` ou `profile`; em `profile`, `sheet` é `null` e `role`, `roleRank` e `rep` são opcionais. `sources` tem ao menos uma entrada, com o livro e a **página impressa** (a do rodapé, não a do PDF).
+- `stats`, `skills` e `attackBase` guardam o valor impresso, sem recalcular. `—` no livro vira `null`.
+- `armoredStats` guarda os valores entre parênteses de `REF 8(6)`, os que já trazem a penalidade da armadura; fica vazio quando o livro não os imprime. `armoredSkills` faz o mesmo para perícias como `Athletics 13 (11)`. O combate usa esses valores quando existem.
+- `rangeDv` (opcional, em `weapons`) tem oito valores, das faixas 0-6 a 401-800 m/yds, copiados da tabela que a ficha imprime para a arma, com `null` nas faixas `—`. Quando existe, o combate usa essa tabela no lugar da tabela geral de alcance, nos ataques normais e em Autofire.
+- `autofireMultiplier`: arma "Autofire only" imprime "See Type" no DMG. Fica então `damage` com o dano de Autofire (`2d6`), `autofireMultiplier` com o multiplicador impresso (`x5` vira `5`) e `notes` registrando o "See Type".
+- `spVsMelee` (opcional, em `armor`) é a coluna "SP vs Melee/Charged Tech Weapons".
+- `class` é um valor de `WeaponClass` quando a arma do livro corresponde a um; `null` em armas fora da tabela (punhos do Smasher), e então `melee` diz como a arma se comporta.
+
+### Combate
+
+`POST /api/encounters/{id}/combatants` aceita `compendiumNpcId`. `FighterViews.Compendium` monta o `CombatSnapshot`: STATs de `armoredStats` quando existem, HP e BODY da ficha, SP de corpo e cabeça de `armor`, perícias traduzidas para as chaves de `NpcRuleBook.Skills` (as que não batem ficam fora do snapshot, mas continuam na ficha), cada arma como `CombatWeapon` e `Cyberarm` quando há um Cyberarm no cyberware. O combatente é do tipo `Npc`. Adicionar um `profile` devolve erro de validação ("Este NPC não tem ficha oficial") e um `id` desconhecido devolve 404.
+
+**O que o combate não faz sozinho:** as regras especiais (`specials`) são só texto na ficha. Habilidades de Role, de corpo borg ou de equipamento (o "Halves SP" dos punhos do Smasher, por exemplo, está em `notes`) não alteram os cálculos; o Mestre as aplica.
+
+### Extração e conferência
+
+Os scripts ficam em `tools/npc-compendium/` e precisam do `pdftotext` (xpdf ou poppler) no PATH. A pasta padrão dos PDFs é `%USERPROFILE%\Downloads\Cyberpunk PDFs`; outra pasta pode ir como argumento.
+
+```bash
+node tools/npc-compendium/extract.mjs ["pasta dos PDFs"]   # acha todo bloco de ficha; gera out/blocks.json e out/report.txt
+node tools/npc-compendium/reconcile.mjs                    # todo bloco precisa de destino; sai com 1 se algum sumiu
+node tools/npc-compendium/check-wording.mjs ["pasta dos PDFs"]  # sai com 1 se um texto nosso repete 8+ palavras seguidas de um livro
+```
+
+- **`extract.mjs`** acha os blocos pela linha de STATs e escreve um rascunho (cabeçalho, STATs, texto bruto, página impressa) mais um relatório por livro. Ele não publica nada: o JSON final é conferido ficha a ficha contra o PDF e as biografias são escritas à mão. `out/` é gerado e não vai para o git.
+- **`reconcile.mjs`** compara os blocos com as entradas do JSON (mesmo livro e página, nome compatível) e com `discarded.txt`. Bloco sem destino é erro, para nenhuma ficha sumir em silêncio.
+- **`discarded.txt`** lista o que foi encontrado e não entrou, uma linha por bloco: `<livro> | p.<página> | <nome> | <motivo>` (genérico, sem nome próprio, texto de passagem...). Linhas com `#` são comentários. Se um bloco novo aparecer, ele entra no JSON ou ganha uma linha aqui com o motivo.
+- **`check-wording.mjs`** garante que `summary` (EN), `specials[].text` (EN) e `sheetNote` (em inglês) são palavras nossas.
+
+### Como corrigir um NPC
+
+1. Abra o PDF na página impressa citada em `sources` e confira o valor errado.
+2. Edite a entrada em `data/source/npc-compendium.json`. Mantenha o valor impresso (`—` vira `null`) e o mesmo `id`, para não quebrar links. Textos próprios ficam em PT e EN.
+3. Se mudou texto, rode `check-wording.mjs`. Se mexeu em fontes ou descartes, rode `reconcile.mjs`.
+4. `cd backend && dotnet test`: o teste de dados confere formato, páginas, IDs únicos, os dois idiomas e as regras acima. O arquivo é um recurso embutido, então o backend precisa ser recompilado.
 
 ## Personagens
 
