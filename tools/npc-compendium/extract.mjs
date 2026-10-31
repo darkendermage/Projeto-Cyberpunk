@@ -154,6 +154,11 @@ function anchorKind(line) {
 // ------------------------------------------------------------------ header
 
 const HEADER_START = /^\s*(?:[A-Za-z]\s+)?(?:name|level|roles?)\b/i;
+/** A sheet header: a NAME / LEVEL line with the "Seriously ... HP" box on it or within the next three lines (its tokens may sit on different lines). */
+const HEADER_LINE = /^\s*(?:[A-Za-z]\s+){0,3}(?:name|level)\b/i;
+function isHeader(lines, i) {
+  return HEADER_LINE.test(lines[i] ?? '') && /Seriously\s+(?:HP\b|[\d—]+\s+[\d—]+)|[\d—]+\s+Seriously\s+HP\b/i.test(lines.slice(i, i + 4).join('\n'));
+}
 const HP_LINE = /([\d—]+)\s+([\d—]+)\s+HP\b/;
 const num = (s) => (s === undefined || !/^\d+$/.test(s) ? null : Number(s));
 const seg = (s) => s.trim().split(/\s{2,}/)[0].trim();
@@ -173,6 +178,11 @@ function header(lines, from, to) {
   const h = {};
   const hp = text.match(HP_LINE);
   if (hp) [h.hp, h.seriouslyWounded] = [num(hp[1]), num(hp[2])];
+  else {
+    // "10 Seriously     HP" then "wounded     20": Seriously Wounded first, HP on the next line
+    const split = text.match(/(\d+)\s+Seriously\s+HP[\s\S]{0,120}?wounded\s+(\d+)/i);
+    if (split) [h.hp, h.seriouslyWounded] = [num(split[2]), num(split[1])];
+  }
   const rep = text.match(/\b(\d+)\s*rep\b/i) ?? text.match(/\(rep\s*(\d+)\)/i) ?? text.match(/\brep\s+(\d+)/i) ?? text.match(/^\s*(\d+)\s+Death\b/im);
   if (rep) h.rep = Number(rep[1]);
   const lvlAt = win.findIndex((l) => /^\s*(?:[A-Za-z]\s+)?level\b/i.test(l));
@@ -275,6 +285,7 @@ function scan(file) {
   const printed = pageOffsets(pages, fallback);
   const blocks = [];
   const excluded = [];
+  const warnings = [];
   pages.forEach((page, p) => {
     const lines = page.split('\n');
     const anchors = [];
@@ -293,9 +304,9 @@ function scan(file) {
     });
     // sheet headers without a STAT row nearby: counted, so nothing is lost
     lines.forEach((line, i) => {
-      if (!HP_LINE.test(line) || !/seriously|wounded/i.test(`${line}${lines[i + 1] ?? ''}`)) return;
+      if (!isHeader(lines, i)) return;
       if (anchors.some((a) => a.row >= i && a.row <= i + 14)) return;
-      anchors.push({ kind: null, row: i + 7 });
+      anchors.push({ kind: null, row: i + 7, hdr: i });
     });
     anchors.sort((a, b) => a.row - b.row);
     const used = new Set(); // header lines already taken by a block
@@ -308,7 +319,7 @@ function scan(file) {
       // the header is the nearest NAME / LEVEL line above the STAT row that no other block took (sheets side by side
       // share their lines, so the search is not cut at the previous block)
       let hs = -1;
-      if (!twoRows) {
+      if (a.hdr !== undefined) { hs = a.hdr; used.add(hs); } else if (!twoRows) {
         for (let i = r.start - 1; i >= Math.max(0, r.start - 30); i--) {
           if (/^\s*(?:[A-Za-z]\s+){0,3}(?:name|level)\b/i.test(lines[i]) && !used.has(i)) { hs = i; break; }
         }
@@ -327,6 +338,10 @@ function scan(file) {
     read.filter(blank).forEach(() => excluded.push({ printedPage: printed[p], what: 'blank NPC template sheet' }));
     const sheets = read.filter((x) => !blank(x));
     const starts = sheets.map((x) => x.hs);
+    // guard: every header line of the page must belong to a block (or to a blank template sheet)
+    const headers = lines.map((_, i) => i).filter((i) => isHeader(lines, i));
+    const owned = new Set(read.map((x) => x.hs));
+    for (const i of headers) if (!owned.has(i)) warnings.push(`p.${printed[p]} (pdf ${p + 1}): header line "${lines[i].trim().slice(0, 50)}" belongs to no block`);
     sheets.forEach(({ a, r, hs, regionFrom, twoRows }, k) => {
       const end = Math.min(...starts.filter((s) => s > hs), lines.length);
       let h;
@@ -350,6 +365,8 @@ function scan(file) {
       if (!h.name && !heading) issues.push('name not found');
       if (!h.name && heading) issues.push('name taken from the page heading');
       if (h.nameGarbled) issues.push('name taken from a drop cap line: letters may be missing');
+      const second = lines.slice(hs + 1, end).findIndex((_, j) => isHeader(lines, hs + 1 + j));
+      if (second >= 0) warnings.push(`p.${printed[p]} (pdf ${p + 1}): block "${h.name ?? heading ?? '?'}" contains a second header at line +${second + 1}`);
       blocks.push({
         book,
         printedPage: printed[p],
@@ -370,7 +387,7 @@ function scan(file) {
       });
     });
   });
-  return { book, blocks, excluded, pages: pages.length };
+  return { book, blocks, excluded, warnings, pages: pages.length };
 }
 
 // ------------------------------------------------------------------ run
@@ -404,6 +421,9 @@ for (const r of results.filter((x) => x.blocks.length || x.excluded.length)) {
     for (const [what, pg] of byWhat) rep.push(`    ${what}: ${pg.length} lines, pages ${[...new Set(pg)].join(', ')}`);
   }
 }
+const warned = results.filter((r) => r.warnings.length);
+rep.push('', `=== Header guard warnings: ${warned.reduce((n, r) => n + r.warnings.length, 0)} ===`);
+for (const r of warned) for (const w of r.warnings) rep.push(`  ${r.book} ${w}`);
 const bad = blocks.filter((b) => !b.parsed);
 rep.push('', `=== Blocks not fully read, to check by hand: ${bad.length} ===`);
 for (const b of bad) rep.push(`  ${b.book} p.${b.printedPage} (pdf ${b.pdfPage}) ${b.rawName ?? '(no name)'}: ${b.issues.join('; ')}`);
