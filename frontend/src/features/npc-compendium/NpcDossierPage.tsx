@@ -5,6 +5,7 @@ import { ErrorState, Spinner } from '../../components/ui/ui';
 import page from '../../styles/Page.module.css';
 import { SheetPanel, StateTag } from '../characters/CharacterUi';
 import styles from '../characters/Characters.module.css';
+import dossier from './NpcDossier.module.css';
 import { t } from '../../i18n';
 import { NpcArmor, NpcCyberware, NpcGear, NpcHealth, NpcSkills, NpcSpecials, NpcStats, NpcWeapons } from './NpcSheetPanels';
 
@@ -23,7 +24,7 @@ export function NpcDossierPage() {
   return (
     <div className={page.page}>
       {back}
-      <header className={styles.card} style={{ cursor: 'default' }}>
+      <header className={dossier.header}>
         <div className={styles.avatar}>{sheet ? <Skull size={34} /> : <UserRound size={34} />}</div>
         <div className={styles.cardBody}>
           <h1 className="hud-title">{npc.name}</h1>
@@ -50,9 +51,9 @@ export function NpcDossierPage() {
       )}
 
       {sheet && (
-        <div className={styles.row} style={{ alignItems: 'flex-start' }}>
-          <div style={{ width: 112, flex: '0 0 auto' }}><NpcStats sheet={sheet} /></div>
-          <div className={styles.column} style={{ flex: '1 1 0' }}>
+        <div className={dossier.sheet}>
+          <NpcStats sheet={sheet} />
+          <div className={`${styles.column} ${dossier.panels}`}>
             <NpcHealth sheet={sheet} />
             <NpcWeapons weapons={sheet.weapons} />
             <NpcArmor armor={sheet.armor} />

@@ -3,6 +3,7 @@ import { Cpu, Crosshair, Heart, Package, Shield, Sparkles, Swords } from 'lucide
 import type { NpcSheet, NpcWeapon } from '../../api/npcCompendium';
 import { SheetPanel } from '../characters/CharacterUi';
 import styles from '../characters/Characters.module.css';
+import dossier from './NpcDossier.module.css';
 import { t } from '../../i18n';
 import { formatPrinted, RANGE_BANDS, STAT_ORDER } from './npcFormat';
 
@@ -58,11 +59,13 @@ export function NpcWeapons({ weapons }: { weapons: NpcWeapon[] }) {
                 {w.autofireMultiplier != null && <> · Autofire x{w.autofireMultiplier}</>}
               </div>
               {w.rangeDv && (
+                <div className={dossier.scroll}>
                 <table className={styles.table}>
                   <caption>{t('DV por distância (m)', 'DV by range (m)')}</caption>
                   <thead><tr>{RANGE_BANDS.map((b) => <th key={b} className={styles.num}>{b}</th>)}</tr></thead>
                   <tbody><tr>{RANGE_BANDS.map((b, i) => <td key={b} className={styles.num}>{formatPrinted(w.rangeDv?.[i])}</td>)}</tr></tbody>
                 </table>
+                </div>
               )}
               {w.notes && <div className={`${styles.small} ${styles.muted}`}>{w.notes}</div>}
             </div>
