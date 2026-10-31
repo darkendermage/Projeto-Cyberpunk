@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useParams } from 'react-router';
+import { Link, useLocation, useParams } from 'react-router';
 import { ArrowLeft, Skull, Swords, UserRound } from 'lucide-react';
 import { useCompendiumNpc } from '../../api/npcCompendium';
 import { Button, ErrorState, Spinner } from '../../components/ui/ui';
@@ -16,7 +16,9 @@ export function NpcDossierPage() {
   const query = useCompendiumNpc(id);
   const [adding, setAdding] = useState(false);
   const npc = query.data;
-  const back = <Link to="/npcs" className={page.link}><ArrowLeft size={14} /> {t('Voltar ao compêndio', 'Back to the compendium')}</Link>;
+  // Opened from the list, the link carries its filters; opened directly, it goes to the whole list.
+  const listSearch = (useLocation().state as { listSearch?: string } | null)?.listSearch ?? '';
+  const back = <Link to={`/npcs${listSearch}`} className={page.link}><ArrowLeft size={14} /> {t('Voltar ao compêndio', 'Back to the compendium')}</Link>;
 
   if (query.isLoading) return <div className={page.page}><Spinner /></div>;
   if (query.error || !npc) {

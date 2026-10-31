@@ -5,7 +5,7 @@ import { SheetPanel } from '../characters/CharacterUi';
 import styles from '../characters/Characters.module.css';
 import dossier from './NpcDossier.module.css';
 import { t } from '../../i18n';
-import { formatPrinted, RANGE_BANDS, STAT_ORDER } from './npcFormat';
+import { formatPrinted, RANGE_BANDS, STAT_ORDER, weaponClassLabel } from './npcFormat';
 
 /** STATs in book order, only the keys the sheet prints. A differing armored value shows in parentheses, like the book. */
 export function NpcStats({ sheet }: { sheet: NpcSheet }) {
@@ -45,12 +45,12 @@ export function NpcWeapons({ weapons }: { weapons: NpcWeapon[] }) {
   return (
     <SheetPanel title={t('Armas', 'Weapons')} icon={<Swords size={16} />}>
       <ul className={styles.list}>
-        {weapons.map((w) => (
-          <li key={w.name} className={styles.listItem}>
+        {weapons.map((w, index) => (
+          <li key={`${w.name}-${index}`} className={styles.listItem}>
             <div className={styles.grow}>
               <div className={styles.row}>
                 <strong>{w.name}</strong>
-                {w.class && <span className={styles.tag}>{w.class}</span>}
+                {w.class && <span className={styles.tag}>{weaponClassLabel(w.class)}</span>}
                 {w.melee && <span className={styles.tag}>{t('corpo a corpo', 'melee')}</span>}
               </div>
               <div className={styles.small}>
@@ -114,7 +114,7 @@ function TextList({ title, icon, items }: { title: string; icon: ReactNode; item
   return (
     <SheetPanel title={title} icon={icon}>
       <ul className={styles.list}>
-        {items.map((i) => <li key={i} className={styles.listItem}><span className={styles.small}>{i}</span></li>)}
+        {items.map((item, index) => <li key={`${item}-${index}`} className={styles.listItem}><span className={styles.small}>{item}</span></li>)}
       </ul>
     </SheetPanel>
   );
@@ -128,8 +128,8 @@ export function NpcSpecials({ specials }: { specials: NpcSheet['specials'] }) {
   return (
     <SheetPanel title={t('Regras especiais', 'Special rules')} icon={<Sparkles size={16} />}>
       <ul className={styles.list}>
-        {specials.map((s) => (
-          <li key={s.name} className={styles.listItem}>
+        {specials.map((s, index) => (
+          <li key={`${s.name}-${index}`} className={styles.listItem}>
             <span className={styles.small}><strong>{s.name}</strong>: {s.text}</span>
           </li>
         ))}

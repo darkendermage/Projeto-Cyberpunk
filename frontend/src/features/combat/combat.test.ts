@@ -13,6 +13,12 @@ describe('modesFor', () => {
     expect(modesFor(weapon({ class: 'AssaultRifle', autofireMultiplier: 4 }))).toEqual(expect.arrayContaining(['Autofire', 'Suppressive']));
   });
 
+  it('offers only Autofire and Suppressive Fire to an Autofire-only weapon, Autofire first', () => {
+    const modes = modesFor(weapon({ class: 'MachineGun', autofireMultiplier: 5, autofireOnly: true }));
+    expect(modes[0]).toBe('Autofire');
+    expect(modes).toEqual(['Autofire', 'Suppressive']);
+  });
+
   it('offers shells to shotguns and area damage to launchers and thrown objects', () => {
     expect(modesFor(weapon({ class: 'Shotgun' }))).toContain('ShotgunShell');
     expect(modesFor(weapon({ class: 'GrenadeLauncher' }))).toContain('Explosive');

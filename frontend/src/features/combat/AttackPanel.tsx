@@ -29,7 +29,7 @@ export function AttackPanel({ detail, rules, attacker, busy, run }: {
   const thrown = weaponKey === THROWN;
   const weapon = thrown ? null : attacker.weapons.find((w) => w.key === weaponKey) ?? attacker.weapons[0] ?? null;
   const modes = modesFor(weapon, thrown);
-  const currentMode = modes.includes(mode) ? mode : 'Single';
+  const currentMode = modes.includes(mode) ? mode : modes[0];
   const area = isArea(currentMode);
   const others = detail.queue.filter((f) => f.id !== attacker.id);
   const chosen = area ? targets.filter((entry) => others.some((o) => o.id === entry)) : targets.slice(0, 1).filter((entry) => others.some((o) => o.id === entry));

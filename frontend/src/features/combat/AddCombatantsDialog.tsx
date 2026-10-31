@@ -4,8 +4,9 @@ import type { CombatSide, EncounterRules } from '../../api/encounterTypes';
 import { useNpcRules, useNpcs } from '../../api/hooks';
 import { useNpcCompendium } from '../../api/npcCompendium';
 import type { NpcLevel } from '../../api/types';
-import { Button, Field, Modal, NumberInput, Segmented, Select, Switch } from '../../components/ui/ui';
+import { Button, ErrorState, Field, Modal, NumberInput, Segmented, Select, Spinner, Switch } from '../../components/ui/ui';
 import { LEVEL_LABEL } from '../enemies/npcDraft';
+import { filterNpcs } from '../npc-compendium/filterNpcs';
 import type { Run } from './EncounterView';
 import styles from './Combat.module.css';
 import { t, tv } from '../../i18n';
@@ -26,6 +27,7 @@ export function AddCombatantsDialog({ open, onClose, rules, busy, run }: { open:
   const [characterId, setCharacterId] = useState('');
   const [npcId, setNpcId] = useState('');
   const [compendiumId, setCompendiumId] = useState('');
+  const [compendiumQ, setCompendiumQ] = useState('');
   const [level, setLevel] = useState<NpcLevel>('Mook');
   const [hardened, setHardened] = useState(false);
   const [gangId, setGangId] = useState('');
@@ -39,24 +41,32 @@ export function AddCombatantsDialog({ open, onClose, rules, busy, run }: { open:
   const [damage, setDamage] = useState(g.damage);
 
   const pcs = (characters.data ?? []).filter((c) => c.status !== 'Creating');
+  const sheets = filterNpcs(compendium.data ?? [], { q: compendiumQ, book: '', role: '', sheet: 'sheet' });
+  // A choice the search hid is no longer a choice: the select shows "Choose…" and nothing goes to the table.
+  const chosenSheet = sheets.some((n) => n.id === compendiumId) ? compendiumId : '';
+
+  const chooseSource = (next: Source) => {
+    setSource(next);
+    setCount(next === 'compendium' ? 1 : 3); // a named NPC is one person
+  };
 
   const add = () => {
     const body: Record<string, unknown> = { side, count: count ?? 1 };
     if (source === 'pc') Object.assign(body, { characterId: Number(characterId), side: 'Ally', count: 1 });
     if (source === 'npc') body.npcId = Number(npcId);
-    if (source === 'compendium') body.compendiumNpcId = compendiumId;
+    if (source === 'compendium') body.compendiumNpcId = chosenSheet;
     if (source === 'generate') body.generate = { level, hardened, gangId: gangId || null, profileId: profileId || null };
     if (source === 'generic') body.generic = { name, ref, hp, spBody: sp, spHead: sp, attackBase: attack, evasionBase: evasion, damage };
     run('combatants', body, t('Combatentes na mesa.', 'Combatants at the table.'));
     onClose();
   };
 
-  const ready = source === 'pc' ? !!characterId : source === 'npc' ? !!npcId : source === 'compendium' ? !!compendiumId : source === 'generic' ? !!name.trim() : true;
+  const ready = source === 'pc' ? !!characterId : source === 'npc' ? !!npcId : source === 'compendium' ? !!chosenSheet : source === 'generic' ? !!name.trim() : true;
 
   return (
     <Modal open={open} onClose={onClose} title={t('Adicionar combatentes', 'Add combatants')} wide>
       <div className={styles.dialog}>
-        <Segmented<Source> ariaLabel={t('Origem', 'Source')} value={source} onChange={setSource} options={[
+        <Segmented<Source> ariaLabel={t('Origem', 'Source')} value={source} onChange={chooseSource} options={[
           { value: 'pc', label: t('Personagem', 'Character') },
           { value: 'npc', label: t('NPC salvo', 'Saved NPC') },
           { value: 'compendium', label: t('Compêndio', 'Compendium') },
@@ -82,14 +92,21 @@ export function AddCombatantsDialog({ open, onClose, rules, busy, run }: { open:
           </Field>
         )}
 
-        {source === 'compendium' && (
-          <Field label={t('NPC do compêndio (com ficha)', 'Compendium NPC (with sheet)')} htmlFor="add-compendium">
-            <Select id="add-compendium" value={compendiumId} onChange={(e) => setCompendiumId(e.target.value)}>
-              <option value="">{t('Escolha…', 'Choose…')}</option>
-              {(compendium.data ?? []).filter((n) => n.kind === 'Sheet').map((n) => <option key={n.id} value={n.id}>{n.name}{n.role ? ` (${n.role})` : ''}</option>)}
-            </Select>
-          </Field>
-        )}
+        {source === 'compendium' && (!compendium.data ? (
+          compendium.isLoading ? <Spinner /> : <ErrorState error={compendium.error} onRetry={() => compendium.refetch()} />
+        ) : (
+          <>
+            <Field label={t('Buscar no compêndio', 'Search the compendium')} htmlFor="add-compendium-q">
+              <input id="add-compendium-q" type="search" value={compendiumQ} onChange={(e) => setCompendiumQ(e.target.value)} placeholder={t('Nome ou apelido', 'Name or alias')} />
+            </Field>
+            <Field label={t('NPC do compêndio (com ficha)', 'Compendium NPC (with sheet)')} htmlFor="add-compendium">
+              <Select id="add-compendium" value={chosenSheet} onChange={(e) => setCompendiumId(e.target.value)}>
+                <option value="">{t('Escolha…', 'Choose…')}</option>
+                {sheets.map((n) => <option key={n.id} value={n.id}>{n.name}{n.role ? ` (${n.role})` : ''}</option>)}
+              </Select>
+            </Field>
+          </>
+        ))}
 
         {source === 'generate' && (
           <div className={styles.formGrid}>

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { NpcSummary } from '../../api/npcCompendium';
-import { filterNpcs, npcBooks, npcRoles, type NpcFilters } from './filterNpcs';
+import { filterNpcs, filtersFromSearch, filtersToSearch, npcBooks, npcRoles, type NpcFilters } from './filterNpcs';
 
 const npc = (over: Partial<NpcSummary>): NpcSummary => ({
   id: 'x', name: 'X', aliases: [], kind: 'Sheet', role: 'Solo', roleRank: 4, rep: null, affiliation: null,
@@ -14,6 +14,20 @@ const list: NpcSummary[] = [
 ];
 const none: NpcFilters = { q: '', book: '', role: '', sheet: 'all' };
 const ids = (r: NpcSummary[]) => r.map((n) => n.id);
+
+describe('filters in the URL', () => {
+  it('round-trips every filter', () => {
+    const f: NpcFilters = { q: 'Léon & co', book: 'Danger Gal Dossier', role: 'Fixer', sheet: 'profile' };
+    expect(filtersFromSearch(new URLSearchParams(filtersToSearch(f).toString()))).toEqual(f);
+  });
+  it('leaves empty filters out of the URL', () => {
+    expect(filtersToSearch(none).toString()).toBe('');
+    expect(filtersFromSearch(new URLSearchParams(''))).toEqual(none);
+  });
+  it('ignores an unknown sheet value', () => {
+    expect(filtersFromSearch(new URLSearchParams('sheet=whatever')).sheet).toBe('all');
+  });
+});
 
 describe('filterNpcs', () => {
   it('finds by name ignoring accents and case', () => {

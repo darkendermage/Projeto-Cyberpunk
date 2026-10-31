@@ -38,6 +38,7 @@ const EXPLOSIVE_CLASSES = new Set(['GrenadeLauncher', 'RocketLauncher']);
 export function modesFor(weapon: WeaponView | null, thrown = false): AttackMode[] {
   if (thrown) return ['Single', 'Explosive'];
   if (!weapon) return ['Single'];
+  if (weapon.autofireOnly) return ['Autofire', 'Suppressive'];
   const modes: AttackMode[] = ['Single'];
   if (weapon.autofireMultiplier != null) modes.push('Autofire', 'Suppressive');
   if (!weapon.melee || weapon.skill === 'melee-weapon' || weapon.skill.startsWith('martial-arts')) modes.push('AimedHead', 'AimedHand', 'AimedLeg');

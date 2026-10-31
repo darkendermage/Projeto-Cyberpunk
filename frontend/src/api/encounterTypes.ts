@@ -20,6 +20,8 @@ export interface WeaponView {
   rounds: number | null;
   magazine: number | null;
   autofireMultiplier: number | null;
+  /** The sheet prints "Autofire only": no normal or aimed shots. */
+  autofireOnly?: boolean | null;
   melee: boolean;
   halvesArmor: boolean;
 }

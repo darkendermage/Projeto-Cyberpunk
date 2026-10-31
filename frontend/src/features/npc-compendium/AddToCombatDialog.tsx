@@ -5,12 +5,12 @@ import { problemMessage } from '../../api/characters';
 import { encounterApi, encounterKeys, useEncounters } from '../../api/encounters';
 import type { CombatSide } from '../../api/encounterTypes';
 import type { NpcSummary } from '../../api/npcCompendium';
-import { Button, Field, Modal, NumberInput, Segmented, Select } from '../../components/ui/ui';
+import { Button, ErrorState, Field, Modal, NumberInput, Segmented, Select, Spinner } from '../../components/ui/ui';
 import { useToast } from '../../state/ToastContext';
 import page from '../../styles/Page.module.css';
 import combat from '../combat/Combat.module.css';
 import { t } from '../../i18n';
-import { openEncounters } from './openEncounters';
+import { addCompendiumNpc, openEncounters } from './openEncounters';
 
 /** Puts a compendium NPC with an official sheet into one of the open encounters. */
 export function AddToCombatDialog({ npc, open, onClose }: { npc: Pick<NpcSummary, 'id' | 'name'>; open: boolean; onClose: () => void }) {
@@ -28,9 +28,7 @@ export function AddToCombatDialog({ npc, open, onClose }: { npc: Pick<NpcSummary
     const id = Number(encounterId);
     setBusy(true);
     try {
-      // The version cached by the list may be stale; the encounter itself says which one is current.
-      const current = await encounterApi.get(id);
-      await encounterApi.command(id, 'combatants', { version: current.version, side, compendiumNpcId: npc.id, count: count ?? 1 });
+      await addCompendiumNpc(encounterApi, id, npc.id, side, count ?? 1);
       client.invalidateQueries({ queryKey: encounterKeys.list, exact: true });
       client.invalidateQueries({ queryKey: encounterKeys.detail(id) });
       onClose();
@@ -45,7 +43,9 @@ export function AddToCombatDialog({ npc, open, onClose }: { npc: Pick<NpcSummary
   return (
     <Modal open={open} onClose={onClose} title={t('Adicionar ao combate', 'Add to combat')}>
       <div className={combat.dialog}>
-        {list.length === 0 ? (
+        {!encounters.data ? (
+          encounters.isLoading ? <Spinner /> : <ErrorState error={encounters.error} onRetry={() => encounters.refetch()} />
+        ) : list.length === 0 ? (
           <p>{t('Nenhum combate aberto. ', 'No open encounter. ')}<Link to="/combat" className={page.link}>{t('Abrir a tela de combate', 'Open the combat screen')}</Link></p>
         ) : (
           <>

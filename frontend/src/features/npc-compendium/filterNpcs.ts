@@ -2,6 +2,26 @@ import type { NpcSummary } from '../../api/npcCompendium';
 
 export type NpcFilters = { q: string; book: string; role: string; sheet: 'all' | 'sheet' | 'profile' };
 
+/** The filters as the list's URL keeps them, so they survive opening an NPC and coming back. */
+export function filtersFromSearch(params: URLSearchParams): NpcFilters {
+  const sheet = params.get('sheet');
+  return {
+    q: params.get('q') ?? '',
+    book: params.get('book') ?? '',
+    role: params.get('role') ?? '',
+    sheet: sheet === 'sheet' || sheet === 'profile' ? sheet : 'all',
+  };
+}
+
+export function filtersToSearch(f: NpcFilters): URLSearchParams {
+  const params = new URLSearchParams();
+  if (f.q) params.set('q', f.q);
+  if (f.book) params.set('book', f.book);
+  if (f.role) params.set('role', f.role);
+  if (f.sheet !== 'all') params.set('sheet', f.sheet);
+  return params;
+}
+
 const fold = (s: string) => s.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase();
 
 export function filterNpcs(list: NpcSummary[], f: NpcFilters): NpcSummary[] {

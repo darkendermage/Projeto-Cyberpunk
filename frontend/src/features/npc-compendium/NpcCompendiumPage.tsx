@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Link } from 'react-router';
+import { Link, useLocation, useNavigationType, useSearchParams } from 'react-router';
 import { Skull, UserRound } from 'lucide-react';
 import { useNpcCompendium, type NpcSummary } from '../../api/npcCompendium';
 import { Button, EmptyState, ErrorState, Field, Select, Spinner } from '../../components/ui/ui';
@@ -7,14 +7,27 @@ import page from '../../styles/Page.module.css';
 import { StateTag } from '../characters/CharacterUi';
 import styles from '../characters/Characters.module.css';
 import { t } from '../../i18n';
-import { filterNpcs, npcBooks, npcRoles, type NpcFilters } from './filterNpcs';
-
-const NO_FILTERS: NpcFilters = { q: '', book: '', role: '', sheet: 'all' };
+import { filtersFromSearch, filtersToSearch, filterNpcs, npcBooks, npcRoles, type NpcFilters } from './filterNpcs';
 
 export function NpcCompendiumPage() {
   const list = useNpcCompendium();
-  const [filters, setFilters] = useState<NpcFilters>(NO_FILTERS);
-  const set = (patch: Partial<NpcFilters>) => setFilters((f) => ({ ...f, ...patch }));
+  const [params, setParams] = useSearchParams();
+  const filters = useMemo(() => filtersFromSearch(params), [params]);
+  // The box keeps its own text: the router updates the URL in a transition, too late for a controlled input. Only a
+  // navigation from outside (the menu link, the browser's buttons) resets it; typing replaces the history entry.
+  const [q, setQ] = useState(filters.q);
+  const location = useLocation();
+  const navigationType = useNavigationType();
+  const [seenKey, setSeenKey] = useState(location.key);
+  if (location.key !== seenKey) {
+    setSeenKey(location.key);
+    if (navigationType !== 'REPLACE') setQ(filters.q);
+  }
+  const set = (patch: Partial<NpcFilters>) => setParams(filtersToSearch({ ...filters, ...patch }), { replace: true });
+  const clear = () => {
+    setQ('');
+    setParams({}, { replace: true });
+  };
 
   const books = useMemo(() => npcBooks(list.data ?? []), [list.data]);
   const roles = useMemo(() => npcRoles(list.data ?? []), [list.data]);
@@ -31,7 +44,11 @@ export function NpcCompendiumPage() {
 
       <div className={styles.formGrid}>
         <Field label={t('Buscar', 'Search')} htmlFor="npc-q">
-          <input id="npc-q" className={styles.input} type="search" value={filters.q} onChange={(e) => set({ q: e.target.value })}
+          <input id="npc-q" className={styles.input} type="search" value={q}
+            onChange={(e) => {
+              setQ(e.target.value);
+              set({ q: e.target.value });
+            }}
             placeholder={t('Nome ou apelido', 'Name or alias')} />
         </Field>
         <Field label={t('Livro', 'Book')} htmlFor="npc-book">
@@ -59,23 +76,23 @@ export function NpcCompendiumPage() {
       {list.error && <ErrorState error={list.error} onRetry={() => list.refetch()} />}
       {list.data && shown.length === 0 && (
         <EmptyState title={t('Nenhum NPC encontrado', 'No NPCs found')}
-          action={<Button onClick={() => setFilters(NO_FILTERS)}>{t('Limpar filtros', 'Clear filters')}</Button>}>
+          action={<Button onClick={clear}>{t('Limpar filtros', 'Clear filters')}</Button>}>
           {t('Nenhum NPC bate com a busca e os filtros atuais.', 'No NPC matches the current search and filters.')}
         </EmptyState>
       )}
       {shown.length > 0 && (
         <div className={styles.cards}>
-          {shown.map((n) => <NpcCard key={n.id} npc={n} />)}
+          {shown.map((n) => <NpcCard key={n.id} npc={n} listSearch={location.search} />)}
         </div>
       )}
     </div>
   );
 }
 
-function NpcCard({ npc: n }: { npc: NpcSummary }) {
+function NpcCard({ npc: n, listSearch }: { npc: NpcSummary; listSearch: string }) {
   const isSheet = n.kind === 'Sheet';
   return (
-    <Link to={`/npcs/${n.id}`} className={styles.card}>
+    <Link to={`/npcs/${n.id}`} state={{ listSearch }} className={styles.card}>
       <div className={styles.avatar}>{isSheet ? <Skull size={34} /> : <UserRound size={34} />}</div>
       <div className={styles.cardBody}>
         <span className={styles.cardName}>{n.name}</span>
