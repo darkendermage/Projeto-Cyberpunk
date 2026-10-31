@@ -69,7 +69,7 @@
           "name": "Self-ICE x3",
           "text": {
             "pt": "Para fazer um Quickhack nele, o Netrunner precisa antes quebrar 3 Passwalls (DV10).",
-            "en": "To Quickhack him, a Netrunner must first Breach 3 Passwalls (DV10)."
+            "en": "A Netrunner has to get through 3 Passwalls (DV10) before they can Quickhack him."
           }
         },
         {
@@ -97,14 +97,14 @@
           "name": "Armor Regeneration Matrix",
           "text": {
             "pt": "A primeira vez que seus HP caem a 40 ou menos, a armadura volta a SP 18.",
-            "en": "The first time his HP drops to 40 or lower, his armor regenerates back to SP 18."
+            "en": "Once his HP first falls to 40 or below, his armor comes back up to SP 18."
           }
         },
         {
           "name": "FBC Body",
           "text": {
             "pt": "Ignora os efeitos de Estrangulamento e de Lesões Críticas (inclusive o dano bônus). Também não precisa respirar, comer nem beber.",
-            "en": "Ignores the effects of Choke Actions and Critical Injuries (including Bonus Damage). He also doesn't need to breathe, eat or drink."
+            "en": "Choke Actions and Critical Injuries (and their Bonus Damage) do nothing to him; he also goes without air, food or drink."
           }
         },
         {
@@ -118,7 +118,7 @@
           "name": "Adam Smasher's Sandevistan",
           "text": {
             "pt": "Sandevistan experimental, sempre ligada em combate: ele ganha uma Ação extra de Mover ou Atacar no Turno, sem perda de Humanidade ou HP.",
-            "en": "An experimental Sandevistan, always on during combat: he gets an extra Move or Attack Action on his Turn, with no Humanity or Hit Point loss."
+            "en": "An experimental Sandevistan that stays active throughout combat, giving him one additional Move or Attack Action each Turn at no cost in Humanity or HP."
           }
         }
       ]
@@ -503,7 +503,7 @@
     ],
     "summary": {
       "pt": "Fixer nômade conhecida como Mad Coyote, que opera de uma garagem nos Badlands, fora de Night City, e cuida dos trabalhos ligados aos nômades. Em The Jacket é ela quem passa o serviço de Falco para a Crew.",
-      "en": "A nomad fixer known as the Mad Coyote who works out of a garage in the Badlands, outside Night City, handling nomad-related gigs. In The Jacket she is the one who passes Falco's job to the Crew."
+      "en": "Nomad Fixer nicknamed the Mad Coyote, working from a Badlands garage outside Night City and handling jobs tied to nomads. In The Jacket she hands the Crew the job from Falco."
     },
     "sheetNote": null,
     "sheet": null
@@ -592,7 +592,7 @@
     ],
     "summary": {
       "pt": "Conhecida como a Dama de Westbrook, comanda um pachinko em Jig-Jig Street, em Japantown. A comunidade a respeita, ou a teme, e os serviços dela cobrem todo tipo de trabalho. Pilar a chama de tia e ela ajudou os filhos de Papa Sunrise.",
-      "en": "Known as the Lady of Westbrook, she runs a pachinko parlor on Jig-Jig Street in Japantown. The community respects or fears her, and her gigs span every type of job. Pilar calls her Auntie and she helped Papa Sunrise's kids."
+      "en": "The Lady of Westbrook, who runs a pachinko parlor along Japantown's Jig-Jig Street. People either respect her or fear her, and she can arrange work of just about any kind. Pilar calls her Auntie, and she once lent a hand to Papa Sunrise's children."
     },
     "sheetNote": null,
     "sheet": null
@@ -615,7 +615,7 @@
     ],
     "summary": {
       "pt": "Considerado o netrunner mais brilhante do mundo, plantou o DataKrash dentro do IGTA como uma chave de segurança que dependia de ele fazer check-ins. Quando foi morto, o vírus embaralhou quase toda a Net e soltou os R.A.B.I.D.s, e a Old Net acabou isolada.",
-      "en": "Regarded as the world's most brilliant netrunner, he planted the DataKrash inside the IGTA as a failsafe that depended on his check-ins. When he was killed, the virus scrambled nearly the whole Net and released the R.A.B.I.D.s, and the Old Net ended up walled off."
+      "en": "Widely seen as the best netrunner alive, he buried the DataKrash in the IGTA as a dead-man switch that needed him to keep checking in. His death triggered it: the virus garbled most of the Net, freed the R.A.B.I.D.s into it and left the Old Net cut off."
     },
     "sheetNote": null,
     "sheet": null
@@ -1530,7 +1530,7 @@
     ],
     "summary": {
       "pt": "Organizador comunitário na nova Watson Development e idealista raro, conhecido por discursos que inspiram ação.",
-      "en": "Community organizer in the newly forming Watson Development and a rare idealist, known for inspiring speeches and calls to action."
+      "en": "Community organizer for the Watson Development that is only now taking shape, and a rare idealist whose speeches push people to act."
     },
     "sheetNote": null,
     "sheet": null
@@ -1634,7 +1634,7 @@
     ],
     "summary": {
       "pt": "Um dos poucos cirurgiões da cidade sem formação militar. Instala cyberware em boostergangs, mas não faz reconstrução facial para posers, que odeia desde que perdeu as mãos para um deles. É confundido com o Dr. Bob Jones da Trauma Team.",
-      "en": "One of the few surgeons in the city without military training. He installs cyberware for boostergangs but will not do facial reconstruction for posers, whom he hates since losing his hands to one. People mistake him for Dr. Bob Jones of Trauma Team."
+      "en": "A surgeon with no military background, which makes him rare in the city. He does cyberware installs for boostergangs but refuses facial reconstruction for posers, whom he loathes since one cost him his hands. Some take him for Trauma Team's Dr. Bob Jones."
     },
     "sheetNote": null,
     "sheet": null
@@ -1922,7 +1922,7 @@
     ],
     "summary": {
       "pt": "Assassino da Yakuza, mestre do disfarce, de quem ninguém sabe a aparência ou identidade. Pode ser codinome de vários assassinos. Para contatar, manda-se a mensagem \"Katana\" a uma conta ZChat conhecida por poucos Fixers.",
-      "en": "Yakuza assassin and master of disguise whose looks and identity nobody knows. It may be a code name for several killers. To reach them, one sends the message \"Katana\" to a ZChat account known to a few Fixers."
+      "en": "Yakuza assassin and master of disguise; nobody knows the face or the real identity, and the name may cover several killers. A few Fixers know a ZChat account, and sending it the word \"Katana\" is how you get in touch."
     },
     "sheetNote": null,
     "sheet": null
@@ -2181,7 +2181,7 @@
     "sources": [{ "book": "Danger Gal Dossier", "page": 10 }],
     "summary": {
       "pt": "Filho do chefe \"X\" e líder do Davis Squad da 6th Street; há quem fale em nepotismo, até vê-lo em ação. Criado entre veteranos de guerra, aprendeu tática com eles e virou um dos melhores snipers de Night City, mantendo a equipe unida na base da conversa fiada pelo rádio.",
-      "en": "Son of the boss \"X\" and leader of 6th Street's Davis Squad; some whisper nepotism until they watch him work. Raised among the gang's war veterans, he picked up their tactics and became one of the best snipers in Night City, keeping his squad together with constant radio banter."
+      "en": "Son of the boss \"X\" and leader of 6th Street's Davis Squad; people mutter nepotism until they see him work. Raised around the gang's war veterans, he absorbed their tactics and turned into one of Night City's finest snipers, holding his squad together with nonstop chatter on the radio."
     },
     "sheetNote": null,
     "sheet": {
@@ -2292,7 +2292,7 @@
     "sources": [{ "book": "Danger Gal Dossier", "page": 12 }],
     "summary": {
       "pt": "Ex-boxeador profissional da Cidade do México que a guerra transformou em soldado, e que tem o lema \"Fuck Arasaka\" desde que viu o empresário morrer. Segundo no comando do Davis Squad, infiltra locais para plantar explosivos ou fazer reconhecimento, e pode criar atrito com Coldfire.",
-      "en": "A former pro boxer from Mexico City whom the war turned into a soldier, carrying a \"Fuck Arasaka\" motto since seeing their manager die. Second in command of the Davis Squad, Breacher sneaks into locations to plant explosives or scout, and may clash with Coldfire."
+      "en": "Former professional boxer from Mexico City, turned soldier by the war, with a \"Fuck Arasaka\" motto since watching his manager die. As the Davis Squad's number two, he slips into sites to plant explosives or scout, and he may butt heads with Coldfire."
     },
     "sheetNote": null,
     "sheet": {
@@ -2347,7 +2347,7 @@
     "sources": [{ "book": "Danger Gal Dossier", "page": 13 }],
     "summary": {
       "pt": "O membro mais velho do Davis Squad, veterano das quatro Guerras Corporativas que nunca tira a máscara diante de câmeras. Só luta de perto, sai quase ileso das batalhas e põe a vida de civis acima da da própria equipe. Trata a gangue como emprego, não como vocação, e é pago em dinheiro vivo após cada missão.",
-      "en": "The oldest member of the Davis Squad, a veteran of all four Corporate Wars who never unmasks on camera. He fights only up close, walks out of most battles nearly unscathed, and puts civilian lives ahead of his team's. He treats the gang as a job, not a calling, and is paid in cash after each mission."
+      "en": "Oldest member of the Davis Squad and a veteran of all four Corporate Wars, he never takes his mask off in front of a camera. He only fights up close, usually leaves fights almost unhurt, and ranks civilian lives above his own team. For him the gang is a paycheck, not a calling; he gets cash after every mission."
     },
     "sheetNote": null,
     "sheet": {
@@ -2517,7 +2517,7 @@
     "sources": [{ "book": "Danger Gal Dossier", "page": 17 }],
     "summary": {
       "pt": "Bozo da velha guarda, lenda que já estava lá quando a gangue tomou as lojas de piada. Recusa-se a chefiar um circo e prefere instigar os mais novos a levar o caos mais longe, talvez inclusive soprando ideias a Big Top. Em combate usa explosivos para encurralar inimigos, sem se importar com os próprios palhaços na linha de tiro.",
-      "en": "A Bozo of the old guard, a legend who was there when the gang took over the joke shops. He refuses to run a circus and instead goads the young ones to push chaos further, possibly whispering ideas in Big Top's ear. In a fight he uses explosives to corral enemies, caring little if his own clowns are in the way."
+      "en": "An old-guard Bozo and a legend who was around when the gang took the joke shops. He won't run a circus himself and would rather push the younger clowns toward more chaos, perhaps feeding Big Top ideas. In a fight he uses explosives to pin enemies down, unbothered if his own clowns are caught in the blast."
     },
     "sheetNote": null,
     "sheet": {
@@ -2882,7 +2882,7 @@
     "sources": [{ "book": "Danger Gal Dossier", "page": 24 }],
     "summary": {
       "pt": "Burt Batail perdeu o cabelo num acidente industrial e ficou obcecado por ácido: quer causar calvície permanente em Night City. Entrou nos Bozos pela promessa de estoque ilimitado de químicos. Atira balas de ácido e sempre ataca quem tiver o cabelo mais bonito, mesmo que seja tech hair.",
-      "en": "Burt Batail lost his hair in an industrial accident and became obsessed with acid; he wants to inflict permanent baldness on Night City. He joined the Bozos for the promise of unlimited chemicals. He fires acid rounds and always goes for the target with the best hair, even tech hair."
+      "en": "Burt Batail lost his hair in an industrial accident and developed a fixation on acid, set on making all of Night City permanently bald. The promise of endless chemicals is what brought him into the Bozos. He shoots acid rounds and always picks the target with the nicest hair, tech hair included."
     },
     "sheetNote": null,
     "sheet": {
@@ -2928,7 +2928,7 @@
     "sources": [{ "book": "Danger Gal Dossier", "page": 25 }],
     "summary": {
       "pt": "Sion Bannerkin, antes um Fool sem sorte, sobreviveu a Hilaria 2045 com um buraco no peito e um taco de beisebol cheio de pontas. Big Top o consertou, soldou-lhe uma máscara ao rosto e o promoveu a Bozo de verdade. Luta de perto, sempre mirando o nariz, e usa uma pistola ruim quando não alcança o alvo.",
-      "en": "Sion Bannerkin, once an unlucky Fool, survived Hilaria 2045 with a hole in his chest and a spiked baseball bat. Big Top patched him up, melted a mask onto his face, and made him a full Bozo. He fights up close, always going for the nose, and fires a lousy pistol when he cannot reach his target."
+      "en": "Sion Bannerkin, formerly a luckless Fool, walked out of Hilaria 2045 with a spiked baseball bat and a hole through his chest. Big Top repaired him, fused a mask to his face and promoted him to full Bozo. He brawls up close, always aiming at the nose, and shoots a poor pistol when the target is out of reach."
     },
     "sheetNote": null,
     "sheet": {
@@ -3087,7 +3087,7 @@
     "sources": [{ "book": "Danger Gal Dossier", "page": 30 }],
     "summary": {
       "pt": "Naomi Alexis cresceu numa família de Reclaimers no Colorado; os pais venderam sua irmã Minna a um casal de Night City e ela nunca a esqueceu. Virou curandeira de um Pack nômade e acabou na Danger Gal, em parte para usar a rede da corporação na busca por Minna. Encontrá-la pode ser a chave para quebrar sua lealdade.",
-      "en": "Naomi Alexis grew up in a Reclaimer family in Colorado; her parents sold her younger sister Minna to a Night City couple and she never forgot it. She became a Nomad pack's healer and joined Danger Gal partly to use its reach to search for Minna. Finding her may be the key to buying Naomi's loyalty away."
+      "en": "Naomi Alexis grew up in a Reclaimer family in Colorado, where her parents sold younger sister Minna to a couple from Night City, and she has never let go of that. She healed for a nomad Pack before joining Danger Gal, partly to use the corporation's reach to look for Minna. Locating her could be what wins Naomi's loyalty."
     },
     "sheetNote": null,
     "sheet": {
@@ -3143,7 +3143,7 @@
     "sources": [{ "book": "Danger Gal Dossier", "page": 31 }],
     "summary": {
       "pt": "Moira Kahn, ex-ginasta promissora que perdeu as pernas e os pais num acidente, fugiu do programa de órfãos corporativos e virou ladra acrobática. Michiko Sanderson fez pessoalmente a proposta para a Danger Gal, e a lealdade de Mouse à empresa e a Michiko parece inabalável.",
-      "en": "Moira Kahn, a promising gymnast who lost her legs and her parents in a car accident, fled the Corporate Orphan Training Program and became an acrobatic cat burglar. Michiko Sanderson made the recruitment pitch herself, and Mouse's loyalty to Danger Gal and to Michiko appears unshakable."
+      "en": "Moira Kahn was a gymnast with a bright future until a car accident took her legs and her parents; she escaped the Corporate Orphan Training Program and became an acrobatic cat burglar. Michiko Sanderson pitched Danger Gal to her personally, and Mouse seems utterly loyal to the company and to Michiko."
     },
     "sheetNote": null,
     "sheet": {
@@ -3634,7 +3634,7 @@
           "name": "CrAB Drone",
           "text": {
             "pt": "Drone ativo de defesa do tamanho de um cão pequeno: 6 MOVE e 40 HP, câmera, pés de aderência e airhypo com Black Lace, Blue Glass ou Biotoxin. Dispara quando um alvo entra na área e falha na verificação biométrica; contra-ataque exige teste de Electronics/Security Tech DV21 em 5 minutos.",
-            "en": "An active-defense drone the size of a small dog: 6 MOVE and 40 HP, camera, grip feet and an airhypo loaded with Black Lace, Blue Glass or Biotoxin. It triggers when a target enters the area and fails a biometric scan; countering it takes a DV21 Electronics/Security Tech check and 5 minutes."
+            "en": "A defensive drone about the size of a small dog: 6 MOVE, 40 HP, a camera, gripping feet and an airhypo that carries Black Lace, Blue Glass or Biotoxin. It strikes when someone enters its zone and fails the biometric scan; shutting it down takes a DV21 Electronics/Security Tech check and 5 minutes."
           }
         },
         {
@@ -3720,8 +3720,8 @@
     "affiliation": null,
     "sources": [{ "book": "Danger Gal Dossier", "page": 44 }],
     "summary": {
-      "pt": "Cicely Feng, Tech freelance excelente em organizar e resolver, e péssima em ser querida. O apelido veio do hábito de elogiar e punir com a mesma frase, e há ao menos um caso físico usando o terceiro braço. Leal só até certo ponto: quem trabalha com ela pode trair se achar que escapa.",
-      "en": "Cicely Feng, a freelance Tech great at organizing and delivering, and bad at being liked. The nickname came from praising and punishing with the same phrase, and she has at least one physical case with her third arm. Her loyalty has limits: people working with her may turn on her if they think they can get away with it."
+      "pt": "Cicely Feng, Tech freelance excelente em organizar e entregar, péssima em ser querida. O apelido vem de elogiar e punir na mesma frase, e uma vez ela acertou alguém, literalmente, com um tapa de costas da mão do terceiro braço. A lealdade dela tem limite: quem trabalha com ela pode traí-la se achar que não vai ser pego.",
+      "en": "Cicely Feng is a freelance Tech who is superb at organizing and delivering and terrible at being liked. Her nickname comes from praising and punishing in one breath, and she once literally struck someone with a backhand from her third arm. Her loyalty is conditional: anyone working with her may betray her if they believe they will not be caught."
     },
     "sheetNote": null,
     "sheet": {
@@ -3776,7 +3776,7 @@
     "sources": [{ "book": "Danger Gal Dossier", "page": 45 }],
     "summary": {
       "pt": "Angela Banks ganhou o apelido ao pular de um AV-4 filmando uma agressão do NCPD contra manifestantes. Depois que os chefes engavetaram o vídeo, ela mesma o divulgou e foi trabalhar por conta própria, inclusive para a Never Blink News. Vai longe por uma história, mas nunca guarda segredo.",
-      "en": "Angela Banks earned her handle by jumping from an AV-4 with her camera running to capture an NCPD beating of protesters. When her bosses shelved the footage she released it herself and went freelance, including work for Never Blink News. She goes to great lengths for a story but never keeps a secret."
+      "en": "Angela Banks got her handle by leaping out of an AV-4, camera rolling, to record NCPD officers beating protesters. After her bosses buried the footage she leaked it herself and went freelance, with jobs for Never Blink News among them. She will go far for a story but cannot keep a secret."
     },
     "sheetNote": null,
     "sheet": {
@@ -3886,7 +3886,7 @@
     "sources": [{ "book": "Danger Gal Dossier", "page": 47 }],
     "summary": {
       "pt": "Estrela do roller derby de Night City que ganhou blindagem subdérmica e habilidades de luta fora da pista. Como o esporte paga mal, procura trabalho mais lucrativo e fez upgrades como um grip subdérmico para smartgun. Tem forte senso de justiça e preza a reputação profissional.",
-      "en": "A Night City roller derby star who gained subdermal armor and fighting skills outside the rink. Since derby pays badly, she is looking for better work and has been upgrading, including a subdermal grip for a smartgun link. She has a strong sense of fair play and values her professional reputation."
+      "en": "Roller derby star of Night City who picked up subdermal armor and combat skills away from the rink. Because derby pays poorly she is hunting for better-paid work and has been upgrading, among other things with a subdermal grip that links to a smartgun. She holds fair play dear and cares about her professional name."
     },
     "sheetNote": null,
     "sheet": {
@@ -4192,7 +4192,7 @@
           "name": "Maker",
           "text": {
             "pt": "Role Ability Maker no Rank 4 (Field Exp 2, Up Exp 2, Fab Exp 2, Inv Exp 2). Bônus de Role Abilities não estão incluídos nas Skill Bases.",
-            "en": "Role Ability Maker at Rank 4 (Field Exp 2, Up Exp 2, Fab Exp 2, Inv Exp 2). Role Ability bonuses are not included in the Skill Bases."
+            "en": "Role Ability Maker at Rank 4, with Field Expertise 2, Upgrade Expertise 2, Fabrication Expertise 2 and Invention Expertise 2. Bonuses from Role Abilities are not folded into the Skill Bases."
           }
         },
         {
@@ -4379,7 +4379,7 @@
     "sources": [{ "book": "Danger Gal Dossier", "page": 56 }],
     "summary": {
       "pt": "Tech corporativo que ajudou edgerunners a invadir o prédio onde trabalhava, para se vingar dos chefes, e gostou tanto que largou a empresa. Ainda está aprendendo; pagando bem, é fácil ganhar a lealdade dele.",
-      "en": "A corporate Tech who helped a team of Edgerunners break into his own workplace to get back at his bosses, and liked it so much he quit. Still learning the ropes; pay him well and his loyalty comes easily."
+      "en": "A corporate Tech who guided a group of Edgerunners into his own office building to get even with his superiors, enjoyed it enough to quit. He is still green, and good pay is an easy way to win his loyalty."
     },
     "sheetNote": null,
     "sheet": {
@@ -4415,7 +4415,7 @@
           "name": "Armas de baixa qualidade",
           "text": {
             "pt": "Medium Pistol e Very Heavy Melee Weapon (ROF 1, 4d6) ambas de Qualidade Ruim.",
-            "en": "A Poor Quality Medium Pistol and a Poor Quality Very Heavy Melee Weapon (ROF 1, 4d6)."
+            "en": "A Medium Pistol and a Very Heavy Melee Weapon (ROF 1, 4d6), both of Poor Quality."
           }
         }
       ]
@@ -4518,7 +4518,7 @@
           "name": "Maker",
           "text": {
             "pt": "Role Ability Maker no Rank 2 (Field Exp 1, Up Exp 1, Fab Exp 1, Inv Exp 1). Bônus de Role Abilities não estão incluídos nas Skill Bases.",
-            "en": "Role Ability Maker at Rank 2 (Field Exp 1, Up Exp 1, Fab Exp 1, Inv Exp 1). Role Ability bonuses are not included in the Skill Bases."
+            "en": "Role Ability Maker at Rank 2, with Field Expertise 1, Upgrade Expertise 1, Fabrication Expertise 1 and Invention Expertise 1. Bonuses from Role Abilities are not folded into the Skill Bases."
           }
         },
         {
@@ -4774,7 +4774,7 @@
           "name": "Skate",
           "text": {
             "pt": "Anda de skate (Skateboard) e leva uma arma corpo a corpo muito pesada de Qualidade Ruim (ROF 1, 4d6).",
-            "en": "Rides a Skateboard and carries a Poor Quality Very Heavy Melee Weapon (ROF 1, 4d6)."
+            "en": "Rides a Skateboard and carries a Very Heavy Melee Weapon of Poor Quality (ROF 1, 4d6)."
           }
         }
       ]
@@ -5156,7 +5156,7 @@
           "name": "Maker",
           "text": {
             "pt": "Role Ability Maker no Rank 4 (Field Exp 3, Up Exp 2, Fab Exp 2, Inv Exp 1). Bônus de Role Abilities não estão incluídos nas Skill Bases.",
-            "en": "Role Ability Maker at Rank 4 (Field Exp 3, Up Exp 2, Fab Exp 2, Inv Exp 1). Role Ability bonuses are not included in the Skill Bases."
+            "en": "Role Ability Maker at Rank 4, with Field Expertise 3, Upgrade Expertise 2, Fabrication Expertise 2 and Invention Expertise 1. Bonuses from Role Abilities are not folded into the Skill Bases."
           }
         },
         {
@@ -5612,7 +5612,7 @@
     "sources": [{ "book": "Danger Gal Dossier", "page": 84 }],
     "summary": {
       "pt": "Policial honesta e quase um ícone entre os colegas, conhecida por ser a primeira a chegar nos chamados de oficial caído. Coopera com agências externas, mas só dentro da lei: ajuda numa troca de tiros e depois prende pelos danos. Seu ponto fraco é a dívida de jogo da esposa com o Fixer Rex Royale.",
-      "en": "An honest officer and something of an icon to her peers, known for being first on scene to Officer Down calls. She cooperates with outside agencies but strictly by the book: she will back you in a firefight and arrest you for the damage afterward. Her weak spot is her wife's gambling debt to the Fixer Rex Royale."
+      "en": "An honest officer, widely admired by her colleagues, who is typically first on scene when an Officer Down call goes out. She works with outside agencies only within the law: she'll join a shootout, then book you for the damage. Her weak point is her wife's gambling debt to the Fixer Rex Royale."
     },
     "sheetNote": null,
     "sheet": {
@@ -6546,7 +6546,7 @@
     "sources": [{ "book": "Danger Gal Dossier", "page": 106 }, { "book": "Danger Gal Dossier", "page": 105 }],
     "summary": {
       "pt": "Netrunner imprevisível que começou com travessuras, evoluiu para hackear corporações e hoje vive de gigs para Fixers. Segue o próprio código ético, é leal a quem ama, sobretudo Nox, e anima o grupo. Ataca com lâminas e patins nos pés e é quem mais questiona os planos do Mr. Fixit.",
-      "en": "An unpredictable Netrunner who started with pranks, grew into hacking Corporations and now lives on Fixer gigs. He follows his own ethics, is loyal to those close to him, above all Nox, and keeps morale up. He fights with blades and skate feet and is the one most likely to question Mr. Fixit's plans."
+      "en": "An erratic Netrunner who began with pranks, moved up to hacking Corporations, and now lives off Fixer gigs. He keeps to his own code, stays loyal to the people he loves (Nox above all) and lifts the crew's mood. He fights with blades and skate feet, and he's the likeliest to push back on Mr. Fixit's plans."
     },
     "sheetNote": null,
     "sheet": {
@@ -7345,7 +7345,7 @@
     "sources": [{ "book": "Danger Gal Dossier", "page": 124 }, { "book": "Danger Gal Dossier", "page": 121 }],
     "summary": {
       "pt": "Capitão dos Kimen-Gumi, o braço \"policial\" dos Tyger Claws, de máscara vermelha e comandante estável, sem os floreios do chefe. Filho de veteranos do Tyger's Claw original, é um dos mais confiáveis de Shinobu the Second e ignora quem queria vê-lo no comando. Os pais aposentados, leais à Arasaka, doutrinam os netos em segredo.",
-      "en": "Captain of the Kimen-Gumi, the \"police\" arm of the Tyger Claws, wearing a red mask and acting as a steady commander without his boss's showmanship. The son of veterans of the original Tyger's Claw, he is one of Shinobu the Second's most trusted companions and ignores those who want him to lead. His retired parents, still loyal to Arasaka, secretly indoctrinate his children."
+      "en": "Captain of the Kimen-Gumi, the Tyger Claws' internal police force. He wears a red mask and leads steadily, with none of his boss's flair. Son of veterans from the original Tyger's Claw, he is among Shinobu the Second's most trusted allies and brushes off those who wanted him in charge. His retired parents, still Arasaka loyalists, quietly pass their ideology on to their grandchildren."
     },
     "sheetNote": null,
     "sheet": {
@@ -7382,7 +7382,7 @@
           "name": "Equipamento Kimen-Gumi",
           "text": {
             "pt": "Very Heavy Pistol, arma corpo a corpo muito pesada de Qualidade Excelente, granadas EMP e Flashbang, máscara anti-smog e um taiko; Neural Link com Kerenzikov e Skill Chip de Drive Land Vehicle.",
-            "en": "A Very Heavy Pistol, an Excellent Quality very heavy melee weapon, EMP and Flashbang grenades, an anti-smog mask and a taiko; a Neural Link with a Kerenzikov and a Drive Land Vehicle Skill Chip."
+            "en": "A Very Heavy Pistol, a very heavy melee weapon of Excellent Quality, EMP and Flashbang grenades, an anti-smog mask and a taiko; a Neural Link with a Kerenzikov and a Drive Land Vehicle Skill Chip."
           }
         }
       ]
@@ -7947,7 +7947,7 @@
     "sources": [{ "book": "Danger Gal Dossier", "page": 137 }, { "book": "Danger Gal Dossier", "page": 131 }],
     "summary": {
       "pt": "Soldado que desertou da 4ª Guerra Corporativa e foi dado como morto, vivendo em acampamentos de barracas. Em South Night City decidiu ficar e hoje faz pequenos serviços de segurança, escolta e \"entregas\" para Fixers. Parece estar comprando imóveis na região e procurando candidatos políticos para apoiar.",
-      "en": "A soldier who deserted the 4th Corporate War and was believed killed in action, living in tent cities. In South Night City he chose to stay, and now takes small security, escort and \"delivery\" jobs for Fixers. He appears to be buying property in the area and looking for political candidates to back."
+      "en": "Soldier who deserted during the 4th Corporate War, was presumed dead, and lived in tent camps. He decided to settle in South Night City, where he takes minor security, escort and \"delivery\" work for Fixers. He seems to be buying up local property and scouting political candidates to support."
     },
     "sheetNote": {
       "pt": "A ficha lista duas Role Abilities: Combat Awareness 3 (Role principal) e Operator 1.",
@@ -7994,7 +7994,7 @@
           "name": "Equipamento",
           "text": {
             "pt": "Heavy SMG de Qualidade Ruim com munição Heavy Pistol x40, cyberarms médicos x2 e Skill Chip tech-upgraded de Language (Spanish); equipamento de acampamento.",
-            "en": "A Poor Quality Heavy SMG with 40 rounds of Heavy Pistol ammo, two medical-grade cyberarms and a tech-upgraded Language (Spanish) Skill Chip; camping gear."
+            "en": "A Heavy SMG (Poor Quality) with 40 rounds of Heavy Pistol ammo, two medical-grade cyberarms and a tech-upgraded Language (Spanish) Skill Chip; camping gear."
           }
         }
       ]
@@ -8122,7 +8122,7 @@
     "sources": [{ "book": "Danger Gal Dossier", "page": 141 }, { "book": "Danger Gal Dossier", "page": 131 }],
     "summary": {
       "pt": "Ex-pesquisador canadense da Militech rebaixado depois de um incidente, que virou incendiário e espião dos Zoners dentro do mundo corporativo. Um colega mora com ele como suposto namorado para vigiá-lo. Passa informação útil aos poucos, mas é descuidado: foi identificado pelas digitais em um copo.",
-      "en": "A Canadian-born Militech R&D employee demoted after an incident, now an arsonist and undercover spy for the Zoners. A fellow Zoner lives with him posing as a boyfriend to check his sincerity. He passes on a trickle of useful intel but is careless: he was identified by fingerprints on a cup."
+      "en": "Canadian-born Militech R&D worker, demoted after an incident, who became an arsonist and a mole for the Zoners inside the corporate world. Another Zoner shares his home as a fake boyfriend, checking up on him. He hands over useful intel bit by bit, but he is sloppy: his fingerprints on a cup gave him away."
     },
     "sheetNote": null,
     "sheet": {
@@ -11997,7 +11997,7 @@
     ],
     "summary": {
       "pt": "Líder miúda e pálida dos Dragula Racers, gogang de bodysculpt de monstros e corrida de carro funerário turbinado. Ajuda a Crew por ser prima de Amani e conta que a gangue expulsou Sparkle Skull por gastar o caixa em cartões do Oasis.",
-      "en": "Small, pallid leader of the Dragula Racers, a gogang of monster-themed bodysculpts and souped-up hearse racing. She helps the Crew because Amani is her cousin, and reveals the gang threw out Sparkle Skull for burning the funds on Oasis gift cards."
+      "en": "Short, pale leader of the Dragula Racers, a gogang built around monster bodysculpts and tuned-up hearse racing. She assists the Crew since her cousin is Amani, and tells them the gang expelled Sparkle Skull for blowing the treasury on Oasis gift cards."
     },
     "sheetNote": null,
     "sheet": null
@@ -12434,7 +12434,7 @@
     "sources": [{"book": "Mixing Drinks, Changing Lives", "page": 9}, {"book": "Mixing Drinks, Changing Lives", "page": 2}],
     "summary": {
       "pt": "Uma das duas bartenders do VA-11 HALL-A e filha de uma violinista de concerto. Largou uma oferta de pesquisa da Biotechnica e terminou com a namorada, e agora tem uma queda pela chefe, Dana Zane. É ótima de conversa e inútil como fonte: nunca conta nada sobre os clientes.",
-      "en": "One of the two bartenders at VA-11 HALL-A and the daughter of a concert violinist. She turned down a Biotechnica research offer and broke up with her girlfriend, and now has a crush on her boss, Dana Zane. She is great at conversation and useless as a source: she never talks about her customers."
+      "en": "One of VA-11 HALL-A's two bartenders and the daughter of a concert violinist. She passed up a research offer from Biotechnica, split with her girlfriend, and now has a thing for her boss, Dana Zane. She excels at conversation but is useless as a source, since she never discusses the customers."
     },
     "sheetNote": {
       "pt": "A ficha imprime só uma linha de armadura, Kevlar® SP 7, depois de um traço na primeira; entrou como armadura de corpo.",
@@ -12464,7 +12464,7 @@
           "name": "Maker 4",
           "text": {
             "pt": "Habilidade de Role Tech (Maker 4): Field Expertise 4 e Fabrication Expertise 4.",
-            "en": "Tech Role Ability (Maker 4): Field Expertise 4 and Fabrication Expertise 4."
+            "en": "Maker 4 (Tech): Field Expertise and Fabrication Expertise both at 4."
           }
         }
       ]
@@ -12526,7 +12526,7 @@
     "sources": [{"book": "Mixing Drinks, Changing Lives", "page": 11}],
     "summary": {
       "pt": "Empresário rico que construiu a fortuna viajando e fechando negócios arriscados e hoje é dono e editor-chefe do Augmented Eye, o segundo screamsheet mais vendido da cidade. Machista e abusivo com os funcionários, insiste que Jill escreveria uma ótima coluna de fofocas sobre a clientela do bar.",
-      "en": "Wealthy businessman who made his fortune traveling and cutting risky deals, now publisher and editor-in-chief of the Augmented Eye, the city's second bestselling screamsheet. Sexist and abusive to his staff, he keeps insisting that Jill would write a great gossip column about the bar's customers."
+      "en": "Rich businessman whose money came from travelling and striking risky deals; he now owns and edits the Augmented Eye, the second-best-selling screamsheet in the city. Sexist and abusive toward his employees, he keeps pressing the point that Jill could produce a terrific gossip column on the bar's clientele."
     },
     "sheetNote": null,
     "sheet": null
@@ -12543,7 +12543,7 @@
     "sources": [{"book": "Mixing Drinks, Changing Lives", "page": 11}],
     "summary": {
       "pt": "Edgerunner especializado em contratos de eliminação, que prefere ser chamado de caçador de recompensas. Muito aprimorado com chrome, aparenta perder memória e sabe que anda perto da ciberpsicose; escolhe o bar porque a dona dá conta de qualquer encrenca.",
-      "en": "Edgerunner who specializes in wetwork contracts and prefers to be called a bounty hunter. Heavily chromed, he seems to be losing memories and knows he is close to cyberpsychosis; he picks this bar because its owner can handle any trouble."
+      "en": "An Edgerunner whose specialty is wetwork contracts, though he would rather be called a bounty hunter. Heavily chromed, he seems to be losing memories and knows he is close to cyberpsychosis; he picks this bar because its owner can handle any trouble."
     },
     "sheetNote": null,
     "sheet": null
@@ -12611,7 +12611,7 @@
     "sources": [{"book": "Mixing Drinks, Changing Lives", "page": 13}],
     "summary": {
       "pt": "Streamer que transmite a vida 24 horas e guarda o conteúdo mais picante atrás de uma assinatura paga. Sua audiência sobe quando visita o VA-11 HALL-A, então aparece sempre; tornou-se próxima de Dorothy Haze e é patrocinada pela Shining Finger.",
-      "en": "Streamer who broadcasts her life around the clock and hides the spicier material behind a paid subscription. Whenever she turns up at VA-11 HALL-A her audience grows, which is why she keeps coming back to pester the staff; she has grown close to Dorothy Haze and is sponsored by Shining Finger."
+      "en": "Streamer who broadcasts her life nonstop and puts the racier content behind a subscription. Her viewership jumps whenever she visits the VA-11 HALL-A bar, which is why she keeps turning up to pester the staff; she has gotten close to Dorothy Haze and is sponsored by Shining Finger."
     },
     "sheetNote": null,
     "sheet": null
@@ -12628,7 +12628,7 @@
     "sources": [{"book": "Mixing Drinks, Changing Lives", "page": 13}],
     "summary": {
       "pt": "Um dos cinco \"cérebros engarrafados\" de Night City, parte do projeto Sola Anima da Biotechnica com a Night City University. O cérebro vive num Biosystem aprimorado que permite se mover e interagir, e Taylor ainda escreveu o best-seller The Last Rain in the World.",
-      "en": "One of Night City's five \"bottled brains\", part of the Sola Anima project run by Biotechnica and Night City University. The brain lives in an upgraded Biosystem that allows movement and interaction, and Taylor also wrote the bestseller The Last Rain in the World."
+      "en": "One of five \"bottled brains\" in Night City, a product of the Sola Anima project, which Biotechnica runs with Night City University. The brain lives in an upgraded Biosystem that allows movement and interaction, and Taylor also wrote the bestseller The Last Rain in the World."
     },
     "sheetNote": null,
     "sheet": null
@@ -12867,7 +12867,7 @@
     "sources": [{"book": "Karaoke Night", "page": 2}, {"book": "Karaoke Night", "page": 7}],
     "summary": {
       "pt": "Executivo da Dynalar que perdeu um data shard criptografado com dados sigilosos num bar de Northside e pagou à fixer Regina Jones para recuperá-lo. Espera o grupo num estacionamento em Rancho Coronado, onde o amante, Rocky, tenta tomar o chip.",
-      "en": "Dynalar executive who lost an encrypted data shard of classified company data in a Northside bar and paid the Fixer Regina Jones to get it back. He waits for the crew in a Rancho Coronado parking lot, where his lover Rocky tries to seize the chip."
+      "en": "Dynalar executive who left an encrypted data shard full of confidential company data in a Northside bar, then hired the Fixer Regina Jones to fetch it. He meets the crew at a Rancho Coronado parking lot, where his lover Rocky tries to grab the chip."
     },
     "sheetNote": null,
     "sheet": null
