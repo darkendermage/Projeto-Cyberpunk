@@ -1,0 +1,312 @@
+[
+  {
+    "id": "adam-smasher",
+    "name": "Adam Smasher",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Solo",
+    "roleRank": 9,
+    "rep": 10,
+    "affiliation": "Arasaka",
+    "sources": [{ "book": "Edgerunners Mission Kit", "page": 38 }, { "book": "Edgerunners Mission Kit", "page": 39 }],
+    "summary": {
+      "pt": "Veterano de guerra com quase um século de vida, mercenário e depois soldado vitalício da Arasaka dentro de um corpo borg completo. Voltou a Night City depois de anos sumido. Há quem duvide que seja o Smasher original, mas ninguém duvida do estrago que ele faz.",
+      "en": "A war veteran nearly a century old, once a mercenary and now a lifetime Arasaka soldier inside a full borg body. He is back in Night City after years off the radar. Some doubt he is the original Smasher, but nobody doubts the damage he does."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 75,
+      "seriouslyWounded": null,
+      "deathSave": 17,
+      "stats": { "INT": 6, "REF": 8, "DEX": 8, "TECH": 6, "COOL": 5, "WILL": 8, "MOVE": 8, "BODY": 17, "EMP": null },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Adam Smasher's Fists", "skill": "Brawling", "attackBase": 18, "damage": "5d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": "Halves SP" },
+        { "name": "Shoulder-Mounted Rocket Launcher", "skill": "Heavy Weapons", "attackBase": 18, "damage": "9d6", "rof": 1, "magazine": 4, "class": null, "melee": false, "notes": "Explosive; Smart Weapon" },
+        { "name": "Pop-Up Autoshotgun", "skill": "Shoulder Arms", "attackBase": 18, "damage": "6d6", "rof": 2, "magazine": 16, "class": null, "melee": false, "notes": "Power Weapon" },
+        { "name": "Adam Smasher's Chain Gun", "skill": "Heavy Weapons", "attackBase": 18, "damage": "2d6", "rof": 1, "magazine": 80, "class": null, "melee": false, "notes": "Autofire (x5) only; Power Weapon. The sheet prints \"See Type\" for damage: 2d6 is the Autofire damage roll from the Autofire rules (p. 9), multiplied by the margin up to x5" }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Adam Smasher's Plating", "sp": 18 },
+        { "location": "Body", "name": "Adam Smasher's Plating", "sp": 18 }
+      ],
+      "skills": {
+        "Athletics": 14, "Autofire": 18, "Brawling": 18, "Bureaucracy": 10, "Conceal/Reveal Object": 12,
+        "Concentration": 16, "Conversation": 2, "Cybertech": 16, "Drive Land Vehicle": 12, "Education": 10,
+        "Electronics/Security Tech": 10, "Endurance": 18, "Evasion": 18, "First Aid": 10, "Handgun": 18,
+        "Heavy Weapons": 18, "Human Perception": 3, "Interrogation": 15, "Local Expert": 8, "Melee Weapon": 18,
+        "Paramedic": 10, "Perception": 16, "Persuasion": 8, "Resist Torture/Drugs": 18, "Shoulder Arms": 18,
+        "Stealth": 12, "Streetwise": 10, "Tactics": 13, "Wardrobe & Style": 12
+      },
+      "gear": [],
+      "cyberware": [
+        "Neuroport", "Self-ICE x3", "Self-ICE Regenerator", "Communications Receiver w/ Descrambler", "Jumpboosters",
+        "Armor Regeneration Matrix", "FBC Body", "Berserk Implant", "Adam Smasher's Sandevistan"
+      ],
+      "specials": [
+        {
+          "name": "Solo",
+          "text": {
+            "pt": "Role Rank 9, com +9 na Iniciativa. Mesmo assim ele sempre age primeiro.",
+            "en": "Role Rank 9, giving +9 to Initiative. He always goes first anyway."
+          }
+        },
+        {
+          "name": "Armor Piercing Ammunition",
+          "text": {
+            "pt": "Toda a munição dele é perfurante: quando atravessa a armadura, ela perde 2 pontos de SP em vez de 1.",
+            "en": "All his ammunition is armor piercing: when it gets through armor, the armor loses 2 SP instead of 1."
+          }
+        },
+        {
+          "name": "Self-ICE x3",
+          "text": {
+            "pt": "Para fazer um Quickhack nele, o Netrunner precisa antes quebrar 3 Passwalls (DV10).",
+            "en": "To Quickhack him, a Netrunner must first Breach 3 Passwalls (DV10)."
+          }
+        },
+        {
+          "name": "Self-ICE Regenerator",
+          "text": {
+            "pt": "No início do Turno dele, qualquer Netrunner conectado à arquitetura do Neuroport é desconectado automaticamente e os Passwalls se regeneram.",
+            "en": "At the start of his Turn, any Netrunner Jacked Into his Neuroport architecture is automatically Jacked Out and the Passwalls regenerate."
+          }
+        },
+        {
+          "name": "Communications Receiver w/ Descrambler",
+          "text": {
+            "pt": "Com uma Ação e um teste de Electronics/Security Tech contra DV13, ele escuta comunicações de holo ou rádio a até 50 m/jardas.",
+            "en": "As an Action, with a DV13 Electronics/Security Tech Check, he listens in on holo or radio communications within 50 m/yds."
+          }
+        },
+        {
+          "name": "Jumpboosters",
+          "text": {
+            "pt": "Ignora as penalidades de movimento em saltos.",
+            "en": "Ignores movement penalties for jumps."
+          }
+        },
+        {
+          "name": "Armor Regeneration Matrix",
+          "text": {
+            "pt": "A primeira vez que seus HP caem a 40 ou menos, a armadura volta a SP 18.",
+            "en": "The first time his HP drops to 40 or lower, his armor regenerates back to SP 18."
+          }
+        },
+        {
+          "name": "FBC Body",
+          "text": {
+            "pt": "Ignora os efeitos de Estrangulamento e de Lesões Críticas (inclusive o dano bônus). Também não precisa respirar, comer nem beber.",
+            "en": "Ignores the effects of Choke Actions and Critical Injuries (including Bonus Damage). He also doesn't need to breathe, eat or drink."
+          }
+        },
+        {
+          "name": "Berserk Implant",
+          "text": {
+            "pt": "Não sofre penalidades por estar Gravemente Ferido ou Mortalmente Ferido, mas ainda faz Death Saves se chegar a 0 HP.",
+            "en": "Suffers no penalties when Seriously Wounded or Mortally Wounded, but still makes Death Saves if knocked down to 0 HP."
+          }
+        },
+        {
+          "name": "Adam Smasher's Sandevistan",
+          "text": {
+            "pt": "Sandevistan experimental, sempre ligada em combate: ele ganha uma Ação extra de Mover ou Atacar no Turno, sem perda de Humanidade ou HP.",
+            "en": "An experimental Sandevistan, always on during combat: he gets an extra Move or Attack Action on his Turn, with no Humanity or Hit Point loss."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "falco",
+    "name": "Falco",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Nomad",
+    "roleRank": 6,
+    "rep": 7,
+    "affiliation": null,
+    "sources": [{ "book": "Edgerunners Mission Kit", "page": 33 }],
+    "summary": {
+      "pt": "Texano que trocou o trator por carros de corrida, depois pelas corridas de rua de Night City e por fim por gigs de edgerunner. Calado e de cabeça fria, é o piloto de fuga que contrata a Crew em The Jacket.",
+      "en": "A Texan who traded tractors for race cars, then Night City street racing, and finally edgerunner gigs. Laconic and cool-headed, he is the getaway driver who hires the Crew in The Jacket."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 40,
+      "seriouslyWounded": 20,
+      "deathSave": 6,
+      "stats": { "INT": 6, "REF": 8, "DEX": 6, "TECH": 5, "COOL": 4, "WILL": 6, "MOVE": 5, "BODY": 6, "EMP": 4 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Brawling Attack", "skill": "Brawling", "attackBase": 12, "damage": "2d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null },
+        { "name": "Techtronika RT-46 Burya", "skill": "Handgun", "attackBase": 14, "damage": "4d6", "rof": 1, "magazine": 4, "class": "VeryHeavyPistol", "melee": false, "notes": "Tech Weapon" }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Light Armorjack", "sp": 11 },
+        { "location": "Body", "name": "Light Armorjack", "sp": 11 }
+      ],
+      "skills": {
+        "Athletics": 8, "Brawling": 12, "Concentration": 6, "Conversation": 10, "Deduction": 10, "Drive Land Vehicle": 20,
+        "Education": 6, "Endurance": 10, "Evasion": 12, "First Aid": 11, "Handgun": 14, "Human Perception": 12,
+        "Local Expert": 12, "Perception": 12, "Persuasion": 8, "Resist Torture/Drugs": 10, "Stealth": 10,
+        "Streetwise": 8, "Tracking": 12, "Wardrobe & Style": 8
+      },
+      "gear": [],
+      "cyberware": ["Neuroport", "EMP Threading", "Arasaka Cyberarm"],
+      "specials": [
+        {
+          "name": "Nomad",
+          "text": {
+            "pt": "Role Rank 6, com +6 em Drive Land Vehicle. O bônus já está incluído nas Skill Bases.",
+            "en": "Role Rank 6, giving +6 to Drive Land Vehicle. The bonus is already included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Arasaka Cyberarm",
+          "text": {
+            "pt": "O cyberarm permite que ele dispare a Techtronika RT-46 Burya sem quebrar o braço.",
+            "en": "The cyberarm lets him fire the Techtronika RT-46 Burya without breaking his arm."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "dalton-estevan-luis",
+    "name": "Dalton Estevan-Luis",
+    "aliases": ["Dalton"],
+    "kind": "sheet",
+    "role": "Tech",
+    "roleRank": 4,
+    "rep": 1,
+    "affiliation": "Valentinos",
+    "sources": [{ "book": "Edgerunners Mission Kit", "page": 34 }],
+    "summary": {
+      "pt": "Mecânico de baixo escalão dos Valentinos que só queria uma família. Roubou um depósito da gangue, ficou com uma jaqueta amarela e agora está marcado para morrer, tentando tirar a parceira da cidade.",
+      "en": "A low-level Valentino mechanic who only wanted a family. He robbed a gang storage unit, ended up with a yellow jacket, and is now marked for death while trying to get his partner out of town."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 35,
+      "seriouslyWounded": 18,
+      "deathSave": 4,
+      "stats": { "INT": 5, "REF": 6, "DEX": 6, "TECH": 7, "COOL": 4, "WILL": 6, "MOVE": 5, "BODY": 4, "EMP": 4 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Brawling Attack", "skill": "Brawling", "attackBase": 8, "damage": "1d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null },
+        { "name": "Constitutional Arms Unity", "skill": "Handgun", "attackBase": 12, "damage": "3d6", "rof": 2, "magazine": 12, "class": "HeavyPistol", "melee": false, "notes": "Power Weapon" }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Light Armorjack", "sp": 11 },
+        { "location": "Body", "name": "Light Armorjack", "sp": 11 }
+      ],
+      "skills": {
+        "Athletics": 8, "Brawling": 8, "Concentration": 8, "Conversation": 6, "Drive Land Vehicle": 10, "Education": 7,
+        "Electronics/Security Tech": 17, "Evasion": 12, "First Aid": 13, "Handgun": 12, "Human Perception": 16,
+        "Local Expert": 7, "Perception": 7, "Persuasion": 6, "Resist Torture/Drugs": 10, "Stealth": 10, "Streetwise": 8
+      },
+      "gear": [],
+      "cyberware": ["Neuroport", "Tech Hair", "Dynalar Tool Cyberarm"],
+      "specials": [
+        {
+          "name": "Tech",
+          "text": {
+            "pt": "Role Rank 4, com +4 em testes de Electronics/Security Tech. O bônus já está incluído nas Skill Bases.",
+            "en": "Role Rank 4, giving +4 to Electronics/Security Tech Checks. The bonus is already included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Dynalar Tool Cyberarm",
+          "text": {
+            "pt": "A mão se abre em várias ferramentas, então ele sempre consegue trabalhar.",
+            "en": "His hand unfolds into a multitude of tools, so he can always work."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "maria-torres",
+    "name": "Maria Torres",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Solo",
+    "roleRank": 6,
+    "rep": 5,
+    "affiliation": "Valentinos",
+    "sources": [{ "book": "Edgerunners Mission Kit", "page": 40 }],
+    "summary": {
+      "pt": "Tenente de Gustavo Orta nos Valentinos, com ordens de matar Dalton. Os dois braços foram trocados por cyberarms com Mantis Blades. É o chefe da luta final de The Jacket, quando Smasher não entra.",
+      "en": "Gustavo Orta's lieutenant in the Valentinos, ordered to kill Dalton. Both arms were replaced with Mantis Blade cyberarms. She is the boss of The Jacket's final fight when Smasher stays out of it."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 45,
+      "seriouslyWounded": 23,
+      "deathSave": 7,
+      "stats": { "INT": 6, "REF": 8, "DEX": 8, "TECH": 6, "COOL": 6, "WILL": 6, "MOVE": 6, "BODY": 7, "EMP": 5 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Mantis Blade x2", "skill": "Melee Weapon", "attackBase": 16, "damage": "3d6", "rof": 1, "magazine": null, "class": "HeavyMelee", "melee": true, "notes": "Melee Weapon" },
+        { "name": "Techtronika RT-46 Burya", "skill": "Handgun", "attackBase": 16, "damage": "4d6", "rof": 1, "magazine": 4, "class": "VeryHeavyPistol", "melee": false, "notes": "Tech Weapon" }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Light Armorjack", "sp": 11 },
+        { "location": "Body", "name": "Light Armorjack", "sp": 11 }
+      ],
+      "skills": {
+        "Athletics": 16, "Brawling": 14, "Bribery": 10, "Concentration": 8, "Conversation": 7, "Drive Land Vehicle": 10,
+        "Education": 8, "Endurance": 10, "Evasion": 16, "First Aid": 8, "Handgun": 16, "Human Perception": 9,
+        "Interrogation": 12, "Local Expert": 10, "Melee Weapon": 16, "Perception": 12, "Persuasion": 10,
+        "Resist Torture/Drugs": 12, "Stealth": 10, "Streetwise": 12, "Tactics": 10, "Wardrobe & Style": 8
+      },
+      "gear": [],
+      "cyberware": ["Neuroport", "EMP Threading", "Arasaka Mantis Blade Cyberarm x2", "Berserk Implant"],
+      "specials": [
+        {
+          "name": "Solo",
+          "text": {
+            "pt": "Role Rank 6, com +6 nas rolagens de Iniciativa.",
+            "en": "Role Rank 6, giving +6 to Initiative Rolls."
+          }
+        },
+        {
+          "name": "Arasaka Mantis Blade Cyberarm x2",
+          "text": {
+            "pt": "Os dois braços de carne foram trocados por cyberarms com Mantis Blades.",
+            "en": "Both meat arms were replaced with Mantis Blade-loaded cyberarms."
+          }
+        },
+        {
+          "name": "Berserk Implant",
+          "text": {
+            "pt": "Se ativado, ela não sofre penalidades por estar Gravemente Ferida ou Mortalmente Ferida, mas ainda faz Death Saves a 0 HP.",
+            "en": "If activated, she suffers no penalties when Seriously Wounded or Mortally Wounded, but still makes Death Saves at 0 HP."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "morgan-blackhand",
+    "name": "Morgan Blackhand",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Solo",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": null,
+    "sources": [
+      { "book": "Cyberpunk RED Core Rulebook", "page": 121 },
+      { "book": "Cyberpunk RED Core Rulebook", "page": 240 },
+      { "book": "Cyberpunk RED Core Rulebook", "page": 293 }
+    ],
+    "summary": {
+      "pt": "Lenda entre os Solos. Liderou a incursão à Arasaka Tower em 2023, ao lado de Johnny Silverhand, quando a bomba explodiu em Night City. Ninguém o viu, vivo ou morto, desde então, e os boatos o dão como espião do governo e visto em cidades da Primeira Onda.",
+      "en": "A legend among Solos. He led the 2023 incursion into the Arasaka Towers alongside Johnny Silverhand, when the bomb went off in Night City. Nobody has seen him, alive or dead, since, and rumor makes him a hidden government asset spotted in First Wave cities."
+    },
+    "sheetNote": null,
+    "sheet": null
+  }
+]

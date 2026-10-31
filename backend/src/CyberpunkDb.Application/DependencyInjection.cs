@@ -18,6 +18,7 @@ using CyberpunkDb.Application.NightMarkets.Generation;
 using CyberpunkDb.Application.NightMarkets.Rules;
 using CyberpunkDb.Application.NightMarkets.Trading;
 using CyberpunkDb.Application.Npcs;
+using CyberpunkDb.Application.Npcs.Compendium;
 using CyberpunkDb.Application.Npcs.Generation;
 using CyberpunkDb.Application.Npcs.Rules;
 using CyberpunkDb.Application.Npcs.Validation;
@@ -36,6 +37,7 @@ public static class DependencyInjection
         services.AddScoped<ItemWriteService>();
         services.AddScoped<CollectionsService>();
         services.AddSingleton(_ => NpcRuleBook.LoadEmbedded());
+        services.AddSingleton(_ => NpcCompendium.LoadEmbedded());
         services.AddSingleton<NpcValidator>();
         services.AddSingleton<NpcGenerator>();
         services.AddSingleton<NpcCatalogCache>();
