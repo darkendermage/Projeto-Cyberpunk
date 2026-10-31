@@ -4005,5 +4005,1171 @@
         }
       ]
     }
+  },
+  {
+    "id": "crasher",
+    "name": "Crasher",
+    "aliases": ["Wedding Crasher"],
+    "kind": "sheet",
+    "role": "Media",
+    "roleRank": 2,
+    "rep": 1,
+    "affiliation": null,
+    "sources": [{ "book": "Danger Gal Dossier", "page": 53 }],
+    "summary": {
+      "pt": "Cinegrafista mercenário que filma o que pagarem, de festas de herdeiros corporativos a oficinas ilegais e lutas clandestinas, de preferência com bufê ou bar aberto. Guarda um arquivo pessoal gigante, sem apagar nada, e vende buscas nele pelo preço certo.",
+      "en": "A mercenary cameraman who films whatever pays, from corporate brats' parties to illegal chop shops and underground fights, ideally with a buffet or open bar. He keeps a huge personal archive he never deletes and sells searches through it for the right price."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 35,
+      "seriouslyWounded": 18,
+      "deathSave": 4,
+      "stats": { "INT": 4, "REF": 5, "DEX": 4, "TECH": 4, "COOL": 5, "WILL": 5, "MOVE": 4, "BODY": 4, "EMP": 4 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Medium Pistol", "skill": "Handgun", "attackBase": 12, "damage": "2d6", "rof": 2, "magazine": null, "class": "MediumPistol", "melee": false, "notes": "Poor Quality" },
+        { "name": "Brawling Attack", "skill": "Brawling", "attackBase": 6, "damage": "1d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Kevlar®", "sp": 7 },
+        { "location": "Body", "name": "Kevlar®", "sp": 7 }
+      ],
+      "skills": {
+        "Athletics": 6, "Brawling": 6, "Composition": 8, "Concentration": 7, "Conversation": 8, "Education": 6,
+        "Evasion": 8, "First Aid": 6, "Handgun": 12, "Human Perception": 10, "Language (English)": 8, "Language (Streetslang)": 8,
+        "Local Expert (Heywood)": 8, "Perception": 8, "Persuasion": 9, "Photography/Film": 10, "Stealth": 6
+      },
+      "gear": ["Incendiary M Pistol Ammo x12", "Computer", "Disposable Cell Phone", "TUp (+1 to Photography/Film) Video Camera"],
+      "cyberware": ["EMP Threading"],
+      "specials": [
+        {
+          "name": "Credibility",
+          "text": {
+            "pt": "Role Ability Credibility no Rank 2. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Credibility at Rank 2. Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Video Camera",
+          "text": {
+            "pt": "Sua Video Camera é TUp: +1 em Photography/Film.",
+            "en": "His Video Camera is TUp: +1 to Photography/Film."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "flasher",
+    "name": "Flasher",
+    "aliases": ["Mal Devincher"],
+    "kind": "sheet",
+    "role": "Fixer",
+    "roleRank": 2,
+    "rep": 1,
+    "affiliation": null,
+    "sources": [{ "book": "Danger Gal Dossier", "page": 54 }],
+    "summary": {
+      "pt": "Mal Devincher, camelô de baixa categoria que abre o casaco para mostrar mercadoria barata, de armas arranhadas a coisas \"caídas de um drone de entrega\". Não vale como fornecedor de qualidade, mas vê e ouve muita coisa na rua e serve como fonte de informação.",
+      "en": "Mal Devincher, a small-time hustler who opens his coat to show cheap wares, from scratched-up guns to things \"dropped by a delivery drone\". Not a quality supplier, but he sees and hears plenty on The Street and is a useful source of information."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 30,
+      "seriouslyWounded": 15,
+      "deathSave": 4,
+      "stats": { "INT": 5, "REF": 5, "DEX": 4, "TECH": 4, "COOL": 5, "WILL": 4, "MOVE": 4, "BODY": 4, "EMP": 4 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Heavy Pistol", "skill": "Handgun", "attackBase": 12, "damage": "3d6", "rof": 2, "magazine": null, "class": "HeavyPistol", "melee": false, "notes": "Poor Quality" },
+        { "name": "Brawling Attack", "skill": "Brawling", "attackBase": 6, "damage": "1d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Scavenged Armor", "sp": 11 },
+        { "location": "Body", "name": "Scavenged Armor", "sp": 11 }
+      ],
+      "skills": {
+        "Athletics": 6, "Brawling": 6, "Bribery": 9, "Conceal/Reveal Object": 10, "Concentration": 6, "Conversation": 8,
+        "Education": 7, "Evasion": 12, "First Aid": 6, "Handgun": 12, "Human Perception": 8, "Language (English)": 9,
+        "Language (Streetslang)": 7, "Local Expert (Old Combat Zone)": 7, "Perception": 7, "Persuasion": 9, "Stealth": 6, "Trading": 9
+      },
+      "gear": ["Expansive H Pistol Ammo x8", "Disposable Cell Phone x2", "Unloaded Teen Dreem (ROF1, 2d6) x12"],
+      "cyberware": ["Cyberaudio Suite w/ Internal Agent", "Cybereye w/ Chyron"],
+      "specials": [
+        {
+          "name": "Operator",
+          "text": {
+            "pt": "Role Ability Operator no Rank 2. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Operator at Rank 2. Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Mercadoria",
+          "text": {
+            "pt": "Carrega 12 Teen Dreem descarregadas (ROF 1, 2d6) para vender, além de dois celulares descartáveis.",
+            "en": "Carries twelve unloaded Teen Dreem guns (ROF 1, 2d6) to sell, plus two disposable cell phones."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "hammer",
+    "name": "Hammer",
+    "aliases": ["Harlan Briggs"],
+    "kind": "sheet",
+    "role": "Solo",
+    "roleRank": 2,
+    "rep": 0,
+    "affiliation": null,
+    "sources": [{ "book": "Danger Gal Dossier", "page": 55 }],
+    "summary": {
+      "pt": "Harlan Briggs, ex-soldado de empresa militar privada que deixou a carne de canhão e foi trabalhar por conta própria. Resolve problemas de forma direta e é leal ao contratante enquanto estiver pago. Gosta de se exibir para quem quer impressionar, o que pode ser explorado.",
+      "en": "Harlan Briggs, an ex-private-military grunt who left cannon-fodder duty to go freelance. He solves problems directly and tends to stay bought once hired. He likes flexing for anyone he wants to impress, which can be exploited."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 35,
+      "seriouslyWounded": 18,
+      "deathSave": 5,
+      "stats": { "INT": 3, "REF": 6, "DEX": 5, "TECH": 4, "COOL": 4, "WILL": 5, "MOVE": 4, "BODY": 5, "EMP": 3 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Very Heavy Pistol w/Extended Magazine", "skill": "Handgun", "attackBase": 12, "damage": "4d6", "rof": 1, "magazine": null, "class": "VeryHeavyPistol", "melee": false, "notes": "Poor Quality" },
+        { "name": "Brawling Attack", "skill": "Brawling", "attackBase": 10, "damage": "2d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Scavenged Armor", "sp": 11 },
+        { "location": "Body", "name": "Scavenged Armor", "sp": 11 }
+      ],
+      "skills": {
+        "Athletics": 7, "Brawling": 10, "Concentration": 7, "Conversation": 5, "Education": 5, "Evasion": 10,
+        "First Aid": 8, "Handgun": 12, "Heavy Weapons": 10, "Language (English)": 7, "Language (Streetslang)": 5, "Local Expert (Rancho Coronado)": 5,
+        "Melee Weapon": 10, "Perception": 8, "Persuasion": 6, "Stealth": 7
+      },
+      "gear": ["Armor-Piercing VH Pistol Ammo x14", "Disposable Cell Phone"],
+      "cyberware": ["Cybereye w/ Targeting Scope"],
+      "specials": [
+        {
+          "name": "Combat Awareness",
+          "text": {
+            "pt": "Role Ability Combat Awareness no Rank 2. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Combat Awareness at Rank 2. Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Pistola de Qualidade Ruim",
+          "text": {
+            "pt": "Very Heavy Pistol de Qualidade Ruim com carregador estendido e Armor-Piercing VH Pistol Ammo x14.",
+            "en": "A Poor Quality Very Heavy Pistol with an extended magazine and fourteen Armor-Piercing VH Pistol rounds."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "leverage",
+    "name": "Leverage",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Tech",
+    "roleRank": 2,
+    "rep": 0,
+    "affiliation": null,
+    "sources": [{ "book": "Danger Gal Dossier", "page": 56 }],
+    "summary": {
+      "pt": "Tech corporativo que ajudou edgerunners a invadir o prédio onde trabalhava, para se vingar dos chefes, e gostou tanto que largou a empresa. Ainda está aprendendo; pagando bem, é fácil ganhar a lealdade dele.",
+      "en": "A corporate Tech who helped a team of Edgerunners break into his own workplace to get back at his bosses, and liked it so much he quit. Still learning the ropes; pay him well and his loyalty comes easily."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 35,
+      "seriouslyWounded": 18,
+      "deathSave": 6,
+      "stats": { "INT": 4, "REF": 3, "DEX": 4, "TECH": 6, "COOL": 4, "WILL": 4, "MOVE": 4, "BODY": 6, "EMP": 4 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Medium Pistol", "skill": "Handgun", "attackBase": 8, "damage": "2d6", "rof": 2, "magazine": null, "class": "MediumPistol", "melee": false, "notes": "Poor Quality" },
+        { "name": "Very Heavy Melee Weapon", "skill": "Melee Weapon", "attackBase": 12, "damage": "4d6", "rof": 1, "magazine": null, "class": null, "melee": true, "notes": "Poor Quality" }
+      ],
+      "armor": [
+        { "location": "Body", "name": "Kevlar®", "sp": 7 }
+      ],
+      "skills": {
+        "Athletics": 6, "Basic Tech": 12, "Brawling": 8, "Bureaucracy": 6, "Concentration": 6, "Conversation": 6,
+        "Education": 6, "Electronics/Security Tech": 10, "Evasion": 6, "First Aid": 8, "Handgun": 8, "Human Perception": 6,
+        "Language (Samoan)": 8, "Language (Spanish)": 6, "Local Expert (Heywood Industrial Zone)": 6, "Melee Weapon": 12, "Perception": 6, "Persuasion": 6,
+        "Stealth": 6
+      },
+      "gear": ["Junk M Pistol Ammo x12", "Disposable Cell Phone", "Smart Lens w/ MicroOptics", "Tech Tool"],
+      "cyberware": ["Contraceptive Implant"],
+      "specials": [
+        {
+          "name": "Maker",
+          "text": {
+            "pt": "Role Ability Maker no Rank 2 (Field Exp 2, Fab Exp 2). Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Maker at Rank 2 (Field Exp 2, Fab Exp 2). Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Armas de baixa qualidade",
+          "text": {
+            "pt": "Medium Pistol e Very Heavy Melee Weapon (ROF 1, 4d6) ambas de Qualidade Ruim.",
+            "en": "A Poor Quality Medium Pistol and a Poor Quality Very Heavy Melee Weapon (ROF 1, 4d6)."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "blades",
+    "name": "Blades",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Fixer",
+    "roleRank": 2,
+    "rep": 1,
+    "affiliation": "Generation Red",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 58 }, { "book": "Danger Gal Dossier", "page": 57 }],
+    "summary": {
+      "pt": "Garota de rua desde pequena, que perdeu o olho e as pernas lutando contra catadores. A Danger Gal pagou pelas cyberlegs com pés de skate para ganhar confiança, e Tigress pede que ela convença a Generation Red a se aliar. Tetra a idolatra, o que Blades não sabe como lidar.",
+      "en": "A street kid since early childhood who lost an eye and her legs fighting off scavengers. Danger Gal paid for her cyberlegs with skate feet as a goodwill gesture, and Tigress wants her to persuade Generation Red to work with the company. Tetra idolizes her, which Blades does not know how to handle."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 30,
+      "seriouslyWounded": 15,
+      "deathSave": 3,
+      "stats": { "INT": 4, "REF": 7, "DEX": 6, "TECH": 3, "COOL": 5, "WILL": 4, "MOVE": 7, "BODY": 3, "EMP": 5 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Heavy Melee Weapon", "skill": "Melee Weapon", "attackBase": 12, "damage": "3d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null },
+        { "name": "Brawling Attack", "skill": "Brawling", "attackBase": 8, "damage": "1d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Leathers", "sp": 4 },
+        { "location": "Body", "name": "Scavenged Armor", "sp": 11 }
+      ],
+      "skills": {
+        "Athletics": 12, "Brawling": 8, "Bribery": 7, "Conversation": 9, "Education": 6, "Evasion": 12,
+        "First Aid": 5, "Handgun": 8, "Human Perception": 10, "Interrogation": 7, "Language (English)": 8, "Language (Streetslang)": 10,
+        "Library Search": 8, "Local Expert (Old Combat Zone)": 9, "Melee Weapon": 12, "Perception": 7, "Persuasion": 10, "Photography/Film": 9,
+        "Pick Lock": 5, "Pick Pocket": 5, "Stealth": 8, "Streetwise": 10, "Trading": 10, "Wardrobe & Style": 8
+      },
+      "gear": ["Carryall", "Disposable Cell Phone x2", "Duct Tape", "Flashlight", "Inflatable Bed & Sleep-bag", "Lock Picking Set", "Personal CarePak"],
+      "cyberware": ["Contraceptive Implant", "Cybereye w/ MicroVideo", "Cyberleg x2 w/ Skate Foot x2"],
+      "specials": [
+        {
+          "name": "Operator",
+          "text": {
+            "pt": "Role Ability Operator no Rank 2. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Operator at Rank 2. Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Cyberlegs",
+          "text": {
+            "pt": "Cyberlegs com Skate Foot x2 e Cybereye com MicroVideo.",
+            "en": "Cyberlegs with two Skate Feet and a Cybereye with a MicroVideo."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "apex",
+    "name": "Apex",
+    "aliases": ["Marianna Brooks"],
+    "kind": "sheet",
+    "role": "Tech",
+    "roleRank": 2,
+    "rep": 1,
+    "affiliation": "Generation Red",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 59 }, { "book": "Danger Gal Dossier", "page": 57 }],
+    "summary": {
+      "pt": "Marianna Brooks, líder da YoGang Generation Red. Filha de funcionários da Zhirafa, fugiu depois de um abuso e criou um abrigo na Old Combat Zone com a amiga Lookout. Desconfia de adultos e de corporações, o que dificulta qualquer acordo com a Danger Gal.",
+      "en": "Marianna Brooks, leader of the YoGang Generation Red. Daughter of Zhirafa workers, she fled after being abused and set up a refuge in the Old Combat Zone with her friend Lookout. She distrusts adults and corps, which complicates any deal with Danger Gal."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 30,
+      "seriouslyWounded": 15,
+      "deathSave": 3,
+      "stats": { "INT": 4, "REF": 4, "DEX": 4, "TECH": 5, "COOL": 5, "WILL": 5, "MOVE": 3, "BODY": 3, "EMP": 6 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Heavy Pistol", "skill": "Handgun", "attackBase": 10, "damage": "3d6", "rof": 2, "magazine": null, "class": "HeavyPistol", "melee": false, "notes": "Poor Quality" },
+        { "name": "Brawling Attack", "skill": "Brawling", "attackBase": 6, "damage": "1d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Leathers", "sp": 4 },
+        { "location": "Body", "name": "Leathers", "sp": 4 }
+      ],
+      "skills": {
+        "Athletics": 7, "Basic Tech": 10, "Brawling": 6, "Concentration": 7, "Conversation": 8, "Education": 6,
+        "Electronics/Security Tech": 10, "Evasion": 6, "First Aid": 7, "Handgun": 10, "Human Perception": 10, "Language (English)": 8,
+        "Language (Streetslang)": 6, "Local Expert (Old Combat Zone)": 6, "Perception": 6, "Persuasion": 10, "Stealth": 8, "Streetwise": 10,
+        "Tactics": 7, "Weaponstech": 10
+      },
+      "gear": ["Junk H Pistol Ammo x8", "Flashbang Grenade x3", "Anti-Smog Mask", "Battleglove w/ Tool Hand", "Carryall", "Disposable Cell Phone", "Duct Tape x2", "Flashlight"],
+      "cyberware": [],
+      "specials": [
+        {
+          "name": "Maker",
+          "text": {
+            "pt": "Role Ability Maker no Rank 2 (Field Exp 1, Up Exp 1, Fab Exp 1, Inv Exp 1). Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Maker at Rank 2 (Field Exp 1, Up Exp 1, Fab Exp 1, Inv Exp 1). Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Battleglove",
+          "text": {
+            "pt": "Usa um Battleglove com Tool Hand, além de três Flashbang Grenades e Junk H Pistol Ammo.",
+            "en": "Uses a Battleglove with a Tool Hand, plus three Flashbang Grenades and Junk H Pistol Ammo."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "tetra",
+    "name": "Tetra",
+    "aliases": ["Andrea Olivetti"],
+    "kind": "sheet",
+    "role": "Solo",
+    "roleRank": 2,
+    "rep": 1,
+    "affiliation": "Generation Red",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 60 }, { "book": "Danger Gal Dossier", "page": 57 }],
+    "summary": {
+      "pt": "Andrea Olivetti, filha de executivos de segurança da Petrochem tão ausentes que nem notaram o sumiço do lança-foguetes. Usa a arma e as aulas de artes marciais para defender a gangue, adora Blades e gasta a mesada com a turma.",
+      "en": "Andrea Olivetti, daughter of Petrochem security Execs so absent they have not noticed their rocket launcher missing. She uses it and her martial arts classes to defend the gang, idolizes Blades, and spends her allowance on the group."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 35,
+      "seriouslyWounded": 18,
+      "deathSave": 5,
+      "stats": { "INT": 3, "REF": 6, "DEX": 5, "TECH": 3, "COOL": 4, "WILL": 4, "MOVE": 4, "BODY": 5, "EMP": 5 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Midnight Arms SDF-45", "skill": "Heavy Weapons", "attackBase": 10, "damage": "8d6", "rof": 1, "magazine": null, "class": "RocketLauncher", "melee": false, "notes": null },
+        { "name": "Martial Arts Attack", "skill": "Martial Arts (Taekwondo)", "attackBase": 10, "damage": "2d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Kevlar®", "sp": 7 },
+        { "location": "Body", "name": "Kevlar®", "sp": 7 }
+      ],
+      "skills": {
+        "Athletics": 7, "Brawling": 7, "Concentration": 6, "Conversation": 7, "Education": 7, "Evasion": 10,
+        "First Aid": 5, "Heavy Weapons": 10, "Human Perception": 7, "Language (English)": 7, "Language (Streetslang)": 5, "Library Search": 5,
+        "Local Expert (New Westbrook)": 5, "Local Expert (Old Combat Zone)": 5, "Martial Arts (Taekwondo)": 10, "Perception": 7, "Persuasion": 7, "Stealth": 7
+      },
+      "gear": ["Armor-Piercing Rocket x4", "Agent", "Carryall", "Flashlight"],
+      "cyberware": [],
+      "specials": [
+        {
+          "name": "Combat Awareness",
+          "text": {
+            "pt": "Role Ability Combat Awareness no Rank 2. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Combat Awareness at Rank 2. Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Midnight Arms SDF-45",
+          "text": {
+            "pt": "Lança-foguetes de 8d6 com quatro Armor-Piercing Rockets, roubado do armário dos pais.",
+            "en": "An 8d6 rocket launcher with four Armor-Piercing Rockets, lifted from her parents' closet."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "hi-stick",
+    "name": "Hi-Stick",
+    "aliases": ["LeShawna Johnson"],
+    "kind": "sheet",
+    "role": null,
+    "roleRank": null,
+    "rep": 1,
+    "affiliation": "Generation Red",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 61 }],
+    "summary": {
+      "pt": "LeShawna Johnson, jogadora de hóquei de rua e poeta que escreve sobre humanos e a máquina corporativa. Mora com a família grande em contêineres do South Cargo Village, mas tem quarto no esconderijo para guardar a coleção de bichos de pelúcia. Pagou o EMP Threading com prêmios de poesia.",
+      "en": "LeShawna Johnson, a street hockey player and poet who writes about humans and the corporate machine. She lives with her extended family in South Cargo Village containers but keeps a room at the clubhouse for her stuffed animals. She paid for her EMP Threading with poetry prizes."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 30,
+      "seriouslyWounded": 15,
+      "deathSave": 4,
+      "stats": { "INT": 4, "REF": 4, "DEX": 4, "TECH": 2, "COOL": 4, "WILL": 3, "MOVE": 3, "BODY": 4, "EMP": 5 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Heavy Melee Weapon", "skill": "Melee Weapon", "attackBase": 10, "damage": "3d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": "Poor Quality" },
+        { "name": "Brawling Attack", "skill": "Brawling", "attackBase": 10, "damage": "1d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
+      ],
+      "armor": [
+        { "location": "Body", "name": "Leathers", "sp": 4 }
+      ],
+      "skills": {
+        "Athletics": 10, "Basic Tech": 4, "Brawling": 10, "Composition": 10, "Concentration": 5, "Conversation": 7,
+        "Education": 6, "Endurance": 5, "Evasion": 10, "Human Perception": 7, "Language (English)": 7, "Language (Streetslang)": 6,
+        "Local Expert (Old Combat Zone)": 6, "Local Expert (South Night City)": 6, "Melee Weapon": 10, "Perception": 7, "Persuasion": 6, "Stealth": 7
+      },
+      "gear": ["Carryall", "Disposable Cell Phone", "Duct Tape", "Glow Paint", "Inflatable Bed & Sleep-bag", "Inline Skates", "Kibble Packet", "Radio Scanner/Music Player"],
+      "cyberware": ["EMP Threading"],
+      "specials": [
+        {
+          "name": "Taco de hóquei",
+          "text": {
+            "pt": "Usa um Heavy Melee Weapon de Qualidade Ruim (o taco) e patins Inline Skates.",
+            "en": "Uses a Poor Quality Heavy Melee Weapon (the stick) and Inline Skates."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "izzy",
+    "name": "Izzy",
+    "aliases": ["Israel Octavius"],
+    "kind": "sheet",
+    "role": "Tech",
+    "roleRank": 1,
+    "rep": 0,
+    "affiliation": "Generation Red",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 62 }],
+    "summary": {
+      "pt": "Israel Octavius, filhe de uma Medtech do Crisis Medical Center, que prefere engenharia de áudio a bio. Discretíssimo apesar do amor por barulho, faz poesia rítmica com Hi-Stick e Wheelie e leva sucata médica para a gangue. Montou com Apex as armadilhas do esconderijo.",
+      "en": "Israel Octavius, child of a Medtech at Crisis Medical Center, who prefers audio engineering to bio. Surprisingly stealthy for someone who loves noise, they make beat poetry with Hi-Stick and Wheelie and bring discarded medical supplies to the gang. They built the clubhouse booby traps with Apex."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 30,
+      "seriouslyWounded": 15,
+      "deathSave": 3,
+      "stats": { "INT": 4, "REF": 3, "DEX": 3, "TECH": 5, "COOL": 3, "WILL": 4, "MOVE": 3, "BODY": 3, "EMP": 5 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Heavy Pistol w/Extended Magazine", "skill": "Handgun", "attackBase": 8, "damage": "3d6", "rof": 2, "magazine": null, "class": "HeavyPistol", "melee": false, "notes": "Poor Quality" },
+        { "name": "Heavy Pistol w/Extended Magazine", "skill": "Handgun", "attackBase": 8, "damage": "3d6", "rof": 2, "magazine": null, "class": "HeavyPistol", "melee": false, "notes": "Poor Quality" }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Leathers", "sp": 4 },
+        { "location": "Body", "name": "Leathers", "sp": 4 }
+      ],
+      "skills": {
+        "Athletics": 5, "Basic Tech": 10, "Brawling": 5, "Composition": 6, "Concentration": 6, "Conversation": 7,
+        "Education": 7, "Electronics/Security Tech": 8, "Evasion": 5, "First Aid": 10, "Handgun": 8, "Human Perception": 7,
+        "Language (Hebrew)": 8, "Language (Streetslang)": 6, "Local Expert (Old Combat Zone)": 6, "Local Expert (Old Japantown)": 6, "Perception": 8, "Persuasion": 5,
+        "Play Instrument (DJ Deck)": 8, "Stealth": 10, "Weaponstech": 6
+      },
+      "gear": ["Rubber H Pistol Ammo x28", "Agent", "Carryall", "Computer", "DJ Deck", "Food Stick", "Memory Chip x5", "Radio Scanner/Music Player", "Techtool", "Virtuality Goggles"],
+      "cyberware": [],
+      "specials": [
+        {
+          "name": "Maker",
+          "text": {
+            "pt": "Role Ability Maker no Rank 1 (Field Exp 1, Fab Exp 1). Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Maker at Rank 1 (Field Exp 1, Fab Exp 1). Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "DJ Deck",
+          "text": {
+            "pt": "Possui um DJ Deck; Play Instrument (DJ Deck) 8. Duas Heavy Pistols de Qualidade Ruim com carregador estendido e munição de borracha.",
+            "en": "Owns a DJ Deck; Play Instrument (DJ Deck) 8. Two Poor Quality Heavy Pistols with extended magazines and rubber ammo."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "lookout",
+    "name": "Lookout",
+    "aliases": ["Chloe Yannatou"],
+    "kind": "sheet",
+    "role": null,
+    "roleRank": null,
+    "rep": 0,
+    "affiliation": "Generation Red",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 63 }],
+    "summary": {
+      "pt": "Chloe Yannatou, sentinela da Generation Red e grafiteira, silenciosa e atenta. Tem uma habilidade de falsificação que não surgiu do nada e ajudou Apex a fugir da família e organizar o esconderijo. Convencer Lookout costuma ser o caminho para convencer Apex.",
+      "en": "Chloe Yannatou, Generation Red's lookout and graffiti artist, quiet and always listening. Her forgery skill did not come from nowhere, and she helped Apex flee her family and set up the clubhouse. Convincing Lookout is often the way to convince Apex."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 25,
+      "seriouslyWounded": 13,
+      "deathSave": 3,
+      "stats": { "INT": 5, "REF": 4, "DEX": 4, "TECH": 4, "COOL": 3, "WILL": 3, "MOVE": 3, "BODY": 3, "EMP": 4 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Light Melee Weapon", "skill": "Melee Weapon", "attackBase": 4, "damage": "1d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": "Poor Quality; No Skill Base printed for this weapon; STAT only." },
+        { "name": "Brawling Attack", "skill": "Brawling", "attackBase": 8, "damage": "1d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Leathers", "sp": 4 },
+        { "location": "Body", "name": "Leathers", "sp": 4 }
+      ],
+      "skills": {
+        "Athletics": 8, "Brawling": 8, "Concentration": 5, "Conversation": 6, "Education": 7, "Evasion": 10,
+        "First Aid": 6, "Forgery": 10, "Human Perception": 10, "Language (Greek)": 7, "Language (Streetslang)": 7, "Library Search": 7,
+        "Local Expert (Old Combat Zone)": 7, "Local Expert (Upper Marina)": 7, "Paint/Draw/Sculpt": 10, "Perception": 11, "Persuasion": 5, "Stealth": 10
+      },
+      "gear": ["Agent", "Carryall", "Duct Tape x3", "Flashlight", "Food Stick", "Glow Paint x10"],
+      "cyberware": ["Light Tattoo"],
+      "specials": [
+        {
+          "name": "Glow Paint",
+          "text": {
+            "pt": "Carrega dez Glow Paint e uma Light Tattoo; usa arma corpo a corpo leve de Qualidade Ruim.",
+            "en": "Carries ten Glow Paint and a Light Tattoo; uses a Poor Quality Light Melee Weapon."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "shredder",
+    "name": "Shredder",
+    "aliases": [],
+    "kind": "sheet",
+    "role": null,
+    "roleRank": null,
+    "rep": 0,
+    "affiliation": "Generation Red",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 64 }],
+    "summary": {
+      "pt": "Órfã de pais edgerunners, apaixonou-se por Hi-Stick ao vê-la derrubar um garoto maior numa partida e foi adotada pela gangue. Costura roupas, conserta os bichinhos de Hi-Stick e tenta apaziguar brigas para não perder o único lugar onde se sente em casa.",
+      "en": "An orphan of Edgerunner parents, she fell for Hi-Stick after seeing her take down a bigger kid in a game and was quickly adopted by the gang. She sews clothes, repairs Hi-Stick's stuffed animals, and tries to defuse arguments so she does not lose the one place that feels like home."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 30,
+      "seriouslyWounded": 15,
+      "deathSave": 4,
+      "stats": { "INT": 3, "REF": 5, "DEX": 3, "TECH": 2, "COOL": 3, "WILL": 4, "MOVE": 4, "BODY": 4, "EMP": 5 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Very Heavy Melee Weapon", "skill": "Melee Weapon", "attackBase": 8, "damage": "4d6", "rof": 1, "magazine": null, "class": null, "melee": true, "notes": "Poor Quality" },
+        { "name": "Brawling Attack", "skill": "Brawling", "attackBase": 5, "damage": "1d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Kevlar®", "sp": 7 },
+        { "location": "Body", "name": "Leathers", "sp": 4 }
+      ],
+      "skills": {
+        "Athletics": 8, "Basic Tech": 8, "Brawling": 5, "Concentration": 6, "Conversation": 7, "Education": 5,
+        "Endurance": 10, "Evasion": 9, "First Aid": 8, "Human Perception": 7, "Language (English)": 7, "Language (Streetslang)": 5,
+        "Library Search": 5, "Local Expert (Old Combat Zone)": 5, "Melee Weapon": 8, "Perception": 5, "Persuasion": 5, "Stealth": 5
+      },
+      "gear": ["Carryall", "Disposable Cell Phone", "Flashlight", "Inflatable Bed & Sleep-bag", "Kibble Pack", "Skateboard", "Techtool"],
+      "cyberware": [],
+      "specials": [
+        {
+          "name": "Skate",
+          "text": {
+            "pt": "Anda de skate (Skateboard) e leva uma arma corpo a corpo muito pesada de Qualidade Ruim (ROF 1, 4d6).",
+            "en": "Rides a Skateboard and carries a Poor Quality Very Heavy Melee Weapon (ROF 1, 4d6)."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "wheelie",
+    "name": "Wheelie",
+    "aliases": ["Hiroki Nishioka"],
+    "kind": "sheet",
+    "role": null,
+    "roleRank": null,
+    "rep": 1,
+    "affiliation": "Generation Red",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 65 }],
+    "summary": {
+      "pt": "Hiroki Nishioka, herdeiro da pesquisa da Kibble alternativa; os pais morreram num acidente de carro suspeito, que também custou o braço dele. Cuidadoso, evita chamar atenção para os poemas que escreve, mas se solta ao lado de Hi-Stick, Shredder e Tetra.",
+      "en": "Hiroki Nishioka, heir to the Kibble alternative research; his parents died in a suspicious car crash that also cost him an arm. Cautious, he avoids drawing attention to the poems he writes, but opens up around Hi-Stick, Shredder and Tetra."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 25,
+      "seriouslyWounded": 13,
+      "deathSave": 3,
+      "stats": { "INT": 5, "REF": 4, "DEX": 4, "TECH": 3, "COOL": 3, "WILL": 3, "MOVE": 3, "BODY": 3, "EMP": 5 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Heavy Pistol", "skill": "Handgun", "attackBase": 8, "damage": "3d6", "rof": 2, "magazine": null, "class": "HeavyPistol", "melee": false, "notes": "Poor Quality" },
+        { "name": "Brawling Attack", "skill": "Brawling", "attackBase": 6, "damage": "1d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
+      ],
+      "armor": [
+        { "location": "Body", "name": "Leathers", "sp": 4 }
+      ],
+      "skills": {
+        "Athletics": 10, "Brawling": 6, "Composition": 8, "Concentration": 5, "Contortionist": 8, "Conversation": 7,
+        "Education": 8, "Evasion": 6, "First Aid": 7, "Handgun": 8, "Human Perception": 8, "Language (English)": 9,
+        "Language (Japanese)": 7, "Language (Streetslang)": 7, "Library Search": 10, "Local Expert (University District)": 7, "Local Expert (Old Combat Zone)": 7, "Perception": 8,
+        "Persuasion": 8, "Science (Biochemistry)": 8, "Stealth": 8, "Streetwise": 5
+      },
+      "gear": ["Armor-Piercing H Pistol Ammo x8", "Bicycle", "Disposable Cell Phone", "Carryall", "Computer", "Kibble Pack"],
+      "cyberware": ["Medical Grade Cyberarm"],
+      "specials": [
+        {
+          "name": "Cyberarm",
+          "text": {
+            "pt": "Medical Grade Cyberarm; vai de Bicycle e leva uma Heavy Pistol com munição Armor-Piercing.",
+            "en": "A Medical Grade Cyberarm; rides a Bicycle and carries a Heavy Pistol with Armor-Piercing rounds."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "crusher",
+    "name": "Crusher",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Solo",
+    "roleRank": 8,
+    "rep": 9,
+    "affiliation": "Maelstrom",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 68 }],
+    "summary": {
+      "pt": "Líder da Maelstrom depois da morte do fundador, Hammer, durante a \"Nuke Frenzy\" que se seguiu à queda da Arasaka Tower. Conduziu os sobreviventes até o Burleson Tower Hotel, mas em 2027 enlouqueceu, massacrou um comboio da StormTech e sumiu na Hot Zone. Reaparece de vez em quando como um deus furioso da gangue, ajudando-a em batalha ou espancando seus membros.",
+      "en": "Maelstrom's leader after founder Hammer died in the \"Nuke Frenzy\" that followed the fall of the Arasaka Tower. He led the survivors to the Burleson Tower Hotel, but in 2027 he went cyberpsychotic, slaughtered a StormTech convoy and vanished into the Hot Zone. He still shows up at random, like the gang's angry god, either joining its battles or beating its members."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 70,
+      "seriouslyWounded": 35,
+      "deathSave": 15,
+      "stats": { "INT": 7, "REF": 8, "DEX": 8, "TECH": 7, "COOL": 8, "WILL": 8, "MOVE": 8, "BODY": 15, "EMP": 0 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Popup Kendachi Flamethrower", "skill": "Heavy Weapons", "attackBase": 16, "damage": "3d6", "rof": 1, "magazine": null, "class": "Shotgun", "melee": false, "notes": "No matching class; Shotgun used as the closest range table" },
+        { "name": "Popup Grenade Launcher x2", "skill": "Heavy Weapons", "attackBase": 16, "damage": "6d6", "rof": 1, "magazine": null, "class": "GrenadeLauncher", "melee": false, "notes": null }
+      ],
+      "armor": [
+        { "location": "Head", "name": "TUp Subdermal Armor", "sp": 12 },
+        { "location": "Body", "name": "TUp Subdermal Armor", "sp": 12 }
+      ],
+      "skills": {
+        "Athletics": 16, "Brawling": 16, "Conceal/Reveal Object": 7, "Concentration": 16, "Conversation": 2, "Drive Land Vehicle": 10,
+        "Education": 9, "Electronics/Security Tech": 7, "Endurance": 13, "Evasion": 14, "First Aid": 11, "Handgun": 14,
+        "Heavy Weapons": 16, "Human Perception": 2, "Interrogation": 12, "Language (English)": 11, "Language (Streetslang)": 9, "Local Expert (Night City)": 15,
+        "Martial Arts (Karate)": 16, "Melee Weapon": 16, "Perception": 15, "Persuasion": 10, "Resist Torture/Drugs": 16, "Shoulder Arms": 14,
+        "Stealth": 16, "Streetwise": 16, "Tracking": 13
+      },
+      "gear": ["Incendiary Shotgun Shell x4", "Incendiary Grenade x4"],
+      "cyberware": ["Cyberarm w/ Hardened Shielding, Popup Kendachi Flamethrower & Wolvers (ROF2, 3d6)", "Cyberarm w/ Hardened Shielding, TUp (-1 Slot) Popup Grenade Launcher x2", "Cyberaudio w/ Level Damper", "Cybereye x2 w/ Anti-Dazzle x2 & Low Light/Infrared/UV x2", "Cyberleg x2 w/ Hardened Shielding x2 & Jump Booster x2", "Grafted Muscle and Bone Lace x2", "TUp (+1 BODY) Implanted Linear Frame Beta", "Neural Link w/ Chipware Socket, Kerenzikov & Pain Editor", "TUp (+1 SP) Subdermal Armor"],
+      "specials": [
+        {
+          "name": "Combat Awareness",
+          "text": {
+            "pt": "Role Ability Combat Awareness no Rank 8. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Combat Awareness at Rank 8. Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Cyberarms",
+          "text": {
+            "pt": "Cyberarm com Hardened Shielding, Popup Kendachi Flamethrower e Wolvers (ROF 2, 3d6); outro com Popup Grenade Launcher x2 (TUp -1 Slot). Os dois ataques de arma da ficha são o lança-chamas e o lança-granadas.",
+            "en": "A cyberarm with Hardened Shielding, a Popup Kendachi Flamethrower and Wolvers (ROF 2, 3d6); another with a Popup Grenade Launcher x2 (TUp -1 Slot). The two listed weapon attacks are the flamethrower and the grenade launcher."
+          }
+        },
+        {
+          "name": "Chrome pesado",
+          "text": {
+            "pt": "Implanted Linear Frame Beta (TUp +1 BODY), Subdermal Armor TUp (+1 SP), Neural Link com Kerenzikov, Pain Editor e Chipware Socket.",
+            "en": "An Implanted Linear Frame Beta (TUp +1 BODY), TUp (+1 SP) Subdermal Armor, and a Neural Link with a Kerenzikov, Pain Editor and Chipware Socket."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "warlock",
+    "name": "Warlock",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Solo",
+    "roleRank": 6,
+    "rep": 6,
+    "affiliation": "Maelstrom",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 69 }, { "book": "Danger Gal Dossier", "page": 67 }],
+    "summary": {
+      "pt": "Líder atual da Maelstrom, que lembra um ganger descartável mas negocia com executivos e planeja a longo prazo. Entrou criança na gangue sob Crusher e assumiu depois que Hextra morreu por um tiro de 30mm da MAX-TAC. Com Quake e Flenser, organiza os catadores da Hot Zone e escora a Totentanz.",
+      "en": "Current leader of Maelstrom, who looks like a disposable ganger but deals with Corp execs and plans long term. He joined as a kid under Crusher and took over after Hextra took a 30mm round from MAX-TAC. With Quake and Flenser he organized the Hot Zone scavengers and holds up Totentanz."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 60,
+      "seriouslyWounded": 30,
+      "deathSave": 12,
+      "stats": { "INT": 7, "REF": 7, "DEX": 7, "TECH": 3, "COOL": 8, "WILL": 8, "MOVE": 6, "BODY": 12, "EMP": 2 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Militech Crusher", "skill": "Handgun", "attackBase": 15, "damage": "3d6", "rof": 1, "magazine": null, "class": "VeryHeavyPistol", "melee": false, "notes": null },
+        { "name": "Popup Magnum Opus Hellbringer", "skill": "Handgun", "attackBase": 15, "damage": "5d6", "rof": 1, "magazine": null, "class": "VeryHeavyPistol", "melee": false, "notes": null }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Subdermal Armor", "sp": 11 },
+        { "location": "Body", "name": "Subdermal Armor", "sp": 11 }
+      ],
+      "skills": {
+        "Athletics": 9, "Autofire": 11, "Brawling": 13, "Bribery": 12, "Business": 12, "Concentration": 16,
+        "Conversation": 8, "Cybertech": 10, "Deduction": 10, "Drive Land Vehicle": 10, "Education": 9, "Endurance": 16,
+        "Evasion": 11, "First Aid": 6, "Handgun": 15, "Human Perception": 9, "Interrogation": 14, "Language (English)": 11,
+        "Language (Streetslang)": 12, "Local Expert (Upper Marina)": 13, "Melee Weapon": 7, "Perception": 13, "Persuasion": 14, "Resist Torture/Drugs": 16,
+        "Shoulder Arms": 11, "Stealth": 10, "Streetwise": 15, "Tactics": 15, "Trading": 12
+      },
+      "gear": ["Armor-Piercing Shotgun Slugs x12", "Basic VH Pistol Ammo x6", "Anti-Smog Breathing Mask", "Auto Level Dampening Ear Protectors", "Disposable Cell Phone x2", "Kibble Pack x10"],
+      "cyberware": ["Cyberarm w/ Popup Ranged Weapon (Hellbringer)", "Cyberaudio Suite w/ Internal Agent", "Cybereye w/ Chyron & Low Light/Infrared/UV", "Cybereye w/ Low Light/Infrared/UV & Targeting Scope", "EMP Threading", "Grafted Muscle and Bone Lace", "Implanted Linear Frame Sigma", "Neural Link w/ Chipware Socket & Pain Editor", "Subdermal Armor", "Subdermal Pocket"],
+      "specials": [
+        {
+          "name": "Combat Awareness",
+          "text": {
+            "pt": "Role Ability Combat Awareness no Rank 6. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Combat Awareness at Rank 6. Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Hellbringer no braço",
+          "text": {
+            "pt": "Cyberarm com Popup Ranged Weapon (Magnum Opus Hellbringer, ROF 1, 5d6); a Militech Crusher dispara cartuchos de escopeta.",
+            "en": "A cyberarm with a Popup Ranged Weapon (Magnum Opus Hellbringer, ROF 1, 5d6); the Militech Crusher fires shotgun shells."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "the-pit",
+    "name": "The Pit",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Solo",
+    "roleRank": 6,
+    "rep": 6,
+    "affiliation": "Maelstrom",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 70 }],
+    "summary": {
+      "pt": "Ciberpsicopata mantido no subsolo da Burleson Tower, usado pela gangue para entretenimento e punição. Já foi humano; não parece mais. Joe Pitt aparafusou uma máscara nele porque comer vítimas o deixava doente. Ninguém vence quando é jogado lá embaixo.",
+      "en": "A cyberpsycho kept in the sub-sub-basement of Burleson Tower, used by the gang for entertainment and punishment. It used to be human; it no longer seems so. Joe Pitt bolted a mask on it because eating victims made it sick. Nobody wins when thrown down there."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 65,
+      "seriouslyWounded": 33,
+      "deathSave": 13,
+      "stats": { "INT": 2, "REF": 8, "DEX": 8, "TECH": 2, "COOL": 8, "WILL": 8, "MOVE": 8, "BODY": 13, "EMP": 0 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Brawling Attack", "skill": "Brawling", "attackBase": 18, "damage": "4d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null },
+        { "name": "Someone Else’s Very Heavy Pistol", "skill": "Handgun", "attackBase": 12, "damage": "4d6", "rof": 1, "magazine": null, "class": "VeryHeavyPistol", "melee": false, "notes": null }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Subdermal Armor", "sp": 11 },
+        { "location": "Body", "name": "Subdermal Armor", "sp": 11 }
+      ],
+      "skills": {
+        "Athletics": 14, "Brawling": 18, "Concentration": 16, "Conversation": 2, "Education": 4, "Endurance": 18,
+        "Evasion": 16, "First Aid": 4, "Handgun": 12, "Human Perception": 2, "Language (Unknown)": 6, "Language (Streetslang)": 4,
+        "Local Expert (Tunnels Beneath Totentanz)": 12, "Perception": 12, "Persuasion": 13, "Resist Torture/Drugs": 16, "Shoulder Arms": 12, "Stealth": 16,
+        "Streetwise": 12, "Tactics": 6, "Tracking": 8, "Wilderness Survival": 8
+      },
+      "gear": ["Basic VH Pistol Ammo x3", "Anti-Smog Breathing Mask (bolted on)", "Smart Glasses w/ Low Light/Infrared/UV (bolted on)"],
+      "cyberware": ["Cyberleg x2 w/ Grip Foot x2", "Grafted Muscle and Bone Lace", "TUp (+1 BODY) Implanted Linear Frame Sigma", "Subdermal Armor"],
+      "specials": [
+        {
+          "name": "Combat Awareness",
+          "text": {
+            "pt": "Role Ability Combat Awareness no Rank 6. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Combat Awareness at Rank 6. Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Armas",
+          "text": {
+            "pt": "Brawling Attack de 4d6 e a Very Heavy Pistol \"de outra pessoa\" (ROF 1, 4d6) com 3 cartuchos; cyberlegs com Grip Foot.",
+            "en": "A 4d6 Brawling Attack and \"someone else's\" Very Heavy Pistol (ROF 1, 4d6) with 3 rounds; cyberlegs with Grip Feet."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "quake",
+    "name": "Quake",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Solo",
+    "roleRank": 6,
+    "rep": 5,
+    "affiliation": "Maelstrom",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 71 }],
+    "summary": {
+      "pt": "O \"punho de ferro\" da Maelstrom, um brutamontes cheio de chrome que obedece a Warlock e lidera tumultos contra os Inquisitors. Armadura reforçada, martelo gigante e revólver embutido; ele não só mata, aterroriza, e seu estilo está virando moda entre os mais novos.",
+      "en": "Maelstrom's \"mailed fist\", a heavily chromed brute who follows Warlock and leads riots against the Inquisitors. Reinforced frame, giant hammer and a built-in revolver; he does not just kill, he terrifies, and his style is spreading among the newer gangers."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 60,
+      "seriouslyWounded": 30,
+      "deathSave": 12,
+      "stats": { "INT": 5, "REF": 8, "DEX": 8, "TECH": 3, "COOL": 8, "WILL": 7, "MOVE": 6, "BODY": 12, "EMP": 2 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Very Heavy Melee Weapon", "skill": "Melee Weapon", "attackBase": 16, "damage": "4d6", "rof": 1, "magazine": null, "class": null, "melee": true, "notes": "Excellent Quality" },
+        { "name": "Popup Magnum Opus Hellbringer", "skill": "Handgun", "attackBase": 16, "damage": "5d6", "rof": 1, "magazine": null, "class": "VeryHeavyPistol", "melee": false, "notes": null }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Subdermal Armor", "sp": 11 },
+        { "location": "Body", "name": "Subdermal Armor", "sp": 11 }
+      ],
+      "skills": {
+        "Athletics": 14, "Brawling": 10, "Concentration": 13, "Conversation": 4, "Drive Land Vehicle": 10, "Education": 7,
+        "Endurance": 13, "Evasion": 14, "First Aid": 5, "Handgun": 16, "Human Perception": 6, "Interrogation": 14,
+        "Language (English)": 9, "Language (Spanish)": 8, "Language (Russian)": 8, "Language (Streetslang)": 9, "Library Search": 10, "Local Expert (Upper Marina)": 12,
+        "Melee Weapon": 16, "Perception": 8, "Persuasion": 12, "Resist Torture/Drugs": 13, "Stealth": 10, "Streetwise": 15,
+        "Tactics": 12, "Tracking": 10
+      },
+      "gear": ["Basic VH Pistol Ammo x6", "Agent", "Disposable Cell Phone", "Road Flare x5"],
+      "cyberware": ["Contraceptive Implant", "Cyberarm w/ Popup Ranged Weapon (Hellbringer)", "Cyberarm w/ Popup Shield", "EMP Threading", "Grafted Muscle and Bone Lace", "Implanted Linear Frame Sigma", "Shift Tacts x2", "Subdermal Armor"],
+      "specials": [
+        {
+          "name": "Combat Awareness",
+          "text": {
+            "pt": "Role Ability Combat Awareness no Rank 6. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Combat Awareness at Rank 6. Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Martelo e revólver",
+          "text": {
+            "pt": "Very Heavy Melee Weapon de Qualidade Excelente (o martelo, ROF 1, 4d6) e cyberarm com Popup Hellbringer (ROF 1, 5d6) e outro com Popup Shield.",
+            "en": "An Excellent Quality Very Heavy Melee Weapon (the hammer, ROF 1, 4d6) and a cyberarm with a Popup Hellbringer (ROF 1, 5d6) plus another with a Popup Shield."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "flenser",
+    "name": "Flenser",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Netrunner",
+    "roleRank": 4,
+    "rep": 3,
+    "affiliation": "Maelstrom",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 72 }],
+    "summary": {
+      "pt": "Segunda tenente de Warlock e o oposto de Quake: discreta, paciente e espiã. Rastreia outras gangues, rouba segredos e protege os da Maelstrom, entrando por telhados, dutos e até contêineres. Foi o maior obstáculo da analista.",
+      "en": "Warlock's other lieutenant and Quake's opposite: stealthy, patient and a spy. She stalks other gangs, steals their secrets and protects Maelstrom's own, getting in through rooftops, ducts and even cargo pods. She was the analyst's biggest obstacle."
+    },
+    "sheetNote": {
+      "pt": "A ficha imprime Seriously Wounded 13 para HP 35 (a metade seria 18); mantido como impresso.",
+      "en": "The sheet prints Seriously Wounded 13 for HP 35 (half would be 18); kept as printed."
+    },
+    "sheet": {
+      "hp": 35,
+      "seriouslyWounded": 13,
+      "deathSave": 5,
+      "stats": { "INT": 5, "REF": 5, "DEX": 7, "TECH": 7, "COOL": 6, "WILL": 5, "MOVE": 5, "BODY": 5, "EMP": 3 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Very Heavy Pistol", "skill": "Handgun", "attackBase": 13, "damage": "4d6", "rof": 1, "magazine": null, "class": "VeryHeavyPistol", "melee": false, "notes": null },
+        { "name": "Popup Heavy Melee Weapon", "skill": "Melee Weapon", "attackBase": 11, "damage": "3d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Bodyweight Suit", "sp": 11 },
+        { "location": "Body", "name": "Bodyweight Suit", "sp": 11 }
+      ],
+      "skills": {
+        "Athletics": 11, "Brawling": 10, "Bribery": 10, "Concentration": 10, "Contortionist": 10, "Conversation": 5,
+        "Education": 7, "Electronics/Security Tech": 14, "Evasion": 11, "First Aid": 9, "Handgun": 13, "Human Perception": 5,
+        "Language (Korean)": 9, "Language (Streetslang)": 7, "Library Search": 8, "Local Expert (Upper Marina)": 9, "Melee Weapon": 11, "Perception": 11,
+        "Persuasion": 8, "Pick Lock": 12, "Pick Pocket": 12, "Stealth": 13
+      },
+      "gear": ["Basic VH Pistol Ammo x16", "Agent", "Audio Recorder", "Binoculars", "Flashlight", "Grapple Gun", "Lock Picking Set", "Memory Chip x5", "Scrambler/Descrambler", "Techtool", "Video Camera", "EQ Cyberdeck (in Cyberarm) w/ Shield x5, Speedy Gonzalves x4 & Insulated Wiring (in Bodyweight Suit)"],
+      "cyberware": ["Contraceptive Implant", "Cyberarm w/ Cyberdeck", "Cyberarm w/ Popup Melee Weapon (Heavy Melee Weapon)", "Cybereye w/ Chyron & Virtuality", "Cybereye w/ Virtuality", "Cyberleg x2 w/ Grip Foot x2", "Neural Link w/ Interface Plugs"],
+      "specials": [
+        {
+          "name": "Interface",
+          "text": {
+            "pt": "Role Ability Interface no Rank 4. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Interface at Rank 4. Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Cyberdeck",
+          "text": {
+            "pt": "Cyberdeck de Qualidade Excelente dentro do cyberarm, com Shield x5, Speedy Gonzalvez x4 e Insulated Wiring (no Bodyweight Suit). Outro cyberarm esconde uma arma pesada (Popup).",
+            "en": "An Excellent Quality Cyberdeck in her cyberarm, with Shield x5, Speedy Gonzalvez x4 and Insulated Wiring (in the Bodyweight Suit). Another cyberarm hides a Popup heavy melee weapon."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "joe-pitt",
+    "name": "Joe Pitt",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Tech",
+    "roleRank": 4,
+    "rep": 5,
+    "affiliation": "Maelstrom",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 73 }],
+    "summary": {
+      "pt": "Engenheiro e líder técnico da Maelstrom, mantém de pé a Burleson Tower com suportes servo-hidráulicos, instala gadgets de Flenser, conserta armas e cyberware e afina motos. Rabugento e com complexo de injustiçado, importa-se com a gangue; denuncia ciberpsicopatas a um policial para evitar a MAX-TAC.",
+      "en": "Maelstrom's engineer and tech lead, who keeps Burleson Tower standing with servo-hydraulic supports, installs Flenser's gadgets, maintains weapons and cyberware and tunes bikes. Sullen and aggrieved, he truly cares about the gang; he reports dangerous cyberpsychos to an NCPD officer to keep MAX-TAC away."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 40,
+      "seriouslyWounded": 20,
+      "deathSave": 7,
+      "stats": { "INT": 6, "REF": 6, "DEX": 5, "TECH": 8, "COOL": 4, "WILL": 5, "MOVE": 6, "BODY": 7, "EMP": 3 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Assault Rifle", "skill": "Shoulder Arms", "attackBase": 13, "damage": "5d6", "rof": 1, "magazine": null, "class": "AssaultRifle", "melee": false, "notes": null },
+        { "name": "Combat Jaw", "skill": "Brawling", "attackBase": 5, "damage": "4d6", "rof": 1, "magazine": null, "class": null, "melee": true, "notes": "No Skill Base printed for this weapon; STAT only." }
+      ],
+      "armor": [
+        { "location": "Body", "name": "Light Armorjack", "sp": 11 }
+      ],
+      "skills": {
+        "Athletics": 7, "Autofire": 13, "Basic Tech": 12, "Concentration": 9, "Conversation": 5, "Cybertech": 12,
+        "Education": 8, "Electronics/Security Tech": 12, "Evasion": 13, "First Aid": 10, "Human Perception": 5, "Language (English)": 10,
+        "Language (Streetslang)": 8, "Local Expert (Upper Marina)": 10, "Perception": 8, "Persuasion": 6, "Science (Engineering)": 8, "Shoulder Arms": 13,
+        "Stealth": 8, "Streetwise": 7, "Weaponstech": 10
+      },
+      "gear": ["Armor-Piercing Rifle Ammo x25", "Agent", "Bug Detector", "Computer", "Tech Bag", "Techscanner"],
+      "cyberware": ["Combat Jaw", "Contraceptive Implant", "Grafted Muscle and Bone Lace"],
+      "specials": [
+        {
+          "name": "Maker",
+          "text": {
+            "pt": "Role Ability Maker no Rank 4 (Field Exp 3, Up Exp 2, Fab Exp 2, Inv Exp 1). Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Maker at Rank 4 (Field Exp 3, Up Exp 2, Fab Exp 2, Inv Exp 1). Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Combat Jaw",
+          "text": {
+            "pt": "Combat Jaw (ROF 1, 4d6) é o ataque corpo a corpo da ficha.",
+            "en": "A Combat Jaw (ROF 1, 4d6) is the sheet's melee attack."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "ripper",
+    "name": "Ripper",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Solo",
+    "roleRank": 4,
+    "rep": 2,
+    "affiliation": "Maelstrom",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 74 }],
+    "summary": {
+      "pt": "Ex-capanga de Quake que passou a comandar o exército de catadores da Hot Zone. Sádico, atrai jovens com a promessa de entrar na gangue e inventou \"Testes\" rituais, e muitos não voltam. O número de mortes pode afundar a Maelstrom ou levá-lo a se separar.",
+      "en": "A former Quake enforcer who now runs the Hot Zone scavver army. Sadistic, he lures kids with the promise of Maelstrom membership and invented ritual \"Tests\", and many never return. His body count could sink the gang or push him to split off."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 40,
+      "seriouslyWounded": 20,
+      "deathSave": 6,
+      "stats": { "INT": 5, "REF": 6, "DEX": 6, "TECH": 4, "COOL": 6, "WILL": 5, "MOVE": 5, "BODY": 6, "EMP": 1 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Assault Rifle", "skill": "Shoulder Arms", "attackBase": 13, "damage": "5d6", "rof": 1, "magazine": null, "class": "AssaultRifle", "melee": false, "notes": null },
+        { "name": "Wolvers", "skill": "Melee Weapon", "attackBase": 13, "damage": "3d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Sycust FleshWeave", "sp": 7 },
+        { "location": "Body", "name": "Sycust FleshWeave", "sp": 7 }
+      ],
+      "skills": {
+        "Athletics": 10, "Basic Tech": 12, "Brawling": 11, "Conceal/Reveal Object": 8, "Concentration": 7, "Conversation": 4,
+        "Education": 7, "Endurance": 7, "Evasion": 13, "First Aid": 6, "Gamble": 7, "Handgun": 9,
+        "Human Perception": 5, "Interrogation": 9, "Language (English)": 9, "Language (Streetslang)": 7, "Local Expert (Hot Zone)": 10, "Melee Weapon": 13,
+        "Perception": 10, "Persuasion": 11, "Shoulder Arms": 13, "Stealth": 8, "Streetwise": 8, "Weaponstech": 6
+      },
+      "gear": ["Basic Rifle Ammo x50", "Agent", "Disposable Cell Phone x2", "Carryall", "Glow Paint", "Techtool"],
+      "cyberware": ["Cyberarm w/ Wolvers", "EMP Threading", "Neural Link w/ Chipware Socket & Pain Editor", "Sycust FleshWeave"],
+      "specials": [
+        {
+          "name": "Combat Awareness",
+          "text": {
+            "pt": "Role Ability Combat Awareness no Rank 4. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Combat Awareness at Rank 4. Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Wolvers",
+          "text": {
+            "pt": "Cyberarm com Wolvers (ROF 2, 3d6) e Sycust FleshWeave como armadura.",
+            "en": "A cyberarm with Wolvers (ROF 2, 3d6) and Sycust FleshWeave for armor."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "drop",
+    "name": "Drop",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Solo",
+    "roleRank": 2,
+    "rep": 1,
+    "affiliation": "Maelstrom",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 75 }],
+    "summary": {
+      "pt": "Franco-atirador de nível médio da Maelstrom, irmão ou irmã de FreeFall e criado em South Night City. Veste-se como veterano e sonha com um rifle Tsunami Arms RJ85. Bom de mira, mas armas baratas e um falatório de gíria de sniper.",
+      "en": "A mid-tier Maelstrom sniper, sibling of the Zoner FreeFall and raised in South Night City. Dresses like an old war vet and dreams of a Tsunami Arms RJ85 ramjet sniper rifle. A good shot, but with cheap gear and a mouth full of sniper slang."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 35,
+      "seriouslyWounded": 18,
+      "deathSave": 5,
+      "stats": { "INT": 5, "REF": 6, "DEX": 4, "TECH": 3, "COOL": 4, "WILL": 4, "MOVE": 5, "BODY": 5, "EMP": 3 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Assault Rifle w/Sniping Scope", "skill": "Shoulder Arms", "attackBase": 12, "damage": "5d6", "rof": 1, "magazine": null, "class": "AssaultRifle", "melee": false, "notes": "Poor Quality" },
+        { "name": "Brawling Attack", "skill": "Brawling", "attackBase": 7, "damage": "2d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
+      ],
+      "armor": [
+        { "location": "Body", "name": "Scavenged Armor", "sp": 11 }
+      ],
+      "skills": {
+        "Athletics": 9, "Brawling": 7, "Concentration": 8, "Conversation": 5, "Education": 7, "Evasion": 10,
+        "First Aid": 5, "Human Perception": 5, "Language (English)": 9, "Language (Streetslang)": 7, "Local Expert (Upper Marina)": 9, "Perception": 12,
+        "Persuasion": 6, "Shoulder Arms": 12, "Stealth": 10, "Streetwise": 8
+      },
+      "gear": ["Basic Rifle Ammo x25", "Agent", "Binoculars", "Radio Communicator"],
+      "cyberware": ["Cybereye x2 w/ Low Light/Infrared/UV x2"],
+      "specials": [
+        {
+          "name": "Combat Awareness",
+          "text": {
+            "pt": "Role Ability Combat Awareness no Rank 2. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Combat Awareness at Rank 2. Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Rifle com mira",
+          "text": {
+            "pt": "Assault Rifle de Qualidade Ruim com mira de sniper (ROF 1, 5d6); cybereyes x2 com visão noturna.",
+            "en": "A Poor Quality Assault Rifle with a sniping scope (ROF 1, 5d6); two cybereyes with Low Light/Infrared/UV."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "raguel",
+    "name": "Raguel",
+    "aliases": [],
+    "kind": "sheet",
+    "role": null,
+    "roleRank": null,
+    "rep": 0,
+    "affiliation": "Maelstrom",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 76 }],
+    "summary": {
+      "pt": "Inquisitor infiltrado que foi corrompido pela Maelstrom: parou de repassar informações, ganhou novos braços e agora fala dos rituais de Quake e Ripper como se fossem sagrados. É de baixo nível e sem amigos, e um zelote recém-convertido.",
+      "en": "An Inquisitor infiltrator corrupted by Maelstrom: he stopped passing on information, got new arms, and now speaks of Quake's and Ripper's rituals as if they were sacred. He is low-level and friendless, a fresh convert and zealot."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 35,
+      "seriouslyWounded": 18,
+      "deathSave": 6,
+      "stats": { "INT": 5, "REF": 4, "DEX": 6, "TECH": 2, "COOL": 5, "WILL": 4, "MOVE": 6, "BODY": 6, "EMP": 0 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Heavy Melee Weapon", "skill": "Melee Weapon", "attackBase": 12, "damage": "3d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": "Poor Quality" },
+        { "name": "Very Heavy Melee Weapon", "skill": "Melee Weapon", "attackBase": 12, "damage": "4d6", "rof": 1, "magazine": null, "class": null, "melee": true, "notes": "Poor Quality" }
+      ],
+      "armor": [
+        { "location": "Body", "name": "Leathers", "sp": 4 }
+      ],
+      "skills": {
+        "Acting": 8, "Athletics": 10, "Brawling": 9, "Concentration": 6, "Conversation": 2, "Education": 8,
+        "Evasion": 12, "First Aid": 4, "Human Perception": 2, "Language (English)": 9, "Language (Streetslang)": 7, "Local Expert (Hot Zone)": 7,
+        "Melee Weapon": 12, "Perception": 8, "Persuasion": 7, "Pick Lock": 8, "Stealth": 9, "Streetwise": 7,
+        "Wardrobe & Style": 5
+      },
+      "gear": ["Agent", "Audio Recorder", "Disposable Cell Phone", "Memory Chips x5"],
+      "cyberware": ["Cyberarm x2", "Cybereye w/ Chyron"],
+      "specials": [
+        {
+          "name": "Cybereye Chyron",
+          "text": {
+            "pt": "Cybereye com Chyron; dois cyberarms. Armas corpo a corpo pesada e muito pesada de Qualidade Ruim.",
+            "en": "A Cybereye with a Chyron; two cyberarms. A Poor Quality Heavy Melee Weapon and a Poor Quality Very Heavy Melee Weapon."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "ghoul",
+    "name": "Ghoul",
+    "aliases": ["Digger"],
+    "kind": "sheet",
+    "role": null,
+    "roleRank": null,
+    "rep": 0,
+    "affiliation": "Maelstrom",
+    "sources": [{ "book": "Danger Gal Dossier", "page": 77 }],
+    "summary": {
+      "pt": "Antigo catador de Hot Zone chamado Digger, que sobreviveu a radiação, desabamentos e nanoenxames e ganhou o nome depois de cozinhar e comer um monstro irradiado. No último Teste de Ripper, pescou uma faca num banho de alumínio derretido e ganhou um braço novo, a faca e a vaga na gangue.",
+      "en": "A former Hot Zone scavver named Digger who survived radiation, collapses and nanoswarm poisoning, and earned his name after cooking and eating an irradiated monster. In Ripper's final Test he fished a knife from molten aluminum, winning a replacement arm, the knife and membership."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 35,
+      "seriouslyWounded": 18,
+      "deathSave": 5,
+      "stats": { "INT": 3, "REF": 5, "DEX": 5, "TECH": 2, "COOL": 2, "WILL": 5, "MOVE": 5, "BODY": 5, "EMP": 1 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Heavy Pistol", "skill": "Handgun", "attackBase": 10, "damage": "3d6", "rof": 2, "magazine": null, "class": "HeavyPistol", "melee": false, "notes": "Poor Quality" },
+        { "name": "Medium Melee Weapon", "skill": "Melee Weapon", "attackBase": 10, "damage": "2d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
+      ],
+      "armor": [
+        { "location": "Body", "name": "Leathers", "sp": 4 }
+      ],
+      "skills": {
+        "Athletics": 9, "Basic Tech": 8, "Brawling": 10, "Concentration": 7, "Conversation": 3, "Education": 5,
+        "Endurance": 8, "Evasion": 9, "First Aid": 4, "Handgun": 10, "Human Perception": 3, "Language (English)": 7,
+        "Language (Streetslang)": 5, "Local Expert (Hot Zone)": 7, "Melee Weapon": 10, "Perception": 9, "Persuasion": 4, "Resist Torture/Drugs": 10,
+        "Stealth": 7
+      },
+      "gear": ["Basic H Pistol Ammo x16", "Disposable Cell Phone", "Glow Paint x2", "Techtool"],
+      "cyberware": ["Cyberarm", "Techhair"],
+      "specials": [
+        {
+          "name": "Cyberarm",
+          "text": {
+            "pt": "Cyberarm de substituição e Techhair; usa Heavy Pistol de Qualidade Ruim e arma corpo a corpo média de Qualidade Ruim.",
+            "en": "A replacement cyberarm and Techhair; uses a Poor Quality Heavy Pistol and a Poor Quality Medium Melee Weapon."
+          }
+        }
+      ]
+    }
   }
 ]
