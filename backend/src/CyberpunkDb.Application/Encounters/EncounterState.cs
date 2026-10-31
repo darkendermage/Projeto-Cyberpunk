@@ -88,6 +88,8 @@ public sealed record CombatWeapon
     public int Rof { get; init; } = 1;
     public int? Magazine { get; init; }
     public int? AutofireMultiplier { get; init; }
+    /// <summary>Printed DV by range band; replaces the general range tables when set.</summary>
+    public int?[]? RangeDv { get; init; }
     public bool Melee { get; init; }
     /// <summary>Generic enemies: attack total without the d10 (STAT + skill).</summary>
     public int? AttackBase { get; init; }

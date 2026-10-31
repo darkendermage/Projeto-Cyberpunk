@@ -67,6 +67,8 @@ public sealed record CompendiumWeapon
     public int? Magazine { get; init; }
     /// <summary>Printed "Autofire (xN)" multiplier; null when the weapon has no Autofire.</summary>
     public int? AutofireMultiplier { get; init; }
+    /// <summary>The sheet's own "DV based on range" table: 8 bands (0-6 to 401-800 m/yds), null where the book prints "—".</summary>
+    public int?[]? RangeDv { get; init; }
     /// <summary>Null for weapons outside the catalog classes (a borg's fists).</summary>
     public WeaponClass? Class { get; init; }
     public bool Melee { get; init; }

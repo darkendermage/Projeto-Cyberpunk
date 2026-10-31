@@ -175,10 +175,15 @@ public class NpcCompendiumApiTests(ApiFactory factory)
             hit = shot;
         }
 
-        // The Chain Gun is Autofire only with a magazine of 80; the Autofire DV table has no machine gun row yet.
+        // The Chain Gun's burst uses the sheet's own table (DV22 at 0-6 m), the x5 multiplier and 10 rounds of its 80.
         chain["magazine"]!.GetValue<int>().Should().Be(80);
-        chain["rounds"]!.GetValue<int>().Should().Be(80);
-        chain["autofireMultiplier"]!.GetValue<int>().Should().Be(5);
+        var burst = await Attack(hit, smasher, target, chain["key"]!.GetValue<string>(),
+            new { mode = "Autofire", range = 5, attackRoll = 10, damageDice = new[] { 3, 4 } });
+        var result = burst["lastAttack"]!["targets"]![0]!;
+        result["hit"]!.GetValue<bool>().Should().BeTrue();
+        result["dv"]!.GetValue<int>().Should().Be(22);
+        result["damage"]!.GetValue<int>().Should().Be(35, "7 on the dice, times the x5 cap");
+        Fighter(burst, "Adam")["weapons"]!.AsArray().Single(w => w!["name"]!.GetValue<string>().Contains("Chain Gun"))["rounds"]!.GetValue<int>().Should().Be(70);
     }
 
     [Fact]

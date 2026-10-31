@@ -14,7 +14,7 @@ namespace CyberpunkDb.Application.Encounters.Combat;
 /// <summary>An attack option with everything but the d10 already added (STAT + skill + penalties).</summary>
 public sealed record WeaponView(
     string Key, string Name, WeaponClass? Class, string Skill, int AttackTotal, int? AutofireTotal, string Damage, int Rof,
-    int? Rounds, int? Magazine, int? AutofireMultiplier, bool Melee, bool HalvesArmor);
+    int? Rounds, int? Magazine, int? AutofireMultiplier, bool Melee, bool HalvesArmor, int?[]? RangeDv = null);
 
 public sealed record InjuryView(string Name, InjuryLocation Location, string? Effect, bool DeathSave);
 
@@ -103,7 +103,7 @@ public sealed class FighterViews(CharacterRuleBook characterRules, CharacterCalc
         var weapons = s.Weapons.Select(w => new WeaponView(
             w.Key, w.Name, w.Class, w.Skill, (w.AttackBase ?? Skill(w.Skill)) + (w.AttackBase is null ? 0 : penalty),
             w.AutofireMultiplier is null ? null : Skill("autofire"), w.Damage, w.Rof,
-            w.Magazine is null ? null : c.Ammo.GetValueOrDefault(w.Key, w.Magazine.Value), w.Magazine, w.AutofireMultiplier, w.Melee, w.Melee)).ToList();
+            w.Magazine is null ? null : c.Ammo.GetValueOrDefault(w.Key, w.Magazine.Value), w.Magazine, w.AutofireMultiplier, w.Melee, w.Melee, w.RangeDv)).ToList();
         weapons.AddRange(Unarmed(s.Body, s.Cyberarm, Skill(Brawling),
             s.Skills.Keys.Where(k => k.StartsWith(MartialArtsPrefix + ":", StringComparison.OrdinalIgnoreCase)).Select(k => (k, k.Split(':')[1], Skill(k)))));
 
@@ -201,7 +201,7 @@ public sealed class FighterViews(CharacterRuleBook characterRules, CharacterCalc
             Weapons = sheet.Weapons.Select((w, i) => new CombatWeapon
             {
                 Key = $"w{i}", Name = w.Name, Class = w.Class, Skill = NpcCompendium.SkillKey(w.Skill, npcRules) ?? w.Skill.ToLowerInvariant(),
-                Damage = w.Damage, Rof = w.Rof, Magazine = w.Magazine, AutofireMultiplier = w.AutofireMultiplier, Melee = w.Melee,
+                Damage = w.Damage, Rof = w.Rof, Magazine = w.Magazine, AutofireMultiplier = w.AutofireMultiplier, Melee = w.Melee, RangeDv = w.RangeDv,
                 AttackBase = w.AttackBase,
             }).ToList(),
         };

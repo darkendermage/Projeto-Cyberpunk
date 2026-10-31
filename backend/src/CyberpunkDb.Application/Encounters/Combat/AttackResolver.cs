@@ -155,6 +155,8 @@ public sealed class AttackResolver(CombatRuleBook combat, CharacterRuleBook char
         var range = r.Range ?? throw RequestValidationException.For("range", L.T("Informe a distância até o alvo em metros.", "Enter the distance to the target in meters."));
         if (thrown && range > doc.Thrown.Value.MaxMeters)
             throw RequestValidationException.For("range", L.T($"Arremesso vai até {doc.Thrown.Value.MaxMeters} m ({doc.Thrown.Source}).", $"Throws reach up to {doc.Thrown.Value.MaxMeters} m ({doc.Thrown.Source})."));
+        // A sheet that prints its own range table uses it for every shot, Autofire included (null band: out of range).
+        if (weapon.RangeDv is { } printed) return combat.SingleShotDv(new RangeRow("printed", weapon.Name, [], printed), range);
         if (r.Mode == AttackMode.Autofire)
         {
             var table = characterRules.Document.Combat.AutofireDv;

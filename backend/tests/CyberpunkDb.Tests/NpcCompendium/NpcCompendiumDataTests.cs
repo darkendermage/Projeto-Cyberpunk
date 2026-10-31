@@ -53,7 +53,7 @@ public class NpcCompendiumDataTests
     {
         foreach (var weapon in Compendium.All.Select(n => n.Sheet).OfType<CompendiumSheet>().SelectMany(s => s.Weapons))
         {
-            weapon.Damage.Should().MatchRegex(@"^\d+d\d+([+-]\d+)?$", weapon.Name);
+            weapon.Damage.Should().MatchRegex(@"^\d+d\d+$", weapon.Name);
             weapon.Rof.Should().BeGreaterThanOrEqualTo(1, weapon.Name);
         }
     }
@@ -80,6 +80,13 @@ public class NpcCompendiumDataTests
     {
         foreach (var weapon in Compendium.All.Select(n => n.Sheet).OfType<CompendiumSheet>().SelectMany(s => s.Weapons).Where(w => !w.Melee))
             weapon.Class.Should().NotBeNull($"{weapon.Name} needs a range table row to attack");
+    }
+
+    [Fact]
+    public void Printed_range_tables_have_one_value_per_band()
+    {
+        foreach (var weapon in Compendium.All.Select(n => n.Sheet).OfType<CompendiumSheet>().SelectMany(s => s.Weapons).Where(w => w.RangeDv != null))
+            weapon.RangeDv.Should().HaveCount(8, weapon.Name);
     }
 
     [Fact]

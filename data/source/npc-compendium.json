@@ -22,9 +22,9 @@
       "armoredStats": {},
       "weapons": [
         { "name": "Adam Smasher's Fists", "skill": "Brawling", "attackBase": 18, "damage": "5d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": "Halves SP" },
-        { "name": "Shoulder-Mounted Rocket Launcher", "skill": "Heavy Weapons", "attackBase": 18, "damage": "9d6", "rof": 1, "magazine": 4, "class": "RocketLauncher", "melee": false, "notes": "Explosive; Smart Weapon" },
-        { "name": "Pop-Up Autoshotgun", "skill": "Shoulder Arms", "attackBase": 18, "damage": "6d6", "rof": 2, "magazine": 16, "class": "Shotgun", "melee": false, "notes": "Power Weapon" },
-        { "name": "Adam Smasher's Chain Gun", "skill": "Heavy Weapons", "attackBase": 18, "damage": "2d6", "rof": 1, "magazine": 80, "class": "MachineGun", "autofireMultiplier": 5, "melee": false, "notes": "Autofire (x5) only; Power Weapon. The sheet prints \"See Type\" for damage: 2d6 is the Autofire damage roll from the Autofire rules (p. 9), multiplied by the margin up to x5" }
+        { "name": "Shoulder-Mounted Rocket Launcher", "skill": "Heavy Weapons", "attackBase": 18, "damage": "9d6", "rof": 1, "magazine": 4, "class": "RocketLauncher", "rangeDv": [17, 16, 15, 15, 20, 20, 25, 30], "melee": false, "notes": "Explosive; Smart Weapon" },
+        { "name": "Pop-Up Autoshotgun", "skill": "Shoulder Arms", "attackBase": 18, "damage": "6d6", "rof": 2, "magazine": 16, "class": "Shotgun", "rangeDv": [13, 15, 20, 25, 30, 35, null, null], "melee": false, "notes": "Power Weapon" },
+        { "name": "Adam Smasher's Chain Gun", "skill": "Heavy Weapons", "attackBase": 18, "damage": "2d6", "rof": 1, "magazine": 80, "class": "MachineGun", "autofireMultiplier": 5, "rangeDv": [22, 20, 17, 20, 25, null, null, null], "melee": false, "notes": "Autofire (x5) only; Power Weapon. The sheet prints \"See Type\" for damage: 2d6 is the Autofire damage roll from the Autofire rules (p. 9), multiplied by the margin up to x5" }
       ],
       "armor": [
         { "location": "Head", "name": "Adam Smasher's Plating", "sp": 18, "spVsMelee": 18 },
@@ -140,7 +140,7 @@
       "armoredStats": {},
       "weapons": [
         { "name": "Brawling Attack", "skill": "Brawling", "attackBase": 12, "damage": "2d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null },
-        { "name": "Techtronika RT-46 Burya", "skill": "Handgun", "attackBase": 14, "damage": "4d6", "rof": 1, "magazine": 4, "class": "VeryHeavyPistol", "melee": false, "notes": "Tech Weapon" }
+        { "name": "Techtronika RT-46 Burya", "skill": "Handgun", "attackBase": 14, "damage": "4d6", "rof": 1, "magazine": 4, "class": "VeryHeavyPistol", "rangeDv": [13, 15, 20, 25, 30, 30, null, null], "melee": false, "notes": "Tech Weapon" }
       ],
       "armor": [
         { "location": "Head", "name": "Light Armorjack", "sp": 11, "spVsMelee": 6 },
@@ -195,7 +195,7 @@
       "armoredStats": {},
       "weapons": [
         { "name": "Brawling Attack", "skill": "Brawling", "attackBase": 8, "damage": "1d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null },
-        { "name": "Constitutional Arms Unity", "skill": "Handgun", "attackBase": 12, "damage": "3d6", "rof": 2, "magazine": 12, "class": "HeavyPistol", "melee": false, "notes": "Power Weapon" }
+        { "name": "Constitutional Arms Unity", "skill": "Handgun", "attackBase": 12, "damage": "3d6", "rof": 2, "magazine": 12, "class": "HeavyPistol", "rangeDv": [13, 15, 20, 25, 30, 30, null, null], "melee": false, "notes": "Power Weapon" }
       ],
       "armor": [
         { "location": "Head", "name": "Light Armorjack", "sp": 11, "spVsMelee": 6 },
@@ -249,7 +249,7 @@
       "armoredStats": {},
       "weapons": [
         { "name": "Mantis Blade x2", "skill": "Melee Weapon", "attackBase": 16, "damage": "3d6", "rof": 1, "magazine": null, "class": "HeavyMelee", "melee": true, "notes": "Melee Weapon" },
-        { "name": "Techtronika RT-46 Burya", "skill": "Handgun", "attackBase": 16, "damage": "4d6", "rof": 1, "magazine": 4, "class": "VeryHeavyPistol", "melee": false, "notes": "Tech Weapon" }
+        { "name": "Techtronika RT-46 Burya", "skill": "Handgun", "attackBase": 16, "damage": "4d6", "rof": 1, "magazine": 4, "class": "VeryHeavyPistol", "rangeDv": [13, 15, 20, 25, 30, 30, null, null], "melee": false, "notes": "Tech Weapon" }
       ],
       "armor": [
         { "location": "Head", "name": "Light Armorjack", "sp": 11, "spVsMelee": 6 },
