@@ -126,8 +126,10 @@ Regras do formato:
 - `armoredSkills` é opcional e guarda o valor entre parênteses de perícias como `Athletics 13 (11)`, que já traz a penalidade da armadura. O combate usa esse valor, e `attackBase` também, quando o livro o imprime.
 - `attackBase` é o total de ataque impresso (STAT + perícia + bônus).
 - `damage` guarda os dados que o motor rola. Arma "Autofire only" imprime "See Type" no DMG: fica com o dano de Autofire do livro (`2d6`), `autofireMultiplier` com o multiplicador impresso (`x5` vira `5`) e `notes` registra o "See Type".
+- `autofireMultiplier` também vale para as armas das classes `Smg`, `HeavySmg` e `AssaultRifle`, cujas fichas não imprimem o valor: ele vem da tabela de armas do Core (CP:R p.171 e p.173), `3` para SMG e Heavy SMG e `4` para Assault Rifle.
+- `autofireOnly` em `weapons` é opcional: `true` quando o livro imprime "Autofire only". A mesa abre essa arma em Autofire e não oferece ataque normal nem tiro mirado.
 - `rangeDv` em `weapons` é opcional: oito valores, das faixas de 0-6 a 401-800 m/yds, copiados da tabela que a ficha imprime para a arma, com `null` nas faixas `—`. Quando existe, o combate usa essa tabela no lugar da tabela geral de alcance, nos ataques normais e em Autofire.
-- `spVsMelee` em `armor` é opcional e guarda a coluna "SP vs Melee/Charged Tech Weapons" quando o livro a imprime.
+- `spVsMelee` em `armor` é opcional e guarda a coluna "SP vs Melee/Charged Tech Weapons" quando o livro a imprime. O valor é a metade do SP arredondada para cima, que o combate já calcula, ou o SP inteiro, como nas placas do Smasher.
 - `class` é um valor do enum `WeaponClass` quando a arma do livro corresponde a um. O campo fica `null` em armas fora da tabela, como os punhos do Smasher, e nesses casos `melee` diz como a arma se comporta.
 - Regras especiais são parafraseadas em poucas frases, com a mecânica preservada.
 
@@ -156,8 +158,10 @@ No csproj, um novo `EmbeddedResource` aponta para `data/source/npc-compendium.js
   - `Stats` usa `armoredStats` quando existir, senão `stats`. Campos `null` ficam de fora.
   - `MaxHp` vem de `hp`, e `Body` de `stats.BODY`.
   - `MaxSpBody` e `MaxSpHead` vêm de `armor`.
+  - `FullSpVsMeleeBody` e `FullSpVsMeleeHead` são verdadeiros só quando `spVsMelee` difere da metade do SP. Nesse caso o corpo a corpo não reduz o SP daquela região, nem depois da ablação.
   - `Skills` traduz os nomes para as chaves de `NpcRuleBook.Skills`. As perícias que não baterem com nenhuma chave ficam de fora do snapshot e continuam visíveis na ficha.
   - Cada arma vira um `CombatWeapon` com `AttackBase = attackBase`, usando o caminho que o genérico já tem.
+  - `HalvesArmor` é falso nas armas da perícia Brawling (CP:R p.176), a não ser que `notes` imprima "Halves SP", como nos punhos do Smasher. Nas demais fica `null` e segue `melee`. Combat Jaw é Very Heavy Melee Weapon (Danger Gal Dossier p.145): usa Melee Weapon e reduz o SP.
   - `Source` traz o nome do livro e a página.
   - `Cyberarm` é verdadeiro quando a lista `cyberware` tem um Cyberarm.
 - Adicionar uma entrada `profile` devolve erro de validação: "Este NPC não tem ficha oficial."
@@ -168,7 +172,7 @@ No csproj, um novo `EmbeddedResource` aponta para `data/source/npc-compendium.js
 
 Código novo em `frontend/src/features/npc-compendium/`. Reaproveita `Characters.module.css` e os componentes de `ui.tsx`.
 
-- **`/npcs`:** título, busca por nome e apelido, filtros por livro, Role e "tem ficha", e a grade de cards no estilo de `CharacterCard`. O card mostra ícone, nome, Role, Rep, afiliação e o selo "sem ficha oficial" quando for o caso. A filtragem roda no cliente, porque a lista é pequena.
+- **`/npcs`:** título, busca por nome e apelido, filtros por livro, Role e "tem ficha", e a grade de cards no estilo de `CharacterCard`. O card mostra ícone, nome, Role, Rep, afiliação e o selo "sem ficha oficial" quando for o caso. A filtragem roda no cliente, porque a lista é pequena. Os filtros ficam na URL, e voltar da ficha devolve a lista filtrada.
 - **`/npcs/:id`:** cabeçalho com nome, Role, Rep e fontes, seguido da biografia. Quem tem ficha ganha STATs, HP com Seriously Wounded e Death Save, armas, armadura, perícias, equipamento, cyberware e regras especiais. Os painéis são só leitura e seguem o visual da aba Ficha.
 - **Adicionar ao combate:** botão na ficha, oculto em perfis. Abre um diálogo para escolher um combate aberto, o lado e a quantidade, e depois leva ao combate.
 - **`AddCombatantsDialog`:** nova origem "Compêndio", com busca entre os NPCs que têm ficha.

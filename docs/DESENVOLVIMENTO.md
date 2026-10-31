@@ -238,7 +238,7 @@ Uma lista de entradas. Números e nomes de armas, equipamentos e perícias ficam
     "stats": { "INT": 6, "REF": 8, "...": 0, "EMP": null },
     "armoredStats": {},
     "weapons": [{ "name": "...", "skill": "Heavy Weapons", "attackBase": 18, "damage": "2d6", "rof": 1, "magazine": 80,
-                  "class": "MachineGun", "autofireMultiplier": 5, "rangeDv": [22, 20, 17, 20, 25, null, null, null],
+                  "class": "MachineGun", "autofireMultiplier": 5, "autofireOnly": true, "rangeDv": [22, 20, 17, 20, 25, null, null, null],
                   "melee": false, "notes": "..." }],
     "armor": [{ "location": "Body", "name": "...", "sp": 18, "spVsMelee": 18 }],
     "skills": { "Evasion": 0 }, "armoredSkills": { "Athletics": 0 },
@@ -254,15 +254,16 @@ Uma lista de entradas. Números e nomes de armas, equipamentos e perícias ficam
 - `stats`, `skills` e `attackBase` guardam o valor impresso, sem recalcular. `—` no livro vira `null`.
 - `armoredStats` guarda os valores entre parênteses de `REF 8(6)`, os que já trazem a penalidade da armadura; fica vazio quando o livro não os imprime. `armoredSkills` faz o mesmo para perícias como `Athletics 13 (11)`. O combate usa esses valores quando existem.
 - `rangeDv` (opcional, em `weapons`) tem oito valores, das faixas 0-6 a 401-800 m/yds, copiados da tabela que a ficha imprime para a arma, com `null` nas faixas `—`. Quando existe, o combate usa essa tabela no lugar da tabela geral de alcance, nos ataques normais e em Autofire.
-- `autofireMultiplier`: arma "Autofire only" imprime "See Type" no DMG. Fica então `damage` com o dano de Autofire (`2d6`), `autofireMultiplier` com o multiplicador impresso (`x5` vira `5`) e `notes` registrando o "See Type".
-- `spVsMelee` (opcional, em `armor`) é a coluna "SP vs Melee/Charged Tech Weapons".
+- `autofireMultiplier`: arma "Autofire only" imprime "See Type" no DMG. Fica então `damage` com o dano de Autofire (`2d6`), `autofireMultiplier` com o multiplicador impresso (`x5` vira `5`) e `notes` registrando o "See Type". As classes `Smg`, `HeavySmg` e `AssaultRifle` levam o multiplicador da tabela do Core (CP:R p.171 e p.173), que as fichas não imprimem: `3`, `3` e `4`.
+- `autofireOnly` (opcional, em `weapons`): `true` quando o livro imprime "Autofire only". A mesa abre a arma em Autofire e esconde ataque normal e tiro mirado.
+- `spVsMelee` (opcional, em `armor`) é a coluna "SP vs Melee/Charged Tech Weapons". Vale a metade do SP arredondada para cima ou o SP inteiro; um teste de dados recusa outro valor.
 - `class` é um valor de `WeaponClass` quando a arma do livro corresponde a um; `null` em armas fora da tabela (punhos do Smasher), e então `melee` diz como a arma se comporta.
 
 ### Combate
 
-`POST /api/encounters/{id}/combatants` aceita `compendiumNpcId`. `FighterViews.Compendium` monta o `CombatSnapshot`: STATs de `armoredStats` quando existem, HP e BODY da ficha, SP de corpo e cabeça de `armor`, perícias traduzidas para as chaves de `NpcRuleBook.Skills` (as que não batem ficam fora do snapshot, mas continuam na ficha), cada arma como `CombatWeapon` e `Cyberarm` quando há um Cyberarm no cyberware. O combatente é do tipo `Npc`. Adicionar um `profile` devolve erro de validação ("Este NPC não tem ficha oficial") e um `id` desconhecido devolve 404.
+`POST /api/encounters/{id}/combatants` aceita `compendiumNpcId`. `FighterViews.Compendium` monta o `CombatSnapshot`: STATs de `armoredStats` quando existem, HP e BODY da ficha, SP de corpo e cabeça de `armor`, perícias traduzidas para as chaves de `NpcRuleBook.Skills` (as que não batem ficam fora do snapshot, mas continuam na ficha), cada arma como `CombatWeapon` e `Cyberarm` quando há um Cyberarm no cyberware. `spVsMelee` igual ao SP inteiro liga `FullSpVsMeleeBody` ou `FullSpVsMeleeHead`, e então o corpo a corpo não reduz aquele SP, nem depois da ablação. Armas da perícia Brawling ficam com `HalvesArmor` falso (CP:R p.176), a não ser que `notes` imprima "Halves SP"; nas demais o campo fica `null` e segue `melee`. O combatente é do tipo `Npc`. Adicionar um `profile` devolve erro de validação ("Este NPC não tem ficha oficial") e um `id` desconhecido devolve 404.
 
-**O que o combate não faz sozinho:** as regras especiais (`specials`) são só texto na ficha. Habilidades de Role, de corpo borg ou de equipamento (o "Halves SP" dos punhos do Smasher, por exemplo, está em `notes`) não alteram os cálculos; o Mestre as aplica.
+**O que o combate não faz sozinho:** as regras especiais (`specials`) são só texto na ficha. Habilidades de Role, de corpo borg ou de equipamento (a munição do Smasher, que tira 2 de SP por acerto, por exemplo) não alteram os cálculos; o Mestre as aplica.
 
 ### Extração e conferência
 
