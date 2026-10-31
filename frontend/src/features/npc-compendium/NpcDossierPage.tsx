@@ -1,17 +1,20 @@
+import { useState } from 'react';
 import { Link, useParams } from 'react-router';
-import { ArrowLeft, Skull, UserRound } from 'lucide-react';
+import { ArrowLeft, Skull, Swords, UserRound } from 'lucide-react';
 import { useCompendiumNpc } from '../../api/npcCompendium';
-import { ErrorState, Spinner } from '../../components/ui/ui';
+import { Button, ErrorState, Spinner } from '../../components/ui/ui';
 import page from '../../styles/Page.module.css';
 import { SheetPanel, StateTag } from '../characters/CharacterUi';
 import styles from '../characters/Characters.module.css';
 import dossier from './NpcDossier.module.css';
 import { t } from '../../i18n';
+import { AddToCombatDialog } from './AddToCombatDialog';
 import { NpcArmor, NpcCyberware, NpcGear, NpcHealth, NpcSkills, NpcSpecials, NpcStats, NpcWeapons } from './NpcSheetPanels';
 
 export function NpcDossierPage() {
   const { id = '' } = useParams();
   const query = useCompendiumNpc(id);
+  const [adding, setAdding] = useState(false);
   const npc = query.data;
   const back = <Link to="/npcs" className={page.link}><ArrowLeft size={14} /> {t('Voltar ao compêndio', 'Back to the compendium')}</Link>;
 
@@ -36,6 +39,11 @@ export function NpcDossierPage() {
           </div>
           {npc.affiliation && <div className={styles.cardMeta}><span className={styles.muted}>{npc.affiliation}</span></div>}
           <div className={styles.source}>{npc.sources.map((s) => `${s.book} p.${s.page}`).join(' · ')}</div>
+          {npc.kind === 'Sheet' && (
+            <div className={styles.row}>
+              <Button variant="primary" onClick={() => setAdding(true)}><Swords size={14} /> {t('Adicionar ao combate', 'Add to combat')}</Button>
+            </div>
+          )}
         </div>
       </header>
 
@@ -64,6 +72,7 @@ export function NpcDossierPage() {
           </div>
         </div>
       )}
+      {npc.kind === 'Sheet' && <AddToCombatDialog npc={npc} open={adding} onClose={() => setAdding(false)} />}
     </div>
   );
 }

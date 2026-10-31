@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useCharacters } from '../../api/characters';
 import type { CombatSide, EncounterRules } from '../../api/encounterTypes';
 import { useNpcRules, useNpcs } from '../../api/hooks';
+import { useNpcCompendium } from '../../api/npcCompendium';
 import type { NpcLevel } from '../../api/types';
 import { Button, Field, Modal, NumberInput, Segmented, Select, Switch } from '../../components/ui/ui';
 import { LEVEL_LABEL } from '../enemies/npcDraft';
@@ -9,13 +10,14 @@ import type { Run } from './EncounterView';
 import styles from './Combat.module.css';
 import { t, tv } from '../../i18n';
 
-type Source = 'pc' | 'npc' | 'generate' | 'generic';
+type Source = 'pc' | 'npc' | 'compendium' | 'generate' | 'generic';
 const LEVELS: NpcLevel[] = ['Mook', 'Lieutenant', 'MiniBoss', 'Boss'];
 
 /** Brings people to the table: a character sheet, a saved NPC, freshly generated enemies or quick generic ones. */
 export function AddCombatantsDialog({ open, onClose, rules, busy, run }: { open: boolean; onClose: () => void; rules: EncounterRules; busy: boolean; run: Run }) {
   const characters = useCharacters();
   const npcs = useNpcs();
+  const compendium = useNpcCompendium();
   const npcRules = useNpcRules();
   const g = rules.rules.generic.value;
   const [source, setSource] = useState<Source>('generate');
@@ -23,6 +25,7 @@ export function AddCombatantsDialog({ open, onClose, rules, busy, run }: { open:
   const [count, setCount] = useState<number | null>(3);
   const [characterId, setCharacterId] = useState('');
   const [npcId, setNpcId] = useState('');
+  const [compendiumId, setCompendiumId] = useState('');
   const [level, setLevel] = useState<NpcLevel>('Mook');
   const [hardened, setHardened] = useState(false);
   const [gangId, setGangId] = useState('');
@@ -41,13 +44,14 @@ export function AddCombatantsDialog({ open, onClose, rules, busy, run }: { open:
     const body: Record<string, unknown> = { side, count: count ?? 1 };
     if (source === 'pc') Object.assign(body, { characterId: Number(characterId), side: 'Ally', count: 1 });
     if (source === 'npc') body.npcId = Number(npcId);
+    if (source === 'compendium') body.compendiumNpcId = compendiumId;
     if (source === 'generate') body.generate = { level, hardened, gangId: gangId || null, profileId: profileId || null };
     if (source === 'generic') body.generic = { name, ref, hp, spBody: sp, spHead: sp, attackBase: attack, evasionBase: evasion, damage };
     run('combatants', body, t('Combatentes na mesa.', 'Combatants at the table.'));
     onClose();
   };
 
-  const ready = source === 'pc' ? !!characterId : source === 'npc' ? !!npcId : source === 'generic' ? !!name.trim() : true;
+  const ready = source === 'pc' ? !!characterId : source === 'npc' ? !!npcId : source === 'compendium' ? !!compendiumId : source === 'generic' ? !!name.trim() : true;
 
   return (
     <Modal open={open} onClose={onClose} title={t('Adicionar combatentes', 'Add combatants')} wide>
@@ -55,6 +59,7 @@ export function AddCombatantsDialog({ open, onClose, rules, busy, run }: { open:
         <Segmented<Source> ariaLabel={t('Origem', 'Source')} value={source} onChange={setSource} options={[
           { value: 'pc', label: t('Personagem', 'Character') },
           { value: 'npc', label: t('NPC salvo', 'Saved NPC') },
+          { value: 'compendium', label: t('Compêndio', 'Compendium') },
           { value: 'generate', label: t('Gerar inimigos', 'Generate enemies') },
           { value: 'generic', label: t('Genérico rápido', 'Quick generic') },
         ]} />
@@ -73,6 +78,15 @@ export function AddCombatantsDialog({ open, onClose, rules, busy, run }: { open:
             <Select id="add-npc" value={npcId} onChange={(e) => setNpcId(e.target.value)}>
               <option value="">{t('Escolha…', 'Choose…')}</option>
               {(npcs.data ?? []).map((n) => <option key={n.id} value={n.id}>{tv(n.name)}{n.concept ? ` — ${n.concept}` : ''}</option>)}
+            </Select>
+          </Field>
+        )}
+
+        {source === 'compendium' && (
+          <Field label={t('NPC do compêndio (com ficha)', 'Compendium NPC (with sheet)')} htmlFor="add-compendium">
+            <Select id="add-compendium" value={compendiumId} onChange={(e) => setCompendiumId(e.target.value)}>
+              <option value="">{t('Escolha…', 'Choose…')}</option>
+              {(compendium.data ?? []).filter((n) => n.kind === 'Sheet').map((n) => <option key={n.id} value={n.id}>{n.name}{n.role ? ` (${n.role})` : ''}</option>)}
             </Select>
           </Field>
         )}
