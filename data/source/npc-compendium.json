@@ -544,7 +544,8 @@
       { "book": "Edgerunners Mission Kit: Rule Book", "page": 27 },
       { "book": "Core Book", "page": 306 },
       { "book": "Core Book", "page": 9 },
-      { "book": "Core Book", "page": 122 }
+      { "book": "Core Book", "page": 122 },
+      { "book": "Tales of the RED", "page": 191 }
     ],
     "summary": {
       "pt": "Chamada de Rainha dos Fixers, é dona do Afterlife, o bar de edgerunners mais famoso da cidade. Foi uma das melhores solos de aluguel de Night City e hoje, quase aposentada das armas, monta equipes de elite para clientes ricos.",
@@ -1705,7 +1706,8 @@
     "affiliation": null,
     "sources": [
       { "book": "Core Book", "page": 306 },
-      { "book": "Core Book", "page": 307 }
+      { "book": "Core Book", "page": 307 },
+      { "book": "Tales of the RED", "page": 184 }
     ],
     "summary": {
       "pt": "Solo de meia-idade, calmo, de sotaque irlandês e rápido no .44. Chamado de \"White Knight of Night City\" por proteger mulheres e crianças, às vezes sem cobrar. Casou, teve filhos e ainda é visto perto da igreja do Father Kevin.",
@@ -1881,7 +1883,8 @@
     "affiliation": "Aldecaldos",
     "sources": [
       { "book": "Core Book", "page": 436 },
-      { "book": "Core Book", "page": 441 }
+      { "book": "Core Book", "page": 441 },
+      { "book": "Tales of the RED", "page": 193 }
     ],
     "summary": {
       "pt": "Media independente e filho do chefe da Família Aldecaldo. Saiu do emprego legítimo e posta as próprias reportagens no Data Pool. Em Black Dog, rastreia o fim da história de Johnny Silverhand e lidera a equipe que leva a bomba.",
@@ -8154,5 +8157,2747 @@
         }
       ]
     }
+  },
+  {
+    "id": "the-clown",
+    "name": "The Clown",
+    "aliases": [],
+    "kind": "sheet",
+    "role": null,
+    "roleRank": null,
+    "rep": 1,
+    "affiliation": "Lord Ruthven's followers",
+    "sources": [
+      { "book": "Tales of the RED", "page": 15 },
+      { "book": "Tales of the RED", "page": 188 }
+    ],
+    "summary": {
+      "pt": "Ex-membro dos Bozos que trocou a gangue pelo serviço de Lord Ruthven e virou um de seus dois tenentes, levando seguidores consigo. Atira com uma pistola pesada e esconde dardos nos olhos cibernéticos.",
+      "en": "A former Bozo who left the gang to serve Lord Ruthven as one of his two lieutenants, bringing followers along. He shoots a heavy pistol and hides darts in his cybereyes."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 35,
+      "seriouslyWounded": 18,
+      "deathSave": 4,
+      "stats": { "INT": 4, "REF": 7, "DEX": 4, "TECH": 7, "COOL": 6, "WILL": 5, "MOVE": 6, "BODY": 4, "EMP": 1 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Heavy Pistol", "skill": "Handgun", "attackBase": 12, "damage": "3d6", "rof": 2, "magazine": null, "class": "HeavyPistol", "melee": false, "notes": null }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Light Armorjack", "sp": 11 },
+        { "location": "Body", "name": "Light Armorjack", "sp": 11 }
+      ],
+      "skills": {
+        "Athletics": 6, "Brawling": 9, "Conceal/Reveal Object": 7, "Concentration": 7, "Contortionist": 7,
+        "Conversation": 3, "Education": 6, "Evasion": 9, "First Aid": 9, "Handgun": 12, "Heavy Weapons": 12,
+        "Human Perception": 3, "Interrogation": 12, "Language (English)": 8, "Language (Streetslang)": 8,
+        "Local Expert (South Night City)": 6, "Melee Weapon": 9, "Perception": 10, "Persuasion": 8, "Stealth": 6
+      },
+      "gear": [
+        "Heavy Pistol Ammo x8", "Acid Paintball x16", "Poison Arrow x2 (in Cybereyes)",
+        "Rubber Arrow x2 (in Cybereyes)", "Disposable Cellphone"
+      ],
+      "cyberware": [
+        "MultiOptic Mount", "Cybereye x6 w/ Anti-Dazzle, Low Light/Infrared/UV, Dartgun x4"
+      ],
+      "specials": [
+        {
+          "name": "Olhos de dardos / Dartgun Eyes",
+          "text": {
+            "pt": "Seis Cybereyes com Anti-Dazzle, Low Light/Infrared/UV e quatro Dartguns, carregando 2 Poison Arrows e 2 Rubber Arrows nos olhos.",
+            "en": "Six Cybereyes with Anti-Dazzle, Low Light/Infrared/UV and four Dartguns, loaded with 2 Poison Arrows and 2 Rubber Arrows inside the eyes."
+          }
+        },
+        {
+          "name": "Air Pistol",
+          "text": {
+            "pt": "Leva também uma Air Pistol, cuja linha de dano vem em branco na ficha, e 16 Acid Paintballs. Por isso ela não está na lista de armas.",
+            "en": "He also carries an Air Pistol whose damage prints as a dash, plus 16 Acid Paintballs. That is why it is not in the weapon list."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "the-monk",
+    "name": "The Monk",
+    "aliases": [],
+    "kind": "sheet",
+    "role": null,
+    "roleRank": null,
+    "rep": 1,
+    "affiliation": "Lord Ruthven's followers",
+    "sources": [
+      { "book": "Tales of the RED", "page": 16 },
+      { "book": "Tales of the RED", "page": 188 }
+    ],
+    "summary": {
+      "pt": "Ex-Inquisidor que abandonou a gangue para servir Lord Ruthven como tenente, levando parte dos seus seguidores. É o atirador mais preciso do trio, com uma pistola pesada de qualidade excelente.",
+      "en": "A former Inquisitor who left his gang to serve Lord Ruthven as a lieutenant, bringing some of his followers. He is the sharper shot of the pair, with an Excellent Quality heavy pistol."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 45,
+      "seriouslyWounded": 23,
+      "deathSave": 6,
+      "stats": { "INT": 6, "REF": 7, "DEX": 6, "TECH": 3, "COOL": 4, "WILL": 7, "MOVE": 6, "BODY": 6, "EMP": 1 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Heavy Pistol w/ Extended Clip", "skill": "Handgun", "attackBase": 15, "damage": "3d6", "rof": 2, "magazine": null, "class": "HeavyPistol", "melee": false, "notes": "Excellent Quality" }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Kevlar®", "sp": 7 },
+        { "location": "Body", "name": "Kevlar®", "sp": 7 }
+      ],
+      "skills": {
+        "Athletics": 12, "Brawling": 12, "Concentration": 9, "Conversation": 3, "Education": 10, "Endurance": 11,
+        "Evasion": 12, "First Aid": 5, "Handgun": 15, "Human Perception": 3, "Language (English)": 8,
+        "Language (Streetslang)": 10, "Local Expert (South Night City)": 8, "Perception": 9, "Persuasion": 6,
+        "Resist Torture/Drugs": 13, "Stealth": 8, "Tactics": 10, "Wilderness Survival": 10
+      },
+      "gear": [
+        "Expansive Heavy Pistol Ammo x14", "Disposable Cellphone"
+      ],
+      "cyberware": [],
+      "specials": [
+        {
+          "name": "Munição expansiva",
+          "text": {
+            "pt": "Leva 14 cargas de Expansive Ammo para a pistola pesada.",
+            "en": "Carries 14 rounds of Expansive Ammo for the heavy pistol."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "lord-ruthven",
+    "name": "Lord Ruthven",
+    "aliases": ["Night Predator", "Professor Huntver"],
+    "kind": "sheet",
+    "role": "Medtech",
+    "roleRank": 4,
+    "rep": 2,
+    "affiliation": "Philharmonic Vampyres (broke away)",
+    "sources": [
+      { "book": "Tales of the RED", "page": 17 },
+      { "book": "Tales of the RED", "page": 188 },
+      { "book": "Tales of the RED", "page": 190 }
+    ],
+    "summary": {
+      "pt": "Ex-professor de psicologia da Night City University que financiou os Philharmonic Vampyres e, depois de tanta cibernética, virou cyberpsicótico: acredita ser um vampiro de verdade e está obcecado pela apresentadora Barbara Dahl. Rachou com a gangue e montou um grupo próprio de Bozos e Inquisidores.",
+      "en": "Once a psychology lecturer at NCU, he funded the Philharmonic Vampyres and later, buried in cyberware, went cyberpsycho. Convinced he is an actual vampire lord and obsessed with anchor Barbara Dahl, he left the gang and gathered his own Bozos and Inquisitors."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 50,
+      "seriouslyWounded": 25,
+      "deathSave": 10,
+      "stats": { "INT": 5, "REF": 8, "DEX": 8, "TECH": 4, "COOL": 5, "WILL": 6, "MOVE": 8, "BODY": 10, "EMP": 0 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Vampyres", "skill": "Melee Weapon", "attackBase": 18, "damage": "1d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null },
+        { "name": "Wolvers x2", "skill": "Melee Weapon", "attackBase": 18, "damage": "3d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": "Excellent Quality (Tech Upgraded)" }
+      ],
+      "armor": [
+        { "location": "Head", "name": "TUp Subdermal Armor", "sp": 12 },
+        { "location": "Body", "name": "TUp Subdermal Armor", "sp": 12 }
+      ],
+      "skills": {
+        "Acting": 10, "Athletics": 16, "Basic Tech": 12, "Brawling": 16, "Conversation": 2, "Cybertech": 12,
+        "Education": 7, "Evasion": 16, "First Aid": 6, "Human Perception": 2, "Interrogation": 14,
+        "Language (English)": 13, "Language (Streetslang)": 9, "Local Expert (University District)": 10,
+        "Melee Weapon": 18, "Paramedic": 10, "Perception": 12, "Personal Grooming": 11, "Persuasion": 12,
+        "Resist Torture/Drugs": 14, "Stealth": 16, "Surgery": 12, "Wardrobe & Style": 12
+      },
+      "gear": [
+        "Agent", "Vial of Biotoxin (in Vampyres)"
+      ],
+      "cyberware": [
+        "Cybereye x2 w/ Low Light/Infrared/UV", "Grafted Muscle & Bone Lace",
+        "Neural Link w/ Chipware Socket x2, Kerenzikov, Pain Editor", "Subdermal Armor (Tech Upgraded to 12 SP)",
+        "Wolvers x2 (Tech Upgraded to Excellent Quality)", "Vampyres"
+      ],
+      "specials": [
+        {
+          "name": "Medicine",
+          "text": {
+            "pt": "Role Ability Medicine no Rank 4 (Surgery 4).",
+            "en": "Role Ability Medicine at Rank 4 (Surgery 4)."
+          }
+        },
+        {
+          "name": "Biotoxina",
+          "text": {
+            "pt": "Guarda um frasco de Biotoxin dentro dos Vampyres, para envenenar quem ele morde.",
+            "en": "Keeps a vial of Biotoxin in his Vampyres, for poisoning the people he bites."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "kodai-khan",
+    "name": "Kodai Khan",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Exec",
+    "roleRank": 2,
+    "rep": 2,
+    "affiliation": "Ziggurat",
+    "sources": [
+      { "book": "Tales of the RED", "page": 36 },
+      { "book": "Tales of the RED", "page": 187 }
+    ],
+    "summary": {
+      "pt": "Executivo da Ziggurat com um caso grave de cyberpsicose. Anos atrás mandou fazer um Soulkill na namorada e guardou o engrama dela no seu Agent; hoje vive numa realidade inventada em que os dois estão sempre prestes a casar.",
+      "en": "A Ziggurat Executive with a severe case of Cyberpsychosis. Years ago he had his girlfriend Soulkilled and stored her engram in his Agent; now he lives in an invented reality where the two are forever about to marry."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 35,
+      "seriouslyWounded": 18,
+      "deathSave": 4,
+      "stats": { "INT": 8, "REF": 7, "DEX": 3, "TECH": 7, "COOL": 7, "WILL": 5, "MOVE": 7, "BODY": 4, "EMP": -4 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Popup Heavy Pistol", "skill": "Handgun", "attackBase": 10, "damage": "3d6", "rof": 2, "magazine": null, "class": "HeavyPistol", "melee": false, "notes": null }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Skin Weave", "sp": 7 },
+        { "location": "Body", "name": "Skin Weave", "sp": 7 }
+      ],
+      "skills": {
+        "Accounting": 14, "Athletics": 10, "Brawling": 9, "Bureaucracy": 13, "Business": 14, "Concentration": 8,
+        "Conversation": 0, "Deduction": 10, "Education": 14, "Evasion": 10, "First Aid": 8, "Handgun": 10,
+        "Human Perception": 2, "Language (English)": 14, "Language (Streetslang)": 12, "Lip Reading": 15,
+        "Local Expert (Upper Marina)": 10, "Perception": 18, "Personal Grooming": 13, "Persuasion": 12, "Stealth": 11
+      },
+      "gear": [
+        "Heavy Pistol Ammo x32", "Agent", "Another Agent", "Businesswear", "Mirrorshades"
+      ],
+      "cyberware": [
+        "Audiovox", "Biomonitor", "Cyberarm w/ Popup Heavy Pistol, Realskinn Covering",
+        "Cyberaudio Suite w/ Amplified Hearing, Audio Recorder, Bug Detector",
+        "Cybereyes x2 w/ Chyron, Image Enhance, MicroVideo", "Enhanced Antibodies",
+        "Neural Link w/ Chipware Socket, Interface Plugs", "Skin Weave", "Techhair", "Toxin Binders"
+      ],
+      "specials": [
+        {
+          "name": "Teamwork",
+          "text": {
+            "pt": "Role Ability Teamwork no Rank 2.",
+            "en": "Role Ability Teamwork at Rank 2."
+          }
+        },
+        {
+          "name": "Dois Agents",
+          "text": {
+            "pt": "Carrega dois Agents; o segundo é o que guarda a namorada transformada em construto virtual.",
+            "en": "Carries two Agents; the second is the one that holds his girlfriend as a virtual construct."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "jane-gatsby",
+    "name": "Jane Gatsby",
+    "aliases": ["Laura Vogt"],
+    "kind": "sheet",
+    "role": "Fixer",
+    "roleRank": 2,
+    "rep": 1,
+    "affiliation": "High Class Heist Crew",
+    "sources": [
+      { "book": "Tales of the RED", "page": 36 },
+      { "book": "Tales of the RED", "page": 186 }
+    ],
+    "summary": {
+      "pt": "Nome falso de Laura Vogt, estudante da Night City University que entrou na High Class Heist Crew para pagar o material da faculdade. Faz o serviço, mas não pretende morrer pela gangue.",
+      "en": "A false name for Laura Vogt, a Night City University student who joined the High Class Heist Crew to pay for school supplies. She does the work but has no plans to die for the gang."
+    },
+    "sheetNote": {
+      "pt": "A ficha imprime \"Language (Street Slang)\"; registrado como Language (Streetslang), o nome da skill no livro de regras.",
+      "en": "The sheet prints \"Language (Street Slang)\"; entered as Language (Streetslang), the rule book's skill name."
+    },
+    "sheet": {
+      "hp": 40,
+      "seriouslyWounded": 20,
+      "deathSave": 6,
+      "stats": { "INT": 6, "REF": 6, "DEX": 7, "TECH": 4, "COOL": 7, "WILL": 6, "MOVE": 7, "BODY": 6, "EMP": 6 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Heavy Pistol", "skill": "Handgun", "attackBase": 11, "damage": "3d6", "rof": 2, "magazine": null, "class": "HeavyPistol", "melee": false, "notes": null }
+      ],
+      "armor": [],
+      "skills": {
+        "Athletics": 13, "Brawling": 11, "Bribery": 10, "Business": 8, "Concentration": 10, "Conversation": 11,
+        "Education": 11, "Evasion": 13, "First Aid": 7, "Forgery": 9, "Handgun": 11, "Human Perception": 12,
+        "Language (English)": 14, "Language (Streetslang)": 14, "Local Expert (University District)": 14,
+        "Perception": 11, "Persuasion": 10, "Pick Lock": 11, "Stealth": 14, "Streetwise": 13, "Trading": 13
+      },
+      "gear": [
+        "Heavy Pistol Ammo x16", "Bug Detector", "Disposable Cellphone x3", "La Lune Bleue Waitress Uniform",
+        "Memory Chips w/ episodes of an old animated TV show x3", "Stolen Agent x2", "Stolen Businesswear Jewelry x3"
+      ],
+      "cyberware": [
+        "Cyberaudio Suite w/ Audio Recorder, Internal Agent, Voice Stress Analyzer", "Subdermal Pocket"
+      ],
+      "specials": [
+        {
+          "name": "Operator",
+          "text": {
+            "pt": "Role Ability Operator no Rank 2.",
+            "en": "Role Ability Operator at Rank 2."
+          }
+        },
+        {
+          "name": "Disfarce de garçonete",
+          "text": {
+            "pt": "Entra nos lugares com o uniforme de garçonete da La Lune Bleue e leva bugs, agents e joias roubados.",
+            "en": "Gets into places in a La Lune Bleue waitress uniform and carries stolen Agents and jewelry."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "markus-malarkey-bornholm",
+    "name": "Markus “Malarkey” Bornholm",
+    "aliases": ["Malarkey"],
+    "kind": "sheet",
+    "role": "Media",
+    "roleRank": 5,
+    "rep": 4,
+    "affiliation": null,
+    "sources": [
+      { "book": "Tales of the RED", "page": 50 },
+      { "book": "Tales of the RED", "page": 189 }
+    ],
+    "summary": {
+      "pt": "Jornalista de tabloide de Night City que segue gente famosa para filmar o pior comportamento delas e transformar isso em tendência. Ganha o bastante com o escândalo para pagar seguranças.",
+      "en": "A Night City tabloid \"journalist\" who tails people to record their worst behavior and push it into a viral trend. He earns enough from the scandal to pay for muscle."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 40,
+      "seriouslyWounded": 20,
+      "deathSave": 5,
+      "stats": { "INT": 7, "REF": 5, "DEX": 5, "TECH": 4, "COOL": 8, "WILL": 7, "MOVE": 7, "BODY": 5, "EMP": 4 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Heavy Pistol", "skill": "Handgun", "attackBase": 11, "damage": "3d6", "rof": 2, "magazine": null, "class": "HeavyPistol", "melee": false, "notes": null }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Kevlar®", "sp": 7 },
+        { "location": "Body", "name": "Kevlar®", "sp": 7 }
+      ],
+      "skills": {
+        "Athletics": 7, "Brawling": 7, "Bribery": 14, "Composition": 13, "Conversation": 11, "Deduction": 13,
+        "Education": 9, "Evasion": 11, "First Aid": 6, "Handgun": 11, "Human Perception": 13,
+        "Language (English)": 11, "Language (Streetslang)": 9, "Library Search": 11, "Lip Reading": 13,
+        "Local Expert (The Glen)": 13, "Perception": 13, "Persuasion": 14, "Photography/Film": 10, "Stealth": 8
+      },
+      "gear": [
+        "Heavy Pistol Ammo x8", "Agent", "Binoculars", "Camera Drone", "Homing Tracer x5"
+      ],
+      "cyberware": [
+        "Cyberaudio Suite w/ Audio Recorder", "Cybereye w/ MicroVideo"
+      ],
+      "specials": [
+        {
+          "name": "Credibility",
+          "text": {
+            "pt": "Role Ability Credibility no Rank 5.",
+            "en": "Role Ability Credibility at Rank 5."
+          }
+        },
+        {
+          "name": "Equipamento de perseguição",
+          "text": {
+            "pt": "Camera Drone e cinco Homing Tracers para seguir os alvos, com Audio Recorder e MicroVideo nos implantes.",
+            "en": "A Camera Drone and five Homing Tracers for following targets, with an Audio Recorder and MicroVideo in his implants."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "darrel-marchant",
+    "name": "Darrel Marchant",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Solo",
+    "roleRank": 6,
+    "rep": 4,
+    "affiliation": null,
+    "sources": [
+      { "book": "Tales of the RED", "page": 50 },
+      { "book": "Tales of the RED", "page": 184 }
+    ],
+    "summary": {
+      "pt": "Filho de pais Reclaimers criado perto de Night City. Ganhou fama escoltando cargas e VIPs para famílias Nomad por causa dos reflexos e do olhar atento. É ex-marido do ator Etan Sim.",
+      "en": "The son of Reclaimer parents, raised on the edge of Night City. He built a name guarding cargo and VIPs for Nomad families on the strength of his reflexes and sharp eye. He is the ex-husband of actor Etan Sim."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 45,
+      "seriouslyWounded": 23,
+      "deathSave": 8,
+      "stats": { "INT": 5, "REF": 8, "DEX": 6, "TECH": 3, "COOL": 5, "WILL": 6, "MOVE": 6, "BODY": 8, "EMP": 4 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Heavy Pistol", "skill": "Handgun", "attackBase": 12, "damage": "3d6", "rof": 2, "magazine": null, "class": "HeavyPistol", "melee": false, "notes": "Excellent Quality" }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Skin Weave", "sp": 7 },
+        { "location": "Body", "name": "Skin Weave", "sp": 7 }
+      ],
+      "skills": {
+        "Athletics": 12, "Autofire": 12, "Brawling": 12, "Concentration": 7, "Conversation": 5,
+        "Drive Land Vehicle": 12, "Education": 7, "Endurance": 10, "Evasion": 12, "First Aid": 7, "Handgun": 12,
+        "Human Perception": 5, "Interrogation": 11, "Language (English)": 9, "Language (Spanish)": 7,
+        "Language (Streetslang)": 9, "Local Expert (Badlands)": 9, "Local Expert (Little Europe)": 7,
+        "Melee Weapon": 12, "Perception": 11, "Persuasion": 5, "Resist Torture/Drugs": 11, "Shoulder Arms": 12,
+        "Stealth": 9, "Tactics": 11, "Wilderness Survival": 9
+      },
+      "gear": [
+        "Heavy Pistol Ammo x8",
+        "A nice house in Little Europe w/ a state-of-the-art security system and a basement armory", "A broken heart"
+      ],
+      "cyberware": [
+        "Cyberarm w/ Subdermal Grip", "Cybereye x2 w/ Anti-Dazzle, Low Light/Infrared/UV", "Neural Link",
+        "Skin Weave"
+      ],
+      "specials": [
+        {
+          "name": "Combat Awareness",
+          "text": {
+            "pt": "Role Ability Combat Awareness no Rank 6.",
+            "en": "Role Ability Combat Awareness at Rank 6."
+          }
+        },
+        {
+          "name": "Casa fortificada",
+          "text": {
+            "pt": "Tem uma casa em Little Europe com segurança de ponta e um arsenal no porão.",
+            "en": "Owns a house in Little Europe with top-grade security and a basement armory."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "drummer",
+    "name": "Drummer",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Netrunner",
+    "roleRank": 4,
+    "rep": 1,
+    "affiliation": "EON Data Consultants",
+    "sources": [
+      { "book": "Tales of the RED", "page": 68 },
+      { "book": "Tales of the RED", "page": 184 }
+    ],
+    "summary": {
+      "pt": "Analista de padrões de dados da EON Data Consultants, calmo e curioso, que observa as festas de longe. Quase ingênuo fora da bolha corporativa, seria um risco em qualquer missão de campo.",
+      "en": "A data-pattern analyst at EON Data Consultants, patient and curious, who watches parties from the edge. Nearly naive outside his corporate bubble, he would be a liability on any field job."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 35,
+      "seriouslyWounded": 18,
+      "deathSave": 4,
+      "stats": { "INT": 8, "REF": 5, "DEX": 4, "TECH": 8, "COOL": 4, "WILL": 5, "MOVE": 5, "BODY": 4, "EMP": 4 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Heavy Pistol", "skill": "Handgun", "attackBase": 6, "damage": "3d6", "rof": 2, "magazine": null, "class": "HeavyPistol", "melee": false, "notes": null }
+      ],
+      "armor": [
+        { "location": "Body", "name": "Kevlar®", "sp": 7 }
+      ],
+      "skills": {
+        "Athletics": 6, "Basic Tech": 13, "Brawling": 6, "Concentration": 9, "Conversation": 6, "Cryptography": 17,
+        "Deduction": 15, "Education": 16, "Electronics/Security Tech": 12, "Evasion": 6, "First Aid": 12,
+        "Forgery": 10, "Handgun": 6, "Human Perception": 7, "Language (Korean)": 14, "Language (Streetslang)": 14,
+        "Library Search": 15, "Local Expert (Little Europe)": 9, "Perception": 11, "Persuasion": 6, "Pick Lock": 11,
+        "Resist Torture/Drugs": 7, "Stealth": 8
+      },
+      "gear": [
+        "Heavy Pistol Ammo x8", "Agent", "Anti-Smog Breathing Mask", "Cyberdeck (Excellent Quality)",
+        "Memory Chip x10", "Trauma Team Silver Card",
+        "Cyberdeck Programs: Banhammer, DeckKRASH, Eraser, Hellbolt, Shield, Sword"
+      ],
+      "cyberware": [
+        "Biomonitor", "Cybereye x2 w/ Virtuality", "Neural Link w/ Interface Plugs"
+      ],
+      "specials": [
+        {
+          "name": "Interface",
+          "text": {
+            "pt": "Role Ability Interface no Rank 4.",
+            "en": "Role Ability Interface at Rank 4."
+          }
+        },
+        {
+          "name": "Cyberdeck",
+          "text": {
+            "pt": "Cyberdeck de Qualidade Excelente com Banhammer, DeckKRASH, Eraser, Hellbolt, Shield e Sword.",
+            "en": "An Excellent Quality Cyberdeck loaded with Banhammer, DeckKRASH, Eraser, Hellbolt, Shield and Sword."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "fife",
+    "name": "Fife",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Netrunner",
+    "roleRank": 4,
+    "rep": 1,
+    "affiliation": null,
+    "sources": [
+      { "book": "Tales of the RED", "page": 68 },
+      { "book": "Tales of the RED", "page": 185 }
+    ],
+    "summary": {
+      "pt": "Netrunner misteriosa e brincalhona, de corpo biosculpt entre ictiossauro e foca-leopardo, que projeta hardware de sinal de longa distância e vive num esconderijo no Pacífico. Prefere salas de chat a encontros em carne e osso e é amiga de Drummer.",
+      "en": "An inscrutable, playful Netrunner with an extreme biosculpt halfway between an ichthyosaur and a leopard seal, who designs long-range signal hardware from a hidden lair in the Pacific. Prefers chat rooms to meeting in the flesh and is Drummer's friend."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 35,
+      "seriouslyWounded": 18,
+      "deathSave": 6,
+      "stats": { "INT": 7, "REF": 5, "DEX": 4, "TECH": 7, "COOL": 4, "WILL": 5, "MOVE": 3, "BODY": 6, "EMP": 4 },
+      "armoredStats": {},
+      "weapons": [],
+      "armor": [
+        { "location": "Head", "name": "Skin Weave", "sp": 7 },
+        { "location": "Body", "name": "Skin Weave", "sp": 7 }
+      ],
+      "skills": {
+        "Athletics": 10, "Basic Tech": 13, "Brawling": 6, "Conceal/Reveal Object": 11, "Concentration": 12,
+        "Conversation": 6, "Cryptography": 17, "Deduction": 15, "Education": 14, "Electronics/Security Tech": 13,
+        "Evasion": 8, "First Aid": 13, "Forgery": 13, "Handgun": 10, "Human Perception": 8, "Language (English)": 14,
+        "Language (Streetslang)": 12, "Library Search": 11, "Local Expert (Night City Harbor)": 16, "Perception": 11,
+        "Persuasion": 8, "Pick Lock": 13, "Resist Torture/Drugs": 9, "Stealth": 9
+      },
+      "gear": [
+        "Aquaform Exotic Biosculpt", "Waterproof Cyberdeck (Excellent Quality) w/ Range Upgrade",
+        "Radio Communicator", "Cyberdeck Programs: Banhammer, DeckKRASH, Eraser, Hellbolt, Shield, Sword, Worm"
+      ],
+      "cyberware": [
+        "Cybereye x2 w/ Low-Light/Infrared/UV, Virtuality", "Cyberleg x2 w/ Web Foot", "Gills",
+        "Neural Link w/ Interface Plugs", "Radar/Sonar Implant", "Skin Weave"
+      ],
+      "specials": [
+        {
+          "name": "Interface",
+          "text": {
+            "pt": "Role Ability Interface no Rank 4.",
+            "en": "Role Ability Interface at Rank 4."
+          }
+        },
+        {
+          "name": "Corpo aquático",
+          "text": {
+            "pt": "Biosculpt aquático com Gills, pés palmados nas Cyberlegs e Radar/Sonar Implant; o Cyberdeck é à prova d'água e tem Range Upgrade.",
+            "en": "An aquatic biosculpt with Gills, web-footed Cyberlegs and a Radar/Sonar Implant; the Cyberdeck is waterproof and has a Range Upgrade."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "commander-aaron-tyler-walsh",
+    "name": "Commander Aaron Tyler Walsh",
+    "aliases": ["Commander Walsh"],
+    "kind": "sheet",
+    "role": "Solo",
+    "roleRank": 4,
+    "rep": 3,
+    "affiliation": "Militech",
+    "sources": [
+      { "book": "Tales of the RED", "page": 69 },
+      { "book": "Tales of the RED", "page": 182 }
+    ],
+    "summary": {
+      "pt": "Comandante patriota da Militech, veterano das Forças Armadas dos EUA, que vê Night City e a Pacifica Confederation como separatistas a serem trazidos de volta à União. Comanda operações no mar.",
+      "en": "A die-hard patriot Militech commander and US military veteran who treats Night City and the Pacifica Confederation as secessionists to be brought back into the Union. He leads operations at sea."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 45,
+      "seriouslyWounded": 23,
+      "deathSave": 6,
+      "stats": { "INT": 6, "REF": 7, "DEX": 7, "TECH": 3, "COOL": 8, "WILL": 7, "MOVE": 5, "BODY": 6, "EMP": 6 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Very Heavy Pistol", "skill": "Handgun", "attackBase": 14, "damage": "4d6", "rof": 1, "magazine": null, "class": "VeryHeavyPistol", "melee": false, "notes": null },
+        { "name": "Light Melee Weapon (Dive Knife)", "skill": "Melee Weapon", "attackBase": 13, "damage": "1d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Light Armorjack", "sp": 11 },
+        { "location": "Body", "name": "Light Armorjack", "sp": 11 }
+      ],
+      "skills": {
+        "Athletics": 14, "Basic Tech": 6, "Brawling": 14, "Concentration": 14, "Conversation": 8, "Deduction": 10,
+        "Education": 10, "Electronics/Security Tech": 6, "Endurance": 14, "Evasion": 13, "First Aid": 8,
+        "Handgun": 14, "Heavy Weapons": 10, "Human Perception": 10, "Language (English)": 14,
+        "Language (Streetslang)": 14, "Local Expert (Pacific Coast)": 16, "Melee Weapon": 13, "Perception": 12,
+        "Persuasion": 12, "Pilot Sea Vehicle": 16, "Resist Torture/Drugs": 14, "Sea Vehicle Tech": 10,
+        "Shoulder Arms": 14, "Stealth": 10, "Weaponstech": 10, "Wilderness Survival": 10
+      },
+      "gear": [
+        "Very Heavy Pistol Ammo x16", "Agent", "Memory Chip x5", "Radio Communicator w/ Scrambler/Descrambler",
+        "Techtool"
+      ],
+      "cyberware": [
+        "Cybereye x2 w/ Chyron, Low-Light/Infrared/UV", "Cyberarm w/ Popup Shield", "Gills",
+        "Neural Link w/ Chipware Socket"
+      ],
+      "specials": [
+        {
+          "name": "Combat Awareness",
+          "text": {
+            "pt": "Role Ability Combat Awareness no Rank 4.",
+            "en": "Role Ability Combat Awareness at Rank 4."
+          }
+        },
+        {
+          "name": "Mergulhador",
+          "text": {
+            "pt": "Respira debaixo d'água com as Gills e tem um Popup Shield no Cyberarm; luta com faca de mergulho no corpo a corpo.",
+            "en": "Breathes underwater through Gills and has a Popup Shield in his Cyberarm; fights in melee with a dive knife."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "conex",
+    "name": "ConEx",
+    "aliases": ["Harry Depuy"],
+    "kind": "sheet",
+    "role": "Exec",
+    "roleRank": 3,
+    "rep": 2,
+    "affiliation": "Lightning Logistics",
+    "sources": [
+      { "book": "Tales of the RED", "page": 88 },
+      { "book": "Tales of the RED", "page": 183 }
+    ],
+    "summary": {
+      "pt": "Harry Depuy, líder da Lightning Logistics, equipe que ele montou para assumir as entregas da Fixie's Couriers. Elegante e convencido de que administra melhor que ela, que por acaso é sua ex.",
+      "en": "Harry Depuy, leader of Lightning Logistics, a crew he built to take over the Fixie's Couriers operation. Smooth and sure he can run it better than she can, which is awkward since she is his ex."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 40,
+      "seriouslyWounded": 20,
+      "deathSave": 5,
+      "stats": { "INT": 5, "REF": 7, "DEX": 7, "TECH": 3, "COOL": 6, "WILL": 7, "MOVE": 5, "BODY": 5, "EMP": 5 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Heavy Pistol", "skill": "Handgun", "attackBase": 13, "damage": "3d6", "rof": 2, "magazine": null, "class": "HeavyPistol", "melee": false, "notes": null }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Kevlar®", "sp": 7 },
+        { "location": "Body", "name": "Kevlar®", "sp": 7 }
+      ],
+      "skills": {
+        "Accounting": 11, "Athletics": 9, "Brawling": 9, "Bureaucracy": 11, "Business": 11, "Concentration": 9,
+        "Conversation": 11, "Deduction": 11, "Education": 11, "Evasion": 13, "First Aid": 5, "Handgun": 13,
+        "Human Perception": 11, "Language (English)": 9, "Language (Streetslang)": 7, "Lip Reading": 11,
+        "Local Expert (Heywood Industrial Zone)": 7, "Perception": 9, "Personal Grooming": 10, "Persuasion": 12,
+        "Stealth": 9
+      },
+      "gear": [
+        "Heavy Pistol Ammo x16", "Agent", "Computer", "Vial of Synthcoke"
+      ],
+      "cyberware": [
+        "Biomonitor"
+      ],
+      "specials": [
+        {
+          "name": "Teamwork",
+          "text": {
+            "pt": "Role Ability Teamwork no Rank 3 (Company Driver - Wheels).",
+            "en": "Role Ability Teamwork at Rank 3 (Company Driver - Wheels)."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "512",
+    "name": "512",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Solo",
+    "roleRank": 4,
+    "rep": 2,
+    "affiliation": "Lightning Logistics",
+    "sources": [
+      { "book": "Tales of the RED", "page": 89 },
+      { "book": "Tales of the RED", "page": 182 }
+    ],
+    "summary": {
+      "pt": "Profissional da Lightning Logistics que segue o código: cumpre o contrato, obedece ordens e luta até não haver outra saída. Tem um passado com John Doe.",
+      "en": "A Lightning Logistics professional who sticks to his code: do the job you signed up for, take orders, keep fighting until there is no other choice. He shares a past with John Doe."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 45,
+      "seriouslyWounded": 23,
+      "deathSave": 7,
+      "stats": { "INT": 7, "REF": 7, "DEX": 6, "TECH": 5, "COOL": 7, "WILL": 6, "MOVE": 7, "BODY": 7, "EMP": 2 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Assault Rifle w/ Smartgun Link", "skill": "Shoulder Arms", "attackBase": 13, "damage": "5d6", "rof": 1, "magazine": null, "class": "AssaultRifle", "melee": false, "notes": null },
+        { "name": "Heavy Melee Weapon", "skill": "Melee Weapon", "attackBase": 12, "damage": "3d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Light Armorjack", "sp": 11 },
+        { "location": "Body", "name": "Light Armorjack", "sp": 11 }
+      ],
+      "skills": {
+        "Athletics": 8, "Autofire": 13, "Brawling": 8, "Concentration": 8, "Conversation": 5, "Education": 9,
+        "Evasion": 12, "First Aid": 11, "Handgun": 13, "Human Perception": 5, "Interrogation": 13,
+        "Language (German)": 11, "Language (Streetslang)": 9, "Local Expert (Heywood Industrial Zone)": 9,
+        "Melee Weapon": 12, "Perception": 13, "Persuasion": 9, "Resist Torture/Drugs": 12, "Shoulder Arms": 13,
+        "Stealth": 8, "Tactics": 13
+      },
+      "gear": [
+        "Rifle Ammo x50", "Agent"
+      ],
+      "cyberware": [
+        "Neural Link w/ Interface Plugs"
+      ],
+      "specials": [
+        {
+          "name": "Combat Awareness",
+          "text": {
+            "pt": "Role Ability Combat Awareness no Rank 4.",
+            "en": "Role Ability Combat Awareness at Rank 4."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "sugarplum",
+    "name": "Sugarplum",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Netrunner",
+    "roleRank": 3,
+    "rep": 1,
+    "affiliation": "Lightning Logistics",
+    "sources": [
+      { "book": "Tales of the RED", "page": 89 },
+      { "book": "Tales of the RED", "page": 192 }
+    ],
+    "summary": {
+      "pt": "Netrunner da Lightning Logistics. O nome vem do ícone dela na NET, não do corpo, que é bem alto. É a mais prática do grupo e a primeira a fugir quando a coisa azeda.",
+      "en": "The Lightning Logistics Netrunner. Her name refers to her NET icon, not her rather tall body. She is the most practical of the crew and the first to run when things go south."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 35,
+      "seriouslyWounded": 18,
+      "deathSave": 6,
+      "stats": { "INT": 6, "REF": 6, "DEX": 6, "TECH": 7, "COOL": 8, "WILL": 4, "MOVE": 7, "BODY": 6, "EMP": 4 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Very Heavy Pistol", "skill": "Handgun", "attackBase": 12, "damage": "4d6", "rof": 1, "magazine": null, "class": "VeryHeavyPistol", "melee": false, "notes": null }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Bodyweight Suit", "sp": 11 },
+        { "location": "Body", "name": "Bodyweight Suit", "sp": 11 }
+      ],
+      "skills": {
+        "Athletics": 8, "Basic Tech": 10, "Brawling": 8, "Concentration": 6, "Conversation": 6, "Education": 12,
+        "Electronics/Security Tech": 12, "Evasion": 12, "First Aid": 9, "Handgun": 12, "Human Perception": 6,
+        "Language (Spanish)": 10, "Language (Streetslang)": 8, "Library Search": 12,
+        "Local Expert (Heywood Industrial Zone)": 8, "Perception": 8, "Persuasion": 10, "Stealth": 12,
+        "Wardrobe & Style": 10
+      },
+      "gear": [
+        "Very Heavy Pistol Ammo x8", "Agent", "Cyberdeck Hardware: Insulated Wiring (in Bodyweight Suit)",
+        "Cyberdeck Programs: Armor x2, Poison Flatline, See Ya, Sword, Vrizzbolt, Worm"
+      ],
+      "cyberware": [
+        "Cyberarm w/ Cyberdeck", "Neural Link w/ Interface Plugs"
+      ],
+      "specials": [
+        {
+          "name": "Interface",
+          "text": {
+            "pt": "Role Ability Interface no Rank 3.",
+            "en": "Role Ability Interface at Rank 3."
+          }
+        },
+        {
+          "name": "Cyberdeck no braço",
+          "text": {
+            "pt": "O Cyberdeck fica embutido no Cyberarm, com Insulated Wiring no Bodyweight Suit e programas de ataque e defesa.",
+            "en": "The Cyberdeck is built into her Cyberarm, with Insulated Wiring in the Bodyweight Suit and a mix of attack and defense programs."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "boom-boom",
+    "name": "Boom-Boom",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Tech",
+    "roleRank": 2,
+    "rep": 1,
+    "affiliation": "Lightning Logistics",
+    "sources": [
+      { "book": "Tales of the RED", "page": 90 },
+      { "book": "Tales of the RED", "page": 183 }
+    ],
+    "summary": {
+      "pt": "Tech versátil da Lightning Logistics com paixão por explosivos.",
+      "en": "A capable all-round Tech for Lightning Logistics with a special love for explosives."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 35,
+      "seriouslyWounded": 18,
+      "deathSave": 6,
+      "stats": { "INT": 7, "REF": 7, "DEX": 7, "TECH": 6, "COOL": 3, "WILL": 3, "MOVE": 6, "BODY": 6, "EMP": 5 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Very Heavy Pistol", "skill": "Handgun", "attackBase": 12, "damage": "4d6", "rof": 1, "magazine": null, "class": "VeryHeavyPistol", "melee": false, "notes": null },
+        { "name": "Heavy Melee Weapon", "skill": "Melee Weapon", "attackBase": 7, "damage": "3d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": "No Skill Base printed for this weapon; STAT only." }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Light Armorjack", "sp": 11 },
+        { "location": "Body", "name": "Light Armorjack", "sp": 11 }
+      ],
+      "skills": {
+        "Athletics": 11, "Basic Tech": 11, "Brawling": 9, "Concentration": 5, "Conversation": 7, "Cybertech": 11,
+        "Demolitions": 12, "Education": 10, "Electronics/Security Tech": 11, "Evasion": 11, "First Aid": 10,
+        "Handgun": 12, "Human Perception": 7, "Language (English)": 11, "Language (Streetslang)": 9,
+        "Local Expert (Heywood Industrial Zone)": 9, "Perception": 9, "Persuasion": 5, "Stealth": 7,
+        "Weaponstech": 12
+      },
+      "gear": [
+        "Very Heavy Pistol Ammo x16", "Armor Piercing Grenade x2", "Incendiary Grenade x2"
+      ],
+      "cyberware": [
+        "Cyberarm w/ Tool Hand"
+      ],
+      "specials": [
+        {
+          "name": "Maker",
+          "text": {
+            "pt": "Role Ability Maker no Rank 2 (Field Expertise 2, Fabrication Expertise 2).",
+            "en": "Role Ability Maker at Rank 2 (Field Expertise 2, Fabrication Expertise 2)."
+          }
+        },
+        {
+          "name": "Granadas",
+          "text": {
+            "pt": "Leva duas granadas Armor Piercing e duas Incendiary, além de uma Tool Hand no Cyberarm.",
+            "en": "Carries two Armor Piercing and two Incendiary Grenades, plus a Tool Hand in his Cyberarm."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "john-doe",
+    "name": "John Doe",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Tech",
+    "roleRank": 4,
+    "rep": 3,
+    "affiliation": null,
+    "sources": [
+      { "book": "Tales of the RED", "page": 90 },
+      { "book": "Tales of the RED", "page": 186 }
+    ],
+    "summary": {
+      "pt": "Agente elegante, discreto e profissional, especialista em operações encobertas. Surgiu em Night City há poucos anos; corre o boato de que é ex-espião. Adora ternos e joga Elflines Online.",
+      "en": "A dapper, discreet operative who specializes in covert work. He showed up in Night City a few years back and rumor says he is an ex-spook. He loves his suits and plays Elflines Online."
+    },
+    "sheetNote": {
+      "pt": "A ficha lista duas Role Abilities: Maker 4 (Role principal, como na lista) e Solo Combat Awareness 2.",
+      "en": "The sheet lists two Role Abilities: Maker 4 (used as his main Role) and Solo Combat Awareness 2."
+    },
+    "sheet": {
+      "hp": 40,
+      "seriouslyWounded": 20,
+      "deathSave": 7,
+      "stats": { "INT": 8, "REF": 6, "DEX": 7, "TECH": 8, "COOL": 4, "WILL": 4, "MOVE": 6, "BODY": 7, "EMP": 5 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Assault Rifle", "skill": "Shoulder Arms", "attackBase": 12, "damage": "5d6", "rof": 1, "magazine": null, "class": "AssaultRifle", "melee": false, "notes": null },
+        { "name": "Heavy Pistol", "skill": "Handgun", "attackBase": 12, "damage": "3d6", "rof": 2, "magazine": null, "class": "HeavyPistol", "melee": false, "notes": null }
+      ],
+      "armor": [
+        { "location": "Body", "name": "Light Armorjack", "sp": 11 }
+      ],
+      "skills": {
+        "Athletics": 12, "Autofire": 12, "Basic Tech": 14, "Brawling": 12, "Concentration": 12, "Conversation": 9,
+        "Cybertech": 12, "Education": 12, "Electronics/Security Tech": 14, "Evasion": 12, "First Aid": 12,
+        "Handgun": 12, "Language (English)": 12, "Language (Streetslang)": 10, "Local Expert (The Glen)": 12,
+        "Perception": 12, "Personal Grooming": 8, "Persuasion": 8, "Pick Lock": 12, "Resist Torture/Drugs": 10,
+        "Shoulder Arms": 12, "Stealth": 14, "Tactics": 14, "Wardrobe & Style": 8, "Weaponstech": 12
+      },
+      "gear": [
+        "Rifle Ammo x50", "Heavy Pistol Ammo x8", "Agent", "Duct Tape", "Smart Glasses w/ Low-Light/Infrared/UV",
+        "Tech Bag", "Techtool"
+      ],
+      "cyberware": [
+        "Contraceptive Implant", "Neural Link w/ Sandevistan"
+      ],
+      "specials": [
+        {
+          "name": "Maker",
+          "text": {
+            "pt": "Role Ability Maker no Rank 4 (Field Expertise 4, Fabrication Expertise 4, Upgrade Expertise 2).",
+            "en": "Role Ability Maker at Rank 4 (Field 4, Fabrication 4, Upgrade 2)."
+          }
+        },
+        {
+          "name": "Sandevistan",
+          "text": {
+            "pt": "Neural Link com Sandevistan, que o torna rápido no combate.",
+            "en": "A Neural Link with a Sandevistan for fast reactions in combat."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "luzia-tanza",
+    "name": "Lieutenant Luzia Tanza",
+    "aliases": ["Luzia Tanzia"],
+    "kind": "sheet",
+    "role": "Solo",
+    "roleRank": 3,
+    "rep": 2,
+    "affiliation": "Militech",
+    "sources": [
+      { "book": "Tales of the RED", "page": 108 },
+      { "book": "Tales of the RED", "page": 188 }
+    ],
+    "summary": {
+      "pt": "Mercenária que subiu depois da 4ª Guerra Corporativa, ligada à Veronica Stiles. Afundou no vício em synthcoke depois de uma missão que matou o marido de Veronica e só se recuperou graças a ela. Hoje é tenente da Militech, mas sua lealdade é toda da Major Stiles.",
+      "en": "A merc who rose after the 4th Corporate War and grew close to Veronica Stiles. She spiraled into synthcoke after a mission that killed Veronica's husband and only recovered thanks to her. Now a Militech lieutenant, her loyalty is entirely to Major Stiles."
+    },
+    "sheetNote": {
+      "pt": "O sobrenome sai como \"Tanza\" na ficha e \"Tanzia\" na biografia; o primeiro nome também varia (Luzia e Luiza).",
+      "en": "The surname reads \"Tanza\" on the sheet and \"Tanzia\" in the biography; the first name also varies (Luzia and Luiza)."
+    },
+    "sheet": {
+      "hp": 40,
+      "seriouslyWounded": 20,
+      "deathSave": 7,
+      "stats": { "INT": 5, "REF": 8, "DEX": 6, "TECH": 4, "COOL": 6, "WILL": 5, "MOVE": 6, "BODY": 7, "EMP": 5 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Assault Rifle w/ Smartgun Link", "skill": "Shoulder Arms", "attackBase": 12, "damage": "5d6", "rof": 1, "magazine": null, "class": "AssaultRifle", "melee": false, "notes": null },
+        { "name": "Heavy Melee Weapon", "skill": "Melee Weapon", "attackBase": 12, "damage": "3d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Light Armorjack", "sp": 11 },
+        { "location": "Body", "name": "Light Armorjack", "sp": 11 }
+      ],
+      "skills": {
+        "Athletics": 8, "Autofire": 12, "Brawling": 8, "Concentration": 7, "Conversation": 7, "Education": 7,
+        "Evasion": 10, "First Aid": 6, "Handgun": 12, "Human Perception": 7, "Interrogation": 9,
+        "Language (Streetslang)": 9, "Language (Swedish)": 9, "Local Expert (South Night City)": 7,
+        "Melee Weapon": 12, "Perception": 9, "Persuasion": 8, "Resist Torture/Drugs": 7, "Shoulder Arms": 12,
+        "Stealth": 8, "Tactics": 10
+      },
+      "gear": [
+        "Rifle Ammo x50", "Agent", "Disposable Cellphone", "Flashlight"
+      ],
+      "cyberware": [
+        "Neural Link w/ Subdermal Grip"
+      ],
+      "specials": [
+        {
+          "name": "Combat Awareness",
+          "text": {
+            "pt": "Role Ability Combat Awareness no Rank 3.",
+            "en": "Role Ability Combat Awareness at Rank 3."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "sall3-smite",
+    "name": "Sall3 Smite",
+    "aliases": [],
+    "kind": "sheet",
+    "role": null,
+    "roleRank": null,
+    "rep": 0,
+    "affiliation": "Militech",
+    "sources": [
+      { "book": "Tales of the RED", "page": 108 },
+      { "book": "Tales of the RED", "page": 192 }
+    ],
+    "summary": {
+      "pt": "Técnico de cabelo rosa vindo de Pacifica Playground, vencedor de um falso concurso que a Militech usava para recrutar técnicos pobres. A Major Stiles o tirou do processo antes do doutrinamento e esta é sua primeira missão de campo.",
+      "en": "A pink-haired young technician from Pacifica Playground who won a fake contest Militech used to recruit poor techs. Major Stiles pulled them out before the brainwashing started, and this is their first field assignment."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 35,
+      "seriouslyWounded": 18,
+      "deathSave": 5,
+      "stats": { "INT": 8, "REF": 8, "DEX": 5, "TECH": 7, "COOL": 3, "WILL": 4, "MOVE": 4, "BODY": 5, "EMP": 6 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Very Heavy Pistol", "skill": "Handgun", "attackBase": 12, "damage": "4d6", "rof": 1, "magazine": null, "class": "VeryHeavyPistol", "melee": false, "notes": null }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Light Armorjack", "sp": 11 },
+        { "location": "Body", "name": "Light Armorjack", "sp": 11 }
+      ],
+      "skills": {
+        "Athletics": 7, "Basic Tech": 13, "Brawling": 7, "Concentration": 6, "Conversation": 8, "Cybertech": 13,
+        "Education": 12, "Electronics/Security Tech": 13, "Evasion": 7, "First Aid": 9, "Handgun": 12,
+        "Human Perception": 8, "Language (Spanish)": 12, "Language (Streetslang)": 10,
+        "Local Expert (Pacifica Playground)": 10, "Perception": 10, "Persuasion": 5, "Stealth": 7, "Weaponstech": 11
+      },
+      "gear": [
+        "Very Heavy Pistol Ammo x50"
+      ],
+      "cyberware": [
+        "Cyberaudio Suite w/ Audio Recorder, Bug Detector, and Internal Agent", "Tool Hand"
+      ],
+      "specials": [
+        {
+          "name": "Ferramentas",
+          "text": {
+            "pt": "Leva uma Tool Hand e um Cyberaudio Suite com Audio Recorder, Bug Detector e Internal Agent.",
+            "en": "Carries a Tool Hand and a Cyberaudio Suite with an Audio Recorder, Bug Detector and Internal Agent."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "dan-renzer",
+    "name": "Dan Renzer",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Lawman",
+    "roleRank": 1,
+    "rep": 2,
+    "affiliation": "Netwatch",
+    "sources": [
+      { "book": "Tales of the RED", "page": 109 },
+      { "book": "Tales of the RED", "page": 183 }
+    ],
+    "summary": {
+      "pt": "Ex-detetive da NCPD que se recusou a entrar no esquema de propinas e sofreu um acidente suspeito com um \"cyberpsycho\". Desiludido, entrou na Netwatch, onde não é Netrunner e ocupa o degrau mais baixo.",
+      "en": "A former NCPD detective who refused to play along with bought badges and had a suspicious \"cyberpsycho\" accident. Disillusioned, he joined Netwatch, where he is no Netrunner and sits on the bottom rung."
+    },
+    "sheetNote": {
+      "pt": "A biografia grafa o sobrenome como \"Rezner\"; mantido \"Renzer\", como na ficha.",
+      "en": "The biography spells the surname \"Rezner\"; kept as \"Renzer\", as on the sheet."
+    },
+    "sheet": {
+      "hp": 50,
+      "seriouslyWounded": 25,
+      "deathSave": 7,
+      "stats": { "INT": 7, "REF": 6, "DEX": 5, "TECH": 5, "COOL": 7, "WILL": 8, "MOVE": 6, "BODY": 7, "EMP": 4 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Shotgun", "skill": "Shoulder Arms", "attackBase": 12, "damage": "5d6", "rof": 1, "magazine": null, "class": "Shotgun", "melee": false, "notes": null },
+        { "name": "Heavy Pistol", "skill": "Handgun", "attackBase": 12, "damage": "3d6", "rof": 2, "magazine": null, "class": "HeavyPistol", "melee": false, "notes": null }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Kevlar®", "sp": 7 },
+        { "location": "Body", "name": "Kevlar®", "sp": 7 }
+      ],
+      "skills": {
+        "Athletics": 7, "Brawling": 11, "Concentration": 10, "Conversation": 8, "Criminology": 13, "Deduction": 13,
+        "Drive Land Vehicle": 9, "Education": 9, "Electronics/Security Tech": 9, "Evasion": 11, "First Aid": 7,
+        "Handgun": 12, "Human Perception": 6, "Interrogation": 13, "Language (Polish)": 11,
+        "Language (Streetslang)": 9, "Local Expert (Little Europe)": 9, "Perception": 9, "Persuasion": 9,
+        "Pilot Air Vehicle": 9, "Shoulder Arms": 12, "Stealth": 7, "Tracking": 13
+      },
+      "gear": [
+        "Slug Ammo x20", "Heavy Pistol Ammo x8", "Agent", "Compact Groundcar", "Flashlight", "Handcuffs x2",
+        "Radio Communicator", "Road Flare x10"
+      ],
+      "cyberware": [
+        "Cyberaudio w/ Voice Stress Analyzer", "Grafted Muscle and Bone Lace", "Medical Grade Cyberarm",
+        "Medical Grade Cyberleg"
+      ],
+      "specials": [
+        {
+          "name": "Backup",
+          "text": {
+            "pt": "Role Ability Backup no Rank 1.",
+            "en": "Role Ability Backup at Rank 1."
+          }
+        },
+        {
+          "name": "Sobrevivente",
+          "text": {
+            "pt": "Cyberarm e Cyberleg de grau médico, resultado do acidente que quase o matou.",
+            "en": "Medical Grade Cyberarm and Cyberleg, left over from the accident that nearly killed him."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "hardhat",
+    "name": "Hardhat",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Solo",
+    "roleRank": 2,
+    "rep": 2,
+    "affiliation": "Hardhat's crew",
+    "sources": [
+      { "book": "Tales of the RED", "page": 123 },
+      { "book": "Tales of the RED", "page": 186 }
+    ],
+    "summary": {
+      "pt": "Solo que acabou de entrar no Afterlife, faminta por reputação mas esperta o bastante para saber que isso leva tempo. Lidera uma equipe pequena que opera na Upper Marina, perto da Hot Zone.",
+      "en": "A Solo who just broke into the Afterlife, hungry for rep but shrewd enough to know it takes time. She leads a small crew based in the Upper Marina, next to the Hot Zone."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 40,
+      "seriouslyWounded": 20,
+      "deathSave": 6,
+      "stats": { "INT": 6, "REF": 8, "DEX": 8, "TECH": 3, "COOL": 5, "WILL": 6, "MOVE": 6, "BODY": 6, "EMP": 4 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Assault Rifle w/ Smartgun Link", "skill": "Shoulder Arms", "attackBase": 12, "damage": "5d6", "rof": 1, "magazine": null, "class": "AssaultRifle", "melee": false, "notes": "Excellent Quality" },
+        { "name": "Heavy Melee Weapon", "skill": "Melee Weapon", "attackBase": 12, "damage": "3d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Light Armorjack", "sp": 11 },
+        { "location": "Body", "name": "Light Armorjack", "sp": 11 }
+      ],
+      "skills": {
+        "Athletics": 14, "Autofire": 12, "Basic Tech": 10, "Brawling": 12, "Concentration": 10, "Conversation": 6,
+        "Education": 8, "Endurance": 10, "Evasion": 14, "First Aid": 5, "Handgun": 10, "Human Perception": 8,
+        "Language (English)": 10, "Language (Streetslang)": 8, "Local Expert (Upper Marina)": 10, "Melee Weapon": 12,
+        "Perception": 14, "Persuasion": 7, "Resist Torture/Drugs": 12, "Shoulder Arms": 12, "Stealth": 10,
+        "Tactics": 10
+      },
+      "gear": [
+        "Rifle Ammo x50", "Agent", "Binoculars", "Disposable Cellphone (on the table)", "Flashlight", "Handcuffs x2"
+      ],
+      "cyberware": [
+        "Neural Link w/ Interface Plugs and Kerenzikov"
+      ],
+      "specials": [
+        {
+          "name": "Combat Awareness",
+          "text": {
+            "pt": "Role Ability Combat Awareness no Rank 2.",
+            "en": "Role Ability Combat Awareness at Rank 2."
+          }
+        },
+        {
+          "name": "Kerenzikov",
+          "text": {
+            "pt": "Neural Link com Kerenzikov, que acelera a reação em combate.",
+            "en": "A Neural Link with a Kerenzikov for faster reactions in combat."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "bullhorn",
+    "name": "Bullhorn",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Fixer",
+    "roleRank": 2,
+    "rep": 1,
+    "affiliation": "Hardhat's crew",
+    "sources": [
+      { "book": "Tales of the RED", "page": 123 },
+      { "book": "Tales of the RED", "page": 183 }
+    ],
+    "summary": {
+      "pt": "Ex-funcionária de logística corporativa demitida por um erro de sistema, agora operadora independente na equipe da Hardhat.",
+      "en": "A former Corporate fulfillment worker fired over a clerical error, now an independent operator in Hardhat's crew."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 35,
+      "seriouslyWounded": 18,
+      "deathSave": 3,
+      "stats": { "INT": 6, "REF": 7, "DEX": 5, "TECH": 5, "COOL": 6, "WILL": 7, "MOVE": 5, "BODY": 3, "EMP": 4 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Heavy Pistol", "skill": "Handgun", "attackBase": 12, "damage": "3d6", "rof": 2, "magazine": null, "class": "HeavyPistol", "melee": false, "notes": "Excellent Quality" },
+        { "name": "Light Melee Weapon", "skill": "Melee Weapon", "attackBase": 5, "damage": "1d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": "No Skill Base printed for this weapon; STAT only." }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Light Armorjack", "sp": 11 },
+        { "location": "Body", "name": "Light Armorjack", "sp": 11 }
+      ],
+      "skills": {
+        "Acting": 12, "Athletics": 7, "Brawling": 7, "Bribery": 10, "Business": 12, "Concentration": 9,
+        "Conversation": 10, "Education": 10, "Evasion": 11, "First Aid": 7, "Forgery": 10, "Handgun": 12,
+        "Language (Cantonese)": 12, "Language (Streetslang)": 12, "Local Expert (Upper Marina)": 12, "Perception": 10,
+        "Persuasion": 10, "Pick Lock": 9, "Stealth": 7, "Streetwise": 10, "Trading": 10, "Wardrobe & Style": 12
+      },
+      "gear": [
+        "Heavy Pistol Ammo x20", "Agent", "Bug Detector", "Disposable Cellphone", "Lock Picking Set",
+        "Vial of Poison"
+      ],
+      "cyberware": [
+        "AudioVox", "Contraceptive Implant", "EMP Threading", "Light Tattoo x3"
+      ],
+      "specials": [
+        {
+          "name": "Operator",
+          "text": {
+            "pt": "Role Ability Operator no Rank 2.",
+            "en": "Role Ability Operator at Rank 2."
+          }
+        },
+        {
+          "name": "Veneno",
+          "text": {
+            "pt": "Leva um Vial of Poison e um Lock Picking Set para os trabalhos mais sujos.",
+            "en": "Carries a Vial of Poison and a Lock Picking Set for dirtier jobs."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "spanner",
+    "name": "Spanner",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Tech",
+    "roleRank": 1,
+    "rep": 1,
+    "affiliation": "Hardhat's crew",
+    "sources": [
+      { "book": "Tales of the RED", "page": 124 },
+      { "book": "Tales of the RED", "page": 192 }
+    ],
+    "summary": {
+      "pt": "Tech criado numa pequena comunidade indo-canadense na fronteira. A família perdeu a terra para um político violento e ele foi para Night City usar as habilidades técnicas como mercenário.",
+      "en": "A Tech from a small Indo-Canadian enclave across the border whose family lost its land to a violent politician; he smuggled south to Night City and put his skills to work as a mercenary."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 35,
+      "seriouslyWounded": 18,
+      "deathSave": 6,
+      "stats": { "INT": 7, "REF": 7, "DEX": 5, "TECH": 6, "COOL": 3, "WILL": 3, "MOVE": 6, "BODY": 6, "EMP": 5 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Shotgun", "skill": "Shoulder Arms", "attackBase": 12, "damage": "5d6", "rof": 1, "magazine": null, "class": "Shotgun", "melee": false, "notes": "Excellent Quality" },
+        { "name": "Medium Melee Weapon", "skill": "Melee Weapon", "attackBase": 5, "damage": "2d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": "No Skill Base printed for this weapon; STAT only." }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Light Armorjack", "sp": 11 },
+        { "location": "Body", "name": "Light Armorjack", "sp": 11 }
+      ],
+      "skills": {
+        "Athletics": 7, "Basic Tech": 11, "Brawling": 7, "Concentration": 5, "Conversation": 7, "Cybertech": 11,
+        "Education": 10, "Electronics/Security Tech": 11, "Evasion": 11, "First Aid": 12, "Human Perception": 7,
+        "Land Vehicle Tech": 11, "Language (English)": 11, "Language (Streetslang)": 9,
+        "Local Expert (Upper Marina)": 9, "Perception": 9, "Persuasion": 5, "Shoulder Arms": 12, "Stealth": 7,
+        "Weaponstech": 12
+      },
+      "gear": [
+        "Shotgun Shells x10", "Shotgun Slugs x10", "Agent", "Duct Tape x2", "Tech Bag", "Techtool"
+      ],
+      "cyberware": [
+        "Contraceptive Implant", "Neural Link w/ Interface Plugs"
+      ],
+      "specials": [
+        {
+          "name": "Maker",
+          "text": {
+            "pt": "Role Ability Maker no Rank 1 (Field Expertise 1, Fabrication Expertise 1).",
+            "en": "Role Ability Maker at Rank 1 (Field Expertise 1, Fabrication Expertise 1)."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "sledge",
+    "name": "Sledge",
+    "aliases": [],
+    "kind": "sheet",
+    "role": null,
+    "roleRank": null,
+    "rep": 0,
+    "affiliation": "Hardhat's crew",
+    "sources": [
+      { "book": "Tales of the RED", "page": 124 },
+      { "book": "Tales of the RED", "page": 192 }
+    ],
+    "summary": {
+      "pt": "Ex-operário e boxeador amador recrutado por Hardhat depois de vê-lo lutar. É o membro mais novo da equipe e ainda está aprendendo.",
+      "en": "A construction worker and amateur boxer Hardhat recruited after watching him fight. He is the newest member of the crew and still learning the ropes."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 40,
+      "seriouslyWounded": 20,
+      "deathSave": 8,
+      "stats": { "INT": 3, "REF": 4, "DEX": 7, "TECH": 2, "COOL": 2, "WILL": 3, "MOVE": 5, "BODY": 8, "EMP": 3 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Very Heavy Melee Weapon", "skill": "Melee Weapon", "attackBase": 12, "damage": "4d6", "rof": 1, "magazine": null, "class": null, "melee": true, "notes": "Excellent Quality" }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Light Armorjack", "sp": 11 },
+        { "location": "Body", "name": "Light Armorjack", "sp": 11 }
+      ],
+      "skills": {
+        "Athletics": 11, "Brawling": 12, "Concentration": 7, "Conversation": 5, "Education": 5, "Evasion": 10,
+        "First Aid": 4, "Handgun": 8, "Human Perception": 5, "Interrogation": 6, "Language (German)": 7,
+        "Language (Streetslang)": 7, "Local Expert (Upper Marina)": 5, "Melee Weapon": 12, "Perception": 5,
+        "Persuasion": 4, "Resist Torture/Drugs": 5, "Stealth": 9
+      },
+      "gear": [
+        "Agent", "Radio Scanner/Music Player"
+      ],
+      "cyberware": [
+        "Grafted Muscle and Bone Lace", "Independent Air Supply"
+      ],
+      "specials": [
+        {
+          "name": "Marreta",
+          "text": {
+            "pt": "Luta com uma arma de corpo a corpo muito pesada de Qualidade Excelente.",
+            "en": "Fights with an Excellent Quality very heavy melee weapon."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "nat",
+    "name": "Nat",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Solo",
+    "roleRank": 5,
+    "rep": 4,
+    "affiliation": "Jodes Nomad Nation",
+    "sources": [
+      { "book": "Tales of the RED", "page": 125 },
+      { "book": "Tales of the RED", "page": 190 }
+    ],
+    "summary": {
+      "pt": "Guerreira Nomad da Jodes Nomad Nation que levava comida pela costa oeste. Sua Pack foi emboscada por uma equipe contratada pela Continental Brands, só ela sobreviveu e agora quer vingança.",
+      "en": "A skilled Nomad warrior of the Jodes Nomad Nation who hauled food along the west coast. Her Pack was ambushed by a crew in Continental Brands' pay, she alone survived, and she wants payback."
+    },
+    "sheetNote": {
+      "pt": "A ficha lista duas Role Abilities: Solo Combat Awareness 5 (Role principal) e Nomad Moto 1.",
+      "en": "The sheet lists two Role Abilities: Solo Combat Awareness 5 (main Role) and Nomad Moto 1."
+    },
+    "sheet": {
+      "hp": 55,
+      "seriouslyWounded": 28,
+      "deathSave": 10,
+      "stats": { "INT": 6, "REF": 8, "DEX": 8, "TECH": 5, "COOL": 4, "WILL": 7, "MOVE": 8, "BODY": 10, "EMP": 4 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Very Heavy Pistol", "skill": "Handgun", "attackBase": 16, "damage": "4d6", "rof": 1, "magazine": null, "class": "VeryHeavyPistol", "melee": false, "notes": null },
+        { "name": "Heavy Melee Weapon", "skill": "Melee Weapon", "attackBase": 16, "damage": "3d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": "Excellent Quality" }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Subdermal Armor", "sp": 11 },
+        { "location": "Body", "name": "Subdermal Armor", "sp": 11 }
+      ],
+      "skills": {
+        "Athletics": 10, "Brawling": 16, "Concentration": 10, "Conversation": 7, "Education": 8, "Evasion": 16,
+        "First Aid": 8, "Handgun": 16, "Human Perception": 7, "Interrogation": 13, "Language (English)": 10,
+        "Language (Scottish)": 10, "Language (Spanish)": 10, "Language (Streetslang)": 8,
+        "Local Expert (Badlands)": 8, "Martial Arts (Karate)": 16, "Melee Weapon": 16, "Perception": 12,
+        "Persuasion": 7, "Resist Torture/Drugs": 16, "Stealth": 16, "Tactics": 14
+      },
+      "gear": [
+        "Very Heavy Pistol Ammo x16", "EMP Grenade x2", "Smoke Grenade x2", "Disposable Cellphone"
+      ],
+      "cyberware": [
+        "Cyberarm w/ Grapple Hand and Popup Microwaver", "Cybereye x2 w/ Lowlight/Infrared Vision/UV",
+        "Grafted Muscle & Bone Lace", "Medical Grade Cyberleg", "Neural Link w/ Sandevistan"
+      ],
+      "specials": [
+        {
+          "name": "Combat Awareness",
+          "text": {
+            "pt": "Role Ability Combat Awareness no Rank 5.",
+            "en": "Role Ability Combat Awareness at Rank 5."
+          }
+        },
+        {
+          "name": "Moto",
+          "text": {
+            "pt": "Segunda Role Ability: Moto no Rank 1, mas no momento ela está sem veículo.",
+            "en": "Second Role Ability: Moto at Rank 1, though she currently has no vehicle."
+          }
+        },
+        {
+          "name": "Karatê",
+          "text": {
+            "pt": "Martial Arts (Karate) 16 e Sandevistan na Neural Link.",
+            "en": "Martial Arts (Karate) 16 and a Sandevistan in her Neural Link."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "the-impaler",
+    "name": "The Impaler",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Solo",
+    "roleRank": 1,
+    "rep": 0,
+    "affiliation": "Lost Kids",
+    "sources": [
+      { "book": "Tales of the RED", "page": 146 },
+      { "book": "Tales of the RED", "page": 186 }
+    ],
+    "summary": {
+      "pt": "Garoto de rua dos Lost Kids que cresceu na Street e achou abrigo em Home. Treina os mais novos em autodefesa e teme o que acontece quando fizer 21 anos e perder o apoio do lugar.",
+      "en": "A Lost Kids member who grew up on the Street and found refuge in Home. He trains the younger kids in self defense and worries about life after he turns 21 and loses Home's support."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 35,
+      "seriouslyWounded": 18,
+      "deathSave": 5,
+      "stats": { "INT": 5, "REF": 7, "DEX": 6, "TECH": 4, "COOL": 4, "WILL": 4, "MOVE": 5, "BODY": 5, "EMP": 6 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Heavy Pistol", "skill": "Handgun", "attackBase": 13, "damage": "3d6", "rof": 2, "magazine": null, "class": "HeavyPistol", "melee": false, "notes": "Poor Quality" },
+        { "name": "Medium Melee Weapon", "skill": "Melee Weapon", "attackBase": 12, "damage": "2d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
+      ],
+      "armor": [
+        { "location": "Body", "name": "Leathers", "sp": 4 }
+      ],
+      "skills": {
+        "Athletics": 10, "Brawling": 10, "Conceal/Reveal Object": 7, "Concentration": 6, "Conversation": 5,
+        "Education": 7, "Endurance": 8, "Evasion": 8, "First Aid": 6, "Handgun": 13, "Human Perception": 8,
+        "Interrogation": 8, "Language (English)": 9, "Language (Streetslang)": 7, "Local Expert (Old Combat Zone)": 7,
+        "Local Expert (Sewers)": 7, "Melee Weapon": 12, "Perception": 9, "Persuasion": 6, "Resist Torture/Drugs": 6,
+        "Stealth": 12
+      },
+      "gear": [
+        "Heavy Pistol Ammo x8", "Flashlight", "Grapple Gun", "Rope (60 m/yds)"
+      ],
+      "cyberware": [
+        "Upgraded Megabite (Package containing Vampyres w/ Suction Pump, Chemskin, and Shift Tacts)"
+      ],
+      "specials": [
+        {
+          "name": "Combat Awareness",
+          "text": {
+            "pt": "Role Ability Combat Awareness no Rank 1.",
+            "en": "Role Ability Combat Awareness at Rank 1."
+          }
+        },
+        {
+          "name": "Megabite",
+          "text": {
+            "pt": "Pacote Upgraded Megabite com Vampyres e Suction Pump, Chemskin e Shift Tacts.",
+            "en": "An Upgraded Megabite package: Vampyres with a Suction Pump, Chemskin and Shift Tacts."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "asher",
+    "name": "Asher",
+    "aliases": [],
+    "kind": "sheet",
+    "role": null,
+    "roleRank": null,
+    "rep": 0,
+    "affiliation": "Lost Kids",
+    "sources": [
+      { "book": "Tales of the RED", "page": 146 },
+      { "book": "Tales of the RED", "page": 182 }
+    ],
+    "summary": {
+      "pt": "Membro dos Lost Kids, de cabelo branco, namorade de Flaxx. Sabe mexer com as emoções para conseguir favores e comida, e chama a bartender Zero Gees de \"mãe\".",
+      "en": "A white-haired Lost Kids member dating Flaxx. Knows how to work on feelings to earn favors and meals, and calls the bartender Zero Gees \"Mom\"."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 25,
+      "seriouslyWounded": 13,
+      "deathSave": 4,
+      "stats": { "INT": 2, "REF": 6, "DEX": 5, "TECH": 2, "COOL": 4, "WILL": 2, "MOVE": 4, "BODY": 4, "EMP": 4 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Light Melee Weapon", "skill": "Melee Weapon", "attackBase": 8, "damage": "1d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
+      ],
+      "armor": [],
+      "skills": {
+        "Athletics": 9, "Brawling": 9, "Conceal/Reveal Object": 4, "Concentration": 4, "Conversation": 5,
+        "Education": 4, "Endurance": 6, "Evasion": 7, "First Aid": 4, "Human Perception": 5, "Interrogation": 6,
+        "Language (English)": 6, "Language (Streetslang)": 9, "Local Expert (Sewers)": 4, "Melee Weapon": 8,
+        "Perception": 6, "Personal Grooming": 8, "Persuasion": 8, "Resist Torture/Drugs": 4, "Stealth": 7,
+        "Wardrobe & Style": 10
+      },
+      "gear": [
+        "Disposable Cellphone"
+      ],
+      "cyberware": [
+        "Techhair", "Upgraded Megabite (Package containing Vampyres w/ Suction Pump, Chemskin, and Shift Tacts)"
+      ],
+      "specials": [
+        {
+          "name": "Megabite",
+          "text": {
+            "pt": "Pacote Upgraded Megabite com Vampyres e Suction Pump, Chemskin e Shift Tacts.",
+            "en": "An Upgraded Megabite package: Vampyres with a Suction Pump, Chemskin and Shift Tacts."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "dave",
+    "name": "Dave",
+    "aliases": [],
+    "kind": "sheet",
+    "role": null,
+    "roleRank": null,
+    "rep": 0,
+    "affiliation": "Lost Kids",
+    "sources": [
+      { "book": "Tales of the RED", "page": 147 },
+      { "book": "Tales of the RED", "page": 184 }
+    ],
+    "summary": {
+      "pt": "Médico dos Lost Kids. Carrega uma pistola média que nunca disparou, fala pouco e sofre de depressão e estresse pós-traumático por ter humilhado alguém no passado.",
+      "en": "The Lost Kids' medic. He carries a Medium Pistol he has never fired, says little, and lives with depression and PTSD over a bullying incident he caused."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 25,
+      "seriouslyWounded": 13,
+      "deathSave": 4,
+      "stats": { "INT": 2, "REF": 6, "DEX": 5, "TECH": 2, "COOL": 4, "WILL": 2, "MOVE": 4, "BODY": 4, "EMP": 4 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Medium Pistol", "skill": "Handgun", "attackBase": 8, "damage": "2d6", "rof": 2, "magazine": null, "class": "MediumPistol", "melee": false, "notes": "Poor Quality" }
+      ],
+      "armor": [],
+      "skills": {
+        "Athletics": 9, "Brawling": 9, "Conceal/Reveal Object": 4, "Concentration": 4, "Conversation": 5,
+        "Education": 4, "Endurance": 6, "Evasion": 7, "First Aid": 8, "Handgun": 8, "Human Perception": 5,
+        "Interrogation": 6, "Language (English)": 6, "Language (Streetslang)": 9, "Local Expert (Sewers)": 4,
+        "Melee Weapon": 8, "Perception": 6, "Persuasion": 6, "Resist Torture/Drugs": 4, "Stealth": 7
+      },
+      "gear": [
+        "Medium Pistol Ammo x8", "Disposable Cellphone"
+      ],
+      "cyberware": [
+        "Upgraded Megabite (Package containing Vampyres w/ Suction Pump, Chemskin, and Shift Tacts)"
+      ],
+      "specials": [
+        {
+          "name": "Megabite",
+          "text": {
+            "pt": "Pacote Upgraded Megabite com Vampyres e Suction Pump, Chemskin e Shift Tacts.",
+            "en": "An Upgraded Megabite package: Vampyres with a Suction Pump, Chemskin and Shift Tacts."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "flaxx",
+    "name": "Flaxx",
+    "aliases": [],
+    "kind": "sheet",
+    "role": null,
+    "roleRank": null,
+    "rep": 0,
+    "affiliation": "Lost Kids",
+    "sources": [
+      { "book": "Tales of the RED", "page": 147 },
+      { "book": "Tales of the RED", "page": 186 }
+    ],
+    "summary": {
+      "pt": "Membro alto e magro dos Lost Kids, de cabeça raspada. Leal mas esquentado, desconfia de estranhos, foge dos problemas e namora Asher.",
+      "en": "A tall, thin, shaven-headed Lost Kids member. Loyal but hot-tempered, wary of strangers, prone to running from problems, and dating Asher."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 25,
+      "seriouslyWounded": 13,
+      "deathSave": 4,
+      "stats": { "INT": 2, "REF": 6, "DEX": 5, "TECH": 2, "COOL": 4, "WILL": 2, "MOVE": 4, "BODY": 4, "EMP": 4 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Light Melee Weapon", "skill": "Melee Weapon", "attackBase": 8, "damage": "1d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
+      ],
+      "armor": [],
+      "skills": {
+        "Athletics": 9, "Brawling": 9, "Conceal/Reveal Object": 4, "Concentration": 4, "Conversation": 5,
+        "Education": 4, "Endurance": 6, "Evasion": 7, "First Aid": 8, "Human Perception": 5, "Interrogation": 6,
+        "Language (Spanish)": 6, "Language (Streetslang)": 9, "Local Expert (Sewers)": 8, "Melee Weapon": 8,
+        "Perception": 6, "Persuasion": 6, "Resist Torture/Drugs": 4, "Stealth": 7
+      },
+      "gear": [
+        "Disposable Cellphone"
+      ],
+      "cyberware": [
+        "Upgraded Megabite (Package containing Vampyres w/ Suction Pump, Chemskin, and Shift Tacts)"
+      ],
+      "specials": [
+        {
+          "name": "Megabite",
+          "text": {
+            "pt": "Pacote Upgraded Megabite com Vampyres e Suction Pump, Chemskin e Shift Tacts.",
+            "en": "An Upgraded Megabite package: Vampyres with a Suction Pump, Chemskin and Shift Tacts."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "two-thee",
+    "name": "Two Thee",
+    "aliases": [],
+    "kind": "sheet",
+    "role": null,
+    "roleRank": null,
+    "rep": 1,
+    "affiliation": "Lost Kids",
+    "sources": [
+      { "book": "Tales of the RED", "page": 148 },
+      { "book": "Tales of the RED", "page": 193 }
+    ],
+    "summary": {
+      "pt": "Vigia dos Lost Kids, órfão de pais assassinados por um Exec rival. Fala pouco e escuta muito, usa roupa esportiva para correr e se esconder e chama gente suspeita de \"doombas\".",
+      "en": "The Lost Kids' lookout, an orphan after a rival Exec had his parents killed. Says little, listens a lot, wears athletic gear for running and hiding, and calls untrustworthy people \"doombas\"."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 25,
+      "seriouslyWounded": 13,
+      "deathSave": 3,
+      "stats": { "INT": 4, "REF": 6, "DEX": 4, "TECH": 4, "COOL": 3, "WILL": 3, "MOVE": 3, "BODY": 3, "EMP": 3 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Medium Melee Weapon", "skill": "Melee Weapon", "attackBase": 8, "damage": "2d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
+      ],
+      "armor": [],
+      "skills": {
+        "Athletics": 10, "Basic Tech": 10, "Brawling": 6, "Bureaucracy": 6, "Concentration": 5, "Conversation": 6,
+        "Education": 10, "Electronics/Security Tech": 10, "Endurance": 5, "Evasion": 6, "First Aid": 6,
+        "Human Perception": 5, "Language (Oromo)": 6, "Language (Streetslang)": 6, "Library Search": 10,
+        "Local Expert (Morro Rock)": 6, "Melee Weapon": 8, "Perception": 6, "Persuasion": 5, "Stealth": 9
+      },
+      "gear": [
+        "Flashlight", "Techtool"
+      ],
+      "cyberware": [
+        "Cybereye w/ MicroOptics, TeleOptics",
+        "Upgraded Megabite (Package containing Vampyres w/ Suction Pump, Chemskin, and Shift Tacts)"
+      ],
+      "specials": [
+        {
+          "name": "Megabite",
+          "text": {
+            "pt": "Pacote Upgraded Megabite com Vampyres e Suction Pump, Chemskin e Shift Tacts.",
+            "en": "An Upgraded Megabite package: Vampyres with a Suction Pump, Chemskin and Shift Tacts."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "lilah-deckard",
+    "name": "Lilah Deckard",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Exec",
+    "roleRank": 5,
+    "rep": 4,
+    "affiliation": "Cactus Water",
+    "sources": [
+      { "book": "Tales of the RED", "page": 148 },
+      { "book": "Tales of the RED", "page": 187 },
+      { "book": "Tales of the RED", "page": 189 }
+    ],
+    "summary": {
+      "pt": "CEO da Cactus Water, empresa da Petrochem que vende água de torneira como \"homeopática\". Sonhava com uma vida suburbana tranquila, mas o marido sumiu e o Red Knight matou os dois filhos. Tem dinheiro e poder e nunca se sentiu tão impotente.",
+      "en": "CEO of Cactus Water, the Petrochem spin-off that sells tap water as \"homeopathic\". She wanted a quiet suburban life, but her husband vanished and Red Knight drove both her children to their deaths. She has money and power and has never felt so powerless."
+    },
+    "sheetNote": {
+      "pt": "A ficha imprime \"Subermal (Head)\" nas duas linhas de armadura; registrado como Subdermal Armor na cabeça e no corpo, pois o implante cobre os dois.",
+      "en": "The sheet prints \"Subermal (Head)\" on both armor rows; entered as Subdermal Armor on Head and Body, since the implant covers both."
+    },
+    "sheet": {
+      "hp": 40,
+      "seriouslyWounded": 20,
+      "deathSave": 5,
+      "stats": { "INT": 5, "REF": 7, "DEX": 7, "TECH": 3, "COOL": 6, "WILL": 7, "MOVE": 5, "BODY": 5, "EMP": 5 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Medium Pistol", "skill": "Handgun", "attackBase": 13, "damage": "3d6", "rof": 2, "magazine": null, "class": "MediumPistol", "melee": false, "notes": "Excellent Quality" }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Subdermal Armor", "sp": 11 },
+        { "location": "Body", "name": "Subdermal Armor", "sp": 11 }
+      ],
+      "skills": {
+        "Accounting": 11, "Athletics": 9, "Brawling": 9, "Bureaucracy": 11, "Business": 11, "Concentration": 9,
+        "Conversation": 11, "Deduction": 11, "Education": 11, "Evasion": 13, "First Aid": 5, "Handgun": 13,
+        "Human Perception": 11, "Language (English)": 9, "Language (Streetslang)": 7, "Lip Reading": 11,
+        "Local Expert (Exec Zone)": 7, "Perception": 9, "Personal Grooming": 10, "Persuasion": 12, "Stealth": 9,
+        "Wardrobe & Style": 10
+      },
+      "gear": [
+        "Medium Pistol Ammo x12", "Businesswear Jewelry", "Memory Chip x2", "Radio Scanner/Music Player",
+        "Smart Lens (contact lens with Chyron installed, linked to Internal Agent)"
+      ],
+      "cyberware": [
+        "Biomonitor", "Contraceptive Implant", "Cyberaudio Suite w/ Internal Agent", "Subdermal Armor"
+      ],
+      "specials": [
+        {
+          "name": "Teamwork",
+          "text": {
+            "pt": "Role Ability Teamwork no Rank 5 (Bodyguard, Driver).",
+            "en": "Role Ability Teamwork at Rank 5 (Bodyguard, Driver)."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "raegan-pro-halley",
+    "name": "Raegan “Pro” Halley",
+    "aliases": ["Pro", "Kandra"],
+    "kind": "sheet",
+    "role": "Rockerboy",
+    "roleRank": 7,
+    "rep": 5,
+    "affiliation": "Protocon",
+    "sources": [
+      { "book": "Tales of the RED", "page": 168 },
+      { "book": "Tales of the RED", "page": 190 }
+    ],
+    "summary": {
+      "pt": "Vocalista da Protocon, criada na Executive Zone com dinheiro e contatos do pai, que nunca quis saber o que ele fazia. Mudou de nome e de rosto para subir, amou Layla Deckard e, depois da morte dela, não larga a busca pela verdade.",
+      "en": "Lead singer of Protocon, raised in the Executive Zone on her father's money and connections without ever asking what he did. She changed her name and face to go pro, loved Layla Deckard, and since Layla's death can't let go of finding the truth."
+    },
+    "sheetNote": {
+      "pt": "A ficha imprime a linha de arma duas vezes (uma por sapato); registrada uma vez.",
+      "en": "The sheet prints the weapon line twice (one per shoe); entered once."
+    },
+    "sheet": {
+      "hp": 40,
+      "seriouslyWounded": 20,
+      "deathSave": 4,
+      "stats": { "INT": 4, "REF": 6, "DEX": 7, "TECH": 7, "COOL": 7, "WILL": 8, "MOVE": 7, "BODY": 4, "EMP": 6 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Light Melee Weapon (in shoe)", "skill": "Melee Weapon", "attackBase": 13, "damage": "1d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": "Excellent Quality" }
+      ],
+      "armor": [
+        { "location": "Body", "name": "Kevlar®", "sp": 7 }
+      ],
+      "skills": {
+        "Athletics": 9, "Brawling": 13, "Composition": 10, "Concentration": 10, "Conversation": 10, "Education": 7,
+        "Evasion": 13, "First Aid": 11, "Handgun": 12, "Human Perception": 12, "Language (English)": 8,
+        "Language (Streetslang)": 10, "Local Expert (Exec Zone)": 8, "Melee Weapon": 13, "Perception": 7,
+        "Personal Grooming": 17, "Persuasion": 13, "Play Instrument (Harp)": 11, "Play Instrument (Singing)": 13,
+        "Stealth": 9, "Streetwise": 13, "Wardrobe & Style": 17
+      },
+      "gear": [
+        "Agent", "Harp", "Handcuffs (disguised as bangles)", "Pocket Amp", "Portable Microphone",
+        "Radio Scanner/Music Player"
+      ],
+      "cyberware": [
+        "AudioVox", "Biomonitor", "Chemskin", "Contraceptive Implant", "Light Tattoo x3", "Shift Tacts", "Skinwatch",
+        "Techhair"
+      ],
+      "specials": [
+        {
+          "name": "Charismatic Impact",
+          "text": {
+            "pt": "Role Ability Charismatic Impact no Rank 7.",
+            "en": "Role Ability Charismatic Impact at Rank 7."
+          }
+        },
+        {
+          "name": "Lâminas nos sapatos",
+          "text": {
+            "pt": "As armas corpo a corpo leves ficam escondidas nos sapatos.",
+            "en": "Her light melee weapons are hidden in her shoes."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "shanna-to-doole",
+    "name": "Shanna “To” Doole",
+    "aliases": ["To"],
+    "kind": "sheet",
+    "role": "Rockerboy",
+    "roleRank": 5,
+    "rep": 4,
+    "affiliation": "Protocon",
+    "sources": [
+      { "book": "Tales of the RED", "page": 168 },
+      { "book": "Tales of the RED", "page": 192 }
+    ],
+    "summary": {
+      "pt": "Baterista da Protocon e empresária de fato da banda. Esperta e boa de negociação, vê a banda como família e sabe que cabe a ela proteger os outros, porque Raegan age sem pensar e Kinnith concorda com tudo.",
+      "en": "Drummer of Protocon and the band's de facto manager. Shrewd and a good negotiator, she treats the band as family and knows it falls on her to keep it safe, since Raegan leaps without thinking and Kinnith goes along with anything."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 40,
+      "seriouslyWounded": 20,
+      "deathSave": 4,
+      "stats": { "INT": 6, "REF": 6, "DEX": 6, "TECH": 5, "COOL": 7, "WILL": 8, "MOVE": 5, "BODY": 4, "EMP": 6 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Light Melee Weapon", "skill": "Melee Weapon", "attackBase": 10, "damage": "1d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": "Excellent Quality" }
+      ],
+      "armor": [
+        { "location": "Body", "name": "Kevlar®", "sp": 7 }
+      ],
+      "skills": {
+        "Accounting": 12, "Athletics": 7, "Basic Tech": 7, "Brawling": 7, "Bureaucracy": 10, "Business": 10,
+        "Concentration": 10, "Conversation": 12, "Deduction": 10, "Education": 10, "Electronics/Security Tech": 7,
+        "Evasion": 9, "First Aid": 8, "Human Perception": 8, "Language (French)": 8, "Language (Streetslang)": 12,
+        "Local Expert (Upper Marina)": 8, "Melee Weapon": 10, "Perception": 8, "Personal Grooming": 10,
+        "Persuasion": 13, "Play Instrument (Drums)": 13, "Play Instrument (Singing)": 8, "Streetwise": 8,
+        "Wardrobe & Style": 10
+      },
+      "gear": [
+        "Agent", "Drum Synthesizer", "Drumsticks", "Memory Chips x10", "Radio Scanner/Music Player"
+      ],
+      "cyberware": [
+        "Contraceptive Implant", "Cyberaudio Suite w/ Audio Recorder", "Neural Link w/ Chipware Socket"
+      ],
+      "specials": [
+        {
+          "name": "Charismatic Impact",
+          "text": {
+            "pt": "Role Ability Charismatic Impact no Rank 5.",
+            "en": "Role Ability Charismatic Impact at Rank 5."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "kinneth-con-de-leon",
+    "name": "Kinneth “Con” de Léon",
+    "aliases": ["Con"],
+    "kind": "sheet",
+    "role": "Rockerboy",
+    "roleRank": 4,
+    "rep": 4,
+    "affiliation": "Protocon",
+    "sources": [
+      { "book": "Tales of the RED", "page": 169 },
+      { "book": "Tales of the RED", "page": 187 }
+    ],
+    "summary": {
+      "pt": "Guitarrista da Protocon. Parece cínico e convencido, mas é máscara: tem medo de não estar à altura dos colegas de banda e é quem sente a música de forma mais pura.",
+      "en": "Protocon's guitarist. He acts cocky and unaffected, but it is a mask: he fears he doesn't measure up to his bandmates and feels the music most purely of them all."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 35,
+      "seriouslyWounded": 18,
+      "deathSave": 5,
+      "stats": { "INT": 4, "REF": 6, "DEX": 6, "TECH": 7, "COOL": 7, "WILL": 4, "MOVE": 7, "BODY": 5, "EMP": 5 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Heavy Melee Weapon (in guitar)", "skill": "Melee Weapon", "attackBase": 8, "damage": "3d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": "Excellent Quality" }
+      ],
+      "armor": [
+        { "location": "Body", "name": "Kevlar®", "sp": 7 }
+      ],
+      "skills": {
+        "Athletics": 9, "Basic Tech": 10, "Brawling": 9, "Concentration": 6, "Conversation": 12, "Education": 8,
+        "Electronics/Security Tech": 8, "Evasion": 9, "First Aid": 9, "Human Perception": 12,
+        "Language (Spanish)": 10, "Language (Streetslang)": 10, "Local Expert (Upper Marina)": 9, "Melee Weapon": 8,
+        "Perception": 8, "Personal Grooming": 11, "Persuasion": 13, "Play Instrument (Guitar)": 12,
+        "Play Instrument (Sing)": 10, "Streetwise": 8, "Wardrobe & Style": 13
+      },
+      "gear": [
+        "Agent", "Electric Guitar", "Memory Chips x10", "Portable Amp", "Radio Scanner/Music Player"
+      ],
+      "cyberware": [
+        "Chemskin", "Contraceptive Implant", "Enhanced Antibodies", "Light Tattoo x3", "Shift Tacs", "Toxin Binders"
+      ],
+      "specials": [
+        {
+          "name": "Charismatic Impact",
+          "text": {
+            "pt": "Role Ability Charismatic Impact no Rank 4.",
+            "en": "Role Ability Charismatic Impact at Rank 4."
+          }
+        },
+        {
+          "name": "Arma na guitarra",
+          "text": {
+            "pt": "A arma corpo a corpo pesada de Qualidade Excelente está embutida na guitarra.",
+            "en": "An Excellent Quality heavy melee weapon is built into his guitar."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "red-knight",
+    "name": "Red Knight",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Netrunner",
+    "roleRank": 6,
+    "rep": 5,
+    "affiliation": null,
+    "sources": [
+      { "book": "Tales of the RED", "page": 169 },
+      { "book": "Tales of the RED", "page": 191 }
+    ],
+    "summary": {
+      "pt": "Identidade que um herdeiro entediado dos Deckard assumiu depois de uma brincadeira que acabou na morte da irmã e do namorado dela. Mergulhado em Black Lace e cyberpsicose, quer punir a família Deckard inteira.",
+      "en": "The identity a bored Deckard heir took on after a prank ended with his sister and her boyfriend dead. Sunk in Black Lace and Cyberpsychosis, he means to punish the whole Deckard family."
+    },
+    "sheetNote": {
+      "pt": "A ficha lista duas Role Abilities: Netrunner Interface 6 (Role principal) e Solo Combat Awareness 2. A ficha imprime \"Electronic/Security Tech\"; registrado como Electronics/Security Tech.",
+      "en": "The sheet lists two Role Abilities: Netrunner Interface 6 (main Role) and Solo Combat Awareness 2. The sheet prints \"Electronic/Security Tech\"; entered as Electronics/Security Tech."
+    },
+    "sheet": {
+      "hp": 45,
+      "seriouslyWounded": 23,
+      "deathSave": 8,
+      "stats": { "INT": 8, "REF": 8, "DEX": 8, "TECH": 6, "COOL": 3, "WILL": 6, "MOVE": 7, "BODY": 8, "EMP": -2 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Very Heavy Melee Weapon (claymore)", "skill": "Melee Weapon", "attackBase": 14, "damage": "4d6", "rof": 1, "magazine": null, "class": null, "melee": true, "notes": null }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Bodyweight Suit", "sp": 11 },
+        { "location": "Body", "name": "Bodyweight Suit", "sp": 11 }
+      ],
+      "skills": {
+        "Athletics": 10, "Basic Tech": 12, "Brawling": 10, "Conceal/Reveal Object": 10, "Concentration": 8,
+        "Conversation": 0, "Cryptography": 12, "Deduction": 12, "Education": 12, "Electronics/Security Tech": 12,
+        "Evasion": 12, "First Aid": 8, "Forgery": 12, "Human Perception": 0, "Language (English)": 12,
+        "Language (Streetslang)": 10, "Library Search": 14, "Local Expert (Seral Grove)": 10, "Melee Weapon": 14,
+        "Perception": 10, "Persuasion": 5, "Pick Lock": 12, "Stealth": 12, "Tactics": 10
+      },
+      "gear": [
+        "Airhypos x2 (loaded w/ Black Lace and Synthcoke)", "Agent", "Excellent Quality Cyberdeck", "Silver Keycard",
+        "Cyberdeck Hardware: DNA Lock, Insulated Wiring (in Bodyweight Suit), Range Upgrade",
+        "Cyberdeck Programs: Armor, Eraser, Hellbolt, Speedy Gonzalvez, Superglue, Sword"
+      ],
+      "cyberware": [
+        "Grafted Muscle and Bone Lace", "Neural Link w/ Interface Plugs, Kerenzikov"
+      ],
+      "specials": [
+        {
+          "name": "Interface",
+          "text": {
+            "pt": "Role Ability Interface no Rank 6.",
+            "en": "Role Ability Interface at Rank 6."
+          }
+        },
+        {
+          "name": "Segunda Role Ability",
+          "text": {
+            "pt": "Solo Combat Awareness no Rank 2, além do Interface.",
+            "en": "Solo Combat Awareness at Rank 2 on top of Interface."
+          }
+        },
+        {
+          "name": "DNA Lock",
+          "text": {
+            "pt": "O Cyberdeck tem DNA Lock e Range Upgrade, e há duas seringas com Black Lace e Synthcoke.",
+            "en": "The Cyberdeck has a DNA Lock and Range Upgrade, and two airhypos hold Black Lace and Synthcoke."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "aisha-tiang",
+    "name": "Aisha “Ai” Tiang",
+    "aliases": ["Ai"],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": null,
+    "sources": [
+      { "book": "Tales of the RED", "page": 182 }
+    ],
+    "summary": {
+      "pt": "Ex-funcionária de suporte da 4overTechnologies e antiga namorada de Kodai Khan. Depois do Soulkill, a \"nova\" Aisha existe só como construto virtual no Agent dele, quase idêntica à original, ao menos na visão de Kodai.",
+      "en": "A former customer-support employee at 4overTechnologies and Kodai Khan's longtime partner. After the Soulkill, the \"new\" Aisha exists only as a virtual construct in his Agent, nearly identical to the original, at least to Kodai."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "anya",
+    "name": "Anya",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": null,
+    "sources": [
+      { "book": "Tales of the RED", "page": 182 }
+    ],
+    "summary": {
+      "pt": "Assistente pessoal e agente secreta de Michael Deckard. Apesar do cyberware, sonha com uma vida natural num mundo em que a Biotechnica aposentou a cibernética, e finge afeto pelo chefe para subir na empresa.",
+      "en": "Michael Deckard's personal assistant and covert operative. Chromed as she is, she dreams of a fully natural life in a future where Biotechnica has made cyberware obsolete, and fakes affection for her boss to climb the corporate ladder."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "ashley",
+    "name": "Ashley",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Simwives",
+    "sources": [
+      { "book": "Tales of the RED", "page": 182 }
+    ],
+    "summary": {
+      "pt": "Adolescente de Night City, a integrante mais barulhenta e ousada das Simwives, fã-clube de Etan Sim.",
+      "en": "A Night City teenager, the brashest voice among the Simwives, a fan club devoted to Etan Sim."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "auntie-ivy",
+    "name": "Auntie Ivy",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Dirty Hippies",
+    "sources": [
+      { "book": "Tales of the RED", "page": 182 }
+    ],
+    "summary": {
+      "pt": "Mulher de meia-idade, durona e de camisa xadrez, com dedo verde de verdade. Integra os Dirty Hippies e entende de hidroponia.",
+      "en": "A hard-bitten middle-aged woman in flannel whose thumb really is green. She belongs to the Dirty Hippies and knows hydroponics inside out."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "barbara-dahl",
+    "name": "Barbara Dahl",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Network 54",
+    "sources": [
+      { "book": "Tales of the RED", "page": 182 }
+    ],
+    "summary": {
+      "pt": "Apresentadora do jornal da noite da Network 54, conhecida por sorrir em qualquer crise. É a obsessão de Lord Ruthven.",
+      "en": "Evening news anchor for Network 54, known for smiling through any crisis. She is the object of Lord Ruthven's obsession."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "buck",
+    "name": "Buck",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Senait Sisters' production company",
+    "sources": [
+      { "book": "Tales of the RED", "page": 183 }
+    ],
+    "summary": {
+      "pt": "Alto, de camisa xadrez e com jeito de interior dos EUA, comanda a oficina de efeitos práticos da produtora das irmãs Senait.",
+      "en": "A tall, flannel-wearing Midwesterner who manages the practical-effects shop at the Senait Sisters' studio."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "cheech",
+    "name": "Cheech",
+    "aliases": ["Wizard"],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Jack ‘N’ the Green",
+    "sources": [
+      { "book": "Tales of the RED", "page": 183 }
+    ],
+    "summary": {
+      "pt": "Conhecido como Wizard, dirige a Jack ‘N’ the Green, empresa de Reclaimers que opera a partir de Rancho Coronado.",
+      "en": "Nicknamed the Wizard, he is in charge of Jack ‘N’ the Green, a Reclaimer outfit working from Rancho Coronado."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "cookie",
+    "name": "Cookie",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Senait Sisters' production company",
+    "sources": [
+      { "book": "Tales of the RED", "page": 183 }
+    ],
+    "summary": {
+      "pt": "Chefe do bufê no set da produtora das irmãs Senait. Seu trabalho é manter a equipe alimentada e o elenco satisfeito com pedidos alimentares muitas vezes absurdos.",
+      "en": "Chief caterer at the Senait Sisters' studio, feeding the crew and humoring a cast whose food demands are often unreasonable."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "doc-stoic",
+    "name": "Doc Stoic",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Medtech",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Forlorn Hope",
+    "sources": [
+      { "book": "Tales of the RED", "page": 184 }
+    ],
+    "summary": {
+      "pt": "Ex-Trauma Team que quase não fala do passado. Montou consultório no Forlorn Hope e conserta ferimentos, biológicos ou cibernéticos, da clientela do bar.",
+      "en": "A former Trauma Team medic who rarely talks about his past. He set up shop in the Forlorn Hope and patches up the bar's customers, biological or cybernetic injuries alike."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "etan-sim",
+    "name": "Etan Sim",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": null,
+    "sources": [
+      { "book": "Tales of the RED", "page": 185 }
+    ],
+    "summary": {
+      "pt": "Astro de cinema AAA nascido em Singapura, filho de executivos da Biotechnica e formado na Juilliard. Divorciou-se de Darrel Marchant após uma infidelidade bêbada, foi para a reabilitação e vive de forma discreta, com um segurança só para afastar paparazzi.",
+      "en": "AAA movie star born in Singapore to Biotechnica corporate parents and a Juilliard graduate. He divorced Darrel Marchant after a drunken affair, went to rehab, and lives modestly with a bodyguard just to keep paparazzi away."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "faisal",
+    "name": "Faisal",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Tech",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Faisal's Customs",
+    "sources": [
+      { "book": "Tales of the RED", "page": 185 }
+    ],
+    "summary": {
+      "pt": "Imigrante somali que transformou um negócio de sucata na Faisal's Customs. Jovem Tech famoso por armas criativas e complexas para clientes particulares, tem corpo de titã graças a uma estrutura linear interna que ele mesmo projetou.",
+      "en": "A Somali immigrant who turned a salvage business into Faisal's Customs. A young Tech known for clever, complex weapons for private clients, he looks like a titan because of a linear frame he designed and wears under his clothes."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "fanta-senait",
+    "name": "Fanta Senait",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Senait Sisters' production company",
+    "sources": [
+      { "book": "Tales of the RED", "page": 185 }
+    ],
+    "summary": {
+      "pt": "Codiretora, com a irmã Teresa, de dezesseis grandes sucessos de Addiswood. Prefere filmar em locações com elenco local, e os filmes são muito populares na África e na Highrider Confederation.",
+      "en": "Co-director with her sister Teresa of sixteen Addiswood blockbusters. They prefer shooting on location with local talent, and the films are hugely popular in Africa and the Highrider Confederation."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "fixie",
+    "name": "Fixie",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Fixer",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Fixie's Couriers",
+    "sources": [
+      { "book": "Tales of the RED", "page": 185 }
+    ],
+    "summary": {
+      "pt": "Fixer magrela, com corpo de corredora, que montou uma rede de ciclistas-mensageiros nos moldes dos dabbawalas de Mumbai do bisavô e entrega por boa parte do submundo de Night City. É ex da ConEx.",
+      "en": "A wiry Fixer with a distance runner's build who organized a bicycle courier network modeled on her great-grandfather's Mumbai dabbawalas, serving much of Night City's underside. She is ConEx's ex."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "grace-steel",
+    "name": "Grace Steel",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Forlorn Hope",
+    "sources": [
+      { "book": "Tales of the RED", "page": 186 }
+    ],
+    "summary": {
+      "pt": "Ex-militar e ex-Back Bay Brawler que largou tudo pela música. Venceu um concurso e lidera a banda da casa do Forlorn Hope, com um metal cromático rápido, estridente e potente.",
+      "en": "An ex-soldier and former Back Bay Brawler who hung it all up for music. She won a contest and now leads the Forlorn Hope's house band with fast, shrill, powerful chromatic metal."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "jaya-almazan",
+    "name": "Jaya Almazan",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Arasaka",
+    "sources": [
+      { "book": "Tales of the RED", "page": 186 }
+    ],
+    "summary": {
+      "pt": "Agente secreta da Arasaka fora do Japão, atualmente em missões nos Estados Unidos.",
+      "en": "A covert Arasaka agent working outside Japan, currently on assignments in the United States."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "jezz-stiles",
+    "name": "Jezz Stiles",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": null,
+    "sources": [
+      { "book": "Tales of the RED", "page": 186 }
+    ],
+    "summary": {
+      "pt": "Filha de Veronica Stiles e analista de dados da Ziggurat. Gostava de estética gótica e andava com os Sinful Adams. Morreu atropelada ao correr para a rua durante um show improvisado das Digital Divas.",
+      "en": "Veronica Stiles's daughter and a Ziggurat data analyst. She liked gothic style and ran with the Sinful Adams. She died running into traffic during an impromptu Digital Divas concert."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "layla-deckard",
+    "name": "Layla Deckard",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Cactus Water",
+    "sources": [
+      { "book": "Tales of the RED", "page": 187 }
+    ],
+    "summary": {
+      "pt": "Filha mais velha dos Deckard e estudante da NCU, garota-propaganda da Cactus Water. Namorou Raegan Halley e Dillon Murphy; foi morta por Dillon, que depois se matou, e é homenageada em Seral Grove.",
+      "en": "The eldest Deckard child and an NCU student, spokesmodel for Cactus Water. She dated Raegan Halley and Dillon Murphy; Dillon killed her and then himself, and she is memorialized in Seral Grove."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "lazar",
+    "name": "Lazar",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Senait Sisters' production company",
+    "sources": [
+      { "book": "Tales of the RED", "page": 187 }
+    ],
+    "summary": {
+      "pt": "Técnico de figurino da produtora das irmãs Senait que gosta de acompanhar as fofocas.",
+      "en": "A costume technician at the Senait Sisters' production company who likes keeping up with gossip."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "lotus-lemarch",
+    "name": "Lotus LeMarch",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Tech",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": null,
+    "sources": [
+      { "book": "Tales of the RED", "page": 188 }
+    ],
+    "summary": {
+      "pt": "Tech habilidoso que inventava cyberware para a Arasaka antes da 4ª Guerra Corporativa. Fez muitos inimigos e hoje prefere uma vida isolada, atendendo amigos de amigos com problemas interessantes.",
+      "en": "A gifted Tech who designed cyberware for Arasaka before the 4th Corporate War. The job earned him many enemies and now prefers isolation, taking jobs from friends of friends with interesting problems."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "lowball",
+    "name": "Lowball",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Fixer",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": null,
+    "sources": [
+      { "book": "Tales of the RED", "page": 188 }
+    ],
+    "summary": {
+      "pt": "Fixer de nível médio que trabalha para clientes corporativos como REO Meatwagon, Raven Microcybernetics e Continental Brands. Diz que o apelido vem de sempre pechinchar bem, mas na verdade é bom em arrancar dinheiro do cliente e pagar pouco às equipes.",
+      "en": "A mid-level Fixer whose Corporate clients include REO Meatwagon, Raven and Continental Brands. He claims the handle comes from his bargain hunting, but really he squeezes clients and underpays his crews."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "lucy-rhinemeyer",
+    "name": "Lucy Rhinemeyer",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": null,
+    "sources": [
+      { "book": "Tales of the RED", "page": 188 }
+    ],
+    "summary": {
+      "pt": "Estudante de 19 anos da Night City University e a mais recente vítima de uma série de sequestros na região.",
+      "en": "A 19-year-old NCU student, the newest in a run of local kidnapping victims."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "mael-cartaret",
+    "name": "Mael Cartaret",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": null,
+    "sources": [
+      { "book": "Tales of the RED", "page": 188 }
+    ],
+    "summary": {
+      "pt": "Atriz famosa e protagonista de Parisian Hostess, a nova produção das irmãs Senait. Nos bastidores é conhecida pelo paladar refinado e por insistir em comida orgânica.",
+      "en": "A well-known movie star and the lead in the Senait Sisters' Parisian Hostess. Behind the scenes she is known for a refined palate and insistence on all-organic food."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "magnus-haggard",
+    "name": "Magnus Haggard",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Delirium",
+    "sources": [
+      { "book": "Tales of the RED", "page": 189 }
+    ],
+    "summary": {
+      "pt": "Gerente do Delirium, ruivo, sardento e de moicano, que mora no terceiro andar do clube. Os funcionários o chamam de velho rabugento; ele é viciado em Smash e já bebeu até desmaiar.",
+      "en": "Manager of Delirium, a red-haired, freckled mohawked man who lives on the club's third floor. Staff call him a cranky old grump; he is hooked on Smash and sometimes drinks until he passes out."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "marianne-freeman",
+    "name": "Marianne Freeman",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Forlorn Hope",
+    "sources": [
+      { "book": "Tales of the RED", "page": 189 }
+    ],
+    "summary": {
+      "pt": "Co-dona e bartender-chefe do Forlorn Hope há décadas, de humor ferino. Trata os Edgerunners de que gosta como \"seus filhos\" e é especialmente maternal, com sarcasmo, com clientes trans.",
+      "en": "Co-owner and head bartender of the Forlorn Hope for decades, with a wicked sense of humor. She treats the Edgerunners she likes as \"her kids\" and is, sarcastically, especially motherly to her transgender patrons."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "the-master",
+    "name": "The Master",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Philharmonic Vampyres",
+    "sources": [
+      { "book": "Tales of the RED", "page": 189 }
+    ],
+    "summary": {
+      "pt": "Um dos líderes dos Philharmonic Vampyres e aspirante a diretor que quer dar vida nova aos clássicos góticos. Tudo que faz é teatral demais.",
+      "en": "One of the Philharmonic Vampyres' leaders and an aspiring director who wants to revive the gothic classics. Everything he does is overly theatrical."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "maurice-the-maitre-d",
+    "name": "Maurice the Maitre’d",
+    "aliases": ["Maurice"],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "La Lune Bleue",
+    "sources": [
+      { "book": "Tales of the RED", "page": 189 }
+    ],
+    "summary": {
+      "pt": "Maître do La Lune Bleue, o típico esnobe de berço rico que faz questão de lembrar a todos. O bigodinho e a simpatia dão vontade de bater nele.",
+      "en": "Maitre'd at La Lune Bleue, the snob from a rich family who makes sure everyone knows it. The pencil mustache and the warm personality make you want to wipe the smugness off him."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "michael-deckard",
+    "name": "Michael Deckard",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Exec",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Petrochem",
+    "sources": [
+      { "book": "Tales of the RED", "page": 189 }
+    ],
+    "summary": {
+      "pt": "Executivo ambicioso da Petrochem que criou a Cactus Water para se livrar de um fracasso. Quando a filha Layla começou a questionar a Corp, mandou o filho Roman resolver, o que terminou em duas mortes. Desertou para a Biotechnica e ganhou uma amante.",
+      "en": "An ambitious Petrochem executive who invented Cactus Water to escape blame for a failed project. When daughter Layla began questioning the Corp, he sent son Roman to handle it, which ended in two deaths. He defected to Biotechnica and took a new mistress."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "oliver-riddle",
+    "name": "Oliver Riddle",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": null,
+    "sources": [
+      { "book": "Tales of the RED", "page": 190 }
+    ],
+    "summary": {
+      "pt": "Assistente pessoal magro e de cabelo roxo do ator Etan Sim, sempre com um terno cinza discreto.",
+      "en": "The slender, purple-haired personal assistant of movie star Etan Sim, always in a plain gray suit."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "patchz",
+    "name": "Patchz",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Tech",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Bits’n’Bolts",
+    "sources": [
+      { "book": "Tales of the RED", "page": 190 }
+    ],
+    "summary": {
+      "pt": "Tech de aparência rústica que trabalha na Bits’n’Bolts e às vezes faz serviços para Faisal.",
+      "en": "A rough-hewn Tech at Bits’n’Bolts who occasionally does contract work for Faisal."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "roman-deckard",
+    "name": "Roman Deckard",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Cactus Water",
+    "sources": [
+      { "book": "Tales of the RED", "page": 191 }
+    ],
+    "summary": {
+      "pt": "Filho caçula de Michael e Lilah Deckard. Largou a NCU depois da morte da irmã Layla e passou dias no Delirium atrás de um Netrunner por causa do assédio do Red Knight. A biografia dele e a do Red Knight não batem totalmente entre si.",
+      "en": "The youngest child of Michael and Lilah Deckard. He dropped out of NCU after sister Layla died and spent days at Delirium looking for a Netrunner to deal with Red Knight's harassment. His biography and Red Knight's do not fully agree."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "reggie",
+    "name": "Reggie",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Fixer",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": null,
+    "sources": [
+      { "book": "Tales of the RED", "page": 191 }
+    ],
+    "summary": {
+      "pt": "Fixer e traficante do University District que forneceu drogas e pacotes de Megabite \"caídos do caminhão\" a Roman Deckard.",
+      "en": "A Fixer and drug dealer in the University District who supplied Roman Deckard with drugs and Megabite packages that \"fell off the truck\"."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "the-reaper",
+    "name": "The Reaper",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": null,
+    "sources": [
+      { "book": "Tales of the RED", "page": 191 }
+    ],
+    "summary": {
+      "pt": "IA de origem desconhecida, talvez um Netrunner Soulkilled ou um R.A.B.I.D. Só quer controle, morte e caos. Depois de saltar de Netrunner em Netrunner, passou a comandar Biodrones por sinal digital e cria cópias menores de si; o original fica no MindNutz Love.",
+      "en": "An AI of unknown origin, maybe a Soulkilled Netrunner or a R.A.B.I.D. It seems to want only control, death and chaos. After hopping from Netrunner to Netrunner, it now commands Biodrones by digital signal and spawns lesser copies; the original stays at MindNutz Love."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "rustle",
+    "name": "Rustle",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": null,
+    "sources": [
+      { "book": "Tales of the RED", "page": 191 }
+    ],
+    "summary": {
+      "pt": "Edgerunner novato, sem reputação, mas capaz de mandar em alguns brutamontes e formar algo parecido com uma equipe.",
+      "en": "A newbie Edgerunner with no rep, yet enough of a force to boss a few toughs into something like a crew."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "samuelson",
+    "name": "Samuelson",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": null,
+    "sources": [
+      { "book": "Tales of the RED", "page": 192 }
+    ],
+    "summary": {
+      "pt": "Chaveiro que vende segurança aos clientes. Não faz muitas perguntas, mas leva a própria segurança a sério e recusa trabalho se achar que pode levar tiro.",
+      "en": "A locksmith who sells his clients security. He asks few questions, but he guards his own skin and turns down a lock if he expects gunfire."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "shears",
+    "name": "Shears",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Torrell and Chiang's",
+    "sources": [
+      { "book": "Tales of the RED", "page": 192 }
+    ],
+    "summary": {
+      "pt": "Alfaiate da Torrell and Chiang's, magro, bem vestido e de cabelo tingido de azul-esverdeado. Conhecido por alimentar muito bem funcionários e contratados.",
+      "en": "A tailor at Torrell and Chiang's: slight, well dressed, with blue-green dyed hair. Known for keeping employees and contractors extremely well fed."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "spooky-sue",
+    "name": "Spooky Sue",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": null,
+    "sources": [
+      { "book": "Tales of the RED", "page": 192 }
+    ],
+    "summary": {
+      "pt": "Química de rua de cabelo emaranhado e vestido branco, famosa pela pureza das drogas que vende.",
+      "en": "A stringy-haired street chemist in a white gown, well known for the purity of her drugs."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "teresa-senait",
+    "name": "Teresa Senait",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Senait Sisters' production company",
+    "sources": [
+      { "book": "Tales of the RED", "page": 193 }
+    ],
+    "summary": {
+      "pt": "Codiretora, com a irmã Fanta, de dezesseis grandes sucessos de Addiswood, populares na África e na Highrider Confederation.",
+      "en": "Co-director with her sister Fanta of sixteen Addiswood blockbusters, hugely popular in Africa and the Highrider Confederation."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "veronica-stiles",
+    "name": "Veronica Stiles",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Militech",
+    "sources": [
+      { "book": "Tales of the RED", "page": 193 }
+    ],
+    "summary": {
+      "pt": "Major da Militech, ex-aprendiz de uma wrangler e depois veterana das forças especiais. Perdeu o marido numa operação e a filha Jezz, e, sem apoio dos superiores para a teoria da IA rebelde, gastou economias e favores para destruir o Reaper.",
+      "en": "A Militech Major, once a wrangler's apprentice and later a special-forces veteran. She lost her husband on an operation and then her daughter Jezz, and with no backing from her superiors for her rogue-AI theory she has spent savings and favors to flatline the Reaper."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "zero-gees",
+    "name": "Zero Gees",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Delirium",
+    "sources": [
+      { "book": "Tales of the RED", "page": 193 }
+    ],
+    "summary": {
+      "pt": "Bartender do Delirium e namorada de Magnus Haggard, punk de cabeça raspada, camiseta branca e jaqueta de couro. Tem carinho por Asher e cobre o vício de Haggard em Smash.",
+      "en": "Delirium bartender and Magnus Haggard's girlfriend, a buzz-cut punk in white tees and leather jackets. She has a soft spot for Asher and covers for Haggard's Smash addiction."
+    },
+    "sheetNote": null,
+    "sheet": null
   }
 ]
