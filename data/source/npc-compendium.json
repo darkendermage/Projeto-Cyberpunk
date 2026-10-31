@@ -2245,9 +2245,10 @@
       "deathSave": 7,
       "stats": { "INT": 5, "REF": 8, "DEX": 6, "TECH": 3, "COOL": 3, "WILL": 6, "MOVE": 6, "BODY": 7, "EMP": 4 },
       "armoredStats": { "REF": 6, "DEX": 4, "MOVE": 4 },
+      "armoredSkills": { "Athletics": 10, "Autofire": 12, "Brawling": 6, "Evasion": 10, "Melee Weapon": 10, "Shoulder Arms": 12, "Stealth": 9 },
       "weapons": [
-        { "name": "Arasaka WAA Bullpup Assault Weapon", "skill": "Shoulder Arms", "attackBase": 14, "damage": "5d6", "rof": 1, "magazine": null, "class": "AssaultRifle", "melee": false, "notes": null },
-        { "name": "Heavy Melee Weapon", "skill": "Melee Weapon", "attackBase": 12, "damage": "3d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
+        { "name": "Arasaka WAA Bullpup Assault Weapon", "skill": "Shoulder Arms", "attackBase": 12, "damage": "5d6", "rof": 1, "magazine": null, "class": "AssaultRifle", "melee": false, "notes": null },
+        { "name": "Heavy Melee Weapon", "skill": "Melee Weapon", "attackBase": 10, "damage": "3d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
       ],
       "armor": [
         { "location": "Head", "name": "Light Armorjack", "sp": 11 },
@@ -2525,9 +2526,10 @@
       "deathSave": 8,
       "stats": { "INT": 7, "REF": 8, "DEX": 8, "TECH": 5, "COOL": 5, "WILL": 5, "MOVE": 8, "BODY": 8, "EMP": 0 },
       "armoredStats": { "REF": 6, "DEX": 6, "MOVE": 6 },
+      "armoredSkills": { "Athletics": 13, "Brawling": 14, "Dance": 8, "Evasion": 14, "Heavy Weapons": 14, "Melee Weapon": 12, "Shoulder Arms": 14, "Stealth": 8 },
       "weapons": [
-        { "name": "Rocket Launcher w/Extended Clip", "skill": "Heavy Weapons", "attackBase": 16, "damage": "8d6", "rof": 1, "magazine": null, "class": "RocketLauncher", "melee": false, "notes": "Excellent Quality" },
-        { "name": "Shotgun", "skill": "Shoulder Arms", "attackBase": 16, "damage": "5d6", "rof": 1, "magazine": null, "class": "Shotgun", "melee": false, "notes": "Excellent Quality" }
+        { "name": "Rocket Launcher w/Extended Clip", "skill": "Heavy Weapons", "attackBase": 14, "damage": "8d6", "rof": 1, "magazine": null, "class": "RocketLauncher", "melee": false, "notes": "Excellent Quality" },
+        { "name": "Shotgun", "skill": "Shoulder Arms", "attackBase": 14, "damage": "5d6", "rof": 1, "magazine": null, "class": "Shotgun", "melee": false, "notes": "Excellent Quality" }
       ],
       "armor": [
         { "location": "Head", "name": "Kevlar®", "sp": 7 },
@@ -2691,8 +2693,9 @@
       "deathSave": 6,
       "stats": { "INT": 4, "REF": 7, "DEX": 6, "TECH": 3, "COOL": 4, "WILL": 5, "MOVE": 6, "BODY": 6, "EMP": 3 },
       "armoredStats": { "REF": 6, "DEX": 5, "MOVE": 5 },
+      "armoredSkills": { "Athletics": 12, "Contortionist": 9, "Dance": 7, "Evasion": 11, "Handgun": 12 },
       "weapons": [
-        { "name": "Heavy Pistol", "skill": "Handgun", "attackBase": 13, "damage": "3d6", "rof": 2, "magazine": null, "class": "HeavyPistol", "melee": false, "notes": null },
+        { "name": "Heavy Pistol", "skill": "Handgun", "attackBase": 12, "damage": "3d6", "rof": 2, "magazine": null, "class": "HeavyPistol", "melee": false, "notes": null },
         { "name": "Brawling Attack", "skill": "Brawling", "attackBase": 12, "damage": "2d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
       ],
       "armor": [
@@ -3093,9 +3096,10 @@
       "deathSave": 4,
       "stats": { "INT": 6, "REF": 6, "DEX": 6, "TECH": 6, "COOL": 4, "WILL": 6, "MOVE": 5, "BODY": 4, "EMP": 5 },
       "armoredStats": { "REF": 5, "DEX": 5, "MOVE": 4 },
+      "armoredSkills": { "Athletics": 7, "Brawling": 7, "Drive Land Vehicle": 10, "Evasion": 11, "Handgun": 13 },
       "weapons": [
-        { "name": "Heavy Pistol", "skill": "Handgun", "attackBase": 14, "damage": "3d6", "rof": 2, "magazine": null, "class": "HeavyPistol", "melee": false, "notes": null },
-        { "name": "Brawling Attack", "skill": "Brawling", "attackBase": 8, "damage": "2d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
+        { "name": "Heavy Pistol", "skill": "Handgun", "attackBase": 13, "damage": "3d6", "rof": 2, "magazine": null, "class": "HeavyPistol", "melee": false, "notes": null },
+        { "name": "Brawling Attack", "skill": "Brawling", "attackBase": 7, "damage": "2d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
       ],
       "armor": [
         { "location": "Head", "name": "TUp Medium Armorjack", "sp": 12 },
@@ -3781,8 +3785,9 @@
       "deathSave": 5,
       "stats": { "INT": 5, "REF": 5, "DEX": 5, "TECH": 4, "COOL": 6, "WILL": 6, "MOVE": 7, "BODY": 5, "EMP": 5 },
       "armoredStats": { "REF": 3, "DEX": 3, "WILL": 4 },
+      "armoredSkills": { "Athletics": 7, "Brawling": 11, "Evasion": 11, "Handgun": 11, "Stealth": 5 },
       "weapons": [
-        { "name": "Heavy Pistol", "skill": "Handgun", "attackBase": 13, "damage": "3d6", "rof": 2, "magazine": null, "class": "HeavyPistol", "melee": false, "notes": null }
+        { "name": "Heavy Pistol", "skill": "Handgun", "attackBase": 11, "damage": "3d6", "rof": 2, "magazine": null, "class": "HeavyPistol", "melee": false, "notes": null }
       ],
       "armor": [
         { "location": "Head", "name": "Medium Armorjack", "sp": 12 },
@@ -5387,8 +5392,9 @@
       "deathSave": 6,
       "stats": { "INT": 8, "REF": 8, "DEX": 8, "TECH": 6, "COOL": 6, "WILL": 7, "MOVE": 6, "BODY": 6, "EMP": 2 },
       "armoredStats": { "REF": 7, "DEX": 7, "MOVE": 5 },
+      "armoredSkills": { "Athletics": 13, "Autofire": 13, "Brawling": 9, "Drive Land Vehicle": 10, "Evasion": 15, "Handgun": 13, "Martial Arts (Judo)": 11, "Melee Weapon": 11, "Shoulder Arms": 17, "Stealth": 13 },
       "weapons": [
-        { "name": "Sniper Rifle", "skill": "Shoulder Arms", "attackBase": 18, "damage": "5d6", "rof": 1, "magazine": null, "class": "SniperRifle", "melee": false, "notes": "Tech-upgraded (TUp): +1 Slot; Excellent Quality; w/ Infrared Nightvision Scope, Smartgun Link & Sniping Scope" }
+        { "name": "Sniper Rifle", "skill": "Shoulder Arms", "attackBase": 17, "damage": "5d6", "rof": 1, "magazine": null, "class": "SniperRifle", "melee": false, "notes": "Tech-upgraded (TUp): +1 Slot; Excellent Quality; w/ Infrared Nightvision Scope, Smartgun Link & Sniping Scope" }
       ],
       "armor": [
         { "location": "Head", "name": "TUp Medium Armorjack", "sp": 12 },
@@ -5560,8 +5566,9 @@
       "deathSave": 7,
       "stats": { "INT": 5, "REF": 7, "DEX": 6, "TECH": 4, "COOL": 5, "WILL": 5, "MOVE": 5, "BODY": 7, "EMP": 4 },
       "armoredStats": { "REF": 5, "DEX": 4, "MOVE": 3 },
+      "armoredSkills": { "Athletics": 8, "Autofire": 11, "Brawling": 10, "Evasion": 10, "Handgun": 11, "Shoulder Arms": 11, "Stealth": 6 },
       "weapons": [
-        { "name": "Very Heavy Pistol w/ Smartgun Link", "skill": "Handgun", "attackBase": 13, "damage": "4d6", "rof": 1, "magazine": null, "class": "VeryHeavyPistol", "melee": false, "notes": "Excellent Quality" }
+        { "name": "Very Heavy Pistol w/ Smartgun Link", "skill": "Handgun", "attackBase": 11, "damage": "4d6", "rof": 1, "magazine": null, "class": "VeryHeavyPistol", "melee": false, "notes": "Excellent Quality" }
       ],
       "armor": [
         { "location": "Head", "name": "Heavy Armorjack", "sp": 13 },
@@ -5669,9 +5676,10 @@
       "deathSave": 6,
       "stats": { "INT": 4, "REF": 8, "DEX": 7, "TECH": 3, "COOL": 4, "WILL": 3, "MOVE": 6, "BODY": 6, "EMP": 3 },
       "armoredStats": { "REF": 6, "DEX": 5, "MOVE": 4 },
+      "armoredSkills": { "Athletics": 7, "Autofire": 8, "Brawling": 9, "Drive Land Vehicle": 10, "Evasion": 11, "Handgun": 10, "Shoulder Arms": 13, "Stealth": 7 },
       "weapons": [
-        { "name": "Assault Rifle", "skill": "Shoulder Arms", "attackBase": 15, "damage": "5d6", "rof": 1, "magazine": null, "class": "AssaultRifle", "melee": false, "notes": "Poor Quality" },
-        { "name": "Medium Pistol", "skill": "Handgun", "attackBase": 12, "damage": "2d6", "rof": 2, "magazine": null, "class": "MediumPistol", "melee": false, "notes": null }
+        { "name": "Assault Rifle", "skill": "Shoulder Arms", "attackBase": 13, "damage": "5d6", "rof": 1, "magazine": null, "class": "AssaultRifle", "melee": false, "notes": "Poor Quality" },
+        { "name": "Medium Pistol", "skill": "Handgun", "attackBase": 10, "damage": "2d6", "rof": 2, "magazine": null, "class": "MediumPistol", "melee": false, "notes": null }
       ],
       "armor": [
         { "location": "Head", "name": "Medium Armorjack", "sp": 12 },
@@ -5724,9 +5732,10 @@
       "deathSave": 4,
       "stats": { "INT": 6, "REF": 6, "DEX": 5, "TECH": 2, "COOL": 7, "WILL": 5, "MOVE": 4, "BODY": 4, "EMP": 5 },
       "armoredStats": { "REF": 4, "DEX": 3, "MOVE": 2 },
+      "armoredSkills": { "Athletics": 5, "Brawling": 5, "Drive Land Vehicle": 8, "Evasion": 7, "Handgun": 13, "Shoulder Arms": 8, "Stealth": 5 },
       "weapons": [
-        { "name": "Militech Crusher", "skill": "Handgun", "attackBase": 15, "damage": "3d6", "rof": 1, "magazine": null, "class": "VeryHeavyPistol", "melee": false, "notes": null },
-        { "name": "Medium Pistol", "skill": "Handgun", "attackBase": 15, "damage": "2d6", "rof": 2, "magazine": null, "class": "MediumPistol", "melee": false, "notes": null }
+        { "name": "Militech Crusher", "skill": "Handgun", "attackBase": 13, "damage": "3d6", "rof": 1, "magazine": null, "class": "VeryHeavyPistol", "melee": false, "notes": null },
+        { "name": "Medium Pistol", "skill": "Handgun", "attackBase": 13, "damage": "2d6", "rof": 2, "magazine": null, "class": "MediumPistol", "melee": false, "notes": null }
       ],
       "armor": [
         { "location": "Head", "name": "Light Armorjack", "sp": 11 },
@@ -5779,9 +5788,10 @@
       "deathSave": 5,
       "stats": { "INT": 6, "REF": 7, "DEX": 6, "TECH": 3, "COOL": 5, "WILL": 4, "MOVE": 4, "BODY": 5, "EMP": 4 },
       "armoredStats": { "REF": 5, "DEX": 4, "MOVE": 2 },
+      "armoredSkills": { "Athletics": 8, "Autofire": 11, "Brawling": 8, "Evasion": 9, "Handgun": 10, "Shoulder Arms": 11, "Stealth": 8 },
       "weapons": [
-        { "name": "Assault Rifle", "skill": "Shoulder Arms", "attackBase": 13, "damage": "5d6", "rof": 1, "magazine": null, "class": "AssaultRifle", "melee": false, "notes": null },
-        { "name": "Medium Pistol", "skill": "Handgun", "attackBase": 12, "damage": "2d6", "rof": 2, "magazine": null, "class": "MediumPistol", "melee": false, "notes": null }
+        { "name": "Assault Rifle", "skill": "Shoulder Arms", "attackBase": 11, "damage": "5d6", "rof": 1, "magazine": null, "class": "AssaultRifle", "melee": false, "notes": null },
+        { "name": "Medium Pistol", "skill": "Handgun", "attackBase": 10, "damage": "2d6", "rof": 2, "magazine": null, "class": "MediumPistol", "melee": false, "notes": null }
       ],
       "armor": [
         { "location": "Head", "name": "Heavy Armorjack", "sp": 13 },
@@ -6326,9 +6336,10 @@
       "deathSave": 7,
       "stats": { "INT": 4, "REF": 7, "DEX": 5, "TECH": 4, "COOL": 4, "WILL": 5, "MOVE": 4, "BODY": 7, "EMP": 4 },
       "armoredStats": { "REF": 5, "DEX": 3, "MOVE": 2 },
+      "armoredSkills": { "Athletics": 8, "Autofire": 12, "Evasion": 12, "Handgun": 12, "Melee Weapon": 9, "Shoulder Arms": 12, "Stealth": 5 },
       "weapons": [
-        { "name": "Assault Rifle", "skill": "Shoulder Arms", "attackBase": 14, "damage": "5d6", "rof": 1, "magazine": null, "class": "AssaultRifle", "melee": false, "notes": null },
-        { "name": "Very Heavy Pistol", "skill": "Handgun", "attackBase": 14, "damage": "4d6", "rof": 1, "magazine": null, "class": "VeryHeavyPistol", "melee": false, "notes": null }
+        { "name": "Assault Rifle", "skill": "Shoulder Arms", "attackBase": 12, "damage": "5d6", "rof": 1, "magazine": null, "class": "AssaultRifle", "melee": false, "notes": null },
+        { "name": "Very Heavy Pistol", "skill": "Handgun", "attackBase": 12, "damage": "4d6", "rof": 1, "magazine": null, "class": "VeryHeavyPistol", "melee": false, "notes": null }
       ],
       "armor": [
         { "location": "Head", "name": "Medium Armorjack", "sp": 12 },
@@ -6654,9 +6665,10 @@
       "deathSave": 5,
       "stats": { "INT": 6, "REF": 7, "DEX": 6, "TECH": 6, "COOL": 3, "WILL": 5, "MOVE": 5, "BODY": 5, "EMP": 5 },
       "armoredStats": { "REF": 6, "DEX": 5, "MOVE": 4 },
+      "armoredSkills": { "Athletics": 7, "Brawling": 7, "Evasion": 12, "Handgun": 13, "Pilot Air Vehicle": 11, "Stealth": 7 },
       "weapons": [
-        { "name": "Very Heavy Pistol", "skill": "Handgun", "attackBase": 14, "damage": "4d6", "rof": 1, "magazine": null, "class": "VeryHeavyPistol", "melee": false, "notes": null },
-        { "name": "Brawling Attack", "skill": "Brawling", "attackBase": 8, "damage": "2d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
+        { "name": "Very Heavy Pistol", "skill": "Handgun", "attackBase": 13, "damage": "4d6", "rof": 1, "magazine": null, "class": "VeryHeavyPistol", "melee": false, "notes": null },
+        { "name": "Brawling Attack", "skill": "Brawling", "attackBase": 7, "damage": "2d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
       ],
       "armor": [
         { "location": "Head", "name": "TUp Medium Armorjack", "sp": 12 },
@@ -6994,9 +7006,10 @@
       "deathSave": 4,
       "stats": { "INT": 6, "REF": 6, "DEX": 4, "TECH": 8, "COOL": 5, "WILL": 4, "MOVE": 5, "BODY": 4, "EMP": 6 },
       "armoredStats": { "REF": 5, "DEX": 3, "MOVE": 4 },
+      "armoredSkills": { "Athletics": 9, "Brawling": 9, "Evasion": 11, "Shoulder Arms": 12, "Stealth": 5 },
       "weapons": [
-        { "name": "Assault Rifle", "skill": "Shoulder Arms", "attackBase": 13, "damage": "5d6", "rof": 1, "magazine": null, "class": "AssaultRifle", "melee": false, "notes": "Excellent Quality" },
-        { "name": "Brawling Attack", "skill": "Brawling", "attackBase": 10, "damage": "2d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
+        { "name": "Assault Rifle", "skill": "Shoulder Arms", "attackBase": 12, "damage": "5d6", "rof": 1, "magazine": null, "class": "AssaultRifle", "melee": false, "notes": "Excellent Quality" },
+        { "name": "Brawling Attack", "skill": "Brawling", "attackBase": 9, "damage": "2d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
       ],
       "armor": [
         { "location": "Head", "name": "TUp Heavy Armorjack", "sp": 13 },
@@ -7052,9 +7065,10 @@
       "deathSave": 5,
       "stats": { "INT": 6, "REF": 6, "DEX": 4, "TECH": 8, "COOL": 7, "WILL": 4, "MOVE": 4, "BODY": 5, "EMP": 4 },
       "armoredStats": { "REF": 5, "DEX": 3, "MOVE": 3 },
+      "armoredSkills": { "Athletics": 5, "Brawling": 5, "Evasion": 11, "Shoulder Arms": 12, "Stealth": 5 },
       "weapons": [
-        { "name": "Assault Rifle", "skill": "Shoulder Arms", "attackBase": 13, "damage": "5d6", "rof": 1, "magazine": null, "class": "AssaultRifle", "melee": false, "notes": "Excellent Quality" },
-        { "name": "Brawling Attack", "skill": "Brawling", "attackBase": 6, "damage": "2d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
+        { "name": "Assault Rifle", "skill": "Shoulder Arms", "attackBase": 12, "damage": "5d6", "rof": 1, "magazine": null, "class": "AssaultRifle", "melee": false, "notes": "Excellent Quality" },
+        { "name": "Brawling Attack", "skill": "Brawling", "attackBase": 5, "damage": "2d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
       ],
       "armor": [
         { "location": "Head", "name": "TUp Heavy Armorjack", "sp": 13 },
@@ -7169,9 +7183,10 @@
       "deathSave": 4,
       "stats": { "INT": 3, "REF": 8, "DEX": 6, "TECH": 5, "COOL": 3, "WILL": 3, "MOVE": 4, "BODY": 4, "EMP": 3 },
       "armoredStats": { "REF": 6, "DEX": 4, "MOVE": 2 },
+      "armoredSkills": { "Athletics": 6, "Brawling": 10, "Evasion": 6, "Melee Weapon": 10, "Stealth": 6 },
       "weapons": [
         { "name": "Heavy Pistol", "skill": "Handgun", "attackBase": 6, "damage": "3d6", "rof": 2, "magazine": null, "class": "HeavyPistol", "melee": false, "notes": "No Skill Base printed for this weapon; STAT only." },
-        { "name": "Stun Baton (Defib Paddle)", "skill": "Melee Weapon", "attackBase": 12, "damage": "2d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
+        { "name": "Stun Baton (Defib Paddle)", "skill": "Melee Weapon", "attackBase": 10, "damage": "2d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
       ],
       "armor": [
         { "location": "Head", "name": "Medium Armorjack", "sp": 12 },
@@ -7719,8 +7734,9 @@
       "deathSave": 12,
       "stats": { "INT": 5, "REF": 8, "DEX": 7, "TECH": 4, "COOL": 6, "WILL": 6, "MOVE": 6, "BODY": 12, "EMP": 4 },
       "armoredStats": { "REF": 6, "DEX": 5, "MOVE": 4 },
+      "armoredSkills": { "Athletics": 12, "Autofire": 10, "Brawling": 12, "Drive Land Vehicle": 8, "Evasion": 12, "Heavy Weapons": 14, "Stealth": 7 },
       "weapons": [
-        { "name": "Grenade Launcher", "skill": "Heavy Weapons", "attackBase": 16, "damage": "6d6", "rof": 1, "magazine": null, "class": "GrenadeLauncher", "melee": false, "notes": "w/ TUp (can mix ammo types) Drum Mag" }
+        { "name": "Grenade Launcher", "skill": "Heavy Weapons", "attackBase": 14, "damage": "6d6", "rof": 1, "magazine": null, "class": "GrenadeLauncher", "melee": false, "notes": "w/ TUp (can mix ammo types) Drum Mag" }
       ],
       "armor": [
         { "location": "Head", "name": "Heavy Armorjack", "sp": 13 },
@@ -7776,8 +7792,9 @@
       "deathSave": 8,
       "stats": { "INT": 5, "REF": 8, "DEX": 6, "TECH": 5, "COOL": 5, "WILL": 4, "MOVE": 5, "BODY": 8, "EMP": 4 },
       "armoredStats": { "REF": 6, "DEX": 4, "MOVE": 3 },
+      "armoredSkills": { "Athletics": 11, "Brawling": 6, "Drive Land Vehicle": 10, "Evasion": 11, "Heavy Weapons": 12, "Stealth": 6 },
       "weapons": [
-        { "name": "Brawling Attack", "skill": "Brawling", "attackBase": 8, "damage": "3d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
+        { "name": "Brawling Attack", "skill": "Brawling", "attackBase": 6, "damage": "3d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
       ],
       "armor": [
         { "location": "Head", "name": "Heavy Armorjack", "sp": 13 },
@@ -8223,9 +8240,10 @@
       "deathSave": 4,
       "stats": { "INT": 7, "REF": 6, "DEX": 6, "TECH": 7, "COOL": 5, "WILL": 4, "MOVE": 6, "BODY": 4, "EMP": 3 },
       "armoredStats": { "REF": 5, "DEX": 5, "MOVE": 5 },
+      "armoredSkills": { "Athletics": 7, "Brawling": 7, "Evasion": 11, "Handgun": 13, "Stealth": 7 },
       "weapons": [
-        { "name": "Very Heavy Pistol", "skill": "Handgun", "attackBase": 14, "damage": "4d6", "rof": 1, "magazine": null, "class": "VeryHeavyPistol", "melee": false, "notes": null },
-        { "name": "Brawling Attack", "skill": "Brawling", "attackBase": 8, "damage": "1d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
+        { "name": "Very Heavy Pistol", "skill": "Handgun", "attackBase": 13, "damage": "4d6", "rof": 1, "magazine": null, "class": "VeryHeavyPistol", "melee": false, "notes": null },
+        { "name": "Brawling Attack", "skill": "Brawling", "attackBase": 7, "damage": "1d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
       ],
       "armor": [
         { "location": "Head", "name": "TUp Medium Armorjack", "sp": 12 },
@@ -8278,9 +8296,10 @@
       "deathSave": 8,
       "stats": { "INT": 5, "REF": 8, "DEX": 8, "TECH": 4, "COOL": 4, "WILL": 4, "MOVE": 8, "BODY": 8, "EMP": 3 },
       "armoredStats": { "REF": 6, "DEX": 6, "MOVE": 6 },
+      "armoredSkills": { "Athletics": 14, "Autofire": 14, "Brawling": 14, "Evasion": 14, "Handgun": 12, "Shoulder Arms": 14, "Stealth": 10 },
       "weapons": [
-        { "name": "Assault Rifle", "skill": "Shoulder Arms", "attackBase": 16, "damage": "5d6", "rof": 1, "magazine": null, "class": "AssaultRifle", "melee": false, "notes": "Excellent Quality" },
-        { "name": "Very Heavy Pistol", "skill": "Handgun", "attackBase": 14, "damage": "4d6", "rof": 1, "magazine": null, "class": "VeryHeavyPistol", "melee": false, "notes": null }
+        { "name": "Assault Rifle", "skill": "Shoulder Arms", "attackBase": 14, "damage": "5d6", "rof": 1, "magazine": null, "class": "AssaultRifle", "melee": false, "notes": "Excellent Quality" },
+        { "name": "Very Heavy Pistol", "skill": "Handgun", "attackBase": 12, "damage": "4d6", "rof": 1, "magazine": null, "class": "VeryHeavyPistol", "melee": false, "notes": null }
       ],
       "armor": [
         { "location": "Head", "name": "Heavy Armorjack", "sp": 13 },

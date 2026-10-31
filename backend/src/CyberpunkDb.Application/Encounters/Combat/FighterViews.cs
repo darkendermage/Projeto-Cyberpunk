@@ -172,7 +172,7 @@ public sealed class FighterViews(CharacterRuleBook characterRules, CharacterCalc
 
     /// <summary>
     /// The combat side of a printed stat block. Stats the book leaves blank stay out, and the armored values win over the plain ones.
-    /// Weapons carry the printed attack total; skills keep their printed Skill Base.
+    /// Weapons carry the printed attack total; skills keep their printed Skill Base, armored when the book prints one.
     /// </summary>
     public CombatSnapshot Compendium(CompendiumNpc npc)
     {
@@ -184,7 +184,8 @@ public sealed class FighterViews(CharacterRuleBook characterRules, CharacterCalc
 
         var skills = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
         foreach (var (name, value) in sheet.Skills)
-            if (NpcCompendium.SkillKey(name, npcRules) is { } key) skills[key] = value;
+            if (NpcCompendium.SkillKey(name, npcRules) is { } key)
+                skills[key] = sheet.ArmoredSkills.TryGetValue(name, out var armored) ? armored : value;
 
         int Sp(string location) => sheet.Armor.Where(a => a.Location.Equals(location, StringComparison.OrdinalIgnoreCase)).Select(a => a.Sp).DefaultIfEmpty(0).Max();
         var source = npc.Sources.FirstOrDefault();

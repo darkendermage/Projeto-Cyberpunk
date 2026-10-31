@@ -65,7 +65,7 @@ export function NpcDossierPage() {
             <NpcHealth sheet={sheet} />
             <NpcWeapons weapons={sheet.weapons} />
             <NpcArmor armor={sheet.armor} />
-            <NpcSkills skills={sheet.skills} />
+            <NpcSkills skills={sheet.skills} armoredSkills={sheet.armoredSkills} />
             <NpcGear gear={sheet.gear} />
             <NpcCyberware cyberware={sheet.cyberware} />
             <NpcSpecials specials={sheet.specials} />

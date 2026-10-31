@@ -94,14 +94,15 @@ export function NpcArmor({ armor }: { armor: NpcSheet['armor'] }) {
   );
 }
 
-export function NpcSkills({ skills }: { skills: Record<string, number> }) {
+/** Skill Bases as printed. A differing armored value shows in parentheses, like the book. */
+export function NpcSkills({ skills, armoredSkills }: { skills: Record<string, number>; armoredSkills: Record<string, number> }) {
   const entries = Object.entries(skills).sort(([a], [b]) => a.localeCompare(b));
   if (entries.length === 0) return null;
   return (
     <SheetPanel title={t('Perícias', 'Skills')} icon={<Crosshair size={16} />}>
       <ul className={styles.list}>
         {entries.map(([name, base]) => (
-          <li key={name} className={styles.listItem}><span className={styles.small}>{name} {base}</span></li>
+          <li key={name} className={styles.listItem}><span className={styles.small}>{name} {base}{armoredSkills[name] != null && armoredSkills[name] !== base && ` (${armoredSkills[name]})`}</span></li>
         ))}
       </ul>
     </SheetPanel>

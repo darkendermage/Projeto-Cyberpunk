@@ -38,6 +38,7 @@ public sealed record CompendiumSheetDto(
     IReadOnlyList<CompendiumWeapon> Weapons,
     IReadOnlyList<CompendiumArmor> Armor,
     IReadOnlyDictionary<string, int> Skills,
+    IReadOnlyDictionary<string, int> ArmoredSkills,
     IReadOnlyList<string> Gear,
     IReadOnlyList<string> Cyberware,
     IReadOnlyList<CompendiumSpecialDto> Specials);

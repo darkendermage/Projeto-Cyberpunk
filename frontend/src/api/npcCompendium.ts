@@ -44,6 +44,7 @@ export type NpcSheet = {
   weapons: NpcWeapon[];
   armor: NpcArmor[];
   skills: Record<string, number>;
+  armoredSkills: Record<string, number>;
   gear: string[];
   cyberware: string[];
   specials: NpcSpecial[];

@@ -36,4 +36,24 @@ public class CompendiumFighterTests
         fighter.Evasion.Should().Be(0);
         fighter.SpBody.Should().Be(0);
     }
+
+    [Fact]
+    public void Armored_skill_wins_over_the_plain_one()
+    {
+        var npc = new CompendiumNpc
+        {
+            Id = "armored", Name = "Armored", Kind = CompendiumKind.Sheet, Sources = [new CompendiumSource("Book", 9)],
+            Sheet = new CompendiumSheet
+            {
+                Hp = 40, Stats = new() { ["BODY"] = 6, ["REF"] = 8 },
+                Skills = new() { ["Evasion"] = 14, ["Handgun"] = 14 },
+                ArmoredSkills = new() { ["Evasion"] = 12 },
+            },
+        };
+
+        var snapshot = Views.Compendium(npc);
+
+        snapshot.Skills["evasion"].Should().Be(12);
+        snapshot.Skills["handgun"].Should().Be(14);
+    }
 }

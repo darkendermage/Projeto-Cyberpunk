@@ -51,6 +51,8 @@ public sealed record CompendiumSheet
     public List<CompendiumArmor> Armor { get; init; } = [];
     /// <summary>Printed Skill Bases (STAT + skill + bonus), not recalculated.</summary>
     public Dictionary<string, int> Skills { get; init; } = [];
+    /// <summary>Skill Bases with the armor penalty, from values printed like Athletics 13 (11). Empty when the book has none.</summary>
+    public Dictionary<string, int> ArmoredSkills { get; init; } = [];
     public List<string> Gear { get; init; } = [];
     public List<string> Cyberware { get; init; } = [];
     public List<CompendiumSpecial> Specials { get; init; } = [];

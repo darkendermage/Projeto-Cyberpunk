@@ -49,6 +49,17 @@ public class NpcCompendiumDataTests
     }
 
     [Fact]
+    public void Armored_skills_are_printed_skills()
+    {
+        foreach (var sheet in Compendium.All.Select(n => n.Sheet).OfType<CompendiumSheet>())
+            foreach (var (name, armored) in sheet.ArmoredSkills)
+            {
+                sheet.Skills.Should().ContainKey(name);
+                armored.Should().BeLessThanOrEqualTo(sheet.Skills[name], name);
+            }
+    }
+
+    [Fact]
     public void Weapon_damage_rolls_in_the_combat_engine()
     {
         foreach (var weapon in Compendium.All.Select(n => n.Sheet).OfType<CompendiumSheet>().SelectMany(s => s.Weapons))

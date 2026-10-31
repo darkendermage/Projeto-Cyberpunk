@@ -44,7 +44,7 @@ public sealed class NpcCompendium
         var n = Require(id);
         var s = n.Sheet;
         var sheet = s is null ? null : new CompendiumSheetDto(s.Hp, s.SeriouslyWounded, s.DeathSave, s.Stats, s.ArmoredStats,
-            s.Weapons, s.Armor, s.Skills, s.Gear, s.Cyberware,
+            s.Weapons, s.Armor, s.Skills, s.ArmoredSkills, s.Gear, s.Cyberware,
             s.Specials.Select(x => new CompendiumSpecialDto(x.Name, x.Text.Current)).ToList());
         return new CompendiumNpcDetail(n.Id, n.Name, n.Aliases, n.Kind, n.Role, n.RoleRank, n.Rep, n.Affiliation, n.Sources,
             n.Summary.Current, n.SheetNote?.Current, sheet);
