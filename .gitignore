@@ -21,3 +21,6 @@ Thumbs.db
 
 # Executável desktop (gerado por deploy/desktop/publicar.ps1)
 artifacts/
+
+# Saída da ferramenta de extração de NPCs
+tools/npc-compendium/out/
