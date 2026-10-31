@@ -11796,5 +11796,185 @@
     },
     "sheetNote": null,
     "sheet": null
+  },
+  {
+    "id": "laura-june-maybach",
+    "name": "Laura June Maybach",
+    "aliases": ["Sparkle Skull", "LJM"],
+    "kind": "sheet",
+    "role": "Medtech",
+    "roleRank": 2,
+    "rep": null,
+    "affiliation": null,
+    "sources": [
+      {"book": "Interface RED Volume 4", "page": 64},
+      {"book": "Interface RED Volume 4", "page": 63}
+    ],
+    "summary": {
+      "pt": "Ex-ciberpsicopata e Medtech expulsa dos Dragula Racers, que vira obcecada por TSpooks e forja o falso lobisomem de Watson para impulsionar a carreira dela. Quando a Crew se aproxima da influenciadora, ela ataca por ciúme.",
+      "en": "Former cyberpsycho and Medtech, kicked out of the Dragula Racers, who fixates on TSpooks and stages the fake Watson werewolf to boost her career. When the Crew gets close to the influencer, she attacks out of jealousy."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 35,
+      "seriouslyWounded": 18,
+      "deathSave": 5,
+      "stats": {"INT": 5, "REF": 8, "DEX": 6, "TECH": 7, "COOL": 4, "WILL": 4, "MOVE": 6, "BODY": 5, "EMP": 0},
+      "armoredStats": {},
+      "weapons": [
+        {"name": "Popup Flamethrower", "skill": "Heavy Weapons", "attackBase": 14, "damage": "3d6", "rof": 1, "magazine": null, "class": "Shotgun", "melee": false, "notes": "No matching class; Shotgun used as the closest range table"},
+        {"name": "Heavy Pistol", "skill": "Handgun", "attackBase": 14, "damage": "3d6", "rof": 2, "magazine": null, "class": "HeavyPistol", "melee": false, "notes": null}
+      ],
+      "armor": [
+        {"location": "Head", "name": "Light Armorjack", "sp": 11},
+        {"location": "Body", "name": "Light Armorjack", "sp": 11}
+      ],
+      "skills": {
+        "Athletics": 11,
+        "Basic Tech": 9,
+        "Brawling": 10,
+        "Concentration": 8,
+        "Conversation": 2,
+        "Cybertech": 9,
+        "Education": 10,
+        "Evasion": 14,
+        "First Aid": 9,
+        "Handgun": 14,
+        "Heavy Weapons": 14,
+        "Human Perception": 2,
+        "Language (English)": 7,
+        "Language (Streetslang)": 7,
+        "Local Expert (Watson)": 7,
+        "Paramedic": 9,
+        "Perception": 7,
+        "Persuasion": 6,
+        "Resist Torture/Drugs": 12,
+        "Stealth": 10,
+        "Surgery": 11
+      },
+      "gear": ["Incendiary Shotgun Shells x8", "Heavy Pistol Ammo x16", "Incendiary Grenade x1", "Flashbang Grenade x1", "Agent"],
+      "cyberware": ["Cyberaudio Suite w/ Level Dampners", "Cybereye x2 w/ Anti-Dazzle x2", "Cyberarm w/ Popup Flamethrower", "Nasal Filters"],
+      "specials": [
+        {
+          "name": "Medicine 2",
+          "text": {
+            "pt": "Habilidade de Role Medtech (Medicine 2, com Surgery 2).",
+            "en": "Medtech Role Ability (Medicine 2, with Surgery 2)."
+          }
+        },
+        {
+          "name": "Lança-chamas embutido",
+          "text": {
+            "pt": "O Cyberarm esconde um Popup Flamethrower, que a ficha trata como Heavy Weapons. Ela leva Incendiary Shotgun Shells para ele.",
+            "en": "The Cyberarm hides a Popup Flamethrower, which the sheet runs on Heavy Weapons. She carries Incendiary Shotgun Shells for it."
+          }
+        },
+        {
+          "name": "Número de combate",
+          "text": {
+            "pt": "O livro imprime o total de ataque como C# 14 nas duas armas, e esse é o valor usado em attackBase.",
+            "en": "The book prints the attack total as C# 14 on both weapons, and that is the value used as attackBase."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "leila-amani",
+    "name": "Leila Amani",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "NCPD",
+    "sources": [
+      {"book": "Interface RED Volume 4", "page": 63},
+      {"book": "Interface RED Volume 4", "page": 62}
+    ],
+    "summary": {
+      "pt": "Assistente de legista do Precinct #3 que descobre que o lobisomem de Watson era um homem mutilado por bodysculpt e é pressionada a arquivar a morte como acidente. Paga a Crew com o fundo do necrotério para seguir as pistas que ela reuniu.",
+      "en": "Assistant coroner at Precinct #3 who finds the Watson werewolf was a man ruined by bad bodysculpting, then gets pushed to file his death as an accident. She pays the Crew from the morgue's discretionary funds to chase the leads she gathered."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "tspooks",
+    "name": "TSpooks",
+    "aliases": ["Tabitha Evanovich"],
+    "kind": "profile",
+    "role": "Rockerboy",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": null,
+    "sources": [
+      {"book": "Interface RED Volume 4", "page": 63},
+      {"book": "Interface RED Volume 4", "page": 62}
+    ],
+    "summary": {
+      "pt": "Influenciadora de paranormal que trabalha de zeladora no turno da noite do Megabuilding H10. O vídeo do falso lobisomem virou o de maior audiência dela, mas ela não quer construir a carreira em cima de uma mentira e planeja desmentir o caso.",
+      "en": "Paranormal influencer who works second-shift custodian at Megabuilding H10. The fake-werewolf video became her highest rated, but she refuses to base her career on a hoax and plans to expose it."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "frankie-sparks",
+    "name": "Frankie Sparks",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Dragula Racers",
+    "sources": [
+      {"book": "Interface RED Volume 4", "page": 63}
+    ],
+    "summary": {
+      "pt": "Líder miúda e pálida dos Dragula Racers, gogang de bodysculpt de monstros e corrida de carro funerário turbinado. Ajuda a Crew por ser prima de Amani e conta que a gangue expulsou Sparkle Skull por gastar o caixa em cartões do Oasis.",
+      "en": "Small, pallid leader of the Dragula Racers, a gogang of monster-themed bodysculpts and souped-up hearse racing. She helps the Crew because Amani is her cousin, and reveals the gang threw out Sparkle Skull for burning the funds on Oasis gift cards."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "kieran-keen-maclennan",
+    "name": "Kieran \"Keen\" MacLennan",
+    "aliases": ["Keen MacLennan", "Watson Werewolf"],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Militech (former)",
+    "sources": [
+      {"book": "Interface RED Volume 4", "page": 63},
+      {"book": "Interface RED Volume 4", "page": 62}
+    ],
+    "summary": {
+      "pt": "Veterano sem-teto da 4ª Guerra Corporativa, ex-Militech, transformado no falso lobisomem de Watson com bodysculpt e um Audiovox que só emite uivos. Morre baleado por seguranças de folga da SovOil, mas já estava condenado pelas infecções.",
+      "en": "Homeless 4th Corporate War veteran and former Militech employee, turned into the fake Watson werewolf through bodysculpting and an Audiovox that only howls. He dies shot by off-duty SovOil security, though his infections would have killed him anyway."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "ophelia",
+    "name": "Ophelia",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Sinful Adams",
+    "sources": [
+      {"book": "Interface RED Volume 4", "page": 60}
+    ],
+    "summary": {
+      "pt": "Líder de guerra dos Sinful Adams, a gangue goth do Boneyard. Contrata a Crew como segurança extra do Carnaval de Halloween, pedindo o mínimo de força para expulsar os Philharmonic Vampyres, e fica ocupada com as lutas do Ring of Wrath.",
+      "en": "War-leader of the Sinful Adams, the goth gang of the Boneyard. She hires the Crew as extra security for the Halloween Carnival, asking for as little force as possible in driving off the Philharmonic Vampyres, while she runs the Ring of Wrath bouts."
+    },
+    "sheetNote": null,
+    "sheet": null
   }
 ]
