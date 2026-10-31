@@ -12038,7 +12038,7 @@
     ],
     "summary": {
       "pt": "Fixer de Little Europe que toca o Night Market dele no andar de cima do Short Circuit, o bar que ele tem com o marido, Brain, e a filha, Bug. Vende só equipamento de tech, decks e programas completos e revisados, e quem decide quem entra é a pequena Bug. Também apresenta um canal sobre finanças na Garden.",
-      "en": "A Little Europe Fixer who runs his Night Market from the top floor of Short Circuit, the bar he owns with his husband Brain and their daughter Bug. He sells tech, decks and programs that are always complete and refurbished, and little Bug decides who gets in. He also hosts a finance channel on the Garden."
+      "en": "A Little Europe Fixer who runs his Night Market upstairs from Short Circuit, the family bar co-owned by Brain, his spouse, and their kid Bug. He sells tech, decks and programs that are always complete and refurbished, and little Bug decides who gets in. He also hosts a finance channel on the Garden."
     },
     "sheetNote": null,
     "sheet": {
@@ -12144,6 +12144,813 @@
     "summary": {
       "pt": "Marido de 3-Piece e coproprietário do Short Circuit. No térreo ele serve drinks e recolhe fofoca; no vídeo de 3-Piece sobre Agents, explica com empolgação como o brinquedo da Segotari virou o assistente que todo mundo carrega.",
       "en": "3-Piece's husband and co-owner of Short Circuit. On the ground floor he pours drinks and collects gossip; in 3-Piece's video on Agents he happily lays out how a Segotari toy became the assistant everyone carries."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "dana-zane",
+    "name": "Dana Zane",
+    "aliases": ["The Red Comet"],
+    "kind": "sheet",
+    "role": "Solo",
+    "roleRank": 8,
+    "rep": 7,
+    "affiliation": "VA-11 HALL-A",
+    "sources": [
+      {"book": "Mixing Drinks, Changing Lives", "page": 5},
+      {"book": "Mixing Drinks, Changing Lives", "page": 3},
+      {"book": "Mixing Drinks, Changing Lives", "page": 4}
+    ],
+    "summary": {
+      "pt": "Lutadora lendária da EWL, a Red Comet, que também foi gladiadora, consultora policial e herói de uma vid da Garden. Hoje é dona do bar VA-11 HALL-A por uma franquia da Hammered Industries e tenta viver discreta, mas ainda é uma Solo capaz de dar trabalho a um esquadrão inteiro. Adora qualquer coisa fofa e não resiste a enfiar a cabeça em objetos esquisitos.",
+      "en": "Legendary EWL wrestler known as the Red Comet, who has also been a gladiator, a police consultant and the hero of a Garden vid. She now owns the bar VA-11 HALL-A through a Hammered Industries franchise and tries to keep a low profile, yet she is still a Solo who can keep a whole squad busy. She loves anything cute and cannot help sticking her head into odd objects."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 60,
+      "seriouslyWounded": 30,
+      "deathSave": 14,
+      "stats": {"INT": 6, "REF": 8, "DEX": 8, "TECH": 6, "COOL": 8, "WILL": 6, "MOVE": 8, "BODY": 14, "EMP": 5},
+      "armoredStats": {},
+      "weapons": [
+        {"name": "Zankantou", "skill": "Melee Weapon", "attackBase": 16, "damage": "4d6", "rof": 1, "magazine": null, "class": "VeryHeavyMelee", "melee": true, "notes": "Excellent Quality Very Heavy Melee Weapon"},
+        {"name": "Brawling Attack", "skill": "Brawling", "attackBase": 18, "damage": "4d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null}
+      ],
+      "armor": [{"location": "Head", "name": "Skinweave", "sp": 7}, {"location": "Body", "name": "Skinweave", "sp": 7}],
+      "skills": {
+        "Accounting": 10, "Animal Handling": 12, "Athletics": 18, "Basic Tech": 12, "Brawling": 18, "Bureaucracy": 10,
+        "Business": 10, "Concentration": 10, "Conversation": 10, "Criminology": 10, "Deduction": 12, "Drive Land Vehicle": 10,
+        "Education": 10, "Endurance": 16, "Evasion": 18, "First Aid": 10, "Human Perception": 12, "Interrogation": 10,
+        "Language (English)": 10, "Language (Streetslang)": 8, "Local Expert (Glitch City)": 8, "Melee Weapon": 16, "Perception": 12, "Personal Grooming": 10,
+        "Persuasion": 10, "Resist Torture/Drugs": 14, "Stealth": 10, "Streetwise": 12, "Tactics": 10, "Tracking": 10,
+        "Trading": 10, "Wardrobe & Style": 10, "Wilderness Survival": 12
+      },
+      "gear": ["Agent", "VA-11 HALL-A Keys"],
+      "cyberware": [
+        "Contraceptive Implant",
+        "Cyberarm w/Superchrome® Covering",
+        "Cyberleg w/Jump Booster x2",
+        "Enhanced Antibodies",
+        "Grafted Muscle & Bone Lace x2",
+        "TUp (reduced visual footprint) Implanted Linear Frame Beta",
+        "Neural Link w/Chipware Socket, Kerenzikov & Pain Editor",
+        "Toxin Binders",
+        "Skinweave"
+      ],
+      "specials": [
+        {
+          "name": "Combat Awareness",
+          "text": {
+            "pt": "Role Ability Combat Awareness no Rank 8. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Combat Awareness at Rank 8. Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "TUp",
+          "text": {
+            "pt": "A ficha usa TUp para marcar itens melhorados por um Tech com a Maker Role Ability; o Linear Frame dela teve a pegada visual reduzida.",
+            "en": "The sheet uses TUp to mark items upgraded by a Tech's Maker Role Ability; her Linear Frame has a reduced visual footprint."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "alma-armas",
+    "name": "Alma Armas",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Netrunner",
+    "roleRank": 6,
+    "rep": 5,
+    "affiliation": null,
+    "sources": [{"book": "Mixing Drinks, Changing Lives", "page": 6}],
+    "summary": {
+      "pt": "Netrunner de aluguel da Pacifica Confederation, criada numa família comum e estável. Trabalha sobretudo como consultora de segurança, mas também aceita serviços de black hat. A Danger Gal a vê como suspeita de ser a ativista Alice_Rabbit, embora ela critique esse tipo de hacker em público.",
+      "en": "A hired Netrunner in the Pacifica Confederation, raised in an ordinary and stable family. She mostly works as a security consultant but also takes black-hat gigs. Danger Gal lists her as a suspect for the activist Alice_Rabbit, even though she loudly criticizes that kind of hacker."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 40,
+      "seriouslyWounded": 20,
+      "deathSave": 6,
+      "stats": {"INT": 8, "REF": 5, "DEX": 6, "TECH": 8, "COOL": 6, "WILL": 6, "MOVE": 6, "BODY": 6, "EMP": 6},
+      "armoredStats": {},
+      "weapons": [
+        {"name": "Heavy Pistol", "skill": "Handgun", "attackBase": 12, "damage": "3d6", "rof": 2, "magazine": null, "class": "HeavyPistol", "melee": false, "notes": "Excellent Quality"},
+        {"name": "Brawling Attack", "skill": "Brawling", "attackBase": 8, "damage": "2d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null}
+      ],
+      "armor": [
+        {"location": "Head", "name": "Bodyweight Suit", "sp": 11},
+        {"location": "Body", "name": "Bodyweight Suit", "sp": 11}
+      ],
+      "skills": {
+        "Acting": 10, "Athletics": 8, "Basic Tech": 12, "Brawling": 8, "Bribery": 12, "Bureaucracy": 12,
+        "Business": 12, "Composition": 12, "Conceal/Reveal Object": 12, "Concentration": 8, "Conversation": 10, "Cryptography": 16,
+        "Cybertech": 13, "Deduction": 12, "Education": 12, "Electronics/Security Tech": 16, "Evasion": 12, "First Aid": 10,
+        "Forgery": 16, "Handgun": 12, "Human Perception": 8, "Language (English)": 12, "Language (Streetslang)": 10, "Local Expert (Watson)": 12,
+        "Perception": 10, "Personal Grooming": 10, "Persuasion": 10, "Photography/Film": 12, "Pick Lock": 12, "Resist Torture/Drugs": 10,
+        "Stealth": 14, "Streetwise": 10, "Trading": 10, "Wardrobe & Style": 10
+      },
+      "gear": [
+        "Armor-Piercing H Pistol Ammunition x16",
+        "Agent x2",
+        "Breacher",
+        "Lock Picking Set",
+        "TUp (+1 Slot) Smart Glasses w/Low Light/Infrared/Ultraviolet & Virtuality",
+        "Techscanner",
+        "Techtool",
+        "EQ Cyberdeck w/Armor, Eraser, Sword x2, Crunch Whistle, DNA Lock, KRASH Barrier, Hardened Circuitry, Insulated Wiring & Range Upgrade"
+      ],
+      "cyberware": ["Contraceptive Implant", "Dynalar Professional Cyberhand x2", "Neural Link w/Interface Plugs"],
+      "specials": [
+        {
+          "name": "Interface 6",
+          "text": {"pt": "Habilidade de Role Netrunner (Interface 6).", "en": "Netrunner Role Ability (Interface 6)."}
+        },
+        {
+          "name": "Cyberdeck",
+          "text": {
+            "pt": "O deck dela é de qualidade excelente e traz Armor, Eraser, dois Swords, Crunch Whistle, DNA Lock, KRASH Barrier, Hardened Circuitry, Insulated Wiring e Range Upgrade.",
+            "en": "Excellent Quality deck with Armor, Eraser, two Swords and a Crunch Whistle, plus a DNA Lock, a KRASH Barrier, Insulated Wiring, Hardened Circuitry and a Range Upgrade."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "sei-asagiri",
+    "name": "Sei Asagiri",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Medtech",
+    "roleRank": 6,
+    "rep": 4,
+    "affiliation": null,
+    "sources": [{"book": "Mixing Drinks, Changing Lives", "page": 7}],
+    "summary": {
+      "pt": "Ex-White Knight da Valkyrie Squad. Quando criança foi ferida no parque por um policial da MAX-TAC em surto, no mesmo ataque que custou um olho a Stella Hoshii, e entrou nos White Knights em homenagem a quem a salvou. Escapou das acusações quando o grupo foi exposto e hoje é guarda-costas de Stella.",
+      "en": "Former White Knight of Valkyrie Squad. As a child she was hurt in a park by a MAX-TAC officer in the middle of a breakdown, in the same attack that cost Stella Hoshii an eye, and she joined the White Knights to honor her rescuer. She was cleared when the group was exposed and now works as Stella's bodyguard."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 50,
+      "seriouslyWounded": 25,
+      "deathSave": 10,
+      "stats": {"INT": 4, "REF": 8, "DEX": 8, "TECH": 6, "COOL": 4, "WILL": 6, "MOVE": 8, "BODY": 10, "EMP": 6},
+      "armoredStats": {},
+      "weapons": [
+        {"name": "Brawling Attack", "skill": "Brawling", "attackBase": 15, "damage": "3d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null},
+        {"name": "Martial Arts Attack", "skill": "Martial Arts (Akido)", "attackBase": 14, "damage": "3d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null}
+      ],
+      "armor": [
+        {"location": "Head", "name": "Light Armorjack", "sp": 11},
+        {"location": "Body", "name": "Light Armorjack", "sp": 11}
+      ],
+      "skills": {
+        "Animal Handling": 8, "Athletics": 14, "Basic Tech": 10, "Brawling": 15, "Bureaucracy": 10, "Concentration": 8,
+        "Conversation": 8, "Cybertech": 8, "Drive Land Vehicle": 12, "Education": 8, "Endurance": 14, "Evasion": 15,
+        "First Aid": 8, "Human Perception": 8, "Language (English)": 8, "Language (Streetslang)": 6, "Local Expert (Watson)": 6, "Martial Arts (Akido)": 14,
+        "Medical Tech": 10, "Perception": 10, "Persuasion": 6, "Play Instrument (Harmonica)": 10, "Resist Torture/Drugs": 10, "Stealth": 10,
+        "Streetwise": 10, "Surgery": 10
+      },
+      "gear": ["Agent", "Medscanner", "Medtech Bag"],
+      "cyberware": [
+        "Contraceptive Implant",
+        "Enhanced Antibodies",
+        "Grafted Muscle & Bone Lace x2",
+        "Medical Grade Neurochemical Regulator (helps prevent PTSD episodes)",
+        "Nasal Filters",
+        "Neural Link w/Chipware Socket & Tactile Boost"
+      ],
+      "specials": [
+        {
+          "name": "Medicine 6",
+          "text": {
+            "pt": "Habilidade de Role Medtech (Medicine 6), com Surgery 2 e MedTech [Cryo] 4.",
+            "en": "Medtech Role Ability (Medicine 6), with Surgery 2 and MedTech [Cryo] 4."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "dorothy-haze",
+    "name": "Dorothy Haze",
+    "aliases": ["Rebecca Dorothy Willow Graem", "Becky"],
+    "kind": "sheet",
+    "role": "Fixer",
+    "roleRank": 4,
+    "rep": 5,
+    "affiliation": null,
+    "sources": [{"book": "Mixing Drinks, Changing Lives", "page": 8}, {"book": "Mixing Drinks, Changing Lives", "page": 13}],
+    "summary": {
+      "pt": "Profissional do sexo em um corpo FBC, resgatada pela Danger Gal de um culto de chrome que adorava uma IA e depois acolhida por Millicent Graem, que a chama de Becky. Alegre, nada ingênua e dona de mãos-arma MIRD113, é também uma amiga leal de Jill.",
+      "en": "A sex worker in an FBC body, rescued by Danger Gal out of a cult built around an AI and its chrome bodies and later taken in by Millicent Graem, who calls her Becky. Cheerful, far from naive, and the owner of MIRD113 gun hands, she is also a loyal friend to Jill."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 55,
+      "seriouslyWounded": 28,
+      "deathSave": 12,
+      "stats": {"INT": 6, "REF": 6, "DEX": 6, "TECH": 4, "COOL": 8, "WILL": 6, "MOVE": 6, "BODY": 12, "EMP": 5},
+      "armoredStats": {},
+      "weapons": [
+        {"name": "MIRD113 Gun Hand x2", "skill": "Handgun", "attackBase": 14, "damage": "2d6", "rof": 2, "magazine": null, "class": "MediumPistol", "melee": false, "notes": "Rocklin Augmentics cyberarm option; the book describes it as an Exotic Medium Pistol with five shots (one per finger)"},
+        {"name": "Brawling Attack", "skill": "Brawling", "attackBase": 10, "damage": "4d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null}
+      ],
+      "armor": [
+        {"location": "Head", "name": "Subdermal Armor", "sp": 11},
+        {"location": "Body", "name": "Subdermal Armor", "sp": 11}
+      ],
+      "skills": {
+        "Accounting": 10, "Acting": 12, "Athletics": 8, "Brawling": 10, "Bribery": 10, "Business": 10,
+        "Concentration": 10, "Conversation": 11, "Cybertech": 10, "Education": 8, "Electronics/Security Tech": 8, "Endurance": 10,
+        "Evasion": 14, "First Aid": 10, "Gamble": 10, "Handgun": 14, "Human Perception": 11, "Interrogation": 10,
+        "Language (English)": 10, "Language (Japanese)": 10, "Language (Streetslang)": 8, "Local Expert (Watson)": 10, "Perception": 12, "Personal Grooming": 12,
+        "Persuasion": 12, "Resist Torture/Drugs": 10, "Stealth": 8, "Streetwise": 12, "Wardrobe & Style": 14
+      },
+      "gear": ["Expansive M Pistol Ammo x10", "Agent", "Disposable Cellphone", "Various Sex Toys & Accessories"],
+      "cyberware": [
+        "FBC (Rocklin Augmentics Alpha)",
+        "Cyberarm w/Rocklin Augmentics MIRD113 Gun Hand & Extra-Jointed Cyberlimb Upgrade",
+        "Cyberarm w/Rocklin Augmentics MIRD113 Gun Hand, Extra-Jointed Cyberlimb Upgrade & TUp (connected to scanner in tongue)",
+        "Medscanner",
+        "Cyberaudio Suite w/Signal Jammer & Voice Stress Analyzer",
+        "Cybereye",
+        "Cybereye w/VIC Jammer",
+        "Cyberleg w/Extra-Jointed Cyberlimb Upgrade x2",
+        "Cyberskull",
+        "TUp (reduced size) Implanted Linear Frame Sigma",
+        "TUp Midnight Lady Sexual Implant",
+        "TUp Mr. Studd Sexual Implant",
+        "Neural Link w/Interface Plugs",
+        "Subdermal Armor"
+      ],
+      "specials": [
+        {
+          "name": "Operator 4",
+          "text": {"pt": "Habilidade de Role Fixer (Operator 4).", "en": "Fixer Role Ability (Operator 4)."}
+        },
+        {
+          "name": "FBC",
+          "text": {
+            "pt": "Nesta versão de Night City ela é uma Full Body Conversion, ou seja, um cérebro humano num corpo totalmente cibernético (regras em Interface RED Volume 3).",
+            "en": "In this version of Night City she is a Full Body Conversion, a human brain in an otherwise fully cybernetic body (rules in Interface RED Volume 3)."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "jill-stingray",
+    "name": "Jill Stingray",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Tech",
+    "roleRank": 4,
+    "rep": 2,
+    "affiliation": "VA-11 HALL-A",
+    "sources": [{"book": "Mixing Drinks, Changing Lives", "page": 9}, {"book": "Mixing Drinks, Changing Lives", "page": 2}],
+    "summary": {
+      "pt": "Uma das duas bartenders do VA-11 HALL-A e filha de uma violinista de concerto. Largou uma oferta de pesquisa da Biotechnica e terminou com a namorada, e agora tem uma queda pela chefe, Dana Zane. É ótima de conversa e inútil como fonte: nunca conta nada sobre os clientes.",
+      "en": "One of the two bartenders at VA-11 HALL-A and the daughter of a concert violinist. She turned down a Biotechnica research offer and broke up with her girlfriend, and now has a crush on her boss, Dana Zane. She is great at conversation and useless as a source: she never talks about her customers."
+    },
+    "sheetNote": {
+      "pt": "A ficha imprime só uma linha de armadura, Kevlar® SP 7, depois de um traço na primeira; entrou como armadura de corpo.",
+      "en": "The sheet prints a single armor line, Kevlar® SP 7, after a dash on the first row; it is entered as body armor."
+    },
+    "sheet": {
+      "hp": 35,
+      "seriouslyWounded": 18,
+      "deathSave": 4,
+      "stats": {"INT": 7, "REF": 4, "DEX": 4, "TECH": 6, "COOL": 6, "WILL": 5, "MOVE": 4, "BODY": 4, "EMP": 6},
+      "armoredStats": {},
+      "weapons": [
+        {"name": "Brawling Attack", "skill": "Brawling", "attackBase": 6, "damage": "1d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null}
+      ],
+      "armor": [{"location": "Body", "name": "Kevlar®", "sp": 7}],
+      "skills": {
+        "Acting": 10, "Animal Handling": 8, "Athletics": 6, "Basic Tech": 10, "Brawling": 6, "Bureaucracy": 10,
+        "Business": 10, "Concentration": 7, "Conversation": 16, "Deduction": 10, "Education": 12, "Evasion": 7,
+        "First Aid": 8, "Human Perception": 12, "Language (English)": 11, "Language (French)": 8, "Language (Streetslang)": 9, "Local Expert (Glitch City)": 9,
+        "Perception": 10, "Personal Grooming": 10, "Persuasion": 12, "Play Instrument (Violin)": 10, "Resist Torture/Drugs": 10, "Science (Biochemistry)": 12,
+        "Stealth": 6, "Streetwise": 10, "Wardrobe & Style": 10
+      },
+      "gear": ["Agent", "Cat Toys", "Collection of Antique Liquor", "Lighter", "Pack of Cigarettes"],
+      "cyberware": ["Biomonitor", "Contraceptive Implant", "Hammered Industries Cyberliver"],
+      "specials": [
+        {
+          "name": "Maker 4",
+          "text": {
+            "pt": "Habilidade de Role Tech (Maker 4): Field Expertise 4 e Fabrication Expertise 4.",
+            "en": "Tech Role Ability (Maker 4): Field Expertise 4 and Fabrication Expertise 4."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "stella-hoshii",
+    "name": "Stella Hoshii",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Exec",
+    "roleRank": 4,
+    "rep": 5,
+    "affiliation": null,
+    "sources": [{"book": "Mixing Drinks, Changing Lives", "page": 10}],
+    "summary": {
+      "pt": "Filha de um alto executivo da Night Corp que nasceu como exótica por causa da cura genética para uma síndrome rara. Perdeu um olho no mesmo ataque que feriu Sei Asagiri, cuja versão oficial a MAX-TAC maquiou. Hoje é bem ajustada, generosa, faz caridade e vai disfarçada aos shows de *Kira* Miki.",
+      "en": "Daughter of a senior Night Corp exec, born an Exotic because of the genetic cure for a rare syndrome. She lost an eye in the same attack that hurt Sei Asagiri, whose official story MAX-TAC covered up. Today she is well adjusted and generous, does charity work and sneaks into *Kira* Miki concerts in disguise."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 35,
+      "seriouslyWounded": 18,
+      "deathSave": 4,
+      "stats": {"INT": 5, "REF": 4, "DEX": 4, "TECH": 4, "COOL": 5, "WILL": 6, "MOVE": 6, "BODY": 4, "EMP": 6},
+      "armoredStats": {},
+      "weapons": [
+        {"name": "Brawling Attack", "skill": "Brawling", "attackBase": 10, "damage": "1d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null}
+      ],
+      "armor": [
+        {"location": "Head", "name": "Skinweave", "sp": 7},
+        {"location": "Body", "name": "Light Armorjack", "sp": 11}
+      ],
+      "skills": {
+        "Accounting": 10, "Athletics": 6, "Brawling": 10, "Bureaucracy": 10, "Business": 12, "Concentration": 10,
+        "Conversation": 10, "Dance": 8, "Education": 10, "Endurance": 10, "Evasion": 10, "First Aid": 8,
+        "Human Perception": 8, "Language (English)": 9, "Language (Streetslang)": 7, "Local Expert (Executive Zone)": 7, "Perception": 7, "Personal Grooming": 11,
+        "Persuasion": 11, "Resist Torture/Drugs": 8, "Stealth": 6, "Wardrobe & Style": 11
+      },
+      "gear": ["Agent", "Anti-Smog Breathing Mask", "Personal CarePak", "Trauma Team (Executive)"],
+      "cyberware": ["Exotic Biosculpting", "Contraceptive Implant", "Cybereye w/ Chyron", "Skinweave"],
+      "specials": [
+        {
+          "name": "Teamwork 4",
+          "text": {"pt": "Habilidade de Role Exec (Teamwork 4).", "en": "Exec Role Ability (Teamwork 4)."}
+        }
+      ]
+    }
+  },
+  {
+    "id": "donovan-d-dawson",
+    "name": "Donovan D. Dawson",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Media",
+    "roleRank": 6,
+    "rep": null,
+    "affiliation": "Augmented Eye",
+    "sources": [{"book": "Mixing Drinks, Changing Lives", "page": 11}],
+    "summary": {
+      "pt": "Empresário rico que construiu a fortuna viajando e fechando negócios arriscados e hoje é dono e editor-chefe do Augmented Eye, o segundo screamsheet mais vendido da cidade. Machista e abusivo com os funcionários, insiste que Jill escreveria uma ótima coluna de fofocas sobre a clientela do bar.",
+      "en": "Wealthy businessman who made his fortune traveling and cutting risky deals, now publisher and editor-in-chief of the Augmented Eye, the city's second bestselling screamsheet. Sexist and abusive to his staff, he keeps insisting that Jill would write a great gossip column about the bar's customers."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "jamie",
+    "name": "Jamie",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Solo",
+    "roleRank": 4,
+    "rep": null,
+    "affiliation": null,
+    "sources": [{"book": "Mixing Drinks, Changing Lives", "page": 11}],
+    "summary": {
+      "pt": "Edgerunner especializado em contratos de eliminação, que prefere ser chamado de caçador de recompensas. Muito aprimorado com chrome, aparenta perder memória e sabe que anda perto da ciberpsicose; escolhe o bar porque a dona dá conta de qualquer encrenca.",
+      "en": "Edgerunner who specializes in wetwork contracts and prefers to be called a bounty hunter. Heavily chromed, he seems to be losing memories and knows he is close to cyberpsychosis; he picks this bar because its owner can handle any trouble."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "kira-miki",
+    "name": "*Kira* Miki",
+    "aliases": ["Kira Miki"],
+    "kind": "profile",
+    "role": "Rockerboy",
+    "roleRank": 7,
+    "rep": null,
+    "affiliation": null,
+    "sources": [{"book": "Mixing Drinks, Changing Lives", "page": 12}],
+    "summary": {
+      "pt": "Ídolo full-borg e superstar que passa pelo VA-11 HALL-A quando vem à cidade para um show. Gosta de Jill, a ponto de dedicar uma música a ela, e acredita de verdade que ídolos mudam o mundo pela sinceridade.",
+      "en": "Full-borg idol and superstar who drops by VA-11 HALL-A whenever she is in town for a concert. She is fond of Jill, even dedicating a song to her, and sincerely believes idols can change the world through honesty."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "rad-shiba",
+    "name": "Rad Shiba",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": null,
+    "sources": [{"book": "Mixing Drinks, Changing Lives", "page": 12}],
+    "summary": {
+      "pt": "Exótico canino extremo, esculpido e programado com chips de comportamento para ser o mais parecido possível com um cão. O nome é apelido de Dana Zane por causa dos óculos escuros e da camisa tropical, e ele atua como mascote não oficial do bar para arrecadar fundos para a CIRA.",
+      "en": "Extreme canine Exotic, sculpted and fitted with behavior chips to be as dog-like as possible. The name is a nickname from Dana Zane, inspired by his sunglasses and tropical shirt, and he works as the bar's unofficial mascot to raise money for the CIRA."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "robert-gil",
+    "name": "Robert",
+    "aliases": ["Gil", "Gillian"],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "VA-11 HALL-A",
+    "sources": [{"book": "Mixing Drinks, Changing Lives", "page": 12}],
+    "summary": {
+      "pt": "O segundo bartender do VA-11 HALL-A, chamado de Gil ou Gillian por Jill e por Zane. É um mistério: tem jeito de ex-soldado ou policial, talvez foragido na China, e Zane o protege com muito zelo.",
+      "en": "VA-11 HALL-A's second bartender, called Gil or Gillian by Jill and Zane. He is a mystery: he seems a former soldier or cop, possibly on the run from China, and Zane is fiercely protective of him."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "streaming-chan",
+    "name": "Streaming-Chan",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Rockerboy",
+    "roleRank": 4,
+    "rep": null,
+    "affiliation": null,
+    "sources": [{"book": "Mixing Drinks, Changing Lives", "page": 13}],
+    "summary": {
+      "pt": "Streamer que transmite a vida 24 horas e guarda o conteúdo mais picante atrás de uma assinatura paga. Sua audiência sobe quando visita o VA-11 HALL-A, então aparece sempre; tornou-se próxima de Dorothy Haze e é patrocinada pela Shining Finger.",
+      "en": "Streamer who broadcasts her life around the clock and hides the spicier material behind a paid subscription. Whenever she turns up at VA-11 HALL-A her audience grows, which is why she keeps coming back to pester the staff; she has grown close to Dorothy Haze and is sponsored by Shining Finger."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "taylor",
+    "name": "Taylor",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Media",
+    "roleRank": 5,
+    "rep": null,
+    "affiliation": "Sola Anima",
+    "sources": [{"book": "Mixing Drinks, Changing Lives", "page": 13}],
+    "summary": {
+      "pt": "Um dos cinco \"cérebros engarrafados\" de Night City, parte do projeto Sola Anima da Biotechnica com a Night City University. O cérebro vive num Biosystem aprimorado que permite se mover e interagir, e Taylor ainda escreveu o best-seller The Last Rain in the World.",
+      "en": "One of Night City's five \"bottled brains\", part of the Sola Anima project run by Biotechnica and Night City University. The brain lives in an upgraded Biosystem that allows movement and interaction, and Taylor also wrote the bestseller The Last Rain in the World."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "nitro",
+    "name": "Nitro",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Solo",
+    "roleRank": 4,
+    "rep": 3,
+    "affiliation": "Maelstrom",
+    "sources": [
+      {"book": "Karaoke Night", "page": 8},
+      {"book": "Karaoke Night", "page": 4},
+      {"book": "Karaoke Night", "page": 2}
+    ],
+    "summary": {
+      "pt": "Ganger da Maelstrom com mais de dois metros de altura e vários olhos vermelhos brilhantes, que toma o bar Bouncing Benny's para festejar o aniversário com karaokê. Não está no topo da gangue, mas os outros a seguem e ela comemora cada golpe como se fosse um presente.",
+      "en": "Maelstrom ganger well over two meters tall with several glowing red eyes, who takes over Bouncing Benny's to celebrate her birthday with karaoke. She is not high in the gang, but the others follow her lead and she cheers every hit like a gift."
+    },
+    "sheetNote": {
+      "pt": "A lista de perícias imprime \"Handguns\"; entrou como Handgun, a perícia do livro-base.",
+      "en": "The skill list prints \"Handguns\"; it is entered as Handgun, the rule book skill."
+    },
+    "sheet": {
+      "hp": 40,
+      "seriouslyWounded": 20,
+      "deathSave": 6,
+      "stats": {"INT": 4, "REF": 7, "DEX": 5, "TECH": 3, "COOL": 5, "WILL": 6, "MOVE": 5, "BODY": 6, "EMP": 3},
+      "armoredStats": {},
+      "weapons": [
+        {"name": "Monowire", "skill": "Melee Weapon", "attackBase": 13, "damage": "3d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null},
+        {"name": "Militech Crusher", "skill": "Handgun", "attackBase": 14, "damage": "3d6", "rof": 1, "magazine": 12, "class": "VeryHeavyPistol", "rangeDv": [13, null, null, null, null, null, null, null], "melee": false, "notes": "Power Weapon; Shell Ammo. The printed DV table lists only 13 at 0-6 m/yds"}
+      ],
+      "armor": [
+        {"location": "Head", "name": "Subdermal Armor", "sp": 11, "spVsMelee": 6},
+        {"location": "Body", "name": "Subdermal Armor", "sp": 11, "spVsMelee": 6}
+      ],
+      "skills": {
+        "Athletics": 13, "Brawling": 11, "Concentration": 6, "Conversation": 6, "Drive Land Vehicle": 8, "Education": 6,
+        "Endurance": 9, "Evasion": 13, "First Aid": 6, "Handgun": 14, "Human Perception": 6, "Interrogation": 10,
+        "Local Expert": 8, "Melee Weapon": 13, "Perception": 10, "Persuasion": 8, "Resist Torture/Drugs": 12, "Stealth": 8,
+        "Streetwise": 10, "Tactics": 6
+      },
+      "gear": [],
+      "cyberware": ["Neuroport", "Maelstrom Multi-Optic Mount", "Salvaged Monowire Cyberarm"],
+      "specials": [
+        {
+          "name": "Solo",
+          "text": {"pt": "Role Rank 4, com +4 nas rolagens de Iniciativa.", "en": "Role Rank 4, giving +4 to Initiative Rolls."}
+        },
+        {
+          "name": "Self-ICE",
+          "text": {
+            "pt": "Para fazer um Quickhack nela, o Netrunner precisa antes quebrar 1 Passwall (DV6).",
+            "en": "A Netrunner has to Breach one Passwall (DV6) before any Quickhack against her can happen."
+          }
+        },
+        {
+          "name": "Maelstrom Multi-Optic Mount",
+          "text": {
+            "pt": "+2 em testes de Perception baseados em visão, e enxerga no escuro e com pouca luz sem penalidade.",
+            "en": "+2 to sight-based Perception Checks, and she sees in low light and darkness without penalty."
+          }
+        },
+        {
+          "name": "Salvaged Monowire Cyberarm",
+          "text": {
+            "pt": "O braço esquerdo carrega um Monowire, usado como arma corpo a corpo.",
+            "en": "Her left Cyberarm holds a Monowire, used as her melee weapon."
+          }
+        },
+        {
+          "name": "Neuroport",
+          "text": {
+            "pt": "Controla todo o cyberware dela e inclui um holophone.",
+            "en": "Controls all her cyberware and includes a holophone."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "stingball",
+    "name": "Stingball",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Solo",
+    "roleRank": 1,
+    "rep": 1,
+    "affiliation": "Maelstrom",
+    "sources": [
+      {"book": "Karaoke Night", "page": 9},
+      {"book": "Karaoke Night", "page": 2},
+      {"book": "Karaoke Night", "page": 3}
+    ],
+    "summary": {
+      "pt": "Maelstrom recém-promovido a membro pleno, deixado de segurança na porta do Bouncing Benny's durante a festa de Nitro. Queria estar lá dentro, mas tem mais medo dos colegas do que de estranhos, e um suborno de 100 eddies pode fazê-lo olhar para o outro lado.",
+      "en": "A newly full Maelstrom member left guarding the door of Bouncing Benny's during Nitro's party. He would rather be inside, but fears his own gang more than strangers, and a 100 eddie bribe can make him look away."
+    },
+    "sheetNote": {
+      "pt": "A ficha é impressa como \"Maelstrom Gonk/Stingball\" e serve também para os Maelstrom comuns da festa.",
+      "en": "The sheet is printed as \"Maelstrom Gonk/Stingball\" and also serves the ordinary Maelstrom gangers at the party."
+    },
+    "sheet": {
+      "hp": 40,
+      "seriouslyWounded": 20,
+      "deathSave": 6,
+      "stats": {"INT": 4, "REF": 7, "DEX": 5, "TECH": 3, "COOL": 5, "WILL": 6, "MOVE": 5, "BODY": 6, "EMP": 3},
+      "armoredStats": {},
+      "weapons": [
+        {"name": "Gorilla Arm", "skill": "Melee Weapon", "attackBase": 12, "damage": "3d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null},
+        {"name": "Constitutional Arms Unity", "skill": "Handgun", "attackBase": 11, "damage": "3d6", "rof": 2, "magazine": 12, "class": "HeavyPistol", "rangeDv": [13, 15, 20, 25, 30, 30, null, null], "melee": false, "notes": "Power Weapon"}
+      ],
+      "armor": [
+        {"location": "Head", "name": "Skinweave", "sp": 7, "spVsMelee": 4},
+        {"location": "Body", "name": "Skinweave", "sp": 7, "spVsMelee": 4}
+      ],
+      "skills": {"Athletics": 10, "Brawling": 10, "Evasion": 11, "Human Perception": 9, "Perception": 10, "Tactics": 10},
+      "gear": [],
+      "cyberware": ["Neuroport", "Gorilla Arm", "Maelstrom Multi-Optic Mount"],
+      "specials": [
+        {
+          "name": "Solo",
+          "text": {"pt": "Role Rank 1, com +1 nas rolagens de Iniciativa.", "en": "Role Rank 1, giving +1 to Initiative Rolls."}
+        },
+        {
+          "name": "Gorilla Arm",
+          "text": {"pt": "Cyberarm reforçado para esmagar e quebrar.", "en": "Cyberarm built for maximum smashing and bashing."}
+        },
+        {
+          "name": "Maelstrom Multi-Optic Mount",
+          "text": {
+            "pt": "+2 em testes de Perception baseados em visão, e enxerga no escuro e com pouca luz sem penalidade.",
+            "en": "+2 to sight-based Perception Checks, and he sees in low light and darkness without penalty."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "rocky-erikson",
+    "name": "Rocky Erikson",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Netrunner",
+    "roleRank": 3,
+    "rep": 2,
+    "affiliation": "MoorE Technologies",
+    "sources": [
+      {"book": "Karaoke Night", "page": 10},
+      {"book": "Karaoke Night", "page": 2},
+      {"book": "Karaoke Night", "page": 7}
+    ],
+    "summary": {
+      "pt": "Netrunner da MoorE Technologies e amante ocasional do executivo Roger Kynard. Prefere entregar o data shard ao empregador a preservar o caso, e leva um grupo de hustle ao estacionamento de Rancho Coronado para tomá-lo. Luta de trás de cobertura com Quickhacks e foge se for ferido gravemente.",
+      "en": "Netrunner for MoorE Technologies and occasional lover of the executive Roger Kynard. He would rather hand the data shard to his employer than keep the affair, and brings a group of hustle to the Rancho Coronado parking lot to take it. He fights from cover with Quickhacks and flees if badly hurt."
+    },
+    "sheetNote": null,
+    "sheet": {
+      "hp": 30,
+      "seriouslyWounded": 15,
+      "deathSave": 4,
+      "stats": {"INT": 5, "REF": 4, "DEX": 4, "TECH": 6, "COOL": 3, "WILL": 4, "MOVE": 4, "BODY": 4, "EMP": 4},
+      "armoredStats": {},
+      "weapons": [
+        {"name": "Constitutional Arms Unity", "skill": "Handgun", "attackBase": 10, "damage": "3d6", "rof": 2, "magazine": 12, "class": "HeavyPistol", "rangeDv": [13, 15, 20, 25, 30, 30, null, null], "melee": false, "notes": "Power Weapon"}
+      ],
+      "armor": [{"location": "Body", "name": "Kevlar® Suit", "sp": 7, "spVsMelee": 4}],
+      "skills": {"Athletics": 6, "Brawling": 6, "Evasion": 8, "Human Perception": 10, "Perception": 10, "Stealth": 10},
+      "gear": [],
+      "cyberware": ["Neuroport w/ Cyberdeck"],
+      "specials": [
+        {
+          "name": "Netrunner",
+          "text": {
+            "pt": "Role Rank 3, com Interface 3 e 2 NET Actions por Turno.",
+            "en": "Role Rank 3, with Interface 3 and 2 Net Actions per Turn."
+          }
+        },
+        {
+          "name": "Neuroport w/ Cyberdeck",
+          "text": {
+            "pt": "O Neuroport dele traz um Cyberdeck embutido, então ele pode fazer Quickhacks.",
+            "en": "A Cyberdeck built into his Neuroport gives him access to Quickhacks."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "benny-jez",
+    "name": "Benny Jeż",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Bouncing Benny’s",
+    "sources": [{"book": "Karaoke Night", "page": 2}, {"book": "Karaoke Night", "page": 4}],
+    "summary": {
+      "pt": "Dono do Bouncing Benny's, bar de Northside, que achou o data shard esquecido por Roger Kynard e planeja vendê-lo para levantar uns eddies. Não é lutador: se a coisa esquenta, se esconde no escritório e deixa a Maelstrom resolver.",
+      "en": "Owner of Bouncing Benny's, a Northside bar, who found the data shard Roger Kynard dropped and plans to sell it for quick eddies. He is no fighter: when things heat up he hides in his office and lets the Maelstrom sort it out."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "cherry-babomb",
+    "name": "Cherry BaBomb",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Bouncing Benny’s",
+    "sources": [{"book": "Karaoke Night", "page": 4}, {"book": "Karaoke Night", "page": 3}],
+    "summary": {
+      "pt": "Ex-nômade que deixou a família para tentar a sorte como cantora em Night City e hoje serve no Bouncing Benny's. Não é da Maelstrom e pode ajudar o grupo se receber um bom motivo, mas nunca se expõe a perigo real e foge de moto assim que os tiros começam.",
+      "en": "Former Nomad who left her family to try making it as a singer in Night City and now tends bar at Bouncing Benny's. She is not Maelstrom and may help the crew for a good reason, but she never risks real danger and rides off the moment shooting starts."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "roger-kynard",
+    "name": "Roger Kynard",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Dynalar",
+    "sources": [{"book": "Karaoke Night", "page": 2}, {"book": "Karaoke Night", "page": 7}],
+    "summary": {
+      "pt": "Executivo da Dynalar que perdeu um data shard criptografado com dados sigilosos num bar de Northside e pagou à fixer Regina Jones para recuperá-lo. Espera o grupo num estacionamento em Rancho Coronado, onde o amante, Rocky, tenta tomar o chip.",
+      "en": "Dynalar executive who lost an encrypted data shard of classified company data in a Northside bar and paid the Fixer Regina Jones to get it back. He waits for the crew in a Rancho Coronado parking lot, where his lover Rocky tries to seize the chip."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "toggle",
+    "name": "Toggle",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "The Temple",
+    "sources": [{"book": "Toggle’s Temple", "page": 2}, {"book": "Toggle’s Temple", "page": 3}],
+    "summary": {
+      "pt": "Colecionador de armas que vive nos esgotos sob a borda oeste da Hot Zone e toca sozinho o The Temple, um estande de tiro com pista de obstáculos para testar armas antes de comprar. Herdou o acervo da mãe, morta por ciberpsicose, e jura que golfinhos e orcas manipulam corporações, governos e a NET.",
+      "en": "Gun collector who lives in the sewers under the western edge of the Hot Zone and runs The Temple alone, a firing range with an obstacle course for trying weapons before buying. He inherited his mother's collection after she died of cyberpsychosis, and swears dolphins and orcas pull the strings of corporations, governments and the NET."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "angie-wu-2-0",
+    "name": "Angie Wu 2.0",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "KLIA Garden Patch Network",
+    "sources": [{"book": "Toggle’s Temple", "page": 2}, {"book": "Spinning Your Wheels", "page": 2}],
+    "summary": {
+      "pt": "Jornalista que apresenta o Rebuilding Night City, programa da rede KLIA Garden Patch sobre a reconstrução lenta da cidade. Entrevista gente fora do comum, de um colecionador paranoico de armas a um fabricante de bicicletas, e se acostumou a ser recebida com arma na cara.",
+      "en": "Journalist who hosts Rebuilding Night City, a KLIA Garden Patch Network show about the city's slow reconstruction. She interviews unusual people, from a paranoid gun collector to a bicycle maker, and has grown used to being greeted with a gun in her face."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "jericho-hunt",
+    "name": "Jericho Hunt",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Today At The Source",
+    "sources": [{"book": "Woodchipper’s Garage", "page": 2}],
+    "summary": {
+      "pt": "Jornalista freelancer que já escreveu para vários screamsheets, incluindo o Night City Today News, e passou a cobrir notícias de empresas na The Glen antes de lançar a Garden Patch independente Today At The Source. A primeira série trata de armas e começa com Woodchipper.",
+      "en": "Freelance journalist who has written for several screamsheets, including Night City Today News, and covered the corporate beat in The Glen before launching the independent Garden Patch Today At The Source. The first series is about guns and starts with Woodchipper."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "gabriel-yang",
+    "name": "Gabriel Yang",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Yang’s Wheels",
+    "sources": [{"book": "Spinning Your Wheels", "page": 2}, {"book": "Spinning Your Wheels", "page": 3}],
+    "summary": {
+      "pt": "Fundador da Yang's Wheels, de uma Pack nômade da Snake Nation que deixou a cidade enquanto ele ficou. Largou a construção civil para fabricar bicicletas, skates e patins baratos, com a engenheira-chefe Edith Lamarr, e já planeja levar a mesma ideia ao transporte público.",
+      "en": "Founder of Yang's Wheels, from a Snake Nation Nomad Pack that left the city while he stayed behind. He quit construction work to build cheap bicycles, skateboards and inline skates with Chief Engineer Edith Lamarr, and is already planning to bring the same idea to public transport."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "mr-a-maaaze",
+    "name": "Mr. A-MAAAZE",
+    "aliases": ["William Maze"],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "House of MAAAZE",
+    "sources": [{"book": "Must Have Cyberware Deals", "page": 2}, {"book": "Interface RED Volume 3", "page": 46}],
+    "summary": {
+      "pt": "Vendedor de cyberware que grita seus anúncios como \"Mr. A-MAAAZE\"; o nome verdadeiro é William Maze. Toca a House of MAAAZE no Dock 13, em South Night City, e vive tentando enfiar o produto em quem passa. Os anúncios dele terminam com o microfone ainda aberto.",
+      "en": "Cyberware seller who shouts his ads as \"Mr. A-MAAAZE\"; his real name is William Maze. He runs the House of MAAAZE at Dock 13 in South Night City and keeps pushing product on everyone who walks by. His ads tend to end with the mic still open."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "cee-arrtea",
+    "name": "Cee-arrtea",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Segotari Station",
+    "sources": [{"book": "Segotari Power", "page": 2}],
+    "summary": {
+      "pt": "Apresentadora que se define como entusiasta de ração de pasta de amendoim e \"Demônio\" certificado da Segotari Station no Playland by the Sea. Faz listas retrospectivas dos melhores jogos de cada geração da Segotari, montadas a partir de enquetes na própria Garden Patch.",
+      "en": "Host who calls herself a Peanut Butter Kibble enthusiast and holds a \"Demon\" certification at the Segotari Station in Playland by the Sea. She makes retrospective lists of the best games from each Segotari generation, compiled from surveys on her own Garden Patch."
     },
     "sheetNote": null,
     "sheet": null

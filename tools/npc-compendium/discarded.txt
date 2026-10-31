@@ -65,3 +65,4 @@ Interface RED Volume 5 | p.78 | Cyberbear™ | Cyberpet species/brand (Biotechni
 Interface RED Volume 5 | p.79 | Cyberboa™ | Cyberpet species/brand (Biotechnica product line, not a unique named being)
 Interface RED Volume 5 | p.80 | Cyberrat™ | Cyberpet species/brand (Biotechnica product line, not a unique named being)
 Interface RED Volume 5 | p.81 | Cyberwolf™ | Cyberpet species/brand (Biotechnica product line, not a unique named being)
+Karaoke Night | p.10 | Rocky’s Hustle | generic (type sheet for Rocky's hired hustle, no proper name)
