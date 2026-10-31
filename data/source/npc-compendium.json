@@ -845,7 +845,8 @@
     "rep": null,
     "affiliation": null,
     "sources": [
-      { "book": "Core Book", "page": 6 },
+      { "book": "Core Book", "page": 7 },
+      { "book": "Core Book", "page": 8 },
       { "book": "Core Book", "page": 9 },
       { "book": "Core Book", "page": 122 },
       { "book": "Core Book", "page": 124 }
@@ -896,7 +897,7 @@
     ],
     "summary": {
       "pt": "Presidente dos Estados Unidos, ex-oficial militar, no cargo há mais de uma década e reeleita quatro vezes ignorando os limites de mandato. Estatizou a Militech reativando a patente do general Lundee depois da explosão em Night City. É praticamente a única coisa que mantém o país unido.",
-      "en": "President of the United States, an ex-military officer, in office for over a decade and \"re-elected\" four times in disregard of term limits. She nationalized Militech by reactivating General Lundee's commission after the Night City blast. She is pretty much the only thing holding the country together."
+      "en": "President of the United States, an ex-military officer, in office for over a decade and \"re-elected\" four times in disregard of term limits. She nationalized Militech by reactivating General Lundee's commission after the Night City blast. In practice, her grip is what keeps the nation from falling apart."
     },
     "sheetNote": null,
     "sheet": null
@@ -998,7 +999,7 @@
       { "book": "Core Book", "page": 447 }
     ],
     "summary": {
-      "pt": "Nascida Arasaka, filha de Kei, é a rosto da Danger Gal, agência de detetives de socialites e, nos bastidores, desmonta operações da Arasaka em troca de poder ficar nos EUA. Parece boba e fofa, mas é uma criminologista afiada. Na aventura Black Dog, chega de AV para ajudar a equipe a levar uma bomba da família até Los Alamos.",
+      "pt": "Nascida Arasaka, filha de Kei, é o rosto da Danger Gal, agência de detetives de socialites e, nos bastidores, desmonta operações da Arasaka em troca de poder ficar nos EUA. Parece boba e fofa, mas é uma criminologista afiada. Na aventura Black Dog, chega de AV para ajudar a equipe a levar uma bomba da família até Los Alamos.",
       "en": "Born an Arasaka and Kei's daughter, she is the Face of Danger Gal, a detective firm for socialites that secretly dismantles Arasaka operations as part of her deal to stay in the U.S. She seems bubbly but is a sharp criminologist. In the Black Dog adventure she drops in by AV to help the crew take a family bomb to Los Alamos."
     },
     "sheetNote": null,
@@ -1018,7 +1019,7 @@
     ],
     "summary": {
       "pt": "Bioquímico brilhante e imprevisível, fundador da Biotechnica e pai do CHOOH2. Quer restaurar a biosfera, recriando espécies extintas com defesas novas, e deixa os negócios para o neto Mario e para a esposa Luchessia. Pode ser o Doutor Moreau da Time of the Red.",
-      "en": "Brilliant, erratic biochemist who built Biotechnica and the CHOOH2 fuel. He wants to restore the biosphere by recreating extinct animals with new defenses, leaving business to his grandson Mario and wife Luchessia. He may well be the Doctor Moreau of the Time of the Red."
+      "en": "Brilliant, erratic biochemist who built Biotechnica and the CHOOH2 fuel. He wants to restore the biosphere by recreating extinct animals with new defenses, leaving business to his grandson Mario and wife Luchessia. Some see in him this era's mad island-doctor of genetics."
     },
     "sheetNote": null,
     "sheet": null
@@ -1397,7 +1398,7 @@
     ],
     "summary": {
       "pt": "Estrela da Net 54 que investiga escândalos e corrupção e aparece sem convite com sua equipe de câmeras. Já derrubou muita gente poderosa e por isso vive como foragida por meses. Corre o boato de que não é a primeira Fiona Hayes.",
-      "en": "Net 54 star who chases scandal, graft and corruption, turning up unwanted with her camera crew. She has brought down many powerful people and lives like a fugitive for months at a time. Rumor says she is not the first Fiona Hayes."
+      "en": "Net 54 star who chases scandal, graft and corruption, turning up unwanted with her camera crew. She has brought down many powerful people and so spends long stretches of the year in hiding. Rumor says she is not the first Fiona Hayes."
     },
     "sheetNote": null,
     "sheet": null
@@ -1590,7 +1591,7 @@
     ],
     "summary": {
       "pt": "Solo em ascensão que saiu da Combat Zone e se autoproclamou \"Queen of Solos\". Lidera uma organização pequena e eficiente de assassinos e guarda-costas e, diferente de outros Solos, dá entrevistas e aparece em público.",
-      "en": "Rising Solo who fought her way out of the Combat Zone and calls herself the \"Queen of Solos\". She runs a small but effective organization of freelance killers and bodyguards and, unlike many Solos, gives interviews and makes public appearances."
+      "en": "Rising Solo from the Combat Zone who calls herself the \"Queen of Solos\". She runs a small but effective organization of freelance killers and bodyguards and, unlike many Solos, gives interviews and makes public appearances."
     },
     "sheetNote": null,
     "sheet": null
