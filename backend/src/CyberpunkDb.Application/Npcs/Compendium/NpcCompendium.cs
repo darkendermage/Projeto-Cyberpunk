@@ -2,6 +2,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using CyberpunkDb.Application.Common;
 using CyberpunkDb.Application.Localization;
+using CyberpunkDb.Application.Npcs.Rules;
 
 namespace CyberpunkDb.Application.Npcs.Compendium;
 
@@ -47,6 +48,22 @@ public sealed class NpcCompendium
             s.Specials.Select(x => new CompendiumSpecialDto(x.Name, x.Text.Current)).ToList());
         return new CompendiumNpcDetail(n.Id, n.Name, n.Aliases, n.Kind, n.Role, n.RoleRank, n.Rep, n.Affiliation, n.Sources,
             n.Summary.Current, n.SheetNote?.Current, sheet);
+    }
+
+    /// <summary>
+    /// The rule-book key of a printed skill: "Handgun" gives "handgun", "Language (English)" gives "language:English".
+    /// Null when the rule book has no such skill.
+    /// </summary>
+    public static string? SkillKey(string name, NpcRuleBook rules)
+    {
+        name = name.Trim();
+        var exact = rules.Skills.FirstOrDefault(k => k.Name.Equals(name, StringComparison.OrdinalIgnoreCase) || k.Id.Equals(name, StringComparison.OrdinalIgnoreCase));
+        if (exact is not null) return exact.Id;
+        var open = name.IndexOf('(');
+        if (open <= 0 || !name.EndsWith(')')) return null;
+        var baseName = name[..open].Trim();
+        var skill = rules.Skills.FirstOrDefault(k => k.Name.Equals(baseName, StringComparison.OrdinalIgnoreCase));
+        return skill is null ? null : $"{skill.Id}:{name[(open + 1)..^1].Trim()}";
     }
 
     public static NpcCompendium LoadEmbedded()

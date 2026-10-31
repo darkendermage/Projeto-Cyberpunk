@@ -1,5 +1,6 @@
 using System.Text.RegularExpressions;
 using CyberpunkDb.Application.Npcs.Compendium;
+using CyberpunkDb.Application.Npcs.Rules;
 using FluentAssertions;
 
 namespace CyberpunkDb.Tests.Compendium;
@@ -72,5 +73,32 @@ public class NpcCompendiumDataTests
     {
         Compendium.Find("adam-smasher")!.Name.Should().Be("Adam Smasher");
         Compendium.Find("nobody").Should().BeNull();
+    }
+
+    [Fact]
+    public void Ranged_weapons_have_a_class()
+    {
+        foreach (var weapon in Compendium.All.Select(n => n.Sheet).OfType<CompendiumSheet>().SelectMany(s => s.Weapons).Where(w => !w.Melee))
+            weapon.Class.Should().NotBeNull($"{weapon.Name} needs a range table row to attack");
+    }
+
+    [Fact]
+    public void Skills_map_to_the_rule_book()
+    {
+        // Printed skills the rule book has no entry for; none today.
+        string[] knownExceptions = [];
+        var rules = NpcRuleBook.LoadEmbedded();
+        foreach (var sheet in Compendium.All.Select(n => n.Sheet).OfType<CompendiumSheet>())
+            foreach (var name in sheet.Skills.Keys.Concat(sheet.Weapons.Select(w => w.Skill)).Except(knownExceptions))
+                NpcCompendium.SkillKey(name, rules).Should().NotBeNull(name);
+    }
+
+    [Fact]
+    public void Skill_keys_follow_the_id_and_specialization_format()
+    {
+        var rules = NpcRuleBook.LoadEmbedded();
+        NpcCompendium.SkillKey("handgun", rules).Should().Be("handgun");
+        NpcCompendium.SkillKey("Language (English)", rules).Should().Be("language:English");
+        NpcCompendium.SkillKey("Nothing Like This", rules).Should().BeNull();
     }
 }

@@ -17,11 +17,11 @@ public sealed record GenericRequest(
 
 /// <summary>
 /// Adds combatants: a saved character (<see cref="CharacterId"/>), a saved NPC (<see cref="NpcId"/>), freshly generated
-/// enemies (<see cref="Generate"/>) or quick generic ones (<see cref="Generic"/>). <see cref="Count"/> copies NPCs.
+/// enemies (<see cref="Generate"/>), a named NPC of the books (<see cref="CompendiumNpcId"/>) or quick generic ones (<see cref="Generic"/>). <see cref="Count"/> copies NPCs.
 /// </summary>
 public sealed record AddCombatantsRequest(
     int Version, CombatSide Side, int? CharacterId = null, int? NpcId = null, Npcs.Generation.NpcGenerationRequest? Generate = null,
-    GenericRequest? Generic = null, int Count = 1, string? Name = null);
+    GenericRequest? Generic = null, int Count = 1, string? Name = null, string? CompendiumNpcId = null);
 
 /// <summary>Initiative for everyone (or the listed combatants); typed d10s win over rolled ones.</summary>
 public sealed record InitiativeRequest(int Version, Dictionary<string, int>? Rolls = null, List<string>? Only = null);

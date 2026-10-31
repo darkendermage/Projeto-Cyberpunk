@@ -1,5 +1,7 @@
 using System.Net;
+using System.Net.Http.Json;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using FluentAssertions;
 
 namespace CyberpunkDb.Tests.Integration;
@@ -59,5 +61,133 @@ public class NpcCompendiumApiTests(ApiFactory factory)
         var (status, body) = await Get("/api/npc-compendium/nobody");
         status.Should().Be(HttpStatusCode.NotFound);
         body.Should().Contain("isn't in the compendium");
+    }
+
+    // ------------------------------------------------------------------ joining a fight
+
+    private async Task<(HttpStatusCode Status, JsonNode Body)> PostJson(string url, object body, string language = "pt-BR")
+    {
+        using var client = factory.CreateClient();
+        client.DefaultRequestHeaders.AcceptLanguage.Clear();
+        client.DefaultRequestHeaders.AcceptLanguage.ParseAdd(language);
+        var response = await client.PostAsJsonAsync(url, body);
+        return (response.StatusCode, (await response.Content.ReadFromJsonAsync<JsonNode>())!);
+    }
+
+    private async Task<JsonNode> NewFight()
+    {
+        var (_, e) = await PostJson("/api/encounters", new { name = "Compêndio" });
+        return e;
+    }
+
+    private static int V(JsonNode n) => n["version"]!.GetValue<int>();
+    private static JsonNode Fighter(JsonNode n, string name) => n["queue"]!.AsArray().First(f => f!["name"]!.GetValue<string>().StartsWith(name))!;
+
+    private async Task<(JsonNode Fight, string SmasherId, string TargetId)> SmasherAndTarget()
+    {
+        var e = await NewFight();
+        var id = e["id"]!.GetValue<int>();
+        (_, e) = await PostJson($"/api/encounters/{id}/combatants", new { version = V(e), side = "Enemy", compendiumNpcId = "adam-smasher" });
+        (_, e) = await PostJson($"/api/encounters/{id}/combatants", new
+        {
+            version = V(e), side = "Ally", generic = new { name = "Alvo", hp = 200, spBody = 0, spHead = 0, evasionBase = 1 },
+        });
+        return (e, Fighter(e, "Adam")["id"]!.GetValue<string>(), Fighter(e, "Alvo")["id"]!.GetValue<string>());
+    }
+
+    private async Task<JsonNode> Attack(JsonNode fight, string attackerId, string targetId, string weapon, object? extra = null)
+    {
+        var body = new JsonObject
+        {
+            ["version"] = V(fight), ["attackerId"] = attackerId, ["targetIds"] = new JsonArray(targetId), ["weapon"] = weapon,
+        };
+        foreach (var (k, v) in JsonSerializer.SerializeToNode(extra ?? new { })!.AsObject()) body[k] = v?.DeepClone();
+        var (status, result) = await PostJson($"/api/encounters/{fight["id"]!.GetValue<int>()}/attack", body);
+        status.Should().Be(HttpStatusCode.OK, result.ToJsonString());
+        return result;
+    }
+
+    [Fact]
+    public async Task Adam_Smasher_joins_a_fight()
+    {
+        var (e, smasherId, _) = await SmasherAndTarget();
+        var smasher = Fighter(e, "Adam");
+        smasher["name"]!.GetValue<string>().Should().Be("Adam Smasher");
+        smasher["kind"]!.GetValue<string>().Should().Be("Npc");
+        smasher["maxHp"]!.GetValue<int>().Should().Be(75);
+        smasher["spBody"]!.GetValue<int>().Should().Be(18);
+        smasher["source"]!.GetValue<string>().Should().Contain("p.");
+        var weapons = smasher["weapons"]!.AsArray().Select(w => w!["name"]!.GetValue<string>()).ToList();
+        weapons.Should().Contain(["Shoulder-Mounted Rocket Launcher", "Pop-Up Autoshotgun", "Adam Smasher's Chain Gun"]);
+        smasherId.Should().NotBeNull();
+    }
+
+    [Fact]
+    public async Task Count_numbers_the_copies()
+    {
+        var e = await NewFight();
+        (_, e) = await PostJson($"/api/encounters/{e["id"]!.GetValue<int>()}/combatants",
+            new { version = V(e), side = "Enemy", compendiumNpcId = "falco", count = 2 });
+        var names = e["queue"]!.AsArray().Select(f => f!["name"]!.GetValue<string>()).ToList();
+        names.Should().HaveCount(2).And.OnlyHaveUniqueItems();
+        names.Should().OnlyContain(n => n.StartsWith("Falco"));
+    }
+
+    [Fact]
+    public async Task A_profile_cannot_join()
+    {
+        var e = await NewFight();
+        var (status, body) = await PostJson($"/api/encounters/{e["id"]!.GetValue<int>()}/combatants",
+            new { version = V(e), side = "Enemy", compendiumNpcId = "morgan-blackhand" });
+        status.Should().Be(HttpStatusCode.BadRequest);
+        body["errors"]!["compendiumNpcId"]![0]!.GetValue<string>().Should().Be("Este NPC não tem ficha oficial.");
+    }
+
+    [Fact]
+    public async Task Unknown_npc_is_404()
+    {
+        var e = await NewFight();
+        var (status, _) = await PostJson($"/api/encounters/{e["id"]!.GetValue<int>()}/combatants",
+            new { version = V(e), side = "Enemy", compendiumNpcId = "nobody" });
+        status.Should().Be(HttpStatusCode.NotFound);
+    }
+
+    [Fact]
+    public async Task A_compendium_npc_can_attack()
+    {
+        var (e, smasher, target) = await SmasherAndTarget();
+        var weapons = Fighter(e, "Adam")["weapons"]!.AsArray();
+        var chain = weapons.Single(w => w!["name"]!.GetValue<string>().Contains("Chain Gun"));
+        var rocket = weapons.Single(w => w!["name"]!.GetValue<string>().Contains("Rocket"));
+        var shotgun = weapons.Single(w => w!["name"]!.GetValue<string>().Contains("Autoshotgun"));
+
+        // Melee: the fists use the printed attack base.
+        var fists = weapons[0]!;
+        var hit = await Attack(e, smasher, target, fists["key"]!.GetValue<string>(), new { attackRoll = 5, damageDice = new[] { 3, 3, 3, 3, 3 } });
+        hit["lastAttack"]!["attackTotal"]!.GetValue<int>().Should().Be(fists["attackTotal"]!.GetValue<int>() + 5);
+        hit["lastAttack"]!["targets"]![0]!["hit"]!.GetValue<bool>().Should().BeTrue();
+
+        // Ranged weapons need a class the range table knows.
+        foreach (var w in new[] { rocket, shotgun })
+        {
+            var shot = await Attack(hit, smasher, target, w["key"]!.GetValue<string>(), new { range = 5, attackRoll = 10 });
+            shot["lastAttack"]!["targets"]![0]!["hit"]!.GetValue<bool>().Should().BeTrue(w["name"]!.GetValue<string>());
+            hit = shot;
+        }
+
+        // The Chain Gun is Autofire only with a magazine of 80; the Autofire DV table has no machine gun row yet.
+        chain["magazine"]!.GetValue<int>().Should().Be(80);
+        chain["rounds"]!.GetValue<int>().Should().Be(80);
+        chain["autofireMultiplier"]!.GetValue<int>().Should().Be(5);
+    }
+
+    [Fact]
+    public async Task Null_stats_stay_out_of_the_snapshot()
+    {
+        var (e, _, _) = await SmasherAndTarget();
+        var stats = Fighter(e, "Adam")["stats"]!.AsArray().Select(s => s!["id"]!.GetValue<string>()).ToList();
+        stats.Should().NotContain("EMP").And.Contain("BODY");
+        (_, e) = await PostJson($"/api/encounters/{e["id"]!.GetValue<int>()}/initiative", new { version = V(e) });
+        Fighter(e, "Adam")["initiative"]!.GetValue<int>().Should().BeGreaterThan(0);
     }
 }

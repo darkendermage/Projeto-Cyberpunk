@@ -3,6 +3,7 @@ using CyberpunkDb.Application.Characters.Calculation;
 using CyberpunkDb.Application.Characters.Rules;
 using CyberpunkDb.Application.Encounters.Rules;
 using CyberpunkDb.Application.Npcs;
+using CyberpunkDb.Application.Npcs.Compendium;
 using CyberpunkDb.Application.Npcs.Rules;
 using CyberpunkDb.Application.Npcs.Validation;
 using CyberpunkDb.Domain.Enums;
@@ -166,6 +167,43 @@ public sealed class FighterViews(CharacterRuleBook characterRules, CharacterCalc
             MaxSpHead = d.SpHead,
             Cyberarm = report.CyberLines.Any(l => l.Slug.Equals("cyberarm", StringComparison.OrdinalIgnoreCase)),
             Weapons = weapons,
+        };
+    }
+
+    /// <summary>
+    /// The combat side of a printed stat block. Stats the book leaves blank stay out, and the armored values win over the plain ones.
+    /// Weapons carry the printed attack total; skills keep their printed Skill Base.
+    /// </summary>
+    public CombatSnapshot Compendium(CompendiumNpc npc)
+    {
+        var sheet = npc.Sheet ?? throw new InvalidOperationException($"{npc.Name} não tem ficha oficial.");
+        var stats = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+        foreach (var (key, value) in sheet.Stats)
+            if (value is { } v) stats[key] = v;
+        foreach (var (key, value) in sheet.ArmoredStats) stats[key] = value;
+
+        var skills = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+        foreach (var (name, value) in sheet.Skills)
+            if (NpcCompendium.SkillKey(name, npcRules) is { } key) skills[key] = value;
+
+        int Sp(string location) => sheet.Armor.Where(a => a.Location.Equals(location, StringComparison.OrdinalIgnoreCase)).Select(a => a.Sp).DefaultIfEmpty(0).Max();
+        var source = npc.Sources.FirstOrDefault();
+        return new CombatSnapshot
+        {
+            Source = source is null ? npc.Name : $"{source.Book} p.{source.Page}",
+            MaxHp = sheet.Hp,
+            Body = stats.GetValueOrDefault("BODY"),
+            Stats = stats,
+            Skills = skills,
+            MaxSpBody = Sp("Body"),
+            MaxSpHead = Sp("Head"),
+            Cyberarm = sheet.Cyberware.Any(c => c.Contains("Cyberarm", StringComparison.OrdinalIgnoreCase)),
+            Weapons = sheet.Weapons.Select((w, i) => new CombatWeapon
+            {
+                Key = $"w{i}", Name = w.Name, Class = w.Class, Skill = NpcCompendium.SkillKey(w.Skill, npcRules) ?? w.Skill.ToLowerInvariant(),
+                Damage = w.Damage, Rof = w.Rof, Magazine = w.Magazine, AutofireMultiplier = w.AutofireMultiplier, Melee = w.Melee,
+                AttackBase = w.AttackBase,
+            }).ToList(),
         };
     }
 

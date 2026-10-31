@@ -9,6 +9,7 @@ using CyberpunkDb.Application.Common;
 using CyberpunkDb.Application.Encounters.Combat;
 using CyberpunkDb.Application.Encounters.Rules;
 using CyberpunkDb.Application.Npcs;
+using CyberpunkDb.Application.Npcs.Compendium;
 using CyberpunkDb.Domain.Entities;
 using CyberpunkDb.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
@@ -28,6 +29,7 @@ public sealed class EncounterService(
     CharacterService characters,
     NpcService npcs,
     NpcCatalogProvider catalogs,
+    NpcCompendium compendium,
     FighterViews views,
     AttackResolver resolver,
     NpcCombat npcCombat,
@@ -144,7 +146,16 @@ public sealed class EncounterService(
                 var baseName = string.IsNullOrWhiteSpace(generic.Name) ? "Inimigo" : generic.Name.Trim();
                 for (var i = 0; i < count; i++) added.Add(Npc(s, added, NameOf(baseName, i, count), r.Side, CombatantKind.Generic, snapshot));
             }
-            else throw RequestValidationException.For("combatant", L.T("Escolha um personagem, um NPC salvo, um gerado ou um genérico.", "Pick a character, a saved NPC, a generated one or a generic one."));
+            else if (r.CompendiumNpcId is { } compendiumId)
+            {
+                var npc = compendium.Require(compendiumId);
+                if (npc.Sheet is null)
+                    throw RequestValidationException.For("compendiumNpcId", L.T("Este NPC não tem ficha oficial.", "This NPC has no official sheet."));
+                var snapshot = views.Compendium(npc);
+                for (var i = 0; i < count; i++)
+                    added.Add(Npc(s, added, NameOf(r.Name ?? npc.Name, i, count), r.Side, CombatantKind.Npc, snapshot));
+            }
+            else throw RequestValidationException.For("combatant", L.T("Escolha um personagem, um NPC salvo, um do compêndio, um gerado ou um genérico.", "Pick a character, a saved NPC, a compendium one, a generated one or a generic one."));
 
             notices.Add(L.T($"{added.Count} combatente(s) na mesa.", $"{added.Count} combatant(s) at the table."));
             return Log(s with { Combatants = [.. s.Combatants, .. added] }, null, "join", $"Entraram: {string.Join(", ", added.Select(a => a.Name))}.");

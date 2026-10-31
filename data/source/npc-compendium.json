@@ -22,9 +22,9 @@
       "armoredStats": {},
       "weapons": [
         { "name": "Adam Smasher's Fists", "skill": "Brawling", "attackBase": 18, "damage": "5d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": "Halves SP" },
-        { "name": "Shoulder-Mounted Rocket Launcher", "skill": "Heavy Weapons", "attackBase": 18, "damage": "9d6", "rof": 1, "magazine": 4, "class": null, "melee": false, "notes": "Explosive; Smart Weapon" },
-        { "name": "Pop-Up Autoshotgun", "skill": "Shoulder Arms", "attackBase": 18, "damage": "6d6", "rof": 2, "magazine": 16, "class": null, "melee": false, "notes": "Power Weapon" },
-        { "name": "Adam Smasher's Chain Gun", "skill": "Heavy Weapons", "attackBase": 18, "damage": "2d6", "rof": 1, "magazine": 80, "class": null, "autofireMultiplier": 5, "melee": false, "notes": "Autofire (x5) only; Power Weapon. The sheet prints \"See Type\" for damage: 2d6 is the Autofire damage roll from the Autofire rules (p. 9), multiplied by the margin up to x5" }
+        { "name": "Shoulder-Mounted Rocket Launcher", "skill": "Heavy Weapons", "attackBase": 18, "damage": "9d6", "rof": 1, "magazine": 4, "class": "RocketLauncher", "melee": false, "notes": "Explosive; Smart Weapon" },
+        { "name": "Pop-Up Autoshotgun", "skill": "Shoulder Arms", "attackBase": 18, "damage": "6d6", "rof": 2, "magazine": 16, "class": "Shotgun", "melee": false, "notes": "Power Weapon" },
+        { "name": "Adam Smasher's Chain Gun", "skill": "Heavy Weapons", "attackBase": 18, "damage": "2d6", "rof": 1, "magazine": 80, "class": "MachineGun", "autofireMultiplier": 5, "melee": false, "notes": "Autofire (x5) only; Power Weapon. The sheet prints \"See Type\" for damage: 2d6 is the Autofire damage roll from the Autofire rules (p. 9), multiplied by the margin up to x5" }
       ],
       "armor": [
         { "location": "Head", "name": "Adam Smasher's Plating", "sp": 18, "spVsMelee": 18 },
