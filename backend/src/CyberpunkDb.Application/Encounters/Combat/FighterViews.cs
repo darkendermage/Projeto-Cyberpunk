@@ -1,5 +1,6 @@
 using CyberpunkDb.Application.Characters;
 using CyberpunkDb.Application.Characters.Calculation;
+using CyberpunkDb.Application.Characters.Operations;
 using CyberpunkDb.Application.Characters.Rules;
 using CyberpunkDb.Application.Encounters.Rules;
 using CyberpunkDb.Application.Npcs;
@@ -14,7 +15,7 @@ namespace CyberpunkDb.Application.Encounters.Combat;
 /// <summary>An attack option with everything but the d10 already added (STAT + skill + penalties).</summary>
 public sealed record WeaponView(
     string Key, string Name, WeaponClass? Class, string Skill, int AttackTotal, int? AutofireTotal, string Damage, int Rof,
-    int? Rounds, int? Magazine, int? AutofireMultiplier, bool Melee, bool HalvesArmor, int?[]? RangeDv = null);
+    int? Rounds, int? Magazine, int? AutofireMultiplier, bool Melee, bool HalvesArmor, int?[]? RangeDv = null, bool? AutofireOnly = null);
 
 public sealed record InjuryView(string Name, InjuryLocation Location, string? Effect, bool DeathSave);
 
@@ -103,7 +104,7 @@ public sealed class FighterViews(CharacterRuleBook characterRules, CharacterCalc
         var weapons = s.Weapons.Select(w => new WeaponView(
             w.Key, w.Name, w.Class, w.Skill, (w.AttackBase ?? Skill(w.Skill)) + (w.AttackBase is null ? 0 : penalty),
             w.AutofireMultiplier is null ? null : Skill("autofire"), w.Damage, w.Rof,
-            w.Magazine is null ? null : c.Ammo.GetValueOrDefault(w.Key, w.Magazine.Value), w.Magazine, w.AutofireMultiplier, w.Melee, w.Melee, w.RangeDv)).ToList();
+            w.Magazine is null ? null : c.Ammo.GetValueOrDefault(w.Key, w.Magazine.Value), w.Magazine, w.AutofireMultiplier, w.Melee, w.HalvesArmor ?? w.Melee, w.RangeDv, w.AutofireOnly)).ToList();
         weapons.AddRange(Unarmed(s.Body, s.Cyberarm, Skill(Brawling),
             s.Skills.Keys.Where(k => k.StartsWith(MartialArtsPrefix + ":", StringComparison.OrdinalIgnoreCase)).Select(k => (k, k.Split(':')[1], Skill(k)))));
 
@@ -187,7 +188,10 @@ public sealed class FighterViews(CharacterRuleBook characterRules, CharacterCalc
             if (NpcCompendium.SkillKey(name, npcRules) is { } key)
                 skills[key] = sheet.ArmoredSkills.TryGetValue(name, out var armored) ? armored : value;
 
-        int Sp(string location) => sheet.Armor.Where(a => a.Location.Equals(location, StringComparison.OrdinalIgnoreCase)).Select(a => a.Sp).DefaultIfEmpty(0).Max();
+        IEnumerable<CompendiumArmor> Worn(string location) => sheet.Armor.Where(a => a.Location.Equals(location, StringComparison.OrdinalIgnoreCase));
+        int Sp(string location) => Worn(location).Select(a => a.Sp).DefaultIfEmpty(0).Max();
+        // A printed melee SP is the usual half unless the sheet says otherwise.
+        bool? FullSpVsMelee(string location) => Worn(location).Any(a => a.SpVsMelee is { } melee && melee != DamageMath.EffectiveSp(a.Sp, true, false)) ? true : null;
         var source = npc.Sources.FirstOrDefault();
         return new CombatSnapshot
         {
@@ -198,12 +202,20 @@ public sealed class FighterViews(CharacterRuleBook characterRules, CharacterCalc
             Skills = skills,
             MaxSpBody = Sp("Body"),
             MaxSpHead = Sp("Head"),
+            FullSpVsMeleeBody = FullSpVsMelee("Body"),
+            FullSpVsMeleeHead = FullSpVsMelee("Head"),
             Cyberarm = sheet.Cyberware.Any(c => c.Contains("Cyberarm", StringComparison.OrdinalIgnoreCase)),
-            Weapons = sheet.Weapons.Select((w, i) => new CombatWeapon
+            Weapons = sheet.Weapons.Select((w, i) =>
             {
-                Key = $"w{i}", Name = w.Name, Class = w.Class, Skill = NpcCompendium.SkillKey(w.Skill, npcRules) ?? w.Skill.ToLowerInvariant(),
-                Damage = w.Damage, Rof = w.Rof, Magazine = w.Magazine, AutofireMultiplier = w.AutofireMultiplier, Melee = w.Melee, RangeDv = w.RangeDv,
-                AttackBase = w.AttackBase,
+                var skill = NpcCompendium.SkillKey(w.Skill, npcRules) ?? w.Skill.ToLowerInvariant();
+                return new CombatWeapon
+                {
+                    Key = $"w{i}", Name = w.Name, Class = w.Class, Skill = skill,
+                    Damage = w.Damage, Rof = w.Rof, Magazine = w.Magazine, AutofireMultiplier = w.AutofireMultiplier, AutofireOnly = w.AutofireOnly, Melee = w.Melee, RangeDv = w.RangeDv,
+                    AttackBase = w.AttackBase,
+                    // CP:R p.176: Brawling keeps the armor whole, unless the sheet prints "Halves SP" (Adam Smasher's Fists).
+                    HalvesArmor = skill == Brawling ? w.Notes?.Contains("Halves SP", StringComparison.OrdinalIgnoreCase) == true : null,
+                };
             }).ToList(),
         };
     }

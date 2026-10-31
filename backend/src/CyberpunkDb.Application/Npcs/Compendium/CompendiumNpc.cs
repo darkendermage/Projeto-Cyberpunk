@@ -67,8 +67,10 @@ public sealed record CompendiumWeapon
     public string Damage { get; init; } = "";
     public int Rof { get; init; }
     public int? Magazine { get; init; }
-    /// <summary>Printed "Autofire (xN)" multiplier; null when the weapon has no Autofire.</summary>
+    /// <summary>Printed "Autofire (xN)" multiplier, or the one of the weapon's Core class (Autofire 3 for SMGs, 4 for Assault Rifles); null when it has no Autofire.</summary>
     public int? AutofireMultiplier { get; init; }
+    /// <summary>The book prints "Autofire only"; null otherwise.</summary>
+    public bool? AutofireOnly { get; init; }
     /// <summary>The sheet's own "DV based on range" table: 8 bands (0-6 to 401-800 m/yds), null where the book prints "—".</summary>
     public int?[]? RangeDv { get; init; }
     /// <summary>Null for weapons outside the catalog classes (a borg's fists).</summary>

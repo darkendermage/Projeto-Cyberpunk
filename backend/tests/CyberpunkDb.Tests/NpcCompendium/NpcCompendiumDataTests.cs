@@ -1,6 +1,7 @@
 using System.Text.RegularExpressions;
 using CyberpunkDb.Application.Npcs.Compendium;
 using CyberpunkDb.Application.Npcs.Rules;
+using CyberpunkDb.Domain.Enums;
 using FluentAssertions;
 
 namespace CyberpunkDb.Tests.Compendium;
@@ -100,6 +101,36 @@ public class NpcCompendiumDataTests
             weapon.AutofireMultiplier.Should().BeGreaterThanOrEqualTo(2, weapon.Name);
         foreach (var armor in sheets.SelectMany(s => s.Armor).Where(a => a.SpVsMelee != null))
             armor.SpVsMelee.Should().BeInRange(0, armor.Sp, armor.Name);
+    }
+
+    [Fact]
+    public void Automatic_weapons_have_the_multiplier_of_their_class()
+    {
+        // CP:R p.171 and p.173: Autofire 3 for SMGs and Heavy SMGs, 4 for Assault Rifles.
+        var expected = new Dictionary<WeaponClass, int> { [WeaponClass.Smg] = 3, [WeaponClass.HeavySmg] = 3, [WeaponClass.AssaultRifle] = 4 };
+        var weapons = Compendium.All.Select(n => n.Sheet).OfType<CompendiumSheet>().SelectMany(s => s.Weapons)
+            .Where(w => w.Class is { } c && expected.ContainsKey(c)).ToList();
+        weapons.Should().NotBeEmpty();
+        foreach (var weapon in weapons)
+            weapon.AutofireMultiplier.Should().Be(expected[weapon.Class!.Value], weapon.Name);
+    }
+
+    [Fact]
+    public void Autofire_only_weapons_are_flagged_and_have_a_multiplier()
+    {
+        var weapons = Compendium.All.Select(n => n.Sheet).OfType<CompendiumSheet>().SelectMany(s => s.Weapons).ToList();
+        foreach (var weapon in weapons.Where(w => w.AutofireOnly == true))
+            weapon.AutofireMultiplier.Should().NotBeNull(weapon.Name);
+        foreach (var weapon in weapons.Where(w => w.Notes is { } n && Regex.IsMatch(n, @"Autofire.*\bonly\b")))
+            weapon.AutofireOnly.Should().BeTrue(weapon.Name);
+    }
+
+    [Fact]
+    public void Printed_melee_sp_is_half_or_all_of_the_sp()
+    {
+        // The combat snapshot only knows these two cases: it halves SP, or a flag keeps it whole.
+        foreach (var armor in Compendium.All.Select(n => n.Sheet).OfType<CompendiumSheet>().SelectMany(s => s.Armor).Where(a => a.SpVsMelee != null))
+            armor.SpVsMelee.Should().BeOneOf([(armor.Sp + 1) / 2, armor.Sp], armor.Name);
     }
 
     [Fact]

@@ -73,6 +73,10 @@ public sealed record CombatSnapshot
     public Dictionary<string, int> Skills { get; init; } = new(StringComparer.OrdinalIgnoreCase);
     public int MaxSpBody { get; init; }
     public int MaxSpHead { get; init; }
+    /// <summary>The sheet prints this location's SP undivided against melee: halving attacks don't halve it, however much it ablates.</summary>
+    public bool? FullSpVsMeleeBody { get; init; }
+    /// <inheritdoc cref="FullSpVsMeleeBody"/>
+    public bool? FullSpVsMeleeHead { get; init; }
     public bool Cyberarm { get; init; }
     public List<CombatWeapon> Weapons { get; init; } = [];
 }
@@ -88,9 +92,13 @@ public sealed record CombatWeapon
     public int Rof { get; init; } = 1;
     public int? Magazine { get; init; }
     public int? AutofireMultiplier { get; init; }
+    /// <summary>The sheet prints "Autofire only": no normal or aimed shots.</summary>
+    public bool? AutofireOnly { get; init; }
     /// <summary>Printed DV by range band; replaces the general range tables when set.</summary>
     public int?[]? RangeDv { get; init; }
     public bool Melee { get; init; }
+    /// <summary>Whether the weapon halves SP; null follows <see cref="Melee"/>.</summary>
+    public bool? HalvesArmor { get; init; }
     /// <summary>Generic enemies: attack total without the d10 (STAT + skill).</summary>
     public int? AttackBase { get; init; }
 }

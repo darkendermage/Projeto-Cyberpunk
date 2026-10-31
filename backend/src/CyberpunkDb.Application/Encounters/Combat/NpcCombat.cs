@@ -23,7 +23,8 @@ public sealed class NpcCombat(CharacterRuleBook rules, CharacterCalculator calcu
         var notes = new List<string>();
         var before = Wound(c);
         var head = location == InjuryLocation.Head;
-        var sp = DamageMath.EffectiveSp(head ? c.SpHead : c.SpBody, halveArmor, bypassArmor);
+        var fullVsMelee = head ? c.Snapshot!.FullSpVsMeleeHead : c.Snapshot!.FullSpVsMeleeBody;
+        var sp = DamageMath.EffectiveSp(head ? c.SpHead : c.SpBody, halveArmor && fullVsMelee != true, bypassArmor);
         var cracked = c.Injuries.Any(i => i.Name.Equals("Cracked Skull", StringComparison.OrdinalIgnoreCase));
         var through = DamageMath.Through(amount, sp, head, cracked);
         var next = c with { Hp = Math.Max(0, c.Hp - through), Stabilized = c.Stabilized && c.Hp - through >= 1 };

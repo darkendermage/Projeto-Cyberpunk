@@ -157,9 +157,9 @@ public class NpcCompendiumApiTests(ApiFactory factory)
     {
         var (e, smasher, target) = await SmasherAndTarget();
         var weapons = Fighter(e, "Adam")["weapons"]!.AsArray();
-        var chain = weapons.Single(w => w!["name"]!.GetValue<string>().Contains("Chain Gun"));
-        var rocket = weapons.Single(w => w!["name"]!.GetValue<string>().Contains("Rocket"));
-        var shotgun = weapons.Single(w => w!["name"]!.GetValue<string>().Contains("Autoshotgun"));
+        var chain = weapons.Single(w => w!["name"]!.GetValue<string>().Contains("Chain Gun"))!;
+        var rocket = weapons.Single(w => w!["name"]!.GetValue<string>().Contains("Rocket"))!;
+        var shotgun = weapons.Single(w => w!["name"]!.GetValue<string>().Contains("Autoshotgun"))!;
 
         // Melee: the fists use the printed attack base.
         var fists = weapons[0]!;
@@ -183,7 +183,106 @@ public class NpcCompendiumApiTests(ApiFactory factory)
         result["hit"]!.GetValue<bool>().Should().BeTrue();
         result["dv"]!.GetValue<int>().Should().Be(22);
         result["damage"]!.GetValue<int>().Should().Be(35, "7 on the dice, times the x5 cap");
-        Fighter(burst, "Adam")["weapons"]!.AsArray().Single(w => w!["name"]!.GetValue<string>().Contains("Chain Gun"))["rounds"]!.GetValue<int>().Should().Be(70);
+        Fighter(burst, "Adam")["weapons"]!.AsArray().Single(w => w!["name"]!.GetValue<string>().Contains("Chain Gun"))!["rounds"]!.GetValue<int>().Should().Be(70);
+    }
+
+    // ------------------------------------------------------------------ printed rules in combat
+
+    private async Task<JsonNode> FightWith(string compendiumNpcId)
+    {
+        var e = await NewFight();
+        (_, e) = await PostJson($"/api/encounters/{e["id"]!.GetValue<int>()}/combatants", new { version = V(e), side = "Enemy", compendiumNpcId });
+        return e;
+    }
+
+    private async Task<JsonNode> WithBlade(JsonNode fight)
+    {
+        var (_, e) = await PostJson($"/api/encounters/{fight["id"]!.GetValue<int>()}/combatants", new
+        {
+            version = V(fight), side = "Ally", generic = new { name = "Lâmina", weaponClass = "VeryHeavyMelee", damage = "5d6", attackBase = 40 },
+        });
+        return e;
+    }
+
+    private static JsonNode WeaponNamed(JsonNode fighter, string name) =>
+        fighter["weapons"]!.AsArray().First(w => w!["name"]!.GetValue<string>() == name)!;
+
+    [Fact]
+    public async Task An_assault_rifle_from_the_table_fires_autofire()
+    {
+        var e = await FightWith("coldfire");
+        (_, e) = await PostJson($"/api/encounters/{e["id"]!.GetValue<int>()}/combatants", new
+        {
+            version = V(e), side = "Ally", generic = new { name = "Alvo", hp = 200, spBody = 0, spHead = 0, evasionBase = 1 },
+        });
+        var coldfire = Fighter(e, "Coldfire");
+        var rifle = WeaponNamed(coldfire, "Arasaka WAA Bullpup Assault Weapon");
+        rifle["autofireMultiplier"]!.GetValue<int>().Should().Be(4);
+        rifle["autofireTotal"]!.GetValue<int>().Should().Be(12, "the printed Autofire 14 (12), with the armor penalty");
+
+        var burst = await Attack(e, coldfire["id"]!.GetValue<string>(), Fighter(e, "Alvo")["id"]!.GetValue<string>(), rifle["key"]!.GetValue<string>(),
+            new { mode = "Autofire", range = 15, attackRoll = 10, damageDice = new[] { 3, 4 } });
+
+        var result = burst["lastAttack"]!["targets"]![0]!;
+        result["dv"]!.GetValue<int>().Should().Be(17, "Assault Rifle at 13-25 m on the Autofire table (CP:R p.173)");
+        result["damage"]!.GetValue<int>().Should().Be(28, "7 on the dice, times the x4 cap of a margin of 5");
+    }
+
+    [Fact]
+    public async Task Printed_brawling_keeps_full_armor_unless_the_sheet_says_otherwise()
+    {
+        WeaponNamed(Fighter(await FightWith("falco"), "Falco"), "Brawling Attack")["halvesArmor"]!.GetValue<bool>().Should().BeFalse("CP:R p.176");
+        WeaponNamed(Fighter(await FightWith("adam-smasher"), "Adam"), "Adam Smasher's Fists")["halvesArmor"]!.GetValue<bool>().Should().BeTrue("the sheet prints Halves SP");
+    }
+
+    [Fact]
+    public async Task A_combat_jaw_is_a_melee_weapon()
+    {
+        var gustav = Fighter(await FightWith("gustav"), "Gustav");
+        var jaw = WeaponNamed(gustav, "Combat Jaw");
+        jaw["halvesArmor"]!.GetValue<bool>().Should().BeTrue("Very Heavy Melee Weapon (Danger Gal Dossier p.145, CP:R p.176)");
+        jaw["skill"]!.GetValue<string>().Should().Be("melee-weapon");
+        jaw["attackTotal"]!.GetValue<int>().Should().Be(12, "the printed Melee Weapon Skill Base");
+        WeaponNamed(gustav, "Brawling Attack")["halvesArmor"]!.GetValue<bool>().Should().BeFalse();
+    }
+
+    [Fact]
+    public async Task Smasher_plating_keeps_its_printed_sp_against_melee_as_it_ablates()
+    {
+        var e = await WithBlade(await FightWith("adam-smasher"));
+        var smasher = Fighter(e, "Adam")["id"]!.GetValue<string>();
+        var blade = Fighter(e, "Lâmina");
+        blade["weapons"]![0]!["halvesArmor"]!.GetValue<bool>().Should().BeTrue();
+        var swing = new { attackRoll = 5, defenseRolls = new Dictionary<string, int> { [smasher] = 1 }, damageDice = new[] { 5, 5, 5, 5, 5 } };
+
+        var first = await Attack(e, blade["id"]!.GetValue<string>(), smasher, "w0", swing);
+        first["lastAttack"]!["targets"]![0]!["through"]!.GetValue<int>().Should().Be(7, "25 through SP 18");
+
+        var second = await Attack(first, blade["id"]!.GetValue<string>(), smasher, "w0", swing);
+        second["lastAttack"]!["targets"]![0]!["through"]!.GetValue<int>().Should().Be(8, "25 through SP 17: still not halved after ablation");
+    }
+
+    [Fact]
+    public async Task Ordinary_armor_still_halves_against_melee()
+    {
+        var e = await WithBlade(await FightWith("falco"));
+        var falco = Fighter(e, "Falco")["id"]!.GetValue<string>();
+        var hit = await Attack(e, Fighter(e, "Lâmina")["id"]!.GetValue<string>(), falco, "w0",
+            new { attackRoll = 5, defenseRolls = new Dictionary<string, int> { [falco] = 1 }, damageDice = new[] { 5, 5, 5, 5, 5 } });
+        hit["lastAttack"]!["targets"]![0]!["through"]!.GetValue<int>().Should().Be(19, "25 through half of SP 11, rounded up");
+    }
+
+    [Fact]
+    public async Task A_dash_on_the_printed_table_is_out_of_range_on_the_sheet()
+    {
+        var (e, smasher, target) = await SmasherAndTarget();
+        var shotgun = Fighter(e, "Adam")["weapons"]!.AsArray().Single(w => w!["name"]!.GetValue<string>().Contains("Autoshotgun"))!;
+        var (status, body) = await PostJson($"/api/encounters/{e["id"]!.GetValue<int>()}/attack", new
+        {
+            version = V(e), attackerId = smasher, targetIds = new[] { target }, weapon = shotgun["key"]!.GetValue<string>(), range = 300, attackRoll = 5,
+        });
+        status.Should().Be(HttpStatusCode.BadRequest);
+        body["errors"]!["range"]![0]!.GetValue<string>().Should().Be("Pop-Up Autoshotgun não alcança 300 m: fora do alcance na tabela da própria ficha.");
     }
 
     [Fact]

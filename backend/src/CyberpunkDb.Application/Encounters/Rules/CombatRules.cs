@@ -101,12 +101,17 @@ public sealed class CombatRuleBook
         .Select(x => (int?)x.i).FirstOrDefault();
 
     /// <summary>The DV of a single shot at this range, or an explanation of why the shot can't be made.</summary>
-    public int SingleShotDv(RangeRow row, int meters)
-    {
-        var band = Band(meters) ?? throw RequestValidationException.For("range", L.T($"{meters} m está além da tabela de alcance ({Document.SingleShot.Source}).", $"{meters} m is beyond the range table ({Document.SingleShot.Source})."));
-        return row.Dv[band] ?? throw RequestValidationException.For("range",
+    public int SingleShotDv(RangeRow row, int meters) =>
+        row.Dv[TableBand(meters)] ?? throw RequestValidationException.For("range",
             L.T($"{row.Label} não alcança {meters} m (N/A na tabela, {Document.SingleShot.Source}).", $"{L.D(row.Label)} doesn't reach {meters} m (N/A on the table, {Document.SingleShot.Source})."));
-    }
+
+    /// <summary>The DV on a table the weapon's own sheet prints; a dash on it means out of the weapon's range.</summary>
+    public int PrintedDv(string weapon, int?[] dv, int meters) =>
+        dv[TableBand(meters)] ?? throw RequestValidationException.For("range",
+            L.T($"{weapon} não alcança {meters} m: fora do alcance na tabela da própria ficha.", $"{weapon} doesn't reach {meters} m: out of range on its own sheet's table."));
+
+    private int TableBand(int meters) =>
+        Band(meters) ?? throw RequestValidationException.For("range", L.T($"{meters} m está além da tabela de alcance ({Document.SingleShot.Source}).", $"{meters} m is beyond the range table ({Document.SingleShot.Source})."));
 
     /// <summary>Brawling and Martial Arts damage by BODY (CP:R p.176, p.178); a Cyberarm makes Brawling at least 2d6.</summary>
     public string UnarmedDice(int body, bool cyberarm)
