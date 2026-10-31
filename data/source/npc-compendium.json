@@ -8,7 +8,14 @@
     "roleRank": 9,
     "rep": 10,
     "affiliation": "Arasaka",
-    "sources": [{ "book": "Edgerunners Mission Kit: The Jacket", "page": 38 }, { "book": "Edgerunners Mission Kit: The Jacket", "page": 39 }, { "book": "Edgerunners Mission Kit: Rule Book", "page": 34 }, { "book": "Edgerunners Mission Kit: The Jacket", "page": 28 }],
+    "sources": [
+      { "book": "Edgerunners Mission Kit: The Jacket", "page": 38 },
+      { "book": "Edgerunners Mission Kit: The Jacket", "page": 39 },
+      { "book": "Edgerunners Mission Kit: Rule Book", "page": 34 },
+      { "book": "Edgerunners Mission Kit: The Jacket", "page": 28 },
+      { "book": "Core Book", "page": 123 },
+      { "book": "Core Book", "page": 441 }
+    ],
     "summary": {
       "pt": "Veterano de guerra com quase um século de vida, mercenário e depois soldado vitalício da Arasaka dentro de um corpo borg completo. Voltou a Night City depois de anos sumido. Há quem duvide que seja o Smasher original, mas ninguém duvida do estrago que ele faz.",
       "en": "A war veteran nearly a century old, once a mercenary and now a lifetime Arasaka soldier inside a full borg body. He is back in Night City after years off the radar. Some doubt he is the original Smasher, but nobody doubts the damage he does."
@@ -298,9 +305,10 @@
     "rep": null,
     "affiliation": null,
     "sources": [
-      { "book": "Edgerunners Mission Kit: The Jacket", "page": 121 },
-      { "book": "Edgerunners Mission Kit: The Jacket", "page": 240 },
-      { "book": "Edgerunners Mission Kit: The Jacket", "page": 293 }
+      { "book": "Core Book", "page": 293 },
+      { "book": "Core Book", "page": 240 },
+      { "book": "Core Book", "page": 241 },
+      { "book": "Core Book", "page": 121 }
     ],
     "summary": {
       "pt": "Lenda entre os Solos. Liderou a incursão à Arasaka Tower em 2023, ao lado de Johnny Silverhand, quando a bomba explodiu em Night City. Ninguém o viu, vivo ou morto, desde então, e os boatos o dão como espião do governo e visto em cidades da Primeira Onda.",
@@ -533,7 +541,10 @@
     "rep": null,
     "affiliation": "Afterlife",
     "sources": [
-      { "book": "Edgerunners Mission Kit: Rule Book", "page": 27 }
+      { "book": "Edgerunners Mission Kit: Rule Book", "page": 27 },
+      { "book": "Core Book", "page": 306 },
+      { "book": "Core Book", "page": 9 },
+      { "book": "Core Book", "page": 122 }
     ],
     "summary": {
       "pt": "Chamada de Rainha dos Fixers, é dona do Afterlife, o bar de edgerunners mais famoso da cidade. Foi uma das melhores solos de aluguel de Night City e hoje, quase aposentada das armas, monta equipes de elite para clientes ricos.",
@@ -596,7 +607,10 @@
     "affiliation": null,
     "sources": [
       { "book": "Edgerunners Mission Kit: Rule Book", "page": 12 },
-      { "book": "Edgerunners Mission Kit: Rule Book", "page": 5 }
+      { "book": "Edgerunners Mission Kit: Rule Book", "page": 5 },
+      { "book": "Core Book", "page": 254 },
+      { "book": "Core Book", "page": 255 },
+      { "book": "Core Book", "page": 239 }
     ],
     "summary": {
       "pt": "Considerado o netrunner mais brilhante do mundo, plantou o DataKrash dentro do IGTA como uma chave de segurança que dependia de ele fazer check-ins. Quando foi morto, o vírus embaralhou quase toda a Net e soltou os R.A.B.I.D.s, e a Old Net acabou isolada.",
@@ -721,6 +735,1241 @@
     "summary": {
       "pt": "Funcionário do Tom's Diner que toca o balcão sozinho num dia de folga de Tom, porque o cozinheiro faltou. Está de mau humor e só fala com a Crew se for tratado bem ou receber boa gorjeta.",
       "en": "A Tom's Diner employee running the diner alone on Tom's day off because the cook didn't show. He is in a bad mood and only talks to the Crew if treated well or tipped decently."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "johnny-silverhand",
+    "name": "Johnny Silverhand",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Rockerboy",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Samurai",
+    "sources": [
+      { "book": "Core Book", "page": 6 },
+      { "book": "Core Book", "page": 122 },
+      { "book": "Core Book", "page": 239 },
+      { "book": "Core Book", "page": 240 },
+      { "book": "Core Book", "page": 241 },
+      { "book": "Core Book", "page": 30 },
+      { "book": "Core Book", "page": 95 },
+      { "book": "Core Book", "page": 307 },
+      { "book": "Core Book", "page": 438 }
+    ],
+    "summary": {
+      "pt": "Rockerboy lendário, vocalista da banda Samurai e símbolo de rebeldia contra as corporações. Foi o motor da invasão à Arasaka Tower em 2023 para resgatar Alt Cunningham e sumiu com a explosão. Corre o boato de que o corpo dele foi guardado em um banco de corpos nas ruínas de Night City.",
+      "en": "Legendary Rockerboy, front man of the band Samurai and a symbol of defiance against the Corps. He drove the 2023 raid on the Arasaka Tower to rescue Alt Cunningham and vanished in the blast. Rumor says his body was kept in a body bank in the ruins of Night City."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "alt-cunningham",
+    "name": "Alt Cunningham",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": null,
+    "sources": [
+      { "book": "Core Book", "page": 6 },
+      { "book": "Core Book", "page": 122 },
+      { "book": "Core Book", "page": 239 },
+      { "book": "Core Book", "page": 263 },
+      { "book": "Core Book", "page": 264 }
+    ],
+    "summary": {
+      "pt": "Programadora da ITS (Altiera Cunningham) que criou o Soulkiller e foi sequestrada pela Arasaka para transformá-lo em arma. Johnny Silverhand tentou resgatá-la em 2023. Depois, virou um fantasma digital que, segundo os boatos, ergue refúgios na Old NET e serve de ponte entre a Netwatch e as IAs.",
+      "en": "ITS programmer (Altiera Cunningham) who created Soulkiller and was kidnapped by Arasaka so it could be weaponized. Johnny Silverhand tried to rescue her in 2023. She later became a digital ghost who, by rumor, builds havens across the Old NET and acts as go-between for Netwatch and the AIs."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "nomad-santiago",
+    "name": "Nomad Santiago",
+    "aliases": [
+      "Santiago"
+    ],
+    "kind": "profile",
+    "role": "Nomad",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Aldecaldos",
+    "sources": [
+      { "book": "Core Book", "page": 9 },
+      { "book": "Core Book", "page": 10 },
+      { "book": "Core Book", "page": 11 },
+      { "book": "Core Book", "page": 441 }
+    ],
+    "summary": {
+      "pt": "Nomad corpulento, antigo parceiro de Rogue e braço direito de Johnny na missão de resgatar Alt. Depois do Fall of the Towers deixou a vida de Solo, casou e acabou assumindo a liderança da Família Aldecaldo. É o \"Old Man Santiago\" de quem Trace é filho.",
+      "en": "Burly Nomad, Rogue's former partner and Johnny's backup on the mission to save Alt. After the Fall of the Towers he left Solo work, settled down and ended up leading the Aldecaldo Family. He is the \"Old Man Santiago\" whose son is Trace."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "spider-murphy",
+    "name": "Spider Murphy",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Netrunner",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": null,
+    "sources": [
+      { "book": "Core Book", "page": 122 },
+      { "book": "Core Book", "page": 123 },
+      { "book": "Core Book", "page": 124 },
+      { "book": "Core Book", "page": 441 }
+    ],
+    "summary": {
+      "pt": "Netrunner amiga de Rache Bartmoss que invade os sistemas da Arasaka durante a incursão de 2023. Foi ela quem abriu contato com Alt Cunningham dentro da rede e contou que Rache estava morto. Continua no resgate de feridos depois que a operação desanda.",
+      "en": "Netrunner and friend of Rache Bartmoss who breaks into Arasaka's systems during the 2023 incursion. She is the one who contacted Alt Cunningham inside the network and told her Rache was dead. She keeps helping drag out the wounded once the operation falls apart."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "thompson",
+    "name": "Thompson",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Media",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": null,
+    "sources": [
+      { "book": "Core Book", "page": 6 },
+      { "book": "Core Book", "page": 9 },
+      { "book": "Core Book", "page": 122 },
+      { "book": "Core Book", "page": 124 }
+    ],
+    "summary": {
+      "pt": "Repórter obstinado, veterano da guerra, que segue Alt Cunningham porque quer a Arasaka a qualquer custo. Une-se a Johnny Silverhand e Rogue na primeira missão e volta para a de 2023. O nome também é um pseudônimo usado por vários Medias para publicar matérias perigosas.",
+      "en": "Stubborn war-veteran reporter who follows Alt Cunningham because he wants Arasaka at any cost. He joins Johnny Silverhand and Rogue on the first mission and returns for the 2023 one. The name is also a pen name several Medias use to publish dangerous stories."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "shaitan",
+    "name": "Shaitan",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": null,
+    "sources": [
+      { "book": "Core Book", "page": 122 },
+      { "book": "Core Book", "page": 123 },
+      { "book": "Core Book", "page": 441 }
+    ],
+    "summary": {
+      "pt": "Borg de corpo inteiro, armado com um canhão de braço, que entra primeiro pela porta do laboratório na incursão de 2023. Mais tarde, segundo a história de Trace, foi quem prendeu Adam Smasher para dar tempo ao grupo de fugir.",
+      "en": "Full-body borg with a gun pod who goes through the lab door first in the 2023 incursion. In the later account told to Trace, he is the one who grabbed Adam Smasher so the group could escape."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "elizabeth-kress",
+    "name": "Elizabeth Kress",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "New United States",
+    "sources": [
+      { "book": "Core Book", "page": 258 },
+      { "book": "Core Book", "page": 240 },
+      { "book": "Core Book", "page": 241 },
+      { "book": "Core Book", "page": 271 },
+      { "book": "Core Book", "page": 273 }
+    ],
+    "summary": {
+      "pt": "Presidente dos Estados Unidos, ex-oficial militar, no cargo há mais de uma década e reeleita quatro vezes ignorando os limites de mandato. Estatizou a Militech reativando a patente do general Lundee depois da explosão em Night City. É praticamente a única coisa que mantém o país unido.",
+      "en": "President of the United States, an ex-military officer, in office for over a decade and \"re-elected\" four times in disregard of term limits. She nationalized Militech by reactivating General Lundee's commission after the Night City blast. She is pretty much the only thing holding the country together."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "james-richard-allen",
+    "name": "James Richard Allen",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Gang of Four",
+    "sources": [
+      { "book": "Core Book", "page": 245 }
+    ],
+    "summary": {
+      "pt": "Presidente dos EUA nos primeiros anos do golpe secreto conhecido como Gang of Four. Simpático e pouco brilhante, era manipulado pelo vice-presidente e pelo Conselho de Segurança Nacional, que lucravam com guerras e derrubadas de governos na América do Sul.",
+      "en": "President of the U.S. in the early years of the secret coup known as the Gang of Four. Amiable but not very bright, he was steered by his Vice President and the National Security Council, who profited from wars and from toppling South American governments."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "harold-harrison-hunt",
+    "name": "Harold Harrison Hunt",
+    "aliases": [
+      "H.H. Hunt"
+    ],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Gang of Four",
+    "sources": [
+      { "book": "Core Book", "page": 245 }
+    ],
+    "summary": {
+      "pt": "Vice-presidente charmoso e sem escrúpulos, vindo de uma família rica, que decidiu tomar os EUA depois que sócios europeus se cansaram dele. Era o verdadeiro líder da conspiração, a Gang of Four, que enfraqueceu a democracia federal.",
+      "en": "Charming, unscrupulous Vice President from a wealthy family who decided to take over the U.S. when his European partners grew tired of him. He was the real leader of the Gang of Four plot that ended federal democracy."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "yorinobu-arasaka",
+    "name": "Yorinobu Arasaka",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Arasaka",
+    "sources": [
+      { "book": "Core Book", "page": 268 }
+    ],
+    "summary": {
+      "pt": "Segundo filho de Saburo e líder rebelde da facção Taka (Hawk) da Arasaka. Dado como vítima do Soulkiller pelo irmão Kei, mas quem passou pela máquina era um sósia. Continua tentando derrubar a corporação enquanto o pai ou a facção Kiji mandarem.",
+      "en": "Saburo's second son and renegade leader of Arasaka's Taka (Hawk) Faction. His brother Kei was thought to have Soulkilled him, but the victim was a body double. He keeps working against the corporation as long as his father or the Kiji Faction hold power."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "hanako-arasaka",
+    "name": "Hanako Arasaka",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Netrunner",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Arasaka",
+    "sources": [
+      { "book": "Core Book", "page": 268 }
+    ],
+    "summary": {
+      "pt": "Filha mais velha de Saburo e CEO da Arasaka. Reclusa e netrunner habilidosa, prefere seus projetos digitais, como uma versão do Soulkiller capaz de ir para corpos clonados. É o rosto da facção Kiji, que quer a paz com os novos EUA.",
+      "en": "Saburo's eldest daughter and Arasaka's chief officer. A reclusive, highly skilled Netrunner, she prefers her digital projects, such as a Soulkiller revision that can move into cloned bodies. She is the figurehead of the Kiji Faction, which wants peace with the new U.S."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "michiko-sanderson",
+    "name": "Michiko Sanderson",
+    "aliases": [
+      "Michiko Arasaka"
+    ],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Danger Gal",
+    "sources": [
+      { "book": "Core Book", "page": 271 },
+      { "book": "Core Book", "page": 272 },
+      { "book": "Core Book", "page": 268 },
+      { "book": "Core Book", "page": 446 },
+      { "book": "Core Book", "page": 447 }
+    ],
+    "summary": {
+      "pt": "Nascida Arasaka, filha de Kei, é a rosto da Danger Gal, agência de detetives de socialites e, nos bastidores, desmonta operações da Arasaka em troca de poder ficar nos EUA. Parece boba e fofa, mas é uma criminologista afiada. Na aventura Black Dog, chega de AV para ajudar a equipe a levar uma bomba da família até Los Alamos.",
+      "en": "Born an Arasaka and Kei's daughter, she is the Face of Danger Gal, a detective firm for socialites that secretly dismantles Arasaka operations as part of her deal to stay in the U.S. She seems bubbly but is a sharp criminologist. In the Black Dog adventure she drops in by AV to help the crew take a family bomb to Los Alamos."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "nicolo-loggagia",
+    "name": "Nicolo Loggagia",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Biotechnica",
+    "sources": [
+      { "book": "Core Book", "page": 269 }
+    ],
+    "summary": {
+      "pt": "Bioquímico brilhante e imprevisível, fundador da Biotechnica e pai do CHOOH2. Quer restaurar a biosfera, recriando espécies extintas com defesas novas, e deixa os negócios para o neto Mario e para a esposa Luchessia. Pode ser o Doutor Moreau da Time of the Red.",
+      "en": "Brilliant, erratic biochemist who built Biotechnica and the CHOOH2 fuel. He wants to restore the biosphere by recreating extinct animals with new defenses, leaving business to his grandson Mario and wife Luchessia. He may well be the Doctor Moreau of the Time of the Red."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "olivia-forsythe",
+    "name": "Olivia Forsythe",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Continental Brands",
+    "sources": [
+      { "book": "Core Book", "page": 270 },
+      { "book": "Core Book", "page": 271 }
+    ],
+    "summary": {
+      "pt": "Chefe da Continental Brands, que tomou boa parte do agronegócio da Petrochem. Em público é a Kibble Queen, mascote criada pelo marketing, mas na verdade é cheia de malícia e odeia os holofotes. Angus Youngblood a detesta pelo roubo bilionário.",
+      "en": "Head of Continental Brands, which took a good part of Petrochem's agribusiness. In public she plays the Kibble Queen, a mascot made by marketing, but she is a malicious home-grown corporate monster who hates the spotlight. Angus Youngblood loathes her for the billion-dollar theft."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "donald-lundee",
+    "name": "Donald Lundee",
+    "aliases": [
+      "Gen. Lundee"
+    ],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Militech",
+    "sources": [
+      { "book": "Core Book", "page": 273 },
+      { "book": "Core Book", "page": 272 },
+      { "book": "Core Book", "page": 240 }
+    ],
+    "summary": {
+      "pt": "General aposentado dos Marines e CEO da Militech, de gênio forte e orgulho enorme. Transformou a rivalidade com a Arasaka em guerra pessoal, o que levou à 4th Corporate War. A presidente Kress o calou reativando a patente dele.",
+      "en": "Retired Marine general and Militech CEO, hotheaded and proud. He made the rivalry with Arasaka personal, which helped spark the 4th Corporate War. President Kress reined him in by reactivating his commission."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "samantha-lee-young",
+    "name": "Samantha Lee Young",
+    "aliases": [
+      "Sammy Lee Young"
+    ],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Militech",
+    "sources": [
+      { "book": "Core Book", "page": 273 }
+    ],
+    "summary": {
+      "pt": "General aposentada dos Marines, braço direito de Lundee e rosto da Militech. Conhecida como \"Sammy Slaughter Lee\" na SouthAm War, é calma e irônica, e levou as forças de elite da Militech a dobrar a Arasaka até Kress encerrar a guerra.",
+      "en": "Retired Marine general, second-in-command to Lundee and the Face of Militech. Nicknamed \"Sammy Slaughter Lee\" in the SouthAm War, she is calm and wry, and her elite forces were folding Arasaka until Kress ended the war."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "michelle-dreyer",
+    "name": "Michelle Dreyer",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Network 54",
+    "sources": [
+      { "book": "Core Book", "page": 274 }
+    ],
+    "summary": {
+      "pt": "Viúva do fundador e chefe da Network 54. Para manter o sonho do marido vivo, trocou quase todo o corpo por uma conversão Gemini completa. Desconfortável com as próprias próteses, virou reclusa.",
+      "en": "Widow of the founder and head of Network 54. To keep her husband's dream alive she replaced almost her whole body with a Gemini full-body conversion. Uncomfortable with her augmentations, she has become a recluse."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "angus-youngblood",
+    "name": "Angus Youngblood",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Petrochem",
+    "sources": [
+      { "book": "Core Book", "page": 275 },
+      { "book": "Core Book", "page": 276 }
+    ],
+    "summary": {
+      "pt": "CEO da Petrochem, investidor australiano esperto e sem escrúpulos. Casou por conveniência com a presidente do conselho Ellen Trieste para ganhar o controle da empresa. Simpático e elegante, elimina inimigos sem remorso.",
+      "en": "Petrochem's CEO, a shrewd and ruthless Australian investor. He married board chairman Ellen Trieste for convenience to gain control of the company. Suave and stylish, he disposes of enemies without qualms."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "jacinda-hidalgo",
+    "name": "Jacinda Hidalgo",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Rocklin Augmentics",
+    "sources": [
+      { "book": "Core Book", "page": 276 },
+      { "book": "Core Book", "page": 277 }
+    ],
+    "summary": {
+      "pt": "Filha adotiva de Andrew Rocklin, perdeu as pernas por uma mina aos 10 anos e assumiu a empresa aos 26. Transformou a Rocklin em Rocklin Augmentics, com próteses assumidamente artificiais. Exibe os produtos da marca no próprio corpo e é conhecida pelos inimigos como \"The War Orphan\".",
+      "en": "Andrew Rocklin's adopted daughter, she lost both legs to a landmine at 10 and took over the company at 26. She remade it into Rocklin Augmentics, with openly artificial prosthetics. She shows the brand's products off on her own body and her enemies call her \"The War Orphan\"."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "anatoly-novaragov",
+    "name": "Anatoly Novaragov",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "SovOil",
+    "sources": [
+      { "book": "Core Book", "page": 278 }
+    ],
+    "summary": {
+      "pt": "Rosto da SovOil, espalhafatoso, de camisa aberta e ouro. Quem o conhece lembra de um burocrata miserável, e há quem pergunte se é o mesmo homem, um ator ou um truque do Comitê Central. Seja quem for, tem fama de implacável, com laços com a KGB e a Bratva.",
+      "en": "Face of SovOil, loud and flashy with open shirts and gold. People who knew him remember a miserly bureaucrat, so some wonder whether he is the same man, an actor or a Central Committee ruse. Whoever he is, he is ruthless, with old KGB and Bratva ties."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "carrie-lachanan",
+    "name": "Carrie Lachanan",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Medtech",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Trauma Team",
+    "sources": [
+      { "book": "Core Book", "page": 279 }
+    ],
+    "summary": {
+      "pt": "Médica e uma das duas Faces da Trauma Team, cuida das operações do dia a dia da empresa e das franquias. Casada com Bob Jones e tão cansada quanto ele, põe os pacientes em primeiro lugar e odeia eventos corporativos.",
+      "en": "Doctor and one of Trauma Team's two Faces, she handles day-to-day operations and franchises. Married to Bob Jones and just as weary, she puts patients first and avoids corporate hearings and events."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "bob-jones",
+    "name": "Bob Jones",
+    "aliases": [
+      "Dr. Bob Jones"
+    ],
+    "kind": "profile",
+    "role": "Medtech",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Trauma Team",
+    "sources": [
+      { "book": "Core Book", "page": 279 },
+      { "book": "Core Book", "page": 305 }
+    ],
+    "summary": {
+      "pt": "Médico e a outra Face da Trauma Team, responsável por pessoal e material. Casado com Carrie Lachanan, é um paramédico cansado e direto que só aparece em eventos corporativos se for muito convencido. Outro Dr. Bob da cidade vive sendo confundido com ele.",
+      "en": "Doctor and the other Face of Trauma Team, covering manpower and materiel. Married to Carrie Lachanan, he is a weary, no-nonsense medic who only attends corporate events when strongly persuaded. The Other Dr. Bob of Night City is often mistaken for him."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "ur",
+    "name": "UR",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Ziggurat",
+    "sources": [
+      { "book": "Core Book", "page": 281 },
+      { "book": "Core Book", "page": 280 }
+    ],
+    "summary": {
+      "pt": "Fundador e visionário da Ziggurat, pronunciado \"You Are\", que surgiu do nada em 2030 com o plano de refazer as comunicações de Night City. Muito carismático, muda de visual e de filosofia o tempo todo e já passou pela Church of Elvis. Fala de Rache Bartmoss como se tivesse ligação com ele.",
+      "en": "Founder and visionary of Ziggurat, pronounced \"You Are\", who appeared out of nowhere in 2030 with a plan to rebuild Night City's communications. Highly charismatic, UR keeps changing look and life philosophy and once joined the Church of Elvis. They speak of Rache Bartmoss as if they had a personal link."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "artyom-sokolov",
+    "name": "Artyom Sokolov",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Zhirafa Technical Manufacturing",
+    "sources": [
+      { "book": "Core Book", "page": 281 },
+      { "book": "Core Book", "page": 282 }
+    ],
+    "summary": {
+      "pt": "Fundador e CEO da Zhirafa, ex-Edgerunner e ex-soldado corporativo da SovOil, vendido pela empresa como self-made man. Volátil e carismático, usa cyberware extravagante, debocha dos concorrentes e faz oposição sumir com chantagem. Frequenta festas com a Bratva.",
+      "en": "Founder and CEO of Zhirafa, an ex-Edgerunner and former SovOil soldier marketed as self-made. Volatile and charismatic, he wears flashy custom cyberware, mocks rivals and makes opposition disappear through blackmail. He throws parties with Bratva members."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "richard-night",
+    "name": "Richard Night",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Night Industries",
+    "sources": [
+      { "book": "Core Book", "page": 284 },
+      { "book": "Core Book", "page": 285 }
+    ],
+    "summary": {
+      "pt": "Engenheiro e investidor que idealizou uma cidade planejada e segura. Comprou as ruínas de Morro Bay por quase nada, contratou a Arasaka para limpar os boosters e fundou Coronado City, que o povo chamava de Night's City, origem de Night City.",
+      "en": "Engineer and investor who dreamed up a planned, safe city. He bought the ruins of Morro Bay for pennies, hired Arasaka to clear out the boosters and founded Coronado City, which locals called \"Night's City\", the origin of Night City."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "max-hammerman",
+    "name": "Max Hammerman",
+    "aliases": [
+      "Commander Hammerman"
+    ],
+    "kind": "profile",
+    "role": "Lawman",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "MAX-TAC",
+    "sources": [
+      { "book": "Core Book", "page": 301 },
+      { "book": "Core Book", "page": 302 }
+    ],
+    "summary": {
+      "pt": "Comandante incorruptível da MAX-TAC, o esquadrão que sobrou da antiga NCPD. Mantém controle de ferro sobre cyberpsicopatas, reféns e armas militares na cidade. Segue um código imparcial e encerra qualquer briga, até a de seguranças corporativos.",
+      "en": "Incorruptible commander of MAX-TAC, the surviving squad of the old NCPD. He keeps an iron grip on cyberpsychos, hostage situations and military-grade weapons in the city. He follows an impartial code and ends any fight, even ones involving corporate security."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "kogan-akigo",
+    "name": "Kōgan Akigo",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Biotechnica",
+    "sources": [
+      { "book": "Core Book", "page": 427 }
+    ],
+    "summary": {
+      "pt": "Professor chefe do Project: Orchard da Biotechnica, dado como morto numa ruptura de barragem e encontrado vivo na floresta nordeste da BosWash. A Queen Morosha recebeu a missão de resgatá-lo.",
+      "en": "Professor and head of Biotechnica's Project: Orchard, presumed dead in a dam break and found alive in the northeast woods of the BosWash. Queen Morosha was credited with recovering him."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "bes-isis",
+    "name": "Bes Isis",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Media",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": null,
+    "sources": [
+      { "book": "Core Book", "page": 304 }
+    ],
+    "summary": {
+      "pt": "Jornalista freelancer conhecida por se arriscar demais atrás de furos. Tem uma perna e meio peito cromados, de quando fingiu ferimentos para fazer uma reportagem sobre \"meat jumping\". Já foi membro dos Samurai, a banda de Johnny Silverhand.",
+      "en": "Well-known freelance journalist with a reputation for going too far for a scoop. She has a chrome leg and half a chrome chest from faking injuries for a story on \"meat jumping\". She was once a member of Samurai, Johnny Silverhand's band."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "blacklist",
+    "name": "Blacklist",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Tech",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Biotechnica",
+    "sources": [
+      { "book": "Core Book", "page": 304 }
+    ],
+    "summary": {
+      "pt": "Ex-engenheiro químico e ciber da Biotechnica que virou figura conhecida na cidade. Boostergangs o procuram para cyberware sob medida, corporações para sintetizar vírus e a polícia para analisar químicos. Fez as pazes com Loggagia e hoje projeta fauna bioengenheirada.",
+      "en": "Renegade chemical/cyber-engineer from Biotechnica who is known across the city. Boostergangs go to him for custom cybernetics, Corps for synthesized viruses, and police to analyze chemicals. He made peace with Loggagia and now designs bio-engineered fauna."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "david-ling-po",
+    "name": "David Ling Po",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Exec",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Weng Fang Tong",
+    "sources": [
+      { "book": "Core Book", "page": 304 }
+    ],
+    "summary": {
+      "pt": "Empresário respeitável, formado em Stanford, que na verdade chefia a Weng Fang Tong, a maior organização criminosa chinesa do oeste dos EUA. Controla jogo, agiotagem e prostituição e usa as gangues de Little China como capangas.",
+      "en": "Respectable-looking businessman and Stanford graduate who actually heads the Weng Fang Tong, the largest Chinese criminal organization in the western U.S. He controls gambling, loan sharking and prostitution, and uses the Little China gangs as enforcers."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "edward-michaels",
+    "name": "Edward Michaels",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Exec",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Night City University",
+    "sources": [
+      { "book": "Core Book", "page": 304 }
+    ],
+    "summary": {
+      "pt": "Reitor da Night City University, perto dos oitenta anos mas ainda corre toda manhã, com pernas Rocklin. É honesto e fez acordos com Edgerunners para defender a universidade, e quer tratamento igual para todos.",
+      "en": "Dean of Night City University, in his late seventies but still running every morning on Rocklin cyberlegs. Open and honest, he has made deals with Edgerunners to defend the university and wants everyone treated equally."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "fiona-hayes",
+    "name": "Fiona Hayes",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Media",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Network 54",
+    "sources": [
+      { "book": "Core Book", "page": 304 }
+    ],
+    "summary": {
+      "pt": "Estrela da Net 54 que investiga escândalos e corrupção e aparece sem convite com sua equipe de câmeras. Já derrubou muita gente poderosa e por isso vive como foragida por meses. Corre o boato de que não é a primeira Fiona Hayes.",
+      "en": "Net 54 star who chases scandal, graft and corruption, turning up unwanted with her camera crew. She has brought down many powerful people and lives like a fugitive for months at a time. Rumor says she is not the first Fiona Hayes."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "fireman",
+    "name": "Fireman",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Fixer",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": null,
+    "sources": [
+      { "book": "Core Book", "page": 304 },
+      { "book": "Core Book", "page": 305 }
+    ],
+    "summary": {
+      "pt": "O traficante de armas mais conhecido da cidade, ex-ciber-soldado da SouthAm War. Vende armas e sistemas de segurança a negócios legítimos, também negocia informação e frequenta o Afterlife.",
+      "en": "Night City's best-known arms dealer, a former cyber-soldier of the SouthAm War. He supplies weapons and security systems to legitimate businesses, also deals in information, and is a regular at the Afterlife."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "franklin-mbolu",
+    "name": "Franklin M'bolu",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Tech",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Orbital Air",
+    "sources": [
+      { "book": "Core Book", "page": 305 }
+    ],
+    "summary": {
+      "pt": "Desenvolvedor da Orbital Air responsável pelo massdriver em construção no Morro Rock. Negociador duro, e corre o boato de que complementa a renda vendendo tecnologia e informação no mercado negro.",
+      "en": "Orbital Air developer in charge of the massdriver being built inside Morro Rock. A hard bargainer, rumored to supplement his income by selling technology and information on the black market."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "garven-haakensen",
+    "name": "Garven Haakensen",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Fixer",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": null,
+    "sources": [
+      { "book": "Core Book", "page": 305 }
+    ],
+    "summary": {
+      "pt": "Ex-vice-prefeito, o \"Councilman\" que sempre está no escritório. Tem contatos com todos os grupos de interesse, corporações e crime organizado, e sem prefeito oficial é o que mais se aproxima de um articulador de favores no Conselho.",
+      "en": "Former Assistant Mayor, the \"Councilman\" always at his office. He has contacts with every special interest group, the Corps and organized crime, and with no official Mayor he is the Council's closest thing to a favor-granting power broker."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "hornet",
+    "name": "Hornet",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Fixer",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": null,
+    "sources": [
+      { "book": "Core Book", "page": 305 }
+    ],
+    "summary": {
+      "pt": "Fixer respeitado e cheio de inimigos, ex-falsificador de Heywood que trabalhou com a Arasaka fornecendo armas químicas. Hoje controla cybertech, biotech e drogas, e viaja sempre com a guarda-costas Fox. A casa que perdeu é assunto proibido.",
+      "en": "Respected Fixer with a score of enemies, a former Heywood forger who worked with Arasaka supplying chemical weapons. He now deals in cybertech, biotech and drugs, and always travels with his bodyguard Fox. Asking about his old house is a mistake."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "lucius-rhyne",
+    "name": "Lucius Rhyne",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Rockerboy",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": null,
+    "sources": [
+      { "book": "Core Book", "page": 305 }
+    ],
+    "summary": {
+      "pt": "Organizador comunitário na nova Watson Development e idealista raro, conhecido por discursos que inspiram ação.",
+      "en": "Community organizer in the newly forming Watson Development and a rare idealist, known for inspiring speeches and calls to action."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "mister-kernaghan",
+    "name": "Mister Kernaghan",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Fixer",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": null,
+    "sources": [
+      { "book": "Core Book", "page": 305 }
+    ],
+    "summary": {
+      "pt": "Ex-TI do porto de Night City que levou os dados de embarque quando a bomba caiu e construiu um império vendendo suprimentos. Hoje rico, comanda com o gato Kosmos os Midnight Markets trimestrais de itens de luxo.",
+      "en": "Former Night City Port Authority IT worker who took the shipping data when the nuke hit and built an empire selling supplies. Now wealthy, he and his cat Kosmos run quarterly Midnight Markets of luxury goods."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "nostradamus",
+    "name": "Nostradamus",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Media",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": null,
+    "sources": [
+      { "book": "Core Book", "page": 305 }
+    ],
+    "summary": {
+      "pt": "Recluso que vive num armazém fortificado com a maior coleção de livros reais da cidade e um mainframe. Compila e vende informação sobre passado e presente, contratando netrunners para obter dados.",
+      "en": "Recluse living in a heavily defended warehouse holding the city's biggest collection of real books and a huge mainframe. He compiles and brokers information on the past and present, hiring Netrunners to acquire it."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "the-other-dr-bob",
+    "name": "The Other Dr. Bob",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Medtech",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": null,
+    "sources": [
+      { "book": "Core Book", "page": 305 }
+    ],
+    "summary": {
+      "pt": "Um dos poucos cirurgiões da cidade sem formação militar. Instala cyberware em boostergangs, mas não faz reconstrução facial para posers, que odeia desde que perdeu as mãos para um deles. É confundido com o Dr. Bob Jones da Trauma Team.",
+      "en": "One of the few surgeons in the city without military training. He installs cyberware for boostergangs but will not do facial reconstruction for posers, whom he hates since losing his hands to one. People mistake him for Dr. Bob Jones of Trauma Team."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "phoenix-redwyne",
+    "name": "Phoenix Redwyne",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Medtech",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "From the Embers",
+    "sources": [
+      { "book": "Core Book", "page": 305 },
+      { "book": "Core Book", "page": 306 }
+    ],
+    "summary": {
+      "pt": "Ex-Trauma Team que abriu sua clínica \"From the Embers\" numa barraca depois que a guerra arruinou os planos. A clínica passou por contêiner e loja até uma garagem convertida. Mais de duas décadas remendando gente deixou todo mundo devendo favores a ela.",
+      "en": "Former Trauma Team medic who opened her \"From the Embers\" clinic in a tent after the war wrecked her plans. It moved through a container and a storefront to a converted garage. After two decades of patching people up, nearly everyone owes her a favor."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "queen-morosha",
+    "name": "Queen Morosha",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Solo",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": null,
+    "sources": [
+      { "book": "Core Book", "page": 306 },
+      { "book": "Core Book", "page": 427 }
+    ],
+    "summary": {
+      "pt": "Solo em ascensão que saiu da Combat Zone e se autoproclamou \"Queen of Solos\". Lidera uma organização pequena e eficiente de assassinos e guarda-costas e, diferente de outros Solos, dá entrevistas e aparece em público.",
+      "en": "Rising Solo who fought her way out of the Combat Zone and calls herself the \"Queen of Solos\". She runs a small but effective organization of freelance killers and bodyguards and, unlike many Solos, gives interviews and makes public appearances."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "rex-royale",
+    "name": "Rex Royale",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Fixer",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": null,
+    "sources": [
+      { "book": "Core Book", "page": 306 }
+    ],
+    "summary": {
+      "pt": "Fixer da borda da Combat Zone que cobra proteção com seus Community Solos, a meio caminho entre extorsão e serviço público. Realmente cuida da vizinhança e organiza até café da manhã de panqueca, mas não faz caridade.",
+      "en": "Fixer of the Combat Zone edge who sells protection through his Community Solos, halfway between racket and public service. He truly cares about the neighborhood and even organizes pancake breakfasts, but he is not a charity."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "billy-joe-brentwood",
+    "name": "William Joseph \"Billy Joe\" Brentwood",
+    "aliases": [
+      "Billy Joe Brentwood"
+    ],
+    "kind": "profile",
+    "role": "Exec",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Petrochem",
+    "sources": [
+      { "book": "Core Book", "page": 306 }
+    ],
+    "summary": {
+      "pt": "Executivo do escritório de Night City da Petrochem, simpático e barulhento em público. Por trás é ambicioso e implacável, com dedos na política, e quem tenta chantageá-lo costuma acabar de cara no porto.",
+      "en": "Executive of Petrochem's Night City office, congenial and loud in public. Behind that he is ruthless and ambitious with fingers in politics, and those who try to blackmail him often end up face down in the harbor."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "wu-chii-lee",
+    "name": "Wu Chii Lee",
+    "aliases": [
+      "Dr. Wu Chii Lee"
+    ],
+    "kind": "profile",
+    "role": "Medtech",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": null,
+    "sources": [
+      { "book": "Core Book", "page": 306 }
+    ],
+    "summary": {
+      "pt": "Doutor idoso da Watson Development, curandeiro, sacerdote, vidente e boticário de ervas. Parece só um herbanário que fala cantonês, mas quando respeitado ajuda muito e sabe o que se passa nas comunidades asiáticas.",
+      "en": "Elderly doctor of the Watson Development: healer, priest, fortune-teller and herbal pharmacist. He seems a simple herbalist who speaks only Cantonese, but shown respect he can help a great deal and knows what moves in the Asian communities."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "dillon-murphy",
+    "name": "Dillon Murphy",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Solo",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": null,
+    "sources": [
+      { "book": "Core Book", "page": 306 },
+      { "book": "Core Book", "page": 307 }
+    ],
+    "summary": {
+      "pt": "Solo de meia-idade, calmo, de sotaque irlandês e rápido no .44. Chamado de \"White Knight of Night City\" por proteger mulheres e crianças, às vezes sem cobrar. Casou, teve filhos e ainda é visto perto da igreja do Father Kevin.",
+      "en": "Soft-spoken middle-aged Solo with a thick Irish accent and a fast .44. Called the \"White Knight of Night City\" for protecting women and children, sometimes unpaid. He married and raised many children but is still seen around Father Kevin's church."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "eran-malour",
+    "name": "Eran Malour",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Tech",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": null,
+    "sources": [
+      { "book": "Core Book", "page": 307 }
+    ],
+    "summary": {
+      "pt": "Veterano condecorado das guerras da América do Sul que virou armeiro. Comprou uma fábrica de robótica e a adaptou para fabricar qualquer arma sob encomenda. Já fez uma série de pistolas personalizadas para Johnny Silverhand.",
+      "en": "Decorated veteran of the South American brushfire wars who became an armorer. He bought a robotics factory and modified it to build any firearm to order. He made a series of personalized handguns for Johnny Silverhand."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "father-kevin",
+    "name": "Father Kevin",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Solo",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Holy Angels Church",
+    "sources": [
+      { "book": "Core Book", "page": 307 }
+    ],
+    "summary": {
+      "pt": "Padre da Holy Angels Church, ex-Solo que lutou em mais de uma dúzia de países. Dá santuário e media disputas de gangues e corporações, com histórico excepcional de acordos pacíficos, desde que se entreguem as armas.",
+      "en": "Priest of Holy Angels Church and a former Solo who fought in a dozen or more countries. He offers sanctuary and mediates gang and Corp disputes with an exceptional record of peaceful settlements, provided weapons are surrendered."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "fox",
+    "name": "Fox",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Solo",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": null,
+    "sources": [
+      { "book": "Core Book", "page": 307 }
+    ],
+    "summary": {
+      "pt": "Alta e esguia, sempre de preto e com o rosto escondido por uma rede no capuz, fala pouco. Foi por anos a guarda-costas de Hornet e hoje é respeitada. Prefere matar de modo discreto e treina jovens Solos, dizem.",
+      "en": "Tall and slender, always in black with her face hidden behind a net in the hood, and speaking little. For years she was Hornet's bodyguard and is now well respected. She prefers quiet killing and reportedly trains young Solos."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "green-thumb",
+    "name": "Green Thumb",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Solo",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": null,
+    "sources": [
+      { "book": "Core Book", "page": 307 },
+      { "book": "Core Book", "page": 283 }
+    ],
+    "summary": {
+      "pt": "Nascido em Night City de família nigeriana, serviu na Militech até o fim da guerra e voltou a uma casa destruída, com o corpo cheio de borgware. Hoje cuida de jardins nos telhados e protege uma coalizão de jardineiros contra gangues e a Continental Brands.",
+      "en": "Born in Night City to a Nigerian immigrant family, he served with Militech until the war ended and returned to a wrecked home, his body heavily augmented with borgware. Now he tends rooftop gardens and protects a coalition of gardeners from gangs and Continental Brands."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "kenshiro-saeba",
+    "name": "Kenshiro Saeba",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Lawman",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": null,
+    "sources": [
+      { "book": "Core Book", "page": 307 }
+    ],
+    "summary": {
+      "pt": "Ex-Solo da SouthAm War que trabalha como detetive particular em Little Europe e é chamado \"The Night Hunter\". Ótimo de arma, tem muitos contatos na polícia, que nem sempre aprova seus métodos.",
+      "en": "Former Solo of the SouthAm War working as a private investigator in Little Europe, nicknamed \"The Night Hunter\". A fine shot with many contacts in law enforcement, not all of whom approve of his methods."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "the-knife",
+    "name": "The Knife",
+    "aliases": [
+      "\"The Knife\""
+    ],
+    "kind": "profile",
+    "role": "Solo",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Yakuza",
+    "sources": [
+      { "book": "Core Book", "page": 307 }
+    ],
+    "summary": {
+      "pt": "Assassino da Yakuza, mestre do disfarce, de quem ninguém sabe a aparência ou identidade. Pode ser codinome de vários assassinos. Para contatar, manda-se a mensagem \"Katana\" a uma conta ZChat conhecida por poucos Fixers.",
+      "en": "Yakuza assassin and master of disguise whose looks and identity nobody knows. It may be a code name for several killers. To reach them, one sends the message \"Katana\" to a ZChat account known to a few Fixers."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "recluse",
+    "name": "Recluse",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Netrunner",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": null,
+    "sources": [
+      { "book": "Core Book", "page": 307 },
+      { "book": "Core Book", "page": 308 }
+    ],
+    "summary": {
+      "pt": "Netrunner de ponta que vive no antigo shopping Kaifū Corner, na Combat Zone, protegida por arquiteturas NET complexas. Só trata com clientes que pagam bem, nunca pessoalmente, aparece como uma aranha-marrom gigante. Há quem diga que é ex-Netwatch, IA ou fantasma.",
+      "en": "Top-tier Netrunner living in the old Kaifū Corner mall in the Combat Zone behind complex NET Architectures. She only talks with clients who pay well, never in person, appearing as a giant brown recluse spider Icon. Some say she is ex-Netwatch, an AI, or a Net Ghost."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "woodchipper",
+    "name": "Woodchipper",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Nomad",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": null,
+    "sources": [
+      { "book": "Core Book", "page": 308 }
+    ],
+    "summary": {
+      "pt": "Nomad dona da garagem nos arredores onde as Famílias nômades levam seus conflitos. Faz as vezes de juíza, detetive e conselheira, e armas não são permitidas lá. Quem quer briga é removido pelos 270 libras de blindagem subdérmica dela.",
+      "en": "Nomad owner of the outskirts garage where Nomad Families bring their disputes. She acts as extralegal judge, investigator and counselor, and weapons are not allowed. Anyone seeking violence is removed by her 270 lbs of subdermally armored frame."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "trace-santiago",
+    "name": "Trace Santiago",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Media",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Aldecaldos",
+    "sources": [
+      { "book": "Core Book", "page": 436 },
+      { "book": "Core Book", "page": 441 }
+    ],
+    "summary": {
+      "pt": "Media independente e filho do chefe da Família Aldecaldo. Saiu do emprego legítimo e posta as próprias reportagens no Data Pool. Em Black Dog, rastreia o fim da história de Johnny Silverhand e lidera a equipe que leva a bomba.",
+      "en": "Independent Media and son of the Aldecaldo Family's leader. He quit legit work and uploads his own reports to the Data Pool. In Black Dog he chases the end of Johnny Silverhand's story and leads the crew that carries the bomb."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "lilayah",
+    "name": "Lilayah",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Rockerboy",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": null,
+    "sources": [
+      { "book": "Core Book", "page": 436 },
+      { "book": "Core Book", "page": 445 }
+    ],
+    "summary": {
+      "pt": "Rockerboy de Seattle que mora em Night City, toca o que chama de cybergrunge. Em Black Dog, tenta recompor uma última canção de Johnny Silverhand e topa o trabalho para conseguir o chip com a gravação inteira.",
+      "en": "Seattle-born Rockerboy living in Night City who plays what she calls cybergrunge. In Black Dog she tries to rebuild Johnny Silverhand's last song and takes the job to get the chip with the full recording."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "kepler",
+    "name": "Kepler",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Nomad",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": null,
+    "sources": [
+      { "book": "Core Book", "page": 436 },
+      { "book": "Core Book", "page": 439 }
+    ],
+    "summary": {
+      "pt": "Nomad da Flórida, casada com Pneumo, nascida sem parte do braço direito e com cyberware depois. Dirige a Kombi da equipe e opera o minigun. A Kombi é a última coisa que ganhou da família.",
+      "en": "Nomad from Florida, married to Pneumo, born missing part of her right arm and later fitted with cyberware. She drives the crew's Kombi and works the mini-gun. The Kombi is the last thing her family gave her."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "pneumo",
+    "name": "Pneumo",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Netrunner",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": null,
+    "sources": [
+      { "book": "Core Book", "page": 436 },
+      { "book": "Core Book", "page": 440 }
+    ],
+    "summary": {
+      "pt": "Netrunner londrino, parceiro e marido de Kepler. Aprendeu justiça com os pais policiais honestos e foi reconstruído depois de um acidente. Roda o Data Pool da Kombi e consegue os códigos de ativação da bomba.",
+      "en": "London Netrunner, partner and husband of Kepler. He learned justice from his honest-cop parents and was rebuilt after an accident. He runs the Kombi's Data Pool link and finds the bomb's trigger codes."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "damien",
+    "name": "Damien",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Tech",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": null,
+    "sources": [
+      { "book": "Core Book", "page": 437 },
+      { "book": "Core Book", "page": 443 }
+    ],
+    "summary": {
+      "pt": "Tech mercenário que ganhou ciberbraço cedo e adora tecnologia. Conserta o próprio ciberbraço de fabricação russa, examina o chip e a caixa, e no tiroteio joga napalm da Kombi. Fascinado por Samantha e pelo corpo dela.",
+      "en": "Mercenary Tech who got a cyberarm young and loves technology. He fixes his own Russian cyberarm, inspects the chip and the crate, and throws napalm from the Kombi in the fight. He is fascinated by Samantha's body."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "zara",
+    "name": "Zara",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Solo",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": null,
+    "sources": [
+      { "book": "Core Book", "page": 437 },
+      { "book": "Core Book", "page": 444 }
+    ],
+    "summary": {
+      "pt": "Solo discreta que já foi guarda-costas de ricos e criminosos. Usa arco dobrável e uma Kang Tao, e recebe a pistola prateada de Johnny, cuja interface quase a transforma numa cyberpsicopata no tiroteio.",
+      "en": "Discreet Solo who once guarded the rich and criminal. She uses a collapsible bow and a Kang Tao, and is handed Johnny's silver pistol, whose interface nearly turns her cyberpsycho in the firefight."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "samantha-stevens",
+    "name": "Samantha",
+    "aliases": [
+      "Samantha Stevens"
+    ],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": null,
+    "sources": [
+      { "book": "Core Book", "page": 437 },
+      { "book": "Core Book", "page": 438 }
+    ],
+    "summary": {
+      "pt": "Mulher de dois metros de altura em conversão total de corpo, ex-bombeira e paramédica. Entrega à equipe um chip com a música de Johnny, que ela guarda como fã, e a caixa com a bomba que ela escondeu por quinze anos.",
+      "en": "Seven-foot Full Body Conversion woman, a former firefighter and paramedic. She gives the crew a chip with Johnny's song, a keepsake from a fan, and the crate with the bomb she kept hidden for fifteen years."
     },
     "sheetNote": null,
     "sheet": null
