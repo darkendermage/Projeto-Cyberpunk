@@ -1,27 +1,20 @@
-/* Same shape as the Ficha tab: STAT column beside the panels, stacked (STATs as a wrapping row) on narrow screens. */
-.header {
-  display: grid;
-  grid-template-columns: 72px 1fr;
-  gap: 12px;
-  padding: 12px;
-  background: var(--bg-2);
-  border: 1px solid var(--line-strong);
-  clip-path: polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, 0 100%);
-}
+/* The character sheet's layout comes from Characters.module.css; these are the few things only the compendium has. */
 
-.sheet {
+/* A profile has no STATs or skills: identity beside the biography. */
+.profile {
   display: grid;
-  grid-template-columns: 112px minmax(0, 1fr);
+  grid-template-columns: minmax(250px, 300px) minmax(0, 1fr);
   gap: 12px;
   align-items: start;
 }
 
 @media (max-width: 900px) {
-  .sheet { grid-template-columns: minmax(0, 1fr); }
-  .sheet > :first-child { flex-direction: row !important; flex-wrap: wrap; }
-  .sheet > :first-child > * { flex: 1 1 90px; }
+  .profile { grid-template-columns: minmax(0, 1fr); }
 }
 
-.panels { min-width: 0; }
-
 .scroll { overflow-x: auto; }
+
+/* The range DV table under a weapon: part of the row above, not a table of its own. */
+.weaponDetail td { padding-top: 0; }
+
+.biography { margin: 0; white-space: pre-line; }

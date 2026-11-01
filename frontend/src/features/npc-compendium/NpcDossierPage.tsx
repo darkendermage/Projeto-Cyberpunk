@@ -1,24 +1,26 @@
 import { useState } from 'react';
 import { Link, useLocation, useParams } from 'react-router';
-import { ArrowLeft, Skull, Swords, UserRound } from 'lucide-react';
+import { ArrowLeft, Swords } from 'lucide-react';
+import { useCharacterRules } from '../../api/characters';
 import { useCompendiumNpc } from '../../api/npcCompendium';
 import { Button, ErrorState, Spinner } from '../../components/ui/ui';
 import page from '../../styles/Page.module.css';
-import { SheetPanel, StateTag } from '../characters/CharacterUi';
+import { RoleAbilityButton, StateTag } from '../characters/CharacterUi';
 import styles from '../characters/Characters.module.css';
 import dossier from './NpcDossier.module.css';
 import { t } from '../../i18n';
 import { AddToCombatDialog } from './AddToCombatDialog';
-import { NpcArmor, NpcCyberware, NpcGear, NpcHealth, NpcSkills, NpcSpecials, NpcStats, NpcWeapons } from './NpcSheetPanels';
+import { NpcArmor, NpcBiography, NpcCyberware, NpcGear, NpcHealth, NpcIdentity, NpcSkills, NpcSpecials, NpcStats, NpcWeapons } from './NpcSheetPanels';
 
 export function NpcDossierPage() {
   const { id = '' } = useParams();
   const query = useCompendiumNpc(id);
+  const rules = useCharacterRules();
   const [adding, setAdding] = useState(false);
   const npc = query.data;
   // Opened from the list, the link carries its filters; opened directly, it goes to the whole list.
   const listSearch = (useLocation().state as { listSearch?: string } | null)?.listSearch ?? '';
-  const back = <Link to={`/npcs${listSearch}`} className={page.link}><ArrowLeft size={14} /> {t('Voltar ao compêndio', 'Back to the compendium')}</Link>;
+  const back = <Link to={`/npcs${listSearch}`} className={styles.tab} aria-label={t('Voltar ao compêndio', 'Back to the compendium')}><ArrowLeft size={16} /></Link>;
 
   if (query.isLoading) return <div className={page.page}><Spinner /></div>;
   if (query.error || !npc) {
@@ -26,55 +28,54 @@ export function NpcDossierPage() {
   }
 
   const sheet = npc.sheet;
+  const ability = rules.data && npc.role && (
+    <span className={styles.small}>{t('Habilidade de Role: ', 'Role Ability: ')}<RoleAbilityButton rules={rules.data} role={npc.role} /></span>
+  );
+
   return (
     <div className={page.page}>
-      {back}
-      <header className={dossier.header}>
-        <div className={styles.avatar}>{sheet ? <Skull size={34} /> : <UserRound size={34} />}</div>
-        <div className={styles.cardBody}>
-          <h1 className="hud-title">{npc.name}</h1>
-          {npc.aliases.length > 0 && <div className={`${styles.small} ${styles.muted}`}>{npc.aliases.join(' · ')}</div>}
-          <div className={styles.cardMeta}>
-            <span>{npc.role ?? '—'}</span>
-            {npc.roleRank != null && <span>Rank {npc.roleRank}</span>}
-            {npc.rep != null && <span className={styles.muted}>Rep {npc.rep}</span>}
+      <div className={styles.topbar}>
+        {back}
+        <div className={styles.topbarName}>
+          <strong>{npc.name}{npc.aliases[0] && <span className={styles.muted}> “{npc.aliases[0]}”</span>}</strong>
+          <span className={styles.source}>{[npc.role, npc.affiliation].filter(Boolean).join(' · ') || t('Compêndio de NPCs', 'NPC Compendium')}</span>
+        </div>
+        {sheet
+          ? <StateTag tone="ok">{t('ficha do livro', 'book sheet')}</StateTag>
+          : <StateTag tone="warn" title={t('O livro não traz ficha deste personagem.', 'The book has no stat block for this character.')}>{t('sem ficha oficial', 'no official sheet')}</StateTag>}
+        {sheet && (
+          <div className={styles.topbarRight}>
+            <Button variant="primary" onClick={() => setAdding(true)}><Swords size={14} /> {t('Adicionar ao combate', 'Add to combat')}</Button>
           </div>
-          {npc.affiliation && <div className={styles.cardMeta}><span className={styles.muted}>{npc.affiliation}</span></div>}
-          <div className={styles.source}>{npc.sources.map((s) => `${s.book} p.${s.page}`).join(' · ')}</div>
-          {npc.kind === 'Sheet' && (
-            <div className={styles.row}>
-              <Button variant="primary" onClick={() => setAdding(true)}><Swords size={14} /> {t('Adicionar ao combate', 'Add to combat')}</Button>
-            </div>
-          )}
-        </div>
-      </header>
+        )}
+      </div>
 
-      <SheetPanel title={t('Biografia', 'Biography')}><p>{npc.summary}</p></SheetPanel>
-
-      {npc.sheetNote && <p className={`${styles.small} ${styles.muted}`}>{npc.sheetNote}</p>}
-
-      {!sheet && (
-        <div className={styles.row}>
-          <StateTag tone="warn">{t('sem ficha oficial', 'no official sheet')}</StateTag>
-          <span>{t('O livro não traz ficha deste personagem.', 'The book has no stat block for this character.')}</span>
-        </div>
-      )}
-
-      {sheet && (
-        <div className={dossier.sheet}>
+      {sheet ? (
+        <div className={styles.sheet}>
+          <div className={styles.column}>
+            <NpcIdentity npc={npc} role={ability} />
+            <NpcBiography npc={npc} />
+          </div>
           <NpcStats sheet={sheet} />
-          <div className={`${styles.column} ${dossier.panels}`}>
-            <NpcHealth sheet={sheet} />
-            <NpcWeapons weapons={sheet.weapons} />
-            <NpcArmor armor={sheet.armor} />
-            <NpcSkills skills={sheet.skills} armoredSkills={sheet.armoredSkills} />
-            <NpcGear gear={sheet.gear} />
-            <NpcCyberware cyberware={sheet.cyberware} />
+          <div className={styles.column}>
+            <NpcSkills sheet={sheet} rules={rules.data?.skills ?? []} />
             <NpcSpecials specials={sheet.specials} />
           </div>
+          <div className={styles.sheetRight}>
+            <NpcHealth sheet={sheet} />
+            <NpcArmor armor={sheet.armor} />
+            <NpcWeapons weapons={sheet.weapons} />
+            <NpcGear gear={sheet.gear} />
+            <NpcCyberware cyberware={sheet.cyberware} />
+          </div>
+        </div>
+      ) : (
+        <div className={dossier.profile}>
+          <div className={styles.column}><NpcIdentity npc={npc} role={ability} /></div>
+          <NpcBiography npc={npc} />
         </div>
       )}
-      {npc.kind === 'Sheet' && <AddToCombatDialog npc={npc} open={adding} onClose={() => setAdding(false)} />}
+      {sheet && <AddToCombatDialog npc={npc} open={adding} onClose={() => setAdding(false)} />}
     </div>
   );
 }
