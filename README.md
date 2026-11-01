@@ -123,6 +123,12 @@ O prédio que o seu Netrunner vai invadir, montado em segundos.
 - **Quanto custa:** o preço de compra calculado como no Core, para quando o grupo quiser proteger o próprio esconderijo.
 - **Leve para a mesa:** mapa em árvore (.svg) e a tabela "Floor | On the Other Side of the Door | DV" pronta para copiar.
 
+### 🌧️ Clima de Night City
+
+- **Gerador do suplemento *Night City Weather*:** escolha o mês do jogo e role Temperatura e Condições, com as regras de cada resultado na tela.
+- **Clima Estranho:** Blood Rain, Acid Rain, Deadly Thunderstorm, Heat Wave e os outros eventos, com duração e rolagens de Mestre.
+- **Ou escolha na tabela:** clique numa célula para definir o clima à mão. O dia atual e os anteriores ficam salvos no navegador.
+
 ### 📖 Referência de mesa
 
 - **Regras Rápidas** para tirar dúvidas no meio da sessão.
@@ -203,7 +209,7 @@ Por enquanto, só no Windows 10 e 11.
 
 ## ▓▒░ LIVROS COBERTOS
 
-*Cyberpunk RED Core Rulebook* · *Black Chrome* · *Black Chrome+* · *Interface RED* 2 a 5 · *Danger Gal Dossier* · *Edgerunners Mission Kit* · *Tales of the RED* · a série *12 Days of...* · *Woodchipper's Garage* · *Toggle's Temple* · *Hornet's Pharmacy* · *All About Agents* · *Segotari Power* · *Going Quiet* · *Cyberware Enhancements* · *No Place Like Home* · *Mixing Drinks–Changing Lives* · *Invented Tech Upgrades*
+*Cyberpunk RED Core Rulebook* · *Black Chrome* · *Black Chrome+* · *Interface RED* 1 a 5 · *Danger Gal Dossier* · *Danger Gal Dossier+* · *Hope Reborn+* · *Tales of the RED+* · *Night City Weather* · *Edgerunners Mission Kit* · *Tales of the RED* · a série *12 Days of...* · *Woodchipper's Garage* · *Toggle's Temple* · *Hornet's Pharmacy* · *All About Agents* · *Segotari Power* · *Going Quiet* · *Cyberware Enhancements* · *No Place Like Home* · *Mixing Drinks–Changing Lives* · *Invented Tech Upgrades*
 
 Cada item mostra o livro e a página de onde veio, para você conferir na fonte.
 

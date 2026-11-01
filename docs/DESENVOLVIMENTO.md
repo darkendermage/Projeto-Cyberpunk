@@ -447,12 +447,21 @@ Regras complementares: a divisão dos andares entre os ramos (o livro diz "a gos
 
 A Arquitetura fica salva como JSON (`NetArchitectures.StateJson`, `jsonb` no PostgreSQL) com controle de versão: editar numa janela antiga devolve 409. "Rolar andares" mantém a forma e os andares travados; "Gerar outra" troca tudo.
 
+## Clima de Night City
+
+Tela `/weather`, só no frontend (`frontend/src/features/weather`): tabelas, regras e rolagens ficam em `weather.ts`, sem API nem banco. O dia atual e os 7 anteriores ficam no `localStorage` (`ncdb.weather`), guardados como valores de dados, para o texto acompanhar o idioma.
+
+- **Fonte:** *Night City Weather*, tabelas na p.3 e regras nas p.4–5. Os itens do suplemento já estão no catálogo pela reimpressão em *Interface RED 2*.
+- **Duração:** o livro manda rolar duas vezes na tabela de Strange Weather, uma para a condição e outra para a duração, então a duração pode vir de outra linha. Ao escolher um evento na tabela, vale a duração da própria linha.
+- **Linha 8:** Cold Snap com Temperatura Cool ou Cold, Heat Wave com Warm ou Hot. O evento substitui a Temperatura rolada.
+- **Regra nossa:** "Somar uma condição ao evento" rola de novo um 6, porque o livro só diz que uma condição comum pode acompanhar o evento.
+
 ## Dados
 
 | Origem | O que é | Como aparece |
 | --- | --- | --- |
 | `Compendium` | 1 item convertido de `data/source/compendio_completo_cyberpunk_red.md` e ainda não conferido (Nanoswarm Incubator) | aviso na ficha: "não conferido com os livros" |
-| `Verified` | 1.058 itens conferidos com PDFs oficiais (*Core Rulebook*, *Black Chrome*, *Black Chrome+*, *Interface RED 2 a 5*, *Edgerunners Mission Kit*, *Danger Gal Dossier*, *Tales of the RED*, *12 Days of ...*, *Woodchipper's Garage*, *Toggle's Temple*, *Hornet's Pharmacy*, *All About Agents*, *Segotari Power*, *Going Quiet*, *Cyberware Enhancements*, *No Place Like Home*, *Mixing Drinks–Changing Lives*, *Invented Tech Upgrades*); correções em `data/source/errata/` | selo **CONFERIDO**, com fonte e página na ficha |
+| `Verified` | 1.071 itens conferidos com PDFs oficiais (*Core Rulebook*, *Black Chrome*, *Black Chrome+*, *Interface RED 1 a 5*, *Edgerunners Mission Kit*, *Danger Gal Dossier*, *Danger Gal Dossier+*, *Hope Reborn+*, *Tales of the RED*, *12 Days of ...*, *Woodchipper's Garage*, *Toggle's Temple*, *Hornet's Pharmacy*, *All About Agents*, *Segotari Power*, *Going Quiet*, *Cyberware Enhancements*, *No Place Like Home*, *Mixing Drinks–Changing Lives*, *Invented Tech Upgrades*); correções em `data/source/errata/` | selo **CONFERIDO**, com fonte e página na ficha |
 | `Demo` | nenhum no catálogo atual (os de Fashionware e roupas foram trocados pelos do *Core Rulebook*) | selo **DEMO** no card |
 | `Custom` | itens cadastrados à mão em versões antigas (que tinham Administração) | selo **CUSTOM** |
 
