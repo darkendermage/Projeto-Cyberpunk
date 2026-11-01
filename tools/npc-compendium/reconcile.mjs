@@ -19,6 +19,7 @@ const discardedLines = readFileSync(resolve(root, 'tools/npc-compendium/discarde
 
 // The extractor names books by folder, the entries by their printed title.
 const BOOK_NAMES = {
+  'Interface RED 1': ['Interface RED Volume 1'],
   'Interface RED 2': ['Interface RED Volume 2'],
   'Interface RED 3': ['Interface RED Volume 3'],
   'Interface RED 4': ['Interface RED Volume 4'],
@@ -38,6 +39,18 @@ const NAME_FIXES = {
   'Interface RED 3|5|3 Hardened Executive Protection rep': 'Hardened Executive Protection',
   'Mixing Drinks|6|VA-11 HALL-A': 'Alma Armas',
   'Mixing Drinks|8|VA-11 HALL-A': 'Dorothy Haze',
+  'Danger Gal Dossier+|7|SPOILER FOR THE INCIDENT MISSION.': 'Bloodhound',
+  'Danger Gal Dossier+|9|SPOILER FOR THE INCIDENT MISSION.': 'Mallard',
+  'Tales of the RED+|2|null': 'Etan Sim',
+};
+
+// Tales of the RED+ is a PDF of two-page spreads: printedPage is the sheet of the PDF, not the printed page. The extractor also
+// misses the right-hand sheets of pages 4 and 5 (Stiles and Deckard), which were read by hand. "<book>|<page>|<name>" -> printed page.
+const PAGE_FIXES = {
+  'Tales of the RED+|2|Etan Sim': 3,
+  'Tales of the RED+|3|Fixie': 4,
+  'Tales of the RED+|3|Lotus LeMarch': 4,
+  'Tales of the RED+|4|Trace Santiago': 6,
 };
 
 const norm = (s) => (s ?? '').normalize('NFKD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]/g, '');
@@ -61,6 +74,7 @@ const orphans = [];
 for (const block of blocks) {
   const books = booksOf(block.book);
   block.rawName = NAME_FIXES[`${block.book}|${block.printedPage}|${block.rawName}`] ?? block.rawName;
+  block.printedPage = PAGE_FIXES[`${block.book}|${block.printedPage}|${block.rawName}`] ?? block.printedPage;
   const inEntry = npcs.some((npc) =>
     npc.sources.some((s) => books.includes(s.book) && s.page === block.printedPage) && nameMatches(block.rawName, npc));
   if (inEntry) continue;

@@ -5507,7 +5507,7 @@
     "page": 23
    }
   ],
-  "slug": null
+  "slug": "killstrom-power-chord"
  },
  {
   "section": "gear",
@@ -5857,7 +5857,7 @@
  {
   "section": "gear",
   "group": "General Gear",
-  "name": "S RUSH REVOLUTION® Headset",
+  "name": "Segotari RUSH REVOLUTION® Headset",
   "cost": "500eb (Expensive)",
   "priceEb": 500,
   "priceCategory": "Expensive",
@@ -5871,7 +5871,7 @@
     "page": 44
    }
   ],
-  "slug": null
+  "slug": "segotari-rush-revolution"
  },
  {
   "section": "gear",
@@ -6274,7 +6274,7 @@
  {
   "section": "gear",
   "group": "Apps and Software",
-  "name": "Online",
+  "name": "Elflines Online",
   "cost": "50eb (Costly)",
   "priceEb": 50,
   "priceCategory": "Costly",
@@ -6288,7 +6288,7 @@
     "page": 44
    }
   ],
-  "slug": null
+  "slug": "elflines-online-game"
  },
  {
   "section": "gear",
@@ -6682,7 +6682,7 @@
     "page": 61
    }
   ],
-  "slug": null
+  "slug": "my-first-graf3"
  },
  {
   "section": "gear",
@@ -6716,7 +6716,7 @@
     "page": 63
    }
   ],
-  "slug": null
+  "slug": "the-transporter"
  },
  {
   "section": "gear",
@@ -9491,7 +9491,7 @@
     "page": 22
    }
   ],
-  "slug": null
+  "slug": "drone-remote"
  },
  {
   "section": "cyberware",
@@ -11444,7 +11444,7 @@
     "page": 38
    }
   ],
-  "slug": null
+  "slug": "rocklin-spider-cyberchair"
  },
  {
   "section": "fashion",
@@ -12903,7 +12903,7 @@
     "page": 11
    }
   ],
-  "slug": null
+  "slug": "superflash-jacket"
  },
  {
   "section": "fashion",
@@ -14114,7 +14114,7 @@
     "page": 38
    }
   ],
-  "slug": null
+  "slug": "rocklin-spider-cyberchair"
  },
  {
   "section": "vehicles",
@@ -15823,7 +15823,7 @@
     "page": 59
    }
   ],
-  "slug": null
+  "slug": "zhirafa-graf3"
  },
  {
   "section": "net",
@@ -15928,7 +15928,7 @@
     "page": 60
    }
   ],
-  "slug": null
+  "slug": "zhirafa-savannah-eagle"
  },
  {
   "section": "net",
@@ -15943,7 +15943,7 @@
     "page": 61
    }
   ],
-  "slug": null
+  "slug": "zhirafa-savannah-panther"
  },
  {
   "section": "net",
@@ -18222,7 +18222,7 @@
  {
   "section": "elflines",
   "group": "In-Game Purchases",
-  "name": "Online Gold Pieces",
+  "name": "Elflines Online Gold Pieces",
   "cost": "1eb per 100 gold",
   "priceEb": 1,
   "priceCategory": null,
@@ -18236,7 +18236,7 @@
     "page": 44
    }
   ],
-  "slug": null
+  "slug": "elflines-online-gold-pieces"
  },
  {
   "section": "elflines",
@@ -18255,7 +18255,7 @@
     "page": 44
    }
   ],
-  "slug": null
+  "slug": "elflines-online-rank-10-character"
  },
  {
   "section": "elflines",

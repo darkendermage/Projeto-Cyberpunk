@@ -134,6 +134,38 @@ public class NpcCompendiumApiTests(ApiFactory factory)
     }
 
     [Fact]
+    public async Task A_sheet_that_prints_luck_joins_a_fight()
+    {
+        var (_, detail) = await Get("/api/npc-compendium/mover");
+        JsonNode.Parse(detail)!["sheet"]!["stats"]!["LUCK"]!.GetValue<int>().Should().Be(6);
+
+        var e = await NewFight();
+        var (status, fight) = await PostJson($"/api/encounters/{e["id"]!.GetValue<int>()}/combatants",
+            new { version = V(e), side = "Enemy", compendiumNpcId = "mover" });
+        status.Should().Be(HttpStatusCode.OK);
+        var mover = Fighter(fight, "Mover");
+        mover["hp"]!.GetValue<int>().Should().Be(45);
+        mover["spBody"]!.GetValue<int>().Should().Be(11);
+    }
+
+    [Fact]
+    public async Task A_sheet_from_a_plus_supplement_joins_a_fight()
+    {
+        var (_, detail) = await Get("/api/npc-compendium/veronica-stiles");
+        var npc = JsonNode.Parse(detail)!;
+        npc["kind"]!.GetValue<string>().Should().Be("Sheet");
+        npc["sources"]!.AsArray().Select(s => s!["book"]!.GetValue<string>()).Should().Contain("Tales of the RED+");
+
+        var e = await NewFight();
+        var (status, fight) = await PostJson($"/api/encounters/{e["id"]!.GetValue<int>()}/combatants",
+            new { version = V(e), side = "Enemy", compendiumNpcId = "veronica-stiles" });
+        status.Should().Be(HttpStatusCode.OK);
+        var stiles = Fighter(fight, "Veronica Stiles");
+        stiles["hp"]!.GetValue<int>().Should().Be(45);
+        stiles["spBody"]!.GetValue<int>().Should().Be(11);
+    }
+
+    [Fact]
     public async Task A_profile_cannot_join()
     {
         var e = await NewFight();

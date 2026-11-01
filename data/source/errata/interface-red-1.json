@@ -1,0 +1,182 @@
+{
+  "about": "Conferido com o PDF Interface RED Volume 1 (coletânea de DLCs de 2020 e 2021, mais o artigo exclusivo All About Drones). Mercurius Cyberchair e The Observer já estavam no catálogo pela reimpressão no Danger Gal Dossier. O Stolbovoy St-5 de Old Guns Never Die é só um exemplo de conversão, e o catálogo já traz a arma pelo Toggle's Temple. Os itens do Elflines Online Armory (p. 42) custam gp e não chegam a um Night Market, por isso ficaram de fora. Formato descrito no README (seção Dados).",
+  "source": "Interface 1",
+  "additions": [
+    {
+      "slug": "rocklin-spider-cyberchair",
+      "name": "Spider Cyberchair",
+      "category": "gear",
+      "manufacturer": "Rocklin Augmentics",
+      "description": "Topo de linha da Rocklin: cadeira com arnês automático e quatro membros hidráulicos. Pilotada por Interface Plug ou por uma mão no painel; ataques contra a cadeira vão para o piloto. Dá MOVE 5, todas as formas de movimento e 4 Option Slots para opções de Cyberarm, Cyberleg ou Cyberlimb, sempre consideradas em par. Efeitos de EMP e programas que não são Black ICE não a inutilizam.",
+      "notes": "Conferido com Interface RED Volume 1, p. 38–39. Artigo Cyberchairs. Ausente do compêndio.",
+      "price": 1000,
+      "priceCategory": "VeryExpensive",
+      "page": 38,
+      "tags": [],
+      "attributes": {
+        "gearType": "Medical",
+        "effect": "MOVE 5, todas as formas de movimento e 4 Option Slots para opções de Cyberlimb."
+      }
+    },
+    {
+      "slug": "zhirafa-graf3",
+      "name": "GRAF3",
+      "category": "gear",
+      "manufacturer": "Zhirafa",
+      "description": "Drone quadrúpede de construção inspirado na girafa, com guindaste de 5 toneladas, Very Heavy Melee Weapon (o pescoço) e Observation Camera. É uma Active Defense: precisa de Arquitetura NET. Dispara quando alguém entra na área defendida sem passe ou crachá. Anular: Electronics/Security Tech DV17, 5 minutos.",
+      "notes": "Conferido com Interface RED Volume 1, p. 59. Artigo All About Drones. Ausente do compêndio.",
+      "price": 5000,
+      "priceCategory": "Luxury",
+      "page": 59,
+      "tags": [],
+      "attributes": {
+        "gearType": "Tool",
+        "gearClass": "Drone",
+        "requirements": "Arquitetura NET",
+        "effect": "Drone de construção: 2 MOVE, 11 SP, 60 HP, Very Heavy Melee Weapon."
+      }
+    },
+    {
+      "slug": "zhirafa-savannah-eagle",
+      "name": "Savannah Eagle",
+      "category": "gear",
+      "manufacturer": "Zhirafa",
+      "description": "Drone aéreo inspirado na águia, com Shrieker, SMG com 30 balas Basic ou Rubber, Observation Camera e Cloaking Upgrade. Parado por um minuto, fica camuflado: vê-lo exige Perception DV17, e a camuflagem não engana Low Light/Infrared/UV nem Radar/Sonar. É uma Active Defense: precisa de Arquitetura NET. Anular: Electronics/Security Tech DV21, 5 minutos.",
+      "notes": "Conferido com Interface RED Volume 1, p. 60. Artigo All About Drones. Ausente do compêndio.",
+      "price": 15000,
+      "priceCategory": "SuperLuxury",
+      "page": 60,
+      "tags": [],
+      "attributes": {
+        "gearType": "Security",
+        "gearClass": "Drone",
+        "requirements": "Arquitetura NET",
+        "effect": "Drone aéreo camuflado: 6 MOVE, 7 SP, 30 HP, SMG e Shrieker."
+      }
+    },
+    {
+      "slug": "zhirafa-savannah-panther",
+      "name": "Savannah Panther",
+      "category": "gear",
+      "manufacturer": "Zhirafa",
+      "description": "Drone quadrúpede de patrulha inspirado na pantera, com Stun Baton, Heavy Melee Weapon (garras de carboglass), Grenade Launcher com 2 granadas Teargas ou Incendiary e Observation Camera. É uma Active Defense: precisa de Arquitetura NET. Anular: Electronics/Security Tech DV21, 5 minutos.",
+      "notes": "Conferido com Interface RED Volume 1, p. 60–61. Artigo All About Drones. Ausente do compêndio.",
+      "price": 15000,
+      "priceCategory": "SuperLuxury",
+      "page": 61,
+      "tags": [],
+      "attributes": {
+        "gearType": "Security",
+        "gearClass": "Drone",
+        "requirements": "Arquitetura NET",
+        "effect": "Drone de patrulha: 8 MOVE, 11 SP, 40 HP, Stun Baton, garras e Grenade Launcher."
+      }
+    },
+    {
+      "slug": "my-first-graf3",
+      "name": "My First GRAF3",
+      "category": "gear",
+      "manufacturer": "Concept Mechanics",
+      "description": "Versão de brinquedo do GRAF3, com 1 m/yd de altura, ligada a um Agent. Tem os modos Standby e Direct Control; em Direct Control, usa as perícias do dono e não esquiva de ataques à distância. Para de funcionar a mais de 6 m/yds do Agent. Funciona por 3 horas e carrega em 1 hora. Anular: Electronics/Security Tech DV9, 5 minutos.",
+      "notes": "Conferido com Interface RED Volume 1, p. 61–62. Artigo All About Drones. Ausente do compêndio.",
+      "price": 500,
+      "priceCategory": "Expensive",
+      "page": 61,
+      "tags": [],
+      "attributes": {
+        "gearType": "Electronics",
+        "gearClass": "Drone",
+        "requirements": "Agent",
+        "effect": "Drone de brinquedo: 1 MOVE, 5 HP."
+      }
+    },
+    {
+      "slug": "the-transporter",
+      "name": "The Transporter",
+      "category": "gear",
+      "manufacturer": "Concept Mechanics",
+      "description": "Drone voador de entrega com quatro rotores, Observation Camera e braços que carregam até 13,5 kg, ligado a um Agent. Tem os modos Standby, Auto e Direct Control; em Auto, vai a um endereço, entrega e volta. Alcança qualquer lugar com acesso à mesma CitiNet do Agent. Funciona por 48 horas e carrega em 1 hora. Anular: Electronics/Security Tech DV21, 5 minutos.",
+      "notes": "Conferido com Interface RED Volume 1, p. 63. Artigo All About Drones. Ausente do compêndio.",
+      "price": 5000,
+      "priceCategory": "Luxury",
+      "page": 63,
+      "tags": [],
+      "attributes": {
+        "gearType": "Electronics",
+        "gearClass": "Drone",
+        "requirements": "Agent",
+        "effect": "Drone de entrega: 6 MOVE, 20 HP, carrega até 13,5 kg."
+      }
+    },
+    {
+      "slug": "elflines-online-game",
+      "name": "Elflines Online",
+      "category": "gear",
+      "manufacturer": "Segotari",
+      "description": "O MMO mais popular de Night City, lançado pela Segotari para o headset RUSH Revolution. A assinatura é paga à parte.",
+      "notes": "Conferido com Interface RED Volume 1, p. 44. Artigo Elflines Online. Ausente do compêndio.",
+      "price": 50,
+      "priceCategory": "Costly",
+      "page": 44,
+      "tags": [],
+      "attributes": {
+        "gearType": "Lifestyle",
+        "gearClass": "Videogame",
+        "requirements": "Segotari RUSH Revolution",
+        "effect": "Jogo MMO para o headset RUSH Revolution."
+      }
+    },
+    {
+      "slug": "elflines-online-subscription",
+      "name": "Elflines Online Subscription",
+      "category": "gear",
+      "manufacturer": "Segotari",
+      "description": "Assinatura mensal de um personagem, incluída nos Lifestyles a partir de Generic Prepak. A partir de Good Prepak, cobre quantos personagens o jogador quiser.",
+      "notes": "Conferido com Interface RED Volume 1, p. 44. Artigo Elflines Online. Ausente do compêndio.",
+      "price": 20,
+      "priceCategory": "Everyday",
+      "priceNote": "Por mês",
+      "page": 44,
+      "tags": [],
+      "attributes": {
+        "gearType": "Lifestyle",
+        "gearClass": "Videogame",
+        "effect": "Assinatura mensal de um personagem."
+      }
+    },
+    {
+      "slug": "elflines-online-gold-pieces",
+      "name": "Elflines Online Gold Pieces",
+      "category": "gear",
+      "manufacturer": "Segotari",
+      "description": "Ouro do jogo, à venda a qualquer momento durante a partida.",
+      "notes": "Conferido com Interface RED Volume 1, p. 44. Artigo Elflines Online. Ausente do compêndio.",
+      "price": 1,
+      "priceNote": "Por 100 gp",
+      "page": 44,
+      "tags": [],
+      "attributes": {
+        "gearType": "Lifestyle",
+        "gearClass": "Videogame",
+        "effect": "100 gp por 1eb."
+      }
+    },
+    {
+      "slug": "elflines-online-rank-10-character",
+      "name": "Rank 10 Elflines Online Character",
+      "category": "gear",
+      "manufacturer": null,
+      "description": "Conta de Elflines Online com um personagem Rank 10, vendida na rua como qualquer item valioso do jogo. Procure seu Fixer.",
+      "notes": "Conferido com Interface RED Volume 1, p. 44. Artigo Elflines Online. Ausente do compêndio.",
+      "price": 500,
+      "priceCategory": "Expensive",
+      "page": 44,
+      "tags": [],
+      "attributes": {
+        "gearType": "Lifestyle",
+        "gearClass": "Videogame",
+        "effect": "Conta com um personagem Rank 10."
+      }
+    }
+  ]
+}

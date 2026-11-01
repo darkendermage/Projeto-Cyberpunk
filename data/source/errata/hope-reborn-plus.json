@@ -1,0 +1,47 @@
+{
+  "about": "Conferido com o PDF Hope Reborn+ v1.1 (DLC de novembro de 2024). Os dois itens aparecem em Tales of the RED: Hope Reborn, mas as regras só saíram neste PDF.",
+  "source": "Hope Reborn+",
+  "additions": [
+    {
+      "slug": "drone-remote",
+      "name": "Drone Remote",
+      "category": "cyberware",
+      "manufacturer": null,
+      "description": "Neuralware Option. Controla mentalmente um drone como se fosse um Agent. A conexão com o drone segue as regras normais do tipo dele, por link ou counter. A antena especial aumenta para 20 m/yds o alcance de controle, se o alcance normal for de 20 m/yds ou menos. Requer Neural Link.",
+      "notes": "Conferido com Hope Reborn+, p. 22. Ausente do compêndio.",
+      "price": 500,
+      "priceCategory": "Expensive",
+      "page": 22,
+      "tags": [],
+      "attributes": {
+        "cyberwareType": "Neuralware",
+        "bodyLocation": "NervousSystem",
+        "installLocation": "Clinic",
+        "humanityLoss": 7,
+        "humanityLossDice": "2d6",
+        "foundational": false,
+        "slotsRequired": 1,
+        "requiresPair": false,
+        "requiresItem": "neural-link",
+        "requirements": "Clinic",
+        "effect": "Controle mental de drones como um Agent. Alcance de controle sobe para 20 m/yds."
+      }
+    },
+    {
+      "slug": "killstrom-power-chord",
+      "name": "KillStrom Power Chord",
+      "category": "gear",
+      "manufacturer": "KillStrom Music",
+      "description": "Guitarra elétrica que dá +2 em Play Instrument (Guitar), só se a base for 16 ou mais usando apenas STAT e a perícia. Chips e outros bônus não contam. Não acumula com outros instrumentos nem pode ser alterada por Maker. Resiste a fogo e a ataques de menos de 6 dados. Quem não é Rockerboy e não atinge a base sofre Crushed Fingers ao tocar por 10 minutos ou mais.",
+      "notes": "Conferido com Hope Reborn+, p. 23. Ausente do compêndio.",
+      "price": 2500,
+      "priceCategory": "Luxury",
+      "page": 23,
+      "tags": [],
+      "attributes": {
+        "gearType": "Lifestyle",
+        "effect": "+2 em Play Instrument (Guitar) com base 16 ou mais, sem contar chips ou outros bônus."
+      }
+    }
+  ]
+}

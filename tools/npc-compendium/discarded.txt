@@ -66,3 +66,15 @@ Interface RED Volume 5 | p.79 | Cyberboa™ | Cyberpet species/brand (Biotechnic
 Interface RED Volume 5 | p.80 | Cyberrat™ | Cyberpet species/brand (Biotechnica product line, not a unique named being)
 Interface RED Volume 5 | p.81 | Cyberwolf™ | Cyberpet species/brand (Biotechnica product line, not a unique named being)
 Karaoke Night | p.10 | Rocky’s Hustle | generic (type sheet for Rocky's hired hustle, no proper name)
+# Interface RED Volume 1: extract.mjs skips the ten Single Shot Pack sheets (p.12-30) as STAT examples, so they were read by hand.
+# Mover, Redtail and Chanda Mishra are entries; the other seven keep their Danger Gal Dossier sheet and cite these pages.
+Interface RED Volume 1 | p.52 | (no name) Sage | Elflines Online pregenerated elf (blank Elfname, no proper name)
+Interface RED Volume 1 | p.52 | (no name) Bowmaster | Elflines Online pregenerated elf (blank Elfname, no proper name)
+Interface RED Volume 1 | p.53 | (no name) Bladedancer | Elflines Online pregenerated elf (blank Elfname, no proper name)
+Interface RED Volume 1 | p.53 | (no name) Quickhand | Elflines Online pregenerated elf (blank Elfname, no proper name)
+Interface RED Volume 1 | p.54 | (no name) Warmheart | Elflines Online pregenerated elf (blank Elfname, no proper name)
+Interface RED Volume 1 | p.54 | (no name) Wildblood | Elflines Online pregenerated elf (blank Elfname, no proper name)
+Interface RED Volume 1 | p.55 | (no name) Windkin | Elflines Online pregenerated elf (blank Elfname, no proper name)
+Interface RED Volume 1 | p.55 | (no name) Barkshield | Elflines Online pregenerated elf (blank Elfname, no proper name)
+Interface RED Volume 1 | p.56 | (no name) Druid | Elflines Online pregenerated elf (blank Elfname, no proper name)
+Interface RED Volume 1 | p.56 | (no name) Wayfarer | Elflines Online pregenerated elf (blank Elfname, no proper name)

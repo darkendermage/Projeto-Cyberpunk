@@ -22140,6 +22140,25 @@
   },
   {
     "ruleSystem": "CyberpunkRed",
+    "source": "Danger Gal Dossier+",
+    "slug": "superflash-jacket",
+    "name": "Superflash Jacket",
+    "category": "gear",
+    "manufacturer": null,
+    "description": "A stylish urban flash jacket. As an Action, the wearer can destroy (beyond repair) a replaceable 50eb (Costly) battery, converting it into 7 megacandela of blinding light. Treat the effect like a Flashbang Grenade going off centered on the jacket but without the temporary Damaged Ear Critical Injury. The wearer is not immune to the effects of the jacket, so some sort of eye protection is recommended. Batteries sold separately.",
+    "notes": "Conferido com Danger Gal Dossier+, p. 11. Ausente do compêndio.",
+    "price": 500,
+    "priceCategory": "Expensive",
+    "page": 11,
+    "tags": [],
+    "attributes": {
+      "gearType": "Lifestyle",
+      "effect": "Como Ação, queima uma bateria de 50eb e age como Flashbang Grenade centrada no usuário, sem Damaged Ear."
+    },
+    "dataOrigin": "Verified"
+  },
+  {
+    "ruleSystem": "CyberpunkRed",
     "source": "Danger Gal Dossier",
     "tags": [],
     "manufacturer": "Rocklin Augmentics",
@@ -22868,6 +22887,53 @@
   },
   {
     "ruleSystem": "CyberpunkRed",
+    "source": "Hope Reborn+",
+    "slug": "drone-remote",
+    "name": "Drone Remote",
+    "category": "cyberware",
+    "manufacturer": null,
+    "description": "The perfect piece of cyberware for true drone heads since it places a remote control for your drone in your head.\n\nNeuralware Option. The Drone Remote allows a user to mentally control their drone as if it were an Agent. The user must still connect to the drone following the normal rules as determined by the its type, whether via linking or countering. The Drone Remote's specialized antennae increases the range at which the user can control a drone to 20 m/yds if the regular control range is 20 m/yds or less.",
+    "notes": "Conferido com Hope Reborn+, p. 22. Ausente do compêndio.",
+    "price": 500,
+    "priceCategory": "Expensive",
+    "page": 22,
+    "tags": [],
+    "attributes": {
+      "cyberwareType": "Neuralware",
+      "bodyLocation": "NervousSystem",
+      "installLocation": "Clinic",
+      "humanityLoss": 7,
+      "humanityLossDice": "2d6",
+      "foundational": false,
+      "slotsRequired": 1,
+      "requiresPair": false,
+      "requiresItem": "neural-link",
+      "requirements": "Clinic",
+      "effect": "Controle mental de drones como um Agent. Alcance de controle sobe para 20 m/yds."
+    },
+    "dataOrigin": "Verified"
+  },
+  {
+    "ruleSystem": "CyberpunkRed",
+    "source": "Hope Reborn+",
+    "slug": "killstrom-power-chord",
+    "name": "KillStrom Power Chord",
+    "category": "gear",
+    "manufacturer": "KillStrom Music",
+    "description": "Sound. At the cost of all else. You can handle any discomfort that stands between you and your vision. Music requires commitment. We made this axe to agree. We send this one up to the real rock stars, the ones who fall asleep in the studio and wake up in the bathtub. Shred or be shredded - there is no alternative to rock.\n\nAn electric guitar that grants its user +2 to their Play Instrument (Guitar) Skill Checks, but only if the user's Play Instrument Skill Base is 16 or higher exclusively from the User's STAT + Play Instrument (Guitar) Skill. Skill granted from a Skill chip and all other bonuses do not apply toward reaching this threshold. This bonus only applies once and won't combine with other instruments that grant bonuses to the Play Instrument Skill. This effect cannot be changed or augmented using the Maker Role Ability.\n\nThe KillStrom Power Chord cannot be destroyed or non-aesthetically damaged by fire or any source of damage that inflicts less than 6 dice of damage in a single attack.\n\nA non-Rockerboy who does not qualify for the Power Chord's Skill bonus suffers the Crushed Fingers Critical Injury (no bonus damage) if they play it for 10 minutes or more.\n\nMany owners have Tech Upgrades their Power Chord to serve as a Very Heavy Melee Weapon or Flamethrower.",
+    "notes": "Conferido com Hope Reborn+, p. 23. Ausente do compêndio.",
+    "price": 2500,
+    "priceCategory": "Luxury",
+    "page": 23,
+    "tags": [],
+    "attributes": {
+      "gearType": "Lifestyle",
+      "effect": "+2 em Play Instrument (Guitar) com base 16 ou mais, sem contar chips ou outros bônus."
+    },
+    "dataOrigin": "Verified"
+  },
+  {
+    "ruleSystem": "CyberpunkRed",
     "source": "Hornet's Pharmacy",
     "slug": "suzumebachi-assassin-drone",
     "name": "Suzumebachi Assassin Drone",
@@ -22944,6 +23010,212 @@
       "gearClass": "Aditivo para veneno",
       "requirements": "Frasco de Poison ou Biotoxin",
       "effect": "Veneno de contato numa superfície por até 1 hora."
+    },
+    "dataOrigin": "Verified"
+  },
+  {
+    "ruleSystem": "CyberpunkRed",
+    "source": "Interface 1",
+    "slug": "rocklin-spider-cyberchair",
+    "name": "Spider Cyberchair",
+    "category": "gear",
+    "manufacturer": "Rocklin Augmentics",
+    "description": "This Cyberchair is Rocklin's top of the line model, and it shows. It seats one and secures comfortably to the user with an automatic harnessing system. The Spider's initial activation is a remarkable sight as four hydraulic limbs splay below the user with a hiss and lift the pilot into the air.\n\nTo pilot the Spider, a user must either plug in one of their Interface Plugs for hands free control, or dedicate a hand to operating the armrest's control panel. While using a hand to pilot the Spider, that hand cannot be used to do anything else. While piloted, any attacks targeted at the Cyberchair are instead targeted at its pilot. The chair’s pilot cannot be removed from the Cyberchair as long as they are conscious.\n\nWhen controlling the Spider, the pilot’s MOVE becomes 5 (minus any Armor Penalties), and all movement options (Run, Jump, Climb, Swim, Get Up, etc.) are available to them. Any Critical Injury the pilot suffers that lowers their MOVE will instead lower the MOVE granted to the pilot by the Cyberchair. Quick Fixes and Treatment to remove the effects of the Critical Injury are applied to the chair and follow the rules for Critical Injuries and Cybertech on page 223 of the Cyberpunk RED core rulebook.\n\nThe Spider has 4 Option Slots for installing Cyberarm, Cyberleg, or Cyberlimb Options. Options installed into the Cyberchair always count as if they were paired. Installing an option into the Cyberchair costs the same as installing it into a Cyberlimb.\n\nThe Spider Cyberchair, along with any options installed within it cannot be rendered inoperable by EMP effects, like Microwaver pulses, or Non-Black ICE Program Effects.",
+    "notes": "Conferido com Interface RED Volume 1, p. 38–39. Artigo Cyberchairs. Ausente do compêndio.",
+    "price": 1000,
+    "priceCategory": "VeryExpensive",
+    "page": 38,
+    "tags": [],
+    "attributes": {
+      "gearType": "Medical",
+      "effect": "MOVE 5, todas as formas de movimento e 4 Option Slots para opções de Cyberlimb."
+    },
+    "dataOrigin": "Verified"
+  },
+  {
+    "ruleSystem": "CyberpunkRed",
+    "source": "Interface 1",
+    "slug": "zhirafa-graf3",
+    "name": "GRAF3",
+    "category": "gear",
+    "manufacturer": "Zhirafa",
+    "description": "The third generation of the prolific GRAF line, the GRAF3 forms the foundation of postwar construction. The GRAF3 Construction Platform comes equipped with the tools required for heavy construction and reclamation, including a fully functioning crane capable of lifting up to five tons.\n\nThe GRAF3 is guaranteed to truck through any task thrown at it using a combination of proprietary hydraulic systems and myomar muscle fibers to make this behemoth the most durable and reliable construction machine on the market.\n\nAnd with Zhirafa’s patented Hex-Lok™ system, you can augment your GRAF3 with hundreds of additional tools to suit any possible industrial need.\n\nA quadrupedal construction drone modeled after a giraffe. Equipped with the following: Very Heavy Melee Weapon (Giraffe Neck), Observation Camera.\n\nTrigger: Target enters defended area without wearing proper pass or badge.\n\nData: 2 MOVE • 11 SP • 60 HP. Perimeter of Defended Area. DV17 Electronics/Security Tech, 5 min to counter.\n\nActive Defenses: The GRAF3, Savannah Eagle, and Savannah Panther are all considered Active Defenses and requires an NET Architecture to properly operate (see CP:R page 213).",
+    "notes": "Conferido com Interface RED Volume 1, p. 59. Artigo All About Drones. Ausente do compêndio.",
+    "price": 5000,
+    "priceCategory": "Luxury",
+    "page": 59,
+    "tags": [],
+    "attributes": {
+      "gearType": "Tool",
+      "gearClass": "Drone",
+      "requirements": "Arquitetura NET",
+      "effect": "Drone de construção: 2 MOVE, 11 SP, 60 HP, Very Heavy Melee Weapon."
+    },
+    "dataOrigin": "Verified"
+  },
+  {
+    "ruleSystem": "CyberpunkRed",
+    "source": "Interface 1",
+    "slug": "zhirafa-savannah-eagle",
+    "name": "Savannah Eagle",
+    "category": "gear",
+    "manufacturer": "Zhirafa",
+    "description": "Like the gargoyles of the ancient European castles, the Savannah Eagle lurks in an overwatch position and guards the exterior or interior of any home, compound, factory, or other structure. Using state-of-the-art cloaking technology, the Savannah Eagle remains nearly undetectable until it detects unlawful trespassers.\n\nUpon activation, the Savannah Eagle swoops down on the trespasser, unleashing a barrage of bullets from an integrated submachine gun and a disorienting sonic assault from an onboard Shrieker.\n\nAn eagle-inspired airborne drone with cloaking abilities. Equipped with the following: Shrieker, SMG with 30 Basic or Rubber Bullets, Observation Camera, Cloaking Upgrade.\n\nCloaking Upgrade: Activates after the Eagle remains still for one minute, creating an optical camouflage effect. Spotting a cloaked drone using regular vision requires a DV17 Perception Check. The camouflage does not work against Low Light/Infrared/UV or Radar/Sonar.\n\nTrigger: Target enters defended area without wearing proper pass or badge.\n\nData: 6 MOVE • 7 SP • 30 HP. Perimeter of Defended Area. DV21 Electronics/Security Tech, 5 min to counter.\n\nActive Defenses: The GRAF3, Savannah Eagle, and Savannah Panther are all considered Active Defenses and requires an NET Architecture to properly operate (see CP:R page 213).",
+    "notes": "Conferido com Interface RED Volume 1, p. 60. Artigo All About Drones. Ausente do compêndio.",
+    "price": 15000,
+    "priceCategory": "SuperLuxury",
+    "page": 60,
+    "tags": [],
+    "attributes": {
+      "gearType": "Security",
+      "gearClass": "Drone",
+      "requirements": "Arquitetura NET",
+      "effect": "Drone aéreo camuflado: 6 MOVE, 7 SP, 30 HP, SMG e Shrieker."
+    },
+    "dataOrigin": "Verified"
+  },
+  {
+    "ruleSystem": "CyberpunkRed",
+    "source": "Interface 1",
+    "slug": "zhirafa-savannah-panther",
+    "name": "Savannah Panther",
+    "category": "gear",
+    "manufacturer": "Zhirafa",
+    "description": "Protect yourself and your belongings with the Savannah Panther! Like its namesake, the Savannah Panther is a sleek and deadly hunter designed to patrol hallways and streets with equal effectiveness, ending conflicts before they begin.\n\nUsing a unique blend of hydraulic systems and myomar muscle fibers, the Savannah Panther chases down fast-moving targets and engages with carboglass claws or stun plates designed to neutralize threats quickly.\n\nIn the case of riots and gang warfare, the Savannah Panther comes equipped standard with a backmounted grenade launcher for launching teargas to deescalate the crowd.\n\nA quadrupedal drone with the strength and mobility of a panther. Equipped with the following: Stun Baton, Heavy Melee Weapon, Grenade Launcher with 2 Teargas or Incendiary Grenades, Observation Camera.\n\nTrigger: Target enters defended area without wearing proper pass or badge.\n\nData: 8 MOVE • 11 SP • 40 HP. Perimeter of Defended Area. DV21 Electronics/Security Tech, 5 min to counter.\n\nActive Defenses: The GRAF3, Savannah Eagle, and Savannah Panther are all considered Active Defenses and requires an NET Architecture to properly operate (see CP:R page 213).",
+    "notes": "Conferido com Interface RED Volume 1, p. 60–61. Artigo All About Drones. Ausente do compêndio.",
+    "price": 15000,
+    "priceCategory": "SuperLuxury",
+    "page": 61,
+    "tags": [],
+    "attributes": {
+      "gearType": "Security",
+      "gearClass": "Drone",
+      "requirements": "Arquitetura NET",
+      "effect": "Drone de patrulha: 8 MOVE, 11 SP, 40 HP, Stun Baton, garras e Grenade Launcher."
+    },
+    "dataOrigin": "Verified"
+  },
+  {
+    "ruleSystem": "CyberpunkRed",
+    "source": "Interface 1",
+    "slug": "my-first-graf3",
+    "name": "My First GRAF3",
+    "category": "gear",
+    "manufacturer": "Concept Mechanics",
+    "description": "A 1 m/yd tall toy version of the GRAF3. Personal drones don’t require a NET Architecture and can be operated directly using an Agent.\n\nData: 1 MOVE • 5 HP. Linked to Agent. DV9 Electronics/Security Tech, 5 min to counter.\n\nWhen purchased, a My First GRAF3 is linked to an Agent. Voluntarily linking it to a new Agent requires 5 uninterrupted minutes and both Agents must remain within 6 m/yds of the drone. Countering a My First GRAF3 requires 5 minutes and the counterer must stay within 6 m/yds of the drone the entire time. If countered, the My First GRAF3 can be linked to a new Agent with an Action. The My First GRAF3 has two operation modes: Standby and Direct Control. Switching modes does not require an Action.\n\nStandby Mode: In standby mode, a My First GRAF3 is powered on but not operating. When in standby mode, a My First GRAF3 cannot move, nor can it make or dodge attacks.\n\nDirect Control Mode: The drone can be controlled directly via its linked Agent, using an Action in the same manner as a Netrunner using the Interface Ability, Control (see CP:R page 199). When controlled directly, all attacks and defenses are made using the user’s own skills as if they were firing its weapons in their own hands and dodging with their own body. A My First GRAF3 cannot dodge ranged attacks, no matter how high the user’s Reflex.\n\nIf a My First GRAF3 moves beyond the 6 m/yd signal tether to its linked Agent, it stops functioning. Each unit has 3 hours of operational time before it needs to charge for an hour.",
+    "notes": "Conferido com Interface RED Volume 1, p. 61–62. Artigo All About Drones. Ausente do compêndio.",
+    "price": 500,
+    "priceCategory": "Expensive",
+    "page": 61,
+    "tags": [],
+    "attributes": {
+      "gearType": "Electronics",
+      "gearClass": "Drone",
+      "requirements": "Agent",
+      "effect": "Drone de brinquedo: 1 MOVE, 5 HP."
+    },
+    "dataOrigin": "Verified"
+  },
+  {
+    "ruleSystem": "CyberpunkRed",
+    "source": "Interface 1",
+    "slug": "the-transporter",
+    "name": "The Transporter",
+    "category": "gear",
+    "manufacturer": "Concept Mechanics",
+    "description": "A large flying drone with four rotors and a set of gripping arms. Equipped with the following: Observation Camera, Gripping Arms (can carry up to 30lbs/13.5kg). Personal drones don’t require a NET Architecture and can be operated directly using an Agent.\n\nData: 6 MOVE • 20 HP. Linked to Agent. DV21 Electronics/Security Tech, 5 min to counter.\n\nWhen purchased, a Transporter is linked to an Agent. Voluntarily linking it to a new Agent requires 5 uninterrupted minutes and both Agents must remain in 6 m/yds of the drone. Countering a Transporter requires 5 minutes and the counterer must stay within 6 m/yds of the drone the entire time. If countered, the drone can be made to release any held package and the Transporter can be linked to a new Agent with an Action. The Transporter has three operation modes: Standby, Auto, and Direct Control. Switching modes does not require an Action.\n\nStandby Mode: In standby mode, a Transporter is powered on but not operating. When in standby mode, a Transporter cannot move, nor can it make or dodge attacks.\n\nAuto Mode: When not being directly controlled, a user can instruct a Transporter to go to a specific address or set of coordinates, deliver its package, and return to an assigned home point. The user can instruct the Transporter to simply set the package down or request confirmation via communication with a specific Agent before delivery. When in auto mode, a Transporter cannot make or dodge attacks.\n\nDirect Control Mode: The drone can also be controlled directly via its linked Agent, using an Action in the same manner as a Netrunner using the Interface Ability, Control (see CP:R page 199). When controlled directly, all attacks and defenses are made using the user’s own skills as if they were firing its weapons in their own hands and dodging with their own body. A Transporter cannot dodge ranged attacks, no matter how high the user’s Reflex.\n\nA Transporter can travel to any location with access to the CitiNet it and its linked Agent are connected to. If the drone’s connection to the CitiNet is disrupted, it will land harmlessly on the ground and await either reconnection or retrieval. Each unit has 48 hours of operational time before it needs to charge for an hour.",
+    "notes": "Conferido com Interface RED Volume 1, p. 63. Artigo All About Drones. Ausente do compêndio.",
+    "price": 5000,
+    "priceCategory": "Luxury",
+    "page": 63,
+    "tags": [],
+    "attributes": {
+      "gearType": "Electronics",
+      "gearClass": "Drone",
+      "requirements": "Agent",
+      "effect": "Drone de entrega: 6 MOVE, 20 HP, carrega até 13,5 kg."
+    },
+    "dataOrigin": "Verified"
+  },
+  {
+    "ruleSystem": "CyberpunkRed",
+    "source": "Interface 1",
+    "slug": "elflines-online-game",
+    "name": "Elflines Online",
+    "category": "gear",
+    "manufacturer": "Segotari",
+    "description": "Elflines Online is a Massively Multiplayer Online Game created by Segotari as a launch title for their RUSH REVOLUTION Interactive Braindance headset. Players face off against the forces of darkness and enemy players on Citinet servers, competing for the best items and server first boss kills.\n\nTo play, you’ll also need a Segotari RUSH REVOLUTION® Interactive Braindance headset (500eb, Expensive), and a copy of Elflines Online (50eb, Costly).",
+    "notes": "Conferido com Interface RED Volume 1, p. 44. Artigo Elflines Online. Ausente do compêndio.",
+    "price": 50,
+    "priceCategory": "Costly",
+    "page": 44,
+    "tags": [],
+    "attributes": {
+      "gearType": "Lifestyle",
+      "gearClass": "Videogame",
+      "requirements": "Segotari RUSH Revolution",
+      "effect": "Jogo MMO para o headset RUSH Revolution."
+    },
+    "dataOrigin": "Verified"
+  },
+  {
+    "ruleSystem": "CyberpunkRed",
+    "source": "Interface 1",
+    "slug": "elflines-online-subscription",
+    "name": "Elflines Online Subscription",
+    "category": "gear",
+    "manufacturer": "Segotari",
+    "description": "A subscription to Elflines Online costs 20eb a month for a single character and is included in all lifestyles, starting at Generic Prepak. At Good Prepak and higher, you can have as many Elflines Online characters as you need to sate your obsession, and almost always pay to remove Revive Sickness without really thinking about the expense.",
+    "notes": "Conferido com Interface RED Volume 1, p. 44. Artigo Elflines Online. Ausente do compêndio.",
+    "price": 20,
+    "priceCategory": "Everyday",
+    "priceNote": "Por mês",
+    "page": 44,
+    "tags": [],
+    "attributes": {
+      "gearType": "Lifestyle",
+      "gearClass": "Videogame",
+      "effect": "Assinatura mensal de um personagem."
+    },
+    "dataOrigin": "Verified"
+  },
+  {
+    "ruleSystem": "CyberpunkRed",
+    "source": "Interface 1",
+    "slug": "elflines-online-gold-pieces",
+    "name": "Elflines Online Gold Pieces",
+    "category": "gear",
+    "manufacturer": "Segotari",
+    "description": "You can buy Elflines Online gp at a rate of 1eb to 100gp at any time while playing.",
+    "notes": "Conferido com Interface RED Volume 1, p. 44. Artigo Elflines Online. Ausente do compêndio.",
+    "price": 1,
+    "priceNote": "Por 100 gp",
+    "page": 44,
+    "tags": [],
+    "attributes": {
+      "gearType": "Lifestyle",
+      "gearClass": "Videogame",
+      "effect": "100 gp por 1eb."
+    },
+    "dataOrigin": "Verified"
+  },
+  {
+    "ruleSystem": "CyberpunkRed",
+    "source": "Interface 1",
+    "slug": "elflines-online-rank-10-character",
+    "name": "Rank 10 Elflines Online Character",
+    "category": "gear",
+    "manufacturer": null,
+    "description": "Since all of the items you can acquire in ELO can be traded to other players, there also exists a market for powerful ELO loot on The Street. These items are bought and sold just like any other valuable commodity in RED, so call your Fixer. ELO accounts are also sold just like in game items are, with a Rank 10 character being worth 500eb (Expensive).",
+    "notes": "Conferido com Interface RED Volume 1, p. 44. Artigo Elflines Online. Ausente do compêndio.",
+    "price": 500,
+    "priceCategory": "Expensive",
+    "page": 44,
+    "tags": [],
+    "attributes": {
+      "gearType": "Lifestyle",
+      "gearClass": "Videogame",
+      "effect": "Conta com um personagem Rank 10."
     },
     "dataOrigin": "Verified"
   },

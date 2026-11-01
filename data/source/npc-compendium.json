@@ -545,7 +545,8 @@
       { "book": "Core Book", "page": 306 },
       { "book": "Core Book", "page": 9 },
       { "book": "Core Book", "page": 122 },
-      { "book": "Tales of the RED", "page": 191 }
+      { "book": "Tales of the RED", "page": 191 },
+      { "book": "Hope Reborn+", "page": 14 }
     ],
     "summary": {
       "pt": "Chamada de Rainha dos Fixers, é dona do Afterlife, o bar de edgerunners mais famoso da cidade. Foi uma das melhores solos de aluguel de Night City e hoje, quase aposentada das armas, monta equipes de elite para clientes ricos.",
@@ -1394,7 +1395,7 @@
     "roleRank": 6,
     "rep": 9,
     "affiliation": "Network 54",
-    "sources": [{ "book": "Danger Gal Dossier", "page": 92 }, { "book": "Danger Gal Dossier", "page": 91 }, { "book": "Core Book", "page": 304 }],
+    "sources": [{ "book": "Danger Gal Dossier", "page": 92 }, { "book": "Danger Gal Dossier", "page": 91 }, { "book": "Core Book", "page": 304 }, { "book": "Interface RED Volume 1", "page": 58 }, { "book": "Hope Reborn+", "page": 6 }],
     "summary": {
       "pt": "Repórter investigativa estrela da Net 54 em Night City, otimista e carismática mesmo diante de tragédias. O boato é verdadeiro: não é a Fiona original, morta em 2020, e sim uma entre várias jovens idealistas que a rede treinou e moldou para manter o personagem. A atual ainda quer responsabilizar poderosos, mas ignora que a Net 54 usa as reportagens censuradas para chantagear executivos.",
       "en": "The star investigative reporter of Net 54 in Night City, upbeat and charismatic even in the face of tragedy. The rumor is true: she is not the original Fiona, who died in 2020, but one of a string of idealistic young Medias the network trained and sculpted to keep the persona alive. The current one still wants the powerful held to account, unaware that Net 54 uses her censored stories to blackmail executives."
@@ -1508,7 +1509,7 @@
     "roleRank": null,
     "rep": null,
     "affiliation": null,
-    "sources": [{"book": "Core Book", "page": 305}, {"book": "Hornet’s Pharmacy", "page": 2}],
+    "sources": [{"book": "Core Book", "page": 305}, {"book": "Hornet’s Pharmacy", "page": 2}, { "book": "Interface RED Volume 1", "page": 7 }],
     "summary": {
       "pt": "Fixer respeitado e cheio de inimigos, ex-falsificador de Heywood que trabalhou com a Arasaka fornecendo armas químicas. Hoje controla cybertech, biotech e drogas, e viaja sempre com a guarda-costas Fox. A casa que perdeu é assunto proibido.",
       "en": "Respected Fixer with a score of enemies, a former Heywood forger who worked with Arasaka supplying chemical weapons. He now deals in cybertech, biotech and drugs, and always travels with his bodyguard Fox. Asking about his old house is a mistake."
@@ -1526,11 +1527,12 @@
     "rep": null,
     "affiliation": null,
     "sources": [
-      { "book": "Core Book", "page": 305 }
+      { "book": "Core Book", "page": 305 },
+      { "book": "Hope Reborn+", "page": 10 }
     ],
     "summary": {
-      "pt": "Organizador comunitário na nova Watson Development e idealista raro, conhecido por discursos que inspiram ação.",
-      "en": "Community organizer for the Watson Development that is only now taking shape, and a rare idealist whose speeches push people to act."
+      "pt": "Organizador comunitário na nova Watson Development e idealista raro, conhecido por discursos que inspiram ação. Comandou uma greve em toda Watson que obrigou os negócios locais a votar um City Manager, ganhou a eleição e hoje tem assento no Conselho de Night City.",
+      "en": "Community organizer for the Watson Development that is only now taking shape, and a rare idealist whose speeches push people to act. He led a strike across Watson that forced local businesses to hold a City Manager vote, won it and now sits on the Night City Council."
     },
     "sheetNote": null,
     "sheet": null
@@ -1650,7 +1652,8 @@
     "affiliation": "From the Embers",
     "sources": [
       { "book": "Core Book", "page": 305 },
-      { "book": "Core Book", "page": 306 }
+      { "book": "Core Book", "page": 306 },
+      { "book": "Hope Reborn+", "page": 12 }
     ],
     "summary": {
       "pt": "Ex-Trauma Team que abriu sua clínica \"From the Embers\" numa barraca depois que a guerra arruinou os planos. A clínica passou por contêiner e loja até uma garagem convertida. Mais de duas décadas remendando gente deixou todo mundo devendo favores a ela.",
@@ -1962,7 +1965,8 @@
       {"book": "Black Chrome", "page": 136},
       {"book": "Woodchipper’s Garage", "page": 2},
       {"book": "Core Book", "page": 308},
-      {"book": "Interface RED Volume 3", "page": 26}
+      {"book": "Interface RED Volume 3", "page": 26},
+      { "book": "Hope Reborn+", "page": 17 }
     ],
     "summary": {
       "pt": "Nomad dona da garagem nos arredores onde as Famílias nômades levam seus conflitos. Faz as vezes de juíza, detetive e conselheira, e armas não são permitidas lá. Quem quer briga é removido pelos 270 libras de blindagem subdérmica dela.",
@@ -2031,22 +2035,59 @@
     "id": "trace-santiago",
     "name": "Trace Santiago",
     "aliases": [],
-    "kind": "profile",
+    "kind": "sheet",
     "role": "Media",
-    "roleRank": null,
-    "rep": null,
+    "roleRank": 6,
+    "rep": 6,
     "affiliation": "Aldecaldos",
     "sources": [
       { "book": "Core Book", "page": 436 },
       { "book": "Core Book", "page": 441 },
-      { "book": "Tales of the RED", "page": 193 }
+      { "book": "Tales of the RED", "page": 193 },
+      { "book": "Tales of the RED+", "page": 6 }
     ],
     "summary": {
       "pt": "Media independente e filho do chefe da Família Aldecaldo. Saiu do emprego legítimo e posta as próprias reportagens no Data Pool. Em Black Dog, rastreia o fim da história de Johnny Silverhand e lidera a equipe que leva a bomba.",
       "en": "Independent Media and son of the Aldecaldo Family's leader. He quit legit work and uploads his own reports to the Data Pool. In Black Dog he chases the end of Johnny Silverhand's story and leads the crew that carries the bomb."
     },
-    "sheetNote": null,
-    "sheet": null
+    "sheetNote": {
+      "pt": "Ficha cortada do livro e publicada em Tales of the RED+; a biografia está em Tales of the RED, p. 193.",
+      "en": "Sheet cut from the book and published in Tales of the RED+; the biography is in Tales of the RED, p. 193."
+    },
+    "sheet": {
+      "hp": 40,
+      "seriouslyWounded": 20,
+      "deathSave": 5,
+      "stats": { "INT": 7, "REF": 5, "DEX": 5, "TECH": 4, "COOL": 8, "WILL": 7, "MOVE": 7, "BODY": 5, "EMP": 5 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Heavy Pistol", "skill": "Handgun", "attackBase": 11, "damage": "3d6", "rof": 2, "magazine": null, "class": "HeavyPistol", "melee": false, "notes": null }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Light Armorjack", "sp": 11 },
+        { "location": "Body", "name": "Light Armorjack", "sp": 11 }
+      ],
+      "skills": {
+        "Athletics": 7, "Brawling": 9, "Bribery": 14, "Composition": 13,
+        "Concentration": 9, "Conversation": 13, "Deduction": 13, "Drive Land Vehicle": 10,
+        "Education": 12, "Evasion": 11, "First Aid": 8, "Handgun": 11,
+        "Heavy Weapons": 10, "Human Perception": 13, "Language (English)": 9, "Language (Spanish)": 12,
+        "Language (Streetslang)": 9, "Library Search": 12, "Lip Reading": 11, "Local Expert (Badlands)": 13,
+        "Local Expert (Upper Marina)": 9, "Perception": 13, "Persuasion": 14, "Photography/Film": 10,
+        "Pilot Air Vehicle": 10, "Shoulder Arms": 10, "Stealth": 9, "Wilderness Survival": 10
+      },
+      "gear": ["Heavy Pistol Ammo x8", "Agent", "Disposable Cellphone x2", "Remote Camera Drone", "Compact Groundcar"],
+      "cyberware": ["Biomonitor", "Contraceptive Implant", "Cyberarm w/ Shoulder Cam", "Cybereye w/ Chyron Display, MicroVideo, and TeleOptics"],
+      "specials": [
+        {
+          "name": "Credibility",
+          "text": {
+            "pt": "Role Ability Credibility no Rank 6.",
+            "en": "Role Ability Credibility at Rank 6."
+          }
+        }
+      ]
+    }
   },
   {
     "id": "lilayah",
@@ -3719,7 +3760,7 @@
     "roleRank": 4,
     "rep": 3,
     "affiliation": null,
-    "sources": [{ "book": "Danger Gal Dossier", "page": 44 }],
+    "sources": [{ "book": "Danger Gal Dossier", "page": 44 }, { "book": "Hope Reborn+", "page": 4 }],
     "summary": {
       "pt": "Cicely Feng, Tech freelance excelente em organizar e entregar, péssima em ser querida. O apelido vem de elogiar e punir na mesma frase, e uma vez ela acertou alguém, literalmente, com as costas da mão do terceiro braço. A lealdade dela tem limite: quem trabalha com ela pode traí-la se achar que não vai ser pego.",
       "en": "Cicely Feng is a freelance Tech who is superb at organizing and delivering and terrible at being liked. Her nickname comes from praising and punishing in one breath, and she once literally struck someone with a backhand from her third arm. Her loyalty is conditional: anyone working with her may betray her if they believe they will not be caught."
@@ -3829,12 +3870,15 @@
     "roleRank": 4,
     "rep": 2,
     "affiliation": "Never Blink News",
-    "sources": [{ "book": "Danger Gal Dossier", "page": 46 }],
+    "sources": [{ "book": "Danger Gal Dossier", "page": 46 }, { "book": "Interface RED Volume 1", "page": 26 }],
     "summary": {
       "pt": "Único funcionário da Never Blink News: repórter, âncora, pesquisador e cinegrafista de um canal pirata. Largou a mídia corporativa por causa da censura e recusou propinas para engavetar reportagens. Se chegou perto de um alvo, não larga até pôr a história na Data Pool.",
       "en": "The only staffer of Never Blink News: reporter, anchor, researcher and camera operator of a pirate channel. He quit corporate media over censorship and refused payoffs to bury stories. Once he has the scent of a target, he does not let go until the story is on the Data Pool."
     },
-    "sheetNote": null,
+    "sheetNote": {
+      "pt": "Interface RED Volume 1 imprime outra versão: um personagem pré-gerado do Single Shot Pack, com STATs, perícias e equipamento diferentes. Esta ficha segue a de Danger Gal Dossier, mais recente.",
+      "en": "Interface RED Volume 1 prints another version: a pregenerated character from the Single Shot Pack, with different STATs, skills and gear. This sheet follows Danger Gal Dossier, the more recent book."
+    },
     "sheet": {
       "hp": 35,
       "seriouslyWounded": 18,
@@ -3939,12 +3983,15 @@
     "roleRank": 4,
     "rep": 3,
     "affiliation": null,
-    "sources": [{ "book": "Danger Gal Dossier", "page": 48 }],
+    "sources": [{ "book": "Danger Gal Dossier", "page": 48 }, { "book": "Interface RED Volume 1", "page": 12 }],
     "summary": {
       "pt": "Rockerboy filha do roqueiro A.Dore, que foi esmagado por um contrato predatório da DMS. Herdou os arquivos do pai, a lição de desconfiar de \"grandes chances\" e um rancor contra as Corps. Faz música e confusão na cena underground e entre edgerunners.",
       "en": "A Rockerboy and daughter of the pop star A.Dore, who was crushed by a predatory DMS contract. She inherited her father's files, a distrust of \"big breaks\" and a grudge against the Corps. She makes music and trouble in the underground scene and among Edgerunners."
     },
-    "sheetNote": null,
+    "sheetNote": {
+      "pt": "Interface RED Volume 1 imprime outra versão: um personagem pré-gerado do Single Shot Pack, com STATs, perícias e equipamento diferentes. Esta ficha segue a de Danger Gal Dossier, mais recente.",
+      "en": "Interface RED Volume 1 prints another version: a pregenerated character from the Single Shot Pack, with different STATs, skills and gear. This sheet follows Danger Gal Dossier, the more recent book."
+    },
     "sheet": {
       "hp": 35,
       "seriouslyWounded": 18,
@@ -3994,12 +4041,15 @@
     "roleRank": 4,
     "rep": 2,
     "affiliation": null,
-    "sources": [{ "book": "Danger Gal Dossier", "page": 49 }],
+    "sources": [{ "book": "Danger Gal Dossier", "page": 49 }, { "book": "Interface RED Volume 1", "page": 14 }],
     "summary": {
       "pt": "Fixer em ascensão, liso como o apelido e todo negócios, que se vê só como intermediário. Competente, mas cauteloso demais para assumir riscos; cancela o trabalho se achar que dará errado. É leal ao cliente e não aceita suborno, embora possa ser convencido a desistir.",
       "en": "An up-and-coming Fixer, smooth as his name and all business, who sees himself as just a middleman. Competent but too cautious to take risks; he scrubs a job if he thinks it will fail. Loyal to his client and immune to bribes, though he can be talked into walking away."
     },
-    "sheetNote": null,
+    "sheetNote": {
+      "pt": "Interface RED Volume 1 imprime outra versão: um personagem pré-gerado do Single Shot Pack, com STATs, perícias e equipamento diferentes. Esta ficha segue a de Danger Gal Dossier, mais recente.",
+      "en": "Interface RED Volume 1 prints another version: a pregenerated character from the Single Shot Pack, with different STATs, skills and gear. This sheet follows Danger Gal Dossier, the more recent book."
+    },
     "sheet": {
       "hp": 35,
       "seriouslyWounded": 18,
@@ -4050,12 +4100,15 @@
     "roleRank": 4,
     "rep": 1,
     "affiliation": null,
-    "sources": [{ "book": "Danger Gal Dossier", "page": 50 }],
+    "sources": [{ "book": "Danger Gal Dossier", "page": 50 }, { "book": "Interface RED Volume 1", "page": 20 }],
     "summary": {
       "pt": "Netrunner que fugiu da vida corporativa e de uma família que não a aceitava, e se reinventou nas ruas. Ainda tem espírito ousado e invade NETs corporativas em equipe. Mencione RPGs para ganhar a confiança dela; ela ainda mestra para os amigos edgerunners.",
       "en": "A Netrunner who escaped corporate life and a family that did not accept her, and reinvented herself on The Street. She keeps her daring spirit and breaks into corporate NET Architectures with a team. Mention RPGs to win her over; she still runs them for her Edgerunner friends."
     },
-    "sheetNote": null,
+    "sheetNote": {
+      "pt": "Interface RED Volume 1 imprime outra versão: um personagem pré-gerado do Single Shot Pack, com STATs, perícias e equipamento diferentes. Esta ficha segue a de Danger Gal Dossier, mais recente.",
+      "en": "Interface RED Volume 1 prints another version: a pregenerated character from the Single Shot Pack, with different STATs, skills and gear. This sheet follows Danger Gal Dossier, the more recent book."
+    },
     "sheet": {
       "hp": 35,
       "seriouslyWounded": 18,
@@ -4160,12 +4213,15 @@
     "roleRank": 4,
     "rep": 1,
     "affiliation": null,
-    "sources": [{ "book": "Danger Gal Dossier", "page": 52 }],
+    "sources": [{ "book": "Danger Gal Dossier", "page": 52 }, { "book": "Interface RED Volume 1", "page": 22 }],
     "summary": {
       "pt": "João Barbosa Alves, dono da Torch's Total Repairs na Upper Marina, conserta qualquer coisa que dê para abrir e faz serviços no limite da lei sem perguntas. Ganhou o apelido pelo maçarico e pelo soldador, e tem um lança-chamas funcional na oficina.",
       "en": "João Barbosa Alves, owner of Torch's Total Repairs in the Upper Marina, fixes anything that can be opened and does borderline-legal jobs without questions. He got his handle from his blowtorch and soldering iron, and keeps a working flamethrower in the shop."
     },
-    "sheetNote": null,
+    "sheetNote": {
+      "pt": "Interface RED Volume 1 imprime outra versão: um personagem pré-gerado do Single Shot Pack, com STATs, perícias e equipamento diferentes. Esta ficha segue a de Danger Gal Dossier, mais recente.",
+      "en": "Interface RED Volume 1 prints another version: a pregenerated character from the Single Shot Pack, with different STATs, skills and gear. This sheet follows Danger Gal Dossier, the more recent book."
+    },
     "sheet": {
       "hp": 35,
       "seriouslyWounded": 18,
@@ -5179,7 +5235,7 @@
     "roleRank": 4,
     "rep": 2,
     "affiliation": "Maelstrom",
-    "sources": [{ "book": "Danger Gal Dossier", "page": 74 }],
+    "sources": [{ "book": "Danger Gal Dossier", "page": 74 }, { "book": "Hope Reborn+", "page": 13 }],
     "summary": {
       "pt": "Ex-capanga de Quake que passou a comandar o exército de catadores da Hot Zone. Sádico, atrai jovens com a promessa de entrar na gangue e inventou \"Testes\" rituais, e muitos não voltam. O número de mortes pode afundar a Maelstrom ou levá-lo a se separar.",
       "en": "A former Quake enforcer who now runs the Hot Zone scavver army. Sadistic, he lures kids with the promise of Maelstrom membership and invented ritual \"Tests\", and many never return. His body count could sink the gang or push him to split off."
@@ -5610,12 +5666,15 @@
     "roleRank": 4,
     "rep": 2,
     "affiliation": "NCPD (Precinct #1)",
-    "sources": [{ "book": "Danger Gal Dossier", "page": 84 }],
+    "sources": [{ "book": "Danger Gal Dossier", "page": 84 }, { "book": "Interface RED Volume 1", "page": 28 }],
     "summary": {
       "pt": "Policial honesta e quase um ícone entre os colegas, conhecida por ser a primeira a chegar nos chamados de oficial caído. Coopera com agências externas, mas só dentro da lei: ajuda numa troca de tiros e depois prende pelos danos. Seu ponto fraco é a dívida de jogo da esposa com o Fixer Rex Royale.",
       "en": "An honest officer, widely admired by her colleagues, who is typically first on scene when an Officer Down call goes out. She works with outside agencies only within the law: she'll join a shootout, then book you for the damage. Her weak point is her wife's gambling debt to the Fixer Rex Royale."
     },
-    "sheetNote": null,
+    "sheetNote": {
+      "pt": "Interface RED Volume 1 imprime outra versão: um personagem pré-gerado do Single Shot Pack, com STATs, perícias e equipamento diferentes. Esta ficha segue a de Danger Gal Dossier, mais recente.",
+      "en": "Interface RED Volume 1 prints another version: a pregenerated character from the Single Shot Pack, with different STATs, skills and gear. This sheet follows Danger Gal Dossier, the more recent book."
+    },
     "sheet": {
       "hp": 40,
       "seriouslyWounded": 20,
@@ -6384,12 +6443,15 @@
     "roleRank": 4,
     "rep": 3,
     "affiliation": "Sightseers",
-    "sources": [{ "book": "Danger Gal Dossier", "page": 102 }, { "book": "Danger Gal Dossier", "page": 99 }],
+    "sources": [{ "book": "Danger Gal Dossier", "page": 102 }, { "book": "Danger Gal Dossier", "page": 99 }, { "book": "Interface RED Volume 1", "page": 18 }],
     "summary": {
       "pt": "Fundadora e líder dos Sightseers, ex-edgerunner de escolta e extração que decidiu montar uma família do zero. Vive na Kombi e leva comida, remédios e equipamento médico entre Packs e Reclaimers, deixando as viagens fáceis para os mais novos. Ignora as cargas duvidosas dos companheiros desde que Corps e polícia fiquem longe.",
       "en": "Founder and leader of the Sightseers, a former escort and extraction Edgerunner who chose to build a family from scratch. She lives in her Kombi and moves food, medicine and medical tech between Packs and Reclaimers, giving easy runs to the juniors. She looks away from her crew's shadier cargo as long as Corps and cops stay out."
     },
-    "sheetNote": null,
+    "sheetNote": {
+      "pt": "Interface RED Volume 1 imprime outra versão: um personagem pré-gerado do Single Shot Pack, com STATs, perícias e equipamento diferentes. Esta ficha segue a de Danger Gal Dossier, mais recente.",
+      "en": "Interface RED Volume 1 prints another version: a pregenerated character from the Single Shot Pack, with different STATs, skills and gear. This sheet follows Danger Gal Dossier, the more recent book."
+    },
     "sheet": {
       "hp": 35,
       "seriouslyWounded": 18,
@@ -6547,7 +6609,7 @@
     "roleRank": 5,
     "rep": 3,
     "affiliation": "Team Monster",
-    "sources": [{ "book": "Danger Gal Dossier", "page": 106 }, { "book": "Danger Gal Dossier", "page": 105 }],
+    "sources": [{ "book": "Danger Gal Dossier", "page": 106 }, { "book": "Danger Gal Dossier", "page": 105 }, { "book": "Hope Reborn+", "page": 16 }],
     "summary": {
       "pt": "Netrunner imprevisível que começou com travessuras, evoluiu para hackear corporações e hoje vive de gigs para Fixers. Segue o próprio código ético, é leal a quem ama, sobretudo Nox, e anima o grupo. Ataca com lâminas e patins nos pés e é quem mais questiona os planos do Mr. Fixit.",
       "en": "An erratic Netrunner who began with pranks, moved up to hacking Corporations, and now lives off Fixer gigs. He keeps to his own code, stays loyal to the people he loves (Nox above all) and lifts the crew's mood. He fights with blades and skate feet, and he's the likeliest to push back on Mr. Fixit's plans."
@@ -6602,7 +6664,7 @@
     "roleRank": 4,
     "rep": 3,
     "affiliation": "Team Monster",
-    "sources": [{ "book": "Danger Gal Dossier", "page": 107 }, { "book": "Danger Gal Dossier", "page": 105 }],
+    "sources": [{ "book": "Danger Gal Dossier", "page": 107 }, { "book": "Danger Gal Dossier", "page": 105 }, { "book": "Hope Reborn+", "page": 16 }],
     "summary": {
       "pt": "Filho de um líder guerrilheiro da Geórgia, treinado em guerra constante contra a SovOil e especialista em tiro de longa distância. Chegou a Night City após a queda da célula do pai e foi acolhido por Mr. Fixit, o \"tio\". Ainda é novato como edgerunner, e Paladin o chama de Red Shirt, mas já provou que prioriza vidas, até largando uma missão para levar uma mulher em trabalho de parto.",
       "en": "Son of a Georgian insurgent leader, raised in constant war against SovOil and gifted with long-range firearms. He came to Night City after his father's cell fell and was taken in by Mr. Fixit, his \"uncle\". Still green as an Edgerunner, which earned him Paladin's nickname Red Shirt, he has shown he puts lives first, once leaving a job to get a woman in labor to a hospital."
@@ -6657,7 +6719,7 @@
     "roleRank": 5,
     "rep": 3,
     "affiliation": "Team Monster",
-    "sources": [{ "book": "Danger Gal Dossier", "page": 108 }, { "book": "Danger Gal Dossier", "page": 105 }],
+    "sources": [{ "book": "Danger Gal Dossier", "page": 108 }, { "book": "Danger Gal Dossier", "page": 105 }, { "book": "Hope Reborn+", "page": 16 }],
     "summary": {
       "pt": "Piloto e médico da Team Monster, vindo de uma equipe de salvage e da Trauma Team antes de virar edgerunner. É conhecido por tirar equipes de enrascadas e mantê-las vivas, e a sorte já salvou o grupo, como no voo sob fogo antiaéreo no assalto ao Anne Boleyn.",
       "en": "The pilot and medic of Team Monster, who came from a salvage crew and Trauma Team before becoming an Edgerunner. Known for getting crews in and out and keeping them alive, his luck has saved the group before, as on the Anne Boleyn heist when anti-air fire nearly downed them."
@@ -6713,7 +6775,7 @@
     "roleRank": 5,
     "rep": 5,
     "affiliation": "Team Monster",
-    "sources": [{ "book": "Danger Gal Dossier", "page": 109 }, { "book": "Danger Gal Dossier", "page": 105 }],
+    "sources": [{ "book": "Danger Gal Dossier", "page": 109 }, { "book": "Danger Gal Dossier", "page": 105 }, { "book": "Hope Reborn+", "page": 16 }],
     "summary": {
       "pt": "Jovem Rockerboy em ascensão que toca em clubes famosos com um synth pop \"extraterrestre\" de shows alucinógenos. Fora do palco é mais humilde, e há suspeita de que a habilidade de coletar informações a levou ao radar de Mr. Fixit. Tem encanto para chegar a quase qualquer pessoa e é ligada a Cereal.",
       "en": "A rising young Rockerboy who plays well-known clubs with an \"extraterrestrial\" synth pop and hallucinogenic shows. Off-stage she is humbler, and she probably caught Mr. Fixit's eye through her knack for gathering intel. She has the charm to reach almost anyone and is close to Cereal."
@@ -6768,7 +6830,7 @@
     "roleRank": 5,
     "rep": 4,
     "affiliation": "Team Monster",
-    "sources": [{ "book": "Danger Gal Dossier", "page": 110 }, { "book": "Danger Gal Dossier", "page": 105 }],
+    "sources": [{ "book": "Danger Gal Dossier", "page": 110 }, { "book": "Danger Gal Dossier", "page": 105 }, { "book": "Hope Reborn+", "page": 16 }],
     "summary": {
       "pt": "Veterano calado que saiu da Combat Zone, serviu a Militech e virou freelancer por mais dinheiro. Segue o plano à risca, sem emoção, e gosta de ver os mais novos errarem. Lidera o combate da Team Monster e é o \"bastão\" que os colegas ameaçam usar nos interrogatórios.",
       "en": "A quiet veteran who climbed out of the Combat Zone, served Militech and went freelance for better pay. He follows the plan to the letter without emotion and enjoys watching the youngsters mess up. He runs point on Team Monster's combat ops and is the \"stick\" the crew threatens interrogations with."
@@ -6823,7 +6885,7 @@
     "roleRank": 5,
     "rep": 3,
     "affiliation": "Team Monster",
-    "sources": [{ "book": "Danger Gal Dossier", "page": 111 }, { "book": "Danger Gal Dossier", "page": 105 }, { "book": "Danger Gal Dossier", "page": 112 }],
+    "sources": [{ "book": "Danger Gal Dossier", "page": 111 }, { "book": "Danger Gal Dossier", "page": 105 }, { "book": "Danger Gal Dossier", "page": 112 }, { "book": "Hope Reborn+", "page": 16 }],
     "summary": {
       "pt": "Gigante de quase dois metros e especialista em armas pesadas e em embarcações, valorizado entre os Aldecaldos por mover cargas discretamente pela água. Acompanha a Team Monster, cuja família é dona do AV, e dá cobertura com o lançador de foguetes enquanto Lucky pilota.",
       "en": "A near-seven-foot giant and expert in heavy weapons and watercraft, valued among the Aldecaldos for moving cargo quietly across water. He rides with Team Monster, whose AV belongs to his family, and covers the crew with his rocket launcher while Lucky flies."
@@ -7838,7 +7900,7 @@
     "roleRank": 4,
     "rep": 5,
     "affiliation": "Zoners",
-    "sources": [{ "book": "Danger Gal Dossier", "page": 135 }, { "book": "Danger Gal Dossier", "page": 131 }],
+    "sources": [{ "book": "Danger Gal Dossier", "page": 135 }, { "book": "Danger Gal Dossier", "page": 131 }, { "book": "Hope Reborn+", "page": 11 }],
     "summary": {
       "pt": "Chefe de uma trupe de pornô artístico e astro de Braindances, que mora num andar inteiro de um conjunto habitacional de South Night City com seu harém. Também atira bem de escopeta e defendeu o prédio sozinho contra cinco gangueiros enviados pela Zhirafa, gravando tudo do seu ponto de vista e distribuindo os chips de graça.",
       "en": "Head of an artistic porn troupe and Braindance star, who lives on a whole floor of a South Night City housing complex with his harem. He is also a fine shotgun shot and defended the building alone against five gangers sent by Zhirafa, recording it all from his point of view and giving the chips away free."
@@ -9763,7 +9825,8 @@
     "affiliation": "Lost Kids",
     "sources": [
       { "book": "Tales of the RED", "page": 146 },
-      { "book": "Tales of the RED", "page": 186 }
+      { "book": "Tales of the RED", "page": 186 },
+      { "book": "Tales of the RED+", "page": 3 }
     ],
     "summary": {
       "pt": "Garoto de rua dos Lost Kids que cresceu na Street e achou abrigo em Home. Treina os mais novos em autodefesa e teme o que acontece quando fizer 21 anos e perder o apoio do lugar.",
@@ -9807,8 +9870,8 @@
         {
           "name": "Megabite",
           "text": {
-            "pt": "Pacote Upgraded Megabite com Vampyres e Suction Pump, Chemskin e Shift Tacts.",
-            "en": "An Upgraded Megabite package: Vampyres with a Suction Pump, Chemskin and Shift Tacts."
+            "pt": "Pacote Upgraded Megabite com Vampyres e Suction Pump, Chemskin e Shift Tacts. Suction Pump: age como Choke. Depois de um Grab, gasta uma Ação nos Rounds seguintes, sem teste, para morder o pescoço do alvo e causar o BODY do atacante direto no HP, ignorando armadura. Ao contrário do Choke, é letal.",
+            "en": "An Upgraded Megabite package: Vampyres with a Suction Pump, Chemskin and Shift Tacts. Suction Pump: works like Choke. After a Grab, spend an Action on later Rounds, with no Check, to bite the target's neck and deal the attacker's BODY straight to HP, ignoring armor. Unlike Choke, it is lethal."
           }
         }
       ]
@@ -9825,7 +9888,8 @@
     "affiliation": "Lost Kids",
     "sources": [
       { "book": "Tales of the RED", "page": 146 },
-      { "book": "Tales of the RED", "page": 182 }
+      { "book": "Tales of the RED", "page": 182 },
+      { "book": "Tales of the RED+", "page": 3 }
     ],
     "summary": {
       "pt": "Membro dos Lost Kids, de cabelo branco, namorade de Flaxx. Sabe mexer com as emoções para conseguir favores e comida, e chama a bartender Zero Gees de \"mãe\".",
@@ -9859,8 +9923,8 @@
         {
           "name": "Megabite",
           "text": {
-            "pt": "Pacote Upgraded Megabite com Vampyres e Suction Pump, Chemskin e Shift Tacts.",
-            "en": "An Upgraded Megabite package: Vampyres with a Suction Pump, Chemskin and Shift Tacts."
+            "pt": "Pacote Upgraded Megabite com Vampyres e Suction Pump, Chemskin e Shift Tacts. Suction Pump: age como Choke. Depois de um Grab, gasta uma Ação nos Rounds seguintes, sem teste, para morder o pescoço do alvo e causar o BODY do atacante direto no HP, ignorando armadura. Ao contrário do Choke, é letal.",
+            "en": "An Upgraded Megabite package: Vampyres with a Suction Pump, Chemskin and Shift Tacts. Suction Pump: works like Choke. After a Grab, spend an Action on later Rounds, with no Check, to bite the target's neck and deal the attacker's BODY straight to HP, ignoring armor. Unlike Choke, it is lethal."
           }
         }
       ]
@@ -9877,7 +9941,8 @@
     "affiliation": "Lost Kids",
     "sources": [
       { "book": "Tales of the RED", "page": 147 },
-      { "book": "Tales of the RED", "page": 184 }
+      { "book": "Tales of the RED", "page": 184 },
+      { "book": "Tales of the RED+", "page": 3 }
     ],
     "summary": {
       "pt": "Médico dos Lost Kids. Carrega uma pistola média que nunca disparou, fala pouco e sofre de depressão e estresse pós-traumático por ter humilhado alguém no passado.",
@@ -9910,8 +9975,8 @@
         {
           "name": "Megabite",
           "text": {
-            "pt": "Pacote Upgraded Megabite com Vampyres e Suction Pump, Chemskin e Shift Tacts.",
-            "en": "An Upgraded Megabite package: Vampyres with a Suction Pump, Chemskin and Shift Tacts."
+            "pt": "Pacote Upgraded Megabite com Vampyres e Suction Pump, Chemskin e Shift Tacts. Suction Pump: age como Choke. Depois de um Grab, gasta uma Ação nos Rounds seguintes, sem teste, para morder o pescoço do alvo e causar o BODY do atacante direto no HP, ignorando armadura. Ao contrário do Choke, é letal.",
+            "en": "An Upgraded Megabite package: Vampyres with a Suction Pump, Chemskin and Shift Tacts. Suction Pump: works like Choke. After a Grab, spend an Action on later Rounds, with no Check, to bite the target's neck and deal the attacker's BODY straight to HP, ignoring armor. Unlike Choke, it is lethal."
           }
         }
       ]
@@ -9928,7 +9993,8 @@
     "affiliation": "Lost Kids",
     "sources": [
       { "book": "Tales of the RED", "page": 147 },
-      { "book": "Tales of the RED", "page": 186 }
+      { "book": "Tales of the RED", "page": 186 },
+      { "book": "Tales of the RED+", "page": 3 }
     ],
     "summary": {
       "pt": "Membro alto e magro dos Lost Kids, de cabeça raspada. Leal mas esquentado, desconfia de estranhos, foge dos problemas e namora Asher.",
@@ -9961,8 +10027,8 @@
         {
           "name": "Megabite",
           "text": {
-            "pt": "Pacote Upgraded Megabite com Vampyres e Suction Pump, Chemskin e Shift Tacts.",
-            "en": "An Upgraded Megabite package: Vampyres with a Suction Pump, Chemskin and Shift Tacts."
+            "pt": "Pacote Upgraded Megabite com Vampyres e Suction Pump, Chemskin e Shift Tacts. Suction Pump: age como Choke. Depois de um Grab, gasta uma Ação nos Rounds seguintes, sem teste, para morder o pescoço do alvo e causar o BODY do atacante direto no HP, ignorando armadura. Ao contrário do Choke, é letal.",
+            "en": "An Upgraded Megabite package: Vampyres with a Suction Pump, Chemskin and Shift Tacts. Suction Pump: works like Choke. After a Grab, spend an Action on later Rounds, with no Check, to bite the target's neck and deal the attacker's BODY straight to HP, ignoring armor. Unlike Choke, it is lethal."
           }
         }
       ]
@@ -9979,7 +10045,8 @@
     "affiliation": "Lost Kids",
     "sources": [
       { "book": "Tales of the RED", "page": 148 },
-      { "book": "Tales of the RED", "page": 193 }
+      { "book": "Tales of the RED", "page": 193 },
+      { "book": "Tales of the RED+", "page": 3 }
     ],
     "summary": {
       "pt": "Vigia dos Lost Kids, órfão de pais assassinados por um Exec rival. Fala pouco e escuta muito, usa roupa esportiva para correr e se esconder e chama gente suspeita de \"doombas\".",
@@ -10013,8 +10080,8 @@
         {
           "name": "Megabite",
           "text": {
-            "pt": "Pacote Upgraded Megabite com Vampyres e Suction Pump, Chemskin e Shift Tacts.",
-            "en": "An Upgraded Megabite package: Vampyres with a Suction Pump, Chemskin and Shift Tacts."
+            "pt": "Pacote Upgraded Megabite com Vampyres e Suction Pump, Chemskin e Shift Tacts. Suction Pump: age como Choke. Depois de um Grab, gasta uma Ação nos Rounds seguintes, sem teste, para morder o pescoço do alvo e causar o BODY do atacante direto no HP, ignorando armadura. Ao contrário do Choke, é letal.",
+            "en": "An Upgraded Megabite package: Vampyres with a Suction Pump, Chemskin and Shift Tacts. Suction Pump: works like Choke. After a Grab, spend an Action on later Rounds, with no Check, to bite the target's neck and deal the attacker's BODY straight to HP, ignoring armor. Unlike Choke, it is lethal."
           }
         }
       ]
@@ -10511,18 +10578,19 @@
   {
     "id": "doc-stoic",
     "name": "Doc Stoic",
-    "aliases": [],
+    "aliases": ["Michael Lewis"],
     "kind": "profile",
     "role": "Medtech",
     "roleRank": null,
     "rep": null,
     "affiliation": "Forlorn Hope",
     "sources": [
-      { "book": "Tales of the RED", "page": 184 }
+      { "book": "Tales of the RED", "page": 184 },
+      { "book": "Hope Reborn+", "page": 11 }
     ],
     "summary": {
-      "pt": "Ex-Trauma Team que quase não fala do passado. Montou consultório no Forlorn Hope e conserta ferimentos, biológicos ou cibernéticos, da clientela do bar.",
-      "en": "A former Trauma Team medic who rarely talks about his past. He set up shop in the Forlorn Hope and patches up the bar's customers, biological or cybernetic injuries alike."
+      "pt": "Ex-Trauma Team que quase não fala do passado. Montou consultório no Forlorn Hope e conserta ferimentos, biológicos ou cibernéticos, da clientela do bar. Hope Reborn+ conta outra origem: paramédico da REO Meatwagon, único sobrevivente da batida com um punknaught, que virou aprendiz de Sundance e herdou a clínica do bar.",
+      "en": "A former Trauma Team medic who rarely talks about his past. He set up shop in the Forlorn Hope and patches up the bar's customers, biological or cybernetic injuries alike. Hope Reborn+ tells another origin: an REO Meatwagon paramedic, sole survivor of a crash with a punknaught, who became the apprentice of Sundance and inherited the bar clinic."
     },
     "sheetNote": null,
     "sheet": null
@@ -10531,20 +10599,51 @@
     "id": "etan-sim",
     "name": "Etan Sim",
     "aliases": [],
-    "kind": "profile",
-    "role": null,
-    "roleRank": null,
-    "rep": null,
+    "kind": "sheet",
+    "role": "Exec",
+    "roleRank": 4,
+    "rep": 8,
     "affiliation": null,
     "sources": [
-      { "book": "Tales of the RED", "page": 185 }
+      { "book": "Tales of the RED", "page": 185 },
+      { "book": "Tales of the RED+", "page": 3 }
     ],
     "summary": {
       "pt": "Astro de cinema AAA nascido em Singapura, filho de executivos da Biotechnica e formado na Juilliard. Divorciou-se de Darrel Marchant após uma infidelidade bêbada, foi para a reabilitação e vive de forma discreta, com um segurança só para afastar paparazzi.",
       "en": "AAA movie star born in Singapore to Biotechnica corporate parents and a Juilliard graduate. He divorced Darrel Marchant after a drunken affair, went to rehab, and lives modestly with a bodyguard just to keep paparazzi away."
     },
-    "sheetNote": null,
-    "sheet": null
+    "sheetNote": {
+      "pt": "Ficha cortada do livro e publicada em Tales of the RED+; a biografia está em Tales of the RED, p. 185. A ficha imprime \"L Armorback (Body)\" sem valor de SP, então ele fica sem armadura aqui.",
+      "en": "Sheet cut from the book and published in Tales of the RED+; the biography is in Tales of the RED, p. 185. The sheet prints \"L Armorback (Body)\" with no SP value, so he has no armor here."
+    },
+    "sheet": {
+      "hp": 40,
+      "seriouslyWounded": 20,
+      "deathSave": 6,
+      "stats": { "INT": 5, "REF": 6, "DEX": 6, "TECH": 4, "COOL": 8, "WILL": 5, "MOVE": 6, "BODY": 6, "EMP": 8 },
+      "armoredStats": {},
+      "weapons": [],
+      "armor": [],
+      "skills": {
+        "Accounting": 9, "Acting": 14, "Athletics": 12, "Brawling": 10,
+        "Bureaucracy": 7, "Business": 9, "Concentration": 9, "Conversation": 14,
+        "Dance": 10, "Drive Land Vehicle": 8, "Education": 11, "Evasion": 12,
+        "First Aid": 8, "Handgun": 8, "Human Perception": 14, "Language (Streetslang)": 7,
+        "Language (English)": 11, "Lip Reading": 9, "Local Expert (Little Europe)": 9, "Local Expert (Upper Marina)": 7,
+        "Perception": 9, "Personal Grooming": 14, "Persuasion": 12, "Wardrobe & Style": 14
+      },
+      "gear": ["Agent", "Plush conapt", "Closet full of perfect, tasteful outfits", "Self-inflicted broken heart"],
+      "cyberware": ["Contraceptive Implant", "Enhanced Antibodies"],
+      "specials": [
+        {
+          "name": "Teamwork",
+          "text": {
+            "pt": "Role Ability Teamwork no Rank 4 (Covert Operative - O. Riddle).",
+            "en": "Role Ability Teamwork at Rank 4 (Covert Operative - O. Riddle)."
+          }
+        }
+      ]
+    }
   },
   {
     "id": "faisal",
@@ -10588,20 +10687,57 @@
     "id": "fixie",
     "name": "Fixie",
     "aliases": [],
-    "kind": "profile",
+    "kind": "sheet",
     "role": "Fixer",
-    "roleRank": null,
-    "rep": null,
+    "roleRank": 6,
+    "rep": 5,
     "affiliation": "Fixie's Couriers",
     "sources": [
-      { "book": "Tales of the RED", "page": 185 }
+      { "book": "Tales of the RED", "page": 185 },
+      { "book": "Tales of the RED+", "page": 4 }
     ],
     "summary": {
       "pt": "Fixer magrela, com corpo de corredora, que montou uma rede de ciclistas-mensageiros nos moldes dos dabbawalas de Mumbai do bisavô e entrega por boa parte do submundo de Night City. É ex da ConEx.",
       "en": "A wiry Fixer with a distance runner's build who organized a bicycle courier network modeled on her great-grandfather's Mumbai dabbawalas, serving much of Night City's underside. She is ConEx's ex."
     },
-    "sheetNote": null,
-    "sheet": null
+    "sheetNote": {
+      "pt": "Ficha cortada do livro e publicada em Tales of the RED+; a biografia está em Tales of the RED, p. 185.",
+      "en": "Sheet cut from the book and published in Tales of the RED+; the biography is in Tales of the RED, p. 185."
+    },
+    "sheet": {
+      "hp": 40,
+      "seriouslyWounded": 20,
+      "deathSave": 6,
+      "stats": { "INT": 8, "REF": 6, "DEX": 6, "TECH": 3, "COOL": 6, "WILL": 5, "MOVE": 7, "BODY": 6, "EMP": 5 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Heavy Pistol", "skill": "Handgun", "attackBase": 12, "damage": "3d6", "rof": 2, "magazine": null, "class": "HeavyPistol", "melee": false, "notes": null },
+        { "name": "Light Melee Weapon", "skill": "Melee Weapon", "attackBase": 6, "damage": "1d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": "No Skill Base printed for this weapon; STAT only." }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Light Armorjack", "sp": 11 },
+        { "location": "Body", "name": "Light Armorjack", "sp": 11 }
+      ],
+      "skills": {
+        "Athletics": 14, "Brawling": 14, "Business": 14, "Concentration": 12,
+        "Conversation": 9, "Education": 12, "Endurance": 11, "Evasion": 12,
+        "First Aid": 7, "Forgery": 10, "Handgun": 12, "Human Perception": 12,
+        "Language (English)": 12, "Language (Hindi)": 12, "Language (Streetslang)": 12, "Language (Urdu)": 12,
+        "Lip Reading": 12, "Local Expert (All Night City Districts)": 12, "Perception": 14, "Persuasion": 12,
+        "Stealth": 10, "Streetwise": 12, "Trading": 12
+      },
+      "gear": ["Heavy Pistol Ammo x16", "Agent", "Bag full of water and snacks"],
+      "cyberware": ["Contraceptive Implant", "Enhanced Antibodies"],
+      "specials": [
+        {
+          "name": "Operator",
+          "text": {
+            "pt": "Role Ability Operator no Rank 6.",
+            "en": "Role Ability Operator at Rank 6."
+          }
+        }
+      ]
+    }
   },
   {
     "id": "freki",
@@ -10648,16 +10784,17 @@
     "name": "Grace Steel",
     "aliases": [],
     "kind": "profile",
-    "role": null,
+    "role": "Rockerboy",
     "roleRank": null,
     "rep": null,
     "affiliation": "Forlorn Hope",
     "sources": [
-      { "book": "Tales of the RED", "page": 186 }
+      { "book": "Tales of the RED", "page": 186 },
+      { "book": "Hope Reborn+", "page": 7 }
     ],
     "summary": {
-      "pt": "Ex-militar e ex-Back Bay Brawler que largou tudo pela música. Venceu um concurso e lidera a banda da casa do Forlorn Hope, com um metal cromático rápido, estridente e potente.",
-      "en": "An ex-soldier and former Back Bay Brawler who hung it all up for music. She won a contest and now leads the Forlorn Hope's house band with fast, shrill, powerful chromatic metal."
+      "pt": "Ex-militar e ex-Back Bay Brawler que largou tudo pela música. Venceu um concurso e lidera a banda da casa do Forlorn Hope, com um metal cromático rápido, estridente e potente. Toca uma KillStrom Power Chord. O passado antes da gangue é mistério, e ela recusou liderar os Brawlers quando o grupo rachou.",
+      "en": "An ex-soldier and former Back Bay Brawler who hung it all up for music. She won a contest and now leads the Forlorn Hope's house band with fast, shrill, powerful chromatic metal. She plays a KillStrom Power Chord. Her past before the gang is a mystery, and she refused to lead the Brawlers when the group split."
     },
     "sheetNote": null,
     "sheet": null
@@ -10781,19 +10918,20 @@
   {
     "id": "lily",
     "name": "Lily",
-    "aliases": [],
+    "aliases": ["Lily Ramos", "Lily Larson"],
     "kind": "profile",
-    "role": null,
+    "role": "Tech",
     "roleRank": null,
     "rep": null,
     "affiliation": "Stems & Seeds",
     "sources": [
       { "book": "Tales of the RED", "page": 188 },
-      { "book": "Tales of the RED", "page": 42 }
+      { "book": "Tales of the RED", "page": 42 },
+      { "book": "Hope Reborn+", "page": 10 }
     ],
     "summary": {
-      "pt": "Jardineira-chefe do Stems & Seeds, coletivo de jardinagem de guerrilha perto da Night City University. Em A Bucket of Popcorn-Flavored Kibble, a complicação dela é querer um autógrafo de Mael Cartaret.",
-      "en": "Head gardener at Stems & Seeds, a guerrilla gardening group based near Night City University. In A Bucket of Popcorn-Flavored Kibble her complication is that she wants Mael Cartaret's autograph."
+      "pt": "Jardineira-chefe do Stems & Seeds, coletivo de jardinagem de guerrilha perto da Night City University. Em A Bucket of Popcorn-Flavored Kibble, a complicação dela é querer um autógrafo de Mael Cartaret. Hope Reborn+ a chama de Lily Ramos, ex-pesquisadora da Petrochem que ficou sem emprego quando a Continental Brands se separou. A lista de locais do mesmo PDF escreve Lily Larson.",
+      "en": "Head gardener at Stems & Seeds, a guerrilla gardening group based near Night City University. In A Bucket of Popcorn-Flavored Kibble her complication is that she wants Mael Cartaret's autograph. Hope Reborn+ calls her Lily Ramos, a former Petrochem researcher left unemployed by the Continental Brands breakaway. The location list in the same PDF writes Lily Larson."
     },
     "sheetNote": null,
     "sheet": null
@@ -10802,20 +10940,53 @@
     "id": "lotus-lemarch",
     "name": "Lotus LeMarch",
     "aliases": [],
-    "kind": "profile",
+    "kind": "sheet",
     "role": "Tech",
-    "roleRank": null,
-    "rep": null,
+    "roleRank": 8,
+    "rep": 2,
     "affiliation": null,
     "sources": [
-      { "book": "Tales of the RED", "page": 188 }
+      { "book": "Tales of the RED", "page": 188 },
+      { "book": "Tales of the RED+", "page": 4 }
     ],
     "summary": {
       "pt": "Tech habilidoso que inventava cyberware para a Arasaka antes da 4ª Guerra Corporativa. Fez muitos inimigos e hoje prefere uma vida isolada, atendendo amigos de amigos com problemas interessantes.",
       "en": "A gifted Tech who designed cyberware for Arasaka before the 4th Corporate War. The job earned him many enemies and now prefers isolation, taking jobs from friends of friends with interesting problems."
     },
-    "sheetNote": null,
-    "sheet": null
+    "sheetNote": {
+      "pt": "Ficha cortada do livro e publicada em Tales of the RED+; a biografia está em Tales of the RED, p. 188.",
+      "en": "Sheet cut from the book and published in Tales of the RED+; the biography is in Tales of the RED, p. 188."
+    },
+    "sheet": {
+      "hp": 35,
+      "seriouslyWounded": 18,
+      "deathSave": 5,
+      "stats": { "INT": 8, "REF": 4, "DEX": 4, "TECH": 8, "COOL": 4, "WILL": 4, "MOVE": 5, "BODY": 5, "EMP": 4 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Popup Very Heavy Pistol", "skill": "Handgun", "attackBase": 6, "damage": "4d6", "rof": 1, "magazine": null, "class": "VeryHeavyPistol", "melee": false, "notes": null }
+      ],
+      "armor": [],
+      "skills": {
+        "Athletics": 6, "Basic Tech": 17, "Brawling": 6, "Concentration": 10,
+        "Conversation": 7, "Cybertech": 17, "Education": 13, "Electronics/Security Tech": 17,
+        "Evasion": 6, "First Aid": 13, "Handgun": 6, "Human Perception": 7,
+        "Land Vehicle Tech": 11, "Language (English)": 14, "Language (Streetslang)": 12, "Local Expert (Little Europe)": 10,
+        "Perception": 13, "Persuasion": 7, "Science (Physics)": 13, "Stealth": 9,
+        "Weaponstech": 17
+      },
+      "gear": ["Very Heavy Pistol Ammo x8", "Agent", "Anti-Smog Breathing Mask", "Duct Tape x2", "Flashlight", "Tech Bag"],
+      "cyberware": ["Cyberarm x2 w/ Popup Very Heavy Pistol (left) and Tool Hands (both)", "Cybereyes x2 w/ Image Enhance and MicroOptics", "Neural Link w/ Interface Plugs"],
+      "specials": [
+        {
+          "name": "Maker",
+          "text": {
+            "pt": "Role Ability Maker no Rank 8 (Field Exp 2, Up Exp 4, Fab Exp 4, Inv Exp 6).",
+            "en": "Role Ability Maker at Rank 8 (Field Exp 2, Up Exp 4, Fab Exp 4, Inv Exp 6)."
+          }
+        }
+      ]
+    }
   },
   {
     "id": "lowball",
@@ -10898,16 +11069,17 @@
     "name": "Marianne Freeman",
     "aliases": [],
     "kind": "profile",
-    "role": null,
+    "role": "Tech",
     "roleRank": null,
     "rep": null,
     "affiliation": "Forlorn Hope",
     "sources": [
-      { "book": "Tales of the RED", "page": 189 }
+      { "book": "Tales of the RED", "page": 189 },
+      { "book": "Hope Reborn+", "page": 10 }
     ],
     "summary": {
-      "pt": "Co-dona e bartender-chefe do Forlorn Hope há décadas, de humor ferino. Trata os Edgerunners de que gosta como \"seus filhos\" e é especialmente maternal, com sarcasmo, com clientes trans.",
-      "en": "Co-owner and head bartender of the Forlorn Hope for decades, with a wicked sense of humor. She treats the Edgerunners she likes as \"her kids\" and is, sarcastically, especially motherly to her transgender patrons."
+      "pt": "Co-dona e bartender-chefe do Forlorn Hope há décadas, de humor ferino. Trata os Edgerunners de que gosta como \"seus filhos\" e é especialmente maternal, com sarcasmo, com clientes trans. Hoje administra o bar em tempo integral para que o marido, John Freeman, cuide dos veteranos. Por trás das pegadinhas, teme a vida depois da morte dele.",
+      "en": "Co-owner and head bartender of the Forlorn Hope for decades, with a wicked sense of humor. She treats the Edgerunners she likes as \"her kids\" and is, sarcastically, especially motherly to her transgender patrons. She now runs the bar full-time so her husband, John Freeman, can look after veterans. Behind the pranks she dreads life after his death."
     },
     "sheetNote": null,
     "sheet": null
@@ -11054,20 +11226,55 @@
     "id": "michael-deckard",
     "name": "Michael Deckard",
     "aliases": [],
-    "kind": "profile",
+    "kind": "sheet",
     "role": "Exec",
-    "roleRank": null,
-    "rep": null,
+    "roleRank": 7,
+    "rep": 4,
     "affiliation": "Petrochem",
     "sources": [
-      { "book": "Tales of the RED", "page": 189 }
+      { "book": "Tales of the RED", "page": 189 },
+      { "book": "Tales of the RED+", "page": 5 }
     ],
     "summary": {
       "pt": "Executivo ambicioso da Petrochem que criou a Cactus Water para se livrar de um fracasso. Quando a filha Layla começou a questionar a Corp, mandou o filho Roman resolver, o que terminou em duas mortes. Desertou para a Biotechnica e ganhou uma amante.",
       "en": "An ambitious Petrochem executive who invented Cactus Water to escape blame for a failed project. When daughter Layla began questioning the Corp, he sent son Roman to handle it, which ended in two deaths. He defected to Biotechnica and took a new mistress."
     },
-    "sheetNote": null,
-    "sheet": null
+    "sheetNote": {
+      "pt": "Ficha cortada do livro e publicada em Tales of the RED+; a biografia está em Tales of the RED, p. 189.",
+      "en": "Sheet cut from the book and published in Tales of the RED+; the biography is in Tales of the RED, p. 189."
+    },
+    "sheet": {
+      "hp": 45,
+      "seriouslyWounded": 23,
+      "deathSave": 6,
+      "stats": { "INT": 6, "REF": 6, "DEX": 6, "TECH": 3, "COOL": 8, "WILL": 7, "MOVE": 5, "BODY": 6, "EMP": 4 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Excellent Quality Medium Pistol", "skill": "Handgun", "attackBase": 8, "damage": "2d6", "rof": 2, "magazine": null, "class": "MediumPistol", "melee": false, "notes": "Excellent Quality" }
+      ],
+      "armor": [
+        { "location": "Body", "name": "Kevlar", "sp": 7 }
+      ],
+      "skills": {
+        "Accounting": 12, "Athletics": 8, "Brawling": 8, "Bureaucracy": 12,
+        "Business": 12, "Concentration": 9, "Conversation": 11, "Deduction": 12,
+        "Education": 12, "Evasion": 10, "First Aid": 5, "Handgun": 8,
+        "Human Perception": 11, "Language (English)": 10, "Language (Streetslang)": 8, "Lip Reading": 12,
+        "Local Expert (Exec Zone)": 8, "Perception": 10, "Personal Grooming": 12, "Persuasion": 14,
+        "Science (Biochemistry)": 10
+      },
+      "gear": ["Medium Pistol Ammo x8", "Businesswear Jewelry", "Memory Chip x2"],
+      "cyberware": ["Biomonitor", "Cyberaudio Suite w/ Internal Agent", "Cybereye w/ Chyron"],
+      "specials": [
+        {
+          "name": "Teamwork",
+          "text": {
+            "pt": "Role Ability Teamwork no Rank 7 (Covert Operative - Anna, Company Driver - Jeeves).",
+            "en": "Role Ability Teamwork at Rank 7 (Covert Operative - Anna, Company Driver - Jeeves)."
+          }
+        }
+      ]
+    }
   },
   {
     "id": "oliver-riddle",
@@ -11262,21 +11469,66 @@
   {
     "id": "veronica-stiles",
     "name": "Veronica Stiles",
-    "aliases": [],
-    "kind": "profile",
-    "role": null,
-    "roleRank": null,
-    "rep": null,
+    "aliases": ["Major", "Vicky"],
+    "kind": "sheet",
+    "role": "Exec",
+    "roleRank": 4,
+    "rep": 7,
     "affiliation": "Militech",
     "sources": [
-      { "book": "Tales of the RED", "page": 193 }
+      { "book": "Tales of the RED", "page": 193 },
+      { "book": "Tales of the RED+", "page": 5 },
+      { "book": "Hope Reborn+", "page": 17 }
     ],
     "summary": {
       "pt": "Major da Militech, ex-aprendiz de uma wrangler e depois veterana das forças especiais. Perdeu o marido numa operação e a filha Jezz, e, sem apoio dos superiores para a teoria da IA rebelde, gastou economias e favores para destruir o Reaper.",
       "en": "A Militech Major, once a wrangler's apprentice and later a special-forces veteran. She lost her husband on an operation and then her daughter Jezz, and with no backing from her superiors for her rogue-AI theory she has spent savings and favors to flatline the Reaper."
     },
-    "sheetNote": null,
-    "sheet": null
+    "sheetNote": {
+      "pt": "Ficha cortada do livro e publicada em Tales of the RED+; a biografia está em Tales of the RED, p. 193.",
+      "en": "Sheet cut from the book and published in Tales of the RED+; the biography is in Tales of the RED, p. 193."
+    },
+    "sheet": {
+      "hp": 45,
+      "seriouslyWounded": 23,
+      "deathSave": 6,
+      "stats": { "INT": 6, "REF": 7, "DEX": 8, "TECH": 3, "COOL": 5, "WILL": 7, "MOVE": 5, "BODY": 6, "EMP": 4 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Excellent Quality Heavy Pistol", "skill": "Handgun", "attackBase": 13, "damage": "3d6", "rof": 2, "magazine": null, "class": "HeavyPistol", "melee": false, "notes": "Excellent Quality" },
+        { "name": "Light Melee Weapon", "skill": "Melee Weapon", "attackBase": 12, "damage": "1d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Light Armorjack", "sp": 11 },
+        { "location": "Body", "name": "Light Armorjack", "sp": 11 }
+      ],
+      "skills": {
+        "Accounting": 12, "Athletics": 10, "Brawling": 14, "Bureaucracy": 12,
+        "Business": 12, "Concentration": 9, "Conversation": 7, "Deduction": 12,
+        "Education": 12, "Evasion": 14, "First Aid": 5, "Handgun": 13,
+        "Human Perception": 10, "Language (English)": 10, "Language (Streetslang)": 8, "Local Expert (NorCal Military Base)": 8,
+        "Melee Weapon": 12, "Perception": 12, "Personal Grooming": 7, "Persuasion": 10,
+        "Shoulder Arms": 13, "Stealth": 13, "Wardrobe & Style": 7
+      },
+      "gear": ["Heavy Pistol Ammo x12", "Agent", "Businesswear Jewelry", "Disposable Cellphone x2", "Smart Glasses w/ Chyron, Image Enhance, and Targeting Scope"],
+      "cyberware": ["Biomonitor", "Neural Link w/ Sandevistan and Subdermal Grip"],
+      "specials": [
+        {
+          "name": "Teamwork",
+          "text": {
+            "pt": "Role Ability Teamwork no Rank 4 (Company Technician - Sall3 Smite).",
+            "en": "Role Ability Teamwork at Rank 4 (Company Technician - Sall3 Smite)."
+          }
+        },
+        {
+          "name": "Combat Awareness",
+          "text": {
+            "pt": "Role Ability Combat Awareness no Rank 4.",
+            "en": "Role Ability Combat Awareness at Rank 4."
+          }
+        }
+      ]
+    }
   },
   {
     "id": "vesper",
@@ -12097,7 +12349,7 @@
     "roleRank": null,
     "rep": null,
     "affiliation": null,
-    "sources": [{"book": "Interface RED Volume 3", "page": 38}, {"book": "Midnight with the Upload", "page": 2}],
+    "sources": [{"book": "Interface RED Volume 3", "page": 38}, {"book": "Midnight with the Upload", "page": 2}, { "book": "Interface RED Volume 1", "page": 49 }],
     "summary": {
       "pt": "Vendedor de cyberdecks e hardware do Midnight Market, com quatro olhos cibernéticos e um terceiro cyberarm saindo do colarinho. Compra gravações de flatline e circula o boato de ser cultista de R.A.B.I.D.S. ou agente infiltrado da Netwatch.",
       "en": "Cyberdeck and hardware dealer at the Midnight Market, with four cybereyes and a third cyberarm rising from the collar. He buys flatline recordings, and rumor has him as either a R.A.B.I.D.S. cultist or an undercover Netwatch agent."
@@ -13158,7 +13410,7 @@
     "roleRank": null,
     "rep": null,
     "affiliation": "Today At The Source",
-    "sources": [{"book": "Woodchipper’s Garage", "page": 2}],
+    "sources": [{"book": "Woodchipper’s Garage", "page": 2}, { "book": "Interface RED Volume 1", "page": 6 }],
     "summary": {
       "pt": "Jornalista freelancer que já escreveu para vários screamsheets, incluindo o Night City Today News, e passou a cobrir notícias de empresas na The Glen antes de lançar a Garden Patch independente Today At The Source. A primeira série trata de armas e começa com Woodchipper.",
       "en": "Freelance journalist who has written for several screamsheets, including Night City Today News, and covered the corporate beat in The Glen before launching the independent Garden Patch Today At The Source. The first series is about guns and starts with Woodchipper."
@@ -13213,6 +13465,1592 @@
     "summary": {
       "pt": "Apresentadora que se define como entusiasta de ração de pasta de amendoim e \"Demônio\" certificado da Segotari Station no Playland by the Sea. Faz listas retrospectivas dos melhores jogos de cada geração da Segotari, montadas a partir de enquetes na própria Garden Patch.",
       "en": "Host who calls herself a Peanut Butter Kibble enthusiast and holds a \"Demon\" certification at the Segotari Station in Playland by the Sea. She makes retrospective lists of the best games from each Segotari generation, compiled from surveys on her own Garden Patch."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "mover",
+    "name": "Mover",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Solo",
+    "roleRank": 4,
+    "rep": null,
+    "affiliation": null,
+    "sources": [{ "book": "Interface RED Volume 1", "page": 16 }],
+    "summary": {
+      "pt": "Ficha pré-gerada de Solo do Single Shot Pack, um dos dez edgerunners que aparecem nas imagens do livro básico. Combina Assault Rifle, Very Heavy Pistol e arma pesada de corpo a corpo com Sandevistan. O próprio pack sugere usar essas fichas como NPCs.",
+      "en": "A pregenerated Solo from the Single Shot Pack, one of the ten edgerunners shown in the art of the core rulebook. Pairs an Assault Rifle, a Very Heavy Pistol and a heavy melee weapon with a Sandevistan. The pack itself suggests running these sheets as NPCs."
+    },
+    "sheetNote": {
+      "pt": "Personagem pré-gerado (Streetrat) sem Lifepath nem Reputação impressa. EMP 3 é o valor atual, com o cyberware instalado; o máximo é 5. O livro conta os pré-gerados como Lieutenant.",
+      "en": "Pregenerated character (Streetrat), with no Lifepath or printed Reputation. EMP 3 is the current value with the installed cyberware; the maximum is 5. The book counts the pregens as Lieutenants."
+    },
+    "sheet": {
+      "hp": 45,
+      "seriouslyWounded": 23,
+      "deathSave": 7,
+      "stats": { "INT": 7, "REF": 7, "DEX": 6, "TECH": 5, "COOL": 7, "WILL": 6, "LUCK": 6, "MOVE": 7, "BODY": 7, "EMP": 3 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Heavy Melee Weapon", "skill": "Melee Weapon", "attackBase": 12, "damage": "3d6", "rof": 2, "magazine": null, "class": "HeavyMelee", "melee": true, "notes": "2 handed, not concealable" },
+        { "name": "Assault Rifle", "skill": "Shoulder Arms", "attackBase": 13, "damage": "5d6", "rof": 1, "magazine": 25, "class": "AssaultRifle", "autofireMultiplier": 4, "melee": false, "notes": "Autofire, not concealable. Mags: 3" },
+        { "name": "Very Heavy Pistol", "skill": "Handgun", "attackBase": 13, "damage": "4d6", "rof": 1, "magazine": 8, "class": "VeryHeavyPistol", "melee": false, "notes": "Not concealable. Mags: 8" }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Light Armorjack", "sp": 11 },
+        { "location": "Body", "name": "Light Armorjack", "sp": 11 }
+      ],
+      "skills": {
+        "Athletics": 8, "Autofire": 13, "Brawling": 8, "Concentration": 8, "Conversation": 5, "Education": 9, "Evasion": 12,
+        "First Aid": 11, "Handgun": 13, "Human Perception": 5, "Interrogation": 13, "Language (Streetslang)": 9, "Local Expert (Your Home)": 9,
+        "Melee Weapon": 12, "Perception": 13, "Persuasion": 9, "Resist Torture/Drugs": 12, "Shoulder Arms": 13, "Stealth": 8, "Tactics": 13
+      },
+      "gear": ["Agent"],
+      "cyberware": ["Biomonitor", "Neural Link", "Sandevistan Speedware"],
+      "specials": [
+        {
+          "name": "Combat Awareness",
+          "text": {
+            "pt": "Role Ability Combat Awareness no Rank 4. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Combat Awareness at Rank 4. Role Ability bonuses are not included in the Skill Bases."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "redtail",
+    "name": "Redtail",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Medtech",
+    "roleRank": 4,
+    "rep": null,
+    "affiliation": null,
+    "sources": [{ "book": "Interface RED Volume 1", "page": 24 }],
+    "summary": {
+      "pt": "Ficha pré-gerada de Medtech do Single Shot Pack, um dos dez edgerunners que aparecem nas imagens do livro básico. Atende em campo com Medtech Bag e Airhypo, e cobre o grupo de longe com Assault Rifle e cybereye com TeleOptics. O próprio pack sugere usar essas fichas como NPCs.",
+      "en": "A pregenerated Medtech from the Single Shot Pack, one of the ten edgerunners shown in the art of the core rulebook. Treats people in the field with a Medtech Bag and an Airhypo, and covers the crew from afar with an Assault Rifle and a TeleOptics cybereye. The pack itself suggests running these sheets as NPCs."
+    },
+    "sheetNote": {
+      "pt": "Personagem pré-gerado (Streetrat) sem Lifepath nem Reputação impressa. EMP 4 é o valor atual, com o cyberware instalado; o máximo é 6. O livro conta os pré-gerados como Lieutenant.",
+      "en": "Pregenerated character (Streetrat), with no Lifepath or printed Reputation. EMP 4 is the current value with the installed cyberware; the maximum is 6. The book counts the pregens as Lieutenants."
+    },
+    "sheet": {
+      "hp": 35,
+      "seriouslyWounded": 18,
+      "deathSave": 5,
+      "stats": { "INT": 8, "REF": 5, "DEX": 5, "TECH": 8, "COOL": 5, "WILL": 5, "LUCK": 6, "MOVE": 6, "BODY": 5, "EMP": 4 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Assault Rifle", "skill": "Shoulder Arms", "attackBase": 11, "damage": "5d6", "rof": 1, "magazine": 25, "class": "AssaultRifle", "autofireMultiplier": 4, "melee": false, "notes": "Autofire; not concealable. Mags: 4" }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Light Armorjack", "sp": 11 },
+        { "location": "Body", "name": "Light Armorjack", "sp": 11 }
+      ],
+      "skills": {
+        "Athletics": 7, "Basic Tech": 14, "Brawling": 7, "Concentration": 7, "Conversation": 10, "Cybertech": 12, "Deduction": 14,
+        "Education": 14, "Evasion": 11, "First Aid": 10, "Human Perception": 10, "Language (Streetslang)": 10, "Local Expert (Your Home)": 10,
+        "Paramedic": 14, "Perception": 10, "Persuasion": 7, "Resist Torture/Drugs": 9, "Science (Choose Specialty)": 14, "Shoulder Arms": 11, "Stealth": 7
+      },
+      "gear": ["Smoke Grenade x2", "Agent", "Airhypo", "Flashlight", "Glow Paint", "Medtech Bag", "Bulletproof Shield"],
+      "cyberware": ["Cybereye w/ TeleOptics", "Nasal Filters", "Biomonitor"],
+      "specials": [
+        {
+          "name": "Medicine",
+          "text": {
+            "pt": "Role Ability Medicine no Rank 4. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Medicine at Rank 4. Role Ability bonuses are not included in the Skill Bases."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "chanda-mishra",
+    "name": "Chanda Mishra",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Exec",
+    "roleRank": 4,
+    "rep": null,
+    "affiliation": null,
+    "sources": [{ "book": "Interface RED Volume 1", "page": 30 }],
+    "summary": {
+      "pt": "Ficha pré-gerada de Exec do Single Shot Pack, uma das dez que aparecem nas imagens do livro básico. Leva Radio Communicators para o grupo, um Scrambler/Descrambler e uma Very Heavy Pistol, com Toxin Binder e Internal Agent implantados. O próprio pack sugere usar essas fichas como NPCs.",
+      "en": "A pregenerated Exec from the Single Shot Pack, one of the ten shown in the art of the core rulebook. Carries Radio Communicators for the crew, a Scrambler/Descrambler and a Very Heavy Pistol, with a Toxin Binder and an Internal Agent implanted. The pack itself suggests running these sheets as NPCs."
+    },
+    "sheetNote": {
+      "pt": "Personagem pré-gerado (Streetrat) sem Lifepath nem Reputação impressa. EMP 5 é o valor atual, com o cyberware instalado; o máximo é 7. O livro conta os pré-gerados como Lieutenant.",
+      "en": "Pregenerated character (Streetrat), with no Lifepath or printed Reputation. EMP 5 is the current value with the installed cyberware; the maximum is 7. The book counts the pregens as Lieutenants."
+    },
+    "sheet": {
+      "hp": 40,
+      "seriouslyWounded": 20,
+      "deathSave": 5,
+      "stats": { "INT": 5, "REF": 7, "DEX": 7, "TECH": 3, "COOL": 6, "WILL": 7, "LUCK": 6, "MOVE": 5, "BODY": 5, "EMP": 5 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Very Heavy Pistol", "skill": "Handgun", "attackBase": 13, "damage": "4d6", "rof": 1, "magazine": 8, "class": "VeryHeavyPistol", "melee": false, "notes": "Not concealable. Mags: 7" }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Light Armorjack", "sp": 11 },
+        { "location": "Body", "name": "Light Armorjack", "sp": 11 }
+      ],
+      "skills": {
+        "Accounting": 11, "Athletics": 9, "Brawling": 9, "Bureaucracy": 11, "Business": 11, "Concentration": 9, "Conversation": 11,
+        "Deduction": 11, "Education": 11, "Evasion": 13, "First Aid": 5, "Handgun": 13, "Human Perception": 11, "Language (Streetslang)": 7,
+        "Lip Reading": 11, "Local Expert (Your Home)": 7, "Perception": 9, "Personal Grooming": 10, "Persuasion": 12, "Stealth": 9
+      },
+      "gear": ["Radio Communicator x4", "Scrambler/Descrambler"],
+      "cyberware": ["Toxin Binder", "Cyberaudio Suite w/ Internal Agent", "Biomonitor"],
+      "specials": [
+        {
+          "name": "Teamwork",
+          "text": {
+            "pt": "Role Ability Teamwork no Rank 4. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Teamwork at Rank 4. Role Ability bonuses are not included in the Skill Bases."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "minnie",
+    "name": "Minnie",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Elflines Online",
+    "sources": [{ "book": "Interface RED Volume 1", "page": 48 }],
+    "summary": {
+      "pt": "Garçonete de um restaurante sofisticado de Night City, charmosa e discreta sobre o hobby. Só toca no assunto ao ver produtos de Elflines Online num cliente, e aí se revela uma raider de elite com vários boss kills inéditos no mundo. Melhor não descobrir o que acontece com a comida de quem é de uma Elfline rival.",
+      "en": "Waitress at an upscale Night City restaurant, charming and quiet about her hobby. She only brings it up when she spots Elflines Online merch on a customer, and then turns out to be an elite raider with several world-first boss kills. Better not learn what happens to the meal of someone from a rival Elfline."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "tony",
+    "name": "Tony",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Elflines Online",
+    "sources": [{ "book": "Interface RED Volume 1", "page": 48 }],
+    "summary": {
+      "pt": "Aposentado grisalho que mora com o filho, a nora e os netos, e ajuda nas contas com a pensão. Os netos o levaram para Elflines Online, a maior diversão que teve desde que ficou viúvo. Quando as crianças vão dormir, ele continua farmando madrugada adentro.",
+      "en": "A gray-haired retiree who lives with his son, daughter-in-law and grandkids and helps with the bills from his pension. The grandkids got him into Elflines Online, the most fun he has had since he was widowed. Once the kids are in bed, he keeps grinding deep into the night."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "hayabusa",
+    "name": "Hayabusa",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Elflines Online",
+    "sources": [{ "book": "Interface RED Volume 1", "page": 48 }],
+    "summary": {
+      "pt": "Ex-atirador de elite que serviu a segurança corporativa e até o governo dos EUA, e guardou o pagamento em vez de gastar. Aposentou-se para casar, entediou-se e caiu em Elflines Online. A companheira reclama da falta de atenção, e as raids lembram tanto ataques corporativos que ele pensa em abrir o arsenal escondido em casa.",
+      "en": "A former elite sharpshooter who worked corporate security and even for the U.S. government, banking his pay instead of spending it. He retired to get married, grew bored and fell into Elflines Online. His sweetheart resents the neglect, and raiding feels so much like corporate work that he is tempted to open the armory hidden at home."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "ami",
+    "name": "Ami",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Elflines Online",
+    "sources": [{ "book": "Interface RED Volume 1", "page": 48 }],
+    "summary": {
+      "pt": "Poserganger moe de nome de nascimento desconhecido, que frequenta cafés de boba com um rifle num estojo de violoncelo. Viciou em Elflines Online e vive suspirando por príncipes elfos, para desespero do grupo, que precisa de força na guerra contra as Death Metal Princesses. Cogita um bodysculpt para ter orelhas pontudas.",
+      "en": "A moe poserganger, birth name unknown, who carries a rifle to boba cafés inside a cello case. Hooked on Elflines Online and forever sighing over elven princes, to the dismay of a crew that needs its muscle against the Death Metal Princesses. Considering a bodysculpt for pointed ears."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "ben",
+    "name": "Ben",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Elflines Online",
+    "sources": [{ "book": "Interface RED Volume 1", "page": 48 }],
+    "summary": {
+      "pt": "Adolescente alto e desajeitado, filho de Execs de escalão médio, com boa comida e escola particular, mas sem talento nenhum para esportes. Em Elflines Online é um dos melhores da série, e começa a gostar da atenção dos colegas, mesmo que ela vá para o personagem e não para ele.",
+      "en": "A tall, awkward teenager, son of mid-level Execs, with good food and a private school but no talent for sports. In Elflines Online he is one of the best in his grade, and he is starting to enjoy the attention from his peers, even if it goes to his character and not to him."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "mountain",
+    "name": "Mountain",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Elflines Online",
+    "sources": [{ "book": "Interface RED Volume 1", "page": 48 }],
+    "summary": {
+      "pt": "Orderly enorme da clínica From the Embers, onde limpa sangue e segura pacientes agressivos. Fez jus ao apelido e é boa gente. Joga Elflines Online com um amigo da enfermagem para aliviar a pressão depois do plantão.",
+      "en": "A huge orderly at the From the Embers clinic, where he mops up blood and holds back combative patients. He earned the nickname and is a great guy. He plays Elflines Online with a nurse friend to decompress after a shift."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "edna",
+    "name": "Edna",
+    "aliases": ["Granny Ed"],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Elflines Online",
+    "sources": [{ "book": "Interface RED Volume 1", "page": 48 }],
+    "summary": {
+      "pt": "Influencer da Garden patrocinada pela Segotari: uma avó de cabelo azulado que aprendeu o jogo com os netos e passou a transmitir partidas para dar aos jovens exemplos melhores. Orienta novatos e conhece o crafting a fundo. Mata PKers com estilo, em kill-cams de 360 graus.",
+      "en": "A Garden influencer sponsored by Segotari: a bluish-haired grandma who learned the game from her grandsons and began streaming to give young gamers better role models. She guides newbies and knows crafting inside out. She kills PKers with style, on 360-degree kill-cams."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "lapin-and-kirk",
+    "name": "Lapin and Kirk",
+    "aliases": ["Sweetheart Bandits"],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Elflines Online",
+    "sources": [{ "book": "Interface RED Volume 1", "page": 49 }],
+    "summary": {
+      "pt": "Recém-casados que se conheceram, se apaixonaram e casaram em Elflines Online. Fora do jogo são os Sweetheart Bandits, que assaltam instituições financeiras só para bancar de quatro a seis meses de jogatina. Lavam o dinheiro farmando ouro no MMO, com desvios de centavos e ataques a contas corporativas.",
+      "en": "Newlyweds who met, fell in love and got married in Elflines Online. Outside the game they are the Sweetheart Bandits, who rob financial institutions only to fund four to six months of play. They launder the money by farming gold in the MMO, along with salami slicing and raids on corporate accounts."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "dallas",
+    "name": "Dallas",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Elflines Online",
+    "sources": [{ "book": "Interface RED Volume 1", "page": 49 }],
+    "summary": {
+      "pt": "Ex-balconista que um Fixer descobriu pelo talento em Elflines Online. Hoje faz parte do PVP competitivo e aceita assassinatos virtuais por ouro, que a empresária converte em eurobucks. Virou alvo do \"Offline PK\", jogadores irritados que o caçam na vida real, e vive escondido.",
+      "en": "A former store clerk discovered by a Fixer for his Elflines Online skills. Now he is on the competitive PVP scene, taking virtual hits for gold that his manager turns into Eurobucks. He has become a target of \"Offline PK\", angry players who hunt him in real life, so he lives in hiding."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "nyx",
+    "name": "Nyx",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Bladedancer",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Elflines Online",
+    "sources": [{ "book": "Interface RED Volume 1", "page": 49 }],
+    "summary": {
+      "pt": "Bladedancer pequena de maria-chiquinha rosa, adagas encantadas do tamanho do tronco e o mínimo de roupa possível. PKer por puro prazer, embosca quem está cumprindo missão em zonas de Miasma. Várias Elflines juntaram uma recompensa real em eb para quebrar os dedos de quem a joga.",
+      "en": "A tiny Bladedancer with pink pigtails, enchanted daggers as long as her torso and barely any clothes. A PKer for the pure joy of it, she ambushes questing players in Miasma zones. Several Elflines have pooled a real eb bounty to break her player's fingers."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "bur",
+    "name": "Bur",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Wayfarer",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Elflines Online",
+    "sources": [{ "book": "Interface RED Volume 1", "page": 49 }],
+    "summary": {
+      "pt": "Candidato a Wayfarer e o pior noob do servidor de Night City. Por engano, acampou no endgame das Razorfire Caverns com um elfo Rank 2, e morre a cada metro e meio enquanto tenta se arrastar para fora, Revive Sickness e tudo. Ainda não desistiu; talvez alguém o escolte.",
+      "en": "A would-be Wayfarer and the worst noob on the Night City server. By mistake he set camp in the Razorfire Caverns endgame with a Rank 2 elf, and he dies every meter and a half as he crawls out, Revive Sickness and all. He has not given up; maybe someone will escort him."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "wormwood",
+    "name": "Wormwood",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Bowmaster",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Elflines Online",
+    "sources": [{ "book": "Interface RED Volume 1", "page": 49 }],
+    "summary": {
+      "pt": "Veterano que comanda uma Elfline amigável para quem joga sem tempo para raids. De gambeson vermelho, recruta em cima de uma caixa de correio na cidade e leva novatos a dungeons toda semana. Bowmaster com uma cockatrice de estimação, faz um pouco de cada função.",
+      "en": "A veteran who runs a friendly Elfline for people with no time to raid. In his red gambeson he recruits from atop a town mailbox and takes newbies on weekly dungeon runs. A Bowmaster with a pet cockatrice, he covers a bit of every party role."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "tira",
+    "name": "Tira",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Elflines Online",
+    "sources": [{ "book": "Interface RED Volume 1", "page": 49 }],
+    "summary": {
+      "pt": "Acusada de ser farmer profissional porque passa o jogo colhendo recursos. De avental branco, chega antes de todos aos nodes e abastece o leilão, sem usar bots. Vende o gp que sobra para pagar o cube hotel, a Kibble e a assinatura.",
+      "en": "Accused of being a professional farmer because she spends the game gathering resources. In her white apron she beats everyone to the nodes and stocks the auction market, with no bots. She sells her spare gp to pay for her cube hotel, Kibble and subscription."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "salmistra",
+    "name": "Salmistra",
+    "aliases": ["Mistress of the Winds"],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Elflines Online",
+    "sources": [{ "book": "Interface RED Volume 1", "page": 50 }],
+    "summary": {
+      "pt": "Comanda uma das Elflines de roleplay mais exclusivas do servidor. De olhos perolados e pele violeta, escolhe cada traje a dedo e manda a Elfline inteira caçar quem copia o visual. Para entrar, são cinco mil palavras de história e uma boa atuação, mas não boa a ponto de ameaçá-la.",
+      "en": "She runs one of the most exclusive roleplaying Elflines on the server. With pearlescent eyes and violet skin, she picks every outfit with care and sends her whole Elfline after anyone who copies it. Joining takes a five-thousand-word backstory and good acting, though not good enough to threaten her."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "jinx",
+    "name": "Jinx",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Barkshield",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Elflines Online",
+    "sources": [{ "book": "Interface RED Volume 1", "page": 50 }],
+    "summary": {
+      "pt": "Barkshield que vive recrutando porque é um péssimo líder de raid. As noites com ele são gritos, palavrões e ameaças a quem morre no fogo, e a maioria desiste depois de três horas.",
+      "en": "A Barkshield who is always recruiting because he is a terrible raid leader. Nights with him mean screaming, profanity and threats for anyone who dies in the fire, and most people quit after three hours."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "moonshadow",
+    "name": "Moonshadow",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Warmheart",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Elflines Online",
+    "sources": [{ "book": "Interface RED Volume 1", "page": 50 }],
+    "summary": {
+      "pt": "Curandeiro Warmheart competente, raridade em qualquer servidor. Três Elflines se matam para recrutá-lo e toda raid dele acaba em emboscada, então o progresso parou. O jogador pensa em pagar a troca de nome e avatar para sumir.",
+      "en": "A competent Warmheart healer, a rarity on any server. Three Elflines keep killing each other to recruit him and every raid he joins ends in an ambush, so his progress has stalled. His player is thinking of paying for a name and avatar change to disappear."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "sorrel",
+    "name": "Sorrel",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Druid",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Elflines Online",
+    "sources": [{ "book": "Interface RED Volume 1", "page": 50 }],
+    "summary": {
+      "pt": "Druid brincalhão que trata Elflines Online como o jogo que é, e por isso mesmo rende em grupos improvisados. Aceita gente mal equipada e é paciente com novatos, que o veem como um irmão mais velho descolado.",
+      "en": "A goofy Druid who treats Elflines Online as the game it is, which is exactly why he shines in pickup groups. He accepts poorly geared players and is patient with newbies, who see him as a cool big brother."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "xxblackrockxx",
+    "name": "xxBlackrockxx",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Wildblood",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Elflines Online",
+    "sources": [{ "book": "Interface RED Volume 1", "page": 50 }],
+    "summary": {
+      "pt": "Wildblood rainha do dano do servidor, com as perícias otimizadas em planilha. Derruba qualquer alvo depressa, mas tira a atenção dos chefes do tank, e aí o grupo inteiro cai. Acha que tank que não dá conta precisa \"git gud\".",
+      "en": "The Wildblood damage queen of the server, with her skills optimized on a spreadsheet. She drops any target fast but pulls bosses away from the tank, and then the whole group falls. She thinks tanks who cannot keep up should \"git gud\"."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "lunchbox",
+    "name": "Lunchbox",
+    "aliases": ["Ameryssian"],
+    "kind": "profile",
+    "role": "Quickhand",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Elflines Online",
+    "sources": [{ "book": "Interface RED Volume 1", "page": 50 }],
+    "summary": {
+      "pt": "Quickhand que ganhou o apelido pela armadura de placas mais aprimorada do servidor. O avatar, que dizem ser um elfo bonito, não é visto sem ela há duas expansões. Trabalha como tank freelancer de raid, cobrando em gp.",
+      "en": "A Quickhand nicknamed for owning the most enhanced plate armor on the server. The avatar, said to be a handsome elf, has not been seen without it for two expansions. Lunchbox works as a freelance raid tank, paid in gp."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "organ-grinder",
+    "name": "Organ Grinder",
+    "aliases": ["Orson Grand"],
+    "kind": "sheet",
+    "role": "Medtech",
+    "roleRank": 2,
+    "rep": 1,
+    "affiliation": "The Bozos",
+    "sources": [{ "book": "Danger Gal Dossier+", "page": 6 }],
+    "summary": {
+      "pt": "Orson Grand era um Medtech promissor da Savage Docs até operar o próprio irmão ainda fantasiado de palhaço, depois de uma festa de Halloween, e matá-lo na mesa. Sumiu por meses e voltou com os Bozos como assistente médico de Big Top. Empunha o que chama de \"motosserra cirúrgica\" e sabe exatamente onde cortar para sangrar mais.",
+      "en": "Orson Grand was a promising Savage Docs Medtech until he operated on his own brother while still dressed as a clown after a Halloween party, and killed him on the table. He vanished for months and came back with the Bozos as medical assistant to Big Top. He wields what he calls a \"surgical chainsaw\" and knows exactly where to cut for the most blood."
+    },
+    "sheetNote": {
+      "pt": "Nível Hardened Mook.",
+      "en": "Hardened Mook tier."
+    },
+    "sheet": {
+      "hp": 35,
+      "seriouslyWounded": 18,
+      "deathSave": 6,
+      "stats": { "INT": 3, "REF": 3, "DEX": 7, "TECH": 5, "COOL": 3, "WILL": 4, "MOVE": 5, "BODY": 6, "EMP": 3 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Very Heavy Melee Weapon", "skill": "Melee Weapon", "attackBase": 13, "damage": "4d6", "rof": 1, "magazine": null, "class": null, "melee": true, "notes": null },
+        { "name": "Heavy Pistol", "skill": "Handgun", "attackBase": 5, "damage": "3d6", "rof": 2, "magazine": null, "class": "HeavyPistol", "melee": false, "notes": "Poor Quality" }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Skinweave", "sp": 7 },
+        { "location": "Body", "name": "Skinweave", "sp": 7 }
+      ],
+      "skills": {
+        "Athletics": 9, "Basic Tech": 7, "Brawling": 9, "Concentration": 6,
+        "Conversation": 5, "Cybertech": 8, "Education": 10, "Evasion": 12,
+        "First Aid": 7, "Handgun": 5, "Human Perception": 5, "Language (English)": 7,
+        "Language (Streetslang)": 5, "Local Expert (Little Europe)": 5, "Melee Weapon": 13, "Paramedic": 10,
+        "Perception": 6, "Persuasion": 5, "Surgery": 9
+      },
+      "gear": ["Junk H Pistol Ammo x16", "Agent", "Medtech Bag"],
+      "cyberware": ["Exotic Bodysculpting", "Skinweave"],
+      "specials": [
+        {
+          "name": "Medicine",
+          "text": {
+            "pt": "Role Ability Medicine no Rank 2 (Surgery 2). Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Medicine at Rank 2 (Surgery 2). Role Ability bonuses are not included in the Skill Bases."
+          }
+        },
+        {
+          "name": "Motosserra cirúrgica",
+          "text": {
+            "pt": "A Very Heavy Melee Weapon da ficha é a motosserra que ele chama de cirúrgica.",
+            "en": "The Very Heavy Melee Weapon on the sheet is the chainsaw he calls surgical."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "bloodhound",
+    "name": "Bloodhound",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Media",
+    "roleRank": 2,
+    "rep": 0,
+    "affiliation": "Shroomers",
+    "sources": [{ "book": "Danger Gal Dossier+", "page": 7 }],
+    "summary": {
+      "pt": "Shroomer nascido nos túneis, de cara comprida e triste, daí o apelido. Gosta de cozinhar, e foi esse hobby que o levou a comprar um Olfactory Boost. No ano de andança pela superfície tomou gosto por música e mídia, ficou amigo de Mallard e Capo e sonha em pagar um conapt com serviços de vigia.",
+      "en": "A tunnel-born Shroomer with a long, sad face, hence the nickname. He loves cooking, the hobby that led him to buy an Olfactory Boost. During his year wandering the surface he took to music and media, befriended Mallard and Capo, and dreams of paying for a conapt with lookout gigs."
+    },
+    "sheetNote": {
+      "pt": "Nível Hardened Mook. Na missão The Incident, do Danger Gal Dossier, é o \"Body #2\"; esta ficha é spoiler da missão. A biografia cita um Olfactory Boost que a lista de cyberware não traz.",
+      "en": "Hardened Mook tier. In The Incident mission of Danger Gal Dossier, this is \"Body #2\"; this sheet spoils the mission. The biography mentions an Olfactory Boost that the cyberware list leaves out."
+    },
+    "sheet": {
+      "hp": 30,
+      "seriouslyWounded": 15,
+      "deathSave": 4,
+      "stats": { "INT": 4, "REF": 4, "DEX": 4, "TECH": 5, "COOL": 6, "WILL": 4, "MOVE": 4, "BODY": 4, "EMP": 4 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Very Heavy Pistol", "skill": "Handgun", "attackBase": 10, "damage": "4d6", "rof": 1, "magazine": null, "class": "VeryHeavyPistol", "melee": false, "notes": "Poor Quality" },
+        { "name": "Light Melee Weapon", "skill": "Melee Weapon", "attackBase": 4, "damage": "1d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": "No Skill Base printed for this weapon; STAT only." }
+      ],
+      "armor": [
+        { "location": "Body", "name": "Kevlar", "sp": 7 }
+      ],
+      "skills": {
+        "Athletics": 6, "Brawling": 6, "Composition": 8, "Concentration": 6,
+        "Conversation": 6, "Education": 6, "Endurance": 8, "Evasion": 10,
+        "First Aid": 7, "Handgun": 10, "Human Perception": 6, "Language (English)": 8,
+        "Language (Streetslang)": 6, "Local Expert (Night City Tunnels)": 6, "Perception": 8, "Persuasion": 8,
+        "Resist Torture/Drugs": 8, "Science (Culinary)": 8, "Stealth": 6, "Wilderness Survival": 10
+      },
+      "gear": ["Basic VH Pistol Ammo x16", "Disposable Cell Phone", "Memory Chip", "Radio Scanner/Music Player", "Shroomer Token"],
+      "cyberware": ["Cybereye x2 w/ Low Light/Infrared/UV x2"],
+      "specials": [
+        {
+          "name": "Credibility",
+          "text": {
+            "pt": "Role Ability Credibility no Rank 2. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Credibility at Rank 2. Role Ability bonuses are not included in the Skill Bases."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "capo",
+    "name": "Capo",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Rockerboy",
+    "roleRank": 2,
+    "rep": 1,
+    "affiliation": "The Razor Squad",
+    "sources": [{ "book": "Danger Gal Dossier+", "page": 8 }],
+    "summary": {
+      "pt": "Filha de uma família corporativa tediosa de Little Europe, sempre metida em encrenca na escola. Um amigo da família a apresentou ao roller derby, e o jeito violento de jogar lhe rendeu fãs, uma vida de V-idol e uma parceria com a banda The Razor Squad. Sai com Bugout e aceita trabalhos porque derby e banda não pagam as roupas.",
+      "en": "Daughter of a dull corporate family from Little Europe, always in trouble at school. A family friend introduced her to roller derby, and her violent style earned her fans, a V-idol lifestyle and a collaboration with the band The Razor Squad. She goes out with Bugout and takes jobs because derby and the band do not pay for her clothes."
+    },
+    "sheetNote": {
+      "pt": "Nível Hardened Mook. Na missão The Incident, do Danger Gal Dossier, é a \"Patient #1\"; esta ficha é spoiler da missão.",
+      "en": "Hardened Mook tier. In The Incident mission of Danger Gal Dossier, this is a \"Patient #1\"; this sheet spoils the mission."
+    },
+    "sheet": {
+      "hp": 40,
+      "seriouslyWounded": 20,
+      "deathSave": 7,
+      "stats": { "INT": 3, "REF": 5, "DEX": 4, "TECH": 3, "COOL": 5, "WILL": 4, "MOVE": 5, "BODY": 7, "EMP": 5 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Heavy Pistol", "skill": "Handgun", "attackBase": 10, "damage": "3d6", "rof": 2, "magazine": null, "class": "HeavyPistol", "melee": false, "notes": "Poor Quality" },
+        { "name": "Light Melee Weapon", "skill": "Melee Weapon", "attackBase": 10, "damage": "1d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": null }
+      ],
+      "armor": [
+        { "location": "Body", "name": "Kevlar", "sp": 7 }
+      ],
+      "skills": {
+        "Athletics": 10, "Brawling": 10, "Concentration": 6, "Conversation": 7,
+        "Dance": 8, "Education": 5, "Evasion": 10, "First Aid": 5,
+        "Handgun": 10, "Human Perception": 7, "Language (English)": 7, "Language (Streetslang)": 5,
+        "Local Expert (Little Europe)": 5, "Melee Weapon": 10, "Perception": 5, "Personal Grooming": 7,
+        "Persuasion": 10, "Stealth": 6, "Wardrobe & Style": 7
+      },
+      "gear": ["Basic H Pistol Ammo x16", "Agent", "Inline Skates"],
+      "cyberware": ["Contraceptive Implant", "EMP Threading", "Grafted Muscle & Bone Lace", "Techhair"],
+      "specials": [
+        {
+          "name": "Charismatic Impact",
+          "text": {
+            "pt": "Role Ability Charismatic Impact no Rank 2. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Charismatic Impact at Rank 2. Role Ability bonuses are not included in the Skill Bases."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "mallard",
+    "name": "Mallard",
+    "aliases": ["Jayce Ballard"],
+    "kind": "sheet",
+    "role": "Fixer",
+    "roleRank": 2,
+    "rep": 1,
+    "affiliation": null,
+    "sources": [{ "book": "Danger Gal Dossier+", "page": 9 }],
+    "summary": {
+      "pt": "Jayce Ballard, Fixer em ascensão da Marina, batizado pela cor do moicano de Techhair e pela rima com o sobrenome. Revende achados de catadores e fofoca embalada como informação, com uma pequena equipe de amigos. Dizem que trabalha para Mister Amaze. A amizade com Bloodhound começou de olho nos cogumelos e acabou sendo de verdade.",
+      "en": "Jayce Ballard, a rising Fixer from the Marina, named for the color of his Techhair mohawk and the rhyme with his surname. He resells scavenger finds and gossip packaged as intel, backed by a small crew of friends. Rumor says he works for Mister Amaze. His friendship with Bloodhound began as a play for mushrooms and turned real."
+    },
+    "sheetNote": {
+      "pt": "Nível Hardened Mook. Na missão The Incident, do Danger Gal Dossier, é o \"Body #1\"; esta ficha é spoiler da missão.",
+      "en": "Hardened Mook tier. In The Incident mission of Danger Gal Dossier, this is o \"Body #1\"; this sheet spoils the mission."
+    },
+    "sheet": {
+      "hp": 30,
+      "seriouslyWounded": 15,
+      "deathSave": 4,
+      "stats": { "INT": 5, "REF": 4, "DEX": 4, "TECH": 5, "COOL": 5, "WILL": 4, "MOVE": 4, "BODY": 4, "EMP": 4 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Assault Rifle", "skill": "Shoulder Arms", "attackBase": 11, "damage": "5d6", "rof": 1, "magazine": null, "class": "AssaultRifle", "autofireMultiplier": 4, "melee": false, "notes": "Poor Quality" },
+        { "name": "Heavy Melee Weapon", "skill": "Melee Weapon", "attackBase": 10, "damage": "3d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": "Poor Quality" }
+      ],
+      "armor": [
+        { "location": "Body", "name": "Light Armorjack", "sp": 11 }
+      ],
+      "skills": {
+        "Athletics": 6, "Basic Tech": 10, "Brawling": 6, "Concentration": 6,
+        "Conversation": 6, "Education": 7, "Evasion": 10, "First Aid": 7,
+        "Human Perception": 6, "Language (English)": 9, "Language (Streetslang)": 7, "Local Expert (Heywood Industrial District)": 7,
+        "Melee Weapon": 10, "Perception": 7, "Persuasion": 10, "Shoulder Arms": 11,
+        "Stealth": 6, "Trading": 10
+      },
+      "gear": ["Basic Rifle Ammo x25", "Carryall", "Disposable Cell Phone", "Flashlight"],
+      "cyberware": ["Neural Link w/ Chipware Socket & Skill Chip (Accounting)"],
+      "specials": [
+        {
+          "name": "Operator",
+          "text": {
+            "pt": "Role Ability Operator no Rank 2. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Operator at Rank 2. Role Ability bonuses are not included in the Skill Bases."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "bugout",
+    "name": "Bugout",
+    "aliases": [],
+    "kind": "sheet",
+    "role": "Rockerboy",
+    "roleRank": 2,
+    "rep": 0,
+    "affiliation": "Shroomers",
+    "sources": [{ "book": "Danger Gal Dossier+", "page": 10 }],
+    "summary": {
+      "pt": "Shroomer que varria os túneis contra gangues e pragas até Bloodhound, amigo de infância, apresentá-lo aos amigos da superfície. Apaixonou-se de cara por Capo, a primeira pessoa da idade dele que não é parente. Tanto faz para ele se ela descer para os túneis ou se ele subir para a cidade, desde que fiquem juntos.",
+      "en": "A Shroomer who swept the tunnels of gangers and vermin until Bloodhound, his childhood friend, introduced him to the surface crowd. He fell for Capo at once, the first person his age who is not a relative. He does not care if she moves underground or he moves to the city, as long as they stay together."
+    },
+    "sheetNote": {
+      "pt": "Nível Hardened Mook. Na missão The Incident, do Danger Gal Dossier, é o \"Patient #2\"; esta ficha é spoiler da missão.",
+      "en": "Hardened Mook tier. In The Incident mission of Danger Gal Dossier, this is o \"Patient #2\"; this sheet spoils the mission."
+    },
+    "sheet": {
+      "hp": 35,
+      "seriouslyWounded": 18,
+      "deathSave": 5,
+      "stats": { "INT": 4, "REF": 5, "DEX": 4, "TECH": 4, "COOL": 4, "WILL": 4, "MOVE": 5, "BODY": 5, "EMP": 4 },
+      "armoredStats": {},
+      "weapons": [
+        { "name": "Shotgun", "skill": "Shoulder Arms", "attackBase": 12, "damage": "5d6", "rof": 1, "magazine": null, "class": "Shotgun", "melee": false, "notes": "Poor Quality" },
+        { "name": "Light Melee Weapon", "skill": "Melee Weapon", "attackBase": 4, "damage": "1d6", "rof": 2, "magazine": null, "class": null, "melee": true, "notes": "No Skill Base printed for this weapon; STAT only." }
+      ],
+      "armor": [
+        { "location": "Head", "name": "Kevlar", "sp": 7 },
+        { "location": "Body", "name": "Kevlar", "sp": 7 }
+      ],
+      "skills": {
+        "Athletics": 6, "Brawling": 6, "Concentration": 6, "Conversation": 6,
+        "Drive Land Vehicle": 10, "Education": 6, "Evasion": 12, "First Aid": 6,
+        "Human Perception": 6, "Language (English)": 8, "Language (Streetslang)": 6, "Local Expert (Night City Tunnels)": 6,
+        "Perception": 10, "Persuasion": 6, "Shoulder Arms": 12, "Stealth": 8,
+        "Tracking": 10
+      },
+      "gear": ["Basic Shotgun Shell Ammo x4", "Basic Shotgun Slug Ammo x4", "Disposable Cell Phone", "Shroomer Token"],
+      "cyberware": ["Cybereye x2 w/ Low Light/Infrared/UV x2"],
+      "specials": [
+        {
+          "name": "Charismatic Impact",
+          "text": {
+            "pt": "Role Ability Charismatic Impact no Rank 2. Bônus de Role Abilities não estão incluídos nas Skill Bases.",
+            "en": "Role Ability Charismatic Impact at Rank 2. Role Ability bonuses are not included in the Skill Bases."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "pa-saddlefoot",
+    "name": "Pa Saddlefoot",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Shroomers",
+    "sources": [{ "book": "Danger Gal Dossier+", "page": 11 }],
+    "summary": {
+      "pt": "Membro vivo mais velho dos Shroomers. Fazia parte dos micólogos amadores da Night City University que plantavam cogumelos alucinógenos e, no Time of the Red, passaram a cultivar os comestíveis. Até hoje não sabe quem queimou o arsenal e o depósito de comida do grupo.",
+      "en": "The oldest living Shroomer. He was one of the amateur mycologists from Night City University who grew hallucinogenic mushrooms and switched to edible ones in the Time of the Red. He still does not know who burned the armory and food store of the group."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "may",
+    "name": "May",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Shroomers",
+    "sources": [{ "book": "Danger Gal Dossier+", "page": 11 }],
+    "summary": {
+      "pt": "Anciã dos Shroomers, espeleóloga urbana na juventude. Depois do incêndio, propôs descer para os túneis de manutenção que conhecia e, com o falecido irmão Emrys, guiou o grupo até o depósito abandonado do metrô que virou a vila deles.",
+      "en": "A Shroomer elder and an urban spelunker in her youth. After the fire she proposed moving into the maintenance tunnels she knew and, with her late brother Emrys, led the group to the abandoned subway depot that became their village."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "mrs-suzuki",
+    "name": "Mrs. Suzuki",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Fixer",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Shroomers",
+    "sources": [{ "book": "Danger Gal Dossier+", "page": 11 }],
+    "summary": {
+      "pt": "Fixer apaixonada por cogumelos culinários e poderosa aliada dos Shroomers. Há catorze anos mantém uma única bodega aberta na Combat Zone de Old Japantown, só para não perder o contato com eles e com a colheita.",
+      "en": "A Fixer who adores culinary mushrooms and a powerful Shroomer ally. Her one remaining bodega, deep in the Old Japantown Combat Zone, has run for fourteen years only so she can stay close to them and their crops."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "anvil",
+    "name": "Anvil",
+    "aliases": ["Anver Carson"],
+    "kind": "profile",
+    "role": "Solo",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Continental Brands",
+    "sources": [{ "book": "Hope Reborn+", "page": 2 }],
+    "summary": {
+      "pt": "Ex-fuzileiro canadense que vive segundo um código e trabalha como guarda-costas de Jules Lung. É impecável no serviço e um desastre fora dele: afoga os traumas em álcool e braindances.",
+      "en": "A former Canadian Marine who lives by a code and works as bodyguard to Jules Lung. Flawless on the job and a wreck off it, he drowns his trauma in alcohol and braindances."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "rory-oreilly",
+    "name": "Rory O'Reilly",
+    "aliases": ["Aurora O'Reilly", "Aurora Smith"],
+    "kind": "profile",
+    "role": "Media",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Forlorn Hope",
+    "sources": [{ "book": "Hope Reborn+", "page": 2 }],
+    "summary": {
+      "pt": "Filha do jornalista C.J. O'Reilly e da marshal Nails, entregue a um orfanato na guerra e criada como Aurora Smith. Virou livecaster gonzo, e o pessoal do Forlorn Hope a reconheceu e a levou até a mãe pouco antes da morte dela. Hoje é frequentadora do bar, faz parte das Willows e usa um Drone Remote.",
+      "en": "Daughter of journalist C.J. O'Reilly and marshal Nails, given up to a group home in the war and raised as Aurora Smith. She became a gonzo livecaster, and the Forlorn Hope crew recognized her and took her to her mother just before she died. Now a bar regular and a member of the Willows, she uses a Drone Remote."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "axeman",
+    "name": "Axeman",
+    "aliases": ["Axel Mankievicz"],
+    "kind": "profile",
+    "role": "Solo",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Forlorn Hope",
+    "sources": [{ "book": "Hope Reborn+", "page": 2 }],
+    "summary": {
+      "pt": "Detetive particular das antigas que pegava os casos recusados pela polícia, até uma surra encomendada por um executivo da Infocomp. Depois da guerra, The Professor o recrutou para achar pessoas perdidas, e hoje localiza veteranos que precisam de ajuda.",
+      "en": "An old-school private eye who took the cases the police refused, until a beating ordered by an Infocomp executive. After the war The Professor recruited him to find lost people, and he now tracks down veterans who need aid."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "billy-flight",
+    "name": "Billy Flight",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Fixer",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Woodland Park",
+    "sources": [{ "book": "Hope Reborn+", "page": 3 }],
+    "summary": {
+      "pt": "Irlandês tranquilo que abriu a oficina itinerante Choom Goes Vroom em Woodland Park e, de conserto em conserto, virou o Fixer do bairro. Economizou o bastante para comprar e reformar The Shark, o velho prédio local, e não tem interesse em crescer além dali.",
+      "en": "An easygoing Irishman who opened the on-the-spot repair shop Choom Goes Vroom in Woodland Park and, one fix at a time, became the neighborhood Fixer. He saved enough to buy and restore The Shark, the old local building, and has no wish to grow beyond it."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "blank",
+    "name": "Blank",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Fixer",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Red Chrome Legion",
+    "sources": [{ "book": "Hope Reborn+", "page": 3 }],
+    "summary": {
+      "pt": "Fixer sorridente e pegajoso, especialista em XBDs, que achou um nicho mal atendido no território da Red Chrome Legion e o explorou sem dó. Já tem dinheiro e capangas e agora quer ampliar os negócios.",
+      "en": "A smiling, slimy Fixer specializing in XBDs, who found a neglected niche in Red Chrome Legion territory and milked it hard. He now has money and hired muscle and wants to expand."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "brendan-haight",
+    "name": "Brendan Haight",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Exec",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Dynalar",
+    "sources": [{ "book": "Hope Reborn+", "page": 3 }],
+    "summary": {
+      "pt": "Estagiário da Dynalar, jovem e empolgado, o retrato do Exec iniciante. Conta para quem quiser ouvir que a promoção sai a qualquer momento.",
+      "en": "A young, eager Dynalar intern, the picture of a beginner Exec. He tells anyone who will listen that his promotion is due any moment."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "calliope",
+    "name": "Calliope",
+    "aliases": ["Kelly Greenwald"],
+    "kind": "profile",
+    "role": "Exec",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "The Muses",
+    "sources": [{ "book": "Hope Reborn+", "page": 3 }],
+    "summary": {
+      "pt": "Kelly Greenwald servia bebidas no Playland by the Sea até ver um filme antigo sobre uma deusa grega de patins. Roubou os Piranhas, forjou a própria morte e ressurgiu em North Heywood como Calliope, dona da boate e pista de derby Xanadu e fundadora das Muses. Vive o sonho enquanto os Piranhas não a descobrirem.",
+      "en": "Kelly Greenwald served drinks at Playland by the Sea until she saw an old film about a Greek goddess on skates. She robbed the Piranhas, faked her death and resurfaced in North Heywood as Calliope, owner of the Xanadu club and derby rink and founder of the Muses. She lives the dream as long as the Piranhas stay fooled."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "carri-zote",
+    "name": "Carri Zote",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Rockerboy",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Woodland Park",
+    "sources": [{ "book": "Hope Reborn+", "page": 4 }],
+    "summary": {
+      "pt": "Ex-modelo gentil e romântica que mantém sozinha o food truck Terminus, estacionado em The Palms, depois que o parceiro foi embora. Serve moradores e funcionários da Dynalar e volta a posar para catálogos quando o dinheiro aperta.",
+      "en": "A gentle, romantic former model who runs the Terminus food truck alone in The Palms after her partner left. She feeds locals and Dynalar workers and goes back to catalog shoots when money runs short."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "chevalier",
+    "name": "Chevalier",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Rockerboy",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": null,
+    "sources": [{ "book": "Hope Reborn+", "page": 4 }],
+    "summary": {
+      "pt": "Rockerboy discreto que se apaixonou pela música vendo o tio tocar air guitar sobre discos de vinil. Faz shows locais tentando decolar a carreira, sem descuidar da esposa Isabel e dos filhos Damien, Daniela e Xavier.",
+      "en": "A discreet Rockerboy who fell for music watching his uncle play air guitar over vinyl records. He plays local gigs trying to launch his career, without neglecting his wife Isabel and his kids Damien, Daniela and Xavier."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "cid",
+    "name": "Cid",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Forlorn Hope",
+    "sources": [{ "book": "Hope Reborn+", "page": 4 }],
+    "summary": {
+      "pt": "Veio de Vancouver há três anos e foi demitida de uma dúzia de restaurantes por quebrar a tecnologia dos patrões. Marianne a contratou no Forlorn Hope porque ela guarda qualquer pedido de cabeça. Backhand não gosta tanto assim dela.",
+      "en": "She came from Vancouver three years ago and got fired from a dozen restaurants for breaking the tech of her employers. Marianne hired her at the Forlorn Hope because she memorizes every order. Backhand is less of a fan."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "destiny-hondel",
+    "name": "Destiny Hondel",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Media",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Network 54",
+    "sources": [{ "book": "Hope Reborn+", "page": 5 }],
+    "summary": {
+      "pt": "Repórter de rua da Network 54 em Night City, há um ano na função. Já tem certo nome, mas ainda não garante que as matérias irão ao ar, e quer chegar à bancada de âncora.",
+      "en": "A Network 54 street reporter in Night City, one year on the job. She has some name already but cannot yet count on her stories airing, and she wants an anchor desk."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "dyl-rollins",
+    "name": "Dyl Rollins",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Media",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "ChoomPatch",
+    "sources": [{ "book": "Hope Reborn+", "page": 5 }],
+    "summary": {
+      "pt": "Livecaster arrogante e cruel de moicano famoso, a serviço da ChoomPatch, um grupo de mídia \"independente\" bancado por PMCs. Passa pelos cordões de isolamento porque os guardas têm ordem de deixar.",
+      "en": "An arrogant, cruel livecaster with a famous mohawk, working for ChoomPatch, an \"independent\" media group funded by PMCs. He gets through cordons because the guards are told to let him."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "edelweiss-dolarhyde",
+    "name": "Edelweiss Dolarhyde",
+    "aliases": ["Annie May"],
+    "kind": "profile",
+    "role": "Rockerboy",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Forlorn Hope",
+    "sources": [{ "book": "Hope Reborn+", "page": 5 }],
+    "summary": {
+      "pt": "Sobrinha de \"Dollar Bill\" Dolarhyde, cofundador do Forlorn Hope, onde trabalha tímida e educada. Fora do bar é Annie May, cosplayer profissional famosa por nunca sair do personagem.",
+      "en": "Niece of \"Dollar Bill\" Dolarhyde, co-founder of the Forlorn Hope, where she works shy and polite. Away from the bar she is Annie May, a professional cosplayer famous for never breaking character."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "ella-corella",
+    "name": "Ella Corella",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Fixer",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Woodland Park",
+    "sources": [{ "book": "Hope Reborn+", "page": 5 }],
+    "summary": {
+      "pt": "Dona de sotaque francês da Burning Bright Bodega, herdada de quem ela achava ser a tia. Comanda a loja com mão de ferro, abastece Woodland Park com o que aparecer e dá pequenas entregas às crianças para mantê-las longe de encrenca.",
+      "en": "French-accented owner of the Burning Bright Bodega, inherited from the woman she knew as her aunt. She runs it with an iron fist, stocks Woodland Park with whatever turns up and gives local kids small deliveries to keep them out of trouble."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "fashanu-baines",
+    "name": "Fashanu Baines",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Media",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Woodland Park",
+    "sources": [{ "book": "Hope Reborn+", "page": 5 }],
+    "summary": {
+      "pt": "Fã de romances e filmes de detetive que alugou um escritório e abriu uma agência particular. Vive citando esses filmes e acredita de verdade que nenhum caso é pequeno demais.",
+      "en": "A fan of old detective novels and films who rented an office and set up as a private investigator. Always quoting those movies, Fashanu truly believes no case is too small."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "nails",
+    "name": "Nails",
+    "aliases": ["Gayle Sigmund"],
+    "kind": "profile",
+    "role": "Solo",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Forlorn Hope",
+    "sources": [{ "book": "Hope Reborn+", "page": 6 }],
+    "summary": {
+      "pt": "Gayle Sigmund, ex-Militech e ex-marshal federal. Na 4ª Guerra Corporativa perdeu o parceiro Gunsights e o companheiro C.J. O'Reilly e deixou a filha num abrigo, que se perdeu depois da bomba. Virou Solo em tempo integral até o corpo ceder. Os amigos do Forlorn Hope acharam Aurora a tempo do reencontro, e Nails morreu logo depois.",
+      "en": "Gayle Sigmund, former Militech soldier and federal marshal. The 4th Corporate War took her partner Gunsights and her lover C.J. O'Reilly, and she left her daughter at a home that was lost after the nuke. She went full Solo until her body gave out. Friends at the Forlorn Hope found Aurora in time for a reunion, and Nails died soon after."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "the-gentleman",
+    "name": "The Gentleman",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Fixer",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": null,
+    "sources": [{ "book": "Hope Reborn+", "page": 6 }],
+    "summary": {
+      "pt": "Agiota de classe que atende numa suíte do Highcourt Plaza e tem até Garden Patch. É conhecido por ser razoável, já que cliente morto não paga dívida.",
+      "en": "A classy loan shark who works from a suite at the Highcourt Plaza and even has a Garden Patch. He is known for being reasonable, since a dead client repays nothing."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "harry-the-shrimp",
+    "name": "Harry the Shrimp",
+    "aliases": ["Harriet Woodward"],
+    "kind": "profile",
+    "role": "Rockerboy",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": null,
+    "sources": [{ "book": "Hope Reborn+", "page": 7 }],
+    "summary": {
+      "pt": "Harriet Woodward, vigarista lendária a quem se atribui qualquer golpe famoso sem violência das últimas duas décadas. Dizem que só segue viva por um acordo: fica aposentada e ninguém a mata. Passa o tempo jogando sinuca no Greta's, um bar lésbico.",
+      "en": "Harriet Woodward, a legendary grifter credited with every famous non-violent crime of the last two decades. Rumor says she stays alive through a deal: she remains retired and nobody kills her. She spends her days shooting pool at Greta's, a lesbian bar."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "ingenue",
+    "name": "Ingénue",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Solo",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "The Willows",
+    "sources": [{ "book": "Hope Reborn+", "page": 7 }],
+    "summary": {
+      "pt": "Única sobrevivente da Willow Sisterhood, gangue poser de sirenes de Hollywood massacrada num serviço para a Infocomp. Esculpida como a jovem Norma Jean, caiu na bebida até Marianne Freeman contratá-la para criar um grupo de apoio a veteranas, as Willows, que ela ainda dirige.",
+      "en": "Sole survivor of the Willow Sisterhood, a poser gang of Hollywood sirens slaughtered on an Infocomp job. Sculpted as a young Norma Jean, she drank herself down until Marianne Freeman hired her to start a support group for women veterans, the Willows, which she still runs."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "jack-skorkowsky",
+    "name": "Jack Skorkowsky",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Solo",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": null,
+    "sources": [{ "book": "Hope Reborn+", "page": 8 }],
+    "summary": {
+      "pt": "Ex-mercenário tagarela que fez uma bolada na 4ª Guerra Corporativa, não diz como, e investiu tudo em imóveis. Hoje aluga e vende propriedades para quem vive à margem, inclusive edgerunners.",
+      "en": "A talkative former merc who made a fortune in the 4th Corporate War, he will not say how, and sank it all into property. He now rents and sells to people on the fringes, edgerunners included."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "john-freeman",
+    "name": "John Freeman",
+    "aliases": ["The Professor"],
+    "kind": "profile",
+    "role": "Fixer",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Forlorn Hope",
+    "sources": [{ "book": "Hope Reborn+", "page": 8 }],
+    "summary": {
+      "pt": "Fazia pós-graduação em história militar quando se alistou, e voltou da América Central como capitão do LRT-601, cheio de cyberware experimental. Fundou o Forlorn Hope com Bill Dolarhyde como refúgio para veteranos e casou-se com Marianne. Depois da 4ª Guerra dedicou-se aos ex-combatentes abandonados, e nem o diagnóstico de ALS o fez parar.",
+      "en": "He was a military history grad student when he enlisted, and came back from Central America as captain of LRT-601, full of experimental chrome. He founded the Forlorn Hope with Bill Dolarhyde as a refuge for veterans and married Marianne. After the 4th Corporate War he devoted himself to abandoned vets, and even his ALS diagnosis has not stopped him."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "jorge",
+    "name": "Jorge",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Forlorn Hope",
+    "sources": [{ "book": "Hope Reborn+", "page": 8 }],
+    "summary": {
+      "pt": "Nativo de Night City, simpático e fã de exibir os músculos. Mora em Heywood com o namorado e é bartender reserva do Forlorn Hope, com certificado da Hammered Industries.",
+      "en": "A friendly Night City native who likes to flex. He lives in Heywood with his boyfriend and is backup bartender at the Forlorn Hope, certified by Hammered Industries."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "joshua-travel",
+    "name": "Joshua Travél",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Solo",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Crawling Cobras",
+    "sources": [{ "book": "Hope Reborn+", "page": 9 }],
+    "summary": {
+      "pt": "Líder de rua que juntou catadores nos Crawling Cobras na base do carisma e da força bruta. A gangue vai acabar. A dúvida é se ele foge no meio de uma briga ou vende todo mundo para se salvar.",
+      "en": "A street leader who pulled scavvers together as the Crawling Cobras with charm and brute force. The gang will fall. The only question is whether he slips away mid-fight or sells everyone out to save himself."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "jules-lung",
+    "name": "Jules Lung",
+    "aliases": ["Julianna Lung", "Juliana Lung"],
+    "kind": "profile",
+    "role": "Exec",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Continental Brands",
+    "sources": [{ "book": "Hope Reborn+", "page": 9 }],
+    "summary": {
+      "pt": "Exec implacável e estranhamente simpática, COO do The Devil's Cut, investimento de luxo da Continental Brands. Subiu com a ideia da \"Roaming Vendit Treasure Hunt\". O marido de três meses, Anthony Snapdragon, morreu ao cair da varanda do conapt deles em Camden Court.",
+      "en": "A ruthless, oddly charming Exec, COO of The Devil's Cut, an upscale Continental Brands investment. She rose on the idea of the \"Roaming Vendit Treasure Hunt\". Anthony Snapdragon, whom she had married only three months before, fell to his death from their Camden Court balcony."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "kasymbek-kasim",
+    "name": "Kasymbek Kasim",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Fixer",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": null,
+    "sources": [{ "book": "Hope Reborn+", "page": 9 }],
+    "summary": {
+      "pt": "Muçulmano devoto de origem turca, dono do Kasim's, um café de narguilé e café forte. Disputa sempre o torneio de gamão de Night City e ainda não se classificou.",
+      "en": "A devout Muslim of Turkish descent who owns Kasim's, a cafe of water pipes and strong coffee. He always enters the Night City backgammon tournament and has yet to place."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "legacy",
+    "name": "Legacy",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Rockerboy",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Woodland Park",
+    "sources": [{ "book": "Hope Reborn+", "page": 9 }],
+    "summary": {
+      "pt": "Talento verdadeiro, criado entre rock clássico e música tradicional Yurok, com diploma em música pela NCU. Depois de muitas recusas, foi morar num cube hotel em Woodland Park e acampa nas Badlands atrás de inspiração. Também é viciado em Carrions and Crawlers.",
+      "en": "A true talent raised on classic rock and traditional Yurok music, with an NCU music degree. After too many rejections Legacy moved to a Woodland Park cube hotel and camps in the Badlands seeking inspiration. Also hooked on Carrions and Crawlers."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "mira-maldonado",
+    "name": "Mira Maldonado",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Solo",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Continental Brands",
+    "sources": [{ "book": "Hope Reborn+", "page": 11 }],
+    "summary": {
+      "pt": "Assistente pessoal da Continental Brands, muito mais que secretária. O histórico difícil de investigar sugere operações secretas. Reservada, quer subir para um escritório maior e melhor.",
+      "en": "A Continental Brands personal assistant and far more than a secretary. A background that resists investigation points to covert ops. Intensely private, she wants a bigger, better office."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "morrus-jenkins",
+    "name": "Morrus Jenkins",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Tech",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Zhirafa",
+    "sources": [{ "book": "Hope Reborn+", "page": 11 }],
+    "summary": {
+      "pt": "Arquiteto da Zhirafa especializado em projetos comerciais pequenos, de até três andares. Nervoso e metódico, quase nunca sai da rotina.",
+      "en": "A Zhirafa architect who specializes in small commercial projects of up to three stories. Nervous and methodical, he almost never breaks routine."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "nana-and-pop-pop",
+    "name": "Nana and Pop Pop",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Tech",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Woodland Park",
+    "sources": [{ "book": "Hope Reborn+", "page": 12 }],
+    "summary": {
+      "pt": "Casal britânico de velhos hippies, ela Tech ex-Biotechnica, ele Solo ex-Lazarus. Largaram as Corps e abriram a Breeze, loja de drogas recreativas feitas no próprio porão, porque se importam com a forma como você fica chapado. Meio bairro os adotou como avós.",
+      "en": "A British couple of old hippies, she a former Biotechnica Tech and he a former Lazarus Solo. They quit the Corps and opened Breeze, a shop of recreational drugs cooked in their basement, because they care how you get high. Half the neighborhood adopted them as grandparents."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "petra-david",
+    "name": "Petra David",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Solo",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Forlorn Hope",
+    "sources": [{ "book": "Hope Reborn+", "page": 12 }],
+    "summary": {
+      "pt": "Nasceu em Israel, foi recrutada pela Arasaka e saiu da 4ª Guerra Corporativa com estilhaços na cabeça e menos membros. Prefere viver o presente. Retribuiu a ajuda dos Freeman tornando-se chefe de segurança do Forlorn Hope em 2031.",
+      "en": "Born in Israel and recruited by Arasaka, Petra left the 4th Corporate War with shrapnel in the head and fewer limbs. Petra prefers to live in the present, and repaid the help of the Freemans by becoming head of security at the Forlorn Hope in 2031."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "populi",
+    "name": "Populi",
+    "aliases": ["Damien Naumann", "Daniel Nelson", "Arthur"],
+    "kind": "profile",
+    "role": "Solo",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Red Chrome Legion",
+    "sources": [{ "book": "Hope Reborn+", "page": 13 }],
+    "summary": {
+      "pt": "Daniel Nelson, aspirante a astro de ação que vivia de bicos como segurança, até Vox refazê-lo como Damien Naumann. Na Red Chrome Legion, é o parceiro de recrutamento dela e dá legitimidade à liderança entre os membros que não aceitam ordens de mulher.",
+      "en": "Daniel Nelson, a failed action-star hopeful who worked as a bouncer until Vox remade him as Damien Naumann. In the Red Chrome Legion he is her recruiting partner and props up her rule among members who refuse orders from a woman."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "random",
+    "name": "Random",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Rockerboy",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Woodland Park",
+    "sources": [{ "book": "Hope Reborn+", "page": 13 }],
+    "summary": {
+      "pt": "Ex-membro da gangue The Andersons, lindo, festeiro e ótimo no keytar. Gasta mais rápido do que ganha e é um desastre em todo o resto.",
+      "en": "A former member of the gang The Andersons, gorgeous, a party animal and great on the keytar. He spends faster than he earns and is a disaster at everything else."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "roxxi-and-kissy",
+    "name": "Roxxi and Kissy",
+    "aliases": ["Roxanne Colton", "Kimiko Sanchez", "Night City Angels"],
+    "kind": "profile",
+    "role": "Solo",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": null,
+    "sources": [{ "book": "Hope Reborn+", "page": 14 }],
+    "summary": {
+      "pt": "Roxanne Colton e Kimiko Sanchez, as Night City Angels, famosas nos anos 2020 por flertar pela noite e terminar todo serviço numa explosão. Enfrentar Adam Smasher em Rancho Coronado na guerra lhes ensinou a medir os danos, e elas se casaram logo depois. Ainda explodem coisas, mas escolhem melhor quem atingem.",
+      "en": "Roxanne Colton and Kimiko Sanchez, the Night City Angels, famous in the 2020s for flirting through the nightlife and ending every job in an explosion. Facing Adam Smasher in Rancho Coronado during the war taught them restraint, and they married soon after. They still blow things up, but pick their targets better."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "sin-gin",
+    "name": "Sin Gin",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Albino Alligators",
+    "sources": [{ "book": "Hope Reborn+", "page": 14 }],
+    "summary": {
+      "pt": "De dia anda com os Albino Alligators, à noite trabalha numa barraca do Playland by the Sea. Faz os dois pelo dinheiro, para sustentar a si e à mãe.",
+      "en": "An Albino Alligators ganger in daylight hours and a Playland by the Sea snack seller after dark. Neither job is a calling: the pay keeps him and his mother fed and housed."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "skippy",
+    "name": "Skippy",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Solo",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Maelstrom",
+    "sources": [{ "book": "Hope Reborn+", "page": 14 }],
+    "summary": {
+      "pt": "Cyberpsycho de orelhas e bigodes de cachorro malfeitos, enxertos musculares e dentes limados. Ripper a transformou no \"cão de guarda\" dele por meio de atrocidades, até que ela surtou com a mente fixada nele como protetor. Vive em fúria quase constante e é fanaticamente leal.",
+      "en": "A cyberpsycho with shoddy dog ears and whiskers, muscle grafts and filed teeth. Ripper turned her into his \"guard dog\" through atrocities, until she broke with her mind fixed on him as protector. Almost always in a rage, she is fanatically loyal."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "sp00ph",
+    "name": "Sp00ph",
+    "aliases": ["Sp00p"],
+    "kind": "profile",
+    "role": "Netrunner",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "The Cirqu3 d3 B0z0",
+    "sources": [{ "book": "Hope Reborn+", "page": 15 }],
+    "summary": {
+      "pt": "Netrunner errático e de rimas horríveis. Dizem que estudou na NCU e foi dos Philharmonic Vampyres, até trocar os ex-colegas pelos Bozos. Na guerra civil dos palhaços, a equipe dele adotou o nome The Cirqu3 d3 B0z0.",
+      "en": "An erratic Netrunner with terrible rhymes. Rumor says he studied at NCU and ran with the Philharmonic Vampyres before leaving them for the Bozos. In the clown civil war his crew took the name The Cirqu3 d3 B0z0."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "sundance",
+    "name": "Sundance",
+    "aliases": ["Susan Dahner"],
+    "kind": "profile",
+    "role": "Medtech",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Forlorn Hope",
+    "sources": [{ "book": "Hope Reborn+", "page": 15 }],
+    "summary": {
+      "pt": "Susan Dahner, médica de campo e cybertech do LRT-601 sob o capitão Freeman, carregou a culpa pelo cyberware dos colegas. Assumiu a clínica do Forlorn Hope depois que Needles morreu na guerra e treinou Doc Stoic para substituí-la. Aposentada, ainda toca baixo no bar e guarda uma Super Redhawk sob o colete.",
+      "en": "Susan Dahner, field medic and cybertech of LRT-601 under Captain Freeman, carried the guilt for the chrome in her comrades. She took over the Forlorn Hope clinic when Needles died in the war and trained Doc Stoic to replace her. Retired, she still plays bass at the bar and keeps a Super Redhawk under her vest."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "tarquin",
+    "name": "Tarquin",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Fixer",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Albino Alligators",
+    "sources": [{ "book": "Hope Reborn+", "page": 15 }],
+    "summary": {
+      "pt": "Chefe de nível médio dos Albino Alligators, usa a gangue para comprar imóveis baratos e revender. Quer um império e não se importa com as casas ou as vidas no caminho.",
+      "en": "A mid-level Albino Alligators boss who uses the gang to buy property cheap and flip it. She wants an empire and does not care about the homes or lives in the way."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "tim-ward",
+    "name": "Tim Ward",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Exec",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Ward Security",
+    "sources": [{ "book": "Hope Reborn+", "page": 16 }],
+    "summary": {
+      "pt": "Fofoqueiro e sorridente demais, adora contar como se fez sozinho. Começou como segurança de um velho estúdio de cinema, fundou a Ward Security para proteger ricos e famosos e às vezes contrata edgerunners no Forlorn Hope.",
+      "en": "A gossip who smiles too much and loves telling how he made himself. He started as a guard at an old movie studio, founded Ward Security to protect the rich and famous and sometimes hires edgerunners at the Forlorn Hope."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "tyme",
+    "name": "Tyme",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Tech",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": null,
+    "sources": [{ "book": "Hope Reborn+", "page": 16 }],
+    "summary": {
+      "pt": "Supervisora de obras de Jack Skorkowsky, meio supersticiosa e direta. Não arrisca o pescoço nem o da equipe além do necessário, porque tem uma família esperando em casa.",
+      "en": "Construction supervisor for Jack Skorkowsky, mildly superstitious and plain-spoken. She risks neither her neck nor her crew beyond what is needed, because a family waits at home."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "valence",
+    "name": "Valence",
+    "aliases": [],
+    "kind": "profile",
+    "role": "Tech",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Forlorn Hope",
+    "sources": [{ "book": "Hope Reborn+", "page": 16 }],
+    "summary": {
+      "pt": "Capturada pelo Maelstrom ainda criança e usada como Digger na Hot Zone sob Ripper, sobreviveu engatinhando pelos escombros. Foi deixada para trás na Brookhaven Co-Op, e The Professor e Marianne a adotaram. Ainda se acostuma à vida fora da Zone. Gagueja e tenta ocupar pouco espaço.",
+      "en": "Taken by Maelstrom as a child and used as a Digger in the Hot Zone under Ripper, Valence survived by crawling through wreckage. Abandoned in the rubble of the Brookhaven Co-Op, Valence found a home with the Freemans and is still adjusting to life outside the Zone, with a stutter and a habit of keeping small."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "vox",
+    "name": "Vox",
+    "aliases": ["Jennifer Hauser", "Annie"],
+    "kind": "profile",
+    "role": "Netrunner",
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Red Chrome Legion",
+    "sources": [{ "book": "Hope Reborn+", "page": 17 }],
+    "summary": {
+      "pt": "Jennifer Hauser, Netrunner intolerante e manipuladora, herdeira de uma família de fanáticos ligada à Red Chrome Legion. Com o namorado Populi, subiu a recrutadora da gangue e tomou o comando depois da morte suspeita do líder Maniple.",
+      "en": "Jennifer Hauser, a bigoted, manipulative Netrunner from a family of fanatics tied to the Red Chrome Legion. With her boyfriend Populi she rose to gang recruiter and took command after the suspicious death of its leader, Maniple."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "anh-and-long",
+    "name": "Anh and Long",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "RC Night Market",
+    "sources": [{ "book": "Tales of the RED+", "page": 2 }],
+    "summary": {
+      "pt": "Dupla vietnamita-americana com uma barraca de pho no RC Night Market. Por 10eb mostram um estoque escondido de armas de polímero de um tiro, e quem ajudar não paga mais essa \"entrada\".",
+      "en": "A Vietnamese-American pair with a pho stand at the RC Night Market. For 10eb they show a hidden stock of polymer one-shots, and a Crew that helps them never pays that \"entrance fee\" again."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "beni",
+    "name": "Beni",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Beni's Discount Bentos",
+    "sources": [{ "book": "Tales of the RED+", "page": 2 }],
+    "summary": {
+      "pt": "Nipo-americana de boina vermelha, dona do Beni's Discount Bentos. Sua equipe de catadores suborna funcionários do Oasis para pegar almoços Prepak quase vencidos e revendê-los barato. Quem ajuda ganha refeições que cortam 100eb do Lifestyle.",
+      "en": "A Japanese-American woman in a red cap who owns Beni's Discount Bentos. Her crew bribes Oasis staff for nearly expired Prepak lunches and resells them cheap. Anyone who helps gets meals that cut 100eb from their Lifestyle."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "emengarde",
+    "name": "Emengarde",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Emengarde's Escorts",
+    "sources": [{ "book": "Tales of the RED+", "page": 2 }],
+    "summary": {
+      "pt": "Dona de uma agência de acompanhantes para encontros sexuais ou não. Como recompensa, passa uma fofoca valiosa que vale +5 em um teste para descobrir podres de um Exec.",
+      "en": "Owner of an escort agency for sexual and non-sexual dates. As a reward she shares a valuable piece of gossip worth +5 on one Check to dig up dirt on an Exec."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "madame-mimeux",
+    "name": "Madame Mimeux",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Madame Mimeux's",
+    "sources": [{ "book": "Tales of the RED+", "page": 2 }],
+    "summary": {
+      "pt": "Vende filmes antigos fora de copyright em chips copiados, fachada para as entregas clandestinas de uma das melhores falsificadoras de Night City. Como recompensa, forja um documento de identidade de uso único.",
+      "en": "She sells old, out-of-copyright movies on copied chips, a front for the clandestine deliveries of one of the best forgers in Night City. As a reward she forges a single-use ID."
+    },
+    "sheetNote": null,
+    "sheet": null
+  },
+  {
+    "id": "carl-hudson",
+    "name": "Carl Hudson",
+    "aliases": [],
+    "kind": "profile",
+    "role": null,
+    "roleRank": null,
+    "rep": null,
+    "affiliation": "Carl's Car Rentals",
+    "sources": [{ "book": "Tales of the RED+", "page": 2 }],
+    "summary": {
+      "pt": "Ex-piloto de arrancada de certa fama, dono da Carl's Car Rentals. Quem resolve a entrega das peças dele ganha uma semana com um Compact Groundcar, com danos e consertos por conta do locatário.",
+      "en": "A former drag racer of some fame who owns Carl's Car Rentals. Anyone who sorts out his parts delivery gets a Compact Groundcar for a week, with damage and repairs on the renter."
     },
     "sheetNote": null,
     "sheet": null

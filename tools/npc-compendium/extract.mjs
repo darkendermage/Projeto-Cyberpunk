@@ -44,7 +44,11 @@ const PAGE_OFFSET = {
 const BOOKS = [
   [/edgerunners-mission-kit/i, 'Edgerunners Mission Kit'],
   [/danger gal dossier/i, 'Danger Gal Dossier'],
+  [/DangerGalDossierPlus/i, 'Danger Gal Dossier+'],
+  [/HopeRebornPlus/i, 'Hope Reborn+'],
+  [/TotRPlus/i, 'Tales of the RED+'],
   [/tales of the red/i, 'Tales of the RED'],
+  [/volume 01/i, 'Interface RED 1'],
   [/volume 2/i, 'Interface RED 2'],
   [/vol_3/i, 'Interface RED 3'],
   [/volume 4/i, 'Interface RED 4'],

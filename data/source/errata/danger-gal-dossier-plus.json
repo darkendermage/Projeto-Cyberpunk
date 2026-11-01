@@ -1,0 +1,22 @@
+{
+  "about": "Conferido com o PDF Danger Gal Dossier+ v1.0 (DLC de julho de 2023). O único item do PDF é a Superflash Jacket; os outros três itens do pin set Pinny Arcade já estão no catálogo pelo Danger Gal Dossier.",
+  "source": "Danger Gal Dossier+",
+  "additions": [
+    {
+      "slug": "superflash-jacket",
+      "name": "Superflash Jacket",
+      "category": "gear",
+      "manufacturer": null,
+      "description": "Jaqueta urbana chamativa. Como Ação, o usuário destrói uma bateria substituível de 50eb e libera 7 megacandelas de luz cegante. Funciona como uma Flashbang Grenade centrada na jaqueta, sem o Critical Injury Damaged Ear temporário. O próprio usuário é afetado, e as baterias são vendidas à parte.",
+      "notes": "Conferido com Danger Gal Dossier+, p. 11. Ausente do compêndio.",
+      "price": 500,
+      "priceCategory": "Expensive",
+      "page": 11,
+      "tags": [],
+      "attributes": {
+        "gearType": "Lifestyle",
+        "effect": "Como Ação, queima uma bateria de 50eb e age como Flashbang Grenade centrada no usuário, sem Damaged Ear."
+      }
+    }
+  ]
+}

@@ -156,6 +156,13 @@ const LINE_FIXES = [
   ['100eb (DL:12Gear 4', '100eb (Premium)  DL:12Gear 4'], // SkidRow PackShield, Armor
 ];
 
+/** Names that lost a word to the side tabs of the PDF; v1.24 of the index prints them whole. */
+const NAME_FIXES = {
+  Online: 'Elflines Online',
+  'Online Gold Pieces': 'Elflines Online Gold Pieces',
+  'S RUSH REVOLUTION® Headset': 'Segotari RUSH REVOLUTION® Headset',
+};
+
 function segments(line) {
   return line.trim().split(/\s{2,}/).map((s) => s.trim()).filter((s) => s && !TABS.has(s))
     .map((s) => s.replace(/^(?:Weapons,|Ammo &|Attachments|NET Stuff|Lifestyle &|Housing|Entertainment &|Services|Elflines|Online) /, ''));
@@ -201,6 +208,7 @@ function extractIndex() {
     if (segs[0] === 'Name' && segs.some((s) => s.startsWith('Cost'))) { group = prev; continue; }
     const row = group ? parseRow(segs.join(' ')) : null;
     if (row && !row.name && prev && prev !== group) row.name = prev; // name wrapped onto the line above
+    if (row) row.name = NAME_FIXES[row.name] ?? row.name;
     // Elflines Online in-game items are priced in gold pieces, not eb: they never reach a Night Market
     if (row?.name && !/\dgp\b/.test(row.cost)) { entries.push({ section, group, ...row }); continue; }
     const joined = segs.join('  ');
@@ -213,10 +221,11 @@ function extractIndex() {
 
 const BOOK = {
   'CP:R': 'Core Book', BC: 'Black Chrome', 'DL:BC+': 'Black Chrome+', CEMK: 'Edgerunners Mission Kit', DGD: 'Danger Gal Dossier',
-  IR2: 'Interface 2', IR3: 'Interface 3', IR4: 'Interface 4', IR5: 'Interface 5', 'DL:TT': "Toggle's Temple",
+  IR1: 'Interface 1', IR2: 'Interface 2', IR3: 'Interface 3', IR4: 'Interface 4', IR5: 'Interface 5', 'DL:TT': "Toggle's Temple",
   'DL:WG': "Woodchipper's Garage", 'DL:HP': "Hornet's Pharmacy", 'DL:AAA': 'All About Agents', 'DL:12Gun': '12 Days of Gunmas',
   'DL:12Cy': '12 Days of Cybermas', 'DL:12Gear': '12 Days of Gearmas', 'DL:12RED': '12 Days of REDmas', 'DL:Home': 'No Place Like Home',
   'DL:Mix': 'Mixing Drinks\u2013Changing Lives', 'T:Hope': 'Tales of the RED', 'T:Street': 'Tales of the RED',
+  'DL:DGD+': 'Danger Gal Dossier+', 'DL:HR+': 'Hope Reborn+',
 };
 
 function matchCatalog(entries) {
