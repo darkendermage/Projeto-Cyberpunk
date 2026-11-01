@@ -20,6 +20,7 @@ const NpcDossierPage = lazy(() => import('./features/npc-compendium/NpcDossierPa
 const CharactersPage = lazy(() => import('./features/characters/CharactersPage').then((m) => ({ default: m.CharactersPage })));
 const CharacterPage = lazy(() => import('./features/characters/CharacterPage').then((m) => ({ default: m.CharacterPage })));
 const MartialArtsPage = lazy(() => import('./features/reference/MartialArtsPage').then((m) => ({ default: m.MartialArtsPage })));
+const WeatherPage = lazy(() => import('./features/weather/WeatherPage').then((m) => ({ default: m.WeatherPage })));
 const NightMarketPage = lazy(() => import('./features/night-market/NightMarketPage').then((m) => ({ default: m.NightMarketPage })));
 const CombatPage = lazy(() => import('./features/combat/CombatPage').then((m) => ({ default: m.CombatPage })));
 const NetArchitecturePage = lazy(() => import('./features/net-architecture/NetArchitecturePage').then((m) => ({ default: m.NetArchitecturePage })));
@@ -43,6 +44,7 @@ export default function App() {
           <Route path="/enemies" element={<EnemyGeneratorPage />} />
           <Route path="/npcs" element={<NpcCompendiumPage />} />
           <Route path="/npcs/:id" element={<NpcDossierPage />} />
+          <Route path="/weather" element={<WeatherPage />} />
           <Route path="/night-market" element={<NightMarketPage />} />
           <Route path="/night-market/:id" element={<NightMarketPage />} />
           <Route path="/combat" element={<CombatPage />} />

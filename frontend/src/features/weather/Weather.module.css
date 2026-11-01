@@ -1,0 +1,182 @@
+/* Night City Weather: the roll, its rules and the tables of the supplement. */
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 20px;
+}
+
+.result {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 14px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  background: var(--bg-2);
+}
+
+.label {
+  font-family: var(--font-display);
+  font-size: 11.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.value {
+  font-size: 22px;
+  color: var(--text);
+}
+
+.overridden {
+  color: var(--text-faint);
+  text-decoration: line-through;
+}
+
+.degrees {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--red);
+}
+
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.badges:empty {
+  display: none;
+}
+
+.text {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text-2);
+}
+
+.rolled {
+  padding: 8px 10px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text-2);
+  border-left: 2px solid var(--red);
+  background: rgba(255, 42, 61, 0.05);
+}
+.rolled strong {
+  margin-right: 4px;
+  font-family: var(--font-mono);
+  color: var(--red);
+}
+
+.protection {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-2);
+}
+.protection span {
+  margin-right: 4px;
+  font-family: var(--font-display);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.gmRoll {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  margin-top: auto;
+  padding-top: 4px;
+}
+.gmRoll p {
+  font-size: 13.5px;
+  color: var(--text-2);
+}
+.gmRoll strong {
+  margin-right: 4px;
+  font-family: var(--font-mono);
+  color: var(--red);
+}
+
+.eventActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tables {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 10px;
+}
+
+@media (max-width: 860px) {
+  .tables {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.pick {
+  width: 100%;
+  padding: 0;
+  font: inherit;
+  text-align: left;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+.pick:hover {
+  color: var(--text);
+  text-decoration: underline;
+}
+.picked {
+  font-weight: 700;
+  color: var(--red);
+}
+
+.durationRow {
+  font-weight: 700;
+  color: var(--red) !important;
+}
+
+.rules {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 14px 20px;
+}
+.rules h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+  font-size: 15px;
+}
+
+.history {
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-left: 20px;
+  font-size: 14px;
+  color: var(--text-2);
+}

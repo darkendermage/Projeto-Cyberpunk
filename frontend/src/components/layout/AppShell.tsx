@@ -2,7 +2,7 @@ import { useEffect, useState, type ReactNode } from 'react';
 import { NavLink, useLocation } from 'react-router';
 import clsx from 'clsx';
 import {
-  BookOpen, BookUser, Crosshair, FileText, GitCompareArrows, Heart, LayoutGrid, ListChecks, Menu, Network, Search, Settings, Skull, Store, Swords, Table2, Users, X,
+  BookOpen, BookUser, CloudRain, Crosshair, FileText, GitCompareArrows, Heart, LayoutGrid, ListChecks, Menu, Network, Search, Settings, Skull, Store, Swords, Table2, Users, X,
 } from 'lucide-react';
 import { useCompare } from '../../state/CompareContext';
 import { useEffectsSettings } from '../../state/EffectsContext';
@@ -101,6 +101,7 @@ function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
     { to: '/combat', label: 'Friday Night Firefight', icon: <Crosshair size={19} />, active: location.pathname.startsWith('/combat') },
     { to: '/night-market', label: 'Night Market', icon: <Store size={19} />, active: location.pathname.startsWith('/night-market') },
     { to: '/net-architecture', label: t('Arquiteturas de NET', 'NET Architectures'), icon: <Network size={19} />, active: location.pathname.startsWith('/net-architecture') },
+    { to: '/weather', label: t('Clima de Night City', 'Night City Weather'), icon: <CloudRain size={19} /> },
     { to: '/rules', label: t('Regras Rápidas', 'Quick Rules'), icon: <FileText size={19} /> },
     { to: '/tables', label: t('Tabelas', 'Tables'), icon: <Table2 size={19} /> },
     { to: '/martial-arts', label: t('Artes Marciais', 'Martial Arts'), icon: <Swords size={19} /> },
