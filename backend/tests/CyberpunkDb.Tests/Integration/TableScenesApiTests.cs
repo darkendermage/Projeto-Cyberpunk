@@ -273,7 +273,7 @@ public class TableScenesApiTests(ApiFactory factory)
         var scene = await NewScene("Palco");
         await Gm(HttpMethod.Post, $"/api/table/scenes/{scene.Id}/tokens", new TokenInput("Johnny", 1, 1, CharacterId: characterId));
         var gmView = await Gm(HttpMethod.Post, $"/api/table/scenes/{scene.Id}/activate");
-        Token(gmView, "Johnny").ImageUrl.Should().Be($"/api/characters/{characterId}/portrait");
+        Token(gmView, "Johnny").ImageUrl.Should().StartWith($"/api/characters/{characterId}/portrait?v=");
 
         var state = await Send<PlayerStateDto>(_player, HttpMethod.Get, "/api/table/play/state", seat: seat.Token);
         var url = Token(state.Scene!, "Johnny").ImageUrl!;
