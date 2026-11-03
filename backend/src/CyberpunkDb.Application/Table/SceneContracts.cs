@@ -15,7 +15,7 @@ public sealed record BackgroundView(Guid? MediaId, string? Url, int Width, int H
 public sealed record TokenView(
     string Id, string Label, double X, double Y, double Width, double Height, double Rotation, bool Locked,
     Guid? ImageMediaId, string? ImageUrl, string Color, int? OwnerSeatId, TokenVisibility Visibility, IReadOnlyList<int> VisibleSeatIds,
-    int? CharacterId, string? CombatantId, double? RangeRingMeters, bool Controllable);
+    int? CharacterId, string? CombatantId, double? RangeRingMeters, bool Controllable, int? NpcId, string? CompendiumNpcId);
 
 public sealed record CreateSceneRequest(string Name);
 
@@ -28,7 +28,8 @@ public sealed record ReorderScenesRequest(List<int> Ids);
 public sealed record TokenInput(
     string Label, double X, double Y, double Width = 1, double Height = 1, double Rotation = 0, bool Locked = false,
     Guid? ImageMediaId = null, string? Color = null, int? OwnerSeatId = null, TokenVisibility Visibility = TokenVisibility.All,
-    List<int>? VisibleSeatIds = null, int? CharacterId = null, string? CombatantId = null, double? RangeRingMeters = null);
+    List<int>? VisibleSeatIds = null, int? CharacterId = null, string? CombatantId = null, double? RangeRingMeters = null,
+    int? NpcId = null, string? CompendiumNpcId = null);
 
 /// <summary>A drag, a turn or a resize; anything left null stays as it was. Last write wins.</summary>
 public sealed record TokenMoveRequest(double X, double Y, double? Rotation = null, double? Width = null, double? Height = null);

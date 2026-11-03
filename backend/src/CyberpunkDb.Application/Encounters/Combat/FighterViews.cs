@@ -195,6 +195,7 @@ public sealed class FighterViews(CharacterRuleBook characterRules, CharacterCalc
         var source = npc.Sources.FirstOrDefault();
         return new CombatSnapshot
         {
+            CompendiumId = npc.Id,
             Source = source is null ? npc.Name : $"{source.Book} p.{source.Page}",
             MaxHp = sheet.Hp,
             Body = stats.GetValueOrDefault("BODY"),

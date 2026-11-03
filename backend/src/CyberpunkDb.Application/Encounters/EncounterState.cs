@@ -64,6 +64,8 @@ public sealed record Combatant
 public sealed record CombatSnapshot
 {
     public int? NpcId { get; init; }
+    /// <summary>The compendium entry a named NPC of the books came from (its image shows on the table).</summary>
+    public string? CompendiumId { get; init; }
     public string Source { get; init; } = "";
     public int MaxHp { get; init; }
     /// <summary>BODY used for the Death Save and unarmed damage.</summary>

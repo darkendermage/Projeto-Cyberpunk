@@ -4,6 +4,7 @@ using CyberpunkDb.Application.Abstractions;
 using CyberpunkDb.Application.Common;
 using CyberpunkDb.Application.Encounters;
 using CyberpunkDb.Application.Localization;
+using CyberpunkDb.Application.Npcs.Compendium;
 using CyberpunkDb.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,7 +16,7 @@ namespace CyberpunkDb.Application.Table;
 /// Settings edits (map, grid, linked fight) carry the scene version; token and template changes are last-write-wins,
 /// serialized per scene.
 /// </summary>
-public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotifier notifier)
+public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotifier notifier, NpcCompendium compendium)
 {
     internal static readonly JsonSerializerOptions Json = new(JsonSerializerDefaults.Web) { Converters = { new JsonStringEnumConverter() } };
 
@@ -40,7 +41,7 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
     {
         var scene = await db.Scenes.AsNoTracking().FirstOrDefaultAsync(s => s.Id == id, ct) ?? throw NotFound();
         var state = Deserialize(scene.StateJson);
-        return SceneViews.ForGm(scene, state, await PortraitsAsync(state, ct));
+        return SceneViews.ForGm(scene, state, await ImagesAsync(state, ct));
     }
 
     /// <summary>A new, empty scene at the end of the list. The very first scene starts active.</summary>
@@ -132,15 +133,14 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
         {
             if (state.Tokens.Count >= MaxTokens)
                 throw RequestValidationException.For("tokens", L.T($"Uma cena comporta até {MaxTokens} tokens.", $"A scene holds up to {MaxTokens} tokens."));
-            var token = await TokenAsync(NextId("T", state.Tokens.Select(t => t.Id)), input, ct);
+            var token = await TokenAsync(NextId("T", state.Tokens.Select(t => t.Id)), input, null, ct);
             return state with { Tokens = [.. state.Tokens, token] };
         }, bumpVersion: false, ct);
 
     public Task<SceneView> UpdateTokenAsync(int id, string tokenId, TokenInput input, CancellationToken ct) =>
         MutateAsync(id, null, async (_, state) =>
         {
-            RequireToken(state, tokenId);
-            var token = await TokenAsync(tokenId, input, ct);
+            var token = await TokenAsync(tokenId, input, RequireToken(state, tokenId), ct);
             return state with { Tokens = state.Tokens.Select(t => t.Id == tokenId ? token : t).ToList() };
         }, bumpVersion: false, ct);
 
@@ -177,7 +177,7 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
                 tokens.Add(new SceneToken
                 {
                     Id = NextId("T", tokens.Select(t => t.Id)), Label = Truncate(c.Name, 40), CombatantId = c.Id,
-                    CharacterId = c.CharacterId, X = 1 + column, Y = c.Side == CombatSide.Ally ? 1 : 3,
+                    CharacterId = c.CharacterId, NpcId = c.Snapshot?.NpcId, CompendiumNpcId = c.Snapshot?.CompendiumId, X = 1 + column, Y = c.Side == CombatSide.Ally ? 1 : 3,
                     Color = c.Side == CombatSide.Ally ? "#00f0ff" : "#ff2a6d",
                     // On the scene the players already see, an enemy appears only when the GM shows it.
                     Visibility = c.Side == CombatSide.Enemy && scene.Active ? TokenVisibility.Gm : TokenVisibility.All,
@@ -211,7 +211,7 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
         var scene = await db.Scenes.AsNoTracking().FirstOrDefaultAsync(s => s.Active, ct);
         if (scene is null) return null;
         var state = Deserialize(scene.StateJson);
-        return SceneViews.ForSeat(scene, state, seat, await PortraitsAsync(state, ct));
+        return SceneViews.ForSeat(scene, state, seat, await ImagesAsync(state, ct));
     }
 
     public async Task<SceneView> PlayerMoveTokenAsync(TableSeat seat, string tokenId, TokenMoveRequest move, CancellationToken ct) =>
@@ -241,7 +241,14 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
         }, ct);
 
     /// <summary>Sends again every scene with a token that <paramref name="shows"/> an image that just changed.</summary>
-    public Task RepublishTokensOfAsync(Func<SceneToken, bool> shows, CancellationToken ct) => Task.CompletedTask;
+    public async Task RepublishTokensOfAsync(Func<SceneToken, bool> shows, CancellationToken ct)
+    {
+        foreach (var scene in await db.Scenes.AsNoTracking().ToListAsync(ct))
+        {
+            var state = Deserialize(scene.StateJson);
+            if (state.Tokens.Any(shows)) await PublishAsync(scene, state, ct);
+        }
+    }
 
     public Task<bool> IsActiveAsync(int sceneId, CancellationToken ct) => db.Scenes.AnyAsync(s => s.Id == sceneId && s.Active, ct);
 
@@ -252,12 +259,13 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
         return scene is null ? (null, null) : (scene.EncounterId, Deserialize(scene.StateJson));
     }
 
-    /// <summary>The character whose portrait a visible token of the active scene shows.</summary>
-    public async Task<int> PlayerTokenCharacterAsync(TableSeat seat, string tokenId, CancellationToken ct)
+    /// <summary>The stored image (character, saved NPC or compendium NPC) a visible token of the active scene shows.</summary>
+    public async Task<TokenImageSource> PlayerTokenImageAsync(TableSeat seat, string tokenId, CancellationToken ct)
     {
         var scene = await db.Scenes.AsNoTracking().FirstOrDefaultAsync(s => s.Active, ct) ?? throw TokenNotFound();
-        var token = Deserialize(scene.StateJson).Tokens.FirstOrDefault(t => t.Id == tokenId && SceneViews.CanSee(t, seat));
-        return token?.CharacterId ?? throw TokenNotFound();
+        var state = Deserialize(scene.StateJson);
+        var token = state.Tokens.FirstOrDefault(t => t.Id == tokenId && SceneViews.CanSee(t, seat)) ?? throw TokenNotFound();
+        return SceneViews.ImageSource(token, await ImagesAsync(state with { Tokens = [token] }, ct)) ?? throw TokenNotFound();
     }
 
     /// <summary>
@@ -312,11 +320,11 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
     /// <summary>Sends the GM view, and each open seat's view when the scene is the one on the players' screens.</summary>
     private async Task<SceneView> PublishAsync(Scene scene, SceneState state, CancellationToken ct)
     {
-        var portraits = await PortraitsAsync(state, ct);
-        var gm = SceneViews.ForGm(scene, state, portraits);
+        var images = await ImagesAsync(state, ct);
+        var gm = SceneViews.ForGm(scene, state, images);
         Dictionary<int, SceneView?>? seats = null;
         if (scene.Active)
-            seats = (await OpenSeatsAsync(ct)).ToDictionary(s => s.Id, s => (SceneView?)SceneViews.ForSeat(scene, state, s, portraits));
+            seats = (await OpenSeatsAsync(ct)).ToDictionary(s => s.Id, s => (SceneView?)SceneViews.ForSeat(scene, state, s, images));
         await notifier.SceneAsync(gm, seats, ct);
         return gm;
     }
@@ -327,11 +335,21 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
     private Task<List<TableSeat>> OpenSeatsAsync(CancellationToken ct) =>
         db.TableSeats.AsNoTracking().Where(s => s.RevokedAt == null).ToListAsync(ct);
 
-    private async Task<IReadOnlySet<int>> PortraitsAsync(SceneState state, CancellationToken ct)
+    /// <summary>When the stored images the scene's tokens may show last changed (tokens with their own image need none).</summary>
+    private async Task<TokenImages> ImagesAsync(SceneState state, CancellationToken ct)
     {
-        var ids = state.Tokens.Where(t => t.CharacterId is not null && t.ImageMediaId is null).Select(t => t.CharacterId!.Value).Distinct().ToList();
-        if (ids.Count == 0) return new HashSet<int>();
-        return (await db.CharacterPortraits.AsNoTracking().Where(p => ids.Contains(p.CharacterId)).Select(p => p.CharacterId).ToListAsync(ct)).ToHashSet();
+        var tokens = state.Tokens.Where(t => t.ImageMediaId is null).ToList();
+        var characters = tokens.Where(t => t.CharacterId is not null).Select(t => t.CharacterId!.Value).Distinct().ToList();
+        var npcs = tokens.Where(t => t.NpcId is not null).Select(t => t.NpcId!.Value).Distinct().ToList();
+        var book = tokens.Where(t => t.CompendiumNpcId is not null).Select(t => t.CompendiumNpcId!).Distinct().ToList();
+        if (characters.Count + npcs.Count + book.Count == 0) return TokenImages.None;
+        return new TokenImages(
+            characters.Count == 0 ? TokenImages.None.Characters
+                : await db.CharacterPortraits.AsNoTracking().Where(p => characters.Contains(p.CharacterId)).ToDictionaryAsync(p => p.CharacterId, p => p.UpdatedAt, ct),
+            npcs.Count == 0 ? TokenImages.None.Npcs
+                : await db.NpcPortraits.AsNoTracking().Where(p => npcs.Contains(p.NpcId)).ToDictionaryAsync(p => p.NpcId, p => p.UpdatedAt, ct),
+            book.Count == 0 ? TokenImages.None.Compendium
+                : await db.CompendiumPortraits.AsNoTracking().Where(p => book.Contains(p.CompendiumId)).ToDictionaryAsync(p => p.CompendiumId, p => p.UpdatedAt, ct));
     }
 
     private static SceneState Move(SceneState state, SceneToken token, TokenMoveRequest move)
@@ -346,11 +364,22 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
         return state with { Tokens = state.Tokens.Select(t => t.Id == token.Id ? moved : t).ToList() };
     }
 
-    private async Task<SceneToken> TokenAsync(string id, TokenInput i, CancellationToken ct)
+    /// <summary>
+    /// A token from the GM's input. A token stands for at most one character or NPC; NPC links are checked only when
+    /// they change, so a token whose NPC was deleted can still be edited.
+    /// </summary>
+    private async Task<SceneToken> TokenAsync(string id, TokenInput i, SceneToken? existing, CancellationToken ct)
     {
+        var compendiumNpcId = string.IsNullOrWhiteSpace(i.CompendiumNpcId) ? null : i.CompendiumNpcId;
+        if ((i.CharacterId is null ? 0 : 1) + (i.NpcId is null ? 0 : 1) + (compendiumNpcId is null ? 0 : 1) > 1)
+            throw RequestValidationException.For("source", L.T("Um token representa um só personagem ou NPC.", "A token stands for a single character or NPC."));
         if (i.ImageMediaId is { } media) await RequireMediaAsync(media, "imageMediaId", ct);
         if (i.CharacterId is { } characterId && !await db.Characters.AnyAsync(c => c.Id == characterId, ct))
             throw RequestValidationException.For("characterId", L.T("Personagem não encontrado.", "Character not found."));
+        if (i.NpcId is { } npcId && npcId != existing?.NpcId && !await db.Npcs.AnyAsync(n => n.Id == npcId, ct))
+            throw RequestValidationException.For("npcId", L.T("NPC não encontrado.", "NPC not found."));
+        if (compendiumNpcId is not null && compendiumNpcId != existing?.CompendiumNpcId && compendium.Find(compendiumNpcId) is null)
+            throw RequestValidationException.For("compendiumNpcId", L.T("NPC não encontrado no compêndio.", "NPC not found in the compendium."));
         var seatIds = (i.VisibleSeatIds ?? []).Distinct().ToList();
         if (i.OwnerSeatId is { } owner) seatIds.Add(owner);
         if (seatIds.Count > 0 && await db.TableSeats.CountAsync(s => seatIds.Contains(s.Id), ct) != seatIds.Distinct().Count())
@@ -365,7 +394,8 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
             Height = Size(i.Height, "height"), Rotation = Rotation(i.Rotation), Locked = i.Locked, ImageMediaId = i.ImageMediaId,
             Color = Color(i.Color, "#00f0ff"), OwnerSeatId = i.OwnerSeatId, Visibility = i.Visibility,
             VisibleSeatIds = i.Visibility == TokenVisibility.Seats ? (i.VisibleSeatIds ?? []).Distinct().ToList() : [],
-            CharacterId = i.CharacterId, CombatantId = string.IsNullOrWhiteSpace(i.CombatantId) ? null : i.CombatantId,
+            CharacterId = i.CharacterId, NpcId = i.NpcId, CompendiumNpcId = compendiumNpcId,
+            CombatantId = string.IsNullOrWhiteSpace(i.CombatantId) ? null : i.CombatantId,
             RangeRingMeters = i.RangeRingMeters is > 0 ? i.RangeRingMeters : null,
         };
     }

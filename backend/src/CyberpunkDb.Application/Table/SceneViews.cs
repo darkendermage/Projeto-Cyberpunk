@@ -20,15 +20,28 @@ public static class SceneViews
         _ => false,
     };
 
-    public static SceneView ForGm(Scene scene, SceneState state, IReadOnlySet<int> portraits) =>
-        View(scene, state, state.Tokens.Select(t => Token(t, GmImage(t, portraits), true)));
+    public static SceneView ForGm(Scene scene, SceneState state, TokenImages images) =>
+        View(scene, state, state.Tokens.Select(t => Token(t, GmImage(t, images), true)));
 
     /// <summary>
-    /// The seat's view. Portraits go through the player API with the seat link in the query string, because images
+    /// The seat's view. Stored images go through the player API with the seat link in the query string, because images
     /// load without custom headers.
     /// </summary>
-    public static SceneView ForSeat(Scene scene, SceneState state, TableSeat seat, IReadOnlySet<int> portraits) =>
-        View(scene, state, state.Tokens.Where(t => CanSee(t, seat)).Select(t => Token(t, SeatImage(t, seat, portraits), CanControl(t, seat))));
+    public static SceneView ForSeat(Scene scene, SceneState state, TableSeat seat, TokenImages images) =>
+        View(scene, state, state.Tokens.Where(t => CanSee(t, seat)).Select(t => Token(t, SeatImage(t, seat, images), CanControl(t, seat))));
+
+    /// <summary>
+    /// The stored image a token shows when no image was put on the token itself: the character's portrait, else the
+    /// saved NPC's image, else the compendium NPC's. Null when there is none (the client draws initials).
+    /// </summary>
+    public static TokenImageSource? ImageSource(SceneToken t, TokenImages images)
+    {
+        if (t.ImageMediaId is not null) return null;
+        if (t.CharacterId is { } c && images.Characters.TryGetValue(c, out var cs)) return new(TokenImageKind.Character, c.ToString(), cs);
+        if (t.NpcId is { } n && images.Npcs.TryGetValue(n, out var ns)) return new(TokenImageKind.Npc, n.ToString(), ns);
+        if (t.CompendiumNpcId is { } b && images.Compendium.TryGetValue(b, out var bs)) return new(TokenImageKind.Compendium, b, bs);
+        return null;
+    }
 
     private static SceneView View(Scene scene, SceneState state, IEnumerable<TokenView> tokens) =>
         new(scene.Id, scene.Name, scene.Version, scene.Active, scene.EncounterId, state.Grid,
@@ -37,13 +50,25 @@ public static class SceneViews
 
     private static TokenView Token(SceneToken t, string? image, bool controllable) =>
         new(t.Id, t.Label, t.X, t.Y, t.Width, t.Height, t.Rotation, t.Locked, t.ImageMediaId, image, t.Color, t.OwnerSeatId,
-            t.Visibility, t.VisibleSeatIds, t.CharacterId, t.CombatantId, t.RangeRingMeters, controllable);
+            t.Visibility, t.VisibleSeatIds, t.CharacterId, t.CombatantId, t.RangeRingMeters, controllable, t.NpcId, t.CompendiumNpcId);
 
-    private static string? GmImage(SceneToken t, IReadOnlySet<int> portraits) =>
-        t.ImageMediaId is { } m ? MediaService.UrlOf(m)
-        : t.CharacterId is { } c && portraits.Contains(c) ? $"/api/characters/{c}/portrait" : null;
+    private static string? GmImage(SceneToken t, TokenImages images)
+    {
+        if (t.ImageMediaId is { } m) return MediaService.UrlOf(m);
+        return ImageSource(t, images) switch
+        {
+            { Kind: TokenImageKind.Character } s => $"/api/characters/{s.Key}/portrait?v={s.Stamp.Ticks}",
+            { Kind: TokenImageKind.Npc } s => $"/api/npcs/{s.Key}/portrait?v={s.Stamp.Ticks}",
+            { Kind: TokenImageKind.Compendium } s => $"/api/npc-compendium/{Uri.EscapeDataString(s.Key)}/portrait?v={s.Stamp.Ticks}",
+            _ => null,
+        };
+    }
 
-    private static string? SeatImage(SceneToken t, TableSeat seat, IReadOnlySet<int> portraits) =>
-        t.ImageMediaId is { } m ? MediaService.UrlOf(m)
-        : t.CharacterId is { } c && portraits.Contains(c) ? $"/api/table/play/tokens/{Uri.EscapeDataString(t.Id)}/portrait?seat={Uri.EscapeDataString(seat.Token)}" : null;
+    private static string? SeatImage(SceneToken t, TableSeat seat, TokenImages images)
+    {
+        if (t.ImageMediaId is { } m) return MediaService.UrlOf(m);
+        return ImageSource(t, images) is { } s
+            ? $"/api/table/play/tokens/{Uri.EscapeDataString(t.Id)}/portrait?seat={Uri.EscapeDataString(seat.Token)}&v={s.Stamp.Ticks}"
+            : null;
+    }
 }

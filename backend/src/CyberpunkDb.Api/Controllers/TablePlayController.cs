@@ -1,6 +1,7 @@
 using CyberpunkDb.Application.Characters;
 using CyberpunkDb.Application.Common;
 using CyberpunkDb.Application.Encounters;
+using CyberpunkDb.Application.Npcs;
 using CyberpunkDb.Application.Table;
 using CyberpunkDb.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +14,7 @@ namespace CyberpunkDb.Api.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/table/play")]
-public sealed class TablePlayController(SeatService seats, SceneService scenes, EncounterService encounters, CharacterService characters, ChatService chat) : ControllerBase
+public sealed class TablePlayController(SeatService seats, SceneService scenes, EncounterService encounters, CharacterService characters, NpcPortraitService npcImages, ChatService chat) : ControllerBase
 {
     public const string SeatHeader = "X-Seat";
 
@@ -77,8 +78,13 @@ public sealed class TablePlayController(SeatService seats, SceneService scenes, 
     [HttpGet("tokens/{tokenId}/portrait")]
     public async Task<IActionResult> TokenPortrait(string tokenId, CancellationToken ct)
     {
-        var characterId = await scenes.PlayerTokenCharacterAsync(await SeatAsync(ct), tokenId, ct);
-        var (data, type, updated) = await characters.GetPortraitAsync(characterId, ct);
+        var source = await scenes.PlayerTokenImageAsync(await SeatAsync(ct), tokenId, ct);
+        var (data, type, updated) = source.Kind switch
+        {
+            TokenImageKind.Character => await characters.GetPortraitAsync(int.Parse(source.Key), ct),
+            TokenImageKind.Npc => await npcImages.GetSavedAsync(int.Parse(source.Key), ct),
+            _ => await npcImages.GetCompendiumAsync(source.Key, ct),
+        };
         Response.Headers.CacheControl = "private, no-cache";
         return File(data, type, lastModified: updated, entityTag: new Microsoft.Net.Http.Headers.EntityTagHeaderValue($"\"{updated.Ticks}\""));
     }
