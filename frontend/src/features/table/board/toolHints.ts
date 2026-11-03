@@ -7,4 +7,5 @@ export const TOOL_HINT: Record<BoardTool, string> = {
   ruler: t('Arraste para medir (diagonal conta 1 quadrado)', 'Drag to measure (a diagonal counts as 1 square)'),
   template: t('Clique para pôr a área; em cone e linha, arraste para apontar', 'Click to place the area; for cones and lines, drag to aim'),
   ping: t('Clique no mapa para chamar a atenção de todos', 'Click the map to get everyone\'s attention'),
+  token: t('Toque no mapa onde o seu token deve aparecer', 'Tap the map where your token should appear'),
 };

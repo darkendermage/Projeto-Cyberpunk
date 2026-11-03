@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { problemMessage } from '../../api/characters';
@@ -15,6 +15,9 @@ import { ChatPanel } from './chat/ChatPanel';
 import { CharacterPanel, InitiativePanel } from './PlayerPanels';
 import { fromPlayerFighter } from './tokens';
 import { forgetSeat, isRefusedKey, rememberSeat, savedSeat } from './lobby';
+import { PanelHandle } from './PanelHandle';
+import { PLAYER_PANELS, playerColumns } from './panels';
+import { usePanels } from './usePanels';
 import { HUB_TEXT, useTableHub } from './useTableHub';
 import styles from './Table.module.css';
 
@@ -38,6 +41,7 @@ export function PlayerTablePage() {
   const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
 
   const navigate = useNavigate();
+  const [panels, setPanels] = usePanels('ncdb.table.player-panels', PLAYER_PANELS);
   const state = useQuery({ queryKey: tableKeys.player(token), queryFn: api.state, retry: false });
   const denied = isRefusedKey(state.error);
   // The general link enters this seat again directly; a key that stopped working (released, revoked) is dropped.
@@ -106,6 +110,7 @@ export function PlayerTablePage() {
     },
     onTemplatePlace: (x, y, angle) => void run(() => api.addTemplate({ shape: draft.shape, x, y, sizeMeters: draft.sizeMeters, angle, color: seat?.color ?? draft.color })),
     onPing: (x, y) => { if (scene) hub.ping(scene.id, x, y); },
+    onTokenPlace: (x, y) => { setTool('select'); void run(() => api.placeToken(x, y)); },
   };
 
   const roll = (formula: string, kind: RollKind, label: string | null, visibility: TableVisibility) =>
@@ -132,6 +137,8 @@ export function PlayerTablePage() {
   }
 
   const selectedTpl = scene?.templates.find((tp) => tp.id === selectedTemplate && tp.ownerSeatId === seat?.id);
+  // The seat's own token: its character's, or (without one) the token it owns. The server allows one per scene.
+  const hasOwnToken = !!seat && !!scene?.tokens.some((tk) => (seat.characterId != null ? tk.characterId === seat.characterId : tk.ownerSeatId === seat.id));
 
   return (
     <div className={styles.playerScreen}>
@@ -146,9 +153,14 @@ export function PlayerTablePage() {
           {hub.status === 'offline' && <Button variant="ghost" onClick={hub.reconnect}>{t('Reconectar', 'Reconnect')}</Button>}
         </span>
       </header>
-      <div className={styles.playerBody}>
-        <section className={styles.stage}>
+      <div className={styles.playerBody} style={{ '--cols': playerColumns(panels) } as CSSProperties}>
+        <section className={`${styles.stage} ${styles.colMain}`}>
           <BoardToolbar tool={tool} onTool={setTool} draft={draft} onDraft={setDraft} board={board}>
+            {scene && !hasOwnToken && (
+              <Button variant={tool === 'token' ? 'primary' : 'ghost'} onClick={() => setTool(tool === 'token' ? 'select' : 'token')}>
+                {tool === 'token' ? t('Cancelar', 'Cancel') : t('Pôr meu token', 'Place my token')}
+              </Button>
+            )}
             {selectedTpl && <Button variant="ghost" onClick={() => run(async () => { const v = await api.removeTemplate(selectedTpl.id); setSelectedTemplate(null); return v; })}>{t('Apagar minha área', 'Delete my area')}</Button>}
           </BoardToolbar>
           {scene ? <TableBoard ref={board} data={data} tool={tool} draft={draft} callbacks={callbacks} /> : (
@@ -156,7 +168,9 @@ export function PlayerTablePage() {
           )}
           {scene && <span className={styles.hint}>{TOOL_HINT[tool]}</span>}
         </section>
-        <aside className={styles.column}>
+        <PanelHandle className={styles.handleRight} panel="right" width={panels.right} limits={PLAYER_PANELS.right} open={panels.rightOpen}
+          onResize={(right) => setPanels({ right })} onToggle={() => setPanels({ rightOpen: !panels.rightOpen })} />
+        <aside className={`${styles.column} ${styles.colRight} ${panels.rightOpen ? '' : styles.collapsed}`}>
           <div className={styles.tabs} role="tablist">
             {([['character', t('Personagem', 'Character')], ['initiative', t('Iniciativa', 'Initiative')], ['chat', 'Chat']] as [Tab, string][]).map(([id, label]) => (
               <Button key={id} role="tab" aria-selected={tab === id} variant={tab === id ? 'primary' : 'ghost'} onClick={() => setTab(id)}>{label}</Button>

@@ -14,8 +14,8 @@
 
 .workspace {
   display: grid;
-  grid-template-columns: 230px minmax(0, 1fr) 340px;
-  gap: 10px;
+  grid-template-columns: var(--cols, 190px 10px minmax(0, 1fr) 10px 320px);
+  gap: 0;
   height: calc(100dvh - var(--header-h) - 40px);
   min-height: 560px;
 }
@@ -27,19 +27,53 @@
 }
 .playerBody {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 360px;
-  gap: 10px;
+  grid-template-columns: var(--cols, minmax(0, 1fr) 10px 340px);
+  gap: 0;
   padding: 10px;
   min-height: 0;
 }
-@media (max-width: 1200px) {
-  .workspace { grid-template-columns: 200px minmax(0, 1fr) 300px; }
+/* Side panels: each child sits in its own column, so a hidden panel leaves the others in place. */
+@media (min-width: 901px) {
+  .colLeft { grid-column: 1; }
+  .handleLeft { grid-column: 2; }
+  .colMain { grid-column: 3; }
+  .handleRight { grid-column: 4; }
+  .colRight { grid-column: 5; }
+  .playerBody .colMain { grid-column: 1; }
+  .playerBody .handleRight { grid-column: 2; }
+  .playerBody .colRight { grid-column: 3; }
+  .collapsed { display: none; }
 }
+.handle {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  cursor: col-resize;
+  touch-action: none;
+}
+.handle::before { content: ''; position: absolute; top: 0; bottom: 0; left: 50%; width: 1px; background: transparent; transition: background 0.15s; }
+.handle:hover::before, .handle:focus-visible::before { background: var(--red-line); }
+.handle:focus-visible { outline: none; }
+.handleToggle {
+  position: relative;
+  margin-top: 8px;
+  width: 10px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  color: var(--text-muted);
+  cursor: pointer;
+}
+.handleToggle:hover { color: var(--red); border-color: var(--red-line); }
 @media (max-width: 900px) {
-  .workspace { grid-template-columns: 1fr; height: auto; }
+  .handle { display: none; }
+  .workspace { grid-template-columns: 1fr; height: auto; gap: 10px; }
   .workspace .stage { height: 70vh; }
   .playerScreen { height: auto; min-height: 100dvh; }
-  .playerBody { grid-template-columns: 1fr; }
+  .playerBody { grid-template-columns: 1fr; gap: 10px; }
   .playerBody .stage { height: 65vh; }
 }
 
@@ -297,3 +331,23 @@
 .lobbySeat:disabled { opacity: 0.5; cursor: wait; }
 .lobbySeat img, .lobbyInitials { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; }
 .lobbyInitials { display: grid; place-items: center; font-family: var(--font-display); font-size: 22px; color: var(--bg-0); }
+
+/* ------------------------------------------------------------ new fight from the map */
+
+.fightList { display: flex; flex-direction: column; gap: 4px; max-height: 320px; overflow-y: auto; }
+.fightRow { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 4px 0; border-bottom: 1px solid var(--line); }
+
+/* ------------------------------------------------------------ color and slider fields, in the app's style */
+
+.workspace input[type='color'], .playerScreen input[type='color'] {
+  width: 40px;
+  height: 36px;
+  padding: 4px;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+.workspace input[type='color']::-webkit-color-swatch-wrapper, .playerScreen input[type='color']::-webkit-color-swatch-wrapper { padding: 0; }
+.workspace input[type='color']::-webkit-color-swatch, .playerScreen input[type='color']::-webkit-color-swatch { border: 0; border-radius: 2px; }
+.workspace input[type='range'], .playerScreen input[type='range'] { accent-color: var(--red); }

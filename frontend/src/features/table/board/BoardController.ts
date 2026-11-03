@@ -4,7 +4,7 @@ import { cellToPx, formatMeters, gridDistance, pxToCell, snapCell, type Point } 
 import { templateShape } from '../templates';
 import { initials, tokenStatus, type TokenFighter } from '../tokens';
 
-export type BoardTool = 'select' | 'ruler' | 'template' | 'ping';
+export type BoardTool = 'select' | 'ruler' | 'template' | 'ping' | 'token';
 
 export interface TemplateDraft { shape: TemplateShapeName; sizeMeters: number; color: string }
 
@@ -30,6 +30,8 @@ export interface BoardCallbacks {
   onTemplateDrop: (id: string, x: number, y: number) => void;
   onTemplatePlace: (x: number, y: number, angle: number) => void;
   onPing: (x: number, y: number) => void;
+  /** With the 'token' tool: the cell a player picked for their own token. */
+  onTokenPlace?: (x: number, y: number) => void;
 }
 
 const FONT = 'Rajdhani, "Segoe UI", sans-serif';
@@ -99,6 +101,8 @@ export class BoardController {
     | { kind: 'place'; origin: Point }
     | null = null;
 
+  private resizer: ResizeObserver | null = null;
+
   constructor(private readonly host: HTMLElement, private readonly callbacks: BoardCallbacks) {}
 
   async init() {
@@ -119,6 +123,9 @@ export class BoardController {
     this.app.canvas.addEventListener('wheel', this.onWheel, { passive: false });
     this.app.canvas.addEventListener('contextmenu', (e) => e.preventDefault());
     this.app.ticker.add(() => this.animate());
+    // resizeTo only follows the window: a panel dragged wider or hidden resizes the host too.
+    this.resizer = new ResizeObserver(() => this.app.resize());
+    this.resizer.observe(this.host);
     this.ready = true;
     if (this.data) this.render();
   }
@@ -126,6 +133,7 @@ export class BoardController {
   destroy() {
     this.destroyed = true;
     if (!this.ready) return;
+    this.resizer?.disconnect();
     this.app.canvas.removeEventListener('wheel', this.onWheel);
     this.app.destroy(true, { children: true });
   }
@@ -421,6 +429,7 @@ export class BoardController {
     if (e.button === 2 || e.button === 1) { this.startPan(e); return; }
     if (this.tool === 'ping' || (this.tool === 'select' && e.altKey)) { this.callbacks.onPing(cell.x, cell.y); return; }
     if (this.tool === 'ruler') { this.gesture = { kind: 'ruler', from: cell }; return; }
+    if (this.tool === 'token') { this.callbacks.onTokenPlace?.(Math.floor(cell.x), Math.floor(cell.y)); return; }
     if (this.tool === 'template') { this.gesture = { kind: 'place', origin: this.snapHalf(cell) }; this.drawPreview(cell); return; }
 
     if (target?.tokenId) {

@@ -1,7 +1,7 @@
 import type { ReactNode, RefObject } from 'react';
 import { Maximize2, MousePointer2, Radio, Ruler, Shapes, ZoomIn, ZoomOut } from 'lucide-react';
 import type { TemplateShapeName } from '../../../api/tableTypes';
-import { IconButton } from '../../../components/ui/ui';
+import { IconButton, Select } from '../../../components/ui/ui';
 import { t } from '../../../i18n';
 import { SHAPE_LABEL, TEMPLATE_PRESETS } from '../templates';
 import type { BoardTool, TemplateDraft } from './BoardController';
@@ -28,17 +28,17 @@ export function BoardToolbar({ tool, onTool, draft, onDraft, board, children }: 
       {tool === 'template' && (
         <>
           <span className={styles.divider} />
-          <select aria-label={t('Modelo de área', 'Area preset')} value=""
+          <Select aria-label={t('Modelo de área', 'Area preset')} value=""
             onChange={(e) => {
               const preset = TEMPLATE_PRESETS.find((p) => p.id === e.target.value);
               if (preset) onDraft({ ...draft, shape: preset.shape, sizeMeters: preset.sizeMeters });
             }}>
             <option value="">{t('Modelos…', 'Presets…')}</option>
             {TEMPLATE_PRESETS.map((p) => <option key={p.id} value={p.id} title={p.source}>{p.label}</option>)}
-          </select>
-          <select aria-label={t('Forma', 'Shape')} value={draft.shape} onChange={(e) => onDraft({ ...draft, shape: e.target.value as TemplateShapeName })}>
+          </Select>
+          <Select aria-label={t('Forma', 'Shape')} value={draft.shape} onChange={(e) => onDraft({ ...draft, shape: e.target.value as TemplateShapeName })}>
             {SHAPES.map((s) => <option key={s} value={s}>{SHAPE_LABEL[s]}</option>)}
-          </select>
+          </Select>
           <input className={styles.narrow} type="number" min={0.5} max={200} step={0.5} aria-label={t('Tamanho em metros', 'Size in meters')}
             value={draft.sizeMeters} onChange={(e) => onDraft({ ...draft, sizeMeters: Number(e.target.value) || 1 })} />
           <span className={styles.muted}>m</span>

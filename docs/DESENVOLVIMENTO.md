@@ -95,7 +95,7 @@ Para produção, rode `npm run build` e copie `frontend/dist` para `backend/src/
 ### Testes
 
 ```bash
-cd backend && dotnet test     # 543 testes: filtros, validação, gerador de NPCs e gangues, Compêndio de NPCs (dados e API), regras de personagem, Night Market, Arquiteturas de NET, Friday Night Firefight (mesa de combate), Mesa Virtual (porta dos jogadores, assentos, link geral, cenas, imagens de NPC nos tokens, combate ao vivo, dados e chat, túnel), atualização automática e integração da API (SQLite + seed real)
+cd backend && dotnet test     # 549 testes: filtros, validação, gerador de NPCs e gangues, Compêndio de NPCs (dados e API), regras de personagem, Night Market, Arquiteturas de NET, Friday Night Firefight (mesa de combate), Mesa Virtual (porta dos jogadores, assentos, link geral, cenas, imagens de NPC nos tokens, combate ao vivo, dados e chat, túnel), atualização automática e integração da API (SQLite + seed real)
 cd frontend && npm test       # filtros, URL, editor de NPCs, Compêndio de NPCs, tabela de alcance, perícias, Lifepath, anatomia do cyberware, Night Market e Mesa Virtual (grade, áreas, tokens, origem do token, entrada)
 ```
 
@@ -502,6 +502,10 @@ O estado fica em `Scene.StateJson` (`SceneState`):
 
 Um token pode representar **um** PC (`CharacterId`), NPC salvo (`NpcId`) ou NPC do compêndio (`CompendiumNpcId`). A imagem segue esta ordem (`SceneViews.ImageSource`): imagem posta no token, retrato do PC, imagem do NPC salvo, imagem do NPC do compêndio, iniciais. A URL leva a data da imagem (`?v=`), e trocar a imagem de um NPC reenvia as cenas que têm tokens dele. O servidor só confere se o NPC existe quando o vínculo muda, para que um token de NPC excluído continue editável. "Criar tokens dos combatentes" copia a origem do snapshot (`CombatSnapshot.NpcId` e `CompendiumId`).
 
+O jogador põe o próprio token com `POST /api/table/play/my-token` (só na cena ao vivo, um por assento: o do personagem do assento, ou, sem personagem, o token de que o assento é dono). Se o personagem está no combate vinculado, o token já nasce ligado ao combatente.
+
+`POST /api/table/scenes/{id}/fight` (`TableFightService`) cria um combate a partir de tokens escolhidos, cada um com seu lado: PC pela ficha, NPC salvo, NPC do compêndio com ficha, e o resto como genérico com o nome do token. Depois vincula a cena ao combate e cada token ao combatente. Se algo falha no meio, o combate é apagado.
+
 Editar a cena usa `Version`; uma versão velha recebe 409. Tokens e áreas são *last-write-wins*, serializados por cena (`SceneLocks`). Só uma cena por vez tem `Active`.
 
 ### Imagens de NPC
@@ -523,8 +527,9 @@ Editar a cena usa `Version`; uma versão velha recebe 409. Tokens e áreas são 
 ### Frontend
 
 - `features/table/board/BoardController.ts` desenha com PixiJS (WebGL) de forma imperativa: camadas de fundo, grade, áreas, tokens e sobreposição, mais pan, zoom, arraste, régua, ferramenta de área e ping. As imagens carregam por `<img>`, porque as URLs de mídia não têm extensão.
-- A lógica pura fica em `grid.ts`, `templates.ts`, `tokens.ts`, `sources.ts` (de onde vem o token) e `lobby.ts` (chave guardada no aparelho), com testes.
+- A lógica pura fica em `grid.ts`, `templates.ts`, `tokens.ts`, `sources.ts` (de onde vem o token), `lobby.ts` (chave guardada no aparelho), `fight.ts` (combate a partir dos tokens) e `panels.ts` (largura dos painéis), com testes.
 - `useTableHub.ts` cuida do SignalR e da reconexão; os eventos atualizam o cache do React Query.
+- Os painéis laterais têm largura ajustável (`panels.ts`, `PanelHandle.tsx`), guardada no `localStorage` de cada navegador. O `BoardController` acompanha o tamanho do mapa com um `ResizeObserver`, e o texto do canvas é redesenhado quando a fonte Rajdhani termina de carregar.
 
 ### Regras complementares
 

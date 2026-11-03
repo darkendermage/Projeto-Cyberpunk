@@ -5,17 +5,20 @@ import {
   ArrowDown, ArrowUp, Copy, Download, ExternalLink, Plus, Power, Radio, RotateCcw, RotateCw, SkipForward, Swords, Trash2, Upload,
 } from 'lucide-react';
 import { problemMessage, useCharacters } from '../../api/characters';
-import { useEncounterCommand, useEncounters } from '../../api/encounters';
+import { useEncounterCommand, useEncounterRules, useEncounters } from '../../api/encounters';
 import type { EncounterDetail } from '../../api/encounterTypes';
 import { tableApi, tableKeys } from '../../api/table';
 import type {
   SceneGrid, SceneSummary, SceneTemplate, SceneView, Seat, TemplateShapeName, TokenInput, TokenView, TokenVisibility, TunnelStatus,
 } from '../../api/tableTypes';
-import { Badge, Button, Checkbox, Field, IconButton, Segmented, Spinner, Switch } from '../../components/ui/ui';
+import { Badge, Button, Checkbox, Field, IconButton, Segmented, Select, Spinner, Switch } from '../../components/ui/ui';
 import { MAP_LIMITS, prepareImage } from '../../lib/portrait';
 import { useToast } from '../../state/ToastContext';
 import { t, tv } from '../../i18n';
 import { WOUND_LABEL, WOUND_TONE } from '../combat/combat';
+import { AddCombatantsDialog } from '../combat/AddCombatantsDialog';
+import type { Run } from '../combat/EncounterView';
+import { NewFight } from './NewFight';
 import { SourcePicker } from './SourcePicker';
 import { useTokenSources } from './useTokenSources';
 import { sourceFields, tokenInputOf, type TokenSource } from './sources';
@@ -71,8 +74,8 @@ async function pickAndUpload(file: File | undefined) {
 
 // ------------------------------------------------------------------ scenes
 
-export function ScenesColumn({ scenes, currentId, onSelect, act }: {
-  scenes: SceneSummary[]; currentId: number | null; onSelect: (id: number) => void; act: Act;
+export function ScenesColumn({ scenes, currentId, onSelect, act, className }: {
+  scenes: SceneSummary[]; currentId: number | null; onSelect: (id: number) => void; act: Act; className?: string;
 }) {
   const [name, setName] = useState('');
   const move = (index: number, delta: number) => {
@@ -82,7 +85,7 @@ export function ScenesColumn({ scenes, currentId, onSelect, act }: {
     return act(async () => { await tableApi.reorderScenes(ids); });
   };
   return (
-    <aside className={styles.column}>
+    <aside className={`${styles.column} ${className ?? ''}`}>
       <h2 className={styles.title}>{t('Cenas', 'Scenes')}</h2>
       <form className={styles.row} onSubmit={(e) => {
         e.preventDefault();
@@ -201,11 +204,11 @@ export function SceneTab({ scene, act, onGridDraft }: { scene: SceneView; act: A
 
       <div className={styles.section}>
         <span className={styles.label}>{t('Combate vinculado', 'Linked fight')}</span>
-        <select aria-label={t('Combate vinculado', 'Linked fight')} value={scene.encounterId ?? ''}
+        <Select aria-label={t('Combate vinculado', 'Linked fight')} value={scene.encounterId ?? ''}
           onChange={(e) => act(() => tableApi.updateScene(scene.id, sceneUpdate(scene, { encounterId: e.target.value ? Number(e.target.value) : null })))}>
           <option value="">{t('Nenhum', 'None')}</option>
           {(encounters.data ?? []).map((e) => <option key={e.id} value={e.id}>{tv(e.name)}</option>)}
-        </select>
+        </Select>
         {scene.encounterId && (
           <div className={styles.row}>
             <Button icon={<Swords size={15} />} onClick={() => act(() => tableApi.addEncounterTokens(scene.id), t('Tokens criados.', 'Tokens created.'))}>{t('Criar tokens dos combatentes', 'Create the fighters\' tokens')}</Button>
@@ -228,9 +231,9 @@ export function SceneTab({ scene, act, onGridDraft }: { scene: SceneView; act: A
           <input type="color" aria-label={t('Cor', 'Color')} value={token.color} onChange={(e) => setToken({ ...token, color: e.target.value })} />
         </div>
         <div className={styles.row}>
-          <select aria-label={t('Tamanho', 'Size')} value={token.size} onChange={(e) => setToken({ ...token, size: Number(e.target.value) })}>
+          <Select aria-label={t('Tamanho', 'Size')} value={token.size} onChange={(e) => setToken({ ...token, size: Number(e.target.value) })}>
             {[0.5, 1, 2, 3, 4].map((n) => <option key={n} value={n}>{n} × {n}</option>)}
-          </select>
+          </Select>
           <Checkbox checked={token.hidden} onChange={(hidden) => setToken({ ...token, hidden })} label={t('Oculto', 'Hidden')} />
         </div>
         <SourcePicker sources={sources} value={sourceFields(token.source)}
@@ -277,17 +280,17 @@ export function TokenInspector({ scene, token, seats, encounter, act, onDone }: 
 
       <div className={styles.section}>
         <span className={styles.label}>{t('Quem vê e quem move', 'Who sees and moves it')}</span>
-        <select aria-label={t('Visibilidade', 'Visibility')} value={form.visibility ?? 'All'} onChange={(e) => setForm({ ...form, visibility: e.target.value as TokenVisibility })}>
+        <Select aria-label={t('Visibilidade', 'Visibility')} value={form.visibility ?? 'All'} onChange={(e) => setForm({ ...form, visibility: e.target.value as TokenVisibility })}>
           {(['All', 'Gm', 'Seats'] as TokenVisibility[]).map((v) => <option key={v} value={v}>{VISIBILITY_LABEL[v]}</option>)}
-        </select>
+        </Select>
         {form.visibility === 'Seats' && openSeats.map((s) => (
           <Checkbox key={s.id} label={s.label} checked={(form.visibleSeatIds ?? []).includes(s.id)}
             onChange={(on) => setForm({ ...form, visibleSeatIds: on ? [...(form.visibleSeatIds ?? []), s.id] : (form.visibleSeatIds ?? []).filter((x) => x !== s.id) })} />
         ))}
-        <select aria-label={t('Dono', 'Owner')} value={form.ownerSeatId ?? ''} onChange={(e) => setForm({ ...form, ownerSeatId: e.target.value ? Number(e.target.value) : null })}>
+        <Select aria-label={t('Dono', 'Owner')} value={form.ownerSeatId ?? ''} onChange={(e) => setForm({ ...form, ownerSeatId: e.target.value ? Number(e.target.value) : null })}>
           <option value="">{t('Sem dono (só o mestre move)', 'No owner (only the GM moves it)')}</option>
           {openSeats.map((s) => <option key={s.id} value={s.id}>{t(`Movido por ${s.label}`, `Moved by ${s.label}`)}</option>)}
-        </select>
+        </Select>
         <span className={styles.muted}>{t('O jogador do personagem vinculado também move o token.', 'The linked character\'s player moves the token too.')}</span>
       </div>
 
@@ -295,10 +298,10 @@ export function TokenInspector({ scene, token, seats, encounter, act, onDone }: 
         <span className={styles.label}>{t('Vínculos', 'Links')}</span>
         <SourcePicker sources={sources} value={form} onChange={(source) => setForm({ ...form, ...sourceFields(source) })} />
         {encounter && (
-          <select aria-label={t('Combatente', 'Fighter')} value={form.combatantId ?? ''} onChange={(e) => setForm({ ...form, combatantId: e.target.value || null })}>
+          <Select aria-label={t('Combatente', 'Fighter')} value={form.combatantId ?? ''} onChange={(e) => setForm({ ...form, combatantId: e.target.value || null })}>
             <option value="">{t('Fora do combate', 'Not in the fight')}</option>
             {encounter.queue.map((f) => <option key={f.id} value={f.id}>{f.name}</option>)}
-          </select>
+          </Select>
         )}
         <Field label={t('Anel de alcance (m)', 'Range ring (m)')}>
           <Num label={t('Anel de alcance em metros', 'Range ring in meters')} value={form.rangeRingMeters ?? 0} min={0} max={1000} step={1}
@@ -331,9 +334,9 @@ export function TemplateInspector({ template, onSave, onRemove, editable }: {
   return (
     <div className={styles.stack}>
       <div className={styles.row}>
-        <select aria-label={t('Forma', 'Shape')} value={form.shape} onChange={(e) => setForm({ ...form, shape: e.target.value as TemplateShapeName })}>
+        <Select aria-label={t('Forma', 'Shape')} value={form.shape} onChange={(e) => setForm({ ...form, shape: e.target.value as TemplateShapeName })}>
           {(['Circle', 'Square', 'Cone', 'Line'] as TemplateShapeName[]).map((s) => <option key={s} value={s}>{SHAPE_LABEL[s]}</option>)}
-        </select>
+        </Select>
         <input type="color" aria-label={t('Cor', 'Color')} value={form.color} onChange={(e) => setForm({ ...form, color: e.target.value })} />
       </div>
       <div className={styles.row}>
@@ -352,12 +355,28 @@ export function TemplateInspector({ template, onSave, onRemove, editable }: {
 
 // ------------------------------------------------------------------ combat
 
-export function CombatTab({ scene, encounter, onSelectToken }: { scene: SceneView; encounter: EncounterDetail | undefined; onSelectToken: (id: string) => void }) {
+export function CombatTab({ scene, encounter, act, onSelectToken }: { scene: SceneView; encounter: EncounterDetail | undefined; act: Act; onSelectToken: (id: string) => void }) {
   const toast = useToast();
   const command = useEncounterCommand(scene.encounterId ?? 0);
-  if (!scene.encounterId) return <span className={styles.muted}>{t('Vincule um combate na aba Cena para a iniciativa aparecer aqui e nos tokens.', 'Link a fight in the Scene tab for the Initiative to show here and on the tokens.')}</span>;
+  const rules = useEncounterRules();
+  const [adding, setAdding] = useState(false);
+  if (!scene.encounterId) {
+    return (
+      <div className={styles.stack}>
+        <NewFight key={`${scene.id}:${scene.tokens.map((tk) => tk.id).join(',')}`} scene={scene} act={act} />
+        <span className={styles.muted}>{t('Ou vincule um combate já montado no Friday Night Firefight, na aba Cena.', 'Or link a fight already built in Friday Night Firefight, in the Scene tab.')}</span>
+      </div>
+    );
+  }
   if (!encounter) return <Spinner />;
   const run = (path: string) => command.mutate({ path }, { onError: (e) => toast.notify(problemMessage(e), 'error') });
+  // The combat page's dialog, wired to this fight.
+  const addRun: Run = (path, body = {}, done, method) =>
+    command.mutate({ path, body, method }, {
+      onSuccess: (d) => { if (done) toast.notify(done); d.notices.forEach((n) => toast.notify(n, 'info')); },
+      onError: (error) => toast.notify(problemMessage(error), 'error'),
+    });
+  const untokened = encounter.queue.some((f) => !scene.tokens.some((tk) => tk.combatantId === f.id));
   const rolled = encounter.queue.some((f) => f.initiative != null);
   return (
     <div className={styles.stack}>
@@ -387,7 +406,12 @@ export function CombatTab({ scene, encounter, onSelectToken }: { scene: SceneVie
           );
         })}
       </div>
+      <div className={styles.row}>
+        <Button icon={<Plus size={15} />} disabled={!rules.data} onClick={() => setAdding(true)}>{t('Adicionar combatentes', 'Add fighters')}</Button>
+        {untokened && <Button icon={<Swords size={15} />} onClick={() => act(() => tableApi.addEncounterTokens(scene.id), t('Tokens criados.', 'Tokens created.'))}>{t('Pôr no mapa quem está sem token', 'Put the ones without a token on the map')}</Button>}
+      </div>
       <Link to={`/combat/${scene.encounterId}`} target="_blank" className={styles.link}>{t('Ataques, dano e cobertura na mesa de combate completa', 'Attacks, damage and cover on the full combat table')} <ExternalLink size={12} /></Link>
+      {rules.data && <AddCombatantsDialog open={adding} onClose={() => setAdding(false)} rules={rules.data} busy={command.isPending} run={addRun} />}
     </div>
   );
 }
@@ -469,10 +493,10 @@ export function InvitesTab({ seats, act }: { seats: Seat[]; act: Act }) {
         }}>
           <input aria-label={t('Nome do jogador', 'Player name')} value={label} maxLength={60} placeholder={t('Nome do jogador', 'Player name')} onChange={(e) => setLabel(e.target.value)} />
           <div className={styles.row}>
-            <select className={styles.grow} aria-label={t('Personagem', 'Character')} value={characterId ?? ''} onChange={(e) => setCharacterId(e.target.value ? Number(e.target.value) : null)}>
+            <Select className={styles.grow} aria-label={t('Personagem', 'Character')} value={characterId ?? ''} onChange={(e) => setCharacterId(e.target.value ? Number(e.target.value) : null)}>
               <option value="">{t('Sem personagem', 'No character')}</option>
               {(characters.data ?? []).map((c) => <option key={c.id} value={c.id}>{c.handle ?? c.name}</option>)}
-            </select>
+            </Select>
             <Button type="submit" icon={<Plus size={15} />} disabled={!label.trim()}>{t('Convidar', 'Invite')}</Button>
           </div>
         </form>

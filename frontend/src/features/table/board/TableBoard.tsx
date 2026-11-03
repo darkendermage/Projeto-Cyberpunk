@@ -3,6 +3,9 @@ import type { Ping } from '../../../api/tableTypes';
 import { BoardController, type BoardCallbacks, type BoardData, type BoardTool, type TemplateDraft } from './BoardController';
 import styles from '../Table.module.css';
 
+/** The weights of the board's font (token names, ruler, areas) that canvas text needs loaded. */
+const BOARD_FONTS = ['600 14px Rajdhani', '700 14px Rajdhani'];
+
 export interface BoardHandle {
   showDrag: (tokenId: string, x: number, y: number) => void;
   showPing: (ping: Ping) => void;
@@ -24,8 +27,9 @@ export function TableBoard({ data, tool, draft, callbacks, ref }: {
   const host = useRef<HTMLDivElement>(null);
   const controller = useRef<BoardController | null>(null);
   const callbacksRef = useRef(callbacks);
+  const dataRef = useRef(data);
 
-  useEffect(() => { callbacksRef.current = callbacks; });
+  useEffect(() => { callbacksRef.current = callbacks; dataRef.current = data; });
 
   useEffect(() => {
     const board = new BoardController(host.current!, {
@@ -36,10 +40,15 @@ export function TableBoard({ data, tool, draft, callbacks, ref }: {
       onTemplateDrop: (id, x, y) => callbacksRef.current.onTemplateDrop(id, x, y),
       onTemplatePlace: (x, y, angle) => callbacksRef.current.onTemplatePlace(x, y, angle),
       onPing: (x, y) => callbacksRef.current.onPing(x, y),
+      onTokenPlace: (x, y) => callbacksRef.current.onTokenPlace?.(x, y),
     });
     controller.current = board;
     board.init().catch(() => { /* WebGL unavailable: the board stays empty */ });
+    // Canvas text uses the app's font only once the browser has it; draw again when it arrives.
+    let gone = false;
+    void Promise.all(BOARD_FONTS.map((f) => document.fonts?.load(f))).then(() => { if (!gone && dataRef.current) board.setData(dataRef.current); }, () => {});
     return () => {
+      gone = true;
       board.destroy();
       controller.current = null;
     };

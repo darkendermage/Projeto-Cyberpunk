@@ -20,6 +20,9 @@ export const tableApi = {
   reorderScenes: (ids: number[]) => request<SceneSummary[]>('/table/scenes/reorder', { method: 'POST', body: json({ ids }) }),
   addToken: (id: number, token: TokenInput) => request<SceneView>(`/table/scenes/${id}/tokens`, { method: 'POST', body: json(token) }),
   addEncounterTokens: (id: number) => request<SceneView>(`/table/scenes/${id}/encounter-tokens`, { method: 'POST' }),
+  /** A new fight from the chosen tokens, linked to the scene. */
+  startFight: (id: number, body: { name: string | null; tokens: { tokenId: string; side: 'Ally' | 'Enemy' }[] }) =>
+    request<SceneView>(`/table/scenes/${id}/fight`, { method: 'POST', body: json(body) }),
   updateToken: (id: number, tokenId: string, token: TokenInput) =>
     request<SceneView>(`/table/scenes/${id}/tokens/${encodeURIComponent(tokenId)}`, { method: 'PUT', body: json(token) }),
   moveToken: (id: number, tokenId: string, move: TokenMove) =>
@@ -91,6 +94,8 @@ export function playerApi(seat: string) {
     roll: (body: RollRequest) => request<TableMessage>('/table/play/rolls', { method: 'POST', body: json(body), headers }),
     moveToken: (tokenId: string, move: TokenMove) =>
       request<SceneView>(`/table/play/tokens/${encodeURIComponent(tokenId)}/move`, { method: 'POST', body: json(move), headers }),
+    /** The player's own token on the live scene (one per seat). */
+    placeToken: (x: number, y: number) => request<SceneView>('/table/play/my-token', { method: 'POST', body: json({ x, y }), headers }),
     addTemplate: (tpl: TemplateInput) => request<SceneView>('/table/play/templates', { method: 'POST', body: json(tpl), headers }),
     updateTemplate: (templateId: string, tpl: TemplateInput) =>
       request<SceneView>(`/table/play/templates/${encodeURIComponent(templateId)}`, { method: 'PUT', body: json(tpl), headers }),

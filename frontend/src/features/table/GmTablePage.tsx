@@ -1,11 +1,11 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { problemMessage } from '../../api/characters';
 import { encounterKeys, useEncounter, useEncounterCommand } from '../../api/encounters';
 import type { EncounterDetail, InjuryLocation } from '../../api/encounterTypes';
 import { tableApi, tableKeys } from '../../api/table';
 import type { SceneGrid, SceneView, TableMessage } from '../../api/tableTypes';
-import { Button, EmptyState, ErrorState, Spinner } from '../../components/ui/ui';
+import { Button, EmptyState, ErrorState, Select, Spinner } from '../../components/ui/ui';
 import { useToast } from '../../state/ToastContext';
 import { lang, t } from '../../i18n';
 import type { BoardCallbacks, BoardData, BoardTool, TemplateDraft } from './board/BoardController';
@@ -15,6 +15,9 @@ import { TableBoard, type BoardHandle } from './board/TableBoard';
 import { ChatPanel } from './chat/ChatPanel';
 import { CombatTab, InvitesTab, SceneTab, ScenesColumn, TemplateInspector, TokenInspector, type Act } from './GmPanels';
 import { damageCommand, fromGmFighter } from './tokens';
+import { PanelHandle } from './PanelHandle';
+import { GM_PANELS, gmColumns } from './panels';
+import { usePanels } from './usePanels';
 import { HUB_TEXT, useTableHub } from './useTableHub';
 import styles from './Table.module.css';
 
@@ -48,6 +51,7 @@ export function GmTablePage() {
   const command = useEncounterCommand(scene.data?.encounterId ?? 0);
 
   const [tab, setTab] = useState<Tab>('scene');
+  const [panels, setPanels] = usePanels('ncdb.table.gm-panels', GM_PANELS);
   const [tool, setTool] = useState<BoardTool>('select');
   const [draft, setDraft] = useState<TemplateDraft>({ shape: 'Circle', sizeMeters: 4, color: '#ff2a6d' });
   // The grid being calibrated, shown on the board before it is saved; it belongs to one scene version.
@@ -140,10 +144,13 @@ export function GmTablePage() {
   if (scenes.error) return <ErrorState error={scenes.error} onRetry={() => scenes.refetch()} />;
 
   return (
-    <div className={styles.workspace}>
-      <ScenesColumn scenes={scenes.data ?? []} currentId={sceneId} onSelect={(id) => { setChosen(id); setSelectedToken(null); setSelectedTemplate(null); }} act={act} />
+    <div className={styles.workspace} style={{ '--cols': gmColumns(panels) } as CSSProperties}>
+      <ScenesColumn className={`${styles.colLeft} ${panels.leftOpen ? '' : styles.collapsed}`} scenes={scenes.data ?? []} currentId={sceneId}
+        onSelect={(id) => { setChosen(id); setSelectedToken(null); setSelectedTemplate(null); }} act={act} />
+      <PanelHandle className={styles.handleLeft} panel="left" width={panels.left} limits={GM_PANELS.left} open={panels.leftOpen}
+        onResize={(left) => setPanels({ left })} onToggle={() => setPanels({ leftOpen: !panels.leftOpen })} />
 
-      <section className={styles.stage}>
+      <section className={`${styles.stage} ${styles.colMain}`}>
         <BoardToolbar tool={tool} onTool={setTool} draft={draft} onDraft={setDraft} board={board}>
           <span className={styles.status} title={live ? t('Os jogadores veem esta cena', 'The players see this scene') : t('Os jogadores não veem esta cena', 'The players don\'t see this scene')}>
             <span className={`${styles.dot} ${hub.status === 'online' ? styles.dotOn : hub.status === 'offline' ? styles.dotOff : styles.dotWarn}`} />
@@ -160,7 +167,9 @@ export function GmTablePage() {
         {view && <span className={styles.hint}>{TOOL_HINT[tool]}</span>}
       </section>
 
-      <aside className={styles.column}>
+      <PanelHandle className={styles.handleRight} panel="right" width={panels.right} limits={GM_PANELS.right} open={panels.rightOpen}
+        onResize={(right) => setPanels({ right })} onToggle={() => setPanels({ rightOpen: !panels.rightOpen })} />
+      <aside className={`${styles.column} ${styles.colRight} ${panels.rightOpen ? '' : styles.collapsed}`}>
         <div className={styles.tabs} role="tablist">
           {TABS.map((tb) => <Button key={tb.id} role="tab" aria-selected={tab === tb.id} variant={tab === tb.id ? 'primary' : 'ghost'} onClick={() => setTab(tb.id)}>{tb.label}</Button>)}
         </div>
@@ -172,7 +181,7 @@ export function GmTablePage() {
               onRemove={() => act(async () => { const v = await tableApi.removeTemplate(view.id, template.id); setSelectedTemplate(null); return v; })} />
           : <span className={styles.muted}>{t('Clique num token ou numa área do mapa para editá-lo.', 'Click a token or an area on the map to edit it.')}</span>
         )}
-        {tab === 'combat' && view && <CombatTab scene={view} encounter={encounter.data} onSelectToken={(id) => { setSelectedToken(id); setTab('token'); }} />}
+        {tab === 'combat' && view && <CombatTab scene={view} encounter={encounter.data} act={act} onSelectToken={(id) => { setSelectedToken(id); setTab('token'); }} />}
         {tab === 'invites' && <InvitesTab seats={seats.data ?? []} act={act} />}
         {tab === 'chat' && (
           <ChatPanel gm messages={messages.data ?? []} targets={openSeats.map((s) => ({ id: s.id, label: s.label }))}
@@ -197,14 +206,14 @@ function ApplyDamage({ total, encounter, onApply }: { total: number; encounter: 
   const [location, setLocation] = useState<InjuryLocation>('Body');
   return (
     <div className={styles.row}>
-      <select aria-label={t('Alvo do dano', 'Damage target')} value={target} onChange={(e) => setTarget(e.target.value)}>
+      <Select aria-label={t('Alvo do dano', 'Damage target')} value={target} onChange={(e) => setTarget(e.target.value)}>
         <option value="">{t('Aplicar em…', 'Apply to…')}</option>
         {encounter.queue.filter((f) => !f.dead).map((f) => <option key={f.id} value={f.id}>{f.name}</option>)}
-      </select>
-      <select aria-label={t('Local', 'Location')} value={location} onChange={(e) => setLocation(e.target.value as InjuryLocation)}>
+      </Select>
+      <Select aria-label={t('Local', 'Location')} value={location} onChange={(e) => setLocation(e.target.value as InjuryLocation)}>
         <option value="Body">{t('Corpo', 'Body')}</option>
         <option value="Head">{t('Cabeça', 'Head')}</option>
-      </select>
+      </Select>
       <Button disabled={!target} onClick={() => onApply(target, location)}>{t(`Aplicar ${total}`, `Apply ${total}`)}</Button>
     </div>
   );

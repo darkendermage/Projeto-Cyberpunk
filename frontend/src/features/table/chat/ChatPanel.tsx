@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { Dices, EyeOff, Lock, MessageSquareLock, Send } from 'lucide-react';
 import type { RollKind, RollResult, TableMessage, TableVisibility } from '../../../api/tableTypes';
-import { Badge, Button } from '../../../components/ui/ui';
+import { Badge, Button, Select } from '../../../components/ui/ui';
 import { t } from '../../../i18n';
 import styles from '../Table.module.css';
 
@@ -67,14 +67,14 @@ export function ChatPanel({ messages, gm, targets, onSend, onRoll, renderActions
 
       <div className={styles.composer}>
         <div className={styles.row}>
-          <select aria-label={t('Quem vê', 'Who sees it')} value={visibility} onChange={(e) => setVisibility(e.target.value as TableVisibility)}>
+          <Select aria-label={t('Quem vê', 'Who sees it')} value={visibility} onChange={(e) => setVisibility(e.target.value as TableVisibility)}>
             {visibilities.map((v) => <option key={v} value={v}>{VISIBILITY_LABEL[v]}</option>)}
-          </select>
+          </Select>
           {visibility === 'Whisper' && (
-            <select aria-label={t('Sussurrar para', 'Whisper to')} value={target ?? ''} onChange={(e) => setTarget(e.target.value ? Number(e.target.value) : null)}>
+            <Select aria-label={t('Sussurrar para', 'Whisper to')} value={target ?? ''} onChange={(e) => setTarget(e.target.value ? Number(e.target.value) : null)}>
               <option value="">{t('Para quem?', 'To whom?')}</option>
               {(targets ?? []).map((s) => <option key={s.id} value={s.id}>{s.label}</option>)}
-            </select>
+            </Select>
           )}
         </div>
 
@@ -86,9 +86,9 @@ export function ChatPanel({ messages, gm, targets, onSend, onRoll, renderActions
         </div>
         <form className={styles.row} onSubmit={(e) => { e.preventDefault(); if (formula.trim()) run(() => onRoll(formula.trim(), kind, visibility, whisperTarget)); }}>
           <input style={{ flex: '1 1 100%' }} aria-label={t('Fórmula', 'Formula')} value={formula} maxLength={80} onChange={(e) => setFormula(e.target.value)} placeholder="1d10+12" />
-          <select className={styles.grow} aria-label={t('Tipo de rolagem', 'Roll type')} value={kind} onChange={(e) => setKind(e.target.value as RollKind)}>
+          <Select className={styles.grow} aria-label={t('Tipo de rolagem', 'Roll type')} value={kind} onChange={(e) => setKind(e.target.value as RollKind)}>
             {(['Check', 'Damage', 'Plain'] as RollKind[]).map((k) => <option key={k} value={k}>{KIND_LABEL[k]}</option>)}
-          </select>
+          </Select>
           <Button type="submit" variant="primary" icon={<Dices size={15} />} disabled={blocked}>{t('Rolar', 'Roll')}</Button>
         </form>
 
