@@ -19,9 +19,13 @@ public sealed record CharacterDetailDto(
     // What the last operation means for the player (e.g. "roll a Critical Injury"); empty on plain reads.
     IReadOnlyList<string> Notices);
 
+/// <summary>
+/// One history entry. <see cref="CanUndo"/>: an IP spend on a skill or a Role Rank that is still the latest step of
+/// it; <see cref="Undone"/>: one whose IP came back.
+/// </summary>
 public sealed record CharacterEventDto(
     long Id, CharacterEventKind Kind, string Action, int? Amount, string? Before, string? After, string Description,
-    bool IsManual, DateTime CreatedAt);
+    bool IsManual, DateTime CreatedAt, bool CanUndo = false, bool Undone = false);
 
 public sealed record CreateCharacterRequest
 {
@@ -158,6 +162,7 @@ public sealed record PayMonthsRequest(int Version, int Months = 1);
 public sealed record AwardIpRequest(int Version, int Amount, string Reason);
 
 public sealed record ImproveSkillRequest(int Version, string SkillKey);
+public sealed record UndoProgressionRequest(int Version, long EventId);
 
 public sealed record ImproveRoleRequest(int Version, string Role);
 

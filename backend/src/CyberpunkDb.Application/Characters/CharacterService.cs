@@ -114,15 +114,41 @@ public sealed class CharacterService(
         return Detail(entity, Deserialize(entity.SheetJson), await catalogs.GetAsync(ct), hasPortrait, []);
     }
 
+    /// <summary>The history, newest first. IP spends on skills and Role Ranks say whether they can still be undone.</summary>
     public async Task<IReadOnlyList<CharacterEventDto>> EventsAsync(int id, CharacterEventKind? kind, CancellationToken ct)
     {
-        if (!await db.Characters.AnyAsync(c => c.Id == id, ct)) throw NotFound(id);
+        var sheetJson = await db.Characters.AsNoTracking().Where(c => c.Id == id).Select(c => c.SheetJson).FirstOrDefaultAsync(ct) ?? throw NotFound(id);
+        var sheet = Deserialize(sheetJson);
+        var undone = await UndoneAsync(id, ct);
         var query = db.CharacterEvents.AsNoTracking().Where(e => e.CharacterId == id);
         if (kind is not null) query = query.Where(e => e.Kind == kind);
-        return await query.OrderByDescending(e => e.CreatedAt).ThenByDescending(e => e.Id).Take(500)
-            .Select(e => new CharacterEventDto(e.Id, e.Kind, e.Action, e.Amount, e.Before, e.After, e.Description, e.IsManual, e.CreatedAt))
-            .ToListAsync(ct);
+        var rows = await query.OrderByDescending(e => e.CreatedAt).ThenByDescending(e => e.Id).Take(500).ToListAsync(ct);
+        return rows.Select(e =>
+        {
+            var step = progression.StepOf(e.Action, e.PayloadJson, e.Description);
+            var isUndone = undone.Contains(e.Id);
+            return new CharacterEventDto(e.Id, e.Kind, e.Action, e.Amount, e.Before, e.After, e.Description, e.IsManual, e.CreatedAt,
+                CanUndo: step is not null && !isUndone && progression.CanUndo(sheet, step), Undone: isUndone);
+        }).ToList();
     }
+
+    /// <summary>Undoes one IP spend of the history (a skill level or a Role Rank): the level goes back and the IP return.</summary>
+    public async Task<CharacterDetailDto> UndoProgressionAsync(int id, UndoProgressionRequest r, CancellationToken ct)
+    {
+        var e = await db.CharacterEvents.AsNoTracking().FirstOrDefaultAsync(x => x.CharacterId == id && x.Id == r.EventId, ct)
+                ?? throw new NotFoundException(L.T("Registro do histórico não encontrado.", "History entry not found."));
+        if ((await UndoneAsync(id, ct)).Contains(e.Id))
+            throw RequestValidationException.For("eventId", L.T("Esse passo já foi desfeito.", "That step was already undone."));
+        var step = progression.StepOf(e.Action, e.PayloadJson, e.Description)
+                   ?? throw RequestValidationException.For("eventId", L.T("Este registro não pode ser desfeito.", "This entry can't be undone."));
+        return await MutateAsync(id, r.Version, c => progression.Undo(c.Sheet, step, e.Id, e.Description, c), ct);
+    }
+
+    /// <summary>Ids of the IP spends already undone (each refund points at the spend it reverses).</summary>
+    private async Task<HashSet<long>> UndoneAsync(int id, CancellationToken ct) =>
+        (await db.CharacterEvents.AsNoTracking().Where(e => e.CharacterId == id && e.Action == ProgressionOperations.RefundAction && e.PayloadJson != null)
+            .Select(e => e.PayloadJson!).ToListAsync(ct))
+        .Select(ProgressionOperations.UndoneId).OfType<long>().ToHashSet();
 
     // ------------------------------------------------------------ create, duplicate, delete
 
@@ -537,7 +563,7 @@ public sealed class CharacterService(
             entity.Events.Add(new CharacterEvent
             {
                 Kind = e.Kind, Action = e.Action, Description = Truncate(e.Description, 500)!, Amount = e.Amount,
-                Before = Truncate(e.Before, 200), After = Truncate(e.After, 200), IsManual = e.IsManual, CreatedAt = now,
+                Before = Truncate(e.Before, 200), After = Truncate(e.After, 200), IsManual = e.IsManual, PayloadJson = e.Payload, CreatedAt = now,
             });
     }
 

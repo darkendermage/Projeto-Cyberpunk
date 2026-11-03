@@ -2,12 +2,15 @@ using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using CyberpunkDb.Application.Abstractions;
 using CyberpunkDb.Application.Characters;
 using CyberpunkDb.Application.Characters.Calculation;
 using CyberpunkDb.Application.Characters.Transfer;
 using CyberpunkDb.Application.Npcs;
 using CyberpunkDb.Domain.Enums;
 using FluentAssertions;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CyberpunkDb.Tests.Integration;
 
@@ -378,6 +381,86 @@ public class CharactersApiTests(ApiFactory factory)
         c.Sheet.Progress.Ip.Should().Be(ip - 40 - 20, "Martial Arts (x2) sobe para 1 por 40 IP e Language por 20 (CP:R p.410)");
         (await Raw(HttpMethod.Post, $"/api/characters/{c.Id}/progression/skill", new ImproveSkillRequest(c.Version, "martial-arts"))).StatusCode
             .Should().Be(HttpStatusCode.BadRequest, "a especialização é obrigatória");
+    }
+
+    private async Task<List<CharacterEventDto>> Progression(CharacterDetailDto c) =>
+        (await _client.GetFromJsonAsync<List<CharacterEventDto>>($"/api/characters/{c.Id}/events?kind=Progression", Json))!;
+
+    [Fact]
+    public async Task Undoing_a_skill_raise_gives_back_the_ip_and_the_level()
+    {
+        var c = await FinalizedSolo("Arrependido");
+        c = await Post(c, "progression/ip", new AwardIpRequest(c.Version, 200, "Treino"));
+        var ip = c.Sheet.Progress.Ip;
+        c = await Post(c, "progression/skill", new ImproveSkillRequest(c.Version, "martial-arts:Gun Fu"));
+        var raise = (await Progression(c)).First(e => e.Action == "spend-ip");
+        raise.CanUndo.Should().BeTrue();
+
+        c = await Post(c, "progression/undo", new UndoProgressionRequest(c.Version, raise.Id));
+
+        c.Sheet.Skills.Should().NotContainKey("martial-arts:Gun Fu");
+        c.Sheet.Progress.Ip.Should().Be(ip);
+        var events = await Progression(c);
+        events.Single(e => e.Id == raise.Id).Should().Match<CharacterEventDto>(e => e.Undone && !e.CanUndo);
+        events.Should().Contain(e => e.Action == "refund-ip" && e.Amount == 40);
+        (await Raw(HttpMethod.Post, $"/api/characters/{c.Id}/progression/undo", new UndoProgressionRequest(c.Version, raise.Id))).StatusCode
+            .Should().Be(HttpStatusCode.BadRequest, "um passo já desfeito não volta duas vezes");
+    }
+
+    [Fact]
+    public async Task Only_the_latest_step_of_a_skill_can_be_undone()
+    {
+        var c = await FinalizedSolo("Passo a passo");
+        c = await Post(c, "progression/ip", new AwardIpRequest(c.Version, 500, "Campanha"));
+        c = await Post(c, "progression/skill", new ImproveSkillRequest(c.Version, "handgun"));
+        c = await Post(c, "progression/skill", new ImproveSkillRequest(c.Version, "handgun"));
+        var raises = (await Progression(c)).Where(e => e.Action == "spend-ip").OrderBy(e => e.Id).ToList();
+        raises[0].CanUndo.Should().BeFalse();
+        raises[1].CanUndo.Should().BeTrue();
+        (await Raw(HttpMethod.Post, $"/api/characters/{c.Id}/progression/undo", new UndoProgressionRequest(c.Version, raises[0].Id))).StatusCode
+            .Should().Be(HttpStatusCode.BadRequest);
+
+        c = await Post(c, "progression/undo", new UndoProgressionRequest(c.Version, raises[1].Id));
+        c = await Post(c, "progression/undo", new UndoProgressionRequest(c.Version, raises[0].Id));
+
+        c.Sheet.Skills["handgun"].Should().Be(6);
+        c.Sheet.Progress.Ip.Should().Be(500);
+    }
+
+    [Fact]
+    public async Task Undoing_a_role_rank_gives_back_the_ip()
+    {
+        var c = await FinalizedSolo("Rank de volta");
+        c = await Post(c, "progression/ip", new AwardIpRequest(c.Version, 300, "Campanha"));
+        c = await Post(c, "progression/role", new ImproveRoleRequest(c.Version, "Solo"));
+        var raise = (await Progression(c)).First(e => e.Action == "spend-ip");
+
+        c = await Post(c, "progression/undo", new UndoProgressionRequest(c.Version, raise.Id));
+
+        c.Report.Roles.Single().Rank.Should().Be(4);
+        c.Sheet.Roles.Single().IpInvested.Should().Be(0);
+        c.Sheet.Progress.Ip.Should().Be(300);
+    }
+
+    [Fact]
+    public async Task Raises_recorded_before_undo_existed_are_recognized_from_their_text()
+    {
+        var c = await FinalizedSolo("Registro antigo");
+        c = await Post(c, "progression/ip", new AwardIpRequest(c.Version, 200, "Treino"));
+        c = await Post(c, "progression/skill", new ImproveSkillRequest(c.Version, "martial-arts:Gun Fu"));
+        var raise = (await Progression(c)).First(e => e.Action == "spend-ip");
+        using (var scope = factory.Services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<IAppDbContext>();
+            var old = await db.CharacterEvents.SingleAsync(e => e.Id == raise.Id);
+            old.PayloadJson = null;
+            await db.SaveChangesAsync(default);
+        }
+
+        (await Progression(c)).Single(e => e.Id == raise.Id).CanUndo.Should().BeTrue();
+        c = await Post(c, "progression/undo", new UndoProgressionRequest(c.Version, raise.Id));
+
+        c.Sheet.Skills.Should().NotContainKey("martial-arts:Gun Fu");
     }
 
     [Fact]

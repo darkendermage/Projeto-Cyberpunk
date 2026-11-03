@@ -1,3 +1,5 @@
+using System.Text.Json;
+using System.Text.RegularExpressions;
 using CyberpunkDb.Application.Characters.Rules;
 using CyberpunkDb.Application.Npcs;
 using CyberpunkDb.Domain.Enums;
@@ -9,8 +11,12 @@ namespace CyberpunkDb.Application.Characters.Operations;
 /// Improvement Points (CP:R p.408–410): earning them, raising skills and Role Abilities, and taking up a new Role
 /// (multiclassing, CP:R p.142). Every spend is checked against the cost table and logged as progression.
 /// </summary>
-public sealed class ProgressionOperations(CharacterRuleBook rules)
+public sealed partial class ProgressionOperations(CharacterRuleBook rules)
 {
+    public const string SpendAction = "spend-ip";
+    public const string RefundAction = "refund-ip";
+    private static readonly JsonSerializerOptions Json = new(JsonSerializerDefaults.Web);
+
     public CharacterSheet AwardIp(CharacterSheet sheet, AwardIpRequest request, CharacterChange change)
     {
         RequireFinalized(sheet);
@@ -39,7 +45,7 @@ public sealed class ProgressionOperations(CharacterRuleBook rules)
         var max = rules.Document.Progression.MaxRank.Value;
         if (level >= max) throw CharacterChange.Refuse("skillKey", L.T($"{def.Name} já está no nível máximo ({max}).", $"{def.Name} is already at the maximum level ({max})."));
         var cost = rules.SkillImprovementCost(def, level + 1);
-        sheet = Spend(sheet, cost, $"{def.Name}{(spec is null ? "" : $" ({spec})")} {level} → {level + 1}", change);
+        sheet = Spend(sheet, cost, $"{def.Name}{(spec is null ? "" : $" ({spec})")} {level} → {level + 1}", change, new ProgressionStep(SkillStep, key, level, level + 1, cost));
         return sheet with { Skills = new Dictionary<string, int>(sheet.Skills, StringComparer.OrdinalIgnoreCase) { [key] = level + 1 } };
     }
 
@@ -53,7 +59,7 @@ public sealed class ProgressionOperations(CharacterRuleBook rules)
         var max = rules.Document.Progression.MaxRank.Value;
         if (role.Rank >= max) throw CharacterChange.Refuse("role", L.T($"{role.Role} já está no Rank máximo ({max}).", $"{role.Role} is already at the maximum Rank ({max})."));
         var cost = rules.RoleImprovementCost(role.Rank + 1);
-        sheet = Spend(sheet, cost, $"{rules.Role(role.Role).Ability.Name} Rank {role.Rank} → {role.Rank + 1}", change);
+        sheet = Spend(sheet, cost, $"{rules.Role(role.Role).Ability.Name} Rank {role.Rank} → {role.Rank + 1}", change, new ProgressionStep(RoleStep, role.Role, role.Rank, role.Rank + 1, cost));
         var roles = sheet.Roles.ToList();
         roles[index] = role with { Rank = role.Rank + 1, IpInvested = role.IpInvested + cost };
         return sheet with { Roles = roles };
@@ -85,17 +91,105 @@ public sealed class ProgressionOperations(CharacterRuleBook rules)
         };
     }
 
-    private static CharacterSheet Spend(CharacterSheet sheet, int cost, string what, CharacterChange change)
+    private static CharacterSheet Spend(CharacterSheet sheet, int cost, string what, CharacterChange change, ProgressionStep? step = null)
     {
         if (sheet.Progress.Ip < cost)
             throw CharacterChange.Refuse("ip", L.T($"{what} custa {cost} IP; o personagem tem {sheet.Progress.Ip}.", $"{what} costs {cost} IP; the character has {sheet.Progress.Ip}."));
-        change.Log(CharacterEventKind.Progression, "spend-ip", $"{what} ({cost} IP).", -cost,
-            sheet.Progress.Ip.ToString(), (sheet.Progress.Ip - cost).ToString());
+        change.Log(CharacterEventKind.Progression, SpendAction, $"{what} ({cost} IP).", -cost,
+            sheet.Progress.Ip.ToString(), (sheet.Progress.Ip - cost).ToString(), payload: step is null ? null : JsonSerializer.Serialize(step, Json));
         return sheet with { Progress = sheet.Progress with { Ip = sheet.Progress.Ip - cost } };
     }
+
+    // ------------------------------------------------------------ undo
+
+    private const string SkillStep = "skill";
+    private const string RoleStep = "role";
+
+    /// <summary>
+    /// What an IP spend changed: a skill (key) or a Role (id) going from one level to the next, and its cost. Read from
+    /// the entry's payload, or, for entries written before payloads existed, from its description.
+    /// </summary>
+    public ProgressionStep? StepOf(string action, string? payload, string description)
+    {
+        if (action != SpendAction) return null;
+        if (payload is not null)
+        {
+            try
+            {
+                if (JsonSerializer.Deserialize<ProgressionStep>(payload, Json) is { Kind: SkillStep or RoleStep } step) return step;
+            }
+            catch (JsonException) { /* fall back to the text */ }
+        }
+        if (RoleRaise().Match(description) is { Success: true } r)
+        {
+            var role = rules.Roles.FirstOrDefault(x => x.Ability.Name.Equals(r.Groups["name"].Value, StringComparison.OrdinalIgnoreCase));
+            return role is null ? null : new ProgressionStep(RoleStep, role.Id, int.Parse(r.Groups["from"].Value), int.Parse(r.Groups["to"].Value), int.Parse(r.Groups["cost"].Value));
+        }
+        if (SkillRaise().Match(description) is { Success: true } s)
+        {
+            var def = rules.Skills.FirstOrDefault(x => x.Name.Equals(s.Groups["name"].Value, StringComparison.OrdinalIgnoreCase));
+            var spec = s.Groups["spec"].Success ? s.Groups["spec"].Value : null;
+            if (def is null || def.Specialized != (spec is not null)) return null;
+            return new ProgressionStep(SkillStep, SkillKey.Normalize(SkillKey.Make(def.Id, spec)), int.Parse(s.Groups["from"].Value), int.Parse(s.Groups["to"].Value), int.Parse(s.Groups["cost"].Value));
+        }
+        return null;
+    }
+
+    /// <summary>A step can be undone while it is still the latest one: the skill or Rank is at the level it reached.</summary>
+    public bool CanUndo(CharacterSheet sheet, ProgressionStep step) => step.Kind switch
+    {
+        SkillStep => sheet.Skills.GetValueOrDefault(step.Key) == step.To,
+        RoleStep => sheet.Roles.Any(r => r.Role.Equals(step.Key, StringComparison.OrdinalIgnoreCase) && r.Rank == step.To),
+        _ => false,
+    };
+
+    /// <summary>Puts the skill or Rank back one step and returns its IP; the refund points at the spend it reverses.</summary>
+    public CharacterSheet Undo(CharacterSheet sheet, ProgressionStep step, long eventId, string description, CharacterChange change)
+    {
+        RequireFinalized(sheet);
+        if (!CanUndo(sheet, step))
+            throw CharacterChange.Refuse("eventId", L.T("Desfaça antes o passo mais recente dessa perícia ou Role.", "Undo the latest step of that skill or Role first."));
+        if (step.Kind == SkillStep)
+        {
+            var skills = new Dictionary<string, int>(sheet.Skills, StringComparer.OrdinalIgnoreCase);
+            if (step.From <= 0) skills.Remove(step.Key);
+            else skills[step.Key] = step.From;
+            sheet = sheet with { Skills = skills };
+        }
+        else
+        {
+            var roles = sheet.Roles.Select(r => r.Role.Equals(step.Key, StringComparison.OrdinalIgnoreCase)
+                ? r with { Rank = step.From, IpInvested = Math.Max(0, r.IpInvested - step.Cost) } : r).ToList();
+            sheet = sheet with { Roles = roles };
+        }
+        var what = description.TrimEnd('.');
+        change.Log(CharacterEventKind.Progression, RefundAction, L.T($"Desfeito: {what}. {step.Cost} IP devolvidos.", $"Undone: {what}. {step.Cost} IP returned."), step.Cost,
+            sheet.Progress.Ip.ToString(), (sheet.Progress.Ip + step.Cost).ToString(), payload: JsonSerializer.Serialize(new UndoMark(eventId), Json));
+        return sheet with { Progress = sheet.Progress with { Ip = sheet.Progress.Ip + step.Cost } };
+    }
+
+    /// <summary>The spend a refund entry reverses.</summary>
+    public static long? UndoneId(string payload)
+    {
+        try { return JsonSerializer.Deserialize<UndoMark>(payload, Json)?.Undoes; }
+        catch (JsonException) { return null; }
+    }
+
+    private sealed record UndoMark(long Undoes);
+
+    // "Combat Awareness Rank 4 → 5 (300 IP)."
+    [GeneratedRegex(@"^(?<name>.+) Rank (?<from>\d+) → (?<to>\d+) \((?<cost>\d+) IP\)\.$")]
+    private static partial Regex RoleRaise();
+
+    // "Martial Arts (Gun Fu) 0 → 1 (40 IP)." or "Handgun 6 → 7 (140 IP)."
+    [GeneratedRegex(@"^(?<name>.+?)(?: \((?<spec>[^()]+)\))? (?<from>\d+) → (?<to>\d+) \((?<cost>\d+) IP\)\.$")]
+    private static partial Regex SkillRaise();
 
     private static void RequireFinalized(CharacterSheet sheet)
     {
         if (!sheet.Creation.Finalized) throw CharacterChange.Refuse("creation", L.T("Improvement Points são usados depois da criação.", "Improvement Points are used after creation."));
     }
 }
+
+/// <summary>What one IP spend changed: a skill (key) or a Role (id) from one level to the next, and what it cost.</summary>
+public sealed record ProgressionStep(string Kind, string Key, int From, int To, int Cost);

@@ -529,6 +529,10 @@ export interface CharacterEvent {
   description: string;
   isManual: boolean;
   createdAt: string;
+  /** An IP spend on a skill or a Role Rank that is still its latest step: it can be undone. */
+  canUndo: boolean;
+  /** An IP spend whose IP came back. */
+  undone: boolean;
 }
 
 // ---------------------------------------------------------------- rules

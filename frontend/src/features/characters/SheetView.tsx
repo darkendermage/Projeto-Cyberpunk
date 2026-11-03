@@ -50,7 +50,7 @@ export function SheetView({ detail, rules, editor }: Props) {
         <ArmorPanel {...props} />
         <WeaponsPanel {...props} />
         <InjuriesPanel {...props} />
-        <HistoryPanel id={detail.id} />
+        <HistoryPanel id={detail.id} run={run} busy={command.isPending} />
       </div>
     </div>
   );
@@ -278,7 +278,8 @@ function ModifiersPanel({ detail, editor }: { detail: CharacterDetail; editor: S
 
 const KIND_LABEL: Record<string, string> = { Ledger: t('Dinheiro', 'Money'), Humanity: t('Humanidade', 'Humanity'), Combat: t('Combate', 'Combat'), Injury: t('Lesão', 'Injury'), Progression: t('Progressão', 'Progression'), Edit: t('Edição', 'Edit') };
 
-function HistoryPanel({ id }: { id: number }) {
+/** The character's history; IP spends on skills and Role Ranks can be undone, latest step first. */
+function HistoryPanel({ id, run, busy }: { id: number; run: Run; busy: boolean }) {
   const [open, setOpen] = useState(false);
   const events = useCharacterEvents(id, open);
   return (
@@ -294,9 +295,17 @@ function HistoryPanel({ id }: { id: number }) {
                   {KIND_LABEL[e.kind]} · {formatDate(e.createdAt)}
                   {e.before != null && e.after != null && ` · ${e.before} → ${e.after}`}
                   {e.isManual && ' · manual'}
+                  {e.undone && <> · <strong>{t('desfeito', 'undone')}</strong></>}
                 </div>
               </div>
               {e.amount != null && e.amount !== 0 && <span className={`${styles.mono} ${e.amount > 0 ? styles.green : styles.red}`}>{signed(e.amount)}</span>}
+              {e.canUndo && (
+                <Button variant="ghost" disabled={busy} title={t('Desfazer e devolver os IP', 'Undo and give the IP back')} onClick={() => {
+                  const what = tv(e.description).replace(/\.$/, '');
+                  if (window.confirm(t(`Desfazer "${what}" e devolver ${-(e.amount ?? 0)} IP?`, `Undo "${what}" and give back ${-(e.amount ?? 0)} IP?`)))
+                    void run('progression/undo', { eventId: e.id }, t('Desfeito. IP devolvidos.', 'Undone. IP returned.'));
+                }}>{t('Desfazer', 'Undo')}</Button>
+              )}
             </li>
           ))}
         </ul>

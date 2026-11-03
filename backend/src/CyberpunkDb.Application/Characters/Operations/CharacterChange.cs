@@ -7,7 +7,7 @@ namespace CyberpunkDb.Application.Characters.Operations;
 
 /// <summary>An event produced by an operation, written in the same transaction as the sheet.</summary>
 public sealed record PendingEvent(
-    CharacterEventKind Kind, string Action, string Description, int? Amount, string? Before, string? After, bool IsManual);
+    CharacterEventKind Kind, string Action, string Description, int? Amount, string? Before, string? After, bool IsManual, string? Payload = null);
 
 /// <summary>
 /// One operation on a character: the sheet being changed, the catalog snapshot it is checked against, and the
@@ -24,8 +24,8 @@ public sealed class CharacterChange(CharacterSheet sheet, NpcCatalog catalog, Da
     public List<string> Notices { get; } = [];
 
     public void Log(CharacterEventKind kind, string action, string description,
-        int? amount = null, string? before = null, string? after = null, bool manual = false) =>
-        Events.Add(new PendingEvent(kind, action, description, amount, before, after, manual));
+        int? amount = null, string? before = null, string? after = null, bool manual = false, string? payload = null) =>
+        Events.Add(new PendingEvent(kind, action, description, amount, before, after, manual, payload));
 
     public CatalogItem Item(int id) =>
         Catalog.Find(id) ?? throw new NotFoundException(L.T($"Item {id} não encontrado no catálogo.", $"Item {id} not found in the catalog."));

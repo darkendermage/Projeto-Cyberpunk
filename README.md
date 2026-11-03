@@ -65,7 +65,7 @@ Fichas completas de jogador, salvas no seu computador.
 
 - **Criação pelos três métodos do livro:** Streetrat, Edgerunner e Complete Package, com as dez Roles.
 - **Caminho de Vida:** as tabelas de Lifepath geral e de cada Role. O botão **Rolar o que falta** sorteia tudo que ficou em branco.
-- **Ficha de jogo:** STATs, perícias, HP e ferimentos, Death Save, Critical Injuries, armaduras perdendo SP, munição, Autofire, LUCK e progressão por IP.
+- **Ficha de jogo:** STATs, perícias, HP e ferimentos, Death Save, Critical Injuries, armaduras perdendo SP, munição, Autofire, LUCK e progressão por IP: suba ou aprenda qualquer perícia (com a especialização de Artes Marciais, Idioma, Especialista Local…) e desfaça um gasto de IP pelo histórico.
 - **Cyberware no corpo:** um modelo anatômico mostra onde cada peça vai, quantos slots sobram e quanta Humanity custa. Passe o mouse numa peça para ver em uma linha o que ela faz. Inclui a terapia para recuperar Humanity.
 - **Equipamento e grana:** loja com o catálogo inteiro, saldo em eurobucks, moradia e lifestyle. Itens de troca, presente ou saque entram sem pagar, e as roupas ficam separadas do arsenal.
 - **Leve para outro PC:** exporte a ficha num arquivo e importe na casa do amigo.

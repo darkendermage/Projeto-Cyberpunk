@@ -153,6 +153,10 @@ public sealed class CharactersController(CharacterService characters) : Controll
     [HttpPost("{id:int}/progression/role")]
     public Task<CharacterDetailDto> ImproveRole(int id, ImproveRoleRequest r, CancellationToken ct) => characters.ImproveRoleAsync(id, r, ct);
 
+    /// <summary>Undoes one IP spend of the history (a skill level or a Role Rank) and returns its IP.</summary>
+    [HttpPost("{id:int}/progression/undo")]
+    public Task<CharacterDetailDto> UndoProgression(int id, UndoProgressionRequest r, CancellationToken ct) => characters.UndoProgressionAsync(id, r, ct);
+
     [HttpPost("{id:int}/progression/multiclass")]
     public Task<CharacterDetailDto> AddRole(int id, AddRoleRequest r, CancellationToken ct) => characters.AddRoleAsync(id, r, ct);
 
