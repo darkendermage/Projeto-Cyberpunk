@@ -1,7 +1,9 @@
 import { useMemo, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { Link, useLocation, useNavigationType, useSearchParams } from 'react-router';
 import { Skull, UserRound } from 'lucide-react';
 import { useNpcCompendium, type NpcSummary } from '../../api/npcCompendium';
+import { npcImageApi, npcImageKeys } from '../../api/npcImages';
 import { Button, EmptyState, ErrorState, Field, Select, Spinner } from '../../components/ui/ui';
 import page from '../../styles/Page.module.css';
 import { StateTag } from '../characters/CharacterUi';
@@ -11,6 +13,7 @@ import { filtersFromSearch, filtersToSearch, filterNpcs, npcBooks, npcRoles, typ
 
 export function NpcCompendiumPage() {
   const list = useNpcCompendium();
+  const images = useQuery({ queryKey: npcImageKeys.compendium, queryFn: npcImageApi.compendiumStamps });
   const [params, setParams] = useSearchParams();
   const filters = useMemo(() => filtersFromSearch(params), [params]);
   // The box keeps its own text: the router updates the URL in a transition, too late for a controlled input. Only a
@@ -82,18 +85,20 @@ export function NpcCompendiumPage() {
       )}
       {shown.length > 0 && (
         <div className={styles.cards}>
-          {shown.map((n) => <NpcCard key={n.id} npc={n} listSearch={location.search} />)}
+          {shown.map((n) => <NpcCard key={n.id} npc={n} image={images.data?.[n.id]} listSearch={location.search} />)}
         </div>
       )}
     </div>
   );
 }
 
-function NpcCard({ npc: n, listSearch }: { npc: NpcSummary; listSearch: string }) {
+function NpcCard({ npc: n, image, listSearch }: { npc: NpcSummary; image?: string; listSearch: string }) {
   const isSheet = n.kind === 'Sheet';
   return (
     <Link to={`/npcs/${n.id}`} state={{ listSearch }} className={styles.card}>
-      <div className={styles.avatar}>{isSheet ? <Skull size={34} /> : <UserRound size={34} />}</div>
+      {image
+        ? <img className={styles.avatar} src={npcImageApi.compendiumUrl(n.id, image)} alt="" loading="lazy" />
+        : <div className={styles.avatar}>{isSheet ? <Skull size={34} /> : <UserRound size={34} />}</div>}
       <div className={styles.cardBody}>
         <span className={styles.cardName}>{n.name}</span>
         <div className={styles.cardMeta}>

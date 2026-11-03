@@ -12,12 +12,15 @@ import { formatPrinted, groupNpcSkills, RANGE_BANDS, STAT_ORDER, weaponClassLabe
 const plain = (text: string) => text.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase();
 
 /** Portrait frame of the sheet (the books' art isn't in the app) and the identity block. */
-export function NpcIdentity({ npc, role }: { npc: NpcDetail; role?: ReactNode }) {
+/** Name, handle and role, under the portrait (the GM's image of the NPC, or a placeholder). */
+export function NpcIdentity({ npc, role, portrait }: { npc: NpcDetail; role?: ReactNode; portrait?: ReactNode }) {
   return (
     <>
-      <div className={styles.portrait} role="img" aria-label={npc.name}>
-        <div className={styles.portraitEmpty}><UserRound size={72} /></div>
-      </div>
+      {portrait ?? (
+        <div className={styles.portrait} role="img" aria-label={npc.name}>
+          <div className={styles.portraitEmpty}><UserRound size={72} /></div>
+        </div>
+      )}
       <section className={styles.panel}>
         <div className={styles.idField}>
           <span className={styles.idLabel}>{t('Nome', 'Name')}</span>

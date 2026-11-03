@@ -1,8 +1,11 @@
 import { useState } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Link, useLocation, useParams } from 'react-router';
 import { ArrowLeft, Swords } from 'lucide-react';
 import { useCharacterRules } from '../../api/characters';
 import { useCompendiumNpc } from '../../api/npcCompendium';
+import { npcImageApi, npcImageKeys } from '../../api/npcImages';
+import { PortraitField } from '../../components/ui/PortraitField';
 import { Button, ErrorState, Spinner } from '../../components/ui/ui';
 import page from '../../styles/Page.module.css';
 import { RoleAbilityButton, StateTag } from '../characters/CharacterUi';
@@ -53,7 +56,7 @@ export function NpcDossierPage() {
       {sheet ? (
         <div className={styles.sheet}>
           <div className={styles.column}>
-            <NpcIdentity npc={npc} role={ability} />
+            <NpcIdentity npc={npc} role={ability} portrait={<DossierImage id={npc.id} name={npc.name} />} />
             <NpcBiography npc={npc} />
           </div>
           <NpcStats sheet={sheet} />
@@ -71,11 +74,24 @@ export function NpcDossierPage() {
         </div>
       ) : (
         <div className={dossier.profile}>
-          <div className={styles.column}><NpcIdentity npc={npc} role={ability} /></div>
+          <div className={styles.column}><NpcIdentity npc={npc} role={ability} portrait={<DossierImage id={npc.id} name={npc.name} />} /></div>
           <NpcBiography npc={npc} />
         </div>
       )}
       {sheet && <AddToCombatDialog npc={npc} open={adding} onClose={() => setAdding(false)} />}
     </div>
+  );
+}
+
+/** The GM's image of a book NPC: kept with the app, shown on the NPC's tokens of the Virtual Table. */
+function DossierImage({ id, name }: { id: string; name: string }) {
+  const client = useQueryClient();
+  const images = useQuery({ queryKey: npcImageKeys.compendium, queryFn: npcImageApi.compendiumStamps });
+  const stamp = images.data?.[id];
+  const refresh = () => client.invalidateQueries({ queryKey: npcImageKeys.compendium });
+  return (
+    <PortraitField url={stamp ? npcImageApi.compendiumUrl(id, stamp) : null} alt={name}
+      onUpload={async (file) => { await npcImageApi.uploadCompendium(id, file); await refresh(); }}
+      onRemove={async () => { await npcImageApi.removeCompendium(id); await refresh(); }} />
   );
 }

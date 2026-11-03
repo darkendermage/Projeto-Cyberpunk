@@ -1,6 +1,8 @@
 import clsx from 'clsx';
 import { Copy, FolderOpen, Trash2 } from 'lucide-react';
 import type { NpcRules, NpcSheet, NpcSummary, NpcValidationReport } from '../../api/types';
+import { npcImageApi, type ImageStamps } from '../../api/npcImages';
+import { Thumb } from '../../components/ui/PortraitField';
 import { Badge, IconButton } from '../../components/ui/ui';
 import { LEVEL_LABEL, STAT_KEYS } from './npcDraft';
 import styles from './EnemyGenerator.module.css';
@@ -91,9 +93,10 @@ const STATUS_LABEL = { Draft: t('Rascunho', 'Draft'), Valid: t('Válido', 'Valid
 const STATUS_TONE = { Draft: 'red', Valid: 'cyan', ValidWithExceptions: 'amber' } as const;
 
 export function NpcLibrary({
-  npcs, currentId, onOpen, onDuplicate, onDelete,
+  npcs, images, currentId, onOpen, onDuplicate, onDelete,
 }: {
   npcs: NpcSummary[];
+  images: ImageStamps;
   currentId: number | null;
   onOpen: (id: number) => void;
   onDuplicate: (id: number) => void;
@@ -105,7 +108,7 @@ export function NpcLibrary({
       {npcs.map((n) => (
         <div key={n.id} className={clsx(styles.libraryItem, n.id === currentId && styles.libraryItemActive)}>
           <button type="button" className={styles.libraryOpen} onClick={() => onOpen(n.id)}>
-            {tv(n.name)} <Badge tone={STATUS_TONE[n.status]}>{STATUS_LABEL[n.status]}</Badge>
+            <Thumb url={images[String(n.id)] ? npcImageApi.savedUrl(n.id, images[String(n.id)]) : null} /> {tv(n.name)} <Badge tone={STATUS_TONE[n.status]}>{STATUS_LABEL[n.status]}</Badge>
             <span>{n.hardened ? 'Hardened ' : ''}{LEVEL_LABEL[n.level]}{n.concept ? ` · ${n.concept}` : ''}</span>
           </button>
           <div className={styles.inline}>

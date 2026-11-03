@@ -1,9 +1,11 @@
 import { useReducer, useState } from 'react';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Copy, Dices, Download, FilePlus2, Save, Sparkles } from 'lucide-react';
 import { api, ApiError } from '../../api/client';
 import { useNpcMutations, useNpcRules, useNpcs, useNpcValidation } from '../../api/hooks';
+import { npcImageApi, npcImageKeys } from '../../api/npcImages';
 import type { GenerationConflict, NpcGenerationResult, NpcRules, NpcSummary } from '../../api/types';
+import { PortraitField } from '../../components/ui/PortraitField';
 import { Button, Collapsible, ErrorState, Field, Segmented, Select, Spinner, Switch } from '../../components/ui/ui';
 import { downloadJson } from '../../lib/format';
 import { useDebouncedValue } from '../../lib/hooks';
@@ -49,6 +51,10 @@ function EnemyGenerator({ rules }: { rules: NpcRules }) {
 
   const npcs = useNpcs();
   const mutations = useNpcMutations();
+  const client = useQueryClient();
+  const images = useQuery({ queryKey: npcImageKeys.saved, queryFn: npcImageApi.savedStamps });
+  const refreshImages = () => client.invalidateQueries({ queryKey: npcImageKeys.saved });
+  const imageStamp = currentId === null ? undefined : images.data?.[String(currentId)];
   const semi = mode === 'semi';
 
   const generate = useMutation({
@@ -263,6 +269,16 @@ function EnemyGenerator({ rules }: { rules: NpcRules }) {
                 )}
               </div>
               <div className={styles.card}>
+                <p className={styles.cardTitle}>{t('Imagem', 'Image')}</p>
+                {currentId === null ? (
+                  <p className={styles.muted}>{t('Salve o NPC para pôr uma imagem. Os tokens dele na Mesa Virtual usam essa imagem.', 'Save the NPC to give it an image. Its tokens on the Virtual Table use that image.')}</p>
+                ) : (
+                  <PortraitField size={140} url={imageStamp ? npcImageApi.savedUrl(currentId, imageStamp) : null} alt={sheet.name}
+                    onUpload={async (file) => { await npcImageApi.uploadSaved(currentId, file); await refreshImages(); }}
+                    onRemove={async () => { await npcImageApi.removeSaved(currentId); await refreshImages(); }} />
+                )}
+              </div>
+              <div className={styles.card}>
                 <p className={styles.cardTitle}>{t('Validação', 'Validation')}</p>
                 <ValidationPanel report={report}
                   onException={(key, justification) => dispatch({ type: 'addException', key, justification })}
@@ -276,7 +292,7 @@ function EnemyGenerator({ rules }: { rules: NpcRules }) {
           <div className={styles.card}>
             <p className={styles.cardTitle}>{t('NPCs salvos', 'Saved NPCs')}</p>
             {npcs.data ? (
-              <NpcLibrary npcs={npcs.data} currentId={currentId} onOpen={open} onDuplicate={duplicate} onDelete={remove} />
+              <NpcLibrary npcs={npcs.data} images={images.data ?? {}} currentId={currentId} onOpen={open} onDuplicate={duplicate} onDelete={remove} />
             ) : <Spinner />}
           </div>
         </aside>
