@@ -1,7 +1,7 @@
 import { API_BASE, ApiError, request } from './client';
 import { locale, t } from '../i18n';
 import type {
-  MediaInfo, PlayerCharacter, PlayerEncounter, PlayerState, RollRequest, SceneGrid, SceneSummary, SceneView, Seat,
+  ClaimResult, Lobby, MediaInfo, PlayerCharacter, PlayerEncounter, PlayerSeat, PlayerState, RollRequest, SceneGrid, SceneSummary, SceneView, Seat,
   SendMessage, TableMessage, TemplateInput, TokenInput, TokenMove, TunnelStatus,
 } from './tableTypes';
 
@@ -37,6 +37,10 @@ export const tableApi = {
   updateSeat: (id: number, body: { label: string; characterId: number | null; color: string }) =>
     request<Seat>(`/table/seats/${id}`, { method: 'PUT', body: json(body) }),
   revokeSeat: (id: number) => request<Seat>(`/table/seats/${id}/revoke`, { method: 'POST' }),
+  /** Gives the seat back to the entrance with a new key; whoever held it is thrown out. */
+  releaseSeat: (id: number) => request<Seat>(`/table/seats/${id}/release`, { method: 'POST' }),
+  lobby: () => request<{ open: boolean }>('/table/lobby'),
+  setLobby: (open: boolean) => request<{ open: boolean }>('/table/lobby', { method: 'PUT', body: json({ open }) }),
 
   messages: () => request<TableMessage[]>('/table/messages'),
   send: (body: SendMessage) => request<TableMessage>('/table/messages', { method: 'POST', body: json(body) }),
@@ -67,10 +71,18 @@ export const tableApi = {
   },
 };
 
+/** The general link's entrance: no seat key yet. */
+export const lobbyApi = {
+  list: () => request<Lobby>('/table/play/lobby'),
+  claim: (seatId: number) => request<ClaimResult>(`/table/play/lobby/${seatId}/claim`, { method: 'POST' }),
+  portraitUrl: (seatId: number) => `${API_BASE}/table/play/lobby/${seatId}/portrait`,
+};
+
 /** The player's side: every call carries the seat link token. */
 export function playerApi(seat: string) {
   const headers = { 'X-Seat': seat };
   return {
+    me: () => request<PlayerSeat>('/table/play/me', { headers }),
     state: () => request<PlayerState>('/table/play/state', { headers }),
     encounter: () => request<PlayerEncounter | undefined>('/table/play/encounter', { headers }).then((e) => e ?? null),
     character: () => request<PlayerCharacter | undefined>('/table/play/character', { headers }).then((c) => c ?? null),
@@ -96,6 +108,8 @@ export const tableKeys = {
   online: ['table', 'online'] as const,
   messages: ['table', 'messages'] as const,
   tunnel: ['table', 'tunnel'] as const,
+  lobby: ['table', 'lobby'] as const,
+  lobbyStatus: ['table', 'lobby-status'] as const,
   player: (seat: string) => ['table', 'player', seat] as const,
   playerEncounter: (seat: string) => ['table', 'player', seat, 'encounter'] as const,
   playerCharacter: (seat: string) => ['table', 'player', seat, 'character'] as const,

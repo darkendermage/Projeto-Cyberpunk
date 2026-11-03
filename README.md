@@ -106,12 +106,15 @@ A antiga Mesa de Combate, com o nome do capítulo de combate do livro. O tirotei
 Uma mesa no estilo Foundry/Owlbear dentro do app, com as regras do RED. O seu PC é o servidor e os jogadores entram pelo navegador, de casa, sem instalar nada.
 
 - **Cenas prontas antes da sessão:** suba o mapa (PNG, JPEG, WebP ou GIF; os grandes são reduzidos para 4096 px), calibre a grade (2 m por quadrado, como no livro), ponha tokens e áreas. Duplique a cena, ordene a lista e, na hora, clique em "Mostrar aos jogadores": todas as telas trocam juntas.
-- **Tokens que sabem quem são:** retrato da ficha ou imagem própria, nome, tamanho, giro, trava, anel de alcance, dono e visibilidade (todos, só o mestre ou jogadores escolhidos). Token oculto não sai do seu PC: o jogador não vê nem na fila de iniciativa.
+- **Tokens que sabem quem são:** vincule a um PC, a um NPC salvo do Gerador de Inimigos ou a um NPC do compêndio, e o token usa a imagem dele (ou uma imagem própria). Nome, tamanho, giro, trava, anel de alcance, dono e visibilidade (todos, só o mestre ou jogadores escolhidos). Token oculto não sai do seu PC: o jogador não vê nem na fila de iniciativa.
 - **O combate na mesa:** vincule a cena a um combate do Friday Night Firefight e crie os tokens dos combatentes. A barra de vida, as condições e o anel amarelo de quem joga acompanham cada ação. Os jogadores veem o Wound State dos outros; os números, só do próprio personagem.
 - **Ferramentas:** régua (quadrados e metros, diagonal = 1 quadrado), áreas de efeito com modelos do livro (explosão 10×10 m, Shotgun Shell, Suppressive Fire), ping e arraste com encaixe e prévia ao vivo.
 - **Dados e chat:** o servidor rola, então ninguém doura o resultado. Crítico e falha crítica no d10 (CP:R p.130), aviso de Ferimento Crítico nos dois 6 (p.187), rolagens públicas, privadas, secretas e sussurros. Num dano rolado, o mestre clica em "Aplicar" e ele vai para o combatente.
 - **Painel do jogador:** HP, SP, Sorte, armas com botões de ataque e dano, perícias com o total pronto e Death Save quando é a hora. Funciona no celular.
-- **Pela internet, sem mexer no roteador:** na aba Convites, baixe o cloudflared (o programa gratuito da Cloudflare) e clique em "Abrir para a internet". Cada jogador recebe um link próprio, que você revoga quando quiser. Pelo túnel só se chega à mesa: catálogo, fichas e o resto do app ficam fechados.
+- **Pela internet, sem mexer no roteador:** na aba Convites, baixe o cloudflared (o programa gratuito da Cloudflare) e clique em "Abrir para a internet". Pelo túnel só se chega à mesa: catálogo, fichas e o resto do app ficam fechados.
+- **Um link para todos:** mande o link geral e ligue "Entrada aberta". Cada jogador escolhe um dos lugares livres, e o celular lembra a escolha. Se alguém trocar de aparelho, clique em "Liberar". Quem preferir ainda pode mandar a cada jogador o link próprio dele.
+
+Os NPCs salvos do Gerador de Inimigos e os NPCs do compêndio também ganham imagem: suba no editor do gerador ou no dossiê do compêndio.
 
 ### 🏮 Night Market
 

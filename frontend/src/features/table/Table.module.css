@@ -277,3 +277,23 @@
 .sourceList button:hover, .sourceList button:focus-visible { background: var(--bg-3); color: var(--cyan); }
 .sourceList small, .sourceTag small { font-family: var(--font-mono); font-size: 10.5px; color: var(--text-faint); text-transform: uppercase; }
 .sourceTag { display: inline-flex; align-items: baseline; gap: 6px; padding: 3px 8px; border: 1px solid var(--line); background: var(--bg-2); }
+
+/* ------------------------------------------------------------ general link entrance */
+
+.lobbyGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; }
+.lobbySeat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 10px;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  color: var(--text);
+  cursor: pointer;
+  text-align: center;
+}
+.lobbySeat:hover:not(:disabled), .lobbySeat:focus-visible { background: var(--bg-3); }
+.lobbySeat:disabled { opacity: 0.5; cursor: wait; }
+.lobbySeat img, .lobbyInitials { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; }
+.lobbyInitials { display: grid; place-items: center; font-family: var(--font-display); font-size: 22px; color: var(--bg-0); }

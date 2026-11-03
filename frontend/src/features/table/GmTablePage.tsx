@@ -82,6 +82,10 @@ export function GmTablePage() {
     // Live effects belong to the live scene: ignored while the GM edits another one.
     tokenDrag: (d) => { if (d.sceneId === shownRef.current) board.current?.showDrag(d.tokenId, d.x, d.y); },
     ping: (p) => { if (p.sceneId === shownRef.current) board.current?.showPing(p); },
+    seats: () => {
+      void client.invalidateQueries({ queryKey: tableKeys.seats });
+      void client.invalidateQueries({ queryKey: tableKeys.online });
+    },
     resync: () => void client.invalidateQueries({ queryKey: ['table'] }),
   });
 

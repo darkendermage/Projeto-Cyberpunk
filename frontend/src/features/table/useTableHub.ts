@@ -22,6 +22,8 @@ export interface HubHandlers {
   message?: (message: TableMessage) => void;
   tokenDrag?: (drag: TokenDrag) => void;
   ping?: (ping: Ping) => void;
+  /** GM only: seats changed hands (picked at the entrance, entered, left, released). */
+  seats?: () => void;
   /** After a reconnection: whatever was missed must be fetched again. */
   resync?: () => void;
 }
@@ -61,6 +63,7 @@ export function useTableHub(seat: string | null, handlers: HubHandlers, enabled 
     on('message', 'message');
     on('tokenDrag', 'tokenDrag');
     on('ping', 'ping');
+    on('seats', 'seats');
     // A connection closed by this effect's cleanup (StrictMode, a new seat) must not touch the next one's status.
     let disposed = false;
     connection.onreconnecting(() => { if (!disposed) setStatus('reconnecting'); });

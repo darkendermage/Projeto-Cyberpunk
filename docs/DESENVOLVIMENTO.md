@@ -95,8 +95,8 @@ Para produção, rode `npm run build` e copie `frontend/dist` para `backend/src/
 ### Testes
 
 ```bash
-cd backend && dotnet test     # 506 testes: filtros, validação, gerador de NPCs e gangues, Compêndio de NPCs (dados e API), regras de personagem, Night Market, Arquiteturas de NET, Friday Night Firefight (mesa de combate), Mesa Virtual (porta dos jogadores, assentos, cenas, combate ao vivo, dados e chat, túnel), atualização automática e integração da API (SQLite + seed real)
-cd frontend && npm test       # filtros, URL, editor de NPCs, Compêndio de NPCs, tabela de alcance, perícias, Lifepath, anatomia do cyberware, Night Market e Mesa Virtual (grade, áreas, tokens)
+cd backend && dotnet test     # 542 testes: filtros, validação, gerador de NPCs e gangues, Compêndio de NPCs (dados e API), regras de personagem, Night Market, Arquiteturas de NET, Friday Night Firefight (mesa de combate), Mesa Virtual (porta dos jogadores, assentos, link geral, cenas, imagens de NPC nos tokens, combate ao vivo, dados e chat, túnel), atualização automática e integração da API (SQLite + seed real)
+cd frontend && npm test       # filtros, URL, editor de NPCs, Compêndio de NPCs, tabela de alcance, perícias, Lifepath, anatomia do cyberware, Night Market e Mesa Virtual (grade, áreas, tokens, origem do token, entrada)
 ```
 
 ## Arquitetura
@@ -432,6 +432,7 @@ Duas páginas:
 
 - `/mesa`: a do mestre, dentro do app.
 - `/mesa/j/:token`: a do jogador, renderizada **fora** do `AppShell`. A porta dos jogadores só responde à mesa, e o shell chamaria favoritos, atualização e busca.
+- `/mesa/j/`: a entrada do link geral (`LobbyPage`). O endereço do túnel sozinho cai aqui.
 
 ### Rede
 
@@ -463,12 +464,22 @@ O botão do painel baixa o release oficial do GitHub da Cloudflare e confere o c
 
 `TableSeat` guarda um token aleatório de 128 bits. O jogador o envia no cabeçalho `X-Seat`, ou em `?seat=` nas imagens, que carregam sem cabeçalho. No hub, ele vai como `access_token`. Revogar um assento derruba as conexões dele (`TablePresence`).
 
+### Link geral
+
+`Application/Table/TableLobby.cs` guarda **na memória** se a entrada está aberta e quais assentos alguém já pegou. Ao reiniciar o app, tudo fica livre e a entrada começa fechada. É o que se quer, porque o endereço do túnel muda e a chave guardada no celular (`localStorage`, `ncdb.table.seat`) não vale no endereço novo.
+
+- `GET /api/table/play/lobby`: os assentos livres (rótulo, cor, nome e retrato do PC, nunca a chave). Com a entrada fechada, responde `open: false` e lista vazia.
+- `POST /api/table/play/lobby/{id}/claim`: troca a chave do assento, derruba quem tinha a antiga e devolve a nova. A trava do `TableLobby` garante um só vencedor; o segundo recebe 409.
+- Entrar com uma chave válida (link individual) também marca o assento como pego.
+- Mestre: `GET`/`PUT /api/table/lobby` abre e fecha a entrada; `POST /api/table/seats/{id}/release` troca a chave e devolve o assento à entrada.
+- O hub manda `seats` ao mestre quando um assento é pego, liberado, conecta ou desconecta.
+
 ### Tempo real
 
 O hub fica em `Api/Hubs/TableHub.cs`, com os grupos `gm`, `players` e `seat:{id}`.
 
 - **Do cliente para o hub:** só a prévia de arraste (`DragToken`, cerca de 20 por segundo) e o `Ping`. Tudo que dura passa pela API HTTP.
-- **Do servidor para os clientes:** `scene`, `sceneRemoved`, `encounter`, `encounterRemoved`, `message`, `tokenDrag` e `ping`.
+- **Do servidor para os clientes:** `scene`, `sceneRemoved`, `encounter`, `encounterRemoved`, `message`, `tokenDrag`, `ping` e `seats` (só ao mestre).
 
 Cada assento recebe a própria visão:
 
@@ -489,7 +500,13 @@ O estado fica em `Scene.StateJson` (`SceneState`):
 - **Tokens:** canto superior esquerdo e tamanho em células, giro em graus.
 - **Áreas:** origem em células, tamanho em metros.
 
+Um token pode representar **um** PC (`CharacterId`), NPC salvo (`NpcId`) ou NPC do compêndio (`CompendiumNpcId`). A imagem segue esta ordem (`SceneViews.ImageSource`): imagem posta no token, retrato do PC, imagem do NPC salvo, imagem do NPC do compêndio, iniciais. A URL leva a data da imagem (`?v=`), e trocar a imagem de um NPC reenvia as cenas que têm tokens dele. O servidor só confere se o NPC existe quando o vínculo muda, para que um token de NPC excluído continue editável. "Criar tokens dos combatentes" copia a origem do snapshot (`CombatSnapshot.NpcId` e `CompendiumId`).
+
 Editar a cena usa `Version`; uma versão velha recebe 409. Tokens e áreas são *last-write-wins*, serializados por cena (`SceneLocks`). Só uma cena por vez tem `Active`.
+
+### Imagens de NPC
+
+`NpcPortrait` (por `NpcId`, apagada junto com o NPC) e `CompendiumPortrait` (pelo id do compêndio) guardam os bytes no banco, como o retrato dos PCs, com as mesmas regras (`CharacterService.RequirePortraitFile`: PNG, JPEG, WebP ou GIF, até 2 MB). Rotas: `/api/npcs/{id}/portrait` e `/api/npc-compendium/{id}/portrait`, e `.../portraits` devolve a data de cada imagem para as miniaturas. Duplicar um NPC copia a imagem.
 
 ### Mídia
 
@@ -506,7 +523,7 @@ Editar a cena usa `Version`; uma versão velha recebe 409. Tokens e áreas são 
 ### Frontend
 
 - `features/table/board/BoardController.ts` desenha com PixiJS (WebGL) de forma imperativa: camadas de fundo, grade, áreas, tokens e sobreposição, mais pan, zoom, arraste, régua, ferramenta de área e ping. As imagens carregam por `<img>`, porque as URLs de mídia não têm extensão.
-- A lógica pura fica em `grid.ts`, `templates.ts` e `tokens.ts`, com testes.
+- A lógica pura fica em `grid.ts`, `templates.ts`, `tokens.ts`, `sources.ts` (de onde vem o token) e `lobby.ts` (chave guardada no aparelho), com testes.
 - `useTableHub.ts` cuida do SignalR e da reconexão; os eventos atualizam o cache do React Query.
 
 ### Regras complementares

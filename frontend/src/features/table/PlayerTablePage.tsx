@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { ApiError } from '../../api/client';
 import { problemMessage } from '../../api/characters';
@@ -15,6 +15,7 @@ import { TableBoard, type BoardHandle } from './board/TableBoard';
 import { ChatPanel } from './chat/ChatPanel';
 import { CharacterPanel, InitiativePanel } from './PlayerPanels';
 import { fromPlayerFighter } from './tokens';
+import { forgetSeat, rememberSeat, savedSeat } from './lobby';
 import { HUB_TEXT, useTableHub } from './useTableHub';
 import styles from './Table.module.css';
 
@@ -37,7 +38,12 @@ export function PlayerTablePage() {
   const [selectedToken, setSelectedToken] = useState<string | null>(null);
   const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
 
+  const navigate = useNavigate();
   const state = useQuery({ queryKey: tableKeys.player(token), queryFn: api.state, retry: false });
+  const denied = state.error instanceof ApiError && state.error.status === 401;
+  // The general link enters this seat again directly; a key that stopped working (released, revoked) is dropped.
+  useEffect(() => { if (state.isSuccess) rememberSeat(token); }, [state.isSuccess, token]);
+  useEffect(() => { if (denied && savedSeat() === token) forgetSeat(); }, [denied, token]);
   const encounter = useQuery({ queryKey: tableKeys.playerEncounter(token), queryFn: api.encounter, enabled: state.isSuccess });
   const character = useQuery({ queryKey: tableKeys.playerCharacter(token), queryFn: api.character, enabled: state.isSuccess });
   const messages = useQuery({ queryKey: tableKeys.playerMessages(token), queryFn: api.messages, enabled: state.isSuccess });
@@ -108,7 +114,6 @@ export function PlayerTablePage() {
 
   if (state.isLoading) return <div className={styles.gate}><Spinner /></div>;
   if (state.error) {
-    const denied = state.error instanceof ApiError && state.error.status === 401;
     return (
       <div className={styles.gate}>
         <div className={styles.gateCard}>
@@ -116,10 +121,12 @@ export function PlayerTablePage() {
           <h1>{denied ? t('Convite inválido', 'Invalid invite') : t('Sem sinal', 'No signal')}</h1>
           <p className={styles.muted}>
             {denied
-              ? t('Este link foi revogado ou está incompleto. Peça um link novo ao mestre.', 'This link was revoked or is incomplete. Ask the GM for a new link.')
+              ? t('Este link não vale mais: o mestre liberou ou revogou o lugar. Escolha seu personagem de novo ou peça um link novo.', 'This link no longer works: the GM released or revoked the seat. Pick your character again or ask for a new link.')
               : t('Não deu para falar com a mesa do mestre. O túnel pode ter fechado ou trocado de endereço.', 'Couldn\'t reach the GM\'s table. The tunnel may have closed or changed address.')}
           </p>
-          {!denied && <Button onClick={() => state.refetch()}>{t('Tentar de novo', 'Try again')}</Button>}
+          {denied
+            ? <Button onClick={() => navigate('/mesa/j/', { replace: true })}>{t('Escolher personagem', 'Pick a character')}</Button>
+            : <Button onClick={() => state.refetch()}>{t('Tentar de novo', 'Try again')}</Button>}
         </div>
       </div>
     );

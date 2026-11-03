@@ -130,6 +130,14 @@ export interface Seat {
   claimed: boolean;
 }
 
+/** A free seat at the general link's entrance (never its key). */
+export interface LobbySeat { id: number; label: string; color: string; characterName: string | null; hasPortrait: boolean }
+
+/** The entrance: closed lists nothing; open lists the free seats. */
+export interface Lobby { open: boolean; seats: LobbySeat[] }
+
+export interface ClaimResult { token: string }
+
 export interface PlayerSeat { id: number; label: string; color: string; characterId: number | null }
 
 export interface PlayerState { seat: PlayerSeat; scene: SceneView | null }

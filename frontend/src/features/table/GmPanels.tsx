@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { Link } from 'react-router';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   ArrowDown, ArrowUp, Copy, Download, ExternalLink, Plus, Power, Radio, RotateCcw, RotateCw, SkipForward, Swords, Trash2, Upload,
 } from 'lucide-react';
@@ -408,6 +408,8 @@ export function InvitesTab({ seats, act }: { seats: Seat[]; act: Act }) {
   const characters = useCharacters();
   const tunnel = useQuery({ queryKey: tableKeys.tunnel, queryFn: tableApi.tunnel, refetchInterval: (q) => (q.state.data?.state === 'Starting' || q.state.data?.state === 'Downloading' ? 1500 : 10000) });
   const online = useQuery({ queryKey: tableKeys.online, queryFn: tableApi.onlineSeats, refetchInterval: 5000 });
+  const lobby = useQuery({ queryKey: tableKeys.lobbyStatus, queryFn: tableApi.lobby });
+  const client = useQueryClient();
   const [busy, setBusy] = useState(false);
   const [label, setLabel] = useState('');
   const [characterId, setCharacterId] = useState<number | null>(null);
@@ -419,6 +421,10 @@ export function InvitesTab({ seats, act }: { seats: Seat[]; act: Act }) {
   const status = tunnel.data;
   const base = status?.state === 'Running' && status.url ? status.url : status?.localUrl ?? null;
   const copy = (text: string) => navigator.clipboard.writeText(text).then(() => toast.notify(t('Link copiado.', 'Link copied.')), () => toast.notify(text));
+  const setEntrance = async (open: boolean) => {
+    try { client.setQueryData(tableKeys.lobbyStatus, await tableApi.setLobby(open)); } catch (e) { toast.notify(problemMessage(e), 'error'); }
+  };
+  const general = base ? `${base}/` : null;
 
   return (
     <div className={styles.stack}>
@@ -429,11 +435,6 @@ export function InvitesTab({ seats, act }: { seats: Seat[]; act: Act }) {
           {status ? TUNNEL_TEXT[status.state] : t('Verificando…', 'Checking…')}
         </span>
         {status?.error && <span className={styles.error}>{status.error}</span>}
-        {status?.state === 'Running' && status.url && (
-          <span className={styles.muted}>
-            {t(`Endereço do túnel: ${status.url}. Não mande este endereço: mande a cada jogador o link dele, abaixo.`, `Tunnel address: ${status.url}. Don't send this address: send each player their own link, below.`)}
-          </span>
-        )}
         <div className={styles.row}>
           {status?.state === 'Missing' && <Button icon={busy ? <Spinner /> : <Download size={15} />} disabled={busy} onClick={() => tunnelAction(tableApi.downloadTunnel)}>{t('Baixar cloudflared', 'Download cloudflared')}</Button>}
           {(status?.state === 'Stopped' || status?.state === 'Failed') && <Button variant="primary" icon={busy ? <Spinner /> : <Power size={15} />} disabled={busy} onClick={() => tunnelAction(tableApi.startTunnel)}>{t('Abrir para a internet', 'Open to the internet')}</Button>}
@@ -443,6 +444,20 @@ export function InvitesTab({ seats, act }: { seats: Seat[]; act: Act }) {
           {status?.state === 'Missing'
             ? t('O cloudflared é o programa gratuito da Cloudflare que cria o endereço público (cerca de 60 MB, baixado do GitHub oficial da Cloudflare). Não precisa de conta nem de mexer no roteador.', 'cloudflared is Cloudflare\'s free program that creates the public address (about 60 MB, downloaded from Cloudflare\'s official GitHub). No account or router setup needed.')
             : t('O endereço muda a cada vez que o túnel abre: recopie os links. Por ele, os jogadores só alcançam a mesa.', 'The address changes every time the tunnel opens: copy the links again. Through it, players only reach the table.')}
+        </span>
+      </div>
+
+      <div className={styles.section}>
+        <span className={styles.label}>{t('Link geral', 'General link')}</span>
+        {general && (
+          <div className={styles.row}>
+            <span className={`${styles.link} ${styles.grow}`}>{general}</span>
+            <IconButton label={t('Copiar link geral', 'Copy the general link')} onClick={() => copy(general)}><Copy size={14} /></IconButton>
+          </div>
+        )}
+        <Switch checked={lobby.data?.open ?? false} onChange={(open) => void setEntrance(open)} label={t('Entrada aberta', 'Entrance open')} />
+        <span className={styles.muted}>
+          {t('Mande este link a todos: enquanto a entrada estiver aberta, cada jogador escolhe um dos lugares livres abaixo. Feche depois que todos entrarem. A entrada fecha sozinha quando o programa reinicia.', 'Send this link to everyone: while the entrance is open, each player picks one of the free seats below. Close it once everyone is in. It closes by itself when the program restarts.')}
         </span>
       </div>
 
@@ -473,8 +488,8 @@ export function InvitesTab({ seats, act }: { seats: Seat[]; act: Act }) {
                   {character && <span className={styles.muted}>{character.handle ?? character.name}</span>}
                 </span>
                 <span className={styles.status}>
-                  <span className={`${styles.dot} ${online.data?.includes(s.id) ? styles.dotOn : ''}`} />
-                  {s.revoked ? t('revogado', 'revoked') : online.data?.includes(s.id) ? t('na mesa', 'at the table') : t('fora', 'away')}
+                  <span className={`${styles.dot} ${online.data?.includes(s.id) ? styles.dotOn : s.claimed ? styles.dotWarn : ''}`} />
+                  {s.revoked ? t('revogado', 'revoked') : online.data?.includes(s.id) ? t('conectado', 'connected') : s.claimed ? t('na mesa', 'taken') : t('livre', 'free')}
                 </span>
               </div>
               {!s.revoked && link && (
@@ -484,9 +499,16 @@ export function InvitesTab({ seats, act }: { seats: Seat[]; act: Act }) {
                 </div>
               )}
               {!s.revoked && (
-                <Button variant="ghost" onClick={() => {
-                  if (window.confirm(t(`Revogar o convite de ${s.label}? O link para de funcionar.`, `Revoke ${s.label}'s invite? The link stops working.`))) void act(async () => { await tableApi.revokeSeat(s.id); });
-                }}>{t('Revogar', 'Revoke')}</Button>
+                <div className={styles.row}>
+                  {s.claimed && (
+                    <Button variant="ghost" onClick={() => {
+                      if (window.confirm(t(`Liberar o lugar de ${s.label}? Quem está nele sai da mesa, o link antigo para de funcionar e o lugar volta para a entrada.`, `Release ${s.label}'s seat? Whoever holds it leaves the table, the old link stops working and the seat goes back to the entrance.`))) void act(async () => { await tableApi.releaseSeat(s.id); });
+                    }}>{t('Liberar', 'Release')}</Button>
+                  )}
+                  <Button variant="ghost" onClick={() => {
+                    if (window.confirm(t(`Revogar o convite de ${s.label}? O link para de funcionar.`, `Revoke ${s.label}'s invite? The link stops working.`))) void act(async () => { await tableApi.revokeSeat(s.id); });
+                  }}>{t('Revogar', 'Revoke')}</Button>
+                </div>
               )}
             </div>
           );

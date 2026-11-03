@@ -25,6 +25,7 @@ const NightMarketPage = lazy(() => import('./features/night-market/NightMarketPa
 const CombatPage = lazy(() => import('./features/combat/CombatPage').then((m) => ({ default: m.CombatPage })));
 const GmTablePage = lazy(() => import('./features/table/GmTablePage').then((m) => ({ default: m.GmTablePage })));
 const PlayerTablePage = lazy(() => import('./features/table/PlayerTablePage').then((m) => ({ default: m.PlayerTablePage })));
+const LobbyPage = lazy(() => import('./features/table/LobbyPage').then((m) => ({ default: m.LobbyPage })));
 const NetArchitecturePage = lazy(() => import('./features/net-architecture/NetArchitecturePage').then((m) => ({ default: m.NetArchitecturePage })));
 
 export default function App() {
@@ -36,8 +37,8 @@ export default function App() {
       <Suspense fallback={<Spinner />}>
         <Routes>
           <Route path="/mesa/j/:token" element={<PlayerTablePage />} />
-          {/* A link without its code: the page says it is incomplete. */}
-          <Route path="*" element={<PlayerTablePage />} />
+          {/* The general link (the tunnel address leads here): pick a free seat. */}
+          <Route path="*" element={<LobbyPage />} />
         </Routes>
       </Suspense>
     );
