@@ -87,6 +87,22 @@ public class TableCombatApiTests(ApiFactory factory)
     }
 
     [Fact]
+    public async Task A_player_gets_their_own_skills_for_quick_rolls()
+    {
+        var solo = await FinalizedSolo("Lucky");
+        var seat = await Send<SeatDto>(_gm, HttpMethod.Post, "/api/table/seats", new CreateSeatRequest("Dona da Lucky", solo.Id), expected: HttpStatusCode.Created);
+        var sheet = await Send<PlayerCharacterDto>(_player, HttpMethod.Get, "/api/table/play/character", seat: seat.Token);
+        sheet.Id.Should().Be(solo.Id);
+        sheet.MaxHp.Should().BeGreaterThan(0);
+        sheet.Skills.Should().Contain(s => s.SkillId == "handgun" && s.Total > 0);
+        sheet.Stats.Should().Contain(s => s.Key == "REF");
+
+        var loner = await Send<SeatDto>(_gm, HttpMethod.Post, "/api/table/seats", new CreateSeatRequest("Sem ficha"), expected: HttpStatusCode.Created);
+        (await _player.SendAsync(new HttpRequestMessage(HttpMethod.Get, "/api/table/play/character") { Headers = { { "X-Seat", loner.Token } } }))
+            .StatusCode.Should().Be(HttpStatusCode.NoContent);
+    }
+
+    [Fact]
     public async Task Every_combat_action_reaches_the_screens_live()
     {
         var s = await FightOnTheTable("Mox");

@@ -45,6 +45,22 @@ public sealed class TablePlayController(SeatService seats, SceneService scenes, 
         }
     }
 
+    /// <summary>The seat's own character, for skill checks from the token (204 when the seat plays none).</summary>
+    [HttpGet("character")]
+    public async Task<PlayerCharacterDto?> Character(CancellationToken ct)
+    {
+        var seat = await SeatAsync(ct);
+        if (seat.CharacterId is not { } id) return null;
+        try
+        {
+            return PlayerCharacters.From(await characters.GetAsync(id, ct));
+        }
+        catch (NotFoundException)
+        {
+            return null;
+        }
+    }
+
     [HttpGet("messages")]
     public async Task<IReadOnlyList<TableMessageDto>> Messages(CancellationToken ct) => await chat.HistoryAsync(await SeatAsync(ct), ct);
 
