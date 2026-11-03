@@ -95,8 +95,8 @@ Para produção, rode `npm run build` e copie `frontend/dist` para `backend/src/
 ### Testes
 
 ```bash
-cd backend && dotnet test     # 434 testes: filtros, validação, gerador de NPCs e gangues, Compêndio de NPCs (dados e API), regras de personagem, Night Market, Arquiteturas de NET, Friday Night Firefight (mesa de combate), atualização automática e integração da API (SQLite + seed real)
-cd frontend && npm test       # filtros, URL, editor de NPCs, Compêndio de NPCs, tabela de alcance, perícias, Lifepath, anatomia do cyberware e Night Market
+cd backend && dotnet test     # 506 testes: filtros, validação, gerador de NPCs e gangues, Compêndio de NPCs (dados e API), regras de personagem, Night Market, Arquiteturas de NET, Friday Night Firefight (mesa de combate), Mesa Virtual (porta dos jogadores, assentos, cenas, combate ao vivo, dados e chat, túnel), atualização automática e integração da API (SQLite + seed real)
+cd frontend && npm test       # filtros, URL, editor de NPCs, Compêndio de NPCs, tabela de alcance, perícias, Lifepath, anatomia do cyberware, Night Market e Mesa Virtual (grade, áreas, tokens)
 ```
 
 ## Arquitetura
@@ -111,7 +111,7 @@ backend/
 frontend/src
   api/        cliente tipado + hooks React Query
   lib/        lógica pura de filtros (testada) e formatação
-  features/   catalog (abas, cards, lista, filtros, ficha), search, favorites, lists, compare, reference, characters, night-market, net-architecture, combat
+  features/   catalog (abas, cards, lista, filtros, ficha), search, favorites, lists, compare, reference, characters, night-market, net-architecture, combat, table (mesa virtual)
   components/ layout (header com skyline, sidebar), UI base, arte vetorial dos itens
 data/
   source/     compêndio original (markdown)
@@ -426,6 +426,99 @@ Os exemplos do livro são testes: o tiro e o Autofire do Royal (p.170 e p.173), 
 
 Regras complementares: alcance informado em metros; reordenar a fila à mão (`POST combatants/{id}/move`) faz o combatente assumir a iniciativa do vizinho de baixo (ou de cima, no fim da fila) e decide o empate na ordem escolhida, e um empate já decidido não é rolado de novo quando outra iniciativa muda; inimigo genérico com valores iniciais editáveis; munição dos NPCs contada no encontro, de pente cheio ao entrar. A tabela de exemplos de cobertura usa o HP que o livro lista (a porta de metal aparece com 20 HP, embora Thin Steel valha 25 na tabela de materiais).
 
+## Mesa Virtual
+
+Duas páginas:
+
+- `/mesa`: a do mestre, dentro do app.
+- `/mesa/j/:token`: a do jogador, renderizada **fora** do `AppShell`. A porta dos jogadores só responde à mesa, e o shell chamaria favoritos, atualização e busca.
+
+### Rede
+
+O Kestrel escuta em duas portas:
+
+| Porta | Configuração | Desktop | Dev |
+|---|---|---|---|
+| Mestre | a primeira de `Urls` | 5090 | 5080 |
+| Jogadores | `Table:PlayerPort` | 5091 | 5081 |
+
+O `Api/Table/PlayerSurfaceGuard.cs` decide pela porta local, não pelo IP, porque o túnel chega de 127.0.0.1.
+
+- **Porta dos jogadores:** só passam `/api/table/play/**`, `GET /api/table/media/{id}`, `/hubs/table` e os arquivos do SPA. O resto responde 404.
+- **Porta do mestre:** `/api/table/**` e `/hubs/**` recusam `Origin` de outro site com 403, porque WebSocket não passa por CORS.
+
+### Internet
+
+`Api/Desktop/TunnelService.cs` roda `cloudflared tunnel --url http://localhost:{PlayerPort}` (Quick Tunnel, sem conta) e lê o endereço `*.trycloudflare.com` na saída do processo. O processo morre com o app.
+
+O executável é procurado nesta ordem:
+
+1. o caminho em `Table:Cloudflared`;
+2. a pasta `Table:ToolsDir` (padrão `%LOCALAPPDATA%\NightCityItemDB\tools`);
+3. o PATH.
+
+O botão do painel baixa o release oficial do GitHub da Cloudflare e confere o cabeçalho `MZ` do arquivo.
+
+### Assentos
+
+`TableSeat` guarda um token aleatório de 128 bits. O jogador o envia no cabeçalho `X-Seat`, ou em `?seat=` nas imagens, que carregam sem cabeçalho. No hub, ele vai como `access_token`. Revogar um assento derruba as conexões dele (`TablePresence`).
+
+### Tempo real
+
+O hub fica em `Api/Hubs/TableHub.cs`, com os grupos `gm`, `players` e `seat:{id}`.
+
+- **Do cliente para o hub:** só a prévia de arraste (`DragToken`, cerca de 20 por segundo) e o `Ping`. Tudo que dura passa pela API HTTP.
+- **Do servidor para os clientes:** `scene`, `sceneRemoved`, `encounter`, `encounterRemoved`, `message`, `tokenDrag` e `ping`.
+
+Cada assento recebe a própria visão:
+
+- **Cena:** `SceneViews.ForSeat` tira os tokens ocultos e marca `Controllable`. O jogador move os tokens do seu personagem ou de que é dono, desde que não estejam travados, e mexe só nas áreas que ele mesmo pôs.
+- **Combate:** `IEncounterObserver` é chamado no fim de toda mutação do `EncounterService`. `EncounterBroadcast` manda o detalhe completo ao mestre. Se o combate é o da cena ao vivo, manda também a visão de cada assento, montada por `PlayerEncounters.For`:
+  - do próprio personagem, todos os números;
+  - dos outros combatentes, só o Wound State;
+  - combatentes com token oculto saem da fila;
+  - o log fica só com o mestre.
+- **Chat:** `ChatService` decide quem lê cada linha. Pública vai a todos; privada, ao autor e ao mestre; secreta, só ao mestre (o autor vê que rolou, mas não o resultado); sussurro, ao autor, ao alvo e ao mestre.
+
+### Cena
+
+O estado fica em `Scene.StateJson` (`SceneState`):
+
+- **Grade:** célula e deslocamento em pixels do mapa, mais os metros por célula.
+- **Fundo:** a imagem do mapa e o tamanho dela.
+- **Tokens:** canto superior esquerdo e tamanho em células, giro em graus.
+- **Áreas:** origem em células, tamanho em metros.
+
+Editar a cena usa `Version`; uma versão velha recebe 409. Tokens e áreas são *last-write-wins*, serializados por cena (`SceneLocks`). Só uma cena por vez tem `Active`.
+
+### Mídia
+
+`MediaAsset` fica no banco e os bytes em `Media:Root` (padrão `%LOCALAPPDATA%\NightCityItemDB\media`). O tipo é lido dos primeiros bytes do arquivo. O limite é 15 MB, e o arquivo é servido com cache imutável. O navegador reduz a imagem antes de enviar (`prepareImage` com `MAP_LIMITS`, em `lib/portrait.ts`).
+
+### Dados
+
+`Application/Table/Dice/TableDice.cs` aceita fórmulas com termos `NdS` e constantes ligados por `+` e `-`, até 100 dados. Há três modos:
+
+- `Plain`: soma simples.
+- `Check`: um único d10. O 10 natural soma mais 1d10; o 1 natural subtrai 1d10; o dado extra não encadeia (CP:R p.130).
+- `Damage`: dois 6 nos d6 avisam de Ferimento Crítico (CP:R p.187).
+
+### Frontend
+
+- `features/table/board/BoardController.ts` desenha com PixiJS (WebGL) de forma imperativa: camadas de fundo, grade, áreas, tokens e sobreposição, mais pan, zoom, arraste, régua, ferramenta de área e ping. As imagens carregam por `<img>`, porque as URLs de mídia não têm extensão.
+- A lógica pura fica em `grid.ts`, `templates.ts` e `tokens.ts`, com testes.
+- `useTableHub.ts` cuida do SignalR e da reconexão; os eventos atualizam o cache do React Query.
+
+### Regras complementares
+
+- A régua conta a diagonal como 1 quadrado e mostra também a distância em linha reta. O livro dá o movimento em quadrados de 2 m (p.168), mas não traz regra para a diagonal.
+- O cone do modelo Shotgun Shell é convenção da mesa: o livro só dá o alcance de 6 m (p.174).
+
+### Testar em dev
+
+1. Rode a API (portas 5080 e 5081) e o Vite.
+2. A tela do jogador precisa ser servida pela porta 5081: copie `frontend/dist` para `backend/src/CyberpunkDb.Api/wwwroot`, que o git ignora.
+
 ## Arquiteturas de NET
 
 Página `/net-architecture`. As regras ficam em `backend/src/CyberpunkDb.Application/NetArchitectures/Rules/net-architecture-rules.json`, e cada valor tem página ou a marca `complementary`, como nos outros módulos. O frontend não contém regras: gera, edita e exporta pela API (`/api/net-architectures`), que devolve o estado, o custo e os Watchers recalculados.
@@ -494,5 +587,5 @@ A interface tem inglês (padrão) e português do Brasil. A escolha fica no `loc
 
 ## Observações
 
-- Não há autenticação. Os favoritos, as listas, os personagens, os Night Markets e as Arquiteturas de NET servem a um único perfil local. Coloque a API atrás de autenticação antes de expô-la publicamente.
+- Não há autenticação. Os favoritos, as listas, os personagens, os Night Markets e as Arquiteturas de NET servem a um único perfil local. Coloque a API atrás de autenticação antes de expô-la publicamente. A exceção é a porta dos jogadores da Mesa Virtual, feita para ir à internet: ela só responde à mesa e exige o link do assento.
 - Os efeitos visuais (scanlines, glitch, animações, intensidade do neon, skyline) podem ser desligados na engrenagem do cabeçalho. A preferência do sistema por movimento reduzido é respeitada.
