@@ -312,6 +312,24 @@ internal static class CatalogModelConfiguration
             e.Property(x => x.Data).IsRequired();
         });
 
+        b.Entity<NpcPortrait>(e =>
+        {
+            e.ToTable("NpcPortraits");
+            e.HasKey(x => x.NpcId);
+            e.HasOne<Npc>().WithOne().HasForeignKey<NpcPortrait>(x => x.NpcId).OnDelete(DeleteBehavior.Cascade);
+            e.Property(x => x.ContentType).HasMaxLength(60).IsRequired();
+            e.Property(x => x.Data).IsRequired();
+        });
+
+        b.Entity<CompendiumPortrait>(e =>
+        {
+            e.ToTable("CompendiumPortraits");
+            e.HasKey(x => x.CompendiumId);
+            e.Property(x => x.CompendiumId).HasMaxLength(80);
+            e.Property(x => x.ContentType).HasMaxLength(60).IsRequired();
+            e.Property(x => x.Data).IsRequired();
+        });
+
         b.Entity<CharacterEvent>(e =>
         {
             e.ToTable("CharacterEvents");

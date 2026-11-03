@@ -458,10 +458,7 @@ public sealed class CharacterService(
 
     public async Task SetPortraitAsync(int id, string contentType, Stream content, long length, CancellationToken ct)
     {
-        if (!PortraitTypes.Contains(contentType, StringComparer.OrdinalIgnoreCase))
-            throw RequestValidationException.For("file", L.T("Use uma imagem PNG, JPEG, WebP ou GIF.", "Use a PNG, JPEG, WebP or GIF image."));
-        if (length <= 0 || length > PortraitMaxBytes)
-            throw RequestValidationException.For("file", L.T("A imagem deve ter até 2 MB.", "The image must be 2 MB or less."));
+        RequirePortraitFile(contentType, length);
         var entity = await db.Characters.Include(c => c.Portrait).FirstOrDefaultAsync(c => c.Id == id, ct) ?? throw NotFound(id);
         using var buffer = new MemoryStream();
         await content.CopyToAsync(buffer, ct);
@@ -475,6 +472,15 @@ public sealed class CharacterService(
         }
         entity.UpdatedAt = now;
         await db.SaveChangesAsync(ct);
+    }
+
+    /// <summary>The image rules shared by every stored portrait (characters, saved NPCs, compendium NPCs).</summary>
+    internal static void RequirePortraitFile(string contentType, long length)
+    {
+        if (!PortraitTypes.Contains(contentType, StringComparer.OrdinalIgnoreCase))
+            throw RequestValidationException.For("file", L.T("Use uma imagem PNG, JPEG, WebP ou GIF.", "Use a PNG, JPEG, WebP or GIF image."));
+        if (length <= 0 || length > PortraitMaxBytes)
+            throw RequestValidationException.For("file", L.T("A imagem deve ter até 2 MB.", "The image must be 2 MB or less."));
     }
 
     public async Task DeletePortraitAsync(int id, CancellationToken ct)

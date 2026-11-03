@@ -102,6 +102,11 @@ public sealed class NpcService(
         Apply(npc, sheet, source.Status, now);
         db.Npcs.Add(npc);
         await db.SaveChangesAsync(ct);
+        if (await db.NpcPortraits.AsNoTracking().FirstOrDefaultAsync(p => p.NpcId == id, ct) is { } image)
+        {
+            db.NpcPortraits.Add(new NpcPortrait { NpcId = npc.Id, ContentType = image.ContentType, Data = image.Data, UpdatedAt = now });
+            await db.SaveChangesAsync(ct);
+        }
         return await GetAsync(npc.Id, ct);
     }
 

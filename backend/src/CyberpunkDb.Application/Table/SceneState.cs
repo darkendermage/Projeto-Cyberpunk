@@ -67,6 +67,10 @@ public sealed record SceneToken
     /// <summary>With <see cref="TokenVisibility.Seats"/>: who sees it besides the GM and its owner.</summary>
     public List<int> VisibleSeatIds { get; init; } = [];
     public int? CharacterId { get; init; }
+    /// <summary>A saved NPC of the generator the token stands for; its image shows on the token.</summary>
+    public int? NpcId { get; init; }
+    /// <summary>A named NPC of the books (compendium id) the token stands for; its image shows on the token.</summary>
+    public string? CompendiumNpcId { get; init; }
     public string? CombatantId { get; init; }
     /// <summary>A ring drawn around the token, in meters (a weapon's range, a grenade's reach).</summary>
     public double? RangeRingMeters { get; init; }

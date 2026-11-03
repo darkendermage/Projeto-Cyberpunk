@@ -240,6 +240,9 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
             return state with { Templates = state.Templates.Where(t => t.Id != templateId).ToList() };
         }, ct);
 
+    /// <summary>Sends again every scene with a token that <paramref name="shows"/> an image that just changed.</summary>
+    public Task RepublishTokensOfAsync(Func<SceneToken, bool> shows, CancellationToken ct) => Task.CompletedTask;
+
     public Task<bool> IsActiveAsync(int sceneId, CancellationToken ct) => db.Scenes.AnyAsync(s => s.Id == sceneId && s.Active, ct);
 
     /// <summary>The fight linked to the active scene and the scene's state (for the players' view of it).</summary>

@@ -15,6 +15,8 @@ public interface IAppDbContext
     DbSet<Character> Characters { get; }
     DbSet<CharacterEvent> CharacterEvents { get; }
     DbSet<CharacterPortrait> CharacterPortraits { get; }
+    DbSet<NpcPortrait> NpcPortraits { get; }
+    DbSet<CompendiumPortrait> CompendiumPortraits { get; }
     DbSet<NightMarket> NightMarkets { get; }
     DbSet<NetArchitecture> NetArchitectures { get; }
     DbSet<Encounter> Encounters { get; }

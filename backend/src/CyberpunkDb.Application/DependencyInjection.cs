@@ -45,6 +45,7 @@ public static class DependencyInjection
         services.AddSingleton<NpcCatalogCache>();
         services.AddScoped<NpcCatalogProvider>();
         services.AddScoped<NpcService>();
+        services.AddScoped<NpcPortraitService>();
         services.AddSingleton(sp => CharacterRuleBook.LoadEmbedded(sp.GetRequiredService<NpcRuleBook>()));
         services.AddSingleton<CharacterCalculator>();
         services.AddSingleton<Characters.Roles.RoleModuleRegistry>();

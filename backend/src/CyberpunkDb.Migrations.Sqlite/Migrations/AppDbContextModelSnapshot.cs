@@ -156,6 +156,29 @@ namespace CyberpunkDb.Migrations.Sqlite.Migrations
                     b.ToTable("CharacterPortraits", (string)null);
                 });
 
+            modelBuilder.Entity("CyberpunkDb.Domain.Entities.CompendiumPortrait", b =>
+                {
+                    b.Property<string>("CompendiumId")
+                        .HasMaxLength(80)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ContentType")
+                        .IsRequired()
+                        .HasMaxLength(60)
+                        .HasColumnType("TEXT");
+
+                    b.Property<byte[]>("Data")
+                        .IsRequired()
+                        .HasColumnType("BLOB");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("CompendiumId");
+
+                    b.ToTable("CompendiumPortraits", (string)null);
+                });
+
             modelBuilder.Entity("CyberpunkDb.Domain.Entities.Encounter", b =>
                 {
                     b.Property<int>("Id")
@@ -572,6 +595,28 @@ namespace CyberpunkDb.Migrations.Sqlite.Migrations
                     b.HasIndex("UpdatedAt");
 
                     b.ToTable("Npcs", (string)null);
+                });
+
+            modelBuilder.Entity("CyberpunkDb.Domain.Entities.NpcPortrait", b =>
+                {
+                    b.Property<int>("NpcId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ContentType")
+                        .IsRequired()
+                        .HasMaxLength(60)
+                        .HasColumnType("TEXT");
+
+                    b.Property<byte[]>("Data")
+                        .IsRequired()
+                        .HasColumnType("BLOB");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("NpcId");
+
+                    b.ToTable("NpcPortraits", (string)null);
                 });
 
             modelBuilder.Entity("CyberpunkDb.Domain.Entities.Scene", b =>
@@ -1337,6 +1382,15 @@ namespace CyberpunkDb.Migrations.Sqlite.Migrations
                     b.HasOne("CyberpunkDb.Domain.Entities.Item", null)
                         .WithMany("Tags")
                         .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("CyberpunkDb.Domain.Entities.NpcPortrait", b =>
+                {
+                    b.HasOne("CyberpunkDb.Domain.Entities.Npc", null)
+                        .WithOne()
+                        .HasForeignKey("CyberpunkDb.Domain.Entities.NpcPortrait", "NpcId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
