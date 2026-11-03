@@ -36,6 +36,8 @@ export default function App() {
       <Suspense fallback={<Spinner />}>
         <Routes>
           <Route path="/mesa/j/:token" element={<PlayerTablePage />} />
+          {/* A link without its code: the page says it is incomplete. */}
+          <Route path="*" element={<PlayerTablePage />} />
         </Routes>
       </Suspense>
     );

@@ -30,6 +30,8 @@ public sealed partial class TunnelService(IOptions<TableOptions> table, IConfigu
     private static readonly TimeSpan StartTimeout = TimeSpan.FromSeconds(40);
 
     private readonly Lock _gate = new();
+    /// <summary>Ends cloudflared with the app even when no shutdown code runs (window closed, crash).</summary>
+    private readonly ChildProcessJob _job = new();
     private Process? _process;
     private TunnelState _state = TunnelState.Stopped;
     private string? _url;
@@ -136,7 +138,11 @@ public sealed partial class TunnelService(IOptions<TableOptions> table, IConfigu
         return m.Success && !m.Value.StartsWith("https://api.", StringComparison.Ordinal) ? m.Value : null;
     }
 
-    public void Dispose() => Kill();
+    public void Dispose()
+    {
+        Kill();
+        _job.Dispose();
+    }
 
     private Process Launch(string exe, int port)
     {
@@ -175,6 +181,7 @@ public sealed partial class TunnelService(IOptions<TableOptions> table, IConfigu
             _ready?.TrySetResult(null);
             return process;
         }
+        _job.Add(process);
         process.BeginErrorReadLine();
         process.BeginOutputReadLine();
         return process;

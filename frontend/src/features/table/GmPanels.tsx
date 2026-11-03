@@ -439,7 +439,11 @@ export function InvitesTab({ seats, act }: { seats: Seat[]; act: Act }) {
           {status ? TUNNEL_TEXT[status.state] : t('Verificando…', 'Checking…')}
         </span>
         {status?.error && <span className={styles.error}>{status.error}</span>}
-        {status?.state === 'Running' && status.url && <span className={styles.link}>{status.url}</span>}
+        {status?.state === 'Running' && status.url && (
+          <span className={styles.muted}>
+            {t(`Endereço do túnel: ${status.url}. Não mande este endereço: mande a cada jogador o link dele, abaixo.`, `Tunnel address: ${status.url}. Don't send this address: send each player their own link, below.`)}
+          </span>
+        )}
         <div className={styles.row}>
           {status?.state === 'Missing' && <Button icon={busy ? <Spinner /> : <Download size={15} />} disabled={busy} onClick={() => tunnelAction(tableApi.downloadTunnel)}>{t('Baixar cloudflared', 'Download cloudflared')}</Button>}
           {(status?.state === 'Stopped' || status?.state === 'Failed') && <Button variant="primary" icon={busy ? <Spinner /> : <Power size={15} />} disabled={busy} onClick={() => tunnelAction(tableApi.startTunnel)}>{t('Abrir para a internet', 'Open to the internet')}</Button>}

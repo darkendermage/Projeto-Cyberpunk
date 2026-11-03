@@ -71,6 +71,24 @@ public class TableFoundationApiTests(ApiFactory factory)
         (await _gm.GetAsync(url)).StatusCode.Should().NotBe(HttpStatusCode.NotFound);
     }
 
+    [Theory]
+    [InlineData("/")]
+    [InlineData("/catalog/weapons")]
+    [InlineData("/mesa")]
+    [InlineData("/characters/1")]
+    public async Task Pages_other_than_a_seat_link_send_players_to_the_table(string url)
+    {
+        // Opening the bare tunnel address would load the whole app, whose data the port refuses ("connection lost").
+        using var client = factory.CreateClient(new Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactoryClientOptions { AllowAutoRedirect = false });
+        client.DefaultRequestHeaders.Add(ApiFactory.PortHeader, ApiFactory.PlayerPort.ToString());
+        var response = await client.GetAsync(url);
+        response.StatusCode.Should().Be(HttpStatusCode.Redirect);
+        response.Headers.Location!.ToString().Should().Be("/mesa/j/");
+        (await client.GetAsync("/mesa/j/abc")).StatusCode.Should().NotBe(HttpStatusCode.Redirect);
+        (await client.GetAsync("/assets/index-abc.js")).StatusCode.Should().NotBe(HttpStatusCode.Redirect);
+        (await _gm.GetAsync(url)).StatusCode.Should().NotBe(HttpStatusCode.Redirect);
+    }
+
     [Fact]
     public async Task The_players_port_refuses_writes_outside_the_player_api()
     {

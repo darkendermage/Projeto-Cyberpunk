@@ -26,6 +26,11 @@ public sealed class PlayerSurfaceGuard(RequestDelegate next, IOptions<TableOptio
                 context.Response.StatusCode = StatusCodes.Status404NotFound;
                 return;
             }
+            if (IsOtherPage(request.Path))
+            {
+                context.Response.Redirect(SeatPage);
+                return;
+            }
         }
         else if (IsTableRoute(request.Path) && (!IsLoopback(request.Host) || !SameSite(request)))
         {
@@ -46,6 +51,17 @@ public sealed class PlayerSurfaceGuard(RequestDelegate next, IOptions<TableOptio
         // The frontend bundle and its index.html: read-only files.
         return HttpMethods.IsGet(request.Method) || HttpMethods.IsHead(request.Method);
     }
+
+    private const string SeatPage = "/mesa/j/";
+
+    /// <summary>
+    /// A page of the app other than a seat link (the bare tunnel address, the catalog…). Served there, the whole app
+    /// would load and fail on every call the port refuses; the player's page explains the link instead. Files (with an
+    /// extension) are the frontend bundle and pass.
+    /// </summary>
+    private static bool IsOtherPage(PathString path) =>
+        !path.StartsWithSegments("/api") && !path.StartsWithSegments("/hubs") && !path.StartsWithSegments("/mesa/j")
+        && !Path.HasExtension(path.Value ?? "");
 
     private static bool IsLoopback(HostString host) =>
         host.Host is "127.0.0.1" or "[::1]" or "::1" || host.Host.Equals("localhost", StringComparison.OrdinalIgnoreCase);
