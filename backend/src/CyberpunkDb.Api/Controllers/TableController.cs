@@ -11,8 +11,26 @@ namespace CyberpunkDb.Api.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/table")]
-public sealed class TableController(SeatService seats, MediaService media, SceneService scenes, TablePresence presence) : ControllerBase
+public sealed class TableController(SeatService seats, MediaService media, SceneService scenes, ChatService chat, TablePresence presence) : ControllerBase
 {
+    // ------------------------------------------------------------------ chat and dice
+
+    [HttpGet("messages")]
+    public Task<IReadOnlyList<TableMessageDto>> Messages(CancellationToken ct) => chat.HistoryAsync(null, ct);
+
+    [HttpPost("messages")]
+    public Task<TableMessageDto> Send(SendMessageRequest request, CancellationToken ct) => chat.SendAsync(null, request, ct);
+
+    [HttpPost("rolls")]
+    public Task<TableMessageDto> Roll(RollRequest request, CancellationToken ct) => chat.RollAsync(null, request, ct);
+
+    [HttpDelete("messages")]
+    public async Task<IActionResult> ClearMessages(CancellationToken ct)
+    {
+        await chat.ClearAsync(ct);
+        return NoContent();
+    }
+
     // ------------------------------------------------------------------ scenes
 
     [HttpGet("scenes")]

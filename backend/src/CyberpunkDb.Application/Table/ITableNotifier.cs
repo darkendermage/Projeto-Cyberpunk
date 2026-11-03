@@ -20,6 +20,9 @@ public interface ITableNotifier
     Task EncounterAsync(EncounterDetailDto gm, IReadOnlyDictionary<int, PlayerEncounterDto?>? seats, CancellationToken ct);
 
     Task EncounterRemovedAsync(int id, IReadOnlyDictionary<int, PlayerEncounterDto?>? seats, CancellationToken ct);
+
+    /// <summary>A chat line or roll: the GM's view, and the view of each seat allowed to read it.</summary>
+    Task MessageAsync(TableMessageDto gm, IReadOnlyDictionary<int, TableMessageDto> seats, CancellationToken ct);
 }
 
 /// <summary>For hosts without live screens (and tests that don't care).</summary>
@@ -29,4 +32,5 @@ public sealed class NullTableNotifier : ITableNotifier
     public Task SceneRemovedAsync(int id, IReadOnlyDictionary<int, SceneView?>? seats, CancellationToken ct) => Task.CompletedTask;
     public Task EncounterAsync(EncounterDetailDto gm, IReadOnlyDictionary<int, PlayerEncounterDto?>? seats, CancellationToken ct) => Task.CompletedTask;
     public Task EncounterRemovedAsync(int id, IReadOnlyDictionary<int, PlayerEncounterDto?>? seats, CancellationToken ct) => Task.CompletedTask;
+    public Task MessageAsync(TableMessageDto gm, IReadOnlyDictionary<int, TableMessageDto> seats, CancellationToken ct) => Task.CompletedTask;
 }

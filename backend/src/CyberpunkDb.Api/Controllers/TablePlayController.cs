@@ -13,7 +13,7 @@ namespace CyberpunkDb.Api.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/table/play")]
-public sealed class TablePlayController(SeatService seats, SceneService scenes, EncounterService encounters, CharacterService characters) : ControllerBase
+public sealed class TablePlayController(SeatService seats, SceneService scenes, EncounterService encounters, CharacterService characters, ChatService chat) : ControllerBase
 {
     public const string SeatHeader = "X-Seat";
 
@@ -44,6 +44,15 @@ public sealed class TablePlayController(SeatService seats, SceneService scenes, 
             return null;
         }
     }
+
+    [HttpGet("messages")]
+    public async Task<IReadOnlyList<TableMessageDto>> Messages(CancellationToken ct) => await chat.HistoryAsync(await SeatAsync(ct), ct);
+
+    [HttpPost("messages")]
+    public async Task<TableMessageDto> Send(SendMessageRequest request, CancellationToken ct) => await chat.SendAsync(await SeatAsync(ct), request, ct);
+
+    [HttpPost("rolls")]
+    public async Task<TableMessageDto> Roll(RollRequest request, CancellationToken ct) => await chat.RollAsync(await SeatAsync(ct), request, ct);
 
     [HttpPost("tokens/{tokenId}/move")]
     public async Task<SceneView> MoveToken(string tokenId, TokenMoveRequest move, CancellationToken ct) =>

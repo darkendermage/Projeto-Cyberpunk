@@ -82,6 +82,7 @@ public static class DependencyInjection
         services.AddScoped<SeatService>();
         services.AddScoped<MediaService>();
         services.AddScoped<SceneService>();
+        services.AddScoped<ChatService>();
         services.AddSingleton<SceneLocks>();
         services.TryAddSingleton<ITableNotifier, NullTableNotifier>();
         services.AddScoped<IEncounterObserver, EncounterBroadcast>();
