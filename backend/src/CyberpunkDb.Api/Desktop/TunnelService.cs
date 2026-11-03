@@ -12,8 +12,11 @@ namespace CyberpunkDb.Api.Desktop;
 [JsonConverter(typeof(JsonStringEnumConverter))]
 public enum TunnelState { Missing, Downloading, Stopped, Starting, Running, Failed }
 
-/// <summary>The tunnel as the GM's panel shows it; <see cref="Url"/> is the public address while it runs.</summary>
-public sealed record TunnelStatus(TunnelState State, string? Url, string? Error);
+/// <summary>
+/// The tunnel as the GM's panel shows it; <see cref="Url"/> is the public address while it runs, <see cref="LocalUrl"/>
+/// the players' port on this machine (for testing a link without the tunnel).
+/// </summary>
+public sealed record TunnelStatus(TunnelState State, string? Url, string? Error, string? LocalUrl = null);
 
 /// <summary>
 /// Puts the players' port on the internet through a Cloudflare Quick Tunnel: no account, no router setup. It runs
@@ -33,13 +36,15 @@ public sealed partial class TunnelService(IOptions<TableOptions> table, IConfigu
     private string? _error;
     private TaskCompletionSource<string?>? _ready;
 
+    private string? LocalUrl => table.Value.PlayerPort is { } port ? $"http://localhost:{port}" : null;
+
     public TunnelStatus Status()
     {
         lock (_gate)
         {
             if (_state is TunnelState.Stopped or TunnelState.Failed && Executable() is null)
-                return new TunnelStatus(TunnelState.Missing, null, _error);
-            return new TunnelStatus(_state, _url, _error);
+                return new TunnelStatus(TunnelState.Missing, null, _error, LocalUrl);
+            return new TunnelStatus(_state, _url, _error, LocalUrl);
         }
     }
 

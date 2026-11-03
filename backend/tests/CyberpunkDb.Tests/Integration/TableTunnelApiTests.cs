@@ -20,6 +20,7 @@ public class TableTunnelApiTests(ApiFactory factory)
         var status = await _gm.GetFromJsonAsync<TunnelStatus>("/api/table/tunnel", Json);
         status!.State.Should().Be(TunnelState.Missing);
         status.Url.Should().BeNull();
+        status.LocalUrl.Should().Be($"http://localhost:{ApiFactory.PlayerPort}");
 
         (await _gm.PostAsync("/api/table/tunnel/start", null)).StatusCode.Should().Be(HttpStatusCode.BadRequest);
         (await _gm.PostAsync("/api/table/tunnel/stop", null)).StatusCode.Should().Be(HttpStatusCode.OK);

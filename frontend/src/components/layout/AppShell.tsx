@@ -2,7 +2,7 @@ import { useEffect, useState, type ReactNode } from 'react';
 import { NavLink, useLocation } from 'react-router';
 import clsx from 'clsx';
 import {
-  BookOpen, BookUser, CloudRain, Crosshair, FileText, GitCompareArrows, Heart, LayoutGrid, ListChecks, Menu, Network, Search, Settings, Skull, Store, Swords, Table2, Users, X,
+  BookOpen, BookUser, CloudRain, Crosshair, FileText, GitCompareArrows, Heart, LayoutGrid, ListChecks, Map as MapIcon, Menu, Network, Search, Settings, Skull, Store, Swords, Table2, Users, X,
 } from 'lucide-react';
 import { useCompare } from '../../state/CompareContext';
 import { useEffectsSettings } from '../../state/EffectsContext';
@@ -99,6 +99,7 @@ function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
     { to: '/enemies', label: t('Gerador de Inimigos', 'Enemy Generator'), icon: <Skull size={19} /> },
     { to: '/npcs', label: t('Compêndio de NPCs', 'NPC Compendium'), icon: <BookUser size={19} />, active: location.pathname.startsWith('/npcs') },
     { to: '/combat', label: 'Friday Night Firefight', icon: <Crosshair size={19} />, active: location.pathname.startsWith('/combat') },
+    { to: '/mesa', label: t('Mesa Virtual', 'Virtual Table'), icon: <MapIcon size={19} /> },
     { to: '/night-market', label: 'Night Market', icon: <Store size={19} />, active: location.pathname.startsWith('/night-market') },
     { to: '/net-architecture', label: t('Arquiteturas de NET', 'NET Architectures'), icon: <Network size={19} />, active: location.pathname.startsWith('/net-architecture') },
     { to: '/weather', label: t('Clima de Night City', 'Night City Weather'), icon: <CloudRain size={19} /> },

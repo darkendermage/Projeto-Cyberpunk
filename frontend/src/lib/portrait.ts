@@ -1,4 +1,3 @@
-
 import { t } from '../i18n';// Character portraits are stored with the sheet and the server accepts up to 2 MB (CharacterService.PortraitMaxBytes).
 // Big PNGs (a 1536 × 1024 render easily passes 3 MB) are shrunk and re-encoded in the browser before upload, so the
 // player never hits the limit with an ordinary picture.
@@ -6,6 +5,14 @@ import { t } from '../i18n';// Character portraits are stored with the sheet and
 export const PORTRAIT_MAX_BYTES = 2 * 1024 * 1024;
 export const PORTRAIT_MAX_SIDE = 1024;
 export const PORTRAIT_TYPES = ['image/png', 'image/jpeg', 'image/webp', 'image/gif'];
+
+/** How far an image may go before it is shrunk and re-encoded. */
+export interface ImageLimits { maxSide: number; maxBytes: number }
+
+export const PORTRAIT_LIMITS: ImageLimits = { maxSide: PORTRAIT_MAX_SIDE, maxBytes: PORTRAIT_MAX_BYTES };
+
+/** Virtual table maps and token images: the server takes 15 MB (MediaService.MaxBytes); 4096 px keeps maps sharp. */
+export const MAP_LIMITS: ImageLimits = { maxSide: 4096, maxBytes: 12 * 1024 * 1024 };
 
 /** Scales width × height down (never up) so the longest side fits in `maxSide`. */
 export function fitSize(width: number, height: number, maxSide = PORTRAIT_MAX_SIDE): { width: number; height: number } {
@@ -16,9 +23,9 @@ export function fitSize(width: number, height: number, maxSide = PORTRAIT_MAX_SI
 }
 
 /** Whether a file can go as it is: already small and not oversized (GIFs always go as they are, to keep animation). */
-export function canUploadAsIs(file: { type: string; size: number }, width: number, height: number): boolean {
-  if (file.size > PORTRAIT_MAX_BYTES) return false;
-  return file.type === 'image/gif' || Math.max(width, height) <= PORTRAIT_MAX_SIDE;
+export function canUploadAsIs(file: { type: string; size: number }, width: number, height: number, limits = PORTRAIT_LIMITS): boolean {
+  if (file.size > limits.maxBytes) return false;
+  return file.type === 'image/gif' || Math.max(width, height) <= limits.maxSide;
 }
 
 export class PortraitError extends Error {}
@@ -30,15 +37,21 @@ const QUALITIES = [0.85, 0.75, 0.6, 0.45];
  * most 1024 px and re-encoded as WebP (JPEG where the browser can't write WebP), lowering the quality until it fits.
  */
 export async function preparePortrait(file: File): Promise<File> {
+  return (await prepareImage(file, PORTRAIT_LIMITS)).file;
+}
+
+/** The same for any limits, with the size in pixels of what will be sent (a map's extent on the virtual table). */
+export async function prepareImage(file: File, limits: ImageLimits): Promise<{ file: File; width: number; height: number }> {
+  const mb = Math.round(limits.maxBytes / (1024 * 1024));
   if (!PORTRAIT_TYPES.includes(file.type)) throw new PortraitError(t('Use uma imagem PNG, JPEG, WebP ou GIF.', 'Use a PNG, JPEG, WebP or GIF image.'));
   const bitmap = await createImageBitmap(file).catch(() => {
     throw new PortraitError(t('Não deu para abrir essa imagem.', 'Couldn\'t open that image.'));
   });
   try {
-    if (canUploadAsIs(file, bitmap.width, bitmap.height)) return file;
-    if (file.type === 'image/gif') throw new PortraitError(t('GIFs precisam ter até 2 MB (para não perder a animação).', 'GIFs must be 2 MB or less (so the animation isn\'t lost).'));
+    if (canUploadAsIs(file, bitmap.width, bitmap.height, limits)) return { file, width: bitmap.width, height: bitmap.height };
+    if (file.type === 'image/gif') throw new PortraitError(t(`GIFs precisam ter até ${mb} MB (para não perder a animação).`, `GIFs must be ${mb} MB or less (so the animation isn't lost).`));
 
-    const size = fitSize(bitmap.width, bitmap.height);
+    const size = fitSize(bitmap.width, bitmap.height, limits.maxSide);
     const canvas = document.createElement('canvas');
     canvas.width = size.width;
     canvas.height = size.height;
@@ -48,12 +61,12 @@ export async function preparePortrait(file: File): Promise<File> {
 
     for (const quality of QUALITIES) {
       const blob = await encode(canvas, 'image/webp', quality) ?? await encode(canvas, 'image/jpeg', quality);
-      if (blob && blob.size <= PORTRAIT_MAX_BYTES) {
+      if (blob && blob.size <= limits.maxBytes) {
         const extension = blob.type === 'image/webp' ? 'webp' : 'jpg';
-        return new File([blob], t(`${file.name.replace(/\.[^.]+$/, '') || 'retrato'}.${extension}`, `${file.name.replace(/\.[^.]+$/, '') || 'portrait'}.${extension}`), { type: blob.type });
+        return { file: new File([blob], t(`${file.name.replace(/\.[^.]+$/, '') || 'imagem'}.${extension}`, `${file.name.replace(/\.[^.]+$/, '') || 'image'}.${extension}`), { type: blob.type }), width: size.width, height: size.height };
       }
     }
-    throw new PortraitError(t('Mesmo reduzida, a imagem passou de 2 MB.', 'Even shrunk, the image is over 2 MB.'));
+    throw new PortraitError(t(`Mesmo reduzida, a imagem passou de ${mb} MB.`, `Even shrunk, the image is over ${mb} MB.`));
   } finally {
     bitmap.close();
   }

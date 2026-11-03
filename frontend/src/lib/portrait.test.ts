@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { canUploadAsIs, fitSize, PORTRAIT_MAX_BYTES } from './portrait';
+import { canUploadAsIs, fitSize, MAP_LIMITS, PORTRAIT_MAX_BYTES } from './portrait';
 
 describe('fitSize', () => {
   it('shrinks the longest side to 1024 and keeps the proportion', () => {
@@ -24,5 +24,13 @@ describe('canUploadAsIs', () => {
 
   it('keeps small GIFs whatever their size in pixels, to keep the animation', () => {
     expect(canUploadAsIs({ type: 'image/gif', size: 900_000 }, 1600, 900)).toBe(true);
+  });
+});
+
+describe('map limits', () => {
+  it('let big maps through up to 4096 px and shrink anything larger', () => {
+    expect(fitSize(8000, 4000, MAP_LIMITS.maxSide)).toEqual({ width: 4096, height: 2048 });
+    expect(canUploadAsIs({ type: 'image/png', size: 5_000_000 }, 4000, 3000, MAP_LIMITS)).toBe(true);
+    expect(canUploadAsIs({ type: 'image/png', size: 5_000_000 }, 6000, 3000, MAP_LIMITS)).toBe(false);
   });
 });

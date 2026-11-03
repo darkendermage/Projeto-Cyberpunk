@@ -1,0 +1,251 @@
+/* Virtual table: the GM's workspace (scenes | board | panels) and the player's screen (board | panels). */
+
+.muted { color: var(--text-muted); font-size: 13px; }
+.source { font-family: var(--font-mono); font-size: 11px; color: var(--text-faint); }
+.label { font-family: var(--font-display); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-muted); }
+.row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; }
+.rowBetween { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px; }
+.stack { display: flex; flex-direction: column; gap: 10px; }
+.narrow { width: 78px; }
+.grow { flex: 1; min-width: 0; }
+.error { color: var(--red-bright); font-size: 13px; }
+
+/* ------------------------------------------------------------ layout */
+
+.workspace {
+  display: grid;
+  grid-template-columns: 230px minmax(0, 1fr) 340px;
+  gap: 10px;
+  height: calc(100dvh - var(--header-h) - 40px);
+  min-height: 560px;
+}
+.playerScreen {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  height: 100dvh;
+  background: var(--bg-0);
+}
+.playerBody {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 10px;
+  padding: 10px;
+  min-height: 0;
+}
+@media (max-width: 1200px) {
+  .workspace { grid-template-columns: 200px minmax(0, 1fr) 300px; }
+}
+@media (max-width: 900px) {
+  .workspace { grid-template-columns: 1fr; height: auto; }
+  .workspace .stage { height: 70vh; }
+  .playerScreen { height: auto; min-height: 100dvh; }
+  .playerBody { grid-template-columns: 1fr; }
+  .playerBody .stage { height: 65vh; }
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 0;
+  min-width: 0;
+  overflow-y: auto;
+  padding: 12px;
+  background: var(--panel);
+  border: 1px solid var(--red-line);
+}
+.title {
+  font-family: var(--font-display);
+  font-size: 12.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--red);
+}
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+}
+
+/* ------------------------------------------------------------ board */
+
+.stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+  border: 1px solid var(--red-line);
+  background: var(--bg-0);
+}
+.board { position: relative; flex: 1; min-height: 0; overflow: hidden; touch-action: none; }
+.board canvas { display: block; }
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--line);
+  background: var(--bg-1);
+}
+.toolbar input, .toolbar select { height: 30px; }
+.divider { width: 1px; align-self: stretch; background: var(--line-strong); margin: 0 4px; }
+.hint {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  padding: 4px 10px;
+  font-size: 12.5px;
+  color: var(--text-2);
+  background: rgba(5, 6, 7, 0.82);
+  border: 1px solid var(--line-strong);
+  pointer-events: none;
+}
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--text-faint); flex: none; }
+.dotOn { background: var(--green); box-shadow: 0 0 6px var(--green); }
+.dotWarn { background: var(--amber); }
+.dotOff { background: var(--red); }
+
+/* ------------------------------------------------------------ lists */
+
+.sceneList { display: flex; flex-direction: column; gap: 6px; }
+.sceneItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px 10px;
+  background: var(--bg-2);
+  border: 1px solid var(--line-strong);
+  border-left: 3px solid var(--line-strong);
+  cursor: pointer;
+  text-align: left;
+  color: var(--text-2);
+}
+.sceneItem:hover { border-color: var(--red-line); }
+.sceneSelected { border-left-color: var(--cyan); background: var(--bg-3); color: var(--text); }
+.sceneLive { border-left-color: var(--red); }
+.sceneName { font-family: var(--font-display); font-size: 14.5px; color: var(--text); }
+
+.tabs { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.queue { display: flex; flex-direction: column; gap: 4px; }
+.queueRow {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--text-faint);
+}
+.queueAlly { border-left-color: var(--cyan); }
+.queueEnemy { border-left-color: var(--red); }
+.queueActive { background: rgba(245, 230, 99, 0.12); border-color: rgba(245, 230, 99, 0.6); }
+.queueInit { font-family: var(--font-mono); font-size: 16px; color: var(--amber); text-align: center; }
+.queueName { font-family: var(--font-display); font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.seat {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px 10px;
+  background: var(--bg-2);
+  border: 1px solid var(--line-strong);
+}
+.seatRevoked { opacity: 0.5; }
+.swatch { width: 12px; height: 12px; border-radius: 3px; flex: none; }
+.link {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--cyan);
+  word-break: break-all;
+}
+
+.meter { position: relative; height: 10px; background: var(--bg-4); border: 1px solid var(--line-strong); }
+.meterFill { position: absolute; inset: 0 auto 0 0; background: var(--green); }
+
+.skillList { display: flex; flex-direction: column; gap: 2px; max-height: 280px; overflow-y: auto; }
+.skillButton {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 4px 8px;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-2);
+  font-size: 13.5px;
+  text-align: left;
+  cursor: pointer;
+}
+.skillButton:hover { border-color: var(--red-line); color: var(--text); background: var(--bg-3); }
+.skillTotal { font-family: var(--font-mono); color: var(--amber); }
+
+.weapon { display: flex; flex-direction: column; gap: 6px; padding: 8px; background: var(--bg-2); border: 1px solid var(--line); }
+
+/* ------------------------------------------------------------ chat */
+
+.chat { display: flex; flex-direction: column; gap: 8px; min-height: 0; flex: 1; }
+.messages {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+  min-height: 200px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+.message { display: flex; flex-direction: column; gap: 2px; padding: 6px 8px; background: var(--bg-2); border: 1px solid var(--line); font-size: 14px; }
+.messageHidden { border-style: dashed; }
+.author { font-family: var(--font-display); font-size: 12.5px; font-weight: 700; }
+.messageText { color: var(--text); white-space: pre-wrap; word-break: break-word; }
+.roll { display: flex; flex-direction: column; gap: 4px; }
+.rollTotal { font-family: var(--font-display); font-size: 26px; font-weight: 700; color: var(--text); line-height: 1; }
+.dice { display: flex; flex-wrap: wrap; gap: 3px; }
+.die {
+  min-width: 22px;
+  padding: 1px 4px;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  text-align: center;
+  background: var(--bg-4);
+  border: 1px solid var(--line-strong);
+}
+.dieHigh { border-color: var(--green); color: var(--green); }
+.dieLow { border-color: var(--red); color: var(--red-bright); }
+.composer { display: flex; flex-direction: column; gap: 6px; }
+.composer textarea { min-height: 54px; resize: vertical; }
+.quickDice { display: flex; flex-wrap: wrap; gap: 4px; }
+
+/* ------------------------------------------------------------ player header and gate */
+
+.playerHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  padding: 8px 14px;
+  background: var(--bg-1);
+  border-bottom: 1px solid var(--red-line);
+}
+.brand { font-family: var(--font-display); font-size: 15px; letter-spacing: 0.18em; color: var(--red); text-transform: uppercase; }
+.gate {
+  display: grid;
+  place-items: center;
+  min-height: 100dvh;
+  padding: 24px;
+  background: var(--bg-0);
+}
+.gateCard { max-width: 460px; display: flex; flex-direction: column; gap: 12px; padding: 22px; background: var(--panel); border: 1px solid var(--red-line); }

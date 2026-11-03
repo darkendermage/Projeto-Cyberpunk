@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react';
-import { Link, Navigate, Route, Routes } from 'react-router';
+import { Link, Navigate, Route, Routes, useLocation } from 'react-router';
 import { AppShell } from './components/layout/AppShell';
 import { EmptyState, Spinner } from './components/ui/ui';
 import { CatalogPage } from './features/catalog/CatalogPage';
@@ -23,9 +23,23 @@ const MartialArtsPage = lazy(() => import('./features/reference/MartialArtsPage'
 const WeatherPage = lazy(() => import('./features/weather/WeatherPage').then((m) => ({ default: m.WeatherPage })));
 const NightMarketPage = lazy(() => import('./features/night-market/NightMarketPage').then((m) => ({ default: m.NightMarketPage })));
 const CombatPage = lazy(() => import('./features/combat/CombatPage').then((m) => ({ default: m.CombatPage })));
+const GmTablePage = lazy(() => import('./features/table/GmTablePage').then((m) => ({ default: m.GmTablePage })));
+const PlayerTablePage = lazy(() => import('./features/table/PlayerTablePage').then((m) => ({ default: m.PlayerTablePage })));
 const NetArchitecturePage = lazy(() => import('./features/net-architecture/NetArchitecturePage').then((m) => ({ default: m.NetArchitecturePage })));
 
 export default function App() {
+  const location = useLocation();
+  // A player's screen of the virtual table stands alone: the players' port answers only the table, so the app shell
+  // (favorites, updates, catalog search) must not load there.
+  if (location.pathname.startsWith('/mesa/j/')) {
+    return (
+      <Suspense fallback={<Spinner />}>
+        <Routes>
+          <Route path="/mesa/j/:token" element={<PlayerTablePage />} />
+        </Routes>
+      </Suspense>
+    );
+  }
   return (
     <AppShell>
       <Suspense fallback={<div className={page.page}><Spinner /></div>}>
@@ -49,6 +63,7 @@ export default function App() {
           <Route path="/night-market/:id" element={<NightMarketPage />} />
           <Route path="/combat" element={<CombatPage />} />
           <Route path="/combat/:id" element={<CombatPage />} />
+          <Route path="/mesa" element={<GmTablePage />} />
           <Route path="/net-architecture" element={<NetArchitecturePage />} />
           <Route path="/net-architecture/:id" element={<NetArchitecturePage />} />
           <Route path="/characters" element={<CharactersPage />} />
