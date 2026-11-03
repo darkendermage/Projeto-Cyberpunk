@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { ApiError } from '../../api/client';
 import { problemMessage } from '../../api/characters';
 import { playerApi, tableKeys } from '../../api/table';
 import type { PlayerEncounter, PlayerState, RollKind, SceneView, TableMessage, TableVisibility } from '../../api/tableTypes';
@@ -15,7 +14,7 @@ import { TableBoard, type BoardHandle } from './board/TableBoard';
 import { ChatPanel } from './chat/ChatPanel';
 import { CharacterPanel, InitiativePanel } from './PlayerPanels';
 import { fromPlayerFighter } from './tokens';
-import { forgetSeat, rememberSeat, savedSeat } from './lobby';
+import { forgetSeat, isRefusedKey, rememberSeat, savedSeat } from './lobby';
 import { HUB_TEXT, useTableHub } from './useTableHub';
 import styles from './Table.module.css';
 
@@ -40,7 +39,7 @@ export function PlayerTablePage() {
 
   const navigate = useNavigate();
   const state = useQuery({ queryKey: tableKeys.player(token), queryFn: api.state, retry: false });
-  const denied = state.error instanceof ApiError && state.error.status === 401;
+  const denied = isRefusedKey(state.error);
   // The general link enters this seat again directly; a key that stopped working (released, revoked) is dropped.
   useEffect(() => { if (state.isSuccess) rememberSeat(token); }, [state.isSuccess, token]);
   useEffect(() => { if (denied && savedSeat() === token) forgetSeat(); }, [denied, token]);

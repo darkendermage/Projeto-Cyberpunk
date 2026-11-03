@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { ApiError } from '../../api/client';
-import { claimErrorMessage, forgetSeat, rememberSeat, savedSeat } from './lobby';
+import { claimErrorMessage, forgetSeat, isRefusedKey, rememberSeat, savedSeat } from './lobby';
 
 /** A browser's storage, for the node test environment. */
 function memoryStorage() {
@@ -41,5 +41,14 @@ describe('claimErrorMessage', () => {
     expect(taken.text).toMatch(/escolhido|taken/);
     expect(claimErrorMessage(new ApiError(404, { title: 'closed' })).closed).toBe(true);
     expect(claimErrorMessage(new Error('boom')).closed).toBe(false);
+  });
+});
+
+describe('isRefusedKey', () => {
+  it('drops a saved key only when the table refuses it, not when the connection fails', () => {
+    expect(isRefusedKey(new ApiError(401, { title: 'no' }))).toBe(true);
+    expect(isRefusedKey(new ApiError(502, { title: 'Bad Gateway' }))).toBe(false);
+    expect(isRefusedKey(new ApiError(0, { title: 'network' }))).toBe(false);
+    expect(isRefusedKey(new TypeError('Failed to fetch'))).toBe(false);
   });
 });

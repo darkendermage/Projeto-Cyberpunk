@@ -335,7 +335,10 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
     private Task<List<TableSeat>> OpenSeatsAsync(CancellationToken ct) =>
         db.TableSeats.AsNoTracking().Where(s => s.RevokedAt == null).ToListAsync(ct);
 
-    /// <summary>When the stored images the scene's tokens may show last changed (tokens with their own image need none).</summary>
+    /// <summary>
+    /// When the stored images the scene's tokens may show last changed (tokens with their own image need none). Only the
+    /// dates are read: this runs on every scene change, and the images themselves weigh up to 2 MB each.
+    /// </summary>
     private async Task<TokenImages> ImagesAsync(SceneState state, CancellationToken ct)
     {
         var tokens = state.Tokens.Where(t => t.ImageMediaId is null).ToList();
@@ -345,11 +348,11 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
         if (characters.Count + npcs.Count + book.Count == 0) return TokenImages.None;
         return new TokenImages(
             characters.Count == 0 ? TokenImages.None.Characters
-                : await db.CharacterPortraits.AsNoTracking().Where(p => characters.Contains(p.CharacterId)).ToDictionaryAsync(p => p.CharacterId, p => p.UpdatedAt, ct),
+                : await db.CharacterPortraits.AsNoTracking().Where(p => characters.Contains(p.CharacterId)).Select(p => new { p.CharacterId, p.UpdatedAt }).ToDictionaryAsync(p => p.CharacterId, p => p.UpdatedAt, ct),
             npcs.Count == 0 ? TokenImages.None.Npcs
-                : await db.NpcPortraits.AsNoTracking().Where(p => npcs.Contains(p.NpcId)).ToDictionaryAsync(p => p.NpcId, p => p.UpdatedAt, ct),
+                : await db.NpcPortraits.AsNoTracking().Where(p => npcs.Contains(p.NpcId)).Select(p => new { p.NpcId, p.UpdatedAt }).ToDictionaryAsync(p => p.NpcId, p => p.UpdatedAt, ct),
             book.Count == 0 ? TokenImages.None.Compendium
-                : await db.CompendiumPortraits.AsNoTracking().Where(p => book.Contains(p.CompendiumId)).ToDictionaryAsync(p => p.CompendiumId, p => p.UpdatedAt, ct));
+                : await db.CompendiumPortraits.AsNoTracking().Where(p => book.Contains(p.CompendiumId)).Select(p => new { p.CompendiumId, p.UpdatedAt }).ToDictionaryAsync(p => p.CompendiumId, p => p.UpdatedAt, ct));
     }
 
     private static SceneState Move(SceneState state, SceneToken token, TokenMoveRequest move)

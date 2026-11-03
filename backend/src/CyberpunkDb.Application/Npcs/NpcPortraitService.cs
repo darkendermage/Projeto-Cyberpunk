@@ -18,7 +18,7 @@ public sealed class NpcPortraitService(IAppDbContext db, NpcCompendium compendiu
     // ------------------------------------------------------------------ saved NPCs
 
     public async Task<IReadOnlyDictionary<int, DateTime>> SavedStampsAsync(CancellationToken ct) =>
-        await db.NpcPortraits.AsNoTracking().ToDictionaryAsync(p => p.NpcId, p => p.UpdatedAt, ct);
+        await db.NpcPortraits.AsNoTracking().Select(p => new { p.NpcId, p.UpdatedAt }).ToDictionaryAsync(p => p.NpcId, p => p.UpdatedAt, ct);
 
     public async Task<(byte[] Data, string ContentType, DateTime UpdatedAt)> GetSavedAsync(int npcId, CancellationToken ct)
     {
@@ -53,7 +53,7 @@ public sealed class NpcPortraitService(IAppDbContext db, NpcCompendium compendiu
     // ------------------------------------------------------------------ compendium
 
     public async Task<IReadOnlyDictionary<string, DateTime>> CompendiumStampsAsync(CancellationToken ct) =>
-        await db.CompendiumPortraits.AsNoTracking().ToDictionaryAsync(p => p.CompendiumId, p => p.UpdatedAt, ct);
+        await db.CompendiumPortraits.AsNoTracking().Select(p => new { p.CompendiumId, p.UpdatedAt }).ToDictionaryAsync(p => p.CompendiumId, p => p.UpdatedAt, ct);
 
     public async Task<(byte[] Data, string ContentType, DateTime UpdatedAt)> GetCompendiumAsync(string id, CancellationToken ct)
     {

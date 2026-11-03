@@ -18,6 +18,11 @@ export function forgetSeat() {
   try { localStorage.removeItem(SEAT_KEY); } catch { /* nothing to forget */ }
 }
 
+/** The table refused the key (released or revoked seat); any other failure (tunnel hiccup, no network) keeps it. */
+export function isRefusedKey(error: unknown): boolean {
+  return error instanceof ApiError && error.status === 401;
+}
+
 /** Why picking a seat failed: the GM closed the entrance (404), someone took it first (409), or anything else. */
 export function claimErrorMessage(error: unknown): { closed: boolean; text: string } {
   if (error instanceof ApiError && error.status === 404)

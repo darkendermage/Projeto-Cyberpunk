@@ -85,7 +85,7 @@ public sealed class SeatService(IAppDbContext db, TableLobby lobby, ITableNotifi
         var seats = (await db.TableSeats.AsNoTracking().Where(s => s.RevokedAt == null).OrderBy(s => s.Id).ToListAsync(ct))
             .Where(s => !lobby.IsClaimed(s.Id)).ToList();
         var ids = seats.Where(s => s.CharacterId is not null).Select(s => s.CharacterId!.Value).Distinct().ToList();
-        var names = await db.Characters.AsNoTracking().Where(c => ids.Contains(c.Id)).ToDictionaryAsync(c => c.Id, c => c.Handle ?? c.Name, ct);
+        var names = await db.Characters.AsNoTracking().Where(c => ids.Contains(c.Id)).Select(c => new { c.Id, Name = c.Handle ?? c.Name }).ToDictionaryAsync(c => c.Id, c => c.Name, ct);
         var portraits = (await db.CharacterPortraits.AsNoTracking().Where(p => ids.Contains(p.CharacterId)).Select(p => p.CharacterId).ToListAsync(ct)).ToHashSet();
         return new LobbyDto(true, seats.Select(s => new LobbySeatDto(s.Id, s.Label, s.Color,
             s.CharacterId is { } c ? names.GetValueOrDefault(c) : null, s.CharacterId is { } p && portraits.Contains(p))).ToList());

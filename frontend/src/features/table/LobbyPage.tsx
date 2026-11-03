@@ -6,7 +6,7 @@ import type { LobbySeat } from '../../api/tableTypes';
 import { Button, Spinner } from '../../components/ui/ui';
 import { useToast } from '../../state/ToastContext';
 import { t } from '../../i18n';
-import { claimErrorMessage, forgetSeat, rememberSeat, savedSeat } from './lobby';
+import { claimErrorMessage, forgetSeat, isRefusedKey, rememberSeat, savedSeat } from './lobby';
 import { initials } from './tokens';
 import styles from './Table.module.css';
 
@@ -23,9 +23,14 @@ export function LobbyPage() {
     const saved = savedSeat();
     if (!saved) return;
     let gone = false;
+    // A refused key is dropped and the entrance shows; on any other failure the seat's own page retries.
     playerApi(saved).me().then(
       () => { if (!gone) navigate(`/mesa/j/${saved}`, { replace: true }); },
-      () => { forgetSeat(); if (!gone) setChecking(false); },
+      (error) => {
+        if (!isRefusedKey(error)) { if (!gone) navigate(`/mesa/j/${saved}`, { replace: true }); return; }
+        forgetSeat();
+        if (!gone) setChecking(false);
+      },
     );
     return () => { gone = true; };
   }, [navigate]);

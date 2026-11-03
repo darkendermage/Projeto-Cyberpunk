@@ -1,11 +1,18 @@
+using System.Data.Common;
 using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
+using CyberpunkDb.Application.Npcs;
+using CyberpunkDb.Application.Npcs.Compendium;
 using CyberpunkDb.Application.Table;
+using CyberpunkDb.Infrastructure.Persistence;
 using FluentAssertions;
 using Microsoft.AspNetCore.SignalR.Client;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CyberpunkDb.Tests.Integration;
 
@@ -170,6 +177,43 @@ public class TableTokenImagesApiTests(ApiFactory factory)
 
         var view = await pushed.Task.WaitAsync(TimeSpan.FromSeconds(10));
         view.Tokens.Single().ImageUrl.Should().NotBe(before);
+    }
+
+    /// <summary>Records every SQL query a context runs.</summary>
+    private sealed class SqlLog : DbCommandInterceptor
+    {
+        public List<string> Commands { get; } = [];
+
+        public override ValueTask<InterceptionResult<DbDataReader>> ReaderExecutingAsync(DbCommand command, CommandEventData eventData, InterceptionResult<DbDataReader> result, CancellationToken ct = default)
+        {
+            lock (Commands) Commands.Add(command.CommandText);
+            return base.ReaderExecutingAsync(command, eventData, result, ct);
+        }
+    }
+
+    [Fact]
+    public async Task Scene_views_and_stamps_read_image_dates_without_the_image_bytes()
+    {
+        var npc = await NpcWithImage("Sem bytes");
+        (await NpcPortraitsApiTests.PutImage(_gm, "/api/npc-compendium/adam-smasher/portrait", TableFoundationApiTests.Png)).StatusCode.Should().Be(HttpStatusCode.NoContent);
+        var scene = await Gm(HttpMethod.Post, "/api/table/scenes", new CreateSceneRequest("Sem bytes"), HttpStatusCode.Created);
+        await Gm(HttpMethod.Post, $"/api/table/scenes/{scene.Id}/tokens", new TokenInput("Sem bytes", 1, 1, NpcId: npc));
+        await Gm(HttpMethod.Post, $"/api/table/scenes/{scene.Id}/tokens", new TokenInput("Smasher", 2, 1, CompendiumNpcId: "adam-smasher"));
+        var log = new SqlLog();
+        await using var db = new AppDbContext(new DbContextOptionsBuilder<AppDbContext>()
+            .UseSqlite($"Data Source={factory.DbPath};Pooling=False").AddInterceptors(log).Options);
+        var compendium = factory.Services.GetRequiredService<NpcCompendium>();
+        var scenes = new SceneService(db, new SceneLocks(), new NullTableNotifier(), compendium);
+        var portraits = new NpcPortraitService(db, compendium, scenes);
+
+        var view = await scenes.GetAsync(scene.Id, default);
+        await portraits.SavedStampsAsync(default);
+        await portraits.CompendiumStampsAsync(default);
+
+        view.Tokens.Should().OnlyContain(t => t.ImageUrl != null);
+        var imageQueries = log.Commands.Where(c => c.Contains("Portraits")).ToList();
+        imageQueries.Should().HaveCountGreaterThanOrEqualTo(4);
+        imageQueries.Should().NotContain(c => c.Contains(".\"Data\""), "a scene or a list only needs when each image changed, never its bytes");
     }
 
     [Fact]
