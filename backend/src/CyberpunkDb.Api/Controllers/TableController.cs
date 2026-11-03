@@ -117,6 +117,23 @@ public sealed class TableController(SeatService seats, MediaService media, Scene
     [HttpPut("seats/{id:int}")]
     public Task<SeatDto> UpdateSeat(int id, UpdateSeatRequest request, CancellationToken ct) => seats.UpdateAsync(id, request, ct);
 
+    /// <summary>Gives the seat back to the entrance with a new key; whoever held it is thrown out.</summary>
+    [HttpPost("seats/{id:int}/release")]
+    public async Task<SeatDto> ReleaseSeat(int id, CancellationToken ct)
+    {
+        var seat = await seats.ReleaseAsync(id, ct);
+        presence.Disconnect(id);
+        return seat;
+    }
+
+    // ------------------------------------------------------------------ general link
+
+    [HttpGet("lobby")]
+    public LobbyStatusDto Lobby() => seats.LobbyStatus();
+
+    [HttpPut("lobby")]
+    public LobbyStatusDto SetLobby(SetLobbyRequest request) => seats.SetLobby(request);
+
     [HttpPost("seats/{id:int}/revoke")]
     public async Task<SeatDto> RevokeSeat(int id, CancellationToken ct)
     {

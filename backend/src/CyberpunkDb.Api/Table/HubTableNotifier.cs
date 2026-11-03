@@ -38,6 +38,8 @@ public sealed class HubTableNotifier(IHubContext<TableHub> hub) : ITableNotifier
         await SendSeatsAsync(seats!, "message", ct);
     }
 
+    public Task SeatsAsync(CancellationToken ct) => hub.Clients.Group(TableHub.Gm).SendAsync("seats", ct);
+
     private Task SendSeatsAsync(IReadOnlyDictionary<int, SceneView?>? seats, CancellationToken ct) => SendSeatsAsync(seats, "scene", ct);
 
     private async Task SendSeatsAsync<T>(IReadOnlyDictionary<int, T?>? seats, string method, CancellationToken ct) where T : class

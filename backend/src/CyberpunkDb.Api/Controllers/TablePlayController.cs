@@ -1,3 +1,4 @@
+using CyberpunkDb.Api.Table;
 using CyberpunkDb.Application.Characters;
 using CyberpunkDb.Application.Common;
 using CyberpunkDb.Application.Encounters;
@@ -14,9 +15,34 @@ namespace CyberpunkDb.Api.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/table/play")]
-public sealed class TablePlayController(SeatService seats, SceneService scenes, EncounterService encounters, CharacterService characters, NpcPortraitService npcImages, ChatService chat) : ControllerBase
+public sealed class TablePlayController(SeatService seats, SceneService scenes, EncounterService encounters, CharacterService characters, NpcPortraitService npcImages, ChatService chat, TablePresence presence) : ControllerBase
 {
     public const string SeatHeader = "X-Seat";
+
+    // ------------------------------------------------------------------ general link (no seat key yet)
+
+    /// <summary>The entrance of the general link: the free seats while the GM keeps it open.</summary>
+    [HttpGet("lobby")]
+    public Task<LobbyDto> Lobby(CancellationToken ct) => seats.LobbyAsync(ct);
+
+    [HttpGet("lobby/{seatId:int}/portrait")]
+    public async Task<IActionResult> LobbyPortrait(int seatId, CancellationToken ct)
+    {
+        var (data, type, _) = await seats.LobbyPortraitAsync(seatId, ct);
+        Response.Headers.CacheControl = "no-store";
+        return File(data, type);
+    }
+
+    /// <summary>Takes a free seat; answers its new key. Connections still holding the old one are dropped.</summary>
+    [HttpPost("lobby/{seatId:int}/claim")]
+    public async Task<ClaimResultDto> Claim(int seatId, CancellationToken ct)
+    {
+        var result = await seats.ClaimAsync(seatId, ct);
+        presence.Disconnect(seatId);
+        return result;
+    }
+
+    // ------------------------------------------------------------------ the seat's own screen
 
     [HttpGet("me")]
     public async Task<PlayerSeatDto> Me(CancellationToken ct) => SeatService.ToPlayer(await SeatAsync(ct));
