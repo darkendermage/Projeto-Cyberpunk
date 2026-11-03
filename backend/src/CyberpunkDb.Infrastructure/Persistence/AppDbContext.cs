@@ -20,6 +20,10 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options, ISearch
     public DbSet<NightMarket> NightMarkets => Set<NightMarket>();
     public DbSet<NetArchitecture> NetArchitectures => Set<NetArchitecture>();
     public DbSet<Encounter> Encounters => Set<Encounter>();
+    public DbSet<Scene> Scenes => Set<Scene>();
+    public DbSet<TableSeat> TableSeats => Set<TableSeat>();
+    public DbSet<TableMessage> TableMessages => Set<TableMessage>();
+    public DbSet<MediaAsset> MediaAssets => Set<MediaAsset>();
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {

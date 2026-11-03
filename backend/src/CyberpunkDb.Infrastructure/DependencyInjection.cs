@@ -1,4 +1,6 @@
 using CyberpunkDb.Application.Abstractions;
+using CyberpunkDb.Application.Table;
+using CyberpunkDb.Infrastructure.Media;
 using CyberpunkDb.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -54,6 +56,7 @@ public static class DependencyInjection
         services.TryAddSingleton<ISeedSource, FolderSeedSource>();
         services.Configure<SeedOptions>(configuration.GetSection("Seed"));
         services.AddScoped<DatabaseInitializer>();
+        services.TryAddSingleton<IMediaStore, DiskMediaStore>();
         return services;
     }
 }

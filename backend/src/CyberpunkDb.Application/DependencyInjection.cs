@@ -22,6 +22,7 @@ using CyberpunkDb.Application.Npcs.Compendium;
 using CyberpunkDb.Application.Npcs.Generation;
 using CyberpunkDb.Application.Npcs.Rules;
 using CyberpunkDb.Application.Npcs.Validation;
+using CyberpunkDb.Application.Table;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -77,6 +78,8 @@ public static class DependencyInjection
         services.AddSingleton<AttackResolver>();
         services.AddSingleton<NpcCombat>();
         services.AddScoped<EncounterService>();
+        services.AddScoped<SeatService>();
+        services.AddScoped<MediaService>();
         services.AddValidatorsFromAssemblyContaining<GearListUpsertValidator>(ServiceLifetime.Singleton);
         return services;
     }

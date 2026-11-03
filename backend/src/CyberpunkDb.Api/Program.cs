@@ -1,5 +1,7 @@
 using System.Text.Json.Serialization;
 using CyberpunkDb.Api.Desktop;
+using CyberpunkDb.Api.Hubs;
+using CyberpunkDb.Api.Table;
 using CyberpunkDb.Api.Infrastructure;
 using CyberpunkDb.Application;
 using CyberpunkDb.Application.Localization;
@@ -42,6 +44,10 @@ builder.Services.AddCors(o => o.AddDefaultPolicy(p => p
     .AllowAnyHeader()
     .AllowAnyMethod()));
 
+builder.Services.AddSignalR().AddJsonProtocol(o => o.PayloadSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+builder.Services.Configure<TableOptions>(builder.Configuration.GetSection("Table"));
+builder.Services.AddSingleton<TablePresence>();
+
 builder.Services.AddSingleton(new AppUpdater(AppUpdaterOptions.FromConfiguration(builder.Configuration)));
 builder.Services.AddApplication();
 if (EmbeddedBundle.HasSeed) builder.Services.AddSingleton<ISeedSource, EmbeddedSeedSource>();
@@ -60,6 +66,7 @@ app.Use(async (context, next) =>
     await next();
 });
 app.UseExceptionHandler();
+app.UseMiddleware<PlayerSurfaceGuard>();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -67,6 +74,7 @@ if (app.Environment.IsDevelopment())
 }
 app.UseCors();
 app.MapControllers();
+app.MapHub<TableHub>("/hubs/table");
 app.MapGet("/api/health", () => Results.Ok(new { status = "online", version = AppVersion.Current }));
 app.MapGet("/api/app/update", (AppUpdater updater, CancellationToken ct) => updater.CheckAsync(ct));
 // A JSON body is required on purpose: it forces a CORS preflight, so other sites cannot trigger it.

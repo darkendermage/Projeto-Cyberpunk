@@ -259,6 +259,40 @@ internal static class CatalogModelConfiguration
             e.HasIndex(x => x.UpdatedAt);
         });
 
+        b.Entity<Scene>(e =>
+        {
+            e.ToTable("Scenes");
+            e.Property(x => x.Name).HasMaxLength(80).IsRequired();
+            e.Property(x => x.Version).IsConcurrencyToken();
+            e.Property(x => x.StateJson).IsRequired();
+            if (isPostgres) e.Property(x => x.StateJson).HasColumnType("jsonb");
+            e.HasIndex(x => x.SortOrder);
+        });
+
+        b.Entity<TableSeat>(e =>
+        {
+            e.ToTable("TableSeats");
+            e.Property(x => x.Token).HasMaxLength(64).IsRequired();
+            e.Property(x => x.Label).HasMaxLength(60).IsRequired();
+            e.Property(x => x.Color).HasMaxLength(20).IsRequired();
+            e.HasIndex(x => x.Token).IsUnique();
+        });
+
+        b.Entity<TableMessage>(e =>
+        {
+            e.ToTable("TableMessages");
+            e.Property(x => x.AuthorName).HasMaxLength(60).IsRequired();
+            e.Property(x => x.Text).HasMaxLength(2000).IsRequired();
+            if (isPostgres) e.Property(x => x.RollJson).HasColumnType("jsonb");
+            e.HasIndex(x => x.At);
+        });
+
+        b.Entity<MediaAsset>(e =>
+        {
+            e.ToTable("MediaAssets");
+            e.Property(x => x.ContentType).HasMaxLength(40).IsRequired();
+        });
+
         b.Entity<NetArchitecture>(e =>
         {
             e.ToTable("NetArchitectures");

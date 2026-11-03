@@ -14,3 +14,6 @@ public sealed class RequestValidationException(IDictionary<string, string[]> err
 public sealed class NotFoundException(string message) : Exception(message);
 
 public sealed class ConflictException(string message) : Exception(message);
+
+/// <summary>The request has no valid credential (a virtual table seat link that is wrong or revoked). Mapped to HTTP 401.</summary>
+public sealed class UnauthorizedException(string message) : Exception(message);

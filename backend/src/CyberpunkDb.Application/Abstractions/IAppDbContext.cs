@@ -18,6 +18,10 @@ public interface IAppDbContext
     DbSet<NightMarket> NightMarkets { get; }
     DbSet<NetArchitecture> NetArchitectures { get; }
     DbSet<Encounter> Encounters { get; }
+    DbSet<Scene> Scenes { get; }
+    DbSet<TableSeat> TableSeats { get; }
+    DbSet<TableMessage> TableMessages { get; }
+    DbSet<MediaAsset> MediaAssets { get; }
 
     DbSet<TEntity> Set<TEntity>() where TEntity : class;
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
