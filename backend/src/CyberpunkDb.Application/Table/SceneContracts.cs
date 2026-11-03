@@ -1,3 +1,5 @@
+using CyberpunkDb.Application.Encounters;
+
 namespace CyberpunkDb.Application.Table;
 
 public sealed record SceneSummaryDto(int Id, string Name, bool Active, int SortOrder, int? EncounterId, string? BackgroundUrl, int Tokens, DateTime UpdatedAt);
@@ -33,5 +35,12 @@ public sealed record TokenInput(
 
 /// <summary>A drag, a turn or a resize; anything left null stays as it was. Last write wins.</summary>
 public sealed record TokenMoveRequest(double X, double Y, double? Rotation = null, double? Width = null, double? Height = null);
+
+/// <summary>Where a player puts their own token on the live scene, in cells.</summary>
+public sealed record PlaceTokenRequest(double X, double Y);
+
+/// <summary>A fight started from the map: the chosen tokens and the side each one fights on.</summary>
+public sealed record CreateFightRequest(string? Name, List<FightTokenEntry> Tokens);
+public sealed record FightTokenEntry(string TokenId, CombatSide Side);
 
 public sealed record TemplateInput(TemplateShape Shape, double X, double Y, double SizeMeters, double Angle = 0, string? Color = null, string? Label = null, bool Locked = false);

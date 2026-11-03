@@ -115,6 +115,11 @@ public sealed class TablePlayController(SeatService seats, SceneService scenes, 
         return File(data, type, lastModified: updated, entityTag: new Microsoft.Net.Http.Headers.EntityTagHeaderValue($"\"{updated.Ticks}\""));
     }
 
+    /// <summary>The player's own token on the live scene (one per seat).</summary>
+    [HttpPost("my-token")]
+    public async Task<SceneView> PlaceOwnToken(PlaceTokenRequest request, CancellationToken ct) =>
+        await scenes.PlayerPlaceOwnTokenAsync(await SeatAsync(ct), request, ct);
+
     [HttpPost("templates")]
     public async Task<SceneView> AddTemplate(TemplateInput input, CancellationToken ct) =>
         await scenes.PlayerAddTemplateAsync(await SeatAsync(ct), input, ct);

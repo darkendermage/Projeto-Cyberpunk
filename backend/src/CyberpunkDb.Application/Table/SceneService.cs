@@ -186,6 +186,14 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
             return state with { Tokens = tokens };
         }, bumpVersion: false, ct);
 
+    /// <summary>Links the scene to a fight and its tokens to the fight's combatants (token id → combatant id).</summary>
+    public Task<SceneView> LinkFightAsync(int id, int encounterId, IReadOnlyDictionary<string, string> combatants, CancellationToken ct) =>
+        MutateAsync(id, null, (scene, state) =>
+        {
+            scene.EncounterId = encounterId;
+            return Task.FromResult(state with { Tokens = state.Tokens.Select(t => combatants.TryGetValue(t.Id, out var c) ? t with { CombatantId = c } : t).ToList() });
+        }, bumpVersion: true, ct);
+
     public Task<SceneView> AddTemplateAsync(int id, TemplateInput input, CancellationToken ct) =>
         MutateAsync(id, null, (_, state) => Task.FromResult(AddTemplate(state, input, null)), bumpVersion: false, ct);
 
@@ -222,6 +230,35 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
                 throw RequestValidationException.For("tokenId", L.T("Esse token não é seu (ou está travado pelo mestre).", "That token isn't yours (or the GM locked it)."));
             return Move(state, token, move);
         }, ct);
+
+    /// <summary>
+    /// The seat's own token on the live scene: its character's (portrait and name) or, for a seat without one, the
+    /// seat's name. One per seat and scene; in the scene's fight it stands for the character's combatant.
+    /// </summary>
+    public async Task<SceneView> PlayerPlaceOwnTokenAsync(TableSeat seat, PlaceTokenRequest r, CancellationToken ct)
+    {
+        var name = seat.CharacterId is { } characterId
+            ? await db.Characters.AsNoTracking().Where(c => c.Id == characterId).Select(c => c.Handle ?? c.Name).FirstOrDefaultAsync(ct)
+            : null;
+        var linkedCharacter = name is null ? null : seat.CharacterId;
+        string? combatantId = null;
+        if (linkedCharacter is { } pc && await db.Scenes.Where(s => s.Active).Select(s => s.EncounterId).FirstOrDefaultAsync(ct) is { } encounterId
+            && await db.Encounters.AsNoTracking().Where(e => e.Id == encounterId).Select(e => e.StateJson).FirstOrDefaultAsync(ct) is { } fight)
+            combatantId = EncounterService.Deserialize(fight).Combatants.FirstOrDefault(c => c.CharacterId == pc)?.Id;
+        return await PlayerMutateAsync(seat, (_, state) =>
+        {
+            if (state.Tokens.Any(t => linkedCharacter is { } c ? t.CharacterId == c : t.OwnerSeatId == seat.Id))
+                throw new ConflictException(L.T("Você já tem um token nesta cena.", "You already have a token on this scene."));
+            if (state.Tokens.Count >= MaxTokens)
+                throw RequestValidationException.For("tokens", L.T($"Uma cena comporta até {MaxTokens} tokens.", $"A scene holds up to {MaxTokens} tokens."));
+            var token = new SceneToken
+            {
+                Id = NextId("T", state.Tokens.Select(t => t.Id)), Label = Truncate(name ?? seat.Label, 40), X = Cell(r.X, "x"), Y = Cell(r.Y, "y"),
+                Color = seat.Color, OwnerSeatId = seat.Id, CharacterId = linkedCharacter, CombatantId = combatantId,
+            };
+            return state with { Tokens = [.. state.Tokens, token] };
+        }, ct);
+    }
 
     public Task<SceneView> PlayerAddTemplateAsync(TableSeat seat, TemplateInput input, CancellationToken ct) =>
         PlayerMutateAsync(seat, (_, state) => AddTemplate(state, input with { Locked = false }, seat.Id), ct);
