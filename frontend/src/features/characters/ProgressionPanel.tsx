@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { TrendingUp } from 'lucide-react';
 import type { CharacterDetail, CharacterRules } from '../../api/characterTypes';
-import { Button, Select } from '../../components/ui/ui';
-import { skillLabel } from './characterLabels';
+import { Button, ComboBox, Select } from '../../components/ui/ui';
+import { MARTIAL_ARTS } from '../reference/martialArts';
+import { languagesFor } from './characterLabels';
+import { improvementGroups, specializationChoices } from './skillImprovement';
 import { SheetPanel } from './CharacterUi';
 import type { Run } from './CombatPanels';
 import styles from './Characters.module.css';
@@ -16,13 +18,19 @@ export function ProgressionPanel({ detail, rules, run, busy }: { detail: Charact
   const [amount, setAmount] = useState('');
   const [reason, setReason] = useState('');
   const [skill, setSkill] = useState('');
-  const [newSkill, setNewSkill] = useState('');
+  const [spec, setSpec] = useState('');
   const [newRole, setNewRole] = useState('');
   const ip = detail.sheet.progress.ip;
   const report = detail.report;
   const current = report.roles.find((r) => r.current);
-  const skills = report.skills.filter((s) => s.level > 0 && s.ipToRaise != null);
-  const picked = report.skills.find((s) => s.key === skill);
+  const groups = useMemo(() => improvementGroups(rules.skills, report.skills), [rules.skills, report.skills]);
+  const picked = groups.flatMap((g) => g.options).find((o) => o.value === skill);
+  const choices = picked?.isNew
+    ? specializationChoices(picked.skillId, report.skills.map((s) => s.key), {
+      languages: languagesFor(rules, null), homes: rules.homes, martialArts: MARTIAL_ARTS.map((m) => m.name),
+    })
+    : null;
+  const skillKey = picked?.isNew ? (spec.trim() ? `${picked.skillId}:${spec.trim()}` : '') : picked?.value ?? '';
   const others = rules.roles.filter((r) => !report.roles.some((x) => x.role === r.id));
   const canMulticlass = (current?.rank ?? 0) >= 4;
 
@@ -45,21 +53,33 @@ export function ProgressionPanel({ detail, rules, run, busy }: { detail: Charact
       </div>
 
       <div className={styles.row}>
-        <Select value={skill} onChange={(e) => setSkill(e.target.value)} aria-label={t('Perícia a melhorar', 'Skill to improve')}>
-          <option value="">{t('Melhorar perícia…', 'Improve skill…')}</option>
-          {skills.map((s) => <option key={s.key} value={s.key}>{skillLabel(s)} {s.level} → {s.level + 1} ({s.ipToRaise} IP)</option>)}
+        <Select className={styles.grow} value={skill} onChange={(e) => { setSkill(e.target.value); setSpec(''); }} aria-label={t('Perícia a melhorar', 'Skill to improve')}>
+          <option value="">{t('Melhorar ou aprender perícia…', 'Improve or learn a skill…')}</option>
+          {groups.map((g) => (
+            <optgroup key={g.category} label={g.label}>
+              {g.options.map((o) => (
+                <option key={o.value} value={o.value}>
+                  {o.isNew ? `${o.label} (${o.cost} IP)` : `${o.label} ${o.level} → ${o.level + 1} (${o.cost} IP)`}
+                </option>
+              ))}
+            </optgroup>
+          ))}
         </Select>
-        <Button disabled={busy || !picked || (picked.ipToRaise ?? Infinity) > ip}
-          onClick={async () => { if (await run('progression/skill', { skillKey: skill }, t('Perícia melhorada.', 'Skill improved.'))) setSkill(''); }}>
-          {t('Subir', 'Raise')}{picked ? ` (${picked.ipToRaise} IP)` : ''}
-        </Button>
-      </div>
-      <div className={styles.row}>
-        <input className={styles.input} style={{ maxWidth: 260 }} value={newSkill} placeholder={t('Nova perícia (ex.: language:Japanese)', 'New skill (e.g. language:Japanese)')}
-          aria-label={t('Nova perícia', 'New skill')} onChange={(e) => setNewSkill(e.target.value)} />
-        <Button variant="ghost" disabled={busy || !newSkill.trim() || ip < 20}
-          onClick={async () => { if (await run('progression/skill', { skillKey: newSkill.trim() }, t('Perícia aprendida.', 'Skill learned.'))) setNewSkill(''); }}>
-          {t('Aprender no nível 1', 'Learn at level 1')}
+        {choices && (choices.free
+          ? <ComboBox className={styles.grow} value={spec} onChange={setSpec} options={choices.options} aria-label={t('Especialização', 'Specialization')}
+              placeholder={t('Escolha ou digite…', 'Pick or type…')} />
+          : (
+            <Select className={styles.grow} value={spec} onChange={(e) => setSpec(e.target.value)} aria-label={t('Especialização', 'Specialization')}>
+              <option value="">{t('Escolha…', 'Choose…')}</option>
+              {choices.options.map((o) => <option key={o} value={o}>{o}</option>)}
+            </Select>
+          ))}
+        <Button disabled={busy || !skillKey || !picked || picked.cost > ip}
+          title={picked && picked.cost > ip ? t(`Faltam ${picked.cost - ip} IP.`, `${picked.cost - ip} IP short.`) : undefined}
+          onClick={async () => {
+            if (await run('progression/skill', { skillKey }, picked?.isNew ? t('Perícia aprendida.', 'Skill learned.') : t('Perícia melhorada.', 'Skill improved.'))) { setSkill(''); setSpec(''); }
+          }}>
+          {picked?.isNew || picked?.level === 0 ? t('Aprender', 'Learn') : t('Subir', 'Raise')}{picked ? ` (${picked.cost} IP)` : ''}
         </Button>
       </div>
 

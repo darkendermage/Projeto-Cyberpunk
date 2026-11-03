@@ -363,6 +363,24 @@ public class CharactersApiTests(ApiFactory factory)
     }
 
     [Fact]
+    public async Task Improvement_points_teach_new_skills_and_specializations()
+    {
+        var c = await FinalizedSolo("Aprendiz");
+        c = await Post(c, "progression/ip", new AwardIpRequest(c.Version, 200, "Treino"));
+        var ip = c.Sheet.Progress.Ip;
+
+        c = await Post(c, "progression/skill", new ImproveSkillRequest(c.Version, "martial-arts:Karate"));
+        c = await Post(c, "progression/skill", new ImproveSkillRequest(c.Version, "language:Japanese"));
+
+        c.Sheet.Skills["martial-arts:Karate"].Should().Be(1);
+        c.Sheet.Skills["language:Japanese"].Should().Be(1);
+        c.Report.Skills.Should().Contain(s => s.Key == "martial-arts:Karate" && s.Level == 1);
+        c.Sheet.Progress.Ip.Should().Be(ip - 40 - 20, "Martial Arts (x2) sobe para 1 por 40 IP e Language por 20 (CP:R p.410)");
+        (await Raw(HttpMethod.Post, $"/api/characters/{c.Id}/progression/skill", new ImproveSkillRequest(c.Version, "martial-arts"))).StatusCode
+            .Should().Be(HttpStatusCode.BadRequest, "a especialização é obrigatória");
+    }
+
+    [Fact]
     public async Task Finalize_is_refused_while_there_are_blocking_errors()
     {
         var c = await Create(CreationMethod.Streetrat, "Solo");
