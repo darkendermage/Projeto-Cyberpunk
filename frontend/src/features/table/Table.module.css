@@ -249,3 +249,31 @@
   background: var(--bg-0);
 }
 .gateCard { max-width: 460px; display: flex; flex-direction: column; gap: 12px; padding: 22px; background: var(--panel); border: 1px solid var(--red-line); }
+
+/* ------------------------------------------------------------ token source (PC, NPC, compendium) */
+
+.sourcePicker { position: relative; display: flex; flex-direction: column; gap: 4px; }
+.sourceList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 240px;
+  overflow-y: auto;
+  border: 1px solid var(--line);
+  background: var(--bg-2);
+}
+.sourceList button {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 8px;
+  background: none;
+  border: 0;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+}
+.sourceList button:hover, .sourceList button:focus-visible { background: var(--bg-3); color: var(--cyan); }
+.sourceList small, .sourceTag small { font-family: var(--font-mono); font-size: 10.5px; color: var(--text-faint); text-transform: uppercase; }
+.sourceTag { display: inline-flex; align-items: baseline; gap: 6px; padding: 3px 8px; border: 1px solid var(--line); background: var(--bg-2); }

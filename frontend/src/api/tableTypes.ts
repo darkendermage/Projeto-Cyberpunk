@@ -41,6 +41,10 @@ export interface TokenView {
   combatantId: string | null;
   rangeRingMeters: number | null;
   controllable: boolean;
+  /** A saved NPC of the generator the token stands for (its image shows on the token). */
+  npcId: number | null;
+  /** A named NPC of the books (compendium id) the token stands for. */
+  compendiumNpcId: string | null;
 }
 
 /** An area of effect: origin in cells, size in meters, angle in degrees (0 = right, clockwise). */
@@ -97,6 +101,8 @@ export interface TokenInput {
   characterId?: number | null;
   combatantId?: string | null;
   rangeRingMeters?: number | null;
+  npcId?: number | null;
+  compendiumNpcId?: string | null;
 }
 
 export interface TokenMove { x: number; y: number; rotation?: number; width?: number; height?: number }
@@ -120,6 +126,8 @@ export interface Seat {
   token: string;
   createdAt: string;
   revoked: boolean;
+  /** Someone holds the seat (picked it at the entrance or opened its link) since the app started. */
+  claimed: boolean;
 }
 
 export interface PlayerSeat { id: number; label: string; color: string; characterId: number | null }

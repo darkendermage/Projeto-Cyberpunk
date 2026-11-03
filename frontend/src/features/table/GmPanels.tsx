@@ -16,6 +16,9 @@ import { MAP_LIMITS, prepareImage } from '../../lib/portrait';
 import { useToast } from '../../state/ToastContext';
 import { t, tv } from '../../i18n';
 import { WOUND_LABEL, WOUND_TONE } from '../combat/combat';
+import { SourcePicker } from './SourcePicker';
+import { useTokenSources } from './useTokenSources';
+import { sourceFields, tokenInputOf, type TokenSource } from './sources';
 import { DEFAULT_GRID, pxToCell } from './grid';
 import { SHAPE_LABEL } from './templates';
 import styles from './Table.module.css';
@@ -123,11 +126,11 @@ export function ScenesColumn({ scenes, currentId, onSelect, act }: {
 export function SceneTab({ scene, act, onGridDraft }: { scene: SceneView; act: Act; onGridDraft: (grid: SceneGrid | null) => void }) {
   const toast = useToast();
   const encounters = useEncounters();
-  const characters = useCharacters();
+  const sources = useTokenSources();
   const [name, setName] = useState(scene.name);
   const [grid, setGrid] = useState<SceneGrid>(scene.grid);
   const [uploading, setUploading] = useState(false);
-  const [token, setToken] = useState({ label: '', color: '#00f0ff', size: 1, characterId: null as number | null, hidden: false });
+  const [token, setToken] = useState({ label: '', color: '#00f0ff', size: 1, source: null as TokenSource | null, hidden: false });
 
   const editGrid = (change: Partial<SceneGrid>) => { const next = { ...grid, ...change }; setGrid(next); onGridDraft(next); };
   const gridChanged = JSON.stringify(grid) !== JSON.stringify(scene.grid);
@@ -215,7 +218,7 @@ export function SceneTab({ scene, act, onGridDraft }: { scene: SceneView; act: A
       <form className={styles.section} onSubmit={(e) => {
         e.preventDefault();
         const c = center();
-        const input: TokenInput = { label: token.label.trim(), x: c.x, y: c.y, width: token.size, height: token.size, color: token.color, characterId: token.characterId, visibility: token.hidden ? 'Gm' : 'All' };
+        const input: TokenInput = { label: token.label.trim(), x: c.x, y: c.y, width: token.size, height: token.size, color: token.color, ...sourceFields(token.source), visibility: token.hidden ? 'Gm' : 'All' };
         void act(async () => { const v = await tableApi.addToken(scene.id, input); setToken((tk) => ({ ...tk, label: '' })); return v; });
       }}>
         <span className={styles.label}>{t('Novo token', 'New token')}</span>
@@ -228,16 +231,11 @@ export function SceneTab({ scene, act, onGridDraft }: { scene: SceneView; act: A
           <select aria-label={t('Tamanho', 'Size')} value={token.size} onChange={(e) => setToken({ ...token, size: Number(e.target.value) })}>
             {[0.5, 1, 2, 3, 4].map((n) => <option key={n} value={n}>{n} × {n}</option>)}
           </select>
-          <select aria-label={t('Personagem', 'Character')} value={token.characterId ?? ''} onChange={(e) => {
-            const id = e.target.value ? Number(e.target.value) : null;
-            const c = characters.data?.find((x) => x.id === id);
-            setToken({ ...token, characterId: id, label: token.label || (c ? c.handle ?? c.name : '') });
-          }}>
-            <option value="">{t('Sem ficha', 'No sheet')}</option>
-            {(characters.data ?? []).map((c) => <option key={c.id} value={c.id}>{c.handle ?? c.name}</option>)}
-          </select>
           <Checkbox checked={token.hidden} onChange={(hidden) => setToken({ ...token, hidden })} label={t('Oculto', 'Hidden')} />
         </div>
+        <SourcePicker sources={sources} value={sourceFields(token.source)}
+          onChange={(source) => setToken({ ...token, source, label: token.label || (source?.name.slice(0, 40) ?? '') })} />
+        <span className={styles.muted}>{t('Vincule a um PC, a um NPC salvo ou a um NPC do compêndio: o token usa a imagem dele.', 'Link it to a PC, a saved NPC or a compendium NPC: the token uses its image.')}</span>
         <Button type="submit" icon={<Plus size={15} />} disabled={!token.label.trim()}>{t('Pôr no mapa', 'Put on the map')}</Button>
       </form>
     </div>
@@ -251,13 +249,8 @@ export function TokenInspector({ scene, token, seats, encounter, act, onDone }: 
   scene: SceneView; token: TokenView; seats: Seat[]; encounter: EncounterDetail | undefined; act: Act; onDone: () => void;
 }) {
   const toast = useToast();
-  const characters = useCharacters();
-  const toInput = (tk: TokenView): TokenInput => ({
-    label: tk.label, x: tk.x, y: tk.y, width: tk.width, height: tk.height, rotation: tk.rotation, locked: tk.locked,
-    imageMediaId: tk.imageMediaId, color: tk.color, ownerSeatId: tk.ownerSeatId, visibility: tk.visibility,
-    visibleSeatIds: tk.visibleSeatIds, characterId: tk.characterId, combatantId: tk.combatantId, rangeRingMeters: tk.rangeRingMeters,
-  });
-  const [form, setForm] = useState<TokenInput>(() => toInput(token));
+  const sources = useTokenSources();
+  const [form, setForm] = useState<TokenInput>(() => tokenInputOf(token));
 
   // Position comes from the board, never from this form.
   const save = (change: Partial<TokenInput> = {}) =>
@@ -300,10 +293,7 @@ export function TokenInspector({ scene, token, seats, encounter, act, onDone }: 
 
       <div className={styles.section}>
         <span className={styles.label}>{t('Vínculos', 'Links')}</span>
-        <select aria-label={t('Personagem', 'Character')} value={form.characterId ?? ''} onChange={(e) => setForm({ ...form, characterId: e.target.value ? Number(e.target.value) : null })}>
-          <option value="">{t('Sem ficha', 'No sheet')}</option>
-          {(characters.data ?? []).map((c) => <option key={c.id} value={c.id}>{c.handle ?? c.name}</option>)}
-        </select>
+        <SourcePicker sources={sources} value={form} onChange={(source) => setForm({ ...form, ...sourceFields(source) })} />
         {encounter && (
           <select aria-label={t('Combatente', 'Fighter')} value={form.combatantId ?? ''} onChange={(e) => setForm({ ...form, combatantId: e.target.value || null })}>
             <option value="">{t('Fora do combate', 'Not in the fight')}</option>
