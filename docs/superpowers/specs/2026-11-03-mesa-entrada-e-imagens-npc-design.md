@@ -52,7 +52,7 @@ Mesmas regras do retrato do PC: PNG, JPEG, WebP ou GIF, até 2 MB. O navegador r
 
 - `GET/PUT/DELETE /api/npcs/{id}/portrait`.
 - `GET/PUT/DELETE /api/npc-compendium/{id}/portrait`. O PUT recusa um id que não existe no compêndio.
-- Os resumos e detalhes de NPC salvo e o resumo e dossiê do compêndio ganham `hasPortrait`.
+- `GET /api/npcs/portraits` e `GET /api/npc-compendium/portraits` devolvem um mapa `id → data da imagem` de quem tem imagem. As telas usam esse mapa para as miniaturas e o `?v=` da URL. Os resumos existentes não mudam.
 - `NpcService.DuplicateAsync` copia a imagem. Excluir o NPC apaga a imagem (cascata).
 
 ### Combate
@@ -73,7 +73,8 @@ Mesmas regras do retrato do PC: PNG, JPEG, WebP ou GIF, até 2 MB. O navegador r
   4. imagem do NPC do compêndio (`CompendiumNpcId`);
   5. sem imagem (o cliente desenha as iniciais).
 - A existência das imagens é consultada a cada montagem da cena, como hoje já se faz com os retratos de PC (`PortraitsAsync` passa a devolver os três conjuntos). Trocar a imagem do NPC muda os tokens na próxima vez que a cena for enviada.
-- Para que a imagem nova chegue aos clientes, a URL leva a data da imagem (`?v=<ticks>`), e quem estiver com a cena aberta recebe a cena de novo quando a imagem muda. Para isso, os serviços de retrato chamam o notificador da mesa: a cena ativa e as cenas abertas pelo mestre são reenviadas.
+- Para que a imagem nova chegue aos clientes, a URL leva a data da imagem (`?v=<ticks>`). Quando a imagem de um NPC muda ou é apagada, toda cena com um token desse NPC é reenviada pelo notificador da mesa: o mestre recebe todas, e os jogadores recebem a cena ativa.
+- Um NPC salvo excluído deixa o token sem imagem, mas o token continua editável. O servidor só confere a existência de `NpcId` e `CompendiumNpcId` quando o valor muda.
 
 ### Rotas de imagem
 
@@ -115,7 +116,7 @@ Nada disso vai para o banco. A chave do assento continua sendo a coluna `TableSe
 
 Na porta dos jogadores, liberada pelo `PlayerSurfaceGuard` porque fica dentro de `/api/table/play`:
 
-- `GET /api/table/play/lobby` devolve `{ open, seats: [{ id, label, color, characterName?, hasPortrait }] }`. Nunca devolve chaves.
+- `GET /api/table/play/lobby` devolve `{ open, seats: [{ id, label, color, characterName?, hasPortrait }] }`. Com a entrada fechada, responde `{ open: false, seats: [] }`. Nunca devolve chaves.
 - `GET /api/table/play/lobby/{seatId}/portrait` devolve o retrato do PC do assento. Só funciona com a entrada aberta e o assento livre.
 - `POST /api/table/play/lobby/{seatId}/claim` devolve `{ token }`.
 
@@ -126,7 +127,7 @@ Na porta do mestre, sob a mesma proteção de Host e Origin das outras rotas da 
 - `GET /api/table/lobby` devolve `{ open }`.
 - `PUT /api/table/lobby` com `{ open }`.
 - `POST /api/table/seats/{id}/release`.
-- `SeatDto` ganha `claimed` e `connected` (este vem do `TablePresence`).
+- `SeatDto` ganha `claimed`. "Conectado" continua vindo de `GET /api/table/seats/online`.
 - O mestre recebe pelo hub um evento `seats` quando alguém escolhe um assento, entra, sai ou é liberado, e a aba Convites atualiza sozinha.
 
 ### Telas
@@ -155,7 +156,7 @@ Na porta do mestre, sob a mesma proteção de Host e Origin das outras rotas da 
 **xUnit:**
 
 - Entrada:
-  - com a entrada fechada, listar, ver retrato e escolher respondem 404;
+  - com a entrada fechada, a lista vem vazia com `open: false`, e ver retrato e escolher respondem 404;
   - a lista nunca contém chaves e não mostra assentos pegos nem revogados;
   - duas escolhas simultâneas do mesmo assento dão uma vitória e um 409;
   - a chave nova funciona e a antiga dá 401;
