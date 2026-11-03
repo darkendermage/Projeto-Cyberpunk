@@ -237,6 +237,13 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
             return state with { Templates = state.Templates.Where(t => t.Id != templateId).ToList() };
         }, ct);
 
+    /// <summary>The fight linked to the active scene and the scene's state (for the players' view of it).</summary>
+    public async Task<(int? EncounterId, SceneState? State)> ActiveAsync(CancellationToken ct)
+    {
+        var scene = await db.Scenes.AsNoTracking().FirstOrDefaultAsync(s => s.Active, ct);
+        return scene is null ? (null, null) : (scene.EncounterId, Deserialize(scene.StateJson));
+    }
+
     /// <summary>The character whose portrait a visible token of the active scene shows.</summary>
     public async Task<int> PlayerTokenCharacterAsync(TableSeat seat, string tokenId, CancellationToken ct)
     {

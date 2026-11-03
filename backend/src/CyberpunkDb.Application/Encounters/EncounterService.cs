@@ -33,7 +33,8 @@ public sealed class EncounterService(
     FighterViews views,
     AttackResolver resolver,
     NpcCombat npcCombat,
-    IDiceRoller dice)
+    IDiceRoller dice,
+    IEncounterObserver observer)
 {
     internal static readonly JsonSerializerOptions StateJson = new(JsonSerializerDefaults.Web)
     {
@@ -100,6 +101,7 @@ public sealed class EncounterService(
     {
         db.Encounters.Remove(await FindAsync(id, ct));
         await db.SaveChangesAsync(ct);
+        await observer.RemovedAsync(id, ct);
     }
 
     // ------------------------------------------------------------------ combatants
@@ -564,7 +566,9 @@ public sealed class EncounterService(
         {
             throw new ConflictException(L.T("Este combate foi alterado ao mesmo tempo em outra janela. Recarregue e tente de novo.", "This fight was changed at the same time in another window. Reload and try again."));
         }
-        return await DetailAsync(entity, state, _lastAttack, notices, ct);
+        var detail = await DetailAsync(entity, state, _lastAttack, notices, ct);
+        await observer.ChangedAsync(detail, ct);
+        return detail;
     }
 
     private async Task<EncounterDetailDto> DetailAsync(Encounter e, EncounterState s, AttackResult? attack, IReadOnlyList<string> notices, CancellationToken ct)

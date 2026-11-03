@@ -5,6 +5,7 @@ using CyberpunkDb.Application.Table;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.SignalR.Client;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CyberpunkDb.Tests.Integration;
 
@@ -43,6 +44,7 @@ public class TableFoundationApiTests(ApiFactory factory)
                 if (playerPort) o.Headers[ApiFactory.PortHeader] = ApiFactory.PlayerPort.ToString();
                 if (token is not null) o.AccessTokenProvider = () => Task.FromResult<string?>(token);
             })
+            .AddJsonProtocol(o => o.PayloadSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter()))
             .Build();
     }
 

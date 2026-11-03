@@ -1,4 +1,6 @@
 using CyberpunkDb.Application.Characters;
+using CyberpunkDb.Application.Common;
+using CyberpunkDb.Application.Encounters;
 using CyberpunkDb.Application.Table;
 using CyberpunkDb.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +13,7 @@ namespace CyberpunkDb.Api.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/table/play")]
-public sealed class TablePlayController(SeatService seats, SceneService scenes, CharacterService characters) : ControllerBase
+public sealed class TablePlayController(SeatService seats, SceneService scenes, EncounterService encounters, CharacterService characters) : ControllerBase
 {
     public const string SeatHeader = "X-Seat";
 
@@ -24,6 +26,23 @@ public sealed class TablePlayController(SeatService seats, SceneService scenes, 
     {
         var seat = await SeatAsync(ct);
         return new PlayerStateDto(SeatService.ToPlayer(seat), await scenes.PlayerSceneAsync(seat, ct));
+    }
+
+    /// <summary>The fight linked to the active scene, as this seat sees it (204 when there is none).</summary>
+    [HttpGet("encounter")]
+    public async Task<PlayerEncounterDto?> Encounter(CancellationToken ct)
+    {
+        var seat = await SeatAsync(ct);
+        var (encounterId, state) = await scenes.ActiveAsync(ct);
+        if (encounterId is not { } id) return null;
+        try
+        {
+            return PlayerEncounters.For(await encounters.GetAsync(id, ct), seat, state);
+        }
+        catch (NotFoundException)
+        {
+            return null;
+        }
     }
 
     [HttpPost("tokens/{tokenId}/move")]

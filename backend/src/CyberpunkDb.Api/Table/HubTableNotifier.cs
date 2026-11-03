@@ -1,4 +1,5 @@
 using CyberpunkDb.Api.Hubs;
+using CyberpunkDb.Application.Encounters;
 using CyberpunkDb.Application.Table;
 using Microsoft.AspNetCore.SignalR;
 
@@ -19,9 +20,23 @@ public sealed class HubTableNotifier(IHubContext<TableHub> hub) : ITableNotifier
         await SendSeatsAsync(seats, ct);
     }
 
-    private async Task SendSeatsAsync(IReadOnlyDictionary<int, SceneView?>? seats, CancellationToken ct)
+    public async Task EncounterAsync(EncounterDetailDto gm, IReadOnlyDictionary<int, PlayerEncounterDto?>? seats, CancellationToken ct)
+    {
+        await hub.Clients.Group(TableHub.Gm).SendAsync("encounter", gm, ct);
+        await SendSeatsAsync(seats, "encounter", ct);
+    }
+
+    public async Task EncounterRemovedAsync(int id, IReadOnlyDictionary<int, PlayerEncounterDto?>? seats, CancellationToken ct)
+    {
+        await hub.Clients.Group(TableHub.Gm).SendAsync("encounterRemoved", id, ct);
+        await SendSeatsAsync(seats, "encounter", ct);
+    }
+
+    private Task SendSeatsAsync(IReadOnlyDictionary<int, SceneView?>? seats, CancellationToken ct) => SendSeatsAsync(seats, "scene", ct);
+
+    private async Task SendSeatsAsync<T>(IReadOnlyDictionary<int, T?>? seats, string method, CancellationToken ct) where T : class
     {
         if (seats is null) return;
-        foreach (var (seat, view) in seats) await hub.Clients.Group(TableHub.Seat(seat)).SendAsync("scene", view, ct);
+        foreach (var (seat, view) in seats) await hub.Clients.Group(TableHub.Seat(seat)).SendAsync(method, view, ct);
     }
 }

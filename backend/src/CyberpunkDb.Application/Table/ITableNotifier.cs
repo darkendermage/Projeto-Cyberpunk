@@ -1,3 +1,5 @@
+using CyberpunkDb.Application.Encounters;
+
 namespace CyberpunkDb.Application.Table;
 
 /// <summary>
@@ -13,6 +15,11 @@ public interface ITableNotifier
     Task SceneAsync(SceneView gm, IReadOnlyDictionary<int, SceneView?>? seats, CancellationToken ct);
 
     Task SceneRemovedAsync(int id, IReadOnlyDictionary<int, SceneView?>? seats, CancellationToken ct);
+
+    /// <summary>A fight changed: the GM gets the full detail; <paramref name="seats"/> as in <see cref="SceneAsync"/>.</summary>
+    Task EncounterAsync(EncounterDetailDto gm, IReadOnlyDictionary<int, PlayerEncounterDto?>? seats, CancellationToken ct);
+
+    Task EncounterRemovedAsync(int id, IReadOnlyDictionary<int, PlayerEncounterDto?>? seats, CancellationToken ct);
 }
 
 /// <summary>For hosts without live screens (and tests that don't care).</summary>
@@ -20,4 +27,6 @@ public sealed class NullTableNotifier : ITableNotifier
 {
     public Task SceneAsync(SceneView gm, IReadOnlyDictionary<int, SceneView?>? seats, CancellationToken ct) => Task.CompletedTask;
     public Task SceneRemovedAsync(int id, IReadOnlyDictionary<int, SceneView?>? seats, CancellationToken ct) => Task.CompletedTask;
+    public Task EncounterAsync(EncounterDetailDto gm, IReadOnlyDictionary<int, PlayerEncounterDto?>? seats, CancellationToken ct) => Task.CompletedTask;
+    public Task EncounterRemovedAsync(int id, IReadOnlyDictionary<int, PlayerEncounterDto?>? seats, CancellationToken ct) => Task.CompletedTask;
 }
