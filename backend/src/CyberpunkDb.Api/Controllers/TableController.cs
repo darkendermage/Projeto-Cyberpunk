@@ -11,8 +11,64 @@ namespace CyberpunkDb.Api.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/table")]
-public sealed class TableController(SeatService seats, MediaService media, TablePresence presence) : ControllerBase
+public sealed class TableController(SeatService seats, MediaService media, SceneService scenes, TablePresence presence) : ControllerBase
 {
+    // ------------------------------------------------------------------ scenes
+
+    [HttpGet("scenes")]
+    public Task<IReadOnlyList<SceneSummaryDto>> Scenes(CancellationToken ct) => scenes.ListAsync(ct);
+
+    [HttpPost("scenes")]
+    public async Task<ActionResult<SceneView>> CreateScene(CreateSceneRequest request, CancellationToken ct) =>
+        StatusCode(StatusCodes.Status201Created, await scenes.CreateAsync(request, ct));
+
+    [HttpPost("scenes/reorder")]
+    public Task<IReadOnlyList<SceneSummaryDto>> ReorderScenes(ReorderScenesRequest request, CancellationToken ct) => scenes.ReorderAsync(request, ct);
+
+    [HttpGet("scenes/{id:int}")]
+    public Task<SceneView> Scene(int id, CancellationToken ct) => scenes.GetAsync(id, ct);
+
+    [HttpPut("scenes/{id:int}")]
+    public Task<SceneView> UpdateScene(int id, UpdateSceneRequest request, CancellationToken ct) => scenes.UpdateAsync(id, request, ct);
+
+    [HttpPost("scenes/{id:int}/duplicate")]
+    public async Task<ActionResult<SceneView>> DuplicateScene(int id, CancellationToken ct) =>
+        StatusCode(StatusCodes.Status201Created, await scenes.DuplicateAsync(id, ct));
+
+    [HttpDelete("scenes/{id:int}")]
+    public async Task<IActionResult> DeleteScene(int id, CancellationToken ct)
+    {
+        await scenes.DeleteAsync(id, ct);
+        return NoContent();
+    }
+
+    [HttpPost("scenes/{id:int}/activate")]
+    public Task<SceneView> ActivateScene(int id, CancellationToken ct) => scenes.ActivateAsync(id, ct);
+
+    [HttpPost("scenes/{id:int}/tokens")]
+    public Task<SceneView> AddToken(int id, TokenInput input, CancellationToken ct) => scenes.AddTokenAsync(id, input, ct);
+
+    [HttpPost("scenes/{id:int}/encounter-tokens")]
+    public Task<SceneView> AddEncounterTokens(int id, CancellationToken ct) => scenes.AddEncounterTokensAsync(id, ct);
+
+    [HttpPut("scenes/{id:int}/tokens/{tokenId}")]
+    public Task<SceneView> UpdateToken(int id, string tokenId, TokenInput input, CancellationToken ct) => scenes.UpdateTokenAsync(id, tokenId, input, ct);
+
+    [HttpPost("scenes/{id:int}/tokens/{tokenId}/move")]
+    public Task<SceneView> MoveToken(int id, string tokenId, TokenMoveRequest move, CancellationToken ct) => scenes.MoveTokenAsync(id, tokenId, move, ct);
+
+    [HttpDelete("scenes/{id:int}/tokens/{tokenId}")]
+    public Task<SceneView> RemoveToken(int id, string tokenId, CancellationToken ct) => scenes.RemoveTokenAsync(id, tokenId, ct);
+
+    [HttpPost("scenes/{id:int}/templates")]
+    public Task<SceneView> AddTemplate(int id, TemplateInput input, CancellationToken ct) => scenes.AddTemplateAsync(id, input, ct);
+
+    [HttpPut("scenes/{id:int}/templates/{templateId}")]
+    public Task<SceneView> UpdateTemplate(int id, string templateId, TemplateInput input, CancellationToken ct) => scenes.UpdateTemplateAsync(id, templateId, input, ct);
+
+    [HttpDelete("scenes/{id:int}/templates/{templateId}")]
+    public Task<SceneView> RemoveTemplate(int id, string templateId, CancellationToken ct) => scenes.RemoveTemplateAsync(id, templateId, ct);
+
     // ------------------------------------------------------------------ seats
 
     [HttpGet("seats")]

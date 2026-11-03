@@ -1,3 +1,4 @@
+using CyberpunkDb.Application.Characters;
 using CyberpunkDb.Application.Table;
 using CyberpunkDb.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
@@ -6,16 +7,50 @@ namespace CyberpunkDb.Api.Controllers;
 
 /// <summary>
 /// The players' side of the virtual table, the only API their port reaches. Every call carries the seat link token in
-/// the X-Seat header; a wrong or revoked one answers 401.
+/// the X-Seat header (or ?seat= on images, which load without headers); a wrong or revoked one answers 401.
 /// </summary>
 [ApiController]
 [Route("api/table/play")]
-public sealed class TablePlayController(SeatService seats) : ControllerBase
+public sealed class TablePlayController(SeatService seats, SceneService scenes, CharacterService characters) : ControllerBase
 {
     public const string SeatHeader = "X-Seat";
 
     [HttpGet("me")]
     public async Task<PlayerSeatDto> Me(CancellationToken ct) => SeatService.ToPlayer(await SeatAsync(ct));
 
-    private Task<TableSeat> SeatAsync(CancellationToken ct) => seats.AuthenticateAsync(Request.Headers[SeatHeader].FirstOrDefault(), ct);
+    /// <summary>Everything a player's screen needs on load; the hub keeps it current afterwards.</summary>
+    [HttpGet("state")]
+    public async Task<PlayerStateDto> State(CancellationToken ct)
+    {
+        var seat = await SeatAsync(ct);
+        return new PlayerStateDto(SeatService.ToPlayer(seat), await scenes.PlayerSceneAsync(seat, ct));
+    }
+
+    [HttpPost("tokens/{tokenId}/move")]
+    public async Task<SceneView> MoveToken(string tokenId, TokenMoveRequest move, CancellationToken ct) =>
+        await scenes.PlayerMoveTokenAsync(await SeatAsync(ct), tokenId, move, ct);
+
+    [HttpGet("tokens/{tokenId}/portrait")]
+    public async Task<IActionResult> TokenPortrait(string tokenId, CancellationToken ct)
+    {
+        var characterId = await scenes.PlayerTokenCharacterAsync(await SeatAsync(ct), tokenId, ct);
+        var (data, type, updated) = await characters.GetPortraitAsync(characterId, ct);
+        Response.Headers.CacheControl = "private, no-cache";
+        return File(data, type, lastModified: updated, entityTag: new Microsoft.Net.Http.Headers.EntityTagHeaderValue($"\"{updated.Ticks}\""));
+    }
+
+    [HttpPost("templates")]
+    public async Task<SceneView> AddTemplate(TemplateInput input, CancellationToken ct) =>
+        await scenes.PlayerAddTemplateAsync(await SeatAsync(ct), input, ct);
+
+    [HttpPut("templates/{templateId}")]
+    public async Task<SceneView> UpdateTemplate(string templateId, TemplateInput input, CancellationToken ct) =>
+        await scenes.PlayerUpdateTemplateAsync(await SeatAsync(ct), templateId, input, ct);
+
+    [HttpDelete("templates/{templateId}")]
+    public async Task<SceneView> RemoveTemplate(string templateId, CancellationToken ct) =>
+        await scenes.PlayerRemoveTemplateAsync(await SeatAsync(ct), templateId, ct);
+
+    private Task<TableSeat> SeatAsync(CancellationToken ct) =>
+        seats.AuthenticateAsync(Request.Headers[SeatHeader].FirstOrDefault() ?? Request.Query["seat"].FirstOrDefault(), ct);
 }

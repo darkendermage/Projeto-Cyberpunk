@@ -1,0 +1,36 @@
+namespace CyberpunkDb.Application.Table;
+
+public sealed record SceneSummaryDto(int Id, string Name, bool Active, int SortOrder, int? EncounterId, string? BackgroundUrl, int Tokens, DateTime UpdatedAt);
+
+/// <summary>
+/// A scene as one viewer sees it: the GM gets every token; a player gets the tokens visible to their seat, with
+/// <see cref="TokenView.Controllable"/> marking the ones they may move.
+/// </summary>
+public sealed record SceneView(
+    int Id, string Name, int Version, bool Active, int? EncounterId, SceneGrid Grid, BackgroundView Background,
+    IReadOnlyList<TokenView> Tokens, IReadOnlyList<SceneTemplate> Templates, DateTime UpdatedAt);
+
+public sealed record BackgroundView(Guid? MediaId, string? Url, int Width, int Height);
+
+public sealed record TokenView(
+    string Id, string Label, double X, double Y, double Width, double Height, double Rotation, bool Locked,
+    Guid? ImageMediaId, string? ImageUrl, string Color, int? OwnerSeatId, TokenVisibility Visibility, IReadOnlyList<int> VisibleSeatIds,
+    int? CharacterId, string? CombatantId, double? RangeRingMeters, bool Controllable);
+
+public sealed record CreateSceneRequest(string Name);
+
+/// <summary>Scene settings, checked against the version: the map, the grid and the linked encounter.</summary>
+public sealed record UpdateSceneRequest(int Version, string Name, SceneGrid Grid, Guid? BackgroundMediaId, int BackgroundWidth, int BackgroundHeight, int? EncounterId);
+
+public sealed record ReorderScenesRequest(List<int> Ids);
+
+/// <summary>Everything about a token the GM sets.</summary>
+public sealed record TokenInput(
+    string Label, double X, double Y, double Width = 1, double Height = 1, double Rotation = 0, bool Locked = false,
+    Guid? ImageMediaId = null, string? Color = null, int? OwnerSeatId = null, TokenVisibility Visibility = TokenVisibility.All,
+    List<int>? VisibleSeatIds = null, int? CharacterId = null, string? CombatantId = null, double? RangeRingMeters = null);
+
+/// <summary>A drag, a turn or a resize; anything left null stays as it was. Last write wins.</summary>
+public sealed record TokenMoveRequest(double X, double Y, double? Rotation = null, double? Width = null, double? Height = null);
+
+public sealed record TemplateInput(TemplateShape Shape, double X, double Y, double SizeMeters, double Angle = 0, string? Color = null, string? Label = null, bool Locked = false);

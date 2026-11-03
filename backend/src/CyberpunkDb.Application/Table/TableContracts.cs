@@ -9,4 +9,7 @@ public sealed record PlayerSeatDto(int Id, string Label, string Color, int? Char
 public sealed record CreateSeatRequest(string Label, int? CharacterId = null, string? Color = null);
 public sealed record UpdateSeatRequest(string Label, int? CharacterId, string Color);
 
+/// <summary>A player's screen on load: their seat and the active scene (null when the GM shows none).</summary>
+public sealed record PlayerStateDto(PlayerSeatDto Seat, SceneView? Scene);
+
 public sealed record MediaDto(Guid Id, string Url, string ContentType, long Length);

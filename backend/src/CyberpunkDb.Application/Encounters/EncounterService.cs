@@ -669,7 +669,7 @@ public sealed class EncounterService(
         entity.Version++;
     }
 
-    private static EncounterState Deserialize(string json) =>
+    internal static EncounterState Deserialize(string json) =>
         JsonSerializer.Deserialize<EncounterState>(json, StateJson) ?? new EncounterState();
 
     private async Task<Encounter> FindAsync(int id, CancellationToken ct) =>

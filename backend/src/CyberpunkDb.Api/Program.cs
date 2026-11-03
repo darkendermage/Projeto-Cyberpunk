@@ -47,6 +47,7 @@ builder.Services.AddCors(o => o.AddDefaultPolicy(p => p
 builder.Services.AddSignalR().AddJsonProtocol(o => o.PayloadSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 builder.Services.Configure<TableOptions>(builder.Configuration.GetSection("Table"));
 builder.Services.AddSingleton<TablePresence>();
+builder.Services.AddSingleton<CyberpunkDb.Application.Table.ITableNotifier, HubTableNotifier>();
 
 builder.Services.AddSingleton(new AppUpdater(AppUpdaterOptions.FromConfiguration(builder.Configuration)));
 builder.Services.AddApplication();
