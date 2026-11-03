@@ -67,22 +67,22 @@ public sealed class TableHub(SeatService seats, SceneService scenes, TablePresen
     /// Where a token is while someone drags it (the drop goes through the API). Others see it slide; a token hidden
     /// from some players only previews to the GM.
     /// </summary>
-    public async Task DragToken(string tokenId, double x, double y)
+    public async Task DragToken(int sceneId, string tokenId, double x, double y)
     {
         if (!double.IsFinite(x) || !double.IsFinite(y) || tokenId.Length > 20) return;
-        var everyone = await scenes.DragTargetAsync(CurrentSeat, tokenId, Context.ConnectionAborted);
+        var everyone = await scenes.DragTargetAsync(CurrentSeat, sceneId, tokenId, Context.ConnectionAborted);
         if (everyone is null) return;
-        var preview = new { tokenId, x, y };
+        var preview = new { sceneId, tokenId, x, y };
         if (everyone.Value) await Clients.Others.SendAsync("tokenDrag", preview);
         else await Clients.GroupExcept(Gm, Context.ConnectionId).SendAsync("tokenDrag", preview);
     }
 
-    /// <summary>A pulse on the map that everyone sees for a moment; nothing is saved.</summary>
-    public async Task Ping(double x, double y)
+    /// <summary>A pulse on the scene the players see, for everyone, for a moment; nothing is saved.</summary>
+    public async Task Ping(int sceneId, double x, double y)
     {
-        if (!double.IsFinite(x) || !double.IsFinite(y)) return;
+        if (!double.IsFinite(x) || !double.IsFinite(y) || !await scenes.IsActiveAsync(sceneId, Context.ConnectionAborted)) return;
         var seat = CurrentSeat;
-        await Clients.All.SendAsync("ping", new { x, y, color = seat?.Color ?? GmPingColor, label = seat?.Label ?? "GM" });
+        await Clients.All.SendAsync("ping", new { sceneId, x, y, color = seat?.Color ?? GmPingColor, label = seat?.Label ?? "GM" });
     }
 
     /// <summary>The seat of this connection; null for the GM.</summary>

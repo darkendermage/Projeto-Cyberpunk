@@ -82,15 +82,15 @@ export function useTableHub(seat: string | null, handlers: HubHandlers, enabled 
     if (connection?.state === HubConnectionState.Connected) connection.invoke(method, ...args).catch(() => { /* fleeting */ });
   }, []);
 
-  /** A token being dragged, in cells; throttled. */
-  const dragToken = useCallback((tokenId: string, x: number, y: number) => {
+  /** A token being dragged on a scene, in cells; throttled. Token ids repeat across scenes, hence the scene id. */
+  const dragToken = useCallback((sceneId: number, tokenId: string, x: number, y: number) => {
     const now = performance.now();
     if (now - lastDrag.current < DRAG_INTERVAL_MS) return;
     lastDrag.current = now;
-    send('DragToken', tokenId, x, y);
+    send('DragToken', sceneId, tokenId, x, y);
   }, [send]);
 
-  const ping = useCallback((x: number, y: number) => send('Ping', x, y), [send]);
+  const ping = useCallback((sceneId: number, x: number, y: number) => send('Ping', sceneId, x, y), [send]);
   const reconnect = useCallback(() => { setStatus('connecting'); setAttempt((n) => n + 1); }, []);
 
   return { status, dragToken, ping, reconnect };

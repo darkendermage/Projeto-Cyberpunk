@@ -203,5 +203,5 @@ export interface SendMessage { text: string; visibility?: TableVisibility; targe
 export interface RollRequest { formula: string; kind?: RollKind; label?: string | null; visibility?: TableVisibility; targetSeatId?: number | null }
 
 /** Live previews and pings pushed by the hub. */
-export interface TokenDrag { tokenId: string; x: number; y: number }
-export interface Ping { x: number; y: number; color: string; label: string }
+export interface TokenDrag { sceneId: number; tokenId: string; x: number; y: number }
+export interface Ping { sceneId: number; x: number; y: number; color: string; label: string }

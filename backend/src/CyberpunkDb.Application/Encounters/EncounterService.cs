@@ -100,6 +100,8 @@ public sealed class EncounterService(
     public async Task DeleteAsync(int id, CancellationToken ct)
     {
         db.Encounters.Remove(await FindAsync(id, ct));
+        // Scenes linked to it keep their tokens and lose the link (there is no foreign key to do it).
+        foreach (var scene in await db.Scenes.Where(s => s.EncounterId == id).ToListAsync(ct)) scene.EncounterId = null;
         await db.SaveChangesAsync(ct);
         await observer.RemovedAsync(id, ct);
     }

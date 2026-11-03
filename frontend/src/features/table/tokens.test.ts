@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { damageFormula, initials, tokenStatus } from './tokens';
+import { damageCommand, damageFormula, initials, tokenStatus } from './tokens';
 
 describe('tokenStatus', () => {
   it('uses the real HP when the viewer may see it', () => {
@@ -35,5 +35,13 @@ describe('damageFormula', () => {
     expect(damageFormula('2d6+1')).toBe('2d6+1');
     expect(damageFormula('5d6')).toBe('5d6');
     expect(damageFormula('special')).toBeNull();
+  });
+});
+
+describe('damageCommand', () => {
+  it('carries the Critical Injury of the roll to the combat table', () => {
+    const roll = { formula: '3d6', kind: 'Damage' as const, terms: [], total: 17, critical: null, criticalInjury: true };
+    expect(damageCommand(roll, 'C2', 'Head')).toEqual({ path: 'combatants/C2/damage', body: { amount: 17, location: 'Head', critical: true } });
+    expect(damageCommand({ ...roll, criticalInjury: false }, 'C2', 'Body').body.critical).toBe(false);
   });
 });

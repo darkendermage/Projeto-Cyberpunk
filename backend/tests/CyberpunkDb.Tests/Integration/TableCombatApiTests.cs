@@ -87,6 +87,31 @@ public class TableCombatApiTests(ApiFactory factory)
     }
 
     [Fact]
+    public async Task Enemies_added_to_a_live_scene_stay_hidden_until_the_gm_shows_them()
+    {
+        var solo = await FinalizedSolo("Ambush");
+        var seat = await Send<SeatDto>(_gm, HttpMethod.Post, "/api/table/seats", new CreateSeatRequest("Vítima", solo.Id), expected: HttpStatusCode.Created);
+        var e = await Send<JsonNode>(_gm, HttpMethod.Post, "/api/encounters", new { name = "Emboscada ao vivo" }, expected: HttpStatusCode.Created);
+        var id = e["id"]!.GetValue<int>();
+        var scene = await Send<SceneView>(_gm, HttpMethod.Post, "/api/table/scenes", new CreateSceneRequest("Rua ao vivo"), expected: HttpStatusCode.Created);
+        scene = await Send<SceneView>(_gm, HttpMethod.Put, $"/api/table/scenes/{scene.Id}", new UpdateSceneRequest(scene.Version, scene.Name, scene.Grid, null, 0, 0, id));
+        await Send<SceneView>(_gm, HttpMethod.Post, $"/api/table/scenes/{scene.Id}/activate");
+
+        e = await Send<JsonNode>(_gm, HttpMethod.Post, $"/api/encounters/{id}/combatants", new { version = e["version"]!.GetValue<int>(), side = "Ally", characterId = solo.Id });
+        await Send<JsonNode>(_gm, HttpMethod.Post, $"/api/encounters/{id}/combatants", new { version = e["version"]!.GetValue<int>(), side = "Enemy", generic = new { name = "Atirador" }, count = 2 });
+
+        // Before any token: enemies don't show in the players' Initiative list.
+        var fight = await Send<PlayerEncounterDto>(_player, HttpMethod.Get, "/api/table/play/encounter", seat: seat.Token);
+        fight.Queue.Should().ContainSingle().Which.Own.Should().BeTrue();
+
+        // Tokens created on the live scene: enemies come out hidden, allies visible.
+        var placed = await Send<SceneView>(_gm, HttpMethod.Post, $"/api/table/scenes/{scene.Id}/encounter-tokens");
+        placed.Tokens.Where(t => t.Color == "#ff2a6d").Should().HaveCount(2).And.OnlyContain(t => t.Visibility == TokenVisibility.Gm);
+        placed.Tokens.Single(t => t.CharacterId == solo.Id).Visibility.Should().Be(TokenVisibility.All);
+        (await Send<PlayerStateDto>(_player, HttpMethod.Get, "/api/table/play/state", seat: seat.Token)).Scene!.Tokens.Should().ContainSingle();
+    }
+
+    [Fact]
     public async Task A_player_gets_their_own_skills_for_quick_rolls()
     {
         var solo = await FinalizedSolo("Lucky");

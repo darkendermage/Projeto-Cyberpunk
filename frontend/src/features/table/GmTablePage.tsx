@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { problemMessage } from '../../api/characters';
 import { encounterKeys, useEncounter, useEncounterCommand } from '../../api/encounters';
@@ -14,7 +14,7 @@ import { TOOL_HINT } from './board/toolHints';
 import { TableBoard, type BoardHandle } from './board/TableBoard';
 import { ChatPanel } from './chat/ChatPanel';
 import { CombatTab, InvitesTab, SceneTab, ScenesColumn, TemplateInspector, TokenInspector, type Act } from './GmPanels';
-import { fromGmFighter } from './tokens';
+import { damageCommand, fromGmFighter } from './tokens';
 import { HUB_TEXT, useTableHub } from './useTableHub';
 import styles from './Table.module.css';
 
@@ -79,12 +79,15 @@ export function GmTablePage() {
     sceneRemoved: () => void client.invalidateQueries({ queryKey: tableKeys.scenes, exact: true }),
     encounter: (detail) => { if (detail) client.setQueryData(encounterKeys.detail(detail.id), detail as EncounterDetail); },
     message: (m) => client.setQueryData<TableMessage[]>(tableKeys.messages, (old = []) => (old.some((x) => x.id === m.id) ? old : [...old, m].slice(-300))),
-    tokenDrag: (d) => board.current?.showDrag(d.tokenId, d.x, d.y),
-    ping: (p) => board.current?.showPing(p),
+    // Live effects belong to the live scene: ignored while the GM edits another one.
+    tokenDrag: (d) => { if (d.sceneId === shownRef.current) board.current?.showDrag(d.tokenId, d.x, d.y); },
+    ping: (p) => { if (p.sceneId === shownRef.current) board.current?.showPing(p); },
     resync: () => void client.invalidateQueries({ queryKey: ['table'] }),
   });
 
   const view = scene.data;
+  const shownRef = useRef<number | null>(null);
+  useEffect(() => { shownRef.current = view?.id ?? null; }, [view?.id]);
   const viewKey = view ? `${view.id}:${view.version}` : '';
   const draftGrid = gridDraft?.key === viewKey ? gridDraft.grid : null;
   const live = view?.active ?? false;
@@ -103,7 +106,7 @@ export function GmTablePage() {
   const callbacks: BoardCallbacks = {
     onTokenSelect: (id) => { setSelectedToken(id); if (id) { setSelectedTemplate(null); setTab('token'); } },
     // Previews only make sense on the scene the players are looking at.
-    onTokenDrag: (id, x, y) => { if (live) hub.dragToken(id, x, y); },
+    onTokenDrag: (id, x, y) => { if (live && view) hub.dragToken(view.id, id, x, y); },
     onTokenDrop: (id, x, y) => { if (view) void act(() => tableApi.moveToken(view.id, id, { x, y })); },
     onTemplateSelect: (id) => { setSelectedTemplate(id); if (id) { setSelectedToken(null); setTab('token'); } },
     onTemplateDrop: (id, x, y) => {
@@ -114,8 +117,8 @@ export function GmTablePage() {
       if (view) void act(() => tableApi.addTemplate(view.id, { shape: draft.shape, x, y, sizeMeters: draft.sizeMeters, angle, color: draft.color }));
     },
     onPing: (x, y) => {
-      if (live) hub.ping(x, y);
-      else board.current?.showPing({ x, y, color: '#f5e663', label: 'GM' });
+      if (live && view) hub.ping(view.id, x, y);
+      else board.current?.showPing({ sceneId: view?.id ?? 0, x, y, color: '#f5e663', label: 'GM' });
     },
   };
 
@@ -126,7 +129,7 @@ export function GmTablePage() {
   const applyDamage = (m: TableMessage) => {
     if (m.kind !== 'Roll' || m.roll?.kind !== 'Damage' || !encounter.data) return null;
     return <ApplyDamage total={m.roll.total} encounter={encounter.data}
-      onApply={(id, location) => command.mutate({ path: `combatants/${id}/damage`, body: { amount: m.roll!.total, location } },
+      onApply={(id, location) => command.mutate(damageCommand(m.roll!, id, location),
         { onSuccess: () => toast.notify(t('Dano aplicado.', 'Damage applied.')), onError: (e) => toast.notify(problemMessage(e), 'error') })} />;
   };
 

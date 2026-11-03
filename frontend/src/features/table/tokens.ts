@@ -1,5 +1,5 @@
-import type { FighterView, WoundState } from '../../api/encounterTypes';
-import type { PlayerFighter } from '../../api/tableTypes';
+import type { FighterView, InjuryLocation, WoundState } from '../../api/encounterTypes';
+import type { PlayerFighter, RollResult } from '../../api/tableTypes';
 
 /** What a token shows of its fighter; hp is known only to the GM and to the fighter's own player. */
 export interface TokenFighter {
@@ -34,6 +34,13 @@ export function tokenStatus(f: TokenFighter): TokenStatus {
 
 /** The dice part of a weapon's damage ("3d6 (Shotgun Shell)" → "3d6"); null when there is none to roll. */
 export const damageFormula = (damage: string): string | null => damage.replace(/\s+/g, '').match(/^\d*d\d+([+-]\d+)?/i)?.[0] ?? null;
+
+/**
+ * The combat table action that applies a damage roll to a fighter. Two 6s on the dice make it a Critical Injury there
+ * too (+5 straight to HP and an injury roll, CP:R p.187).
+ */
+export const damageCommand = (roll: RollResult, combatantId: string, location: InjuryLocation) =>
+  ({ path: `combatants/${combatantId}/damage`, body: { amount: roll.total, location, critical: roll.criticalInjury } });
 
 export function initials(label: string): string {
   const words = label.replace(/[#]/g, ' ').trim().split(/\s+/).filter(Boolean);

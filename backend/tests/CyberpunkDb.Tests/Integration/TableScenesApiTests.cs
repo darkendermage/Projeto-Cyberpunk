@@ -171,6 +171,20 @@ public class TableScenesApiTests(ApiFactory factory)
     }
 
     [Fact]
+    public async Task Deleting_the_linked_fight_unlinks_the_scene_and_keeps_it_editable()
+    {
+        var encounter = await Send<JsonNode>(_gm, HttpMethod.Post, "/api/encounters", new { name = "Luta descartada" }, expected: HttpStatusCode.Created);
+        var id = encounter["id"]!.GetValue<int>();
+        var scene = await NewScene("Depois da luta");
+        scene = await Gm(HttpMethod.Put, $"/api/table/scenes/{scene.Id}", new UpdateSceneRequest(scene.Version, scene.Name, scene.Grid, null, 0, 0, id));
+
+        (await Status(_gm, HttpMethod.Delete, $"/api/encounters/{id}")).Should().Be(HttpStatusCode.NoContent);
+        var after = await Gm(HttpMethod.Get, $"/api/table/scenes/{scene.Id}");
+        after.EncounterId.Should().BeNull();
+        await Gm(HttpMethod.Put, $"/api/table/scenes/{scene.Id}", new UpdateSceneRequest(after.Version, "Renomeada", after.Grid, null, 0, 0, null));
+    }
+
+    [Fact]
     public async Task Changes_reach_the_screens_at_once_and_hidden_tokens_never_reach_players()
     {
         var seat = await NewSeat("Netrunner");
@@ -228,17 +242,21 @@ public class TableScenesApiTests(ApiFactory factory)
         await player.StartAsync();
         await gm.StartAsync();
 
-        await player.InvokeAsync("Ping", 3.5, 2.0);
+        await player.InvokeAsync("Ping", scene.Id, 3.5, 2.0);
         var ping = await pings.Task.WaitAsync(TimeSpan.FromSeconds(10));
         ping.GetProperty("label").GetString().Should().Be("Nomad");
         ping.GetProperty("color").GetString().Should().Be(seat.Color);
+        ping.GetProperty("sceneId").GetInt32().Should().Be(scene.Id);
 
         // Someone else's token: no preview goes out.
-        await player.InvokeAsync("DragToken", "T2", 9.0, 9.0);
-        await player.InvokeAsync("DragToken", Token(placed, "Moto").Id, 2.5, 1.5);
+        await player.InvokeAsync("DragToken", scene.Id, "T2", 9.0, 9.0);
+        // A scene other than the live one: token ids repeat across scenes, so nothing goes out.
+        await player.InvokeAsync("DragToken", scene.Id + 1000, Token(placed, "Moto").Id, 7.0, 7.0);
+        await player.InvokeAsync("DragToken", scene.Id, Token(placed, "Moto").Id, 2.5, 1.5);
         var drag = await drags.Task.WaitAsync(TimeSpan.FromSeconds(10));
         drag.GetProperty("tokenId").GetString().Should().Be(Token(placed, "Moto").Id);
         drag.GetProperty("x").GetDouble().Should().Be(2.5);
+        drag.GetProperty("sceneId").GetInt32().Should().Be(scene.Id);
         Token(await Gm(HttpMethod.Get, $"/api/table/scenes/{scene.Id}"), "Moto").X.Should().Be(1);
     }
 

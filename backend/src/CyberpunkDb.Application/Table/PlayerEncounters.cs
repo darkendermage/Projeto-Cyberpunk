@@ -21,13 +21,18 @@ public sealed record PlayerEncounterDto(int Id, string Name, int Round, string? 
 public static class PlayerEncounters
 {
     /// <summary>
-    /// The seat's view. Combatants whose token on the scene is hidden from the seat stay out of the queue, so an
-    /// ambush is not given away by the Initiative order.
+    /// The seat's view. Combatants whose token on the scene is hidden from the seat stay out of the queue, and so do
+    /// enemies with no token there yet, so an ambush is not given away by the Initiative order.
     /// </summary>
     public static PlayerEncounterDto For(EncounterDetailDto detail, TableSeat seat, SceneState? scene)
     {
         var hidden = scene?.Tokens.Where(t => t.CombatantId is not null && !SceneViews.CanSee(t, seat)).Select(t => t.CombatantId!).ToHashSet()
                      ?? [];
+        if (scene is not null)
+        {
+            var placed = scene.Tokens.Where(t => t.CombatantId is not null).Select(t => t.CombatantId!).ToHashSet();
+            hidden.UnionWith(detail.Queue.Where(f => f.Side == CombatSide.Enemy && !placed.Contains(f.Id)).Select(f => f.Id));
+        }
         var queue = detail.Queue.Where(f => !hidden.Contains(f.Id)).Select(f => Fighter(f, seat)).ToList();
         var active = detail.ActiveId is { } id && hidden.Contains(id) ? null : detail.ActiveId;
         return new PlayerEncounterDto(detail.Id, detail.Name, detail.Round, active, queue);

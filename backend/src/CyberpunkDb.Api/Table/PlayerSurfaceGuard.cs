@@ -9,7 +9,8 @@ namespace CyberpunkDb.Api.Table;
 /// the address, tells the two apart.
 ///
 /// On the GM's port, the table routes refuse cross-site requests: a WebSocket skips CORS, and a page on another site
-/// must not drive the table as the GM.
+/// must not drive the table as the GM. They also demand a loopback Host, so a site whose own name was re-pointed to
+/// 127.0.0.1 (DNS rebinding: its Origin then matches the Host) is refused too.
 /// </summary>
 public sealed class PlayerSurfaceGuard(RequestDelegate next, IOptions<TableOptions> options, IConfiguration configuration)
 {
@@ -26,7 +27,7 @@ public sealed class PlayerSurfaceGuard(RequestDelegate next, IOptions<TableOptio
                 return;
             }
         }
-        else if (IsTableRoute(request.Path) && !SameSite(request))
+        else if (IsTableRoute(request.Path) && (!IsLoopback(request.Host) || !SameSite(request)))
         {
             context.Response.StatusCode = StatusCodes.Status403Forbidden;
             return;
@@ -45,6 +46,9 @@ public sealed class PlayerSurfaceGuard(RequestDelegate next, IOptions<TableOptio
         // The frontend bundle and its index.html: read-only files.
         return HttpMethods.IsGet(request.Method) || HttpMethods.IsHead(request.Method);
     }
+
+    private static bool IsLoopback(HostString host) =>
+        host.Host is "127.0.0.1" or "[::1]" or "::1" || host.Host.Equals("localhost", StringComparison.OrdinalIgnoreCase);
 
     private static bool IsTableRoute(PathString path) => path.StartsWithSegments("/hubs") || path.StartsWithSegments("/api/table");
 

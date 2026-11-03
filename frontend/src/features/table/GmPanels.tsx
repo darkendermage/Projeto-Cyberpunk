@@ -209,7 +209,7 @@ export function SceneTab({ scene, act, onGridDraft }: { scene: SceneView; act: A
             <Link to={`/combat/${scene.encounterId}`} target="_blank" className={styles.link}>{t('Abrir o combate', 'Open the fight')} <ExternalLink size={12} /></Link>
           </div>
         )}
-        <span className={styles.muted}>{t('Monte o combate antes (Friday Night Firefight), crie os tokens e arraste-os para as posições iniciais: a cena guarda tudo.', 'Build the fight first (Friday Night Firefight), create the tokens and drag them to their starting spots: the scene keeps it all.')}</span>
+        <span className={styles.muted}>{t('Monte o combate antes (Friday Night Firefight), crie os tokens e arraste-os para as posições iniciais: a cena guarda tudo. Os jogadores só veem inimigos que têm token visível; numa cena já ao vivo, os tokens de inimigos nascem ocultos (revele-os na aba Seleção).', 'Build the fight first (Friday Night Firefight), create the tokens and drag them to their starting spots: the scene keeps it all. Players only see enemies with a visible token; on a scene that is already live, enemy tokens start hidden (reveal them in the Selection tab).')}</span>
       </div>
 
       <form className={styles.section} onSubmit={(e) => {

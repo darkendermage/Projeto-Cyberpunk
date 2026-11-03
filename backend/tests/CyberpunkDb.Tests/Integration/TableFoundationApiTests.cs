@@ -156,6 +156,24 @@ public class TableFoundationApiTests(ApiFactory factory)
     }
 
     [Fact]
+    public async Task A_rebound_domain_cannot_pose_as_the_gm()
+    {
+        // DNS rebinding: a site's own name pointed at 127.0.0.1, so its Origin and the Host match.
+        var rebound = new HttpRequestMessage(HttpMethod.Get, "/api/table/seats");
+        rebound.Headers.Host = "rebind.evil:5090";
+        rebound.Headers.Add("Origin", "http://rebind.evil:5090");
+        (await _gm.SendAsync(rebound)).StatusCode.Should().Be(HttpStatusCode.Forbidden);
+
+        var noOrigin = new HttpRequestMessage(HttpMethod.Post, "/hubs/table/negotiate?negotiateVersion=1");
+        noOrigin.Headers.Host = "rebind.evil:5090";
+        (await _gm.SendAsync(noOrigin)).StatusCode.Should().Be(HttpStatusCode.Forbidden);
+
+        var local = new HttpRequestMessage(HttpMethod.Get, "/api/table/seats");
+        local.Headers.Host = "127.0.0.1:5090";
+        (await _gm.SendAsync(local)).StatusCode.Should().Be(HttpStatusCode.OK);
+    }
+
+    [Fact]
     public async Task The_hub_takes_the_gm_and_seated_players_only()
     {
         await using var gm = Hub(factory, null, playerPort: false);

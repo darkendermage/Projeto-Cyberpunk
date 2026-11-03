@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useParams } from 'react-router';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { ApiError } from '../../api/client';
@@ -30,6 +30,7 @@ export function PlayerTablePage() {
   const client = useQueryClient();
   const toast = useToast();
   const board = useRef<BoardHandle>(null);
+  const shownRef = useRef<number | null>(null);
   const [tab, setTab] = useState<Tab>('character');
   const [tool, setTool] = useState<BoardTool>('select');
   const [draft, setDraft] = useState<TemplateDraft>({ shape: 'Circle', sizeMeters: 4, color: '#ff2a6d' });
@@ -57,13 +58,14 @@ export function PlayerTablePage() {
       void client.invalidateQueries({ queryKey: tableKeys.playerCharacter(token) });
     },
     message: (m) => client.setQueryData<TableMessage[]>(tableKeys.playerMessages(token), (old = []) => (old.some((x) => x.id === m.id) ? old : [...old, m].slice(-300))),
-    tokenDrag: (d) => board.current?.showDrag(d.tokenId, d.x, d.y),
-    ping: (p) => board.current?.showPing(p),
+    tokenDrag: (d) => { if (d.sceneId === shownRef.current) board.current?.showDrag(d.tokenId, d.x, d.y); },
+    ping: (p) => { if (p.sceneId === shownRef.current) board.current?.showPing(p); },
     resync: () => void client.invalidateQueries({ queryKey: tableKeys.player(token) }),
   }, state.isSuccess);
 
   const seat = state.data?.seat;
   const scene = state.data?.scene ?? null;
+  useEffect(() => { shownRef.current = scene?.id ?? null; }, [scene?.id]);
   const fighters = useMemo(() => new Map((encounter.data?.queue ?? []).map((f) => [f.id, fromPlayerFighter(f)])), [encounter.data]);
   const data: BoardData | null = useMemo(() => scene ? {
     scene,
@@ -90,7 +92,7 @@ export function PlayerTablePage() {
 
   const callbacks: BoardCallbacks = {
     onTokenSelect: setSelectedToken,
-    onTokenDrag: (id, x, y) => hub.dragToken(id, x, y),
+    onTokenDrag: (id, x, y) => { if (scene) hub.dragToken(scene.id, id, x, y); },
     onTokenDrop: (id, x, y) => void run(() => api.moveToken(id, { x, y })),
     onTemplateSelect: setSelectedTemplate,
     onTemplateDrop: (id, x, y) => {
@@ -98,7 +100,7 @@ export function PlayerTablePage() {
       if (tpl) void run(() => api.updateTemplate(id, { ...tpl, x, y }));
     },
     onTemplatePlace: (x, y, angle) => void run(() => api.addTemplate({ shape: draft.shape, x, y, sizeMeters: draft.sizeMeters, angle, color: seat?.color ?? draft.color })),
-    onPing: (x, y) => hub.ping(x, y),
+    onPing: (x, y) => { if (scene) hub.ping(scene.id, x, y); },
   };
 
   const roll = (formula: string, kind: RollKind, label: string | null, visibility: TableVisibility) =>

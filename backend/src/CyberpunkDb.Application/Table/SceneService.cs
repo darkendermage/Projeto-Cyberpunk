@@ -64,7 +64,7 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
         MutateAsync(id, r.Version, async (scene, state) =>
         {
             scene.Name = RequireName(r.Name);
-            if (r.EncounterId is { } encounterId && !await db.Encounters.AnyAsync(e => e.Id == encounterId, ct))
+            if (r.EncounterId is { } encounterId && encounterId != scene.EncounterId && !await db.Encounters.AnyAsync(e => e.Id == encounterId, ct))
                 throw RequestValidationException.For("encounterId", L.T("Combate não encontrado.", "Fight not found."));
             scene.EncounterId = r.EncounterId;
             if (r.BackgroundMediaId is { } media) await RequireMediaAsync(media, "backgroundMediaId", ct);
@@ -157,7 +157,8 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
 
     /// <summary>
     /// One token per combatant of the linked fight that has none yet: allies on the first row, enemies two rows below.
-    /// The GM then drags them to their starting positions, and the scene keeps them for the session.
+    /// The GM then drags them to their starting positions, and the scene keeps them for the session. On a live scene the
+    /// enemies' tokens start hidden.
     /// </summary>
     public Task<SceneView> AddEncounterTokensAsync(int id, CancellationToken ct) =>
         MutateAsync(id, null, async (scene, state) =>
@@ -178,6 +179,8 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
                     Id = NextId("T", tokens.Select(t => t.Id)), Label = Truncate(c.Name, 40), CombatantId = c.Id,
                     CharacterId = c.CharacterId, X = 1 + column, Y = c.Side == CombatSide.Ally ? 1 : 3,
                     Color = c.Side == CombatSide.Ally ? "#00f0ff" : "#ff2a6d",
+                    // On the scene the players already see, an enemy appears only when the GM shows it.
+                    Visibility = c.Side == CombatSide.Enemy && scene.Active ? TokenVisibility.Gm : TokenVisibility.All,
                 });
             }
             return state with { Tokens = tokens };
@@ -237,6 +240,8 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
             return state with { Templates = state.Templates.Where(t => t.Id != templateId).ToList() };
         }, ct);
 
+    public Task<bool> IsActiveAsync(int sceneId, CancellationToken ct) => db.Scenes.AnyAsync(s => s.Id == sceneId && s.Active, ct);
+
     /// <summary>The fight linked to the active scene and the scene's state (for the players' view of it).</summary>
     public async Task<(int? EncounterId, SceneState? State)> ActiveAsync(CancellationToken ct)
     {
@@ -256,9 +261,10 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
     /// Whether a live drag preview may be shown: a token of the active scene the seat controls (null seat = the GM, any
     /// token). Null when it may not; otherwise whether every player may see the preview (only public tokens).
     /// </summary>
-    public async Task<bool?> DragTargetAsync(TableSeat? seat, string tokenId, CancellationToken ct)
+    public async Task<bool?> DragTargetAsync(TableSeat? seat, int sceneId, string tokenId, CancellationToken ct)
     {
-        var scene = await db.Scenes.AsNoTracking().FirstOrDefaultAsync(s => s.Active, ct);
+        // Token ids repeat across scenes: a preview counts only for the scene on the players' screens.
+        var scene = await db.Scenes.AsNoTracking().FirstOrDefaultAsync(s => s.Active && s.Id == sceneId, ct);
         var token = scene is null ? null : Deserialize(scene.StateJson).Tokens.FirstOrDefault(t => t.Id == tokenId);
         if (token is null || (seat is not null && !SceneViews.CanControl(token, seat))) return null;
         return token.Visibility == TokenVisibility.All;
