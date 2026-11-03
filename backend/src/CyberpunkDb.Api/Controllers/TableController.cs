@@ -1,3 +1,4 @@
+using CyberpunkDb.Api.Desktop;
 using CyberpunkDb.Api.Table;
 using CyberpunkDb.Application.Table;
 using Microsoft.AspNetCore.Mvc;
@@ -11,8 +12,22 @@ namespace CyberpunkDb.Api.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/table")]
-public sealed class TableController(SeatService seats, MediaService media, SceneService scenes, ChatService chat, TablePresence presence) : ControllerBase
+public sealed class TableController(SeatService seats, MediaService media, SceneService scenes, ChatService chat, TablePresence presence, TunnelService tunnel) : ControllerBase
 {
+    // ------------------------------------------------------------------ internet tunnel
+
+    [HttpGet("tunnel")]
+    public TunnelStatus Tunnel() => tunnel.Status();
+
+    [HttpPost("tunnel/start")]
+    public Task<TunnelStatus> StartTunnel(CancellationToken ct) => tunnel.StartAsync(ct);
+
+    [HttpPost("tunnel/stop")]
+    public TunnelStatus StopTunnel() => tunnel.Stop();
+
+    [HttpPost("tunnel/download")]
+    public Task<TunnelStatus> DownloadTunnel(CancellationToken ct) => tunnel.DownloadAsync(ct);
+
     // ------------------------------------------------------------------ chat and dice
 
     [HttpGet("messages")]

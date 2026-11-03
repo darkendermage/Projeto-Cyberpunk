@@ -57,6 +57,9 @@ public sealed class ApiFactory : WebApplicationFactory<Program>
             ["Seed:Path"] = Path.Combine(AppContext.BaseDirectory, "Seed"),
             ["Table:PlayerPort"] = PlayerPort.ToString(),
             ["Media:Root"] = MediaRoot,
+            // No cloudflared on the test host: a path that doesn't exist, and an empty tools folder.
+            ["Table:Cloudflared"] = Path.Combine(MediaRoot, "no-cloudflared.exe"),
+            ["Table:ToolsDir"] = Path.Combine(MediaRoot, "tools"),
         }));
         builder.ConfigureServices(services => services.AddSingleton<IStartupFilter, TestPortFilter>());
     }

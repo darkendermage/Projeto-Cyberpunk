@@ -47,6 +47,7 @@ builder.Services.AddCors(o => o.AddDefaultPolicy(p => p
 builder.Services.AddSignalR().AddJsonProtocol(o => o.PayloadSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 builder.Services.Configure<TableOptions>(builder.Configuration.GetSection("Table"));
 builder.Services.AddSingleton<TablePresence>();
+builder.Services.AddSingleton<TunnelService>();
 builder.Services.AddSingleton<CyberpunkDb.Application.Table.ITableNotifier, HubTableNotifier>();
 
 builder.Services.AddSingleton(new AppUpdater(AppUpdaterOptions.FromConfiguration(builder.Configuration)));
@@ -76,6 +77,8 @@ if (app.Environment.IsDevelopment())
 app.UseCors();
 app.MapControllers();
 app.MapHub<TableHub>("/hubs/table");
+// The tunnel's cloudflared process ends with the app.
+app.Lifetime.ApplicationStopping.Register(() => app.Services.GetRequiredService<TunnelService>().Dispose());
 app.MapGet("/api/health", () => Results.Ok(new { status = "online", version = AppVersion.Current }));
 app.MapGet("/api/app/update", (AppUpdater updater, CancellationToken ct) => updater.CheckAsync(ct));
 // A JSON body is required on purpose: it forces a CORS preflight, so other sites cannot trigger it.
