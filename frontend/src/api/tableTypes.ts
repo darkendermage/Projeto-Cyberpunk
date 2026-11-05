@@ -105,6 +105,16 @@ export interface TokenInput {
   compendiumNpcId?: string | null;
 }
 
+/** A selection changed at once (see the batch routes). */
+export interface SceneBatch {
+  moveTokens?: { id: string; x: number; y: number }[];
+  moveTemplates?: { id: string; x: number; y: number }[];
+  removeTokens?: string[];
+  removeTemplates?: string[];
+  hideTokens?: string[];
+  showTokens?: string[];
+}
+
 export interface TokenMove { x: number; y: number; rotation?: number; width?: number; height?: number }
 
 export interface TemplateInput {

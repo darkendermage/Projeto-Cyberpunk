@@ -18,6 +18,7 @@ import { fromPlayerFighter } from './tokens';
 import { forgetSeat, isRefusedKey, rememberSeat, savedSeat } from './lobby';
 import { LangSwitch } from './LangSwitch';
 import { PanelHandle } from './PanelHandle';
+import { NO_SELECTION, useBoardKeys, type Selection } from './useBoardKeys';
 import { PLAYER_PANELS, playerColumns } from './panels';
 import { usePanels } from './usePanels';
 import { HUB_TEXT, useTableHub } from './useTableHub';
@@ -46,8 +47,7 @@ export function PlayerTablePage() {
     setDraftState(next);
     saveDraft(next);
   };
-  const [selectedToken, setSelectedToken] = useState<string | null>(null);
-  const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
+  const [selection, setSelection] = useState<Selection>(NO_SELECTION);
 
   const navigate = useNavigate();
   const [panels, setPanels] = usePanels('ncdb.table.player-panels', PLAYER_PANELS);
@@ -90,13 +90,13 @@ export function PlayerTablePage() {
     scene,
     fighters,
     activeCombatantId: encounter.data?.activeId ?? null,
-    selectedTokenId: selectedToken,
-    selectedTemplateId: selectedTemplate,
+    selectedTokens: selection.tokens,
+    selectedTemplates: selection.templates,
     // Any player's area (a grenade that went off) is anyone's to move or clear; the GM's stay the GM's.
     canMoveTemplate: (tpl) => !tpl.locked && tpl.ownerSeatId != null,
     gm: false,
     lang,
-  } : null, [scene, fighters, encounter.data, selectedToken, selectedTemplate]);
+  } : null, [scene, fighters, encounter.data, selection]);
 
   const run = async (fn: () => Promise<SceneView | unknown>) => {
     try {
@@ -111,18 +111,31 @@ export function PlayerTablePage() {
     ?? scene?.tokens.find((tk) => tk.controllable);
 
   const callbacks: BoardCallbacks = {
-    onTokenSelect: setSelectedToken,
+    onSelect: (tokens, templates) => setSelection({ tokens, templates }),
     onTokenDrag: (id, x, y) => { if (scene) hub.dragToken(scene.id, id, x, y); },
-    onTokenDrop: (id, x, y) => void run(() => api.moveToken(id, { x, y })),
-    onTemplateSelect: setSelectedTemplate,
-    onTemplateDrop: (id, x, y) => {
-      const tpl = scene?.templates.find((tp) => tp.id === id);
-      if (tpl) void run(() => api.updateTemplate(id, { ...tpl, x, y }));
+    onMoveDrop: (tokens, templates) => {
+      if (tokens.length === 1 && templates.length === 0) void run(() => api.moveToken(tokens[0].id, { x: tokens[0].x, y: tokens[0].y }));
+      else void run(() => api.batch({ moveTokens: tokens, moveTemplates: templates }));
     },
     onTemplatePlace: (x, y, angle) => void run(() => api.addTemplate({ shape: draft.shape, x, y, sizeMeters: draft.sizeMeters, angle, color: draft.color })),
     onPing: (x, y) => { if (scene) hub.ping(scene.id, x, y); },
     onTokenPlace: (x, y) => { setTool('select'); void run(() => api.placeToken(x, y)); },
   };
+
+  // A player clears players' areas; tokens stay (only the GM removes them).
+  const deletable = (scene?.templates ?? []).filter((tp) => selection.templates.includes(tp.id) && tp.ownerSeatId != null && !tp.locked).map((tp) => tp.id);
+  const removeSelection = () => {
+    if (deletable.length === 0) return;
+    void run(async () => { const v = await api.batch({ removeTemplates: deletable }); setSelection(NO_SELECTION); return v; });
+  };
+  const selectAll = () => {
+    if (!scene) return;
+    setSelection({
+      tokens: scene.tokens.filter((tk) => tk.controllable && !tk.locked).map((tk) => tk.id),
+      templates: scene.templates.filter((tp) => tp.ownerSeatId != null && !tp.locked).map((tp) => tp.id),
+    });
+  };
+  useBoardKeys({ onDelete: removeSelection, onSelectAll: selectAll, onClear: () => setSelection(NO_SELECTION) });
 
   const roll = (formula: string, kind: RollKind, label: string | null, visibility: TableVisibility) =>
     run(async () => { await api.roll({ formula, kind, label, visibility }); setTab('chat'); });
@@ -147,7 +160,6 @@ export function PlayerTablePage() {
     );
   }
 
-  const selectedTpl = scene?.templates.find((tp) => tp.id === selectedTemplate && tp.ownerSeatId != null);
   // The seat's own token: its character's, or (without one) the token it owns. The server allows one per scene.
   const hasOwnToken = !!seat && !!scene?.tokens.some((tk) => (seat.characterId != null ? tk.characterId === seat.characterId : tk.ownerSeatId === seat.id));
 
@@ -167,13 +179,13 @@ export function PlayerTablePage() {
       </header>
       <div className={styles.playerBody} style={{ '--cols': playerColumns(panels) } as CSSProperties}>
         <section className={`${styles.stage} ${styles.colMain}`}>
-          <BoardToolbar tool={tool} onTool={setTool} draft={draft} onDraft={setDraft} board={board}>
+          <BoardToolbar tool={tool} onTool={setTool} draft={draft} onDraft={setDraft} board={board} onSelectAll={scene ? selectAll : undefined}>
             {scene && !hasOwnToken && (
               <Button variant={tool === 'token' ? 'primary' : 'ghost'} onClick={() => setTool(tool === 'token' ? 'select' : 'token')}>
                 {tool === 'token' ? t('Cancelar', 'Cancel') : t('Pôr meu token', 'Place my token')}
               </Button>
             )}
-            {selectedTpl && <Button variant="ghost" onClick={() => run(async () => { const v = await api.removeTemplate(selectedTpl.id); setSelectedTemplate(null); return v; })}>{t('Apagar área', 'Delete area')}</Button>}
+            {deletable.length > 0 && <Button variant="ghost" onClick={removeSelection}>{deletable.length === 1 ? t('Apagar área', 'Delete area') : t(`Apagar ${deletable.length} áreas`, `Delete ${deletable.length} areas`)}</Button>}
           </BoardToolbar>
           {scene ? <TableBoard ref={board} data={data} tool={tool} draft={draft} callbacks={callbacks} /> : (
             <EmptyState title={t('Aguardando o mestre', 'Waiting for the GM')}>{t('O mestre ainda não mostrou nenhuma cena.', 'The GM hasn\'t shown a scene yet.')}</EmptyState>

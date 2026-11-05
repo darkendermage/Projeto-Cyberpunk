@@ -222,6 +222,18 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
         return SceneViews.ForSeat(scene, state, seat, await ImagesAsync(state, ct));
     }
 
+    /// <summary>The GM's selection, changed at once.</summary>
+    public Task<SceneView> BatchAsync(int id, SceneBatchRequest r, CancellationToken ct) =>
+        MutateAsync(id, null, (_, state) => Task.FromResult(ApplyBatch(state, r, null)), bumpVersion: false, ct);
+
+    /// <summary>A player's selection on the live scene: their tokens and players' areas; all of it or nothing.</summary>
+    public Task<SceneView> PlayerBatchAsync(TableSeat seat, SceneBatchRequest r, CancellationToken ct)
+    {
+        if ((r.RemoveTokens?.Count ?? 0) + (r.HideTokens?.Count ?? 0) + (r.ShowTokens?.Count ?? 0) > 0)
+            throw RequestValidationException.For("tokens", L.T("Só o mestre apaga, oculta ou mostra tokens.", "Only the GM clears, hides or shows tokens."));
+        return PlayerMutateAsync(seat, (_, state) => ApplyBatch(state, r, seat), ct);
+    }
+
     public async Task<SceneView> PlayerMoveTokenAsync(TableSeat seat, string tokenId, TokenMoveRequest move, CancellationToken ct) =>
         await PlayerMutateAsync(seat, (_, state) =>
         {
@@ -391,6 +403,51 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
                 : await db.NpcPortraits.AsNoTracking().Where(p => npcs.Contains(p.NpcId)).Select(p => new { p.NpcId, p.UpdatedAt }).ToDictionaryAsync(p => p.NpcId, p => p.UpdatedAt, ct),
             book.Count == 0 ? TokenImages.None.Compendium
                 : await db.CompendiumPortraits.AsNoTracking().Where(p => book.Contains(p.CompendiumId)).Select(p => new { p.CompendiumId, p.UpdatedAt }).ToDictionaryAsync(p => p.CompendiumId, p => p.UpdatedAt, ct));
+    }
+
+    /// <summary>Applies a selection's changes; <paramref name="seat"/> null is the GM. Anything not allowed refuses the whole batch.</summary>
+    private static SceneState ApplyBatch(SceneState state, SceneBatchRequest r, TableSeat? seat)
+    {
+        var count = (r.MoveTokens?.Count ?? 0) + (r.MoveTemplates?.Count ?? 0) + (r.RemoveTokens?.Count ?? 0) + (r.RemoveTemplates?.Count ?? 0)
+                    + (r.HideTokens?.Count ?? 0) + (r.ShowTokens?.Count ?? 0);
+        if (count == 0) throw RequestValidationException.For("batch", L.T("Nada para mudar.", "Nothing to change."));
+        if (count > MaxTokens + MaxTemplates) throw RequestValidationException.For("batch", L.T("Seleção grande demais.", "Selection too large."));
+
+        var tokens = state.Tokens.ToList();
+        int TokenIndex(string id)
+        {
+            var i = tokens.FindIndex(t => t.Id == id);
+            if (i < 0 || (seat is not null && !SceneViews.CanSee(tokens[i], seat))) throw TokenNotFound();
+            return i;
+        }
+        foreach (var m in r.MoveTokens ?? [])
+        {
+            var i = TokenIndex(m.Id);
+            if (seat is not null && !SceneViews.CanControl(tokens[i], seat))
+                throw RequestValidationException.For("tokens", L.T("Esse token não é seu (ou está travado pelo mestre).", "That token isn't yours (or the GM locked it)."));
+            tokens[i] = tokens[i] with { X = Cell(m.X, "x"), Y = Cell(m.Y, "y") };
+        }
+        foreach (var id in r.HideTokens ?? []) { var i = TokenIndex(id); tokens[i] = tokens[i] with { Visibility = TokenVisibility.Gm }; }
+        foreach (var id in r.ShowTokens ?? []) { var i = TokenIndex(id); tokens[i] = tokens[i] with { Visibility = TokenVisibility.All }; }
+        foreach (var id in r.RemoveTokens ?? []) tokens.RemoveAt(TokenIndex(id));
+
+        var templates = state.Templates.ToList();
+        int TemplateIndex(string id)
+        {
+            if (seat is null) RequireTemplate(state, id); else RequirePlayerTemplate(state, id);
+            return templates.FindIndex(t => t.Id == id);
+        }
+        foreach (var m in r.MoveTemplates ?? [])
+        {
+            var i = TemplateIndex(m.Id);
+            if (i >= 0) templates[i] = templates[i] with { X = Cell(m.X, "x"), Y = Cell(m.Y, "y") };
+        }
+        foreach (var id in r.RemoveTemplates ?? [])
+        {
+            var i = TemplateIndex(id);
+            if (i >= 0) templates.RemoveAt(i);
+        }
+        return state with { Tokens = tokens, Templates = templates };
     }
 
     private static SceneState Move(SceneState state, SceneToken token, TokenMoveRequest move)

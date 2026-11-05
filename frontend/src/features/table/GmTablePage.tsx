@@ -5,7 +5,8 @@ import { encounterKeys, useEncounter, useEncounterCommand } from '../../api/enco
 import type { EncounterDetail, InjuryLocation } from '../../api/encounterTypes';
 import { tableApi, tableKeys } from '../../api/table';
 import type { SceneGrid, SceneView, TableMessage } from '../../api/tableTypes';
-import { Button, EmptyState, ErrorState, Select, Spinner } from '../../components/ui/ui';
+import { Trash2 } from 'lucide-react';
+import { Button, EmptyState, ErrorState, IconButton, Select, Spinner } from '../../components/ui/ui';
 import { useToast } from '../../state/ToastContext';
 import { lang, t } from '../../i18n';
 import type { BoardCallbacks, BoardData, BoardTool, TemplateDraft } from './board/BoardController';
@@ -19,6 +20,7 @@ import { damageCommand, fromGmFighter } from './tokens';
 import { PanelHandle } from './PanelHandle';
 import { GM_PANELS, gmColumns } from './panels';
 import { usePanels } from './usePanels';
+import { NO_SELECTION, useBoardKeys, type Selection } from './useBoardKeys';
 import { HUB_TEXT, useTableHub } from './useTableHub';
 import styles from './Table.module.css';
 
@@ -58,8 +60,10 @@ export function GmTablePage() {
   const setDraft = (next: TemplateDraft) => { setDraftState(next); saveDraft(next); };
   // The grid being calibrated, shown on the board before it is saved; it belongs to one scene version.
   const [gridDraft, setGridDraft] = useState<{ key: string; grid: SceneGrid } | null>(null);
-  const [selectedToken, setSelectedToken] = useState<string | null>(null);
-  const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
+  const [selection, setSelection] = useState<Selection>(NO_SELECTION);
+  const selectedToken = selection.tokens.length === 1 && selection.templates.length === 0 ? selection.tokens[0] : null;
+  const selectedTemplate = selection.templates.length === 1 && selection.tokens.length === 0 ? selection.templates[0] : null;
+  const selectToken = (id: string | null) => setSelection(id ? { tokens: [id], templates: [] } : NO_SELECTION);
 
   const putScene = useCallback((view: SceneView) => {
     client.setQueryData(tableKeys.scene(view.id), view);
@@ -106,22 +110,21 @@ export function GmTablePage() {
     scene: draftGrid ? { ...view, grid: draftGrid } : view,
     fighters,
     activeCombatantId: encounter.data?.status === 'Active' ? encounter.data.activeId : null,
-    selectedTokenId: selectedToken,
-    selectedTemplateId: selectedTemplate,
+    selectedTokens: selection.tokens,
+    selectedTemplates: selection.templates,
     canMoveTemplate: (tpl) => !tpl.locked,
     gm: true,
     lang,
-  } : null, [view, draftGrid, fighters, encounter.data, selectedToken, selectedTemplate]);
+  } : null, [view, draftGrid, fighters, encounter.data, selection]);
 
   const callbacks: BoardCallbacks = {
-    onTokenSelect: (id) => { setSelectedToken(id); if (id) { setSelectedTemplate(null); setTab('token'); } },
+    onSelect: (tokens, templates) => { setSelection({ tokens, templates }); if (tokens.length + templates.length > 0) setTab('token'); },
     // Previews only make sense on the scene the players are looking at.
     onTokenDrag: (id, x, y) => { if (live && view) hub.dragToken(view.id, id, x, y); },
-    onTokenDrop: (id, x, y) => { if (view) void act(() => tableApi.moveToken(view.id, id, { x, y })); },
-    onTemplateSelect: (id) => { setSelectedTemplate(id); if (id) { setSelectedToken(null); setTab('token'); } },
-    onTemplateDrop: (id, x, y) => {
-      const tpl = view?.templates.find((tp) => tp.id === id);
-      if (view && tpl) void act(() => tableApi.updateTemplate(view.id, id, { ...tpl, x, y }));
+    onMoveDrop: (tokens, templates) => {
+      if (!view) return;
+      if (tokens.length === 1 && templates.length === 0) void act(() => tableApi.moveToken(view.id, tokens[0].id, { x: tokens[0].x, y: tokens[0].y }));
+      else void act(() => tableApi.batch(view.id, { moveTokens: tokens, moveTemplates: templates }));
     },
     onTemplatePlace: (x, y, angle) => {
       if (view) void act(() => tableApi.addTemplate(view.id, { shape: draft.shape, x, y, sizeMeters: draft.sizeMeters, angle, color: draft.color }));
@@ -131,6 +134,20 @@ export function GmTablePage() {
       else board.current?.showPing({ sceneId: view?.id ?? 0, x, y, color: '#f5e663', label: 'GM' });
     },
   };
+
+  /** Clears the selection (tokens after a confirmation: there is no undo). */
+  const removeSelection = () => {
+    if (!view || selection.tokens.length + selection.templates.length === 0) return;
+    const n = selection.tokens.length;
+    if (n > 0 && !window.confirm(t(n === 1 ? 'Remover o token selecionado?' : `Remover os ${n} tokens selecionados?`, n === 1 ? 'Remove the selected token?' : `Remove the ${n} selected tokens?`))) return;
+    void act(async () => { const v = await tableApi.batch(view.id, { removeTokens: selection.tokens, removeTemplates: selection.templates }); setSelection(NO_SELECTION); return v; });
+  };
+  const selectAll = () => { if (view) setSelection({ tokens: view.tokens.map((tk) => tk.id), templates: view.templates.map((tp) => tp.id) }); };
+  const setHidden = (hidden: boolean) => {
+    if (view && selection.tokens.length) void act(() => tableApi.batch(view.id, hidden ? { hideTokens: selection.tokens } : { showTokens: selection.tokens }));
+  };
+  useBoardKeys({ onDelete: removeSelection, onSelectAll: selectAll, onClear: () => setSelection(NO_SELECTION) });
+  const selectedCount = selection.tokens.length + selection.templates.length;
 
   const token = view?.tokens.find((tk) => tk.id === selectedToken);
   const template = view?.templates.find((tp) => tp.id === selectedTemplate);
@@ -148,12 +165,15 @@ export function GmTablePage() {
   return (
     <div className={styles.workspace} style={{ '--cols': gmColumns(panels) } as CSSProperties}>
       <ScenesColumn className={`${styles.colLeft} ${panels.leftOpen ? '' : styles.collapsed}`} scenes={scenes.data ?? []} currentId={sceneId}
-        onSelect={(id) => { setChosen(id); setSelectedToken(null); setSelectedTemplate(null); }} act={act} />
+        onSelect={(id) => { setChosen(id); setSelection(NO_SELECTION); }} act={act} />
       <PanelHandle className={styles.handleLeft} panel="left" width={panels.left} limits={GM_PANELS.left} open={panels.leftOpen}
         onResize={(left) => setPanels({ left })} onToggle={() => setPanels({ leftOpen: !panels.leftOpen })} />
 
       <section className={`${styles.stage} ${styles.colMain}`}>
-        <BoardToolbar tool={tool} onTool={setTool} draft={draft} onDraft={setDraft} board={board}>
+        <BoardToolbar tool={tool} onTool={setTool} draft={draft} onDraft={setDraft} board={board} onSelectAll={view ? selectAll : undefined}>
+          {selectedCount > 0 && (
+            <IconButton label={t(`Apagar seleção (${selectedCount}) — Delete`, `Delete selection (${selectedCount}) — Delete`)} onClick={removeSelection}><Trash2 size={17} /></IconButton>
+          )}
           <span className={styles.status} title={live ? t('Os jogadores veem esta cena', 'The players see this scene') : t('Os jogadores não veem esta cena', 'The players don\'t see this scene')}>
             <span className={`${styles.dot} ${hub.status === 'online' ? styles.dotOn : hub.status === 'offline' ? styles.dotOff : styles.dotWarn}`} />
             {HUB_TEXT[hub.status]}{view ? ` · ${live ? t('ao vivo', 'live') : t('preparando', 'preparing')}` : ''}
@@ -177,13 +197,24 @@ export function GmTablePage() {
         </div>
         {tab === 'scene' && (view ? <SceneTab key={viewKey} scene={view} act={act} onGridDraft={(grid) => setGridDraft(grid ? { key: viewKey, grid } : null)} /> : <span className={styles.muted}>{t('Escolha uma cena.', 'Pick a scene.')}</span>)}
         {tab === 'token' && view && (
-          token ? <TokenInspector key={token.id} scene={view} token={token} seats={seats.data ?? []} encounter={encounter.data} act={act} onDone={() => setSelectedToken(null)} />
+          token ? <TokenInspector key={token.id} scene={view} token={token} seats={seats.data ?? []} encounter={encounter.data} act={act} onDone={() => selectToken(null)} />
           : template ? <TemplateInspector key={template.id} template={template} editable
               onSave={(tpl) => act(() => tableApi.updateTemplate(view.id, tpl.id, tpl), t('Área salva.', 'Area saved.'))}
-              onRemove={() => act(async () => { const v = await tableApi.removeTemplate(view.id, template.id); setSelectedTemplate(null); return v; })} />
-          : <span className={styles.muted}>{t('Clique num token ou numa área do mapa para editá-lo.', 'Click a token or an area on the map to edit it.')}</span>
+              onRemove={() => act(async () => { const v = await tableApi.removeTemplate(view.id, template.id); setSelection(NO_SELECTION); return v; })} />
+          : selectedCount > 1 ? (
+            <div className={styles.stack}>
+              <span className={styles.title}>{t(`${selectedCount} selecionados`, `${selectedCount} selected`)}</span>
+              <span className={styles.muted}>{t(`${selection.tokens.length} tokens e ${selection.templates.length} áreas. Arraste um deles no mapa para mover todos juntos.`, `${selection.tokens.length} tokens and ${selection.templates.length} areas. Drag one of them on the map to move them all.`)}</span>
+              <div className={styles.row}>
+                {selection.tokens.length > 0 && <Button onClick={() => setHidden(true)}>{t('Ocultar dos jogadores', 'Hide from players')}</Button>}
+                {selection.tokens.length > 0 && <Button onClick={() => setHidden(false)}>{t('Mostrar a todos', 'Show to everyone')}</Button>}
+                <Button variant="danger" icon={<Trash2 size={15} />} onClick={removeSelection}>{t('Apagar', 'Delete')}</Button>
+              </div>
+            </div>
+          )
+          : <span className={styles.muted}>{t('Clique num token ou numa área do mapa para editá-lo. Arraste no vazio para selecionar vários; Ctrl+A seleciona tudo.', 'Click a token or an area on the map to edit it. Drag on empty ground to select several; Ctrl+A selects all.')}</span>
         )}
-        {tab === 'combat' && view && <CombatTab scene={view} encounter={encounter.data} act={act} onSelectToken={(id) => { setSelectedToken(id); setTab('token'); }} />}
+        {tab === 'combat' && view && <CombatTab scene={view} encounter={encounter.data} act={act} onSelectToken={(id) => { selectToken(id); setTab('token'); }} />}
         {tab === 'invites' && <InvitesTab seats={seats.data ?? []} act={act} />}
         {tab === 'chat' && (
           <ChatPanel gm messages={messages.data ?? []} targets={openSeats.map((s) => ({ id: s.id, label: s.label }))}

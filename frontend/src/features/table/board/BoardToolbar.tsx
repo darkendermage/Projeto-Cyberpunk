@@ -1,5 +1,5 @@
 import type { ReactNode, RefObject } from 'react';
-import { Maximize2, MousePointer2, Radio, Ruler, Shapes, ZoomIn, ZoomOut } from 'lucide-react';
+import { BoxSelect, Maximize2, MousePointer2, Ruler, Shapes, ZoomIn, ZoomOut } from 'lucide-react';
 import type { TemplateShapeName } from '../../../api/tableTypes';
 import { IconButton, Select } from '../../../components/ui/ui';
 import { t } from '../../../i18n';
@@ -12,8 +12,9 @@ import styles from '../Table.module.css';
 const SHAPES: TemplateShapeName[] = ['Circle', 'Square', 'Cone', 'Line'];
 
 
-export function BoardToolbar({ tool, onTool, draft, onDraft, board, children }: {
+export function BoardToolbar({ tool, onTool, draft, onDraft, board, onSelectAll, children }: {
   tool: BoardTool;
+  onSelectAll?: () => void;
   onTool: (tool: BoardTool) => void;
   draft: TemplateDraft;
   onDraft: (draft: TemplateDraft) => void;
@@ -25,7 +26,7 @@ export function BoardToolbar({ tool, onTool, draft, onDraft, board, children }: 
       <IconButton label={t('Selecionar e mover', 'Select and move')} active={tool === 'select'} onClick={() => onTool('select')}><MousePointer2 size={17} /></IconButton>
       <IconButton label={t('Régua', 'Ruler')} active={tool === 'ruler'} onClick={() => onTool('ruler')}><Ruler size={17} /></IconButton>
       <IconButton label={t('Área de efeito', 'Area of effect')} active={tool === 'template'} onClick={() => onTool('template')}><Shapes size={17} /></IconButton>
-      <IconButton label="Ping" active={tool === 'ping'} onClick={() => onTool('ping')}><Radio size={17} /></IconButton>
+      {onSelectAll && <IconButton label={t('Selecionar todos (Ctrl+A)', 'Select all (Ctrl+A)')} onClick={onSelectAll}><BoxSelect size={17} /></IconButton>}
       {tool === 'template' && (
         <>
           <span className={styles.divider} />

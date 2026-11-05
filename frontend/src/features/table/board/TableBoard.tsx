@@ -33,11 +33,9 @@ export function TableBoard({ data, tool, draft, callbacks, ref }: {
 
   useEffect(() => {
     const board = new BoardController(host.current!, {
-      onTokenSelect: (id) => callbacksRef.current.onTokenSelect(id),
+      onSelect: (tokens, templates) => callbacksRef.current.onSelect(tokens, templates),
       onTokenDrag: (id, x, y) => callbacksRef.current.onTokenDrag(id, x, y),
-      onTokenDrop: (id, x, y) => callbacksRef.current.onTokenDrop(id, x, y),
-      onTemplateSelect: (id) => callbacksRef.current.onTemplateSelect(id),
-      onTemplateDrop: (id, x, y) => callbacksRef.current.onTemplateDrop(id, x, y),
+      onMoveDrop: (tokens, templates) => callbacksRef.current.onMoveDrop(tokens, templates),
       onTemplatePlace: (x, y, angle) => callbacksRef.current.onTemplatePlace(x, y, angle),
       onPing: (x, y) => callbacksRef.current.onPing(x, y),
       onTokenPlace: (x, y) => callbacksRef.current.onTokenPlace?.(x, y),

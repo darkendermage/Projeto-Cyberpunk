@@ -1,7 +1,7 @@
 import { API_BASE, ApiError, request } from './client';
 import { locale, t } from '../i18n';
 import type {
-  ClaimResult, Lobby, MediaInfo, PlayerCharacter, PlayerEncounter, PlayerSeat, PlayerState, RollRequest, SceneGrid, SceneSummary, SceneView, Seat,
+  ClaimResult, Lobby, MediaInfo, PlayerCharacter, PlayerEncounter, PlayerSeat, PlayerState, RollRequest, SceneBatch, SceneGrid, SceneSummary, SceneView, Seat,
   SendMessage, TableMessage, TemplateInput, TokenInput, TokenMove, TunnelStatus,
 } from './tableTypes';
 
@@ -19,6 +19,7 @@ export const tableApi = {
   activateScene: (id: number) => request<SceneView>(`/table/scenes/${id}/activate`, { method: 'POST' }),
   reorderScenes: (ids: number[]) => request<SceneSummary[]>('/table/scenes/reorder', { method: 'POST', body: json({ ids }) }),
   addToken: (id: number, token: TokenInput) => request<SceneView>(`/table/scenes/${id}/tokens`, { method: 'POST', body: json(token) }),
+  batch: (id: number, body: SceneBatch) => request<SceneView>(`/table/scenes/${id}/batch`, { method: 'POST', body: json(body) }),
   addEncounterTokens: (id: number) => request<SceneView>(`/table/scenes/${id}/encounter-tokens`, { method: 'POST' }),
   /** A new fight from the chosen tokens, linked to the scene. */
   startFight: (id: number, body: { name: string | null; tokens: { tokenId: string; side: 'Ally' | 'Enemy' }[] }) =>
@@ -95,6 +96,7 @@ export function playerApi(seat: string) {
     moveToken: (tokenId: string, move: TokenMove) =>
       request<SceneView>(`/table/play/tokens/${encodeURIComponent(tokenId)}/move`, { method: 'POST', body: json(move), headers }),
     /** The player's own token on the live scene (one per seat). */
+    batch: (body: SceneBatch) => request<SceneView>('/table/play/batch', { method: 'POST', body: json(body), headers }),
     placeToken: (x: number, y: number) => request<SceneView>('/table/play/my-token', { method: 'POST', body: json({ x, y }), headers }),
     addTemplate: (tpl: TemplateInput) => request<SceneView>('/table/play/templates', { method: 'POST', body: json(tpl), headers }),
     updateTemplate: (templateId: string, tpl: TemplateInput) =>

@@ -95,7 +95,7 @@ Para produção, rode `npm run build` e copie `frontend/dist` para `backend/src/
 ### Testes
 
 ```bash
-cd backend && dotnet test     # 555 testes: filtros, validação, gerador de NPCs e gangues, Compêndio de NPCs (dados e API), regras de personagem, Night Market, Arquiteturas de NET, Friday Night Firefight (mesa de combate), Mesa Virtual (porta dos jogadores, assentos, link geral, cenas, imagens de NPC nos tokens, combate ao vivo, dados e chat, túnel), atualização automática e integração da API (SQLite + seed real)
+cd backend && dotnet test     # 557 testes: filtros, validação, gerador de NPCs e gangues, Compêndio de NPCs (dados e API), regras de personagem, Night Market, Arquiteturas de NET, Friday Night Firefight (mesa de combate), Mesa Virtual (porta dos jogadores, assentos, link geral, cenas, imagens de NPC nos tokens, combate ao vivo, dados e chat, túnel), atualização automática e integração da API (SQLite + seed real)
 cd frontend && npm test       # filtros, URL, editor de NPCs, Compêndio de NPCs, tabela de alcance, perícias, Lifepath, anatomia do cyberware, Night Market e Mesa Virtual (grade, áreas, tokens, origem do token, entrada)
 ```
 
@@ -526,7 +526,7 @@ Editar a cena usa `Version`; uma versão velha recebe 409. Tokens e áreas são 
 
 ### Frontend
 
-- `features/table/board/BoardController.ts` desenha com PixiJS (WebGL) de forma imperativa: camadas de fundo, grade, áreas, tokens e sobreposição, mais pan, zoom, arraste, régua, ferramenta de área e ping. As imagens carregam por `<img>`, porque as URLs de mídia não têm extensão.
+- `features/table/board/BoardController.ts` desenha com PixiJS (WebGL) de forma imperativa: camadas de fundo, grade, áreas, tokens e sobreposição, mais pan, zoom, arraste, régua, ferramenta de área e ping. Gestos (`board/gestures.ts`): o botão direito faz pan; o esquerdo seleciona, arrasta a seleção inteira ou desenha um laço no vazio; segurar parado 500 ms é ping; no toque, um dedo no vazio faz pan e dois fazem pinça. Mover, apagar, ocultar ou mostrar vários de uma vez vai num só `POST /api/table/scenes/{id}/batch` (jogador: `/api/table/play/batch`, com as regras de posse). As imagens carregam por `<img>`, porque as URLs de mídia não têm extensão.
 - A lógica pura fica em `grid.ts`, `templates.ts`, `tokens.ts`, `sources.ts` (de onde vem o token), `lobby.ts` (chave guardada no aparelho), `fight.ts` (combate a partir dos tokens) e `panels.ts` (largura dos painéis), com testes.
 - `useTableHub.ts` cuida do SignalR e da reconexão; os eventos atualizam o cache do React Query.
 - Os painéis laterais têm largura ajustável (`panels.ts`, `PanelHandle.tsx`), guardada no `localStorage` de cada navegador. O `BoardController` acompanha o tamanho do mapa com um `ResizeObserver`, e o texto do canvas é redesenhado quando a fonte Rajdhani termina de carregar.

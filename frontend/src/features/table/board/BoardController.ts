@@ -3,8 +3,12 @@ import type { Ping, SceneGrid, SceneTemplate, SceneView, TemplateShapeName, Toke
 import { cellToPx, formatMeters, gridDistance, pxToCell, snapCell, type Point } from '../grid';
 import { templateShape } from '../templates';
 import { initials, tokenStatus, type TokenFighter } from '../tokens';
+import { HOLD_MS, inRect, MOVE_TOLERANCE, rectFrom, toggleSelection } from './gestures';
 
-export type BoardTool = 'select' | 'ruler' | 'template' | 'ping' | 'token';
+export type BoardTool = 'select' | 'ruler' | 'template' | 'token';
+
+/** Where a moved token or area ends up, in cells. */
+export interface BoardMove { id: string; x: number; y: number }
 
 export interface TemplateDraft { shape: TemplateShapeName; sizeMeters: number; color: string }
 
@@ -13,9 +17,9 @@ export interface BoardData {
   /** Fighters of the linked fight by combatant id, as this viewer may see them. */
   fighters: Map<string, TokenFighter>;
   activeCombatantId: string | null;
-  selectedTokenId: string | null;
-  selectedTemplateId: string | null;
-  /** Whether this viewer may drag a template (the GM: unlocked ones; a player: their own). */
+  selectedTokens: readonly string[];
+  selectedTemplates: readonly string[];
+  /** Whether this viewer may drag a template (the GM: unlocked ones; a player: any player's). */
   canMoveTemplate: (t: SceneTemplate) => boolean;
   /** The GM sees hidden tokens dimmed. */
   gm: boolean;
@@ -23,11 +27,11 @@ export interface BoardData {
 }
 
 export interface BoardCallbacks {
-  onTokenSelect: (id: string | null) => void;
+  /** The selection changed (a click, Shift+click or the lasso). */
+  onSelect: (tokens: string[], templates: string[]) => void;
   onTokenDrag: (id: string, x: number, y: number) => void;
-  onTokenDrop: (id: string, x: number, y: number) => void;
-  onTemplateSelect: (id: string | null) => void;
-  onTemplateDrop: (id: string, x: number, y: number) => void;
+  /** A drag of one or more tokens and areas ended. */
+  onMoveDrop: (tokens: BoardMove[], templates: BoardMove[]) => void;
   onTemplatePlace: (x: number, y: number, angle: number) => void;
   onPing: (x: number, y: number) => void;
   /** With the 'token' tool: the cell a player picked for their own token. */
@@ -63,6 +67,9 @@ function loadTexture(url: string): Promise<Texture> {
 
 interface Override { x: number; y: number; until: number }
 
+/** What a press landed on. */
+interface Target { tokenId?: string; template?: SceneTemplate }
+
 /**
  * The virtual table's board, drawn with PixiJS (WebGL). It owns pan and zoom, token and template drags, the ruler, the
  * template tool and pings; everything that lasts goes out through the callbacks and comes back as data.
@@ -92,14 +99,24 @@ export class BoardController {
   private destroyed = false;
   private fitted = false;
 
-  /** What the pointer is doing between down and up. */
+  /**
+   * What the pointer is doing between down and up. A press waits to see what it becomes: a click (select), a drag
+   * (move the selection, or a lasso on empty ground; a finger pans instead), or a hold (ping).
+   */
   private gesture:
     | { kind: 'pan'; start: Point; origin: Point }
-    | { kind: 'token'; id: string; offset: Point; size: number; moved: boolean }
-    | { kind: 'template'; id: string; offset: Point; moved: boolean }
+    | { kind: 'press'; target: Target | null; screen: Point; cell: Point; additive: boolean; touch: boolean; timer: number }
+    | { kind: 'group'; start: Point; tokens: { id: string; x: number; y: number; size: number }[]; templates: { id: string; x: number; y: number }[] }
+    | { kind: 'lasso'; start: Point; additive: boolean }
+    | { kind: 'pinch' }
+    | { kind: 'done' }
     | { kind: 'ruler'; from: Point }
     | { kind: 'place'; origin: Point }
     | null = null;
+  /** Fingers on the board, for the two-finger pinch. */
+  private touches = new Map<number, Point>();
+  private pinch: { distance: number; mid: Point; scale: number; origin: Point } | null = null;
+  private readonly lasso = new Graphics();
 
   private resizer: ResizeObserver | null = null;
 
@@ -115,7 +132,7 @@ export class BoardController {
     this.app.stage.hitArea = this.app.screen;
     this.app.stage.addChild(this.world);
     this.world.addChild(this.backgroundLayer, this.gridLayer, this.templateLayer, this.tokenLayer, this.overlay);
-    this.overlay.addChild(this.preview, this.ruler, this.rulerText);
+    this.overlay.addChild(this.preview, this.ruler, this.rulerText, this.lasso);
     this.app.stage.on('pointerdown', (e) => this.onDown(e, null));
     this.app.stage.on('globalpointermove', (e) => this.onMove(e));
     this.app.stage.on('pointerup', (e) => this.onUp(e));
@@ -156,7 +173,7 @@ export class BoardController {
 
   /** Someone else is dragging a token: slide it there for a moment. */
   showDrag(tokenId: string, x: number, y: number) {
-    if (this.gesture?.kind === 'token' && this.gesture.id === tokenId) return;
+    if (this.gesture?.kind === 'group' && this.gesture.tokens.some((t) => t.id === tokenId)) return;
     this.overrides.set(tokenId, { x, y, until: performance.now() + 1500 });
     this.placeToken(tokenId);
   }
@@ -245,7 +262,7 @@ export class BoardController {
     this.templateLayer.removeChildren().forEach((c) => c.destroy({ children: true }));
     for (const tpl of data.scene.templates) {
       const node = new Graphics();
-      this.drawShape(node, data.scene.grid, tpl, hex(tpl.color), tpl.id === data.selectedTemplateId);
+      this.drawShape(node, data.scene.grid, tpl, hex(tpl.color), data.selectedTemplates.includes(tpl.id));
       node.eventMode = 'static';
       node.cursor = data.canMoveTemplate(tpl) ? 'move' : 'pointer';
       node.on('pointerdown', (e) => this.onDown(e, { template: tpl }));
@@ -339,7 +356,7 @@ export class BoardController {
       text.anchor.set(0.5);
       body.addChild(text);
     }
-    const selected = token.id === data.selectedTokenId;
+    const selected = data.selectedTokens.includes(token.id);
     body.addChild(shape(new Graphics()).stroke({ width: selected ? 4 : 3, color: selected ? 0xffffff : color }));
     if (fighter?.dead) {
       const r = Math.min(w, h) * 0.35;
@@ -421,43 +438,81 @@ export class BoardController {
     return pxToCell(this.data!.scene.grid, p.x, p.y);
   }
 
-  private onDown(e: FederatedPointerEvent, target: { tokenId?: string; template?: SceneTemplate } | null) {
-    if (!this.data || this.gesture) return;
+  private onDown(e: FederatedPointerEvent, target: Target | null) {
+    if (!this.data) return;
     e.stopPropagation();
+    const touch = e.pointerType === 'touch';
+    if (touch) {
+      this.touches.set(e.pointerId, { x: e.global.x, y: e.global.y });
+      // A second finger turns whatever the first was doing into a pinch.
+      if (this.touches.size === 2) { this.cancelGesture(); this.startPinch(); return; }
+    }
+    if (this.gesture) return;
     const cell = this.cellPoint(e);
 
     if (e.button === 2 || e.button === 1) { this.startPan(e); return; }
-    if (this.tool === 'ping' || (this.tool === 'select' && e.altKey)) { this.callbacks.onPing(cell.x, cell.y); return; }
+    if (this.tool === 'select' && e.altKey) { this.callbacks.onPing(cell.x, cell.y); return; }
     if (this.tool === 'ruler') { this.gesture = { kind: 'ruler', from: cell }; return; }
     if (this.tool === 'token') { this.callbacks.onTokenPlace?.(Math.floor(cell.x), Math.floor(cell.y)); return; }
     if (this.tool === 'template') { this.gesture = { kind: 'place', origin: this.snapHalf(cell) }; this.drawPreview(cell); return; }
 
-    if (target?.tokenId) {
-      const token = this.data.scene.tokens.find((t) => t.id === target.tokenId);
-      if (!token) return;
-      this.callbacks.onTokenSelect(token.id);
-      if (token.controllable && !token.locked) {
-        this.gesture = { kind: 'token', id: token.id, offset: { x: cell.x - token.x, y: cell.y - token.y }, size: Math.min(token.width, token.height), moved: false };
-        this.tokens.get(token.id)!.cursor = 'grabbing';
-      }
-      return;
-    }
-    if (target?.template) {
-      const tpl = target.template;
-      this.callbacks.onTemplateSelect(tpl.id);
-      if (this.data.canMoveTemplate(tpl)) this.gesture = { kind: 'template', id: tpl.id, offset: { x: cell.x - tpl.x, y: cell.y - tpl.y }, moved: false };
-      return;
-    }
-    this.callbacks.onTokenSelect(null);
-    this.callbacks.onTemplateSelect(null);
-    this.startPan(e);
+    const additive = e.shiftKey || e.ctrlKey || e.metaKey;
+    // Grabbing something outside the selection makes it the selection (or adds it with Shift), so it can be dragged now.
+    if (target && !this.isSelected(target)) this.select(target, additive);
+    const timer = window.setTimeout(() => {
+      if (this.gesture?.kind !== 'press') return;
+      this.callbacks.onPing(this.gesture.cell.x, this.gesture.cell.y);
+      this.gesture = { kind: 'done' };
+    }, HOLD_MS);
+    this.gesture = { kind: 'press', target, screen: { x: e.global.x, y: e.global.y }, cell, additive, touch, timer };
   }
 
-  private startPan(e: FederatedPointerEvent) {
+  private startPan(e: FederatedPointerEvent | { global: Point }) {
     this.gesture = { kind: 'pan', start: { x: e.global.x, y: e.global.y }, origin: { x: this.world.position.x, y: this.world.position.y } };
   }
 
+  private startPinch() {
+    const [a, b] = [...this.touches.values()];
+    this.pinch = {
+      distance: Math.max(1, Math.hypot(a.x - b.x, a.y - b.y)), mid: { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 },
+      scale: this.world.scale.x, origin: { x: this.world.position.x, y: this.world.position.y },
+    };
+    this.gesture = { kind: 'pinch' };
+  }
+
+  private cancelGesture() {
+    const g = this.gesture;
+    if (g?.kind === 'press') window.clearTimeout(g.timer);
+    if (g?.kind === 'group') for (const t of g.tokens) { this.overrides.delete(t.id); this.placeToken(t.id); }
+    if (g?.kind === 'group' && this.data) this.renderTemplates(this.data);
+    this.lasso.clear();
+    this.preview.clear();
+    this.gesture = null;
+  }
+
+  private isSelected(target: Target) {
+    const d = this.data!;
+    return target.tokenId ? d.selectedTokens.includes(target.tokenId) : d.selectedTemplates.includes(target.template!.id);
+  }
+
+  /** A click on a token or area: it alone, or toggled in the selection with Shift. */
+  private select(target: Target, additive: boolean) {
+    const d = this.data!;
+    if (target.tokenId) this.callbacks.onSelect(toggleSelection(d.selectedTokens, target.tokenId, additive), additive ? [...d.selectedTemplates] : []);
+    else this.callbacks.onSelect(additive ? [...d.selectedTokens] : [], toggleSelection(d.selectedTemplates, target.template!.id, additive));
+  }
+
+  /** The selected things this viewer may drag right now. */
+  private draggable() {
+    const d = this.data!;
+    const tokens = d.scene.tokens.filter((t) => d.selectedTokens.includes(t.id) && t.controllable && !t.locked)
+      .map((t) => ({ id: t.id, x: t.x, y: t.y, size: Math.min(t.width, t.height) }));
+    const templates = d.scene.templates.filter((t) => d.selectedTemplates.includes(t.id) && d.canMoveTemplate(t)).map((t) => ({ id: t.id, x: t.x, y: t.y }));
+    return { tokens, templates };
+  }
+
   private onMove(e: FederatedPointerEvent) {
+    if (e.pointerType === 'touch' && this.touches.has(e.pointerId)) this.touches.set(e.pointerId, { x: e.global.x, y: e.global.y });
     const gesture = this.gesture;
     if (!gesture || !this.data) return;
     const g = this.data.scene.grid;
@@ -465,26 +520,59 @@ export class BoardController {
       case 'pan':
         this.world.position.set(gesture.origin.x + e.global.x - gesture.start.x, gesture.origin.y + e.global.y - gesture.start.y);
         break;
-      case 'token': {
-        const cell = this.cellPoint(e);
-        const x = cell.x - gesture.offset.x;
-        const y = cell.y - gesture.offset.y;
-        gesture.moved = true;
-        this.overrides.set(gesture.id, { x, y, until: Number.POSITIVE_INFINITY });
-        this.placeToken(gesture.id);
-        this.callbacks.onTokenDrag(gesture.id, x, y);
+      case 'pinch': {
+        if (!this.pinch || this.touches.size < 2) break;
+        const [a, b] = [...this.touches.values()];
+        const distance = Math.max(1, Math.hypot(a.x - b.x, a.y - b.y));
+        const mid = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
+        const p = this.pinch;
+        const scale = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, p.scale * (distance / p.distance)));
+        const wx = (p.mid.x - p.origin.x) / p.scale;
+        const wy = (p.mid.y - p.origin.y) / p.scale;
+        this.world.scale.set(scale);
+        this.world.position.set(mid.x - wx * scale, mid.y - wy * scale);
         break;
       }
-      case 'template': {
+      case 'press': {
+        if (Math.hypot(e.global.x - gesture.screen.x, e.global.y - gesture.screen.y) <= MOVE_TOLERANCE) break;
+        window.clearTimeout(gesture.timer);
+        if (gesture.target) {
+          const items = this.draggable();
+          if (items.tokens.length + items.templates.length === 0) { this.gesture = { kind: 'done' }; break; }
+          this.gesture = { kind: 'group', start: gesture.cell, ...items };
+          for (const t of items.tokens) { const node = this.tokens.get(t.id); if (node) node.cursor = 'grabbing'; }
+        } else if (gesture.touch) {
+          // A finger on empty ground pans: there is no right button on a phone.
+          this.gesture = { kind: 'pan', start: gesture.screen, origin: { x: this.world.position.x, y: this.world.position.y } };
+        } else {
+          this.gesture = { kind: 'lasso', start: this.cellToWorld(gesture.cell), additive: gesture.additive };
+        }
+        this.onMove(e);
+        break;
+      }
+      case 'group': {
         const cell = this.cellPoint(e);
-        const node = this.templateLayer.children[this.data.scene.templates.findIndex((t) => t.id === gesture.id)];
-        const tpl = this.data.scene.templates.find((t) => t.id === gesture.id);
-        if (node && tpl) {
-          gesture.moved = true;
-          const o = cellToPx(g, tpl.x, tpl.y);
-          const p = cellToPx(g, cell.x - gesture.offset.x, cell.y - gesture.offset.y);
+        const dx = cell.x - gesture.start.x;
+        const dy = cell.y - gesture.start.y;
+        for (const t of gesture.tokens) {
+          this.overrides.set(t.id, { x: t.x + dx, y: t.y + dy, until: Number.POSITIVE_INFINITY });
+          this.placeToken(t.id);
+          this.callbacks.onTokenDrag(t.id, t.x + dx, t.y + dy);
+        }
+        for (const t of gesture.templates) {
+          const index = this.data.scene.templates.findIndex((x) => x.id === t.id);
+          const node = this.templateLayer.children[index];
+          if (!node) continue;
+          const o = cellToPx(g, t.x, t.y);
+          const p = cellToPx(g, t.x + dx, t.y + dy);
           node.position.set(p.x - o.x, p.y - o.y);
         }
+        break;
+      }
+      case 'lasso': {
+        const r = rectFrom(gesture.start, this.worldPoint(e));
+        this.lasso.clear().rect(r.x, r.y, r.width, r.height).fill({ color: 0x00f0ff, alpha: 0.08 })
+          .stroke({ width: 1.5 / this.world.scale.x, color: 0x00f0ff, alpha: 0.9 });
         break;
       }
       case 'ruler':
@@ -497,29 +585,50 @@ export class BoardController {
   }
 
   private onUp(e: FederatedPointerEvent) {
+    if (e.pointerType === 'touch') {
+      this.touches.delete(e.pointerId);
+      if (this.gesture?.kind === 'pinch') { if (this.touches.size < 2) { this.pinch = null; this.gesture = null; } return; }
+    }
     const gesture = this.gesture;
     this.gesture = null;
     if (!gesture || !this.data) return;
     const g = this.data.scene.grid;
     switch (gesture.kind) {
-      case 'token': {
-        const node = this.tokens.get(gesture.id);
-        if (node) node.cursor = 'grab';
-        if (!gesture.moved) { this.overrides.delete(gesture.id); return; }
-        const cell = this.cellPoint(e);
-        let x = cell.x - gesture.offset.x;
-        let y = cell.y - gesture.offset.y;
-        if (g.snap && g.type === 'Square') { x = snapCell(x, gesture.size); y = snapCell(y, gesture.size); }
-        this.overrides.set(gesture.id, { x, y, until: performance.now() + 4000 });
-        this.placeToken(gesture.id);
-        this.callbacks.onTokenDrop(gesture.id, x, y);
+      case 'press': {
+        window.clearTimeout(gesture.timer);
+        const d = this.data;
+        if (!gesture.target) { if (!gesture.additive) this.callbacks.onSelect([], []); break; }
+        // A plain click on something already selected keeps only it; Shift+click on it takes it out.
+        const id = gesture.target.tokenId ?? gesture.target.template!.id;
+        const wasSelected = gesture.target.tokenId ? d.selectedTokens.includes(id) : d.selectedTemplates.includes(id);
+        const onlyIt = d.selectedTokens.length + d.selectedTemplates.length === 1;
+        if (wasSelected && (gesture.additive || !onlyIt)) this.select(gesture.target, gesture.additive);
         break;
       }
-      case 'template': {
-        if (!gesture.moved) return;
+      case 'group': {
         const cell = this.cellPoint(e);
-        const p = this.snapHalf({ x: cell.x - gesture.offset.x, y: cell.y - gesture.offset.y });
-        this.callbacks.onTemplateDrop(gesture.id, p.x, p.y);
+        const dx = cell.x - gesture.start.x;
+        const dy = cell.y - gesture.start.y;
+        const snap = g.snap && g.type === 'Square';
+        const tokens = gesture.tokens.map((t) => ({ id: t.id, x: snap ? snapCell(t.x + dx, t.size) : t.x + dx, y: snap ? snapCell(t.y + dy, t.size) : t.y + dy }));
+        const templates = gesture.templates.map((t) => ({ id: t.id, ...this.snapHalf({ x: t.x + dx, y: t.y + dy }) }));
+        for (const t of tokens) {
+          const node = this.tokens.get(t.id);
+          if (node) node.cursor = 'grab';
+          this.overrides.set(t.id, { x: t.x, y: t.y, until: performance.now() + 4000 });
+          this.placeToken(t.id);
+        }
+        this.callbacks.onMoveDrop(tokens, templates);
+        break;
+      }
+      case 'lasso': {
+        this.lasso.clear();
+        const r = rectFrom(gesture.start, this.worldPoint(e));
+        const d = this.data;
+        const tokens = d.scene.tokens.filter((t) => (d.gm || t.controllable) && inRect(cellToPx(g, t.x + t.width / 2, t.y + t.height / 2), r)).map((t) => t.id);
+        const templates = d.scene.templates.filter((t) => (d.gm || d.canMoveTemplate(t)) && inRect(cellToPx(g, t.x, t.y), r)).map((t) => t.id);
+        const merge = (old: readonly string[], add: string[]) => (gesture.additive ? [...new Set([...old, ...add])] : add);
+        this.callbacks.onSelect(merge(d.selectedTokens, tokens), merge(d.selectedTemplates, templates));
         break;
       }
       case 'ruler':
@@ -532,6 +641,10 @@ export class BoardController {
         break;
       }
     }
+  }
+
+  private cellToWorld(cell: Point): Point {
+    return cellToPx(this.data!.scene.grid, cell.x, cell.y);
   }
 
   private onWheel = (e: WheelEvent) => {

@@ -36,6 +36,17 @@ public sealed record TokenInput(
 /// <summary>A drag, a turn or a resize; anything left null stays as it was. Last write wins.</summary>
 public sealed record TokenMoveRequest(double X, double Y, double? Rotation = null, double? Width = null, double? Height = null);
 
+/// <summary>Where one token or area goes, in cells.</summary>
+public sealed record BatchMove(string Id, double X, double Y);
+
+/// <summary>
+/// A selection changed at once: tokens and areas moved, cleared, hidden or shown, in one save. Players may move what
+/// they control and players' areas; clearing and hiding tokens is the GM's.
+/// </summary>
+public sealed record SceneBatchRequest(
+    List<BatchMove>? MoveTokens = null, List<BatchMove>? MoveTemplates = null, List<string>? RemoveTokens = null,
+    List<string>? RemoveTemplates = null, List<string>? HideTokens = null, List<string>? ShowTokens = null);
+
 /// <summary>Where a player puts their own token on the live scene, in cells.</summary>
 public sealed record PlaceTokenRequest(double X, double Y);
 

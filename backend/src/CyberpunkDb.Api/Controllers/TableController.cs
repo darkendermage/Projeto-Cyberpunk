@@ -85,6 +85,10 @@ public sealed class TableController(SeatService seats, MediaService media, Scene
     [HttpPost("scenes/{id:int}/fight")]
     public Task<SceneView> StartFight(int id, CreateFightRequest request, CancellationToken ct) => fights.StartAsync(id, request, ct);
 
+    /// <summary>A selection of tokens and areas moved, cleared, hidden or shown in one save.</summary>
+    [HttpPost("scenes/{id:int}/batch")]
+    public Task<SceneView> Batch(int id, SceneBatchRequest request, CancellationToken ct) => scenes.BatchAsync(id, request, ct);
+
     [HttpPost("scenes/{id:int}/encounter-tokens")]
     public Task<SceneView> AddEncounterTokens(int id, CancellationToken ct) => scenes.AddEncounterTokensAsync(id, ct);
 
