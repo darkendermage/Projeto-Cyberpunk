@@ -20,6 +20,8 @@ import { AddCombatantsDialog } from '../combat/AddCombatantsDialog';
 import type { Run } from '../combat/EncounterView';
 import { NewFight } from './NewFight';
 import { NumField } from './NumField';
+import { ArmorControl } from './ArmorControl';
+import { damageFormula } from './tokens';
 import { SourcePicker } from './SourcePicker';
 import { useTokenSources } from './useTokenSources';
 import { sourceFields, tokenInputOf, type TokenSource } from './sources';
@@ -246,6 +248,7 @@ export function TokenInspector({ scene, token, seats, encounter, act, onDone }: 
   const toast = useToast();
   const sources = useTokenSources();
   const [form, setForm] = useState<TokenInput>(() => tokenInputOf(token));
+  const fighter = token.combatantId ? encounter?.queue.find((f) => f.id === token.combatantId) : undefined;
 
   // Position comes from the board, never from this form.
   const save = (change: Partial<TokenInput> = {}) =>
@@ -310,10 +313,56 @@ export function TokenInspector({ scene, token, seats, encounter, act, onDone }: 
         </div>
       </div>
 
+      {fighter && encounter && <FighterQuick fighter={fighter} encounterId={encounter.id} />}
+
       <div className={styles.rowBetween}>
         <Button variant="primary" onClick={() => save()}>{t('Salvar', 'Save')}</Button>
         <Button variant="danger" icon={<Trash2 size={15} />} onClick={() => act(async () => { const v = await tableApi.removeToken(scene.id, token.id); onDone(); return v; })}>{t('Remover', 'Remove')}</Button>
       </div>
+    </div>
+  );
+}
+
+/**
+ * The fighter behind a token, for the GM: armor of head and body with +/− (a PC's lands on their sheet), and the
+ * weapons with Attack and Damage rolled in the chat.
+ */
+function FighterQuick({ fighter, encounterId }: { fighter: EncounterDetail['queue'][number]; encounterId: number }) {
+  const toast = useToast();
+  const command = useEncounterCommand(encounterId);
+  const [secret, setSecret] = useState(false);
+  const roll = (formula: string, kind: 'Check' | 'Damage', label: string) =>
+    tableApi.roll({ formula, kind, label: `${fighter.name}: ${label}`, visibility: secret ? 'Secret' : 'Public' }).catch((e) => toast.notify(problemMessage(e), 'error'));
+  const signed = (n: number) => (n >= 0 ? `+${n}` : `${n}`);
+  return (
+    <div className={styles.section}>
+      <span className={styles.label}>{t('Combatente', 'Fighter')}</span>
+      <span className={styles.row}>
+        <span className={styles.stat}>{fighter.hp}/{fighter.maxHp} HP</span>
+        <Badge tone={WOUND_TONE[fighter.woundState]}>{fighter.dead ? t('Morto', 'Dead') : WOUND_LABEL[fighter.woundState]}</Badge>
+      </span>
+      <ArmorControl armor={fighter} busy={command.isPending}
+        onAdjust={(location, delta) => command.mutate({ path: `combatants/${fighter.id}/armor`, body: { location, delta } }, { onError: (e) => toast.notify(problemMessage(e), 'error') })} />
+      {fighter.weapons.length > 0 && (
+        <>
+          <Switch checked={secret} onChange={setSecret} label={t('Rolar em segredo', 'Roll in secret')} />
+          {fighter.weapons.map((w) => {
+            const damage = damageFormula(w.damage);
+            return (
+              <div key={w.key} className={styles.weapon}>
+                <div className={styles.rowBetween}>
+                  <strong>{w.name}</strong>
+                  {w.magazine != null && <span className={styles.stat}>{w.rounds ?? 0}/{w.magazine}</span>}
+                </div>
+                <div className={styles.row}>
+                  <Button onClick={() => void roll(`1d10${signed(w.attackTotal)}`, 'Check', t(`ataque com ${w.name}`, `attack with ${w.name}`))}>{t('Ataque', 'Attack')} {signed(w.attackTotal)}</Button>
+                  {damage && <Button variant="ghost" onClick={() => void roll(damage, 'Damage', t(`dano de ${w.name}`, `${w.name} damage`))}>{t('Dano', 'Damage')} {w.damage}</Button>}
+                </div>
+              </div>
+            );
+          })}
+        </>
+      )}
     </div>
   );
 }

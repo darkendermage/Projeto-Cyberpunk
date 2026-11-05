@@ -7,7 +7,8 @@ namespace CyberpunkDb.Application.Table;
 
 /// <summary>
 /// A fighter as a player sees it. Everyone gets the Initiative order, the Wound State, conditions and Critical
-/// Injuries (what the table sees); only the player's own character shows its numbers and weapons.
+/// Injuries (what the table sees); PCs also show HP and SP to the whole party; weapons and Death Save stay with the
+/// player's own character.
 /// </summary>
 public sealed record PlayerFighterDto(
     string Id, string Name, CombatSide Side, CombatantKind Kind, int? Initiative, WoundState WoundState, bool Dead,
@@ -41,11 +42,13 @@ public static class PlayerEncounters
     private static PlayerFighterDto Fighter(FighterView f, TableSeat seat)
     {
         var own = f.CharacterId is not null && f.CharacterId == seat.CharacterId;
+        // The party sees each other's HP and armor; NPCs keep only their Wound State. Weapons and Death Save stay the owner's.
+        var numbers = own || f.Kind == CombatantKind.Pc;
         return new PlayerFighterDto(
             f.Id, f.Name, f.Side, f.Kind, f.Initiative, f.WoundState, f.Dead, f.Stabilized, f.Conditions,
             f.Injuries.Select(i => i.Name).ToList(), f.CharacterId, own,
-            own ? f.Hp : null, own ? f.MaxHp : null, own ? f.SpBody : null, own ? f.SpHead : null,
-            own ? f.MaxSpBody : null, own ? f.MaxSpHead : null, own ? f.MustDeathSave : null, own ? f.DeathSaveTarget : null,
+            numbers ? f.Hp : null, numbers ? f.MaxHp : null, numbers ? f.SpBody : null, numbers ? f.SpHead : null,
+            numbers ? f.MaxSpBody : null, numbers ? f.MaxSpHead : null, own ? f.MustDeathSave : null, own ? f.DeathSaveTarget : null,
             own ? f.Weapons : null);
     }
 }

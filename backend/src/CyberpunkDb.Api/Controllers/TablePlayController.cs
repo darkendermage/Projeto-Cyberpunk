@@ -15,7 +15,7 @@ namespace CyberpunkDb.Api.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/table/play")]
-public sealed class TablePlayController(SeatService seats, SceneService scenes, EncounterService encounters, CharacterService characters, NpcPortraitService npcImages, ChatService chat, TablePresence presence) : ControllerBase
+public sealed class TablePlayController(SeatService seats, SceneService scenes, EncounterService encounters, CharacterService characters, NpcPortraitService npcImages, ChatService chat, TablePresence presence, TablePartyService party) : ControllerBase
 {
     public const string SeatHeader = "X-Seat";
 
@@ -114,6 +114,15 @@ public sealed class TablePlayController(SeatService seats, SceneService scenes, 
         Response.Headers.CacheControl = "private, no-cache";
         return File(data, type, lastModified: updated, entityTag: new Microsoft.Net.Http.Headers.EntityTagHeaderValue($"\"{updated.Ticks}\""));
     }
+
+    /// <summary>The PCs on the live scene the seat can see, with their HP and armor.</summary>
+    [HttpGet("party")]
+    public async Task<IReadOnlyList<PartyMemberDto>> Party(CancellationToken ct) => await party.ForSeatAsync(await SeatAsync(ct), ct);
+
+    /// <summary>The seat's own armor up (repair) or down (ablation) on one location.</summary>
+    [HttpPost("armor")]
+    public async Task<PlayerCharacterDto> Armor(ArmorAdjustRequest request, CancellationToken ct) =>
+        await party.AdjustOwnArmorAsync(await SeatAsync(ct), request, ct);
 
     /// <summary>The player's selection moved or cleared at once (their tokens, players' areas).</summary>
     [HttpPost("batch")]

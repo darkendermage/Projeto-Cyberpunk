@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { Crosshair, Dices, HeartPulse, RotateCcw, RotateCw } from 'lucide-react';
-import type { RollKind, TableVisibility, TokenView, PlayerCharacter, PlayerEncounter } from '../../api/tableTypes';
+import type { ArmorLocation, RollKind, TableVisibility, TokenView, PlayerCharacter, PlayerEncounter } from '../../api/tableTypes';
 import { Badge, Button, IconButton, Segmented } from '../../components/ui/ui';
 import { skillName, t } from '../../i18n';
 import { WOUND_LABEL, WOUND_TONE } from '../combat/combat';
+import { ArmorControl } from './ArmorControl';
 import { damageFormula } from './tokens';
 import styles from './Table.module.css';
 
@@ -15,12 +16,15 @@ const signed = (n: number) => (n >= 0 ? `+${n}` : `${n}`);
  * The player's quick panel: their character's numbers, weapons and skills, each a click away from a server roll,
  * and their token's facing. In a fight the numbers come from the combat table; otherwise from the sheet.
  */
-export function CharacterPanel({ character, encounter, token, onRoll, onTurn }: {
+export function CharacterPanel({ character, encounter, token, onRoll, onTurn, onArmor, busy }: {
   character: PlayerCharacter | null;
   encounter: PlayerEncounter | null;
   token: TokenView | undefined;
   onRoll: Roll;
   onTurn: (delta: number) => void;
+  /** The player's own armor up or down (ablation, repair). */
+  onArmor?: (location: ArmorLocation, delta: number) => void;
+  busy?: boolean;
 }) {
   const [visibility, setVisibility] = useState<TableVisibility>('Public');
   const [filter, setFilter] = useState('');
@@ -28,6 +32,11 @@ export function CharacterPanel({ character, encounter, token, onRoll, onTurn }: 
   if (!character && !fighter) return <span className={styles.muted}>{t('O mestre não ligou um personagem a este convite.', 'The GM didn\'t link a character to this invite.')}</span>;
 
   const hp = fighter?.hp ?? character?.hp ?? 0;
+  // In a fight the combat table's numbers; otherwise the sheet's.
+  const armor = fighter?.spBody != null
+    ? { spHead: fighter.spHead ?? null, maxSpHead: fighter.maxSpHead ?? null, spBody: fighter.spBody, maxSpBody: fighter.maxSpBody ?? null }
+    : character ? character.armor : null;
+  const weapons = fighter?.weapons ?? character?.weapons ?? [];
   const maxHp = fighter?.maxHp ?? character?.maxHp ?? 0;
   const skills = (character?.skills ?? [])
     .filter((s) => !filter || skillName(s.name, s.namePt).toLowerCase().includes(filter.toLowerCase()))
@@ -44,9 +53,10 @@ export function CharacterPanel({ character, encounter, token, onRoll, onTurn }: 
         <div className={styles.meter}><div className={styles.meterFill} style={{ width: `${maxHp > 0 ? Math.max(0, Math.min(100, (hp / maxHp) * 100)) : 0}%` }} /></div>
       </div>
       <div className={styles.row}>
-        {fighter?.spBody != null && <span><span className={styles.label}>SP {t('corpo', 'body')} </span><span className={styles.stat}>{fighter.spBody}/{fighter.maxSpBody}</span></span>}
-        {fighter?.spHead != null && <span><span className={styles.label}>SP {t('cabeça', 'head')} </span><span className={styles.stat}>{fighter.spHead}/{fighter.maxSpHead}</span></span>}
         {character && <span><span className={styles.label}>{t('Sorte', 'Luck')} </span><span className={styles.stat}>{character.luckAvailable}/{character.luck}</span></span>}
+      </div>
+      <div className={styles.row}>
+        {armor && <ArmorControl armor={armor} busy={busy} onAdjust={character ? onArmor : undefined} />}
       </div>
       {fighter && (fighter.conditions.length > 0 || fighter.injuries.length > 0) && (
         <div className={styles.row}>
@@ -73,11 +83,11 @@ export function CharacterPanel({ character, encounter, token, onRoll, onTurn }: 
         </div>
       )}
 
-      {(fighter?.weapons ?? []).length > 0 && (
+      {weapons.length > 0 && (
         <div className={styles.section}>
           <span className={styles.label}>{t('Armas', 'Weapons')}</span>
-          {fighter!.weapons!.map((w) => {
-            const damage = damageFormula(w.damage);
+          {weapons.map((w) => {
+            const damage = damageFormula(w.damage ?? '');
             return (
               <div key={w.key} className={styles.weapon}>
                 <div className={styles.rowBetween}>

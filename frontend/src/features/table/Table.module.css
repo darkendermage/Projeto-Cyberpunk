@@ -358,3 +358,28 @@
 .workspace input[type='color']::-webkit-color-swatch, .playerScreen input[type='color']::-webkit-color-swatch { border: 0; border-radius: 2px; }
 .workspace input[type='range'], .playerScreen input[type='range'] { accent-color: var(--red); }
 .mono { font-family: var(--font-mono); }
+
+/* ------------------------------------------------------------ armor (head and body SP) */
+
+.armor { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; }
+.armorSlot { display: inline-flex; align-items: center; gap: 4px; color: var(--text-2); }
+
+/* ------------------------------------------------------------ "on the scene" strip under the map */
+
+.strip { display: flex; gap: 8px; padding: 8px; overflow-x: auto; border-top: 1px solid var(--line); background: var(--bg-1); flex-shrink: 0; }
+.stripCard {
+  display: flex; align-items: center; gap: 8px; min-width: 190px; max-width: 240px; padding: 6px 8px;
+  background: var(--bg-2); border: 1px solid var(--line); border-left-width: 3px; color: var(--text); text-align: left; cursor: pointer;
+}
+.stripCard:hover { background: var(--bg-3); }
+.stripCardOn { outline: 1px solid var(--cyan); }
+.stripAvatar {
+  width: 40px; height: 40px; flex-shrink: 0; border-radius: 50%; object-fit: cover;
+  display: grid; place-items: center; font-family: var(--font-display); font-size: 14px; font-weight: 700; color: var(--bg-0);
+}
+.stripBody { display: flex; flex-direction: column; gap: 3px; min-width: 0; flex: 1; }
+.stripName { font-family: var(--font-display); font-size: 13px; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.stripHp { display: flex; align-items: center; gap: 6px; }
+.stripHp > span:first-child { flex: 1; }
+/* The map and its hint, above the strip. */
+.boardArea { position: relative; flex: 1; min-height: 0; display: flex; flex-direction: column; }

@@ -18,6 +18,8 @@ import { fromPlayerFighter } from './tokens';
 import { forgetSeat, isRefusedKey, rememberSeat, savedSeat } from './lobby';
 import { LangSwitch } from './LangSwitch';
 import { PanelHandle } from './PanelHandle';
+import { SceneStrip } from './SceneStrip';
+import { buildStrip } from './strip';
 import { NO_SELECTION, useBoardKeys, type Selection } from './useBoardKeys';
 import { PLAYER_PANELS, playerColumns } from './panels';
 import { usePanels } from './usePanels';
@@ -59,6 +61,8 @@ export function PlayerTablePage() {
   const encounter = useQuery({ queryKey: tableKeys.playerEncounter(token), queryFn: api.encounter, enabled: state.isSuccess });
   const character = useQuery({ queryKey: tableKeys.playerCharacter(token), queryFn: api.character, enabled: state.isSuccess });
   const messages = useQuery({ queryKey: tableKeys.playerMessages(token), queryFn: api.messages, enabled: state.isSuccess });
+  const party = useQuery({ queryKey: tableKeys.playerParty(token), queryFn: api.party, enabled: state.isSuccess });
+  const [armorBusy, setArmorBusy] = useState(false);
 
   const setScene = (scene: SceneView | null) => {
     const before = client.getQueryData<PlayerState>(tableKeys.player(token));
@@ -66,14 +70,16 @@ export function PlayerTablePage() {
     // Another scene, or another fight linked to it: the fight on screen changes too.
     if (before?.scene?.id !== scene?.id || before?.scene?.encounterId !== scene?.encounterId)
       void client.invalidateQueries({ queryKey: tableKeys.playerEncounter(token) });
+    void client.invalidateQueries({ queryKey: tableKeys.playerParty(token) });
   };
 
   const hub = useTableHub(token, {
     scene: setScene,
     encounter: (e) => {
       client.setQueryData(tableKeys.playerEncounter(token), e as PlayerEncounter | null);
-      // A hit or a heal changes the sheet too.
+      // A hit or a heal changes the sheet too, and the party's numbers.
       void client.invalidateQueries({ queryKey: tableKeys.playerCharacter(token) });
+      void client.invalidateQueries({ queryKey: tableKeys.playerParty(token) });
     },
     message: (m) => client.setQueryData<TableMessage[]>(tableKeys.playerMessages(token), (old = []) => (old.some((x) => x.id === m.id) ? old : [...old, m].slice(-300))),
     tokenDrag: (d) => { if (d.sceneId === shownRef.current) board.current?.showDrag(d.tokenId, d.x, d.y); },
@@ -107,6 +113,8 @@ export function PlayerTablePage() {
     }
   };
 
+  const strip = useMemo(() => buildStrip(scene?.tokens ?? [], party.data ?? [], new Map((encounter.data?.queue ?? []).map((f) => [f.id, f]))),
+    [scene?.tokens, party.data, encounter.data]);
   const myToken = scene?.tokens.find((tk) => tk.controllable && seat?.characterId != null && tk.characterId === seat.characterId)
     ?? scene?.tokens.find((tk) => tk.controllable);
 
@@ -187,10 +195,13 @@ export function PlayerTablePage() {
             )}
             {deletable.length > 0 && <Button variant="ghost" onClick={removeSelection}>{deletable.length === 1 ? t('Apagar área', 'Delete area') : t(`Apagar ${deletable.length} áreas`, `Delete ${deletable.length} areas`)}</Button>}
           </BoardToolbar>
-          {scene ? <TableBoard ref={board} data={data} tool={tool} draft={draft} callbacks={callbacks} /> : (
-            <EmptyState title={t('Aguardando o mestre', 'Waiting for the GM')}>{t('O mestre ainda não mostrou nenhuma cena.', 'The GM hasn\'t shown a scene yet.')}</EmptyState>
-          )}
-          {scene && <span className={styles.hint}>{TOOL_HINT[tool]}</span>}
+          <div className={styles.boardArea}>
+            {scene ? <TableBoard ref={board} data={data} tool={tool} draft={draft} callbacks={callbacks} /> : (
+              <EmptyState title={t('Aguardando o mestre', 'Waiting for the GM')}>{t('O mestre ainda não mostrou nenhuma cena.', 'The GM hasn\'t shown a scene yet.')}</EmptyState>
+            )}
+            {scene && <span className={styles.hint}>{TOOL_HINT[tool]}</span>}
+          </div>
+          {scene && <SceneStrip entries={strip} selected={selection.tokens} onPick={(id) => setSelection({ tokens: [id], templates: [] })} />}
         </section>
         <PanelHandle className={styles.handleRight} panel="right" width={panels.right} limits={PLAYER_PANELS.right} open={panels.rightOpen}
           onResize={(right) => setPanels({ right })} onToggle={() => setPanels({ rightOpen: !panels.rightOpen })} />
@@ -201,7 +212,16 @@ export function PlayerTablePage() {
             ))}
           </div>
           {tab === 'character' && (
-            <CharacterPanel character={character.data ?? null} encounter={encounter.data ?? null} token={myToken} onRoll={roll}
+            <CharacterPanel character={character.data ?? null} encounter={encounter.data ?? null} token={myToken} onRoll={roll} busy={armorBusy}
+              onArmor={(location, delta) => {
+                setArmorBusy(true);
+                void run(async () => {
+                  const updated = await api.armor(location, delta);
+                  client.setQueryData(tableKeys.playerCharacter(token), updated);
+                  void client.invalidateQueries({ queryKey: tableKeys.playerParty(token) });
+                  void client.invalidateQueries({ queryKey: tableKeys.playerEncounter(token) });
+                }).finally(() => setArmorBusy(false));
+              }}
               onTurn={(delta) => { if (myToken) void run(() => api.moveToken(myToken.id, { x: myToken.x, y: myToken.y, rotation: (myToken.rotation + delta + 360) % 360 })); }} />
           )}
           {tab === 'initiative' && <InitiativePanel encounter={encounter.data ?? null} />}

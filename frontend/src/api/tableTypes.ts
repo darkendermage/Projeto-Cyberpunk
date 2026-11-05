@@ -197,6 +197,30 @@ export interface PlayerCharacter {
   humanity: number;
   stats: { key: string; value: number }[];
   skills: PlayerSkill[];
+  /** Equipped weapons, from the sheet (in a fight the fighter's own list is used). */
+  weapons: PlayerWeapon[];
+  armor: PlayerArmor;
+}
+
+/** An equipped weapon: attackTotal is the skill total (add 1d10). */
+export interface PlayerWeapon { key: string; name: string; attackTotal: number; damage: string | null; magazine: number | null; rounds: number; autofireTotal: number | null }
+
+/** SP worn on the head and the body; the max is null where nothing can be repaired. */
+export interface PlayerArmor { spHead: number; maxSpHead: number | null; spBody: number; maxSpBody: number | null }
+
+export type ArmorLocation = 'Head' | 'Body';
+
+/** A PC on the scene, for the strip under the map. */
+export interface PartyMember {
+  characterId: number;
+  name: string;
+  hp: number;
+  maxHp: number;
+  woundState: WoundState;
+  spHead: number;
+  maxSpHead: number | null;
+  spBody: number;
+  maxSpBody: number | null;
 }
 
 export interface RolledTerm { expression: string; sign: number; dice: number[]; extra: number | null; value: number }

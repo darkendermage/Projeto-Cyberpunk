@@ -18,6 +18,8 @@ import { ChatPanel } from './chat/ChatPanel';
 import { CombatTab, InvitesTab, SceneTab, ScenesColumn, TemplateInspector, TokenInspector, type Act } from './GmPanels';
 import { damageCommand, fromGmFighter } from './tokens';
 import { PanelHandle } from './PanelHandle';
+import { SceneStrip } from './SceneStrip';
+import { buildStrip } from './strip';
 import { GM_PANELS, gmColumns } from './panels';
 import { usePanels } from './usePanels';
 import { NO_SELECTION, useBoardKeys, type Selection } from './useBoardKeys';
@@ -51,6 +53,7 @@ export function GmTablePage() {
     ?? scenes.data?.find((s) => s.active)?.id ?? scenes.data?.[0]?.id ?? null;
   const scene = useQuery({ queryKey: tableKeys.scene(sceneId ?? 0), queryFn: ({ signal }) => tableApi.scene(sceneId!, signal), enabled: sceneId != null });
   const encounter = useEncounter(scene.data?.encounterId ?? 0);
+  const party = useQuery({ queryKey: tableKeys.party(sceneId ?? 0), queryFn: () => tableApi.party(sceneId!), enabled: sceneId != null });
   const command = useEncounterCommand(scene.data?.encounterId ?? 0);
 
   const [tab, setTab] = useState<Tab>('scene');
@@ -68,6 +71,7 @@ export function GmTablePage() {
   const putScene = useCallback((view: SceneView) => {
     client.setQueryData(tableKeys.scene(view.id), view);
     void client.invalidateQueries({ queryKey: tableKeys.scenes, exact: true });
+    void client.invalidateQueries({ queryKey: tableKeys.party(view.id) });
   }, [client]);
 
   const act: Act = useCallback(async (fn, done) => {
@@ -87,7 +91,11 @@ export function GmTablePage() {
   const hub = useTableHub(null, {
     scene: (view) => { if (view) putScene(view); },
     sceneRemoved: () => void client.invalidateQueries({ queryKey: tableKeys.scenes, exact: true }),
-    encounter: (detail) => { if (detail) client.setQueryData(encounterKeys.detail(detail.id), detail as EncounterDetail); },
+    encounter: (detail) => {
+      if (detail) client.setQueryData(encounterKeys.detail(detail.id), detail as EncounterDetail);
+      // Damage to a PC lands on their sheet: the strip's numbers follow.
+      void client.invalidateQueries({ queryKey: ['table', 'party'] });
+    },
     message: (m) => client.setQueryData<TableMessage[]>(tableKeys.messages, (old = []) => (old.some((x) => x.id === m.id) ? old : [...old, m].slice(-300))),
     // Live effects belong to the live scene: ignored while the GM edits another one.
     tokenDrag: (d) => { if (d.sceneId === shownRef.current) board.current?.showDrag(d.tokenId, d.x, d.y); },
@@ -149,6 +157,9 @@ export function GmTablePage() {
   useBoardKeys({ onDelete: removeSelection, onSelectAll: selectAll, onClear: () => setSelection(NO_SELECTION) });
   const selectedCount = selection.tokens.length + selection.templates.length;
 
+  const strip = useMemo(() => buildStrip(view?.tokens ?? [], party.data ?? [], new Map((encounter.data?.queue ?? []).map((f) => [f.id, f]))),
+    [view?.tokens, party.data, encounter.data]);
+
   const token = view?.tokens.find((tk) => tk.id === selectedToken);
   const template = view?.templates.find((tp) => tp.id === selectedTemplate);
   const openSeats = (seats.data ?? []).filter((s) => !s.revoked);
@@ -181,12 +192,15 @@ export function GmTablePage() {
           {hub.status === 'offline' && <Button variant="ghost" onClick={hub.reconnect}>{t('Reconectar', 'Reconnect')}</Button>}
           {view && !live && <Button variant="ghost" onClick={() => act(() => tableApi.activateScene(view.id), t('Cena ao vivo.', 'Scene is live.'))}>{t('Mostrar aos jogadores', 'Show to the players')}</Button>}
         </BoardToolbar>
-        {scenes.isLoading ? <Spinner /> : !view ? (
-          <EmptyState title={t('Nenhuma cena', 'No scene')}>{t('Crie uma cena à esquerda para começar a montar o mapa.', 'Create a scene on the left to start building the map.')}</EmptyState>
-        ) : (
-          <TableBoard ref={board} data={data} tool={tool} draft={draft} callbacks={callbacks} />
-        )}
-        {view && <span className={styles.hint}>{TOOL_HINT[tool]}</span>}
+        <div className={styles.boardArea}>
+          {scenes.isLoading ? <Spinner /> : !view ? (
+            <EmptyState title={t('Nenhuma cena', 'No scene')}>{t('Crie uma cena à esquerda para começar a montar o mapa.', 'Create a scene on the left to start building the map.')}</EmptyState>
+          ) : (
+            <TableBoard ref={board} data={data} tool={tool} draft={draft} callbacks={callbacks} />
+          )}
+          {view && <span className={styles.hint}>{TOOL_HINT[tool]}</span>}
+        </div>
+        {view && <SceneStrip entries={strip} selected={selection.tokens} onPick={(id) => { selectToken(id); setTab('token'); }} />}
       </section>
 
       <PanelHandle className={styles.handleRight} panel="right" width={panels.right} limits={GM_PANELS.right} open={panels.rightOpen}

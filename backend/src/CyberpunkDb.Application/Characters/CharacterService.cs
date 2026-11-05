@@ -458,6 +458,21 @@ public sealed class CharacterService(
     public Task<CharacterDetailDto> RepairArmorAsync(int id, RepairArmorRequest r, CancellationToken ct) =>
         MutateAsync(id, r.Version, c => combat.RepairArmor(c.Sheet, r, c), ct);
 
+    /// <summary>
+    /// SP of the armor on one location up or down by <paramref name="delta"/> (the virtual table's +/−): down ablates,
+    /// up repairs, never past the armor's full SP.
+    /// </summary>
+    public async Task<CharacterDetailDto> AdjustArmorAsync(int id, ArmorSlot location, int delta, string description, CancellationToken ct)
+    {
+        var detail = await GetAsync(id, ct);
+        if (delta == 0) return detail;
+        if (delta < 0) return await AblateAsync(id, new AblateRequest(detail.Version, location, -delta, description), ct);
+        var armor = location == ArmorSlot.Head ? detail.Report.Armor.Head : detail.Report.Armor.Body;
+        if (armor.InstanceId is null || armor.MaxSp is not { } max)
+            throw RequestValidationException.For("location", L.T("Não há armadura reparável nesse local.", "There is no repairable armor on that location."));
+        return await RepairArmorAsync(id, new RepairArmorRequest(detail.Version, armor.InstanceId, Math.Min(max, armor.Sp + delta)), ct);
+    }
+
     public Task<CharacterDetailDto> AddInjuryAsync(int id, AddInjuryRequest r, CancellationToken ct) =>
         MutateAsync(id, r.Version, c => combat.AddInjury(RequireFinalized(c.Sheet), r, c), ct);
 

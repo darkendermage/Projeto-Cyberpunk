@@ -4,6 +4,7 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using CyberpunkDb.Application.Characters;
+using CyberpunkDb.Application.Npcs;
 using CyberpunkDb.Application.Table;
 using CyberpunkDb.Domain.Enums;
 using FluentAssertions;
@@ -59,6 +60,8 @@ public class TableCombatApiTests(ApiFactory factory)
         scene = await Send<SceneView>(_gm, HttpMethod.Put, $"/api/table/scenes/{scene.Id}", new UpdateSceneRequest(scene.Version, scene.Name, scene.Grid, null, 0, 0, id));
         scene = await Send<SceneView>(_gm, HttpMethod.Post, $"/api/table/scenes/{scene.Id}/encounter-tokens");
         var hidden = scene.Tokens.Last();
+        // On a fresh database the first scene starts live, and enemy tokens on a live scene start hidden: show them all first.
+        await Send<SceneView>(_gm, HttpMethod.Post, $"/api/table/scenes/{scene.Id}/batch", new SceneBatchRequest(ShowTokens: scene.Tokens.Select(t => t.Id).ToList()));
         await Send<SceneView>(_gm, HttpMethod.Put, $"/api/table/scenes/{scene.Id}/tokens/{hidden.Id}",
             new TokenInput(hidden.Label, hidden.X, hidden.Y, CombatantId: hidden.CombatantId, Visibility: TokenVisibility.Gm));
         await Send<SceneView>(_gm, HttpMethod.Post, $"/api/table/scenes/{scene.Id}/activate");
@@ -109,6 +112,94 @@ public class TableCombatApiTests(ApiFactory factory)
         placed.Tokens.Where(t => t.Color == "#ff2a6d").Should().HaveCount(2).And.OnlyContain(t => t.Visibility == TokenVisibility.Gm);
         placed.Tokens.Single(t => t.CharacterId == solo.Id).Visibility.Should().Be(TokenVisibility.All);
         (await Send<PlayerStateDto>(_player, HttpMethod.Get, "/api/table/play/state", seat: seat.Token)).Scene!.Tokens.Should().ContainSingle();
+    }
+
+    [Fact]
+    public async Task Players_see_the_numbers_of_every_pc_but_only_the_wound_state_of_npcs()
+    {
+        var s = await FightOnTheTable("Visivel");
+        var friend = await FinalizedSolo("Amiga");
+        var e = await Send<JsonNode>(_gm, HttpMethod.Get, $"/api/encounters/{s.EncounterId}");
+        await Send<JsonNode>(_gm, HttpMethod.Post, $"/api/encounters/{s.EncounterId}/combatants", new { version = e["version"]!.GetValue<int>(), side = "Ally", characterId = friend.Id });
+        var scene = await Send<SceneView>(_gm, HttpMethod.Post, $"/api/table/scenes/{s.SceneId}/encounter-tokens");
+
+        var fight = await Send<PlayerEncounterDto>(_player, HttpMethod.Get, "/api/table/play/encounter", seat: s.Seat.Token);
+
+        var other = fight.Queue.Single(f => f.CharacterId == friend.Id);
+        other.Own.Should().BeFalse();
+        other.Hp.Should().BeGreaterThan(0);
+        other.MaxHp.Should().BeGreaterThan(0);
+        other.SpBody.Should().NotBeNull();
+        other.Weapons.Should().BeNull("as armas e o Death Save ficam só com o dono");
+        fight.Queue.Should().Contain(f => f.Kind != CyberpunkDb.Application.Encounters.CombatantKind.Pc);
+        fight.Queue.Where(f => f.Kind != CyberpunkDb.Application.Encounters.CombatantKind.Pc).Should().OnlyContain(f => f.Hp == null && f.SpBody == null);
+        scene.Tokens.Should().NotBeEmpty();
+    }
+
+    [Fact]
+    public async Task A_player_adjusts_their_own_armor_and_the_sheet_follows()
+    {
+        var solo = await FinalizedSolo("Blindada");
+        var seat = await Send<SeatDto>(_gm, HttpMethod.Post, "/api/table/seats", new CreateSeatRequest("Dona da Blindada", solo.Id), expected: HttpStatusCode.Created);
+        var before = await Send<PlayerCharacterDto>(_player, HttpMethod.Get, "/api/table/play/character", seat: seat.Token);
+        before.Armor.SpBody.Should().BeGreaterThan(0);
+
+        var hit = await Send<PlayerCharacterDto>(_player, HttpMethod.Post, "/api/table/play/armor", new ArmorAdjustRequest(ArmorSlot.Body, -2), seat.Token);
+        hit.Armor.SpBody.Should().Be(before.Armor.SpBody - 2);
+        var sheet = await Send<CharacterDetailDto>(_gm, HttpMethod.Get, $"/api/characters/{solo.Id}");
+        sheet.Report.Armor.Body.Sp.Should().Be(before.Armor.SpBody - 2);
+
+        var fixedUp = await Send<PlayerCharacterDto>(_player, HttpMethod.Post, "/api/table/play/armor", new ArmorAdjustRequest(ArmorSlot.Body, 5), seat.Token);
+        fixedUp.Armor.SpBody.Should().Be(before.Armor.SpBody, "o reparo não passa do máximo");
+    }
+
+    [Fact]
+    public async Task The_gm_adjusts_an_npcs_armor_in_the_fight()
+    {
+        var e = await Send<JsonNode>(_gm, HttpMethod.Post, "/api/encounters", new { name = "Armadura de NPC" }, expected: HttpStatusCode.Created);
+        var id = e["id"]!.GetValue<int>();
+        e = await Send<JsonNode>(_gm, HttpMethod.Post, $"/api/encounters/{id}/combatants", new { version = e["version"]!.GetValue<int>(), side = "Enemy", generic = new { name = "Blindado", spBody = 11, spHead = 7 } });
+        var ganger = e["queue"]!.AsArray().Single()!;
+        var cid = ganger["id"]!.GetValue<string>();
+
+        e = await Send<JsonNode>(_gm, HttpMethod.Post, $"/api/encounters/{id}/combatants/{cid}/armor", new { version = e["version"]!.GetValue<int>(), location = "Body", delta = -3 });
+        e["queue"]!.AsArray().Single()!["spBody"]!.GetValue<int>().Should().Be(8);
+        e = await Send<JsonNode>(_gm, HttpMethod.Post, $"/api/encounters/{id}/combatants/{cid}/armor", new { version = e["version"]!.GetValue<int>(), location = "Head", delta = 9 });
+        e["queue"]!.AsArray().Single()!["spHead"]!.GetValue<int>().Should().Be(7, "não passa do SP máximo");
+    }
+
+    [Fact]
+    public async Task A_player_sees_their_equipped_weapons_and_armor_outside_a_fight()
+    {
+        var solo = await FinalizedSolo("Armada");
+        var seat = await Send<SeatDto>(_gm, HttpMethod.Post, "/api/table/seats", new CreateSeatRequest("Dona da Armada", solo.Id), expected: HttpStatusCode.Created);
+
+        var sheet = await Send<PlayerCharacterDto>(_player, HttpMethod.Get, "/api/table/play/character", seat: seat.Token);
+
+        sheet.Weapons.Should().NotBeEmpty();
+        sheet.Weapons.Should().OnlyContain(w => w.AttackTotal > 0 && w.Name.Length > 0);
+        sheet.Armor.MaxSpBody.Should().NotBeNull();
+    }
+
+    [Fact]
+    public async Task The_party_lists_the_pcs_on_the_scene_with_their_numbers()
+    {
+        var mine = await FinalizedSolo("Grupo um");
+        var friend = await FinalizedSolo("Grupo dois");
+        var hidden = await FinalizedSolo("Grupo oculto");
+        var seat = await Send<SeatDto>(_gm, HttpMethod.Post, "/api/table/seats", new CreateSeatRequest("Do grupo", mine.Id), expected: HttpStatusCode.Created);
+        var scene = await Send<SceneView>(_gm, HttpMethod.Post, "/api/table/scenes", new CreateSceneRequest("Cena do grupo"), expected: HttpStatusCode.Created);
+        await Send<SceneView>(_gm, HttpMethod.Post, $"/api/table/scenes/{scene.Id}/tokens", new TokenInput("Grupo um", 1, 1, CharacterId: mine.Id));
+        await Send<SceneView>(_gm, HttpMethod.Post, $"/api/table/scenes/{scene.Id}/tokens", new TokenInput("Grupo dois", 2, 1, CharacterId: friend.Id));
+        await Send<SceneView>(_gm, HttpMethod.Post, $"/api/table/scenes/{scene.Id}/tokens", new TokenInput("Grupo oculto", 3, 1, CharacterId: hidden.Id, Visibility: TokenVisibility.Gm));
+        await Send<SceneView>(_gm, HttpMethod.Post, $"/api/table/scenes/{scene.Id}/activate");
+
+        var party = await Send<List<PartyMemberDto>>(_player, HttpMethod.Get, "/api/table/play/party", seat: seat.Token);
+        party.Select(p => p.CharacterId).Should().BeEquivalentTo([mine.Id, friend.Id]);
+        party.Should().OnlyContain(p => p.Hp > 0 && p.MaxHp > 0);
+
+        var gmParty = await Send<List<PartyMemberDto>>(_gm, HttpMethod.Get, $"/api/table/scenes/{scene.Id}/party");
+        gmParty.Select(p => p.CharacterId).Should().BeEquivalentTo([mine.Id, friend.Id, hidden.Id]);
     }
 
     [Fact]

@@ -95,7 +95,7 @@ Para produção, rode `npm run build` e copie `frontend/dist` para `backend/src/
 ### Testes
 
 ```bash
-cd backend && dotnet test     # 557 testes: filtros, validação, gerador de NPCs e gangues, Compêndio de NPCs (dados e API), regras de personagem, Night Market, Arquiteturas de NET, Friday Night Firefight (mesa de combate), Mesa Virtual (porta dos jogadores, assentos, link geral, cenas, imagens de NPC nos tokens, combate ao vivo, dados e chat, túnel), atualização automática e integração da API (SQLite + seed real)
+cd backend && dotnet test     # 562 testes: filtros, validação, gerador de NPCs e gangues, Compêndio de NPCs (dados e API), regras de personagem, Night Market, Arquiteturas de NET, Friday Night Firefight (mesa de combate), Mesa Virtual (porta dos jogadores, assentos, link geral, cenas, imagens de NPC nos tokens, combate ao vivo, dados e chat, túnel), atualização automática e integração da API (SQLite + seed real)
 cd frontend && npm test       # filtros, URL, editor de NPCs, Compêndio de NPCs, tabela de alcance, perícias, Lifepath, anatomia do cyberware, Night Market e Mesa Virtual (grade, áreas, tokens, origem do token, entrada)
 ```
 
@@ -485,8 +485,9 @@ Cada assento recebe a própria visão:
 
 - **Cena:** `SceneViews.ForSeat` tira os tokens ocultos e marca `Controllable`. O jogador move os tokens do seu personagem ou de que é dono, desde que não estejam travados, e mexe só nas áreas que ele mesmo pôs.
 - **Combate:** `IEncounterObserver` é chamado no fim de toda mutação do `EncounterService`. `EncounterBroadcast` manda o detalhe completo ao mestre. Se o combate é o da cena ao vivo, manda também a visão de cada assento, montada por `PlayerEncounters.For`:
-  - do próprio personagem, todos os números;
-  - dos outros combatentes, só o Wound State;
+  - do próprio personagem, todos os números, armas e Death Save;
+  - dos outros PCs, HP e SP (o grupo vê o grupo);
+  - dos NPCs, só o Wound State;
   - combatentes com token oculto saem da fila;
   - o log fica só com o mestre.
 - **Chat:** `ChatService` decide quem lê cada linha. Pública vai a todos; privada, ao autor e ao mestre; secreta, só ao mestre (o autor vê que rolou, mas não o resultado); sussurro, ao autor, ao alvo e ao mestre.

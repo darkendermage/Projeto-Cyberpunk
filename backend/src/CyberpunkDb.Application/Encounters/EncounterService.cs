@@ -462,6 +462,24 @@ public sealed class EncounterService(
             return Log(Replace(s, npcCombat.Heal(c, r.Amount)), c.Id, "heal", $"{c.Name} recuperou {r.Amount} HP.");
         }, ct);
 
+    /// <summary>A fighter's armor up or down on one location: a PC's on their sheet, an NPC's on the fight, never past full SP.</summary>
+    public Task<EncounterDetailDto> AdjustArmorAsync(int id, string combatantId, CombatantArmorRequest r, CancellationToken ct) =>
+        MutateAsync(id, r.Version, async (s, _, notices) =>
+        {
+            var c = Require(s, combatantId);
+            var where = r.Location == Npcs.ArmorSlot.Head ? L.T("cabeça", "head") : L.T("corpo", "body");
+            if (c.Kind == CombatantKind.Pc)
+            {
+                notices.AddRange((await characters.AdjustArmorAsync(c.CharacterId!.Value, r.Location, r.Delta, L.T("Mesa de combate", "Combat table"), ct)).Notices);
+                return Log(s, c.Id, "armor", $"SP de {where} de {c.Name}: {(r.Delta > 0 ? "+" : "")}{r.Delta}.");
+            }
+            var snapshot = c.Snapshot ?? throw RequestValidationException.For("combatantId", L.T("Combatente sem ficha.", "Fighter without a sheet."));
+            var next = r.Location == Npcs.ArmorSlot.Head
+                ? c with { SpHead = Math.Clamp(c.SpHead + r.Delta, 0, snapshot.MaxSpHead) }
+                : c with { SpBody = Math.Clamp(c.SpBody + r.Delta, 0, snapshot.MaxSpBody) };
+            return Log(Replace(s, next), c.Id, "armor", $"SP de {where} de {c.Name}: {(r.Location == Npcs.ArmorSlot.Head ? next.SpHead : next.SpBody)}.");
+        }, ct);
+
     public Task<EncounterDetailDto> StabilizeAsync(int id, string combatantId, EncounterVersionRequest r, CancellationToken ct) =>
         MutateAsync(id, r.Version, async (s, _, notices) =>
         {
