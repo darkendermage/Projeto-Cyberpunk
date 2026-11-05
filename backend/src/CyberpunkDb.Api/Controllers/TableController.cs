@@ -12,7 +12,7 @@ namespace CyberpunkDb.Api.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/table")]
-public sealed class TableController(SeatService seats, MediaService media, SceneService scenes, TableFightService fights, TablePartyService party, ChatService chat, TablePresence presence, TunnelService tunnel) : ControllerBase
+public sealed class TableController(SeatService seats, MediaService media, SceneService scenes, TableFightService fights, TablePartyService party, TableRulesService rules, ChatService chat, TablePresence presence, TunnelService tunnel) : ControllerBase
 {
     // ------------------------------------------------------------------ internet tunnel
 
@@ -80,6 +80,10 @@ public sealed class TableController(SeatService seats, MediaService media, Scene
 
     [HttpPost("scenes/{id:int}/tokens")]
     public Task<SceneView> AddToken(int id, TokenInput input, CancellationToken ct) => scenes.AddTokenAsync(id, input, ct);
+
+    /// <summary>The book's tables to look up during play.</summary>
+    [HttpGet("rules")]
+    public Task<TableRulesDto> Rules(CancellationToken ct) => rules.GetAsync(ct);
 
     /// <summary>The PCs with a token on the scene, with their HP and armor.</summary>
     [HttpGet("scenes/{id:int}/party")]

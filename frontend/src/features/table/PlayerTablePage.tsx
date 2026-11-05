@@ -18,6 +18,7 @@ import { fromPlayerFighter } from './tokens';
 import { forgetSeat, isRefusedKey, rememberSeat, savedSeat } from './lobby';
 import { LangSwitch } from './LangSwitch';
 import { PanelHandle } from './PanelHandle';
+import { RulesDialog } from './RulesDialog';
 import { SceneStrip } from './SceneStrip';
 import { buildStrip } from './strip';
 import { NO_SELECTION, useBoardKeys, type Selection } from './useBoardKeys';
@@ -50,6 +51,7 @@ export function PlayerTablePage() {
     saveDraft(next);
   };
   const [selection, setSelection] = useState<Selection>(NO_SELECTION);
+  const [tablesOpen, setTablesOpen] = useState(false);
 
   const navigate = useNavigate();
   const [panels, setPanels] = usePanels('ncdb.table.player-panels', PLAYER_PANELS);
@@ -145,8 +147,10 @@ export function PlayerTablePage() {
   };
   useBoardKeys({ onDelete: removeSelection, onSelectAll: selectAll, onClear: () => setSelection(NO_SELECTION) });
 
-  const roll = (formula: string, kind: RollKind, label: string | null, visibility: TableVisibility) =>
-    run(async () => { await api.roll({ formula, kind, label, visibility }); setTab('chat'); });
+  // A roll with LUCK spends it on the sheet: the panel's LUCK left follows.
+  const refreshLuck = () => void client.invalidateQueries({ queryKey: tableKeys.playerCharacter(token) });
+  const roll = (formula: string, kind: RollKind, label: string | null, visibility: TableVisibility, luck = 0) =>
+    run(async () => { await api.roll({ formula, kind, label, visibility, luck }); if (luck) refreshLuck(); setTab('chat'); });
 
   if (state.isLoading) return <div className={styles.gate}><Spinner /></div>;
   if (state.error) {
@@ -187,7 +191,7 @@ export function PlayerTablePage() {
       </header>
       <div className={styles.playerBody} style={{ '--cols': playerColumns(panels) } as CSSProperties}>
         <section className={`${styles.stage} ${styles.colMain}`}>
-          <BoardToolbar tool={tool} onTool={setTool} draft={draft} onDraft={setDraft} board={board} onSelectAll={scene ? selectAll : undefined}>
+          <BoardToolbar tool={tool} onTool={setTool} draft={draft} onDraft={setDraft} board={board} onSelectAll={scene ? selectAll : undefined} onTables={() => setTablesOpen(true)}>
             {scene && !hasOwnToken && (
               <Button variant={tool === 'token' ? 'primary' : 'ghost'} onClick={() => setTool(tool === 'token' ? 'select' : 'token')}>
                 {tool === 'token' ? t('Cancelar', 'Cancel') : t('Pôr meu token', 'Place my token')}
@@ -228,10 +232,13 @@ export function PlayerTablePage() {
           {tab === 'chat' && (
             <ChatPanel gm={false} messages={messages.data ?? []}
               onSend={(text, visibility) => api.send({ text, visibility })}
-              onRoll={(formula, kind, visibility) => api.roll({ formula, kind, visibility })} />
+              onRoll={async (formula, kind, visibility, _target, luck) => { await api.roll({ formula, kind, visibility, luck }); if (luck) refreshLuck(); }}
+              luckAvailable={character.data ? character.data.luckAvailable : undefined} mySeatId={seat?.id}
+              onReroll={async (id) => { await api.reroll(id); refreshLuck(); }} />
           )}
         </aside>
       </div>
+      <RulesDialog open={tablesOpen} onClose={() => setTablesOpen(false)} load={api.rules} />
     </div>
   );
 }

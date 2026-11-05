@@ -5,10 +5,11 @@ import { Badge, Button, IconButton, Segmented } from '../../components/ui/ui';
 import { skillName, t } from '../../i18n';
 import { WOUND_LABEL, WOUND_TONE } from '../combat/combat';
 import { ArmorControl } from './ArmorControl';
+import { NumField } from './NumField';
 import { damageFormula } from './tokens';
 import styles from './Table.module.css';
 
-type Roll = (formula: string, kind: RollKind, label: string, visibility: TableVisibility) => void;
+type Roll = (formula: string, kind: RollKind, label: string, visibility: TableVisibility, luck: number) => void;
 
 const signed = (n: number) => (n >= 0 ? `+${n}` : `${n}`);
 
@@ -27,6 +28,11 @@ export function CharacterPanel({ character, encounter, token, onRoll, onTurn, on
   busy?: boolean;
 }) {
   const [visibility, setVisibility] = useState<TableVisibility>('Public');
+  const [luck, setLuck] = useState(0);
+  const luckLeft = character?.luckAvailable ?? 0;
+  const spend = Math.min(luck, luckLeft);
+  // LUCK goes on Checks only (CP:R p.130) and is spent by the roll; Damage and Death Saves take none.
+  const check = (formula: string, label: string) => { onRoll(formula, 'Check', label, visibility, spend); setLuck(0); };
   const [filter, setFilter] = useState('');
   const fighter = encounter?.queue.find((f) => f.own);
   if (!character && !fighter) return <span className={styles.muted}>{t('O mestre não ligou um personagem a este convite.', 'The GM didn\'t link a character to this invite.')}</span>;
@@ -65,12 +71,19 @@ export function CharacterPanel({ character, encounter, token, onRoll, onTurn, on
         </div>
       )}
 
+      {character && (
+        <div className={styles.row}>
+          <span className={styles.label}>{t('Sorte no próximo teste', 'LUCK on the next Check')}</span>
+          <NumField label={t('Pontos de Sorte a gastar', 'LUCK points to spend')} min={0} max={luckLeft} value={spend} onChange={(n) => setLuck(Math.round(n))} />
+          <span className={styles.muted}>{t('+1 por ponto (CP:R p.130)', '+1 a point (CP:R p.130)')}</span>
+        </div>
+      )}
       <Segmented size="sm" ariaLabel={t('Quem vê as rolagens', 'Who sees the rolls')} value={visibility} onChange={setVisibility}
         options={[{ value: 'Public', label: t('Pública', 'Public') }, { value: 'Private', label: t('Privada', 'Private') }, { value: 'Secret', label: t('Secreta', 'Secret') }]} />
 
       {fighter?.mustDeathSave && (
         <Button variant="danger" icon={<HeartPulse size={15} />}
-          onClick={() => onRoll('1d10', 'Plain', t(`Death Save (precisa de menos que ${fighter.deathSaveTarget})`, `Death Save (needs under ${fighter.deathSaveTarget})`), visibility)}>
+          onClick={() => onRoll('1d10', 'Plain', t(`Death Save (precisa de menos que ${fighter.deathSaveTarget})`, `Death Save (needs under ${fighter.deathSaveTarget})`), visibility, 0)}>
           {t('Rolar Death Save', 'Roll Death Save')}
         </Button>
       )}
@@ -95,16 +108,16 @@ export function CharacterPanel({ character, encounter, token, onRoll, onTurn, on
                   {w.magazine != null && <span className={styles.stat}>{w.rounds ?? 0}/{w.magazine}</span>}
                 </div>
                 <div className={styles.row}>
-                  <Button icon={<Crosshair size={14} />} onClick={() => onRoll(`1d10${signed(w.attackTotal)}`, 'Check', t(`Ataque: ${w.name}`, `Attack: ${w.name}`), visibility)}>
+                  <Button icon={<Crosshair size={14} />} onClick={() => check(`1d10${signed(w.attackTotal)}`, t(`Ataque: ${w.name}`, `Attack: ${w.name}`))}>
                     {t('Ataque', 'Attack')} {signed(w.attackTotal)}
                   </Button>
                   {w.autofireTotal != null && (
-                    <Button variant="ghost" onClick={() => onRoll(`1d10${signed(w.autofireTotal!)}`, 'Check', t(`Autofire: ${w.name}`, `Autofire: ${w.name}`), visibility)}>
+                    <Button variant="ghost" onClick={() => check(`1d10${signed(w.autofireTotal!)}`, t(`Autofire: ${w.name}`, `Autofire: ${w.name}`))}>
                       Autofire {signed(w.autofireTotal)}
                     </Button>
                   )}
                   {damage && (
-                    <Button variant="ghost" icon={<Dices size={14} />} onClick={() => onRoll(damage, 'Damage', t(`Dano: ${w.name}`, `Damage: ${w.name}`), visibility)}>
+                    <Button variant="ghost" icon={<Dices size={14} />} onClick={() => onRoll(damage, 'Damage', t(`Dano: ${w.name}`, `Damage: ${w.name}`), visibility, 0)}>
                       {t('Dano', 'Damage')} {w.damage}
                     </Button>
                   )}
@@ -126,7 +139,7 @@ export function CharacterPanel({ character, encounter, token, onRoll, onTurn, on
             {skills.map((s) => {
               const name = skillName(s.name, s.namePt) + (s.specialization ? ` (${s.specialization})` : '');
               return (
-                <button key={s.key} type="button" className={styles.skillButton} onClick={() => onRoll(`1d10${signed(s.total)}`, 'Check', name, visibility)}>
+                <button key={s.key} type="button" className={styles.skillButton} onClick={() => check(`1d10${signed(s.total)}`, name)}>
                   <span>{name}</span>
                   <span className={styles.skillTotal}>{signed(s.total)}</span>
                 </button>

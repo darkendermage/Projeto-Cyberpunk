@@ -18,6 +18,7 @@ import { ChatPanel } from './chat/ChatPanel';
 import { CombatTab, InvitesTab, SceneTab, ScenesColumn, TemplateInspector, TokenInspector, type Act } from './GmPanels';
 import { damageCommand, fromGmFighter } from './tokens';
 import { PanelHandle } from './PanelHandle';
+import { RulesDialog } from './RulesDialog';
 import { SceneStrip } from './SceneStrip';
 import { buildStrip } from './strip';
 import { GM_PANELS, gmColumns } from './panels';
@@ -64,6 +65,7 @@ export function GmTablePage() {
   // The grid being calibrated, shown on the board before it is saved; it belongs to one scene version.
   const [gridDraft, setGridDraft] = useState<{ key: string; grid: SceneGrid } | null>(null);
   const [selection, setSelection] = useState<Selection>(NO_SELECTION);
+  const [tablesOpen, setTablesOpen] = useState(false);
   const selectedToken = selection.tokens.length === 1 && selection.templates.length === 0 ? selection.tokens[0] : null;
   const selectedTemplate = selection.templates.length === 1 && selection.tokens.length === 0 ? selection.templates[0] : null;
   const selectToken = (id: string | null) => setSelection(id ? { tokens: [id], templates: [] } : NO_SELECTION);
@@ -181,7 +183,7 @@ export function GmTablePage() {
         onResize={(left) => setPanels({ left })} onToggle={() => setPanels({ leftOpen: !panels.leftOpen })} />
 
       <section className={`${styles.stage} ${styles.colMain}`}>
-        <BoardToolbar tool={tool} onTool={setTool} draft={draft} onDraft={setDraft} board={board} onSelectAll={view ? selectAll : undefined}>
+        <BoardToolbar tool={tool} onTool={setTool} draft={draft} onDraft={setDraft} board={board} onSelectAll={view ? selectAll : undefined} onTables={() => setTablesOpen(true)}>
           {selectedCount > 0 && (
             <IconButton label={t(`Apagar seleção (${selectedCount}) — Delete`, `Delete selection (${selectedCount}) — Delete`)} onClick={removeSelection}><Trash2 size={17} /></IconButton>
           )}
@@ -243,6 +245,7 @@ export function GmTablePage() {
           }}>{t('Limpar histórico', 'Clear history')}</Button>
         )}
       </aside>
+      <RulesDialog open={tablesOpen} onClose={() => setTablesOpen(false)} load={tableApi.rules} />
     </div>
   );
 }

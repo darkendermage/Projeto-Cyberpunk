@@ -232,6 +232,10 @@ export interface RollResult {
   total: number;
   critical: 'Success' | 'Failure' | null;
   criticalInjury: boolean;
+  /** LUCK points spent on it, already in the total. */
+  luck?: number;
+  /** The roll this one replaces (the 1-LUCK reroll). */
+  rerollOf?: number | null;
 }
 
 export interface TableMessage {
@@ -250,8 +254,23 @@ export interface TableMessage {
 }
 
 export interface SendMessage { text: string; visibility?: TableVisibility; targetSeatId?: number | null }
-export interface RollRequest { formula: string; kind?: RollKind; label?: string | null; visibility?: TableVisibility; targetSeatId?: number | null }
+export interface RollRequest {
+  /** LUCK points a player spends on their own Check (+1 each). */
+  luck?: number; formula: string; kind?: RollKind; label?: string | null; visibility?: TableVisibility; targetSeatId?: number | null }
 
 /** Live previews and pings pushed by the hub. */
 export interface TokenDrag { sceneId: number; tokenId: string; x: number; y: number }
 export interface Ping { sceneId: number; x: number; y: number; color: string; label: string }
+
+/** The book's tables to look up at the table. */
+export interface RuleNote { title: string; text: string; source: string }
+export interface CoverMaterialRule { id: string; label: string; thick: number; thin: number }
+export interface CoverExampleRule { label: string; material: string; thick: boolean; hp: number }
+export interface TableRules {
+  criticalInjuries: import('./characterTypes').CriticalInjuryRule[];
+  coverMaterials: CoverMaterialRule[];
+  coverMaterialsSource: string;
+  coverExamples: CoverExampleRule[];
+  coverExamplesSource: string;
+  notes: RuleNote[];
+}

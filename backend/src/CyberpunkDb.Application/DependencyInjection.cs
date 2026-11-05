@@ -85,6 +85,7 @@ public static class DependencyInjection
         services.AddScoped<SceneService>();
         services.AddScoped<TableFightService>();
         services.AddScoped<TablePartyService>();
+        services.AddScoped<TableRulesService>();
         services.AddScoped<ChatService>();
         services.AddSingleton<SceneLocks>();
         services.AddSingleton<TableLobby>();

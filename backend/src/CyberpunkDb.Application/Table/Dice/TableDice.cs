@@ -67,8 +67,13 @@ public sealed partial record DiceFormula(IReadOnlyList<DiceTerm> Terms)
 /// <summary>A rolled term: the dice that came up (and the critical's extra d10), and what the term adds to the total.</summary>
 public sealed record RolledTerm(string Expression, int Sign, IReadOnlyList<int> Dice, int? Extra, int Value);
 
+/// <summary>
+/// A server roll. <see cref="Luck"/>: LUCK points spent on it, already in <see cref="Total"/> (+1 each, CP:R p.130);
+/// <see cref="RerollOf"/>: the roll this one replaces (the table's 1-LUCK reroll, a house rule).
+/// </summary>
 public sealed record RollResult(
-    string Formula, RollKind Kind, IReadOnlyList<RolledTerm> Terms, int Total, CriticalResult? Critical, bool CriticalInjury);
+    string Formula, RollKind Kind, IReadOnlyList<RolledTerm> Terms, int Total, CriticalResult? Critical, bool CriticalInjury,
+    int Luck = 0, long? RerollOf = null);
 
 /// <summary>The server rolls every die of the virtual table, so nobody's dice can be doctored.</summary>
 public static class TableRoller

@@ -3,6 +3,7 @@ import { Dices, EyeOff, Lock, MessageSquareLock, Send } from 'lucide-react';
 import type { RollKind, RollResult, TableMessage, TableVisibility } from '../../../api/tableTypes';
 import { Badge, Button, Select } from '../../../components/ui/ui';
 import { t } from '../../../i18n';
+import { NumField } from '../NumField';
 import styles from '../Table.module.css';
 
 export interface ChatTarget { id: number; label: string }
@@ -26,15 +27,19 @@ const QUICK = ['1d10', '1d6', '2d6', '3d6', '4d6', '5d6', '1d100'];
  * The table chat with its dice. The GM may whisper to a seat and apply a damage roll to a combatant; players choose
  * between public, private (with the GM) and secret rolls.
  */
-export function ChatPanel({ messages, gm, targets, onSend, onRoll, renderActions }: {
+export function ChatPanel({ messages, gm, targets, onSend, onRoll, renderActions, luckAvailable, mySeatId, onReroll }: {
   messages: TableMessage[];
   gm: boolean;
   /** Seats the GM can whisper to. */
   targets?: ChatTarget[];
   onSend: (text: string, visibility: TableVisibility, target: number | null) => Promise<unknown>;
-  onRoll: (formula: string, kind: RollKind, visibility: TableVisibility, target: number | null) => Promise<unknown>;
+  onRoll: (formula: string, kind: RollKind, visibility: TableVisibility, target: number | null, luck: number) => Promise<unknown>;
   /** Extra controls under a roll card (the GM's "apply damage"). */
   renderActions?: (message: TableMessage) => ReactNode;
+  /** A player with a character: LUCK left this session (spent on Checks, +1 a point; 1 rerolls a Check). */
+  luckAvailable?: number;
+  mySeatId?: number;
+  onReroll?: (messageId: number) => Promise<unknown>;
 }) {
   const [text, setText] = useState('');
   const [formula, setFormula] = useState('1d10');
@@ -42,7 +47,13 @@ export function ChatPanel({ messages, gm, targets, onSend, onRoll, renderActions
   const [visibility, setVisibility] = useState<TableVisibility>('Public');
   const [target, setTarget] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [luck, setLuck] = useState(0);
   const list = useRef<HTMLDivElement>(null);
+  const luckOn = luckAvailable != null;
+  const spend = Math.min(luck, luckAvailable ?? 0);
+  // LUCK goes on Checks only, and is spent once.
+  const roll = (f: string, k: RollKind) => run(async () => { await onRoll(f, k, visibility, whisperTarget, k === 'Check' ? spend : 0); if (k === 'Check') setLuck(0); });
+  const replaced = new Set(messages.map((m) => m.roll?.rerollOf).filter((x): x is number => x != null));
 
   useEffect(() => {
     const el = list.current;
@@ -62,7 +73,16 @@ export function ChatPanel({ messages, gm, targets, onSend, onRoll, renderActions
     <div className={styles.chat}>
       <div ref={list} className={styles.messages} aria-live="polite">
         {messages.length === 0 && <span className={styles.muted}>{t('Nada por aqui ainda. Role um dado!', 'Nothing here yet. Roll some dice!')}</span>}
-        {messages.map((m) => <MessageCard key={m.id} message={m} targets={targets} actions={renderActions?.(m)} />)}
+        {messages.map((m) => {
+          const canReroll = !!onReroll && m.authorSeatId === mySeatId && m.roll?.kind === 'Check' && !m.concealed && !replaced.has(m.id) && (luckAvailable ?? 0) >= 1;
+          return (
+            <MessageCard key={m.id} message={m} targets={targets} replaced={replaced.has(m.id)}
+              actions={<>
+                {renderActions?.(m)}
+                {canReroll && <Button variant="ghost" onClick={() => run(() => onReroll!(m.id))}>{t('Rerrolar (1 Sorte)', 'Reroll (1 LUCK)')}</Button>}
+              </>} />
+          );
+        })}
       </div>
 
       <div className={styles.composer}>
@@ -81,10 +101,17 @@ export function ChatPanel({ messages, gm, targets, onSend, onRoll, renderActions
         <div className={styles.quickDice}>
           {QUICK.map((q) => (
             <Button key={q} variant="ghost" disabled={blocked}
-              onClick={() => run(() => onRoll(q, q === '1d10' ? 'Check' : q.endsWith('d6') ? 'Damage' : 'Plain', visibility, whisperTarget))}>{q}</Button>
+              onClick={() => roll(q, q === '1d10' ? 'Check' : q.endsWith('d6') ? 'Damage' : 'Plain')}>{q}</Button>
           ))}
         </div>
-        <form className={styles.row} onSubmit={(e) => { e.preventDefault(); if (formula.trim()) run(() => onRoll(formula.trim(), kind, visibility, whisperTarget)); }}>
+        {luckOn && (
+          <div className={styles.row}>
+            <span className={styles.label}>{t('Sorte no próximo teste', 'LUCK on the next Check')}</span>
+            <NumField label={t('Pontos de Sorte a gastar', 'LUCK points to spend')} min={0} max={luckAvailable ?? 0} value={spend} onChange={(n) => setLuck(Math.round(n))} />
+            <span className={styles.muted}>{t(`+1 por ponto · restam ${luckAvailable}`, `+1 a point · ${luckAvailable} left`)}</span>
+          </div>
+        )}
+        <form className={styles.row} onSubmit={(e) => { e.preventDefault(); if (formula.trim()) roll(formula.trim(), kind); }}>
           <input style={{ flex: '1 1 100%' }} aria-label={t('Fórmula', 'Formula')} value={formula} maxLength={80} onChange={(e) => setFormula(e.target.value)} placeholder="1d10+12" />
           <Select className={styles.grow} aria-label={t('Tipo de rolagem', 'Roll type')} value={kind} onChange={(e) => setKind(e.target.value as RollKind)}>
             {(['Check', 'Damage', 'Plain'] as RollKind[]).map((k) => <option key={k} value={k}>{KIND_LABEL[k]}</option>)}
@@ -109,11 +136,11 @@ export function ChatPanel({ messages, gm, targets, onSend, onRoll, renderActions
   );
 }
 
-function MessageCard({ message: m, targets, actions }: { message: TableMessage; targets?: ChatTarget[]; actions?: ReactNode }) {
+function MessageCard({ message: m, targets, actions, replaced }: { message: TableMessage; targets?: ChatTarget[]; actions?: ReactNode; replaced?: boolean }) {
   const time = new Date(m.at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   const target = m.targetSeatId != null ? targets?.find((s) => s.id === m.targetSeatId)?.label : null;
   return (
-    <div className={`${styles.message} ${m.visibility !== 'Public' ? styles.messageHidden : ''}`}>
+    <div className={`${styles.message} ${m.visibility !== 'Public' ? styles.messageHidden : ''} ${replaced ? styles.messageReplaced : ''}`}>
       <div className={styles.rowBetween}>
         <span className={styles.author} style={{ color: m.authorColor ?? 'var(--amber)' }}>{m.authorName}</span>
         <span className={styles.row}>
@@ -153,6 +180,8 @@ function RollView({ label, roll }: { label: string; roll: RollResult | null }) {
       <div className={styles.row}>
         {roll.critical === 'Success' && <Badge tone="cyan">{t('Sucesso crítico! (+1d10)', 'Critical success! (+1d10)')}</Badge>}
         {roll.critical === 'Failure' && <Badge tone="red">{t('Falha crítica! (−1d10)', 'Critical failure! (−1d10)')}</Badge>}
+        {!!roll.luck && <Badge tone="cyan">{t(`Sorte +${roll.luck}`, `LUCK +${roll.luck}`)}</Badge>}
+        {roll.rerollOf != null && <Badge>{t('Rerrolada (1 Sorte)', 'Rerolled (1 LUCK)')}</Badge>}
         {roll.criticalInjury && <Badge tone="amber">{t('Ferimento Crítico! (dois 6: +5 de dano direto, CP:R p.187)', 'Critical Injury! (two 6s: +5 damage straight to HP, CP:R p.187)')}</Badge>}
       </div>
     </div>

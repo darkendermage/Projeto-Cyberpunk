@@ -2,13 +2,13 @@ import { useMemo, useState } from 'react';
 import { Link } from 'react-router';
 import { Search } from 'lucide-react';
 import { useCategories } from '../../api/hooks';
-import { Badge, Spinner } from '../../components/ui/ui';
+import { Spinner } from '../../components/ui/ui';
 import { CategoryIcon } from '../../components/art/CategoryIcon';
 import { useCharacterRules } from '../../api/characters';
-import type { CriticalInjuryRule } from '../../api/characterTypes';
 import { CRITICAL_RULES } from './criticalInjuries';
 import { useRangeUnit } from '../../lib/hooks';
 import { AutofireTable, RangeUnitToggle, SingleShotTable } from './RangeTables';
+import { CriticalTable } from './CriticalTable';
 import page from '../../styles/Page.module.css';
 import styles from './ReferencePages.module.css';
 import { t, tv } from '../../i18n';
@@ -79,33 +79,6 @@ const CLASS_TABLE = [
   [t('Lança-Foguetes', 'Rocket Launcher'), t('Foguete', 'Rocket'), '800 m', '400'],
   [t('Corpo a corpo', 'Melee'), '—', t('Contato', 'Contact'), t('Adjacente', 'Adjacent')],
 ];
-
-function CriticalTable({ title, rows }: { title: string; rows: CriticalInjuryRule[] }) {
-  return (
-    <div>
-      <h3 className={styles.subTitle}>{title}</h3>
-      <div className={page.tableWrap}>
-        <table className={page.table}>
-          <thead><tr><th>2d6</th><th>{t('Lesão', 'Injury')}</th><th>{t('Efeito', 'Effect')}</th><th>Quick Fix</th><th>{t('Tratamento', 'Treatment')}</th></tr></thead>
-          <tbody>
-            {rows.map((r) => (
-              <tr key={r.roll}>
-                <td className={styles.dv}>{r.roll}</td>
-                <td className={styles.injuryName}>{tv(r.name)}</td>
-                <td>
-                  {tv(r.effect)}
-                  {r.deathSave && <> <Badge tone="red" title={t('A penalidade base de Death Save aumenta em 1', 'The base Death Save penalty goes up by 1')}>Death Save +1</Badge></>}
-                </td>
-                <td>{r.quickFix ?? '—'}</td>
-                <td>{r.treatment}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  );
-}
 
 export function TablesPage() {
   const categories = useCategories();

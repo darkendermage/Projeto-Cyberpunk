@@ -15,7 +15,7 @@ namespace CyberpunkDb.Api.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/table/play")]
-public sealed class TablePlayController(SeatService seats, SceneService scenes, EncounterService encounters, CharacterService characters, NpcPortraitService npcImages, ChatService chat, TablePresence presence, TablePartyService party) : ControllerBase
+public sealed class TablePlayController(SeatService seats, SceneService scenes, EncounterService encounters, CharacterService characters, NpcPortraitService npcImages, ChatService chat, TablePresence presence, TablePartyService party, TableRulesService rules) : ControllerBase
 {
     public const string SeatHeader = "X-Seat";
 
@@ -113,6 +113,18 @@ public sealed class TablePlayController(SeatService seats, SceneService scenes, 
         };
         Response.Headers.CacheControl = "private, no-cache";
         return File(data, type, lastModified: updated, entityTag: new Microsoft.Net.Http.Headers.EntityTagHeaderValue($"\"{updated.Ticks}\""));
+    }
+
+    /// <summary>Rolls one of the player's own Checks again for 1 LUCK (the table's reroll).</summary>
+    [HttpPost("rolls/{messageId:long}/reroll")]
+    public async Task<TableMessageDto> Reroll(long messageId, CancellationToken ct) => await chat.RerollAsync(await SeatAsync(ct), messageId, ct);
+
+    /// <summary>The book's tables to look up during play.</summary>
+    [HttpGet("rules")]
+    public async Task<TableRulesDto> Rules(CancellationToken ct)
+    {
+        await SeatAsync(ct);
+        return await rules.GetAsync(ct);
     }
 
     /// <summary>The PCs on the live scene the seat can see, with their HP and armor.</summary>

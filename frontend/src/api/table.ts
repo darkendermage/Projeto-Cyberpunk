@@ -2,7 +2,7 @@ import { API_BASE, ApiError, request } from './client';
 import { locale, t } from '../i18n';
 import type {
   ArmorLocation, ClaimResult, Lobby, MediaInfo, PartyMember, PlayerCharacter, PlayerEncounter, PlayerSeat, PlayerState, RollRequest, SceneBatch, SceneGrid, SceneSummary, SceneView, Seat,
-  SendMessage, TableMessage, TemplateInput, TokenInput, TokenMove, TunnelStatus,
+  SendMessage, TableMessage, TableRules, TemplateInput, TokenInput, TokenMove, TunnelStatus,
 } from './tableTypes';
 
 const json = (body: unknown) => JSON.stringify(body);
@@ -21,6 +21,7 @@ export const tableApi = {
   addToken: (id: number, token: TokenInput) => request<SceneView>(`/table/scenes/${id}/tokens`, { method: 'POST', body: json(token) }),
   batch: (id: number, body: SceneBatch) => request<SceneView>(`/table/scenes/${id}/batch`, { method: 'POST', body: json(body) }),
   party: (id: number) => request<PartyMember[]>(`/table/scenes/${id}/party`),
+  rules: () => request<TableRules>('/table/rules'),
   addEncounterTokens: (id: number) => request<SceneView>(`/table/scenes/${id}/encounter-tokens`, { method: 'POST' }),
   /** A new fight from the chosen tokens, linked to the scene. */
   startFight: (id: number, body: { name: string | null; tokens: { tokenId: string; side: 'Ally' | 'Enemy' }[] }) =>
@@ -99,6 +100,8 @@ export function playerApi(seat: string) {
     /** The player's own token on the live scene (one per seat). */
     batch: (body: SceneBatch) => request<SceneView>('/table/play/batch', { method: 'POST', body: json(body), headers }),
     party: () => request<PartyMember[]>('/table/play/party', { headers }),
+    rules: () => request<TableRules>('/table/play/rules', { headers }),
+    reroll: (messageId: number) => request<TableMessage>(`/table/play/rolls/${messageId}/reroll`, { method: 'POST', headers }),
     armor: (location: ArmorLocation, delta: number) => request<PlayerCharacter>('/table/play/armor', { method: 'POST', body: json({ location, delta }), headers }),
     placeToken: (x: number, y: number) => request<SceneView>('/table/play/my-token', { method: 'POST', body: json({ x, y }), headers }),
     addTemplate: (tpl: TemplateInput) => request<SceneView>('/table/play/templates', { method: 'POST', body: json(tpl), headers }),
@@ -118,6 +121,7 @@ export const tableKeys = {
   online: ['table', 'online'] as const,
   messages: ['table', 'messages'] as const,
   tunnel: ['table', 'tunnel'] as const,
+  rules: ['table', 'rules'] as const,
   lobby: ['table', 'lobby'] as const,
   lobbyStatus: ['table', 'lobby-status'] as const,
   player: (seat: string) => ['table', 'player', seat] as const,

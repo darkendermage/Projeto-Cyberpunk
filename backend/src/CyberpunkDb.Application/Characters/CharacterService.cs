@@ -440,6 +440,15 @@ public sealed class CharacterService(
     public Task<CharacterDetailDto> LuckAsync(int id, LuckRequest r, CancellationToken ct) =>
         MutateAsync(id, r.Version, c => InventoryOperations.SetLuckSpent(c.Sheet, r.Spent, c), ct);
 
+    /// <summary>Takes <paramref name="points"/> from this session's LUCK Pool (CP:R p.130); refuses what the pool doesn't hold.</summary>
+    public async Task<CharacterDetailDto> SpendLuckAsync(int id, int points, CancellationToken ct)
+    {
+        var detail = await GetAsync(id, ct);
+        if (points > detail.Report.LuckAvailable)
+            throw RequestValidationException.For("luck", L.T($"Sorte insuficiente: restam {detail.Report.LuckAvailable} pontos nesta sessão.", $"Not enough LUCK: {detail.Report.LuckAvailable} points left this session."));
+        return await LuckAsync(id, new LuckRequest(detail.Version, detail.Sheet.Combat.LuckSpent + points), ct);
+    }
+
     public Task<CharacterDetailDto> DamageAsync(int id, DamageRequest r, CancellationToken ct) =>
         MutateAsync(id, r.Version, c => combat.Damage(RequireFinalized(c.Sheet), r, c), ct);
 

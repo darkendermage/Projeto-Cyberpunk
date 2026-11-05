@@ -95,7 +95,7 @@ Para produção, rode `npm run build` e copie `frontend/dist` para `backend/src/
 ### Testes
 
 ```bash
-cd backend && dotnet test     # 562 testes: filtros, validação, gerador de NPCs e gangues, Compêndio de NPCs (dados e API), regras de personagem, Night Market, Arquiteturas de NET, Friday Night Firefight (mesa de combate), Mesa Virtual (porta dos jogadores, assentos, link geral, cenas, imagens de NPC nos tokens, combate ao vivo, dados e chat, túnel), atualização automática e integração da API (SQLite + seed real)
+cd backend && dotnet test     # 566 testes: filtros, validação, gerador de NPCs e gangues, Compêndio de NPCs (dados e API), regras de personagem, Night Market, Arquiteturas de NET, Friday Night Firefight (mesa de combate), Mesa Virtual (porta dos jogadores, assentos, link geral, cenas, imagens de NPC nos tokens, combate ao vivo, dados e chat, túnel), atualização automática e integração da API (SQLite + seed real)
 cd frontend && npm test       # filtros, URL, editor de NPCs, Compêndio de NPCs, tabela de alcance, perícias, Lifepath, anatomia do cyberware, Night Market e Mesa Virtual (grade, áreas, tokens, origem do token, entrada)
 ```
 
@@ -524,6 +524,8 @@ Editar a cena usa `Version`; uma versão velha recebe 409. Tokens e áreas são 
 - `Plain`: soma simples.
 - `Check`: um único d10. O 10 natural soma mais 1d10; o 1 natural subtrai 1d10; o dado extra não encadeia (CP:R p.130).
 - `Damage`: dois 6 nos d6 avisam de Ferimento Crítico (CP:R p.187).
+
+Sorte: `RollRequest.Luck` gasta pontos do LUCK Pool do personagem do assento só em `Check` (+1 cada, CP:R p.130), pelo `CharacterService.SpendLuckAsync`. O reroll (`POST /api/table/play/rolls/{id}/reroll`, regra da casa) custa 1 LUCK, rola o d10 de novo mantendo a Sorte já gasta e marca `RerollOf`; cada linha só é rerrolada uma vez. As tabelas da mesa vêm de `GET /api/table/rules` e `/api/table/play/rules` (`TableRulesService`).
 
 ### Frontend
 

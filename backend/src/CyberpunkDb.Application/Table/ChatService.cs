@@ -1,5 +1,6 @@
 using System.Text.Json;
 using CyberpunkDb.Application.Abstractions;
+using CyberpunkDb.Application.Characters;
 using CyberpunkDb.Application.Characters.Operations;
 using CyberpunkDb.Application.Common;
 using CyberpunkDb.Application.Localization;
@@ -12,7 +13,8 @@ namespace CyberpunkDb.Application.Table;
 
 public sealed record SendMessageRequest(string Text, TableVisibility Visibility = TableVisibility.Public, int? TargetSeatId = null);
 
-public sealed record RollRequest(string Formula, RollKind Kind = RollKind.Plain, string? Label = null, TableVisibility Visibility = TableVisibility.Public, int? TargetSeatId = null);
+/// <summary>A roll; <see cref="Luck"/>: LUCK points a player spends on their own Check before rolling (+1 each, CP:R p.130).</summary>
+public sealed record RollRequest(string Formula, RollKind Kind = RollKind.Plain, string? Label = null, TableVisibility Visibility = TableVisibility.Public, int? TargetSeatId = null, int Luck = 0);
 
 /// <summary>
 /// A chat line as one reader sees it. <see cref="Concealed"/>: the author of a secret roll sees that they rolled, not
@@ -27,7 +29,7 @@ public sealed record TableMessageDto(
 /// and for the live push: Public reaches everyone, Private the author and the GM, Secret only the GM (its author sees a
 /// concealed line), Whisper the author, its target and the GM.
 /// </summary>
-public sealed class ChatService(IAppDbContext db, ITableNotifier notifier, IDiceRoller dice)
+public sealed class ChatService(IAppDbContext db, ITableNotifier notifier, IDiceRoller dice, CharacterService characters)
 {
     public const int HistorySize = 300;
     public const string GmName = "GM";
@@ -50,9 +52,36 @@ public sealed class ChatService(IAppDbContext db, ITableNotifier notifier, IDice
     public async Task<TableMessageDto> RollAsync(TableSeat? author, RollRequest r, CancellationToken ct)
     {
         var roll = TableRoller.Roll(r.Formula, r.Kind, dice);
+        if (r.Luck != 0)
+        {
+            if (r.Luck < 0 || author?.CharacterId is not { } characterId || r.Kind != RollKind.Check)
+                throw RequestValidationException.For("luck", L.T("Sorte só vale num teste (1d10) do seu próprio personagem.", "LUCK only goes on a Check (1d10) of your own character."));
+            await characters.SpendLuckAsync(characterId, r.Luck, ct);
+            roll = roll with { Total = roll.Total + r.Luck, Luck = r.Luck };
+        }
         var label = r.Label?.Trim();
         var text = string.IsNullOrEmpty(label) ? roll.Formula : label.Length <= 80 ? label : label[..80];
         return await PostAsync(author, TableMessageKind.Roll, text, roll, r.Visibility, r.TargetSeatId, ct);
+    }
+
+    /// <summary>
+    /// The table's reroll (a house rule): 1 LUCK rolls a player's own Check again, keeping its modifiers and the LUCK
+    /// already spent; the new line points at the one it replaces, and a line is rerolled only once.
+    /// </summary>
+    public async Task<TableMessageDto> RerollAsync(TableSeat author, long messageId, CancellationToken ct)
+    {
+        var m = await db.TableMessages.AsNoTracking().FirstOrDefaultAsync(x => x.Id == messageId, ct);
+        var old = m?.RollJson is { } json ? JsonSerializer.Deserialize<RollResult>(json, SceneService.Json) : null;
+        if (m is null || old is null || m.AuthorSeatId != author.Id || old.Kind != RollKind.Check || author.CharacterId is not { } characterId)
+            throw RequestValidationException.For("messageId", L.T("Só dá para rerrolar um teste seu.", "You can only reroll a Check of yours."));
+        var later = await db.TableMessages.AsNoTracking().Where(x => x.Id > messageId && x.RollJson != null).Select(x => x.RollJson!).ToListAsync(ct);
+        if (later.Any(j => JsonSerializer.Deserialize<RollResult>(j, SceneService.Json)?.RerollOf == messageId))
+            throw RequestValidationException.For("messageId", L.T("Essa rolagem já foi rerrolada.", "That roll was already rerolled."));
+        await characters.SpendLuckAsync(characterId, 1, ct);
+        var again = TableRoller.Roll(old.Formula, RollKind.Check, dice);
+        again = again with { Total = again.Total + old.Luck, Luck = old.Luck, RerollOf = messageId };
+        var text = $"{m.Text} {L.T("(rerrolada)", "(rerolled)")}";
+        return await PostAsync(author, TableMessageKind.Roll, text.Length <= 100 ? text : text[..100], again, m.Visibility, m.TargetSeatId, ct);
     }
 
     /// <summary>Starts a new session's history.</summary>

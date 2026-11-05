@@ -383,3 +383,4 @@
 .stripHp > span:first-child { flex: 1; }
 /* The map and its hint, above the strip. */
 .boardArea { position: relative; flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.messageReplaced { opacity: 0.45; }

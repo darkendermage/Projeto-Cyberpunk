@@ -1,5 +1,5 @@
 import type { ReactNode, RefObject } from 'react';
-import { BoxSelect, Maximize2, MousePointer2, Ruler, Shapes, ZoomIn, ZoomOut } from 'lucide-react';
+import { BookOpen, BoxSelect, Maximize2, MousePointer2, Ruler, Shapes, ZoomIn, ZoomOut } from 'lucide-react';
 import type { TemplateShapeName } from '../../../api/tableTypes';
 import { IconButton, Select } from '../../../components/ui/ui';
 import { t } from '../../../i18n';
@@ -12,9 +12,11 @@ import styles from '../Table.module.css';
 const SHAPES: TemplateShapeName[] = ['Circle', 'Square', 'Cone', 'Line'];
 
 
-export function BoardToolbar({ tool, onTool, draft, onDraft, board, onSelectAll, children }: {
+export function BoardToolbar({ tool, onTool, draft, onDraft, board, onSelectAll, onTables, children }: {
   tool: BoardTool;
   onSelectAll?: () => void;
+  /** Opens the book's tables. */
+  onTables?: () => void;
   onTool: (tool: BoardTool) => void;
   draft: TemplateDraft;
   onDraft: (draft: TemplateDraft) => void;
@@ -49,6 +51,7 @@ export function BoardToolbar({ tool, onTool, draft, onDraft, board, onSelectAll,
       )}
       <span className={styles.grow} />
       {children}
+      {onTables && <IconButton label={t('Tabelas (alcance, ferimentos, cobertura)', 'Tables (range, injuries, cover)')} onClick={onTables}><BookOpen size={17} /></IconButton>}
       <IconButton label={t('Afastar', 'Zoom out')} onClick={() => board.current?.zoomBy(0.8)}><ZoomOut size={17} /></IconButton>
       <IconButton label={t('Aproximar', 'Zoom in')} onClick={() => board.current?.zoomBy(1.25)}><ZoomIn size={17} /></IconButton>
       <IconButton label={t('Mostrar o mapa inteiro', 'Show the whole map')} onClick={() => board.current?.fit()}><Maximize2 size={17} /></IconButton>
