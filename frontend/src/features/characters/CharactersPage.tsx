@@ -210,13 +210,19 @@ export function NewCharacterModal({ open, onClose }: { open: boolean; onClose: (
                 </Select>
               </Field>
               <Field label={t('Origem cultural', 'Cultural origin')} htmlFor="nc-region" hint="CP:R p.45">
-                <Select id="nc-region" value={region} onChange={(e) => { setRegion(e.target.value); setLanguage(''); }}>
+                <Select id="nc-region" value={region} onChange={(e) => {
+                  setRegion(e.target.value);
+                  setLanguage('');
+                  // The origin only suggests the languages: the native language is picked next, here.
+                  if (e.target.value) requestAnimationFrame(() => document.getElementById('nc-lang')?.focus());
+                }}>
                   <option value="">{t('Escolha…', 'Choose…')}</option>
                   {r.culturalOrigins.map((o) => <option key={o.region} value={o.region}>{o.region}</option>)}
                 </Select>
               </Field>
-              <Field label={t('Idioma de origem', 'Native language')} htmlFor="nc-lang" hint={t(`Language nível ${r.originLanguageLevel}, sem custo`, `Language level ${r.originLanguageLevel}, free`)}>
-                <Select id="nc-lang" value={language} onChange={(e) => setLanguage(e.target.value)}>
+              <Field label={t('Idioma nativo', 'Native language')} htmlFor="nc-lang"
+                hint={region && !language ? t('Escolha também o idioma: a origem só sugere as línguas', 'Pick the language too: the origin only suggests them') : t(`Language nível ${r.originLanguageLevel}, sem custo`, `Language level ${r.originLanguageLevel}, free`)}>
+                <Select id="nc-lang" value={language} highlighted={!!region && !language} onChange={(e) => setLanguage(e.target.value)}>
                   <option value="">{t('Escolha…', 'Choose…')}</option>
                   {withCurrent(languages, language).map((l) => <option key={l} value={l}>{l}</option>)}
                 </Select>

@@ -1,18 +1,20 @@
 import { useMemo, useState } from 'react';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
-import { Brain, Cpu, Glasses, HeartPulse, Plus, Repeat, Search, ShieldCheck, Trash2, Undo2, Wallet } from 'lucide-react';
+import { Brain, Cpu, Glasses, HeartPulse, Plus, Repeat, Search, ShieldCheck, Trash2, Wallet } from 'lucide-react';
 import { characterApi, problemMessage, useCharacterCommand } from '../../api/characters';
 import type {
   CharacterDetail, CharacterRules, CyberLine, CyberRegionReport, InstallRequestBody, StoreItem,
 } from '../../api/characterTypes';
-import { useItemDetail } from '../../api/hooks';
+import { PAGE_SIZES, useItemDetail } from '../../api/hooks';
 import { Button, Checkbox, Modal, Select, Spinner, Tooltip } from '../../components/ui/ui';
 import { formatEb } from '../../lib/format';
 import { useDebouncedValue } from '../../lib/hooks';
 import { useToast } from '../../state/ToastContext';
 import { AnatomyFigure } from './AnatomyFigure';
 import { CYBER_TYPE_LABEL, fitsRegion, humanityLossLabel, LEFT_REGIONS, RIGHT_REGIONS, type RegionKey, wearableAccepts } from './anatomy';
-import { CyberEffectsPanel, SheetPanel, StateTag } from './CharacterUi';
+import { Pagination } from '../catalog/Pagination';
+import { CyberEffectsPanel, RefundButton, SheetPanel, StateTag } from './CharacterUi';
+import { pageOf, sortRows } from './sorting';
 import type { Run } from './CombatPanels';
 import type { SheetEditor } from './useSheetEditor';
 import base from './Characters.module.css';
@@ -184,11 +186,21 @@ function RegionPanel({ region, lines, active, selection, onRegion, onPiece }: {
 
 // ------------------------------------------------------------ clinic catalog
 
+type ClinicOrder = 'name' | 'priceAsc' | 'priceDesc' | 'type';
+const CLINIC_ORDER: Record<ClinicOrder, { label: string; sort: { key: 'name' | 'price' | 'type'; dir: 'asc' | 'desc' } }> = {
+  name: { label: t('Nome (A–Z)', 'Name (A–Z)'), sort: { key: 'name', dir: 'asc' } },
+  priceAsc: { label: t('Preço crescente', 'Price, low to high'), sort: { key: 'price', dir: 'asc' } },
+  priceDesc: { label: t('Preço decrescente', 'Price, high to low'), sort: { key: 'price', dir: 'desc' } },
+  type: { label: t('Categoria', 'Category'), sort: { key: 'type', dir: 'asc' } },
+};
+
 function Clinic({ detail, region, onClearRegion, selection, onPick }: {
   detail: CharacterDetail; region: RegionKey | null; onClearRegion: () => void; selection: Selection; onPick: (item: StoreItem) => void;
 }) {
   const [query, setQuery] = useState('');
   const [type, setType] = useState('');
+  const [order, setOrder] = useState<ClinicOrder>('name');
+  const [pageSize, setPageSize] = useState(PAGE_SIZES[0]);
   const q = useDebouncedValue(query, 250);
   const catalog = useQuery({
     queryKey: ['cyber-catalog', q],
@@ -203,7 +215,13 @@ function Clinic({ detail, region, onClearRegion, selection, onPick }: {
   const regionItems = useMemo(() => (catalog.data ?? []).filter((i) => fitsRegion(i, region)), [catalog.data, region]);
   const types = useMemo(() => [...new Set(regionItems.map((i) => i.cyberType).filter(Boolean))] as string[], [regionItems]);
   const activeType = types.includes(type) ? type : '';
-  const items = regionItems.filter((i) => !activeType || i.cyberType === activeType);
+  const filtered = sortRows(regionItems.filter((i) => !activeType || i.cyberType === activeType), CLINIC_ORDER[order].sort,
+    (i, k) => k === 'price' ? i.price : k === 'type' ? CYBER_TYPE_LABEL[i.cyberType ?? ''] ?? i.cyberType : tv(i.name));
+  // Pages of the whole list (no inner scrollbar); a new search, filter or order goes back to page 1.
+  const filter = `${q}|${activeType}|${region}|${order}|${pageSize}`;
+  const [paging, setPaging] = useState({ filter, page: 1 });
+  const shown = pageOf(filtered, paging.filter === filter ? paging.page : 1, pageSize);
+  const items = shown.items;
   const regionLabel = region ? detail.report.regions.find((r) => r.key === region)?.label ?? null : null;
 
   return (
@@ -218,7 +236,11 @@ function Clinic({ detail, region, onClearRegion, selection, onPick }: {
           <option value="">{regionLabel ? t(`Todas de ${regionLabel}`, `All for ${regionLabel}`) : t('Todas as categorias', 'All categories')}</option>
           {types.map((entry) => <option key={entry} value={entry}>{CYBER_TYPE_LABEL[entry] ?? entry}</option>)}
         </Select>
+        <Select value={order} onChange={(e) => setOrder(e.target.value as ClinicOrder)} aria-label={t('Ordenar por', 'Sort by')}>
+          {(Object.keys(CLINIC_ORDER) as ClinicOrder[]).map((k) => <option key={k} value={k}>{CLINIC_ORDER[k].label}</option>)}
+        </Select>
       </div>
+      {catalog.data && <p className={base.small}>{filtered.length} {filtered.length === 1 ? 'item' : t('itens', 'items')}{shown.totalPages > 1 ? t(` · página ${shown.page} de ${shown.totalPages}`, ` · page ${shown.page} of ${shown.totalPages}`) : ''}</p>}
       {region && <div className={base.row}><span className={base.small}>{t('Filtrando pela região selecionada.', 'Filtering by the selected region.')}</span><Button variant="ghost" onClick={onClearRegion}>{t('Ver tudo', 'See all')}</Button></div>}
       {catalog.isLoading && <Spinner />}
       <div className={styles.catalogList} role="listbox" aria-label={t('Catálogo de cyberware', 'Cyberware catalog')}>
@@ -244,6 +266,10 @@ function Clinic({ detail, region, onClearRegion, selection, onPick }: {
         })}
         {catalog.data && items.length === 0 && <p className={base.muted}>{t('Nada nesta região com esse filtro.', 'Nothing in this region with this filter.')}</p>}
       </div>
+      {filtered.length > PAGE_SIZES[0] && (
+        <Pagination page={shown.page} totalPages={shown.totalPages} pageSize={pageSize}
+          onPage={(page) => setPaging({ filter, page })} onPageSize={setPageSize} />
+      )}
     </SheetPanel>
   );
 }
@@ -450,6 +476,9 @@ function InstalledDetails({ detail, line, run, busy, creating, onDone, replacing
   const piece = detail.sheet.cyberware.find((c) => c.instanceId === line.instanceId);
   const parent = line.parentInstanceId ? detail.report.cyberware.find((c) => c.instanceId === line.parentInstanceId) : null;
   const children = detail.report.cyberware.filter((c) => c.parentInstanceId === line.instanceId);
+  // Refunding a host also refunds what was bought and installed in it.
+  const refund = [line.instanceId, ...children.map((c) => c.instanceId)]
+    .reduce((sum, id) => sum + (detail.sheet.cyberware.find((c) => c.instanceId === id)?.pricePaid ?? 0), 0);
 
   return (
     <SheetPanel title={t('Detalhes do implante', 'Implant details')}>
@@ -469,10 +498,12 @@ function InstalledDetails({ detail, line, run, busy, creating, onDone, replacing
         </dl>
         <div className={base.column} style={{ gap: 8 }}>
           {line.requirements && <span className={`${base.small} ${base.amber}`}>{t('Requisito: ', 'Requirement: ')}{tv(line.requirements)}</span>}
+          {piece?.origin === 'Purchase' && (creating || piece.paidFrom === 'Balance') && (
+            <RefundButton name={tv(line.name)} amount={refund} confirm={!creating} disabled={busy}
+              onRefund={async () => { if (await run('purchase/undo', { instanceId: line.instanceId }, t('Compra reembolsada.', 'Purchase refunded.'))) onDone(); }} />
+          )}
           {creating ? (
-            piece?.origin === 'Purchase'
-              ? <Button icon={<Undo2 size={15} />} disabled={busy} onClick={async () => { if (await run('purchase/undo', { instanceId: line.instanceId }, t('Compra desfeita.', 'Purchase undone.'))) onDone(); }}>{t('Desfazer compra', 'Undo purchase')}</Button>
-              : <span className={`${base.small} ${base.muted}`}>{t('Peça do pacote inicial: muda depois de concluir a criação.', 'Starting package piece: change it after completing creation.')}</span>
+            piece?.origin !== 'Purchase' && <span className={`${base.small} ${base.muted}`}>{t('Peça do pacote inicial: muda depois de concluir a criação.', 'Starting package piece: change it after completing creation.')}</span>
           ) : (
             <>
               <Button icon={<Repeat size={15} />} active={replacing === line.instanceId}

@@ -414,6 +414,27 @@
   color: var(--red);
   border-bottom: 1px solid var(--red-line);
 }
+.sortButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.sortButton:hover,
+.sortButton:focus-visible {
+  color: var(--text);
+}
+.sortIdle {
+  opacity: 0.45;
+}
 .table td {
   padding: 3px 6px;
   border-bottom: 1px solid var(--line);

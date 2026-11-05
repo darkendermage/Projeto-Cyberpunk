@@ -5,9 +5,10 @@ import type { CharacterDetail, CharacterRules, InventoryLine, WearableLine } fro
 import { Button, IconButton, Modal, NumberInput, Select } from '../../components/ui/ui';
 import { formatEb } from '../../lib/format';
 import { useToast } from '../../state/ToastContext';
-import { formatDate, ITEM_STATE_LABEL, signed } from './characterLabels';
-import { SheetPanel, StateTag } from './CharacterUi';
+import { CATEGORY_LABEL, formatDate, ITEM_STATE_LABEL, signed } from './characterLabels';
+import { RefundButton, SheetPanel, SortButton, SortHeader, StateTag } from './CharacterUi';
 import { Attachments, type Run } from './CombatPanels';
+import { ariaSort, sortRows, type SortState } from './sorting';
 import { StorePicker, type PurchaseInput } from './StorePicker';
 import type { SheetEditor } from './useSheetEditor';
 import styles from './Characters.module.css';
@@ -149,27 +150,48 @@ function InventoryPanels({ detail, run, busy }: { detail: CharacterDetail; run: 
   );
 }
 
+type InventorySort = 'name' | 'category' | 'qty' | 'paid' | 'state';
+
 function InventoryTable({ items, run, busy, finalized, onRemove }: {
   items: InventoryLine[]; run: Run; busy: boolean; finalized: boolean; onRemove: (item: InventoryLine) => void;
 }) {
+  const [sort, setSort] = useState<SortState<InventorySort> | null>(null);
+  const rows = sortRows(items, sort, (i, k) => k === 'name' ? tv(i.name) : k === 'category' ? CATEGORY_LABEL[i.category] ?? i.category
+    : k === 'qty' ? i.rounds ?? i.quantity : k === 'paid' ? i.pricePaid : ITEM_STATE_LABEL[i.state] ?? i.state);
   return (
     <table className={styles.table}>
-      <thead><tr><th>Item</th><th className={styles.num}>{t('Qtd', 'Qty')}</th><th className={styles.num}>{t('Pago', 'Paid')}</th><th>{t('Estado', 'State')}</th><th /></tr></thead>
+      <thead>
+        <tr>
+          <th aria-sort={ariaSort(sort, ['name', 'category'])}>
+            <span className={styles.row} style={{ gap: 8 }}>
+              <SortButton label="Item" column="name" sort={sort} onSort={setSort} />
+              <SortButton label={t('Categoria', 'Category')} column="category" sort={sort} onSort={setSort} />
+            </span>
+          </th>
+          <SortHeader label={t('Qtd', 'Qty')} column="qty" sort={sort} onSort={setSort} className={styles.num} />
+          <SortHeader label={t('Pago', 'Paid')} column="paid" sort={sort} onSort={setSort} className={styles.num} />
+          <SortHeader label={t('Estado', 'State')} column="state" sort={sort} onSort={setSort} />
+          <th />
+        </tr>
+      </thead>
       <tbody>
-        {items.map((i) => {
+        {rows.map((i) => {
+          // Purchases come back in full: any of them during creation, afterwards what was paid from the balance.
+          const refundable = i.origin === 'Purchase' && (!finalized || i.paidFrom === 'Balance');
           const armor = i.sp != null;
           return (
             <tr key={i.instanceId}>
               <td>
                 {tv(i.name)}
                 {i.caliber && <span className={styles.muted}> ({i.caliber})</span>}
+                <div className={styles.source}>{CATEGORY_LABEL[i.category] ?? i.category}</div>
               </td>
               <td className={styles.num}>{i.rounds ?? i.quantity}</td>
               <td className={styles.num}>
                 {RECEIVED_LABEL[i.origin] ? <span className={styles.tag} title={tv(i.notes) ?? undefined}>{RECEIVED_LABEL[i.origin]}</span> : i.pricePaid ? formatEb(i.pricePaid) : '—'}
               </td>
               <td>
-                <Select style={{ minWidth: 118 }} value={i.state === 'Equipped' && i.worn ? `Equipped:${i.worn}` : i.state} disabled={busy} aria-label={t(`Estado de ${tv(i.name)}`, `State of ${tv(i.name)}`)}
+                <Select style={{ minWidth: 100 }} value={i.state === 'Equipped' && i.worn ? `Equipped:${i.worn}` : i.state} disabled={busy} aria-label={t(`Estado de ${tv(i.name)}`, `State of ${tv(i.name)}`)}
                   onChange={(e) => {
                     const [state, worn] = e.target.value.split(':');
                     void run('equip', { instanceId: i.instanceId, state, worn: worn ?? null });
@@ -184,7 +206,12 @@ function InventoryTable({ items, run, busy, finalized, onRemove }: {
                   <option value="Stored">{ITEM_STATE_LABEL.Stored}</option>
                 </Select>
               </td>
-              <td>{finalized && <IconButton label={t(`Vender ou descartar ${tv(i.name)}`, `Sell or discard ${tv(i.name)}`)} onClick={() => onRemove(i)}><Trash2 size={14} /></IconButton>}</td>
+              <td>
+                <span className={styles.row} style={{ flexWrap: 'nowrap', gap: 2 }}>
+                  {refundable && <RefundButton compact name={tv(i.name)} amount={i.pricePaid} confirm={finalized} disabled={busy} onRefund={() => void run('purchase/undo', { instanceId: i.instanceId }, t('Compra reembolsada.', 'Purchase refunded.'))} />}
+                  {finalized && <IconButton label={t(`Vender ou descartar ${tv(i.name)}`, `Sell or discard ${tv(i.name)}`)} onClick={() => onRemove(i)}><Trash2 size={14} /></IconButton>}
+                </span>
+              </td>
             </tr>
           );
         })}

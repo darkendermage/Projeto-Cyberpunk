@@ -21,8 +21,8 @@ public sealed class CharactersController(CharacterService characters) : Controll
 
     [HttpGet("store")]
     public Task<StorePageDto> Store([FromQuery] string? q, [FromQuery] ItemCategory? category, [FromQuery] int page, [FromQuery] int pageSize,
-        CancellationToken ct) =>
-        characters.StoreAsync(q, category, page == 0 ? 1 : page, pageSize == 0 ? 24 : pageSize, ct);
+        [FromQuery] StoreSort sort, [FromQuery] bool desc, CancellationToken ct) =>
+        characters.StoreAsync(q, category, page == 0 ? 1 : page, pageSize == 0 ? 12 : pageSize, ct, sort, desc);
 
     [HttpGet("{id:int}")]
     public Task<CharacterDetailDto> Get(int id, CancellationToken ct) => characters.GetAsync(id, ct);

@@ -52,15 +52,21 @@ public sealed class CharacterService(
     /// One page of priced catalog items matching a name (accents and case ignored), optionally from one category.
     /// Descriptions are read only for the items on the page.
     /// </summary>
-    public async Task<StorePageDto> StoreAsync(string? query, ItemCategory? category, int page, int pageSize, CancellationToken ct)
+    public async Task<StorePageDto> StoreAsync(string? query, ItemCategory? category, int page, int pageSize, CancellationToken ct,
+        StoreSort sort = StoreSort.Category, bool descending = false)
     {
         var catalog = await catalogs.GetAsync(ct);
         var q = TextNormalizer.Normalize(query ?? "");
-        var matches = catalog.Items
+        var filtered = catalog.Items
             .Where(i => i.Price is not null && (category is null || i.Category == category))
-            .Where(i => q.Length == 0 || TextNormalizer.Normalize(i.Name).Contains(q) || i.Slug.Contains(q, StringComparison.OrdinalIgnoreCase))
-            .OrderBy(i => i.Category).ThenBy(i => i.Name)
-            .ToList();
+            .Where(i => q.Length == 0 || TextNormalizer.Normalize(i.Name).Contains(q) || i.Slug.Contains(q, StringComparison.OrdinalIgnoreCase));
+        // The whole catalog is sorted before paging, so every page follows the chosen column.
+        var matches = (sort switch
+        {
+            StoreSort.Name => descending ? filtered.OrderByDescending(i => i.Name, StringComparer.OrdinalIgnoreCase) : filtered.OrderBy(i => i.Name, StringComparer.OrdinalIgnoreCase),
+            StoreSort.Price => (descending ? filtered.OrderByDescending(i => i.Price) : filtered.OrderBy(i => i.Price)).ThenBy(i => i.Name, StringComparer.OrdinalIgnoreCase),
+            _ => (descending ? filtered.OrderByDescending(i => i.Category) : filtered.OrderBy(i => i.Category)).ThenBy(i => i.Name, StringComparer.OrdinalIgnoreCase),
+        }).ToList();
 
         pageSize = Math.Clamp(pageSize, 1, 1000);
         page = Math.Clamp(page, 1, Math.Max(1, (int)Math.Ceiling(matches.Count / (double)pageSize)));

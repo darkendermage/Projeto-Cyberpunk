@@ -95,7 +95,7 @@ Para produção, rode `npm run build` e copie `frontend/dist` para `backend/src/
 ### Testes
 
 ```bash
-cd backend && dotnet test     # 572 testes: filtros, validação, gerador de NPCs e gangues, Compêndio de NPCs (dados e API), regras de personagem, Night Market, Arquiteturas de NET, Friday Night Firefight (mesa de combate), Mesa Virtual (porta dos jogadores, assentos, link geral, cenas, imagens de NPC nos tokens, combate ao vivo, dados e chat, túnel), atualização automática e integração da API (SQLite + seed real)
+cd backend && dotnet test     # 577 testes: filtros, validação, gerador de NPCs e gangues, Compêndio de NPCs (dados e API), regras de personagem, Night Market, Arquiteturas de NET, Friday Night Firefight (mesa de combate), Mesa Virtual (porta dos jogadores, assentos, link geral, cenas, imagens de NPC nos tokens, combate ao vivo, dados e chat, túnel), atualização automática e integração da API (SQLite + seed real)
 cd frontend && npm test       # filtros, URL, editor de NPCs, Compêndio de NPCs, tabela de alcance, perícias, Lifepath, anatomia do cyberware, Night Market e Mesa Virtual (grade, áreas, tokens, origem do token, entrada)
 ```
 
@@ -315,7 +315,9 @@ Cada personagem pode ser exportado para um arquivo `.cyberpunk.json` (botão de 
 ### Criação, loja e efeitos
 
 - A criação tem seis passos: Identidade, **Caminho de Vida** (como no livro, logo depois da Role, CP:R p.43), STATs, Perícias, Equipamento e Resumo. O botão **Rolar o que falta** (também na aba Caminho de Vida) rola só as tabelas em branco: origem cultural, tabelas gerais e de estilo, amigos/amores/inimigos (uma vez só, mesmo que o resultado seja zero) e o fluxograma da Role seguindo as ramificações; perguntas de escolha ficam para o jogador. O Lifepath é opcional e não impede a conclusão.
-- A loja (criação e "Adicionar itens") é paginada no servidor e alcança o catálogo inteiro; clicar no nome mostra a descrição do item.
+- A loja (criação e "Adicionar itens") é paginada no servidor (12 por página por padrão) e alcança o catálogo inteiro; clicar no nome mostra a descrição do item. Os cabeçalhos Item, Categoria e Preço ordenam o catálogo inteiro antes de paginar (`sort=Name|Category|Price&desc=true`). A clínica de cyberware pagina e ordena no cliente (`sorting.ts`), sem rolagem própria; as tabelas de compras e de inventário também ordenam por coluna.
+- **Reembolso** (`purchase/undo`): durante a criação, qualquer compra volta inteira (botão por linha e "Reembolsar tudo"). Depois da criação, só o que foi pago com o saldo e ainda está como comprado: armadura sem ablação, arma descarregada, munição completa. Cyberware devolve o dinheiro e a Humanity Loss aplicada. Compras com o orçamento da criação, já fechado, são vendidas ou descartadas.
+- O formulário de novo personagem e o passo Identidade destacam o **idioma nativo** enquanto ele falta: a origem cultural só sugere as línguas, e a pendência diz que só falta o idioma.
 - Os efeitos de cyberware ficam em `cyberwareEffects` no JSON de regras: bônus de STAT com teto e acúmulo, bônus de perícia (somados à BASE quando valem sempre, só anotados quando dependem da situação, como "+2 em testes que envolvem visão") e efeitos de jogo exibidos no painel "Efeitos do cyberware". Um teste confere que cada efeito cita página e aponta para um item existente no catálogo.
 
 Atalhos: Ctrl+S salva na hora; Alt+1 a Alt+4 trocam de aba (Personagem, Caminho de Vida, Equipamento e Cyberware). Campos de texto salvam sozinhos em fila; ações de regra são comandos no servidor. Toda gravação leva a versão da ficha: se outra janela salvou antes, a API responde 409 em vez de sobrescrever.

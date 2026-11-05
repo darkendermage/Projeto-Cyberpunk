@@ -175,14 +175,19 @@ public sealed class InventoryOperations(CharacterRuleBook rules, CyberwareOperat
         return Replace(sheet, Find(sheet, weaponEntry.InstanceId) with { Weapon = state with { Attachments = state.Attachments.Where(a => a != entry.InstanceId).ToList() } });
     }
 
-    /// <summary>Undoes a purchase made during creation: refunds it and, for cyberware, the Humanity it cost.</summary>
+    /// <summary>
+    /// Undoes a purchase and refunds it in full; for cyberware, the Humanity it cost comes back too. During creation any
+    /// purchase can be undone. Afterwards only what was paid from the balance, and only while the item is as bought:
+    /// armor without ablation, a weapon unloaded, every round of the ammunition. Anything else is sold or discarded.
+    /// </summary>
     public CharacterSheet UndoPurchase(CharacterSheet sheet, string instanceId, CharacterChange change)
     {
-        CharacterCreationService.RequireCreating(sheet);
+        var creating = !sheet.Creation.Finalized;
         var entry = sheet.Inventory.FirstOrDefault(e => e.InstanceId == instanceId);
         if (entry is not null)
         {
             if (entry.Origin != ItemOrigin.Purchase) throw CharacterChange.Refuse("instanceId", L.T("Só compras podem ser desfeitas.", "Only purchases can be undone."));
+            if (!creating) RequireRefundable(entry, change.Item(entry.ItemId));
             sheet = Refund(sheet, entry.PaidFrom, entry.PricePaid ?? 0, change.Item(entry.ItemId).Name, change);
             var inventory = WearableOperations.Unlink(sheet.Inventory, instanceId).Where(e => e.InstanceId != instanceId)
                 .Select(e => e.Weapon is { } w && w.Attachments.Contains(instanceId) ? e with { Weapon = w with { Attachments = w.Attachments.Where(a => a != instanceId).ToList() } } : e)
@@ -196,16 +201,36 @@ public sealed class InventoryOperations(CharacterRuleBook rules, CyberwareOperat
         var removed = Descendants(sheet, piece.InstanceId).Prepend(piece).ToList();
         if (removed.Any(r => r.Origin != ItemOrigin.Purchase))
             throw CharacterChange.Refuse("instanceId", L.T("Há implantes do pacote inicial instalados nessa peça.", "There are starting package implants installed in that piece."));
+        if (!creating && removed.Any(r => r.PaidFrom != BudgetPool.Balance))
+            throw CharacterChange.Refuse("instanceId", CreationBudgetClosed);
         foreach (var r in removed)
             sheet = Refund(sheet, r.PaidFrom, r.PricePaid ?? 0, change.Item(r.ItemId).Name, change);
         var hl = removed.Sum(r => r.HumanityLossApplied);
-        change.Log(CharacterEventKind.Humanity, "undo-cyberware", L.T($"Compra de cyberware desfeita na criação: {hl} de Humanidade devolvidos.", $"Cyberware purchase undone during creation: {hl} Humanity returned."), hl);
+        change.Log(CharacterEventKind.Humanity, "undo-cyberware", creating
+            ? L.T($"Compra de cyberware desfeita na criação: {hl} de Humanidade devolvidos.", $"Cyberware purchase undone during creation: {hl} Humanity returned.")
+            : L.T($"Compra de cyberware reembolsada: {hl} de Humanidade devolvidos.", $"Cyberware purchase refunded: {hl} Humanity returned."), hl);
         var ids = removed.Select(r => r.InstanceId).ToHashSet();
         return sheet with
         {
             Cyberware = sheet.Cyberware.Where(c => !ids.Contains(c.InstanceId)).ToList(),
             Humanity = sheet.Humanity with { Lost = sheet.Humanity.Lost - hl },
         };
+    }
+
+    private static readonly string CreationBudgetClosed = L.T(
+        "Comprado com o orçamento da criação, que já foi fechado: venda ou descarte pelo inventário.",
+        "Bought with the creation budget, which is already closed: sell or discard it from the inventory.");
+
+    private static void RequireRefundable(InventoryEntry entry, CatalogItem item)
+    {
+        if (entry.PaidFrom != BudgetPool.Balance) throw CharacterChange.Refuse("instanceId", CreationBudgetClosed);
+        if (entry.CurrentSp is { } sp && item.Armor?.Sp is { } max && sp < max)
+            throw CharacterChange.Refuse("instanceId", L.T($"{item.Name} está danificada (SP {sp}/{max}): conserte, venda ou descarte.", $"{item.Name} is damaged (SP {sp}/{max}): repair, sell or discard it."));
+        if (entry.Weapon is { LoadedRounds: > 0 })
+            throw CharacterChange.Refuse("instanceId", L.T($"Descarregue {item.Name} antes do reembolso.", $"Unload {item.Name} before the refund."));
+        if (entry.Rounds is { } rounds && item.Ammo is { PerPack: { } perPack } && item.Price is > 0 and var price
+            && rounds < (entry.PricePaid ?? 0) / price * perPack)
+            throw CharacterChange.Refuse("instanceId", L.T("Parte dessa munição já foi usada: venda ou descarte pelo inventário.", "Some of that ammunition is already used: sell or discard it from the inventory."));
     }
 
     private static CharacterSheet Refund(CharacterSheet sheet, BudgetPool pool, int amount, string what, CharacterChange change)

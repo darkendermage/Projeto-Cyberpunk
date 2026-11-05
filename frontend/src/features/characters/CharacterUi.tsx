@@ -1,11 +1,14 @@
 import { useRef, useState, type ReactNode } from 'react';
-import { AlertTriangle, CheckCircle2, CircleDot, Cpu, ImagePlus, Info, Loader2, Minus, Plus, Trash2, UserRound, XCircle } from 'lucide-react';
+import {
+  AlertTriangle, ArrowDown, ArrowUp, ArrowUpDown, CheckCircle2, CircleDot, Cpu, ImagePlus, Info, Loader2, Minus, Plus, Trash2, Undo2, UserRound, XCircle,
+} from 'lucide-react';
 import { characterApi, problemMessage, useStoreCharacter } from '../../api/characters';
 import type { CharacterDetail, CharacterIssue, CharacterRules, CreationBudget } from '../../api/characterTypes';
-import { IconButton, Modal } from '../../components/ui/ui';
+import { Button, IconButton, Modal } from '../../components/ui/ui';
 import { formatEb } from '../../lib/format';
 import { PortraitError, preparePortrait } from '../../lib/portrait';
 import { useToast } from '../../state/ToastContext';
+import { ariaSort, nextSort, type SortState } from './sorting';
 import type { SaveStatus } from './useSheetEditor';
 import styles from './Characters.module.css';
 import { t, tv } from '../../i18n';
@@ -189,5 +192,48 @@ export function Portrait({ detail, compact }: { detail: CharacterDetail; compact
         {detail.hasPortrait && <IconButton label={t('Remover retrato', 'Remove portrait')} onClick={remove} disabled={busy}><Trash2 size={16} /></IconButton>}
       </div>
     </div>
+  );
+}
+
+/** A column header that sorts the table: the first click sorts ascending, the next one descending. */
+export function SortHeader<K extends string>({ label, column, sort, onSort, className }: {
+  label: string; column: K; sort: SortState<K> | null; onSort: (sort: SortState<K>) => void; className?: string;
+}) {
+  return (
+    <th className={className} aria-sort={ariaSort(sort, [column])}>
+      <SortButton label={label} column={column} sort={sort} onSort={onSort} />
+    </th>
+  );
+}
+
+/** The sort toggle of one column; a header can hold two (Item and Category in a narrow table). */
+export function SortButton<K extends string>({ label, column, sort, onSort }: {
+  label: string; column: K; sort: SortState<K> | null; onSort: (sort: SortState<K>) => void;
+}) {
+  const active = sort?.key === column;
+  return (
+    <button type="button" className={styles.sortButton} onClick={() => onSort(nextSort(sort, column))} title={t(`Ordenar por ${label}`, `Sort by ${label}`)}>
+      {label}
+      {active ? (sort.dir === 'asc' ? <ArrowUp size={12} aria-hidden /> : <ArrowDown size={12} aria-hidden />) : <ArrowUpDown size={12} aria-hidden className={styles.sortIdle} />}
+    </button>
+  );
+}
+
+/**
+ * Undoes a purchase and gives the money back (and, for cyberware, the Humanity). After creation it asks first, like
+ * undoing IP; the server refuses what is no longer as bought (damaged armor, used ammunition).
+ */
+export function RefundButton({ name, amount, confirm, disabled, compact, onRefund }: {
+  name: string; amount: number | null | undefined; confirm: boolean; disabled?: boolean; compact?: boolean; onRefund: () => void;
+}) {
+  const click = () => { if (!confirm || window.confirm(t(`Reembolsar ${name} e devolver ${formatEb(amount ?? 0)}?`, `Refund ${name} and give back ${formatEb(amount ?? 0)}?`))) onRefund(); };
+  if (compact) {
+    return <IconButton label={t(`Reembolsar ${name} (${formatEb(amount ?? 0)})`, `Refund ${name} (${formatEb(amount ?? 0)})`)} disabled={disabled} onClick={click}><Undo2 size={14} /></IconButton>;
+  }
+  return (
+    <Button icon={<Undo2 size={14} />} disabled={disabled} title={t(`Desfazer a compra e devolver ${formatEb(amount ?? 0)}`, `Undo the purchase and give back ${formatEb(amount ?? 0)}`)}
+      aria-label={t(`Reembolsar ${name}`, `Refund ${name}`)} onClick={click}>
+      {t('Reembolsar', 'Refund')}
+    </Button>
   );
 }

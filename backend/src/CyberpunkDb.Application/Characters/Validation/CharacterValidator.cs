@@ -63,8 +63,11 @@ public sealed class CharacterValidator(CharacterRuleBook rules, Roles.RoleModule
         if (string.IsNullOrWhiteSpace(c.Sheet.Identity.Name))
             c.Error("NAME_REQUIRED", L.T("O personagem precisa de um nome.", "The character needs a name."), null, null, "identity.name");
         if (c.Sheet.Identity.NativeLanguage is null)
-            c.Error("NATIVE_LANGUAGE_REQUIRED", L.T("Escolha o idioma de origem cultural.", "Pick the cultural origin language."),
-                L.T("Ele entra como Language no nível 4, sem custo.", "It comes in as Language at level 4, free."), rules.Document.Creation.OriginLanguageLevel.Reference, "identity.nativeLanguage");
+            c.Error("NATIVE_LANGUAGE_REQUIRED", L.T("Escolha o idioma nativo.", "Pick the native language."),
+                c.Sheet.Lifepath.CulturalRegion is { } chosen
+                    ? L.T($"A origem cultural ({chosen}) já está escolhida; falta o idioma, que entra como Language no nível 4, sem custo.", $"The cultural origin ({chosen}) is already chosen; the language is missing, and it comes in as Language at level 4, free.")
+                    : L.T("Ele entra como Language no nível 4, sem custo.", "It comes in as Language at level 4, free."),
+                rules.Document.Creation.OriginLanguageLevel.Reference, "identity.nativeLanguage");
         else if (CreationCosts.NativeLanguageKey(c.Sheet) is not { } key)
             c.Error("NATIVE_LANGUAGE_STREETSLANG", L.T("Streetslang já é perícia básica de todos; o idioma de origem é outro.", "Streetslang is already everyone's basic skill; the native language is another one."),
                 L.T("Escolha a língua da sua região cultural.", "Pick the language of your cultural region."), rules.Document.Creation.OriginLanguageLevel.Reference, "identity.nativeLanguage");

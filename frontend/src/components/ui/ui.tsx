@@ -343,12 +343,15 @@ export function Modal({
   const fallbackId = useId();
   const ref = useRef<HTMLDivElement>(null);
   const titleId = labelledBy ?? fallbackId;
+  // The latest onClose, so a parent re-render (a new arrow function) never re-runs the focus setup below.
+  const close = useRef(onClose);
+  useEffect(() => { close.current = onClose; }, [onClose]);
 
   useEffect(() => {
     if (!open) return;
     const previous = document.activeElement as HTMLElement | null;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
+      if (e.key === 'Escape') close.current();
       if (e.key === 'Tab' && ref.current) {
         const focusable = ref.current.querySelectorAll<HTMLElement>(
           'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])');
@@ -367,7 +370,7 @@ export function Modal({
       document.body.style.overflow = '';
       previous?.focus?.();
     };
-  }, [open, onClose]);
+  }, [open]);
 
   if (!open) return null;
   return createPortal(

@@ -9,12 +9,16 @@ import { locale, t } from '../i18n';
 const json = (body: unknown) => JSON.stringify(body);
 const post = <T>(path: string, body: unknown) => request<T>(path, { method: 'POST', body: json(body) });
 
+/** Columns the store sorts by on the server, before paging. */
+export type StoreSortKey = 'name' | 'category' | 'price';
+const STORE_SORT: Record<StoreSortKey, string> = { name: 'Name', category: 'Category', price: 'Price' };
+
 export const characterApi = {
   rules: (signal?: AbortSignal) => request<CharacterRules>('/characters/rules', { signal }),
   list: () => request<CharacterSummary[]>('/characters'),
   /** One page of priced catalog items (the server clamps the page to the last one). */
-  store: (q: string, category: string | null, page: number, pageSize: number, signal?: AbortSignal) =>
-    request<StorePage>(`/characters/store?q=${encodeURIComponent(q)}${category ? `&category=${category}` : ''}&page=${page}&pageSize=${pageSize}`, { signal }),
+  store: (q: string, category: string | null, page: number, pageSize: number, signal?: AbortSignal, sort?: { key: StoreSortKey; dir: 'asc' | 'desc' } | null) =>
+    request<StorePage>(`/characters/store?q=${encodeURIComponent(q)}${category ? `&category=${category}` : ''}&page=${page}&pageSize=${pageSize}${sort ? `&sort=${STORE_SORT[sort.key]}&desc=${sort.dir === 'desc'}` : ''}`, { signal }),
   get: (id: number, signal?: AbortSignal) => request<CharacterDetail>(`/characters/${id}`, { signal }),
   events: (id: number, kind?: CharacterEventKind) =>
     request<CharacterEvent[]>(`/characters/${id}/events${kind ? `?kind=${kind}` : ''}`),

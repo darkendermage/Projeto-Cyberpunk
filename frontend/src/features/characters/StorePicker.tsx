@@ -1,14 +1,17 @@
 import { Fragment, useState } from 'react';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { ChevronDown, ChevronRight, Gift, Search, ShoppingCart, Sparkles } from 'lucide-react';
-import { characterApi } from '../../api/characters';
+import { characterApi, type StoreSortKey } from '../../api/characters';
 import type { BudgetPool, ItemOrigin, StoreItem } from '../../api/characterTypes';
 import type { ArmorSlot } from '../../api/types';
+import { PAGE_SIZES } from '../../api/hooks';
 import { Button, Checkbox, NumberInput, Select, Spinner } from '../../components/ui/ui';
 import { formatEb } from '../../lib/format';
 import { useDebouncedValue } from '../../lib/hooks';
 import { Pagination } from '../catalog/Pagination';
 import { CATEGORY_LABEL } from './characterLabels';
+import { SortHeader } from './CharacterUi';
+import type { SortState } from './sorting';
 import styles from './Characters.module.css';
 import { t, tv } from '../../i18n';
 
@@ -46,15 +49,16 @@ export function StorePicker({ onBuy, busy, creationBudgets, available, creating,
 }) {
   const [query, setQuery] = useState('');
   const [category, setCategory] = useState('');
-  const [pageSize, setPageSize] = useState(24);
+  const [pageSize, setPageSize] = useState(PAGE_SIZES[0]);
+  const [sort, setSort] = useState<SortState<StoreSortKey> | null>(null);
   const q = useDebouncedValue(query, 250);
-  // A new search or category starts again at page 1.
-  const filter = `${q}|${category}|${pageSize}`;
+  // A new search, category, sort or page size starts again at page 1.
+  const filter = `${q}|${category}|${pageSize}|${sort?.key}|${sort?.dir}`;
   const [paging, setPaging] = useState({ filter, page: 1 });
   const page = paging.filter === filter ? paging.page : 1;
   const results = useQuery({
-    queryKey: ['character-store', q, category, page, pageSize],
-    queryFn: ({ signal }) => characterApi.store(q, category || null, page, pageSize, signal),
+    queryKey: ['character-store', q, category, page, pageSize, sort],
+    queryFn: ({ signal }) => characterApi.store(q, category || null, page, pageSize, signal, sort),
     placeholderData: keepPreviousData,
   });
   const data = results.data;
@@ -81,7 +85,14 @@ export function StorePicker({ onBuy, busy, creationBudgets, available, creating,
             {data.total} {data.total === 1 ? 'item' : 'itens'} {t('· página ', '· page ')}{data.page} {t('de ', 'of ')}{totalPages}{t('. Clique no nome para ver a descrição.', '. Click the name to see the description.')}
           </p>
           <table className={styles.table}>
-            <thead><tr><th>Item</th><th>{t('Categoria', 'Category')}</th><th className={styles.num}>{t('Preço', 'Price')}</th><th /></tr></thead>
+            <thead>
+              <tr>
+                <SortHeader label="Item" column="name" sort={sort} onSort={setSort} />
+                <SortHeader label={t('Categoria', 'Category')} column="category" sort={sort} onSort={setSort} />
+                <SortHeader label={t('Preço', 'Price')} column="price" sort={sort} onSort={setSort} className={styles.num} />
+                <th />
+              </tr>
+            </thead>
             <tbody>
               {data.items.map((item) => (
                 <StoreRow key={item.id} item={item} onBuy={onBuy} busy={busy} creationBudgets={creationBudgets} available={available}
@@ -89,7 +100,7 @@ export function StorePicker({ onBuy, busy, creationBudgets, available, creating,
               ))}
             </tbody>
           </table>
-          {data.total > pageSize || pageSize !== 24 ? (
+          {data.total > PAGE_SIZES[0] ? (
             <Pagination page={data.page} totalPages={totalPages} pageSize={pageSize}
               onPage={(p) => setPaging({ filter, page: p })} onPageSize={setPageSize} />
           ) : null}

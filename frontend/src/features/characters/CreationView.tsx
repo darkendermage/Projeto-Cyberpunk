@@ -8,9 +8,10 @@ import type {
 import { Button, Field, IconButton, Select } from '../../components/ui/ui';
 import { formatEb } from '../../lib/format';
 import { useToast } from '../../state/ToastContext';
-import { languagesFor, METHOD_LABEL, SKILL_CATEGORIES, STAT_LABEL, withCurrent } from './characterLabels';
-import { BudgetBar, IssueList, NumberStepper, RoleAbilityButton, SheetPanel } from './CharacterUi';
+import { CATEGORY_LABEL, languagesFor, METHOD_LABEL, SKILL_CATEGORIES, STAT_LABEL, withCurrent } from './characterLabels';
+import { BudgetBar, IssueList, NumberStepper, RefundButton, RoleAbilityButton, SheetPanel, SortHeader } from './CharacterUi';
 import { RelationsPanel, RoleLifepathPanels, RollMissingButton, StyleTablesFields, TablesPanel } from './LifepathPanels';
+import { sortRows, type SortState } from './sorting';
 import { StorePicker, type PurchaseInput } from './StorePicker';
 import type { SheetEditor } from './useSheetEditor';
 import styles from './Characters.module.css';
@@ -153,8 +154,11 @@ function IdentityStep({ sheet, rules, editor, onReset }: {
               {rules.culturalOrigins.map((o) => <option key={o.region} value={o.region}>{o.region}</option>)}
             </Select>
           </Field>
-          <Field label={t('Idioma de origem', 'Native language')} htmlFor="id-lang" hint={t(`Language ${rules.originLanguageLevel}, sem custo`, `Language ${rules.originLanguageLevel}, free`)}>
-            <Select id="id-lang" value={id.nativeLanguage ?? ''} onChange={(e) => set({ nativeLanguage: e.target.value })}>
+          <Field label={t('Idioma nativo', 'Native language')} htmlFor="id-lang"
+            hint={!id.nativeLanguage && sheet.lifepath.culturalRegion
+              ? t(`Falta só o idioma: a origem (${sheet.lifepath.culturalRegion}) já está escolhida`, `Only the language is missing: the origin (${sheet.lifepath.culturalRegion}) is chosen`)
+              : t(`Language ${rules.originLanguageLevel}, sem custo`, `Language ${rules.originLanguageLevel}, free`)}>
+            <Select id="id-lang" value={id.nativeLanguage ?? ''} highlighted={!id.nativeLanguage} onChange={(e) => set({ nativeLanguage: e.target.value })}>
               <option value="">{t('Escolha…', 'Choose…')}</option>
               {withCurrent(languages, id.nativeLanguage).map((l) => <option key={l} value={l}>{l}</option>)}
             </Select>
@@ -435,16 +439,38 @@ function AddSpecialization({ skill, onAdd }: { skill: SkillRule; onAdd: (spec: s
 
 // ------------------------------------------------------------ 5. equipment
 
+type PurchaseSort = 'name' | 'category' | 'qty' | 'pool' | 'paid';
+
+/** What was bought during creation, gear and cyberware, as rows of the purchases table. */
+function creationPurchases(detail: CharacterDetail) {
+  return [
+    ...detail.report.inventory.filter((i) => i.origin === 'Purchase').map((i) => ({
+      id: i.instanceId, name: i.name, category: i.category, paid: i.pricePaid, pool: i.paidFrom, qty: i.rounds ?? i.quantity,
+    })),
+    ...detail.sheet.cyberware.filter((c) => c.origin === 'Purchase').map((c) => ({
+      id: c.instanceId, name: detail.report.cyberware.find((l) => l.instanceId === c.instanceId)?.name ?? '?', category: 'Cyberware', paid: c.pricePaid ?? null, pool: c.paidFrom, qty: 1,
+    })),
+  ];
+}
+
+const poolLabel = (pool: string) => (pool === 'CreationFashion' ? t('Moda', 'Fashion') : pool === 'CreationGear' ? t('Geral', 'General') : t('Saldo', 'Balance'));
+
 function EquipmentStep({ sheet, role, method, editor, run, detail, busy }: {
   sheet: CharacterSheet; role: RoleRules; method: CreationMethod; editor: SheetEditor; run: Run; detail: CharacterDetail; busy: boolean;
 }) {
-  const purchases = [
-    ...detail.report.inventory.filter((i) => i.origin === 'Purchase').map((i) => ({ id: i.instanceId, name: i.name, paid: i.pricePaid, pool: i.paidFrom, qty: i.rounds ?? i.quantity })),
-    ...detail.sheet.cyberware.filter((c) => c.origin === 'Purchase').map((c) => ({
-      id: c.instanceId, name: detail.report.cyberware.find((l) => l.instanceId === c.instanceId)?.name ?? '?', paid: c.pricePaid, pool: c.paidFrom, qty: 1,
-    })),
-  ];
+  const [sort, setSort] = useState<SortState<PurchaseSort> | null>(null);
+  const purchases = sortRows(creationPurchases(detail), sort, (p, k) => (k === 'category' ? CATEGORY_LABEL[p.category] ?? p.category : k === 'pool' ? poolLabel(p.pool) : p[k]));
   const buy = (input: PurchaseInput) => run('purchase', { ...input });
+  const refundAll = async () => {
+    if (!window.confirm(t(`Reembolsar todas as ${purchases.length} compras da criação?`, `Refund all ${purchases.length} creation purchases?`))) return;
+    // One at a time from the latest sheet: refunding a cyberware host also refunds what is installed in it.
+    let current: CharacterDetail | null = detail;
+    for (let guard = 0; current && guard < 300; guard++) {
+      const next = creationPurchases(current)[0];
+      if (!next) break;
+      current = await run('purchase/undo', { instanceId: next.id });
+    }
+  };
 
   return (
     <>
@@ -477,17 +503,28 @@ function EquipmentStep({ sheet, role, method, editor, run, detail, busy }: {
       ))}
 
       {purchases.length > 0 && (
-        <SheetPanel title={t('Compras da criação', 'Creation purchases')}>
+        <SheetPanel title={t(`Compras da criação (${purchases.length})`, `Creation purchases (${purchases.length})`)}
+          actions={<Button variant="ghost" icon={<Undo2 size={14} />} disabled={busy} onClick={refundAll}>{t('Reembolsar tudo', 'Refund everything')}</Button>}>
           <table className={styles.table}>
-            <thead><tr><th>Item</th><th className={styles.num}>{t('Qtd', 'Qty')}</th><th>{t('Pago com', 'Paid with')}</th><th className={styles.num}>{t('Preço', 'Price')}</th><th /></tr></thead>
+            <thead>
+              <tr>
+                <SortHeader label="Item" column="name" sort={sort} onSort={setSort} />
+                <SortHeader label={t('Categoria', 'Category')} column="category" sort={sort} onSort={setSort} />
+                <SortHeader label={t('Qtd', 'Qty')} column="qty" sort={sort} onSort={setSort} className={styles.num} />
+                <SortHeader label={t('Pago com', 'Paid with')} column="pool" sort={sort} onSort={setSort} />
+                <SortHeader label={t('Preço', 'Price')} column="paid" sort={sort} onSort={setSort} className={styles.num} />
+                <th />
+              </tr>
+            </thead>
             <tbody>
               {purchases.map((p) => (
                 <tr key={p.id}>
                   <td>{tv(p.name)}</td>
+                  <td className={styles.small}>{CATEGORY_LABEL[p.category] ?? p.category}</td>
                   <td className={styles.num}>{p.qty}</td>
-                  <td className={styles.small}>{p.pool === 'CreationFashion' ? t('Moda', 'Fashion') : p.pool === 'CreationGear' ? t('Geral', 'General') : t('Saldo', 'Balance')}</td>
+                  <td className={styles.small}>{poolLabel(p.pool)}</td>
                   <td className={styles.total}>{formatEb(p.paid)}</td>
-                  <td><IconButton label={t(`Desfazer compra de ${tv(p.name)}`, `Undo purchase of ${tv(p.name)}`)} disabled={busy} onClick={() => run('purchase/undo', { instanceId: p.id })}><Undo2 size={15} /></IconButton></td>
+                  <td><RefundButton name={tv(p.name)} amount={p.paid} confirm={false} disabled={busy} onRefund={() => void run('purchase/undo', { instanceId: p.id })} /></td>
                 </tr>
               ))}
             </tbody>
