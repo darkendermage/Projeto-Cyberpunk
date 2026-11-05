@@ -138,7 +138,7 @@ function RollView({ label, roll }: { label: string; roll: RollResult | null }) {
   return (
     <div className={styles.roll}>
       <div className={styles.rowBetween}>
-        <span className={styles.messageText}>{label !== roll.formula ? `${label} · ` : ''}<span className={styles.source}>{roll.formula}</span></span>
+        <span className={styles.messageText}>{label !== roll.formula ? `${label} · ` : ''}<span className={`${styles.source} ${styles.mono}`}>{roll.formula}</span></span>
         <span className={styles.rollTotal}>{roll.total}</span>
       </div>
       <div className={styles.dice}>

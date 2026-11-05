@@ -36,17 +36,17 @@ export function CharacterPanel({ character, encounter, token, onRoll, onTurn }: 
   return (
     <div className={styles.stack}>
       <div className={styles.rowBetween}>
-        <span className={styles.title}>{character?.handle ?? character?.name ?? fighter?.name}</span>
+        <span className={styles.heroName}>{character?.handle ?? character?.name ?? fighter?.name}</span>
         {fighter && <Badge tone={WOUND_TONE[fighter.woundState]}>{fighter.dead ? t('Morto', 'Dead') : WOUND_LABEL[fighter.woundState]}</Badge>}
       </div>
       <div className={styles.stack} style={{ gap: 4 }}>
-        <span className={styles.rowBetween}><span className={styles.label}>HP</span><span className={styles.source}>{hp}/{maxHp}</span></span>
+        <span className={styles.rowBetween}><span className={styles.label}>HP</span><span><span className={styles.statBig}>{hp}</span><span className={styles.stat}> / {maxHp}</span></span></span>
         <div className={styles.meter}><div className={styles.meterFill} style={{ width: `${maxHp > 0 ? Math.max(0, Math.min(100, (hp / maxHp) * 100)) : 0}%` }} /></div>
       </div>
       <div className={styles.row}>
-        {fighter?.spBody != null && <span className={styles.source}>SP {t('corpo', 'body')} {fighter.spBody}/{fighter.maxSpBody}</span>}
-        {fighter?.spHead != null && <span className={styles.source}>SP {t('cabeça', 'head')} {fighter.spHead}/{fighter.maxSpHead}</span>}
-        {character && <span className={styles.source}>{t('Sorte', 'Luck')} {character.luckAvailable}/{character.luck}</span>}
+        {fighter?.spBody != null && <span><span className={styles.label}>SP {t('corpo', 'body')} </span><span className={styles.stat}>{fighter.spBody}/{fighter.maxSpBody}</span></span>}
+        {fighter?.spHead != null && <span><span className={styles.label}>SP {t('cabeça', 'head')} </span><span className={styles.stat}>{fighter.spHead}/{fighter.maxSpHead}</span></span>}
+        {character && <span><span className={styles.label}>{t('Sorte', 'Luck')} </span><span className={styles.stat}>{character.luckAvailable}/{character.luck}</span></span>}
       </div>
       {fighter && (fighter.conditions.length > 0 || fighter.injuries.length > 0) && (
         <div className={styles.row}>
@@ -82,7 +82,7 @@ export function CharacterPanel({ character, encounter, token, onRoll, onTurn }: 
               <div key={w.key} className={styles.weapon}>
                 <div className={styles.rowBetween}>
                   <strong>{w.name}</strong>
-                  {w.magazine != null && <span className={styles.source}>{w.rounds ?? 0}/{w.magazine}</span>}
+                  {w.magazine != null && <span className={styles.stat}>{w.rounds ?? 0}/{w.magazine}</span>}
                 </div>
                 <div className={styles.row}>
                   <Button icon={<Crosshair size={14} />} onClick={() => onRoll(`1d10${signed(w.attackTotal)}`, 'Check', t(`Ataque: ${w.name}`, `Attack: ${w.name}`), visibility)}>

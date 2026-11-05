@@ -3,18 +3,21 @@ import DATA_EN_JSON from './data-en.json';
 
 const DATA_EN = DATA_EN_JSON as Record<string, string>;
 
-export type Lang = 'en' | 'pt';
+import { pickLang, type Lang } from './lang';
+
+export type { Lang };
 
 const STORAGE_KEY = 'ncdb.lang';
 
 function stored(): Lang {
+  let value: string | null = null;
   try {
-    const value = localStorage.getItem(STORAGE_KEY);
-    if (value === 'pt' || value === 'en') return value;
+    value = localStorage.getItem(STORAGE_KEY);
   } catch {
-    /* storage unavailable: the default applies */
+    /* storage unavailable: the browser's language applies */
   }
-  return 'en';
+  // Only a browser has a meaningful language (Node's navigator follows the OS, and tests expect English).
+  return pickLang(value, typeof window === 'undefined' ? undefined : navigator.language);
 }
 
 /**

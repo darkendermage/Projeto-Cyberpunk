@@ -6,6 +6,7 @@ import { t } from '../../../i18n';
 import { SHAPE_LABEL, TEMPLATE_PRESETS } from '../templates';
 import type { BoardTool, TemplateDraft } from './BoardController';
 import type { BoardHandle } from './TableBoard';
+import { NumField } from '../NumField';
 import styles from '../Table.module.css';
 
 const SHAPES: TemplateShapeName[] = ['Circle', 'Square', 'Cone', 'Line'];
@@ -39,8 +40,8 @@ export function BoardToolbar({ tool, onTool, draft, onDraft, board, children }: 
           <Select aria-label={t('Forma', 'Shape')} value={draft.shape} onChange={(e) => onDraft({ ...draft, shape: e.target.value as TemplateShapeName })}>
             {SHAPES.map((s) => <option key={s} value={s}>{SHAPE_LABEL[s]}</option>)}
           </Select>
-          <input className={styles.narrow} type="number" min={0.5} max={200} step={0.5} aria-label={t('Tamanho em metros', 'Size in meters')}
-            value={draft.sizeMeters} onChange={(e) => onDraft({ ...draft, sizeMeters: Number(e.target.value) || 1 })} />
+          <NumField label={t('Tamanho em metros', 'Size in meters')} min={0.5} max={200} step={0.5}
+            value={draft.sizeMeters} onChange={(sizeMeters) => onDraft({ ...draft, sizeMeters })} />
           <span className={styles.muted}>m</span>
           <input type="color" aria-label={t('Cor', 'Color')} value={draft.color} onChange={(e) => onDraft({ ...draft, color: e.target.value })} />
         </>

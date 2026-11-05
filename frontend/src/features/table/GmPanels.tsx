@@ -19,6 +19,7 @@ import { WOUND_LABEL, WOUND_TONE } from '../combat/combat';
 import { AddCombatantsDialog } from '../combat/AddCombatantsDialog';
 import type { Run } from '../combat/EncounterView';
 import { NewFight } from './NewFight';
+import { NumField } from './NumField';
 import { SourcePicker } from './SourcePicker';
 import { useTokenSources } from './useTokenSources';
 import { sourceFields, tokenInputOf, type TokenSource } from './sources';
@@ -34,15 +35,6 @@ const VISIBILITY_LABEL: Record<TokenVisibility, string> = {
   Seats: t('Jogadores escolhidos', 'Chosen players'),
 };
 
-/** A number field that keeps decimals (the shared NumberInput takes whole numbers only). */
-function Num({ value, onChange, min, max, step = 1, label, className }: {
-  value: number; onChange: (n: number) => void; min: number; max: number; step?: number; label: string; className?: string;
-}) {
-  return (
-    <input type="number" aria-label={label} className={className ?? styles.narrow} min={min} max={max} step={step} value={value}
-      onChange={(e) => { const n = Number(e.target.value); if (Number.isFinite(n)) onChange(Math.min(max, Math.max(min, n))); }} />
-  );
-}
 
 /** The scene's settings as the update request wants them, with some fields replaced. */
 function sceneUpdate(scene: SceneView, change: Partial<{ name: string; grid: SceneGrid; backgroundMediaId: string | null; backgroundWidth: number; backgroundHeight: number; encounterId: number | null }>) {
@@ -182,12 +174,12 @@ export function SceneTab({ scene, act, onGridDraft }: { scene: SceneView; act: A
           options={[{ value: 'Square', label: t('Quadrada', 'Square') }, { value: 'None', label: t('Sem grade', 'No grid') }]}
           onChange={(type) => editGrid({ type })} />
         <div className={styles.row}>
-          <Field label={t('Célula (px)', 'Cell (px)')}><Num label={t('Tamanho da célula em pixels', 'Cell size in pixels')} value={grid.sizePx} min={8} max={1000} step={0.5} onChange={(sizePx) => editGrid({ sizePx })} /></Field>
-          <Field label={t('Metros/célula', 'Meters/cell')}><Num label={t('Metros por célula', 'Meters per cell')} value={grid.metersPerCell} min={0.1} max={100} step={0.5} onChange={(metersPerCell) => editGrid({ metersPerCell })} /></Field>
+          <Field label={t('Célula (px)', 'Cell (px)')}><NumField label={t('Tamanho da célula em pixels', 'Cell size in pixels')} value={grid.sizePx} min={8} max={1000} step={0.5} onChange={(sizePx) => editGrid({ sizePx })} /></Field>
+          <Field label={t('Metros/célula', 'Meters/cell')}><NumField label={t('Metros por célula', 'Meters per cell')} value={grid.metersPerCell} min={0.1} max={100} step={0.5} onChange={(metersPerCell) => editGrid({ metersPerCell })} /></Field>
         </div>
         <div className={styles.row}>
-          <Field label={t('Deslocar X', 'Offset X')}><Num label={t('Deslocamento horizontal', 'Horizontal offset')} value={grid.offsetX} min={-1000} max={1000} step={0.5} onChange={(offsetX) => editGrid({ offsetX })} /></Field>
-          <Field label={t('Deslocar Y', 'Offset Y')}><Num label={t('Deslocamento vertical', 'Vertical offset')} value={grid.offsetY} min={-1000} max={1000} step={0.5} onChange={(offsetY) => editGrid({ offsetY })} /></Field>
+          <Field label={t('Deslocar X', 'Offset X')}><NumField label={t('Deslocamento horizontal', 'Horizontal offset')} value={grid.offsetX} min={-1000} max={1000} step={0.5} onChange={(offsetX) => editGrid({ offsetX })} /></Field>
+          <Field label={t('Deslocar Y', 'Offset Y')}><NumField label={t('Deslocamento vertical', 'Vertical offset')} value={grid.offsetY} min={-1000} max={1000} step={0.5} onChange={(offsetY) => editGrid({ offsetY })} /></Field>
         </div>
         <div className={styles.row}>
           <input type="color" aria-label={t('Cor da grade', 'Grid color')} value={grid.color} onChange={(e) => editGrid({ color: e.target.value })} />
@@ -267,8 +259,8 @@ export function TokenInspector({ scene, token, seats, encounter, act, onDone }: 
         <input type="color" aria-label={t('Cor', 'Color')} value={form.color ?? '#00f0ff'} onChange={(e) => setForm({ ...form, color: e.target.value })} />
       </div>
       <div className={styles.row}>
-        <Field label={t('Largura', 'Width')}><Num label={t('Largura em células', 'Width in cells')} value={form.width ?? 1} min={0.25} max={20} step={0.25} onChange={(width) => setForm({ ...form, width })} /></Field>
-        <Field label={t('Altura', 'Height')}><Num label={t('Altura em células', 'Height in cells')} value={form.height ?? 1} min={0.25} max={20} step={0.25} onChange={(height) => setForm({ ...form, height })} /></Field>
+        <Field label={t('Largura', 'Width')}><NumField label={t('Largura em células', 'Width in cells')} value={form.width ?? 1} min={0.25} max={20} step={0.25} onChange={(width) => setForm({ ...form, width })} /></Field>
+        <Field label={t('Altura', 'Height')}><NumField label={t('Altura em células', 'Height in cells')} value={form.height ?? 1} min={0.25} max={20} step={0.25} onChange={(height) => setForm({ ...form, height })} /></Field>
         <Field label={t('Giro (°)', 'Turn (°)')}>
           <span className={styles.row}>
             <IconButton label={t('Girar −45°', 'Turn −45°')} onClick={() => save({ rotation: ((form.rotation ?? 0) + 315) % 360 }).then(() => setForm((f) => ({ ...f, rotation: ((f.rotation ?? 0) + 315) % 360 })))}><RotateCcw size={14} /></IconButton>
@@ -304,7 +296,7 @@ export function TokenInspector({ scene, token, seats, encounter, act, onDone }: 
           </Select>
         )}
         <Field label={t('Anel de alcance (m)', 'Range ring (m)')}>
-          <Num label={t('Anel de alcance em metros', 'Range ring in meters')} value={form.rangeRingMeters ?? 0} min={0} max={1000} step={1}
+          <NumField label={t('Anel de alcance em metros', 'Range ring in meters')} value={form.rangeRingMeters ?? 0} min={0} max={1000} step={1}
             onChange={(n) => setForm({ ...form, rangeRingMeters: n > 0 ? n : null })} />
         </Field>
         <div className={styles.row}>
@@ -340,8 +332,8 @@ export function TemplateInspector({ template, onSave, onRemove, editable }: {
         <input type="color" aria-label={t('Cor', 'Color')} value={form.color} onChange={(e) => setForm({ ...form, color: e.target.value })} />
       </div>
       <div className={styles.row}>
-        <Field label={t('Tamanho (m)', 'Size (m)')}><Num label={t('Tamanho em metros', 'Size in meters')} value={form.sizeMeters} min={0.5} max={200} step={0.5} onChange={(sizeMeters) => setForm({ ...form, sizeMeters })} /></Field>
-        <Field label={t('Ângulo (°)', 'Angle (°)')}><Num label={t('Ângulo em graus', 'Angle in degrees')} value={form.angle} min={-360} max={360} step={15} onChange={(angle) => setForm({ ...form, angle })} /></Field>
+        <Field label={t('Tamanho (m)', 'Size (m)')}><NumField label={t('Tamanho em metros', 'Size in meters')} value={form.sizeMeters} min={0.5} max={200} step={0.5} onChange={(sizeMeters) => setForm({ ...form, sizeMeters })} /></Field>
+        <Field label={t('Ângulo (°)', 'Angle (°)')}><NumField label={t('Ângulo em graus', 'Angle in degrees')} value={form.angle} min={-360} max={360} step={15} onChange={(angle) => setForm({ ...form, angle })} /></Field>
       </div>
       <input aria-label={t('Rótulo', 'Label')} value={form.label ?? ''} maxLength={40} placeholder={t('Rótulo (opcional)', 'Label (optional)')} onChange={(e) => setForm({ ...form, label: e.target.value })} />
       <Switch checked={form.locked} onChange={(locked) => setForm({ ...form, locked })} label={t('Travada', 'Locked')} />
@@ -397,7 +389,7 @@ export function CombatTab({ scene, encounter, act, onSelectToken }: { scene: Sce
               <span className={styles.stack} style={{ gap: 2 }}>
                 <span className={styles.queueName}>{f.name}</span>
                 <span className={styles.row}>
-                  <span className={styles.source}>{f.hp}/{f.maxHp} HP</span>
+                  <span className={styles.stat}>{f.hp}/{f.maxHp} HP</span>
                   <Badge tone={WOUND_TONE[f.woundState]}>{f.dead ? t('Morto', 'Dead') : WOUND_LABEL[f.woundState]}</Badge>
                 </span>
               </span>
@@ -437,6 +429,8 @@ export function InvitesTab({ seats, act }: { seats: Seat[]; act: Act }) {
   const [busy, setBusy] = useState(false);
   const [label, setLabel] = useState('');
   const [characterId, setCharacterId] = useState<number | null>(null);
+  const [showRevoked, setShowRevoked] = useState(false);
+  const revoked = seats.filter((s) => s.revoked).length;
 
   const tunnelAction = async (fn: () => Promise<TunnelStatus>) => {
     setBusy(true);
@@ -500,7 +494,7 @@ export function InvitesTab({ seats, act }: { seats: Seat[]; act: Act }) {
             <Button type="submit" icon={<Plus size={15} />} disabled={!label.trim()}>{t('Convidar', 'Invite')}</Button>
           </div>
         </form>
-        {seats.map((s) => {
+        {seats.filter((s) => showRevoked || !s.revoked).map((s) => {
           const link = base ? `${base}/mesa/j/${s.token}` : null;
           const character = characters.data?.find((c) => c.id === s.characterId);
           return (
@@ -537,6 +531,9 @@ export function InvitesTab({ seats, act }: { seats: Seat[]; act: Act }) {
             </div>
           );
         })}
+        {revoked > 0 && (
+          <Switch checked={showRevoked} onChange={setShowRevoked} label={t(`Mostrar revogados (${revoked})`, `Show revoked (${revoked})`)} />
+        )}
         {status?.state !== 'Running' && seats.length > 0 && <span className={styles.muted}>{t('Com o túnel fechado, os links só abrem nesta máquina (bom para testar).', 'With the tunnel closed, the links only open on this machine (good for testing).')}</span>}
       </div>
     </div>

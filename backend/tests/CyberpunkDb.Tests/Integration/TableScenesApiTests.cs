@@ -151,6 +151,27 @@ public class TableScenesApiTests(ApiFactory factory)
     }
 
     [Fact]
+    public async Task Players_clear_each_others_areas_but_never_the_gms()
+    {
+        var thrower = await NewSeat("Lançador");
+        var other = await NewSeat("Colega");
+        var scene = await NewScene("Beco das áreas");
+        var withGmArea = await Gm(HttpMethod.Post, $"/api/table/scenes/{scene.Id}/templates", new TemplateInput(TemplateShape.Square, 2, 2, 10, Label: "Fumaça do mestre"));
+        await Gm(HttpMethod.Post, $"/api/table/scenes/{scene.Id}/activate");
+        var placed = await Send<SceneView>(_player, HttpMethod.Post, "/api/table/play/templates", new TemplateInput(TemplateShape.Square, 4, 4, 10, Label: "Granada"), thrower.Token);
+        var grenade = placed.Templates.Single(t => t.Label == "Granada");
+        var gmArea = withGmArea.Templates.Single();
+
+        (await Status(_player, HttpMethod.Put, $"/api/table/play/templates/{grenade.Id}", new TemplateInput(TemplateShape.Square, 5, 5, 10), other.Token))
+            .Should().Be(HttpStatusCode.OK, "outro jogador pode mover a área de um jogador");
+        var after = await Send<SceneView>(_player, HttpMethod.Delete, $"/api/table/play/templates/{grenade.Id}", seat: other.Token);
+        after.Templates.Should().NotContain(t => t.Id == grenade.Id);
+        (await Status(_player, HttpMethod.Put, $"/api/table/play/templates/{gmArea.Id}", new TemplateInput(TemplateShape.Square, 5, 5, 10), other.Token))
+            .Should().Be(HttpStatusCode.BadRequest, "a área do mestre é só dele");
+        (await Status(_player, HttpMethod.Delete, $"/api/table/play/templates/{gmArea.Id}", seat: other.Token)).Should().Be(HttpStatusCode.BadRequest);
+    }
+
+    [Fact]
     public async Task A_linked_fight_puts_one_token_per_combatant_on_the_map()
     {
         var encounter = await Send<JsonNode>(_gm, HttpMethod.Post, "/api/encounters", new { name = "Emboscada no beco" }, expected: HttpStatusCode.Created);

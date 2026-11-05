@@ -7,6 +7,7 @@ import { Button, Spinner } from '../../components/ui/ui';
 import { useToast } from '../../state/ToastContext';
 import { t } from '../../i18n';
 import { claimErrorMessage, forgetSeat, isRefusedKey, rememberSeat, savedSeat } from './lobby';
+import { LangSwitch } from './LangSwitch';
 import { initials } from './tokens';
 import styles from './Table.module.css';
 
@@ -45,7 +46,10 @@ export function LobbyPage() {
   const card = (title: string, body: ReactNode) => (
     <div className={styles.gate}>
       <div className={styles.gateCard}>
-        <span className={styles.brand}>Night City // {t('Mesa', 'Table')}</span>
+        <div className={styles.rowBetween}>
+          <span className={styles.brand}>Night City // {t('Mesa', 'Table')}</span>
+          <LangSwitch />
+        </div>
         <h1>{title}</h1>
         {body}
       </div>

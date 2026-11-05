@@ -1,7 +1,12 @@
 /* Virtual table: the GM's workspace (scenes | board | panels) and the player's screen (board | panels). */
 
 .muted { color: var(--text-muted); font-size: 13px; }
-.source { font-family: var(--font-mono); font-size: 11px; color: var(--text-faint); }
+.source { font-size: 12px; color: var(--text-faint); }
+/* Numbers that matter (HP, SP, Luck): the sheet's monospace, at reading size. */
+.stat { font-family: var(--font-mono); font-size: 14px; color: var(--text); }
+.statBig { font-family: var(--font-mono); font-size: 26px; color: var(--text); line-height: 1; }
+/* A character's name, as on the sheet. */
+.heroName { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--text); }
 .label { font-family: var(--font-display); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-muted); }
 .row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; }
 .rowBetween { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px; }
@@ -90,7 +95,8 @@
 }
 .title {
   font-family: var(--font-display);
-  font-size: 12.5px;
+  font-size: 14px;
+  font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--red);
@@ -132,7 +138,7 @@
   left: 10px;
   bottom: 10px;
   padding: 4px 10px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--text-2);
   background: rgba(5, 6, 7, 0.82);
   border: 1px solid var(--line-strong);
@@ -169,7 +175,7 @@
 .sceneItem:hover { border-color: var(--red-line); }
 .sceneSelected { border-left-color: var(--cyan); background: var(--bg-3); color: var(--text); }
 .sceneLive { border-left-color: var(--red); }
-.sceneName { font-family: var(--font-display); font-size: 14.5px; color: var(--text); }
+.sceneName { font-family: var(--font-display); font-size: 14px; color: var(--text); }
 
 .tabs { display: flex; flex-wrap: wrap; gap: 4px; }
 
@@ -219,12 +225,12 @@
   background: transparent;
   border: 1px solid transparent;
   color: var(--text-2);
-  font-size: 13.5px;
+  font-size: 14px;
   text-align: left;
   cursor: pointer;
 }
 .skillButton:hover { border-color: var(--red-line); color: var(--text); background: var(--bg-3); }
-.skillTotal { font-family: var(--font-mono); color: var(--amber); }
+.skillTotal { font-family: var(--font-mono); font-size: 14px; color: var(--amber); }
 
 .weapon { display: flex; flex-direction: column; gap: 6px; padding: 8px; background: var(--bg-2); border: 1px solid var(--line); }
 
@@ -242,7 +248,7 @@
 }
 .message { display: flex; flex-direction: column; gap: 2px; padding: 6px 8px; background: var(--bg-2); border: 1px solid var(--line); font-size: 14px; }
 .messageHidden { border-style: dashed; }
-.author { font-family: var(--font-display); font-size: 12.5px; font-weight: 700; }
+.author { font-family: var(--font-display); font-size: 13px; font-weight: 700; }
 .messageText { color: var(--text); white-space: pre-wrap; word-break: break-word; }
 .roll { display: flex; flex-direction: column; gap: 4px; }
 .rollTotal { font-family: var(--font-display); font-size: 26px; font-weight: 700; color: var(--text); line-height: 1; }
@@ -351,3 +357,4 @@
 .workspace input[type='color']::-webkit-color-swatch-wrapper, .playerScreen input[type='color']::-webkit-color-swatch-wrapper { padding: 0; }
 .workspace input[type='color']::-webkit-color-swatch, .playerScreen input[type='color']::-webkit-color-swatch { border: 0; border-radius: 2px; }
 .workspace input[type='range'], .playerScreen input[type='range'] { accent-color: var(--red); }
+.mono { font-family: var(--font-mono); }

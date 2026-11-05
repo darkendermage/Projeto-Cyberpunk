@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { DEFAULT_GRID } from './grid';
-import { TEMPLATE_PRESETS, templateShape } from './templates';
+import { initialDraft, TEMPLATE_PRESETS, templateShape } from './templates';
 
 const grid = { ...DEFAULT_GRID, sizePx: 50, offsetX: 0, offsetY: 0, metersPerCell: 2 };
 const base = { id: 'A1', color: '#ff0000', label: null, locked: false, ownerSeatId: null };
@@ -42,5 +42,20 @@ describe('presets', () => {
   it('cite the book or say they are a table convention', () => {
     for (const p of TEMPLATE_PRESETS) expect(p.source.length).toBeGreaterThan(0);
     expect(TEMPLATE_PRESETS.find((p) => p.id === 'explosive')).toMatchObject({ shape: 'Square', sizeMeters: 10 });
+  });
+});
+
+describe('the area tool draft', () => {
+  it('starts as the book\'s explosion, a 10×10 m square', () => {
+    expect(initialDraft(null)).toMatchObject({ shape: 'Square', sizeMeters: 10 });
+  });
+
+  it('comes back as it was last used', () => {
+    expect(initialDraft(JSON.stringify({ shape: 'Cone', sizeMeters: 6, color: '#00f0ff' }))).toEqual({ shape: 'Cone', sizeMeters: 6, color: '#00f0ff' });
+  });
+
+  it('ignores a stored draft it cannot trust', () => {
+    expect(initialDraft('{"shape":"Hexagon","sizeMeters":-3}')).toMatchObject({ shape: 'Square', sizeMeters: 10 });
+    expect(initialDraft('not json')).toMatchObject({ shape: 'Square' });
   });
 });

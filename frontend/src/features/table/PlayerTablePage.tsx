@@ -8,6 +8,7 @@ import { Button, EmptyState, Spinner } from '../../components/ui/ui';
 import { useToast } from '../../state/ToastContext';
 import { lang, t } from '../../i18n';
 import type { BoardCallbacks, BoardData, BoardTool, TemplateDraft } from './board/BoardController';
+import { hasSavedDraft, readDraft, saveDraft } from './templates';
 import { BoardToolbar } from './board/BoardToolbar';
 import { TOOL_HINT } from './board/toolHints';
 import { TableBoard, type BoardHandle } from './board/TableBoard';
@@ -15,6 +16,7 @@ import { ChatPanel } from './chat/ChatPanel';
 import { CharacterPanel, InitiativePanel } from './PlayerPanels';
 import { fromPlayerFighter } from './tokens';
 import { forgetSeat, isRefusedKey, rememberSeat, savedSeat } from './lobby';
+import { LangSwitch } from './LangSwitch';
 import { PanelHandle } from './PanelHandle';
 import { PLAYER_PANELS, playerColumns } from './panels';
 import { usePanels } from './usePanels';
@@ -36,7 +38,14 @@ export function PlayerTablePage() {
   const shownRef = useRef<number | null>(null);
   const [tab, setTab] = useState<Tab>('character');
   const [tool, setTool] = useState<BoardTool>('select');
-  const [draft, setDraft] = useState<TemplateDraft>({ shape: 'Circle', sizeMeters: 4, color: '#ff2a6d' });
+  const [savedDraft, setDraftState] = useState<TemplateDraft>(readDraft);
+  // A player's areas start in the seat's color; once they pick another, theirs wins.
+  const [ownColor, setOwnColor] = useState(hasSavedDraft);
+  const setDraft = (next: TemplateDraft) => {
+    if (next.color !== draft.color) setOwnColor(true);
+    setDraftState(next);
+    saveDraft(next);
+  };
   const [selectedToken, setSelectedToken] = useState<string | null>(null);
   const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
 
@@ -73,6 +82,7 @@ export function PlayerTablePage() {
   }, state.isSuccess);
 
   const seat = state.data?.seat;
+  const draft: TemplateDraft = ownColor || !seat ? savedDraft : { ...savedDraft, color: seat.color };
   const scene = state.data?.scene ?? null;
   useEffect(() => { shownRef.current = scene?.id ?? null; }, [scene?.id]);
   const fighters = useMemo(() => new Map((encounter.data?.queue ?? []).map((f) => [f.id, fromPlayerFighter(f)])), [encounter.data]);
@@ -82,10 +92,11 @@ export function PlayerTablePage() {
     activeCombatantId: encounter.data?.activeId ?? null,
     selectedTokenId: selectedToken,
     selectedTemplateId: selectedTemplate,
-    canMoveTemplate: (tpl) => !tpl.locked && tpl.ownerSeatId === seat?.id,
+    // Any player's area (a grenade that went off) is anyone's to move or clear; the GM's stay the GM's.
+    canMoveTemplate: (tpl) => !tpl.locked && tpl.ownerSeatId != null,
     gm: false,
     lang,
-  } : null, [scene, fighters, encounter.data, selectedToken, selectedTemplate, seat?.id]);
+  } : null, [scene, fighters, encounter.data, selectedToken, selectedTemplate]);
 
   const run = async (fn: () => Promise<SceneView | unknown>) => {
     try {
@@ -108,7 +119,7 @@ export function PlayerTablePage() {
       const tpl = scene?.templates.find((tp) => tp.id === id);
       if (tpl) void run(() => api.updateTemplate(id, { ...tpl, x, y }));
     },
-    onTemplatePlace: (x, y, angle) => void run(() => api.addTemplate({ shape: draft.shape, x, y, sizeMeters: draft.sizeMeters, angle, color: seat?.color ?? draft.color })),
+    onTemplatePlace: (x, y, angle) => void run(() => api.addTemplate({ shape: draft.shape, x, y, sizeMeters: draft.sizeMeters, angle, color: draft.color })),
     onPing: (x, y) => { if (scene) hub.ping(scene.id, x, y); },
     onTokenPlace: (x, y) => { setTool('select'); void run(() => api.placeToken(x, y)); },
   };
@@ -136,7 +147,7 @@ export function PlayerTablePage() {
     );
   }
 
-  const selectedTpl = scene?.templates.find((tp) => tp.id === selectedTemplate && tp.ownerSeatId === seat?.id);
+  const selectedTpl = scene?.templates.find((tp) => tp.id === selectedTemplate && tp.ownerSeatId != null);
   // The seat's own token: its character's, or (without one) the token it owns. The server allows one per scene.
   const hasOwnToken = !!seat && !!scene?.tokens.some((tk) => (seat.characterId != null ? tk.characterId === seat.characterId : tk.ownerSeatId === seat.id));
 
@@ -151,6 +162,7 @@ export function PlayerTablePage() {
             {HUB_TEXT[hub.status]}
           </span>
           {hub.status === 'offline' && <Button variant="ghost" onClick={hub.reconnect}>{t('Reconectar', 'Reconnect')}</Button>}
+          <LangSwitch />
         </span>
       </header>
       <div className={styles.playerBody} style={{ '--cols': playerColumns(panels) } as CSSProperties}>
@@ -161,7 +173,7 @@ export function PlayerTablePage() {
                 {tool === 'token' ? t('Cancelar', 'Cancel') : t('Pôr meu token', 'Place my token')}
               </Button>
             )}
-            {selectedTpl && <Button variant="ghost" onClick={() => run(async () => { const v = await api.removeTemplate(selectedTpl.id); setSelectedTemplate(null); return v; })}>{t('Apagar minha área', 'Delete my area')}</Button>}
+            {selectedTpl && <Button variant="ghost" onClick={() => run(async () => { const v = await api.removeTemplate(selectedTpl.id); setSelectedTemplate(null); return v; })}>{t('Apagar área', 'Delete area')}</Button>}
           </BoardToolbar>
           {scene ? <TableBoard ref={board} data={data} tool={tool} draft={draft} callbacks={callbacks} /> : (
             <EmptyState title={t('Aguardando o mestre', 'Waiting for the GM')}>{t('O mestre ainda não mostrou nenhuma cena.', 'The GM hasn\'t shown a scene yet.')}</EmptyState>

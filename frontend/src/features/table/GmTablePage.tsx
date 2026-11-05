@@ -9,6 +9,7 @@ import { Button, EmptyState, ErrorState, Select, Spinner } from '../../component
 import { useToast } from '../../state/ToastContext';
 import { lang, t } from '../../i18n';
 import type { BoardCallbacks, BoardData, BoardTool, TemplateDraft } from './board/BoardController';
+import { readDraft, saveDraft } from './templates';
 import { BoardToolbar } from './board/BoardToolbar';
 import { TOOL_HINT } from './board/toolHints';
 import { TableBoard, type BoardHandle } from './board/TableBoard';
@@ -53,7 +54,8 @@ export function GmTablePage() {
   const [tab, setTab] = useState<Tab>('scene');
   const [panels, setPanels] = usePanels('ncdb.table.gm-panels', GM_PANELS);
   const [tool, setTool] = useState<BoardTool>('select');
-  const [draft, setDraft] = useState<TemplateDraft>({ shape: 'Circle', sizeMeters: 4, color: '#ff2a6d' });
+  const [draft, setDraftState] = useState<TemplateDraft>(readDraft);
+  const setDraft = (next: TemplateDraft) => { setDraftState(next); saveDraft(next); };
   // The grid being calibrated, shown on the board before it is saved; it belongs to one scene version.
   const [gridDraft, setGridDraft] = useState<{ key: string; grid: SceneGrid } | null>(null);
   const [selectedToken, setSelectedToken] = useState<string | null>(null);

@@ -61,3 +61,35 @@ export const SHAPE_LABEL: Record<TemplateShapeName, string> = {
   Cone: t('Cone', 'Cone'),
   Line: t('Linha', 'Line'),
 };
+
+/** What the area tool places next: shape, size and color. */
+export interface AreaDraft { shape: TemplateShapeName; sizeMeters: number; color: string }
+
+/** The area tool remembers its last shape in this browser. */
+export const DRAFT_KEY = 'ncdb.table.area-draft';
+
+const SHAPES: TemplateShapeName[] = ['Circle', 'Square', 'Cone', 'Line'];
+
+/** The draft to start with: the last one used, or else the book's explosion (a 10×10 m square, CP:R p.174). */
+export function initialDraft(stored: string | null): AreaDraft {
+  const fallback: AreaDraft = { shape: 'Square', sizeMeters: 10, color: '#ff2a6d' };
+  try {
+    const d = JSON.parse(stored ?? 'null') as Partial<AreaDraft> | null;
+    if (d && SHAPES.includes(d.shape as TemplateShapeName) && typeof d.sizeMeters === 'number' && d.sizeMeters >= 0.5 && d.sizeMeters <= 200)
+      return { shape: d.shape as TemplateShapeName, sizeMeters: d.sizeMeters, color: /^#[0-9a-f]{6}$/i.test(d.color ?? '') ? d.color! : fallback.color };
+  } catch { /* not a draft */ }
+  return fallback;
+}
+
+export function readDraft(): AreaDraft {
+  try { return initialDraft(localStorage.getItem(DRAFT_KEY)); } catch { return initialDraft(null); }
+}
+
+export function saveDraft(draft: AreaDraft) {
+  try { localStorage.setItem(DRAFT_KEY, JSON.stringify(draft)); } catch { /* not remembered */ }
+}
+
+/** Whether this browser already used the area tool (its color choice is then the person's own). */
+export function hasSavedDraft(): boolean {
+  try { return localStorage.getItem(DRAFT_KEY) !== null; } catch { return false; }
+}

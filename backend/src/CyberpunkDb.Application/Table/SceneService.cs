@@ -266,14 +266,15 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
     public Task<SceneView> PlayerUpdateTemplateAsync(TableSeat seat, string templateId, TemplateInput input, CancellationToken ct) =>
         PlayerMutateAsync(seat, (_, state) =>
         {
-            RequireOwnTemplate(state, templateId, seat);
-            return ReplaceTemplate(state, Template(templateId, input with { Locked = false }, seat.Id));
+            // The area keeps the player who placed it, whoever moves it.
+            var owner = RequirePlayerTemplate(state, templateId).OwnerSeatId;
+            return ReplaceTemplate(state, Template(templateId, input with { Locked = false }, owner));
         }, ct);
 
     public Task<SceneView> PlayerRemoveTemplateAsync(TableSeat seat, string templateId, CancellationToken ct) =>
         PlayerMutateAsync(seat, (_, state) =>
         {
-            RequireOwnTemplate(state, templateId, seat);
+            RequirePlayerTemplate(state, templateId);
             return state with { Templates = state.Templates.Where(t => t.Id != templateId).ToList() };
         }, ct);
 
@@ -489,10 +490,13 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
     private static SceneTemplate RequireTemplate(SceneState state, string id) =>
         state.Templates.FirstOrDefault(t => t.Id == id) ?? throw new NotFoundException(L.T("Área não encontrada.", "Area not found."));
 
-    private static void RequireOwnTemplate(SceneState state, string id, TableSeat seat)
+    /// <summary>Players move and clear any player's area (a grenade that went off); the GM's areas are the GM's alone.</summary>
+    private static SceneTemplate RequirePlayerTemplate(SceneState state, string id)
     {
-        if (RequireTemplate(state, id).OwnerSeatId != seat.Id)
-            throw RequestValidationException.For("templateId", L.T("Só dá para mexer nas áreas que você colocou.", "You can only change the areas you placed."));
+        var template = RequireTemplate(state, id);
+        if (template.OwnerSeatId is null)
+            throw RequestValidationException.For("templateId", L.T("As áreas do mestre só o mestre mexe.", "Only the GM changes the GM's areas."));
+        return template;
     }
 
     private static double Cell(double value, string field) =>
