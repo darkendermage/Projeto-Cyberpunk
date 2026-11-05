@@ -115,6 +115,22 @@ public sealed class TablePlayController(SeatService seats, SceneService scenes, 
         return File(data, type, lastModified: updated, entityTag: new Microsoft.Net.Http.Headers.EntityTagHeaderValue($"\"{updated.Ticks}\""));
     }
 
+    /// <summary>The seat's own sheet to read (204 when the seat plays no character).</summary>
+    [HttpGet("sheet")]
+    public async Task<PlayerSheetDto?> Sheet(CancellationToken ct)
+    {
+        var seat = await SeatAsync(ct);
+        if (seat.CharacterId is not { } id) return null;
+        try
+        {
+            return PlayerCharacters.Sheet(await characters.GetAsync(id, ct));
+        }
+        catch (NotFoundException)
+        {
+            return null;
+        }
+    }
+
     /// <summary>Rolls one of the player's own Checks again for 1 LUCK (the table's reroll).</summary>
     [HttpPost("rolls/{messageId:long}/reroll")]
     public async Task<TableMessageDto> Reroll(long messageId, CancellationToken ct) => await chat.RerollAsync(await SeatAsync(ct), messageId, ct);

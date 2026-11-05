@@ -1,7 +1,7 @@
 import { API_BASE, ApiError, request } from './client';
 import { locale, t } from '../i18n';
 import type {
-  ArmorLocation, ClaimResult, Lobby, MediaInfo, PartyMember, PlayerCharacter, PlayerEncounter, PlayerSeat, PlayerState, RollRequest, SceneBatch, SceneGrid, SceneSummary, SceneView, Seat,
+  ArmorLocation, ClaimResult, Lobby, MediaInfo, PartyMember, PlayerCharacter, PlayerSheet, PlayerEncounter, PlayerSeat, PlayerState, RollRequest, SceneBatch, SceneGrid, SceneSummary, SceneView, Seat,
   SendMessage, TableMessage, TableRules, TemplateInput, TokenInput, TokenMove, TunnelStatus,
 } from './tableTypes';
 
@@ -92,6 +92,7 @@ export function playerApi(seat: string) {
     state: () => request<PlayerState>('/table/play/state', { headers }),
     encounter: () => request<PlayerEncounter | undefined>('/table/play/encounter', { headers }).then((e) => e ?? null),
     character: () => request<PlayerCharacter | undefined>('/table/play/character', { headers }).then((c) => c ?? null),
+    sheet: () => request<PlayerSheet | undefined>('/table/play/sheet', { headers }).then((c) => c ?? null),
     messages: () => request<TableMessage[]>('/table/play/messages', { headers }),
     send: (body: SendMessage) => request<TableMessage>('/table/play/messages', { method: 'POST', body: json(body), headers }),
     roll: (body: RollRequest) => request<TableMessage>('/table/play/rolls', { method: 'POST', body: json(body), headers }),
@@ -127,6 +128,7 @@ export const tableKeys = {
   player: (seat: string) => ['table', 'player', seat] as const,
   playerEncounter: (seat: string) => ['table', 'player', seat, 'encounter'] as const,
   playerCharacter: (seat: string) => ['table', 'player', seat, 'character'] as const,
+  playerSheet: (seat: string) => ['table', 'player', seat, 'sheet'] as const,
   party: (sceneId: number) => ['table', 'party', sceneId] as const,
   playerParty: (seat: string) => ['table', 'player', seat, 'party'] as const,
   playerMessages: (seat: string) => ['table', 'player', seat, 'messages'] as const,

@@ -1,11 +1,12 @@
 import { Fragment, useState } from 'react';
 import {
-  Activity, Bandage, Crosshair, Dices, HeartPulse, RotateCcw, Shield, ShieldMinus, Skull, Swords, Wrench, X,
+  Activity, Bandage, BedDouble, Crosshair, Dices, HeartPulse, RotateCcw, Shield, ShieldMinus, Skull, Swords, Wrench, X,
 } from 'lucide-react';
 import type { CharacterDetail, CharacterRules, InjuryLocation, InjuryStatus } from '../../api/characterTypes';
-import { Button, IconButton, Select, Switch } from '../../components/ui/ui';
+import { Button, IconButton, NumberInput, Select, Switch } from '../../components/ui/ui';
 import { INJURY_STATUS_LABEL, signed, WOUND_LABEL } from './characterLabels';
 import { SheetPanel, StateTag } from './CharacterUi';
+import { healing } from './healing';
 import styles from './Characters.module.css';
 import { t, tv } from '../../i18n';
 
@@ -18,11 +19,13 @@ const woundTone = (w: string) => (w === 'Mortally' ? 'bad' : w === 'Seriously' ?
 /** HP, wound state, Death Save and the quick combat actions. Nothing here changes without an explicit action. */
 export function HealthPanel({ detail, run, busy, locked }: Props) {
   const h = detail.report.health;
-  const [amount, setAmount] = useState('');
+  const [damage, setDamage] = useState<number | null>(null);
+  const [heal, setHeal] = useState<number | null>(null);
   const [location, setLocation] = useState<InjuryLocation>('Body');
   const [bypass, setBypass] = useState(false);
   const [roll, setRoll] = useState('');
-  const value = Number(amount);
+  const care = healing(h, detail.sheet.combat.stabilized);
+  const healBy = async (amount: number, description?: string) => { if (await run('combat/heal', { amount, description })) setHeal(null); };
   const pct = Math.max(0, Math.min(100, (h.currentHp / h.maxHp) * 100));
   const mark = (h.seriouslyWoundedThreshold / h.maxHp) * 100;
   const conditions = detail.sheet.combat.conditions;
@@ -54,23 +57,41 @@ export function HealthPanel({ detail, run, busy, locked }: Props) {
 
       {locked ? <p className={`${styles.small} ${styles.muted}`}>{t('Conclua a criação para usar o painel de combate.', 'Finish creation to use the combat panel.')}</p> : (
         <>
+          <span className={styles.subhead}>{t('Dano', 'Damage')}</span>
           <div className={styles.row}>
-            <input className={`${styles.input} ${styles.inputSmall}`} type="number" min={0} value={amount} placeholder={t('dano', 'damage')}
-              aria-label={t('Quantidade', 'Amount')} onChange={(e) => setAmount(e.target.value)} />
+            <NumberInput className={`${styles.input} ${styles.inputSmall}`} min={0} max={999} allowEmpty value={damage} placeholder={t('dano', 'damage')}
+              aria-label={t('Dano a aplicar', 'Damage to apply')} onChange={setDamage} />
             <Select value={location} onChange={(e) => setLocation(e.target.value as InjuryLocation)} aria-label={t('Local', 'Location')}>
               <option value="Body">{t('Corpo', 'Body')}</option>
               <option value="Head">{t('Cabeça (Aimed Shot)', 'Head (Aimed Shot)')}</option>
             </Select>
             <Switch checked={bypass} onChange={setBypass} label={t('Ignora armadura', 'Ignores armor')} />
-          </div>
-          <div className={styles.row}>
-            <Button icon={<Swords size={14} />} disabled={busy || !(value > 0)}
+            <Button icon={<Swords size={14} />} disabled={busy || !(damage != null && damage > 0)}
               title={t('Dano menos SP do local; o que passar vai ao HP e abla a armadura (CP:R p.186)', 'Damage minus the location\'s SP; what gets through goes to HP and ablates the armor (CP:R p.186)')}
-              onClick={async () => { if (await run('combat/damage', { amount: value, location, bypassArmor: bypass })) setAmount(''); }}>
+              onClick={async () => { if (await run('combat/damage', { amount: damage, location, bypassArmor: bypass })) setDamage(null); }}>
               {t('Aplicar dano', 'Apply damage')}
             </Button>
-            <Button icon={<Bandage size={14} />} disabled={busy || !(value > 0)}
-              onClick={async () => { if (await run('combat/heal', { amount: value })) setAmount(''); }}>{t('Curar', 'Heal')}</Button>
+          </div>
+          <span className={styles.subhead}>{t('Cura', 'Healing')}</span>
+          <div className={styles.row}>
+            <NumberInput className={`${styles.input} ${styles.inputSmall}`} min={0} max={999} allowEmpty value={heal} placeholder={t('HP', 'HP')}
+              aria-label={t('HP a recuperar', 'HP to recover')} onChange={setHeal} />
+            <Button icon={<Bandage size={14} />} disabled={busy || !care.canHeal || !(heal != null && heal > 0)} onClick={() => healBy(heal!)}>{t('Curar', 'Heal')}</Button>
+            {care.quick.map((n) => (
+              <Button key={n} variant="ghost" disabled={busy} onClick={() => healBy(n)}>+{n}</Button>
+            ))}
+            <Button variant="ghost" disabled={busy || !care.canHeal} onClick={() => healBy(care.missing, t('Cura completa', 'Full heal'))}>
+              {t('Curar tudo', 'Heal all')}
+            </Button>
+          </div>
+          <div className={styles.row}>
+            <Button icon={<BedDouble size={14} />} disabled={busy || !care.canRest}
+              title={care.canRest
+                ? t('Estabilizado: cada dia inteiro de descanso recupera HP igual ao BODY (CP:R p.222)', 'Stabilized: each full day of rest heals HP equal to BODY (CP:R p.222)')
+                : t('Só depois de estabilizar e com HP faltando (CP:R p.222)', 'Only once stabilized and missing HP (CP:R p.222)')}
+              onClick={() => healBy(care.rest, t('Descanso de 1 dia (CP:R p.222)', '1 day of rest (CP:R p.222)'))}>
+              {t(`Descanso (1 dia): +${care.rest}`, `Rest (1 day): +${care.rest}`)}
+            </Button>
             <Button icon={<Activity size={14} />} disabled={busy || h.woundState === 'Unhurt'} onClick={() => run('combat/stabilize', {}, t('Estabilizado.', 'Stabilized.'))}>
               {t('Estabilizar', 'Stabilize')}
             </Button>

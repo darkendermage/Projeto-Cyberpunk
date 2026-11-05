@@ -36,7 +36,8 @@ public sealed class CombatOperations(CharacterRuleBook rules, CharacterCalculato
             L.T($"{request.Amount} de dano no {where}, SP {sp}{(request.BypassArmor ? " ignorado" : request.HalveArmor ? " (metade, corpo a corpo)" : "")}; {through} passaram.", $"{request.Amount} damage to the {where}, SP {sp}{(request.BypassArmor ? " ignored" : request.HalveArmor ? " (half, melee)" : "")}; {through} got through."),
             -through, hp.ToString(), after.ToString());
 
-        var combat = sheet.Combat with { CurrentHp = after, Stabilized = after >= 1 && sheet.Combat.Stabilized };
+        // Any wound needs stabilizing before natural healing starts (CP:R p.222).
+        var combat = sheet.Combat with { CurrentHp = after, Stabilized = through == 0 && sheet.Combat.Stabilized };
         if (before.Health.WoundState == WoundState.Mortally && through > 0)
         {
             // CP:R p.187: a Mortally Wounded character damaged by an Attack suffers a Critical Injury and +1 Death Save Penalty.
@@ -215,7 +216,7 @@ public sealed class CombatOperations(CharacterRuleBook rules, CharacterCalculato
             var after = Math.Max(0, report.Health.CurrentHp - bonus);
             change.Log(CharacterEventKind.Combat, "critical-bonus-damage", L.T($"Dano bônus de {def.Name}, direto no HP ({CharacterRuleBook.Page(rules.Document.Combat.CriticalInjury.Reference)}).", $"{def.Name} bonus damage, straight to HP ({CharacterRuleBook.Page(rules.Document.Combat.CriticalInjury.Reference)})."),
                 after - report.Health.CurrentHp, report.Health.CurrentHp.ToString(), after.ToString());
-            sheet = sheet with { Combat = sheet.Combat with { CurrentHp = after, Stabilized = after >= 1 && sheet.Combat.Stabilized } };
+            sheet = sheet with { Combat = sheet.Combat with { CurrentHp = after, Stabilized = false } };
         }
         return sheet;
     }

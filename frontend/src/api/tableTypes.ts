@@ -210,6 +210,27 @@ export interface PlayerArmor { spHead: number; maxSpHead: number | null; spBody:
 
 export type ArmorLocation = 'Head' | 'Body';
 
+/** The seat's own sheet, read-only at the table. */
+export interface PlayerSheet {
+  name: string;
+  handle: string | null;
+  roles: string[];
+  hp: number;
+  maxHp: number;
+  humanity: number;
+  maxHumanity: number;
+  stats: { key: string; value: number }[];
+  armor: PlayerArmor;
+  headArmor: string | null;
+  bodyArmor: string | null;
+  weapons: PlayerSheetWeapon[];
+  cyberware: string[];
+  gear: { name: string; quantity: number }[];
+  skills: PlayerSheetSkill[];
+}
+export interface PlayerSheetWeapon { name: string; damage: string | null; rof: number | null; magazine: number | null; rounds: number; equipped: boolean }
+export interface PlayerSheetSkill { name: string; namePt: string | null; specialization: string | null; category: string; level: number; total: number }
+
 /** A PC on the scene, for the strip under the map. */
 export interface PartyMember {
   characterId: number;

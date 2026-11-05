@@ -550,6 +550,10 @@ public class CharactersApiTests(ApiFactory factory)
         c.Report.Health.CurrentHp.Should().Be(maxHp - 4);
         c.Report.Armor.Body.Sp.Should().Be(10);
         c.Report.Armor.Head.Sp.Should().Be(11);
+        c.Sheet.Combat.Stabilized.Should().BeFalse("any wound needs stabilizing before natural healing (CP:R p.222)");
+        c = await Post(c, "combat/stabilize", new VersionRequest(c.Version));
+        c.Sheet.Combat.Stabilized.Should().BeTrue();
+        c.Report.Health.CurrentHp.Should().Be(maxHp - 4, "stabilizing a Lightly Wounded target changes no HP");
 
         c = await Post(c, "combat/damage", new DamageRequest(c.Version, 200, BypassArmor: true));
         c.Report.Health.WoundState.Should().Be(WoundState.Mortally);

@@ -14,6 +14,7 @@ import { TOOL_HINT } from './board/toolHints';
 import { TableBoard, type BoardHandle } from './board/TableBoard';
 import { ChatPanel } from './chat/ChatPanel';
 import { CharacterPanel, InitiativePanel } from './PlayerPanels';
+import { PlayerSheetPanel } from './PlayerSheetPanel';
 import { fromPlayerFighter } from './tokens';
 import { forgetSeat, isRefusedKey, rememberSeat, savedSeat } from './lobby';
 import { LangSwitch } from './LangSwitch';
@@ -27,7 +28,7 @@ import { usePanels } from './usePanels';
 import { HUB_TEXT, useTableHub } from './useTableHub';
 import styles from './Table.module.css';
 
-type Tab = 'character' | 'initiative' | 'chat';
+type Tab = 'character' | 'sheet' | 'initiative' | 'chat';
 
 /**
  * A player's screen (/mesa/j/:token), reached through the GM's tunnel. It lives outside the app shell: the players'
@@ -62,6 +63,8 @@ export function PlayerTablePage() {
   useEffect(() => { if (denied && savedSeat() === token) forgetSeat(); }, [denied, token]);
   const encounter = useQuery({ queryKey: tableKeys.playerEncounter(token), queryFn: api.encounter, enabled: state.isSuccess });
   const character = useQuery({ queryKey: tableKeys.playerCharacter(token), queryFn: api.character, enabled: state.isSuccess });
+  // The full sheet loads when its tab opens, and again each time it is opened.
+  const sheet = useQuery({ queryKey: tableKeys.playerSheet(token), queryFn: api.sheet, enabled: state.isSuccess && tab === 'sheet' });
   const messages = useQuery({ queryKey: tableKeys.playerMessages(token), queryFn: api.messages, enabled: state.isSuccess });
   const party = useQuery({ queryKey: tableKeys.playerParty(token), queryFn: api.party, enabled: state.isSuccess });
   const [armorBusy, setArmorBusy] = useState(false);
@@ -82,6 +85,7 @@ export function PlayerTablePage() {
       // A hit or a heal changes the sheet too, and the party's numbers.
       void client.invalidateQueries({ queryKey: tableKeys.playerCharacter(token) });
       void client.invalidateQueries({ queryKey: tableKeys.playerParty(token) });
+      void client.invalidateQueries({ queryKey: tableKeys.playerSheet(token) });
     },
     message: (m) => client.setQueryData<TableMessage[]>(tableKeys.playerMessages(token), (old = []) => (old.some((x) => x.id === m.id) ? old : [...old, m].slice(-300))),
     tokenDrag: (d) => { if (d.sceneId === shownRef.current) board.current?.showDrag(d.tokenId, d.x, d.y); },
@@ -211,7 +215,7 @@ export function PlayerTablePage() {
           onResize={(right) => setPanels({ right })} onToggle={() => setPanels({ rightOpen: !panels.rightOpen })} />
         <aside className={`${styles.column} ${styles.colRight} ${panels.rightOpen ? '' : styles.collapsed}`}>
           <div className={styles.tabs} role="tablist">
-            {([['character', t('Personagem', 'Character')], ['initiative', t('Iniciativa', 'Initiative')], ['chat', 'Chat']] as [Tab, string][]).map(([id, label]) => (
+            {([['character', t('Personagem', 'Character')], ['sheet', t('Ficha', 'Sheet')], ['initiative', t('Iniciativa', 'Initiative')], ['chat', 'Chat']] as [Tab, string][]).map(([id, label]) => (
               <Button key={id} role="tab" aria-selected={tab === id} variant={tab === id ? 'primary' : 'ghost'} onClick={() => setTab(id)}>{label}</Button>
             ))}
           </div>
@@ -228,6 +232,7 @@ export function PlayerTablePage() {
               }}
               onTurn={(delta) => { if (myToken) void run(() => api.moveToken(myToken.id, { x: myToken.x, y: myToken.y, rotation: (myToken.rotation + delta + 360) % 360 })); }} />
           )}
+          {tab === 'sheet' && (sheet.isLoading ? <Spinner /> : <PlayerSheetPanel sheet={sheet.data ?? null} />)}
           {tab === 'initiative' && <InitiativePanel encounter={encounter.data ?? null} />}
           {tab === 'chat' && (
             <ChatPanel gm={false} messages={messages.data ?? []}

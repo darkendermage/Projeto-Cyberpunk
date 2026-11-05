@@ -265,6 +265,15 @@
   text-transform: uppercase;
   color: var(--red);
 }
+/* "Dano" / "Cura" inside the HP panel. */
+.subhead {
+  font-family: var(--font-display);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
 .idValue {
   font-family: var(--font-display);
   font-size: 22px;

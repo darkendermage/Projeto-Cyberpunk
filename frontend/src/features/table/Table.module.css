@@ -8,6 +8,8 @@
 /* A character's name, as on the sheet. */
 .heroName { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--text); }
 .label { font-family: var(--font-display); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-muted); }
+.sheetStats { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; }
+.sheetStat { display: flex; flex-direction: column; align-items: center; padding: 4px 2px; border: 1px solid var(--line); border-radius: 4px; }
 .row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; }
 .rowBetween { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px; }
 .stack { display: flex; flex-direction: column; gap: 10px; }

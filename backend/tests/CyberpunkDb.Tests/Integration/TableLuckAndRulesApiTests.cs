@@ -92,6 +92,28 @@ public class TableLuckAndRulesApiTests(ApiFactory factory)
     }
 
     [Fact]
+    public async Task A_player_reads_their_whole_sheet_through_the_table()
+    {
+        var (seat, id) = await LuckySeat("Ficha rapida");
+
+        var sheet = await Send<PlayerSheetDto>(_player, HttpMethod.Get, "/api/table/play/sheet", seat: seat.Token);
+
+        sheet.Name.Should().Be("Ficha rapida");
+        sheet.Roles.Should().ContainSingle(r => r.Contains("Solo"));
+        sheet.Stats.Should().HaveCount(10);
+        sheet.MaxHp.Should().BeGreaterThan(0);
+        sheet.MaxHumanity.Should().BeGreaterThan(0);
+        sheet.Weapons.Should().NotBeEmpty();
+        sheet.Cyberware.Should().NotBeEmpty();
+        sheet.Gear.Should().NotBeEmpty();
+        sheet.Skills.Should().OnlyContain(s => s.Level > 0);
+        var loner = await Send<SeatDto>(_gm, HttpMethod.Post, "/api/table/seats", new CreateSeatRequest("Sem ficha rapida"), expected: HttpStatusCode.Created);
+        (await _player.SendAsync(new HttpRequestMessage(HttpMethod.Get, "/api/table/play/sheet") { Headers = { { "X-Seat", loner.Token } } }))
+            .StatusCode.Should().Be(HttpStatusCode.NoContent);
+        id.Should().BeGreaterThan(0);
+    }
+
+    [Fact]
     public async Task Players_look_up_the_books_tables_through_the_table()
     {
         var (seat, _) = await LuckySeat("Leitora");

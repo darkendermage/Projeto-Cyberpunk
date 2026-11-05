@@ -65,7 +65,7 @@ Fichas completas de jogador, salvas no seu computador.
 
 - **Criação pelos três métodos do livro:** Streetrat, Edgerunner e Complete Package, com as dez Roles.
 - **Caminho de Vida:** as tabelas de Lifepath geral e de cada Role. O botão **Rolar o que falta** sorteia tudo que ficou em branco.
-- **Ficha de jogo:** STATs, perícias, HP e ferimentos, Death Save, Critical Injuries, armaduras perdendo SP, munição, Autofire, LUCK e progressão por IP: suba ou aprenda qualquer perícia (com a especialização de Artes Marciais, Idioma, Especialista Local…) e desfaça um gasto de IP pelo histórico.
+- **Ficha de jogo:** STATs, perícias, HP e ferimentos (dano e cura separados, com +1, +5, curar tudo e o dia de descanso que cura BODY depois de estabilizar, CP:R p.222), Death Save, Critical Injuries, armaduras perdendo SP, munição, Autofire, LUCK e progressão por IP: suba ou aprenda qualquer perícia (com a especialização de Artes Marciais, Idioma, Especialista Local…) e desfaça um gasto de IP pelo histórico.
 - **Cyberware no corpo:** um modelo anatômico mostra onde cada peça vai, quantos slots sobram e quanta Humanity custa. Passe o mouse numa peça para ver em uma linha o que ela faz. Inclui a terapia para recuperar Humanity.
 - **Equipamento e grana:** loja com o catálogo inteiro, saldo em eurobucks, moradia e lifestyle. Itens de troca, presente ou saque entram sem pagar, e as roupas ficam separadas do arsenal.
 - **Leve para outro PC:** exporte a ficha num arquivo e importe na casa do amigo.
@@ -113,7 +113,7 @@ Uma mesa no estilo Foundry/Owlbear dentro do app, com as regras do RED. O seu PC
 - **O jogador põe o próprio token:** com a cena ao vivo, ele toca em "Pôr meu token" e depois no mapa; o token já liga à iniciativa se o personagem estiver no combate.
 - **Painéis ajustáveis:** arraste a borda dos painéis laterais para mudar a largura, ou esconda-os para o mapa ocupar a tela.
 - **Armadura na mão:** ícones de cabeça e corpo com o SP e +/− para ablar ou reparar (o jogador no próprio PC; o mestre em qualquer combatente).
-- **Painel do jogador:** HP, SP, Sorte, armas com botões de ataque e dano, perícias com o total pronto e Death Save quando é a hora. Funciona no celular.
+- **Painel do jogador:** HP, SP, Sorte, armas com botões de ataque e dano, perícias com o total pronto e Death Save quando é a hora. Funciona no celular. A aba Ficha mostra a ficha inteira, só para leitura: STATs, HP, Humanidade, armadura, armas, cyberware, equipamento e perícias com nível.
 - **Pela internet, sem mexer no roteador:** na aba Convites, baixe o cloudflared (o programa gratuito da Cloudflare) e clique em "Abrir para a internet". Pelo túnel só se chega à mesa: catálogo, fichas e o resto do app ficam fechados.
 - **Um link para todos:** mande o link geral e ligue "Entrada aberta". Cada jogador escolhe um dos lugares livres, e o celular lembra a escolha. Se alguém trocar de aparelho, clique em "Liberar". Quem preferir ainda pode mandar a cada jogador o link próprio dele.
 
