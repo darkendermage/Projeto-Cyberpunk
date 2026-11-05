@@ -19,6 +19,7 @@ import { WOUND_LABEL, WOUND_TONE } from '../combat/combat';
 import { AddCombatantsDialog } from '../combat/AddCombatantsDialog';
 import type { Run } from '../combat/EncounterView';
 import { NewFight } from './NewFight';
+import { BarrierControls, BarrierStock } from './BarrierStock';
 import { NumField } from './NumField';
 import { ArmorControl } from './ArmorControl';
 import { damageFormula } from './tokens';
@@ -235,6 +236,8 @@ export function SceneTab({ scene, act, onGridDraft }: { scene: SceneView; act: A
         <span className={styles.muted}>{t('Vincule a um PC, a um NPC salvo ou a um NPC do compêndio: o token usa a imagem dele.', 'Link it to a PC, a saved NPC or a compendium NPC: the token uses its image.')}</span>
         <Button type="submit" icon={<Plus size={15} />} disabled={!token.label.trim()}>{t('Pôr no mapa', 'Put on the map')}</Button>
       </form>
+
+      <BarrierStock scene={scene} act={act} at={center} />
     </div>
   );
 }
@@ -272,6 +275,10 @@ export function TokenInspector({ scene, token, seats, encounter, act, onDone }: 
         </Field>
       </div>
       <Switch checked={form.locked ?? false} onChange={(locked) => setForm({ ...form, locked })} label={t('Travado (ninguém arrasta)', 'Locked (nobody drags it)')} />
+      {token.barrier ? <BarrierControls scene={scene} token={token} act={act} /> : (
+        <Switch checked={form.layer === 'Scenery'} onChange={(on) => setForm({ ...form, layer: on ? 'Scenery' : 'Token' })}
+          label={t('Cenário (fica sob os personagens)', 'Scenery (sits under the characters)')} />
+      )}
 
       <div className={styles.section}>
         <span className={styles.label}>{t('Quem vê e quem move', 'Who sees and moves it')}</span>

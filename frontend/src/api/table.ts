@@ -2,7 +2,7 @@ import { API_BASE, ApiError, request } from './client';
 import { locale, t } from '../i18n';
 import type {
   ArmorLocation, ClaimResult, Lobby, MediaInfo, PartyMember, PlayerCharacter, PlayerSheet, PlayerEncounter, PlayerSeat, PlayerState, RollRequest, SceneBatch, SceneGrid, SceneSummary, SceneView, Seat,
-  SendMessage, TableMessage, TableRules, TemplateInput, TokenInput, TokenMove, TunnelStatus,
+  SendMessage, TableMessage, TableRules, TemplateInput, BarrierRequest, TokenInput, TokenMove, TunnelStatus,
 } from './tableTypes';
 
 const json = (body: unknown) => JSON.stringify(body);
@@ -19,6 +19,9 @@ export const tableApi = {
   activateScene: (id: number) => request<SceneView>(`/table/scenes/${id}/activate`, { method: 'POST' }),
   reorderScenes: (ids: number[]) => request<SceneSummary[]>('/table/scenes/reorder', { method: 'POST', body: json({ ids }) }),
   addToken: (id: number, token: TokenInput) => request<SceneView>(`/table/scenes/${id}/tokens`, { method: 'POST', body: json(token) }),
+  addBarrier: (id: number, barrier: BarrierRequest) => request<SceneView>(`/table/scenes/${id}/barriers`, { method: 'POST', body: json(barrier) }),
+  damageBarrier: (id: number, tokenId: string, amount: number) =>
+    request<SceneView>(`/table/scenes/${id}/barriers/${tokenId}/damage`, { method: 'POST', body: json({ amount }) }),
   batch: (id: number, body: SceneBatch) => request<SceneView>(`/table/scenes/${id}/batch`, { method: 'POST', body: json(body) }),
   party: (id: number) => request<PartyMember[]>(`/table/scenes/${id}/party`),
   rules: () => request<TableRules>('/table/rules'),

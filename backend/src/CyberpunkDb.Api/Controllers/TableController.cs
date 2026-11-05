@@ -100,6 +100,14 @@ public sealed class TableController(SeatService seats, MediaService media, Scene
     [HttpPost("scenes/{id:int}/encounter-tokens")]
     public Task<SceneView> AddEncounterTokens(int id, CancellationToken ct) => scenes.AddEncounterTokensAsync(id, ct);
 
+    /// <summary>A barrier of the cover table on the scenery layer (and the fight's cover, when the scene has a fight).</summary>
+    [HttpPost("scenes/{id:int}/barriers")]
+    public Task<SceneView> AddBarrier(int id, BarrierRequest request, CancellationToken ct) => fights.AddBarrierAsync(id, request, ct);
+
+    [HttpPost("scenes/{id:int}/barriers/{tokenId}/damage")]
+    public Task<SceneView> DamageBarrier(int id, string tokenId, BarrierDamageRequest request, CancellationToken ct) =>
+        fights.DamageBarrierAsync(id, tokenId, request, ct);
+
     [HttpPut("scenes/{id:int}/tokens/{tokenId}")]
     public Task<SceneView> UpdateToken(int id, string tokenId, TokenInput input, CancellationToken ct) => scenes.UpdateTokenAsync(id, tokenId, input, ct);
 

@@ -1,5 +1,6 @@
 import { Application, Container, Graphics, Sprite, Text, Texture, type FederatedPointerEvent } from 'pixi.js';
-import type { Ping, SceneGrid, SceneTemplate, SceneView, TemplateShapeName, TokenView } from '../../../api/tableTypes';
+import type { BarrierView, Ping, SceneGrid, SceneTemplate, SceneView, TemplateShapeName, TokenView } from '../../../api/tableTypes';
+import { barrierLook, barrierState } from './barriers';
 import { cellToPx, formatMeters, gridDistance, pxToCell, snapCell, type Point } from '../grid';
 import { templateShape } from '../templates';
 import { initials, tokenStatus, type TokenFighter } from '../tokens';
@@ -80,6 +81,7 @@ export class BoardController {
   private readonly world = new Container();
   private readonly backgroundLayer = new Container();
   private readonly gridLayer = new Graphics();
+  private readonly sceneryLayer = new Container();
   private readonly templateLayer = new Container();
   private readonly tokenLayer = new Container();
   private readonly overlay = new Container();
@@ -131,7 +133,8 @@ export class BoardController {
     this.app.stage.eventMode = 'static';
     this.app.stage.hitArea = this.app.screen;
     this.app.stage.addChild(this.world);
-    this.world.addChild(this.backgroundLayer, this.gridLayer, this.templateLayer, this.tokenLayer, this.overlay);
+    // Scenery (barriers, cars) over the map and under the areas and the characters.
+    this.world.addChild(this.backgroundLayer, this.gridLayer, this.sceneryLayer, this.templateLayer, this.tokenLayer, this.overlay);
     this.overlay.addChild(this.preview, this.ruler, this.rulerText, this.lasso);
     this.app.stage.on('pointerdown', (e) => this.onDown(e, null));
     this.app.stage.on('globalpointermove', (e) => this.onMove(e));
@@ -296,8 +299,9 @@ export class BoardController {
         const id = token.id;
         node.on('pointerdown', (e) => this.onDown(e, { tokenId: id }));
         this.tokens.set(token.id, node);
-        this.tokenLayer.addChild(node);
       }
+      const layer = token.layer === 'Scenery' ? this.sceneryLayer : this.tokenLayer;
+      if (node.parent !== layer) layer.addChild(node);
       this.drawToken(node, token, data);
       this.placeToken(token.id);
     }
@@ -329,6 +333,12 @@ export class BoardController {
       ring.stroke({ width: 5, color: ACTIVE_COLOR });
       node.addChild(ring);
       this.activeRings.push(ring);
+    }
+
+    if (token.barrier) {
+      this.drawBarrier(node, token, token.barrier, w, h, data.selectedTokens.includes(token.id));
+      node.alpha = data.gm && token.visibility !== 'All' ? 0.55 : 1;
+      return;
     }
 
     const body = new Container();
@@ -389,6 +399,63 @@ export class BoardController {
     node.addChild(label);
 
     node.alpha = data.gm && token.visibility !== 'All' ? 0.55 : 1;
+  }
+
+  /** A barrier: the material's drawn texture, its HP under it, cracked and faded at 0 HP. */
+  private drawBarrier(node: Container, token: TokenView, barrier: BarrierView, w: number, h: number, selected: boolean) {
+    const look = barrierLook(barrier.material);
+    const state = barrierState(barrier);
+    const body = new Container();
+    body.rotation = (token.rotation * Math.PI) / 180;
+    const x0 = -w / 2;
+    const y0 = -h / 2;
+    const tex = new Graphics().rect(x0, y0, w, h).fill({ color: look.base, alpha: look.alpha });
+    const step = Math.max(10, Math.min(w, h) / 2);
+    if (look.pattern === 'plates') {
+      for (let x = x0 + step; x < x0 + w - 1; x += step) tex.moveTo(x, y0).lineTo(x, y0 + h);
+      for (let y = y0 + step; y < y0 + h - 1; y += step) tex.moveTo(x0, y).lineTo(x0 + w, y);
+      tex.stroke({ width: 2, color: look.line, alpha: 0.7 });
+      for (let x = x0 + 5; x < x0 + w; x += step) for (let y = y0 + 5; y < y0 + h; y += step) tex.circle(x, y, 1.6);
+      tex.fill({ color: look.line, alpha: 0.9 });
+    } else if (look.pattern === 'blocks') {
+      const bh = step / 1.5;
+      let row = 0;
+      for (let y = y0; y < y0 + h; y += bh, row++) {
+        tex.moveTo(x0, y).lineTo(x0 + w, y);
+        for (let x = x0 + (row % 2 ? step / 2 : step); x < x0 + w; x += step) tex.moveTo(x, y).lineTo(x, Math.min(y + bh, y0 + h));
+      }
+      tex.stroke({ width: 2, color: look.line, alpha: 0.8 });
+    } else if (look.pattern === 'grain') {
+      const along = w >= h;
+      const span = along ? h : w;
+      for (let i = 1; i < 6; i++) {
+        const o = (span / 6) * i;
+        if (along) tex.moveTo(x0, y0 + o).bezierCurveTo(x0 + w / 3, y0 + o - 3, x0 + (2 * w) / 3, y0 + o + 3, x0 + w, y0 + o);
+        else tex.moveTo(x0 + o, y0).bezierCurveTo(x0 + o - 3, y0 + h / 3, x0 + o + 3, y0 + (2 * h) / 3, x0 + o, y0 + h);
+      }
+      tex.stroke({ width: 1.5, color: look.line, alpha: 0.8 });
+    } else if (look.pattern === 'glass') {
+      for (let d = step / 2; d < w + h; d += step) tex.moveTo(x0 + Math.max(0, d - h), y0 + Math.min(d, h)).lineTo(x0 + Math.min(d, w), y0 + Math.max(0, d - w));
+      tex.stroke({ width: 2, color: look.line, alpha: 0.6 });
+    }
+    if (state.destroyed) {
+      tex.moveTo(x0, y0).lineTo(x0 + w * 0.4, y0 + h * 0.55).lineTo(x0 + w * 0.55, y0 + h * 0.35).lineTo(x0 + w, y0 + h)
+        .moveTo(x0 + w, y0).lineTo(x0 + w * 0.6, y0 + h * 0.6).lineTo(x0 + w * 0.3, y0 + h)
+        .stroke({ width: 3, color: 0x111111, alpha: 0.9 });
+    }
+    tex.rect(x0, y0, w, h).stroke({ width: selected ? 4 : 2, color: selected ? 0xffffff : look.line, alpha: 1 });
+    body.addChild(tex);
+    body.alpha = state.destroyed ? 0.45 : 1;
+    node.addChild(body);
+
+    const barW = Math.max(30, w * 0.9);
+    node.addChild(new Graphics()
+      .rect(-barW / 2, h / 2 + 3, barW, 6).fill({ color: 0x000000, alpha: 0.75 })
+      .rect(-barW / 2 + 1, h / 2 + 4, Math.max(0, (barW - 2) * state.ratio), 4).fill({ color: state.ratio > 0.5 ? 0x3ddc84 : state.ratio > 0 ? 0xffcf3a : 0xff2a3d }));
+    const label = new Text({ text: `${token.label} · ${state.text}`, style: { fontFamily: FONT, fontSize: 12, fontWeight: '600', fill: 0xe9edf2, stroke: { color: 0x000000, width: 3 } }, resolution: 2 });
+    label.anchor.set(0.5, 0);
+    label.position.set(0, h / 2 + 11);
+    node.addChild(label);
   }
 
   /** Puts a token where the data (or a live drag) says; position is the token's center. */

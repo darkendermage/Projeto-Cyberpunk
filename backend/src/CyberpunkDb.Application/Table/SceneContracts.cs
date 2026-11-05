@@ -17,7 +17,17 @@ public sealed record BackgroundView(Guid? MediaId, string? Url, int Width, int H
 public sealed record TokenView(
     string Id, string Label, double X, double Y, double Width, double Height, double Rotation, bool Locked,
     Guid? ImageMediaId, string? ImageUrl, string Color, int? OwnerSeatId, TokenVisibility Visibility, IReadOnlyList<int> VisibleSeatIds,
-    int? CharacterId, string? CombatantId, double? RangeRingMeters, bool Controllable, int? NpcId, string? CompendiumNpcId);
+    int? CharacterId, string? CombatantId, double? RangeRingMeters, bool Controllable, int? NpcId, string? CompendiumNpcId,
+    TokenLayer Layer = TokenLayer.Token, BarrierView? Barrier = null);
+
+/// <summary>A barrier as shown: with a fight, the HP is the fight's cover HP.</summary>
+public sealed record BarrierView(string Material, bool Thick, int MaxHp, int Hp, string? CoverId);
+
+/// <summary>A barrier put on the map: a material of the book (CP:R p.182) and its thickness; the HP comes from the table unless given (the examples of p.183).</summary>
+public sealed record BarrierRequest(string? Label, string Material, bool Thick, int? Hp, double X, double Y, double Width = 1, double Height = 1);
+
+/// <summary>Damage to a barrier; a negative amount repairs it (only while it is not a fight's cover).</summary>
+public sealed record BarrierDamageRequest(int Amount);
 
 public sealed record CreateSceneRequest(string Name);
 
@@ -31,7 +41,7 @@ public sealed record TokenInput(
     string Label, double X, double Y, double Width = 1, double Height = 1, double Rotation = 0, bool Locked = false,
     Guid? ImageMediaId = null, string? Color = null, int? OwnerSeatId = null, TokenVisibility Visibility = TokenVisibility.All,
     List<int>? VisibleSeatIds = null, int? CharacterId = null, string? CombatantId = null, double? RangeRingMeters = null,
-    int? NpcId = null, string? CompendiumNpcId = null);
+    int? NpcId = null, string? CompendiumNpcId = null, TokenLayer Layer = TokenLayer.Token);
 
 /// <summary>A drag, a turn or a resize; anything left null stays as it was. Last write wins.</summary>
 public sealed record TokenMoveRequest(double X, double Y, double? Rotation = null, double? Width = null, double? Height = null);

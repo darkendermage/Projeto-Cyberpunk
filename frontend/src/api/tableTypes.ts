@@ -45,7 +45,17 @@ export interface TokenView {
   npcId: number | null;
   /** A named NPC of the books (compendium id) the token stands for. */
   compendiumNpcId: string | null;
+  /** Scenery sits over the map and under the characters. */
+  layer?: TokenLayer;
+  barrier?: BarrierView | null;
 }
+
+export type TokenLayer = 'Token' | 'Scenery';
+
+/** A barrier of the cover table (CP:R p.182); with a fight, its HP is the fight's cover HP. */
+export interface BarrierView { material: string; thick: boolean; maxHp: number; hp: number; coverId: string | null }
+
+export interface BarrierRequest { label: string | null; material: string; thick: boolean; hp: number | null; x: number; y: number; width?: number; height?: number }
 
 /** An area of effect: origin in cells, size in meters, angle in degrees (0 = right, clockwise). */
 export interface SceneTemplate {
@@ -103,6 +113,7 @@ export interface TokenInput {
   rangeRingMeters?: number | null;
   npcId?: number | null;
   compendiumNpcId?: string | null;
+  layer?: TokenLayer;
 }
 
 /** A selection changed at once (see the batch routes). */

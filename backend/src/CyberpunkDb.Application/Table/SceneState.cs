@@ -11,6 +11,23 @@ public enum TokenVisibility { All, Gm, Seats }
 [JsonConverter(typeof(JsonStringEnumConverter))]
 public enum TemplateShape { Circle, Square, Cone, Line }
 
+/// <summary>Scenery sits over the map and under the characters (barriers, cars, crates); tokens are on top.</summary>
+[JsonConverter(typeof(JsonStringEnumConverter))]
+public enum TokenLayer { Token, Scenery }
+
+/// <summary>
+/// A barrier from the book's cover table (CP:R p.182–183): material, thickness and HP. On a scene with a fight it is
+/// one of the fight's covers (<see cref="CoverId"/>), and the fight keeps its HP.
+/// </summary>
+public sealed record SceneBarrier
+{
+    public string Material { get; init; } = "";
+    public bool Thick { get; init; }
+    public int MaxHp { get; init; }
+    public int Hp { get; init; }
+    public string? CoverId { get; init; }
+}
+
 /// <summary>
 /// Everything on a scene, stored as JSON. Positions are in cells: a cell is <see cref="SceneGrid.SizePx"/> pixels of the
 /// background image, starting at the grid offset. A scene without a visible grid still measures in cells.
@@ -74,6 +91,8 @@ public sealed record SceneToken
     public string? CombatantId { get; init; }
     /// <summary>A ring drawn around the token, in meters (a weapon's range, a grenade's reach).</summary>
     public double? RangeRingMeters { get; init; }
+    public TokenLayer Layer { get; init; } = TokenLayer.Token;
+    public SceneBarrier? Barrier { get; init; }
 }
 
 /// <summary>

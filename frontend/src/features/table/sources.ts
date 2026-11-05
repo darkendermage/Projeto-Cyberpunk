@@ -59,6 +59,6 @@ export function tokenInputOf(tk: TokenView): TokenInput {
     label: tk.label, x: tk.x, y: tk.y, width: tk.width, height: tk.height, rotation: tk.rotation, locked: tk.locked,
     imageMediaId: tk.imageMediaId, color: tk.color, ownerSeatId: tk.ownerSeatId, visibility: tk.visibility,
     visibleSeatIds: tk.visibleSeatIds, characterId: tk.characterId, combatantId: tk.combatantId, rangeRingMeters: tk.rangeRingMeters,
-    npcId: tk.npcId, compendiumNpcId: tk.compendiumNpcId,
+    npcId: tk.npcId, compendiumNpcId: tk.compendiumNpcId, layer: tk.layer ?? 'Token',
   };
 }

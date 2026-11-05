@@ -41,7 +41,7 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
     {
         var scene = await db.Scenes.AsNoTracking().FirstOrDefaultAsync(s => s.Id == id, ct) ?? throw NotFound();
         var state = Deserialize(scene.StateJson);
-        return SceneViews.ForGm(scene, state, await ImagesAsync(state, ct));
+        return SceneViews.ForGm(scene, state, await ImagesAsync(state, ct), await CoversAsync(scene, state, ct));
     }
 
     /// <summary>A new, empty scene at the end of the list. The very first scene starts active.</summary>
@@ -219,7 +219,7 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
         var scene = await db.Scenes.AsNoTracking().FirstOrDefaultAsync(s => s.Active, ct);
         if (scene is null) return null;
         var state = Deserialize(scene.StateJson);
-        return SceneViews.ForSeat(scene, state, seat, await ImagesAsync(state, ct));
+        return SceneViews.ForSeat(scene, state, seat, await ImagesAsync(state, ct), await CoversAsync(scene, state, ct));
     }
 
     /// <summary>The GM's selection, changed at once.</summary>
@@ -371,13 +371,77 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
     private async Task<SceneView> PublishAsync(Scene scene, SceneState state, CancellationToken ct)
     {
         var images = await ImagesAsync(state, ct);
-        var gm = SceneViews.ForGm(scene, state, images);
+        var covers = await CoversAsync(scene, state, ct);
+        var gm = SceneViews.ForGm(scene, state, images, covers);
         Dictionary<int, SceneView?>? seats = null;
         if (scene.Active)
-            seats = (await OpenSeatsAsync(ct)).ToDictionary(s => s.Id, s => (SceneView?)SceneViews.ForSeat(scene, state, s, images));
+            seats = (await OpenSeatsAsync(ct)).ToDictionary(s => s.Id, s => (SceneView?)SceneViews.ForSeat(scene, state, s, images, covers));
         await notifier.SceneAsync(gm, seats, ct);
         return gm;
     }
+
+    /// <summary>The HP of the linked fight's covers, read only when a barrier on the scene is one of them.</summary>
+    private async Task<IReadOnlyDictionary<string, int>?> CoversAsync(Scene scene, SceneState state, CancellationToken ct)
+    {
+        if (scene.EncounterId is not { } encounterId || !state.Tokens.Any(t => t.Barrier?.CoverId is not null)) return null;
+        var json = await db.Encounters.AsNoTracking().Where(e => e.Id == encounterId).Select(e => e.StateJson).FirstOrDefaultAsync(ct);
+        return json is null ? null : EncounterService.Deserialize(json).Covers.ToDictionary(c => c.Id, c => c.Hp);
+    }
+
+    /// <summary>A fight's covers changed: the scenes showing them as barriers go out again.</summary>
+    public async Task RepublishCoversOfAsync(int encounterId, CancellationToken ct)
+    {
+        foreach (var scene in await db.Scenes.AsNoTracking().Where(s => s.EncounterId == encounterId).ToListAsync(ct))
+        {
+            var state = Deserialize(scene.StateJson);
+            if (state.Tokens.Any(t => t.Barrier?.CoverId is not null)) await PublishAsync(scene, state, ct);
+        }
+    }
+
+    // ------------------------------------------------------------------ barriers
+
+    public Task<SceneView> AddBarrierAsync(int id, BarrierRequest r, int hp, string? coverId, CancellationToken ct) =>
+        MutateAsync(id, null, (_, state) =>
+        {
+            if (state.Tokens.Count >= MaxTokens)
+                throw RequestValidationException.For("tokens", L.T($"Uma cena comporta até {MaxTokens} tokens.", $"A scene holds up to {MaxTokens} tokens."));
+            var token = new SceneToken
+            {
+                Id = NextId("T", state.Tokens.Select(t => t.Id)),
+                Label = string.IsNullOrWhiteSpace(r.Label) ? L.T("Barreira", "Barrier") : Truncate(r.Label.Trim(), 40),
+                X = Cell(r.X, "x"), Y = Cell(r.Y, "y"), Width = Size(r.Width, "width"), Height = Size(r.Height, "height"),
+                Color = BarrierColor(r.Material), Layer = TokenLayer.Scenery, Locked = false,
+                Barrier = new SceneBarrier { Material = r.Material, Thick = r.Thick, MaxHp = hp, Hp = hp, CoverId = coverId },
+            };
+            return Task.FromResult(state with { Tokens = [.. state.Tokens, token] });
+        }, bumpVersion: false, ct);
+
+    /// <summary>The HP of a barrier that is no fight's cover, between 0 and its max.</summary>
+    public Task<SceneView> SetBarrierHpAsync(int id, string tokenId, int delta, CancellationToken ct) =>
+        MutateAsync(id, null, (_, state) =>
+        {
+            var token = RequireToken(state, tokenId);
+            var b = token.Barrier ?? throw RequestValidationException.For("tokenId", L.T("Esse token não é uma barreira.", "That token isn't a barrier."));
+            var next = token with { Barrier = b with { Hp = Math.Clamp(b.Hp - delta, 0, b.MaxHp) } };
+            return Task.FromResult(state with { Tokens = state.Tokens.Select(t => t.Id == tokenId ? next : t).ToList() });
+        }, bumpVersion: false, ct);
+
+    /// <summary>Barriers that became a fight's covers when the fight started (token id → cover id).</summary>
+    public Task<SceneView> LinkBarriersAsync(int id, IReadOnlyDictionary<string, string> covers, CancellationToken ct) =>
+        MutateAsync(id, null, (_, state) => Task.FromResult(state with
+        {
+            Tokens = state.Tokens.Select(t => t.Barrier is { } b && covers.TryGetValue(t.Id, out var c) ? t with { Barrier = b with { CoverId = c } } : t).ToList(),
+        }), bumpVersion: false, ct);
+
+    private static string BarrierColor(string material) => material switch
+    {
+        "steel" => "#8a96a3",
+        "stone" => "#9b8f7e",
+        "bulletproof-glass" => "#7fd4e8",
+        "concrete" => "#a3a3a3",
+        "wood" => "#a8743f",
+        _ => "#d8d0c0",
+    };
 
     private async Task<Dictionary<int, SceneView?>> NoSceneAsync(CancellationToken ct) =>
         (await OpenSeatsAsync(ct)).ToDictionary(s => s.Id, _ => (SceneView?)null);
@@ -495,6 +559,8 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
             CharacterId = i.CharacterId, NpcId = i.NpcId, CompendiumNpcId = compendiumNpcId,
             CombatantId = string.IsNullOrWhiteSpace(i.CombatantId) ? null : i.CombatantId,
             RangeRingMeters = i.RangeRingMeters is > 0 ? i.RangeRingMeters : null,
+            Barrier = existing?.Barrier,
+            Layer = existing?.Barrier is not null ? TokenLayer.Scenery : i.Layer,
         };
     }
 

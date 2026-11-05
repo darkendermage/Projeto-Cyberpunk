@@ -8,10 +8,14 @@ namespace CyberpunkDb.Application.Table;
 /// Sends every fight change to the GM's screens, and to the players when the fight is the one linked to the scene on
 /// their screens, each seat with its own view.
 /// </summary>
-public sealed class EncounterBroadcast(IAppDbContext db, ITableNotifier notifier) : IEncounterObserver
+public sealed class EncounterBroadcast(IAppDbContext db, ITableNotifier notifier, SceneService scenes) : IEncounterObserver
 {
-    public async Task ChangedAsync(EncounterDetailDto detail, CancellationToken ct) =>
+    public async Task ChangedAsync(EncounterDetailDto detail, CancellationToken ct)
+    {
         await notifier.EncounterAsync(detail, await SeatViewsAsync(detail.Id, detail, ct), ct);
+        // Cover damaged on the combat table shows on the barriers of the map.
+        await scenes.RepublishCoversOfAsync(detail.Id, ct);
+    }
 
     public async Task RemovedAsync(int id, CancellationToken ct) =>
         await notifier.EncounterRemovedAsync(id, await SeatViewsAsync(id, null, ct), ct);
