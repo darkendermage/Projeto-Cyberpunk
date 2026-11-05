@@ -168,19 +168,78 @@
 
 /* ------------------------------------------------------------ sidebar */
 
+/* Short enough to fit the screen: it stays in view without a scrollbar of its own (the panels open beside it). */
 .sidebar {
   position: sticky;
   top: 0;
+  z-index: 40;
   align-self: flex-start;
   width: var(--sidebar-w);
   flex: none;
-  height: calc(100vh);
+  height: 100vh;
   display: flex;
   flex-direction: column;
   padding: 18px 12px 12px;
   border-right: 1px solid var(--red-line);
   background: linear-gradient(180deg, rgba(10, 11, 14, 0.95), rgba(8, 5, 6, 0.98));
-  overflow-y: auto;
+}
+
+.navGroup {
+  position: relative;
+}
+.navGroupButton {
+  width: 100%;
+  background: none;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.navGroupButton .navCount {
+  margin-left: auto;
+}
+.navChevron {
+  margin-left: auto;
+  transition: transform var(--t-fast);
+}
+.navCount + .navChevron {
+  margin-left: 6px;
+}
+.navGroupOpen {
+  color: var(--text);
+  border-color: var(--red-line);
+  background: rgba(255, 42, 61, 0.08);
+}
+.navGroupOpen .navChevron {
+  color: var(--red);
+}
+
+/* The group's panel, beside the menu. */
+.flyout {
+  position: absolute;
+  top: -10px;
+  left: calc(100% + 13px);
+  z-index: 50;
+  width: 250px;
+  padding: 12px 10px 8px;
+  border: 1px solid var(--red-line);
+  border-left: 2px solid var(--red);
+  background: linear-gradient(180deg, #0e0f13, #0a0607);
+  box-shadow: 18px 10px 40px rgba(0, 0, 0, 0.6), var(--glow-sm);
+  animation: flyoutIn var(--t-fast) var(--ease);
+}
+.flyout .navHeading {
+  margin: 0 10px 10px;
+}
+@keyframes flyoutIn {
+  from { opacity: 0; transform: translateX(-6px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* A short window drops the art so the menu still fits without scrolling. */
+@media (max-height: 680px) {
+  .sidebarArt {
+    display: none;
+  }
 }
 
 .sidebarClose {
@@ -355,6 +414,27 @@ html[data-motion='on'] .artRings {
   }
   .sidebarOpen {
     transform: none;
+  }
+  /* The phone drawer opens the groups inline, under their button. */
+  .sidebar {
+    overflow-y: auto;
+  }
+  .flyout {
+    position: static;
+    width: auto;
+    margin: 0 0 6px 14px;
+    padding: 4px 0 2px 8px;
+    border: none;
+    border-left: 2px solid var(--red-line);
+    background: none;
+    box-shadow: none;
+    animation: none;
+  }
+  .flyout .navHeading {
+    display: none;
+  }
+  .navGroupOpen .navChevron {
+    transform: rotate(90deg);
   }
   .sidebarClose {
     display: grid;

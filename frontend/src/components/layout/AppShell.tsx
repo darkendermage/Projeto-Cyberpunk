@@ -1,8 +1,9 @@
-import { useEffect, useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { NavLink, useLocation } from 'react-router';
 import clsx from 'clsx';
 import {
-  BookOpen, BookUser, CloudRain, Crosshair, FileText, GitCompareArrows, Heart, LayoutGrid, ListChecks, Map as MapIcon, Menu, Network, Search, Settings, Skull, Store, Swords, Table2, Users, X,
+  BookOpen, BookUser, ChevronRight, CloudRain, Crosshair, Dices, FileText, FolderHeart, GitCompareArrows, Heart, LayoutGrid, Library, ListChecks,
+  Map as MapIcon, Menu, Network, Search, Settings, Skull, Store, Swords, Table2, Users, X,
 } from 'lucide-react';
 import { useCompare } from '../../state/CompareContext';
 import { useEffectsSettings } from '../../state/EffectsContext';
@@ -12,6 +13,7 @@ import { SettingsPanel } from '../../features/settings/SettingsPanel';
 import { CyberpunkLogo } from '../brand/CyberpunkLogo';
 import { CitySkyline } from './CitySkyline';
 import { UpdateBanner } from './UpdateBanner';
+import { groupOf, isActive, NAV, type NavIcon, type NavItem } from './navigation';
 import styles from './AppShell.module.css';
 import { t, tv } from '../../i18n';
 
@@ -83,53 +85,85 @@ export function AppShell({ children }: { children: ReactNode }) {
   );
 }
 
+const ICONS: Record<NavIcon, ReactNode> = {
+  items: <LayoutGrid size={19} />, collection: <FolderHeart size={19} />, lists: <ListChecks size={19} />, favorites: <Heart size={19} />,
+  compare: <GitCompareArrows size={19} />, characters: <Users size={19} />, gm: <Dices size={19} />, enemies: <Skull size={19} />,
+  npcs: <BookUser size={19} />, combat: <Crosshair size={19} />, market: <Store size={19} />, net: <Network size={19} />,
+  table: <MapIcon size={19} />, other: <Library size={19} />, weather: <CloudRain size={19} />, rules: <FileText size={19} />,
+  tables: <Table2 size={19} />, martial: <Swords size={19} />, glossary: <BookOpen size={19} />,
+};
+
+/**
+ * The main menu: Items, Characters and the Virtual Table on their own; the collection, the GM tools and the rest are
+ * groups that open a panel beside the menu (inline in the phone drawer). The menu scrolls with the page, never alone.
+ */
 function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
   const compare = useCompare();
   const favorites = useFavoriteIds();
-  const location = useLocation();
+  const { pathname } = useLocation();
+  // The open group remembers the page it was opened on: moving to another page closes it.
+  const [opened, setOpened] = useState<{ id: string; path: string } | null>(null);
+  const group = opened?.path === pathname ? opened.id : null;
+  const setGroup = (id: string | null) => setOpened(id ? { id, path: pathname } : null);
+  const ref = useRef<HTMLElement>(null);
+  const counts = { favorites: favorites.data?.length ?? 0, compare: compare.entries.length };
+  const current = groupOf(pathname);
 
-  const nav = [
-    { to: '/catalog/weapons', label: t('Itens', 'Items'), icon: <LayoutGrid size={19} />, active: location.pathname.startsWith('/catalog') },
-    { to: '/lists', label: t('Minhas Listas', 'My Lists'), icon: <ListChecks size={19} /> },
-    { to: '/favorites', label: t('Favoritos', 'Favorites'), icon: <Heart size={19} />, count: favorites.data?.length },
-    { to: '/compare', label: t('Comparar', 'Compare'), icon: <GitCompareArrows size={19} />, count: compare.entries.length },
-    { to: '/characters', label: t('Personagens', 'Characters'), icon: <Users size={19} />, active: location.pathname.startsWith('/characters') },
-  ];
-  const others = [
-    { to: '/enemies', label: t('Gerador de Inimigos', 'Enemy Generator'), icon: <Skull size={19} /> },
-    { to: '/npcs', label: t('Compêndio de NPCs', 'NPC Compendium'), icon: <BookUser size={19} />, active: location.pathname.startsWith('/npcs') },
-    { to: '/combat', label: 'Friday Night Firefight', icon: <Crosshair size={19} />, active: location.pathname.startsWith('/combat') },
-    { to: '/mesa', label: t('Mesa Virtual', 'Virtual Table'), icon: <MapIcon size={19} /> },
-    { to: '/night-market', label: 'Night Market', icon: <Store size={19} />, active: location.pathname.startsWith('/night-market') },
-    { to: '/net-architecture', label: t('Arquiteturas de NET', 'NET Architectures'), icon: <Network size={19} />, active: location.pathname.startsWith('/net-architecture') },
-    { to: '/weather', label: t('Clima de Night City', 'Night City Weather'), icon: <CloudRain size={19} /> },
-    { to: '/rules', label: t('Regras Rápidas', 'Quick Rules'), icon: <FileText size={19} /> },
-    { to: '/tables', label: t('Tabelas', 'Tables'), icon: <Table2 size={19} /> },
-    { to: '/martial-arts', label: t('Artes Marciais', 'Martial Arts'), icon: <Swords size={19} /> },
-    { to: '/glossary', label: t('Glossário', 'Glossary'), icon: <BookOpen size={19} /> },
-  ];
+  useEffect(() => {
+    if (!group) return;
+    const onDown = (e: PointerEvent) => { if (!ref.current?.contains(e.target as Node)) setOpened(null); };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== 'Escape') return;
+      ref.current?.querySelector<HTMLButtonElement>(`[data-group="${group}"]`)?.focus();
+      setOpened(null);
+    };
+    document.addEventListener('pointerdown', onDown);
+    document.addEventListener('keydown', onKey);
+    return () => { document.removeEventListener('pointerdown', onDown); document.removeEventListener('keydown', onKey); };
+  }, [group]);
 
-  const renderLink = (l: { to: string; label: string; icon: ReactNode; count?: number; active?: boolean }) => (
-    <NavLink key={l.to} to={l.to}
-      className={({ isActive }) => clsx(styles.navLink, (l.active ?? isActive) && styles.navActive)}>
-      {l.icon}
-      <span>{tv(l.label)}</span>
-      {l.count ? <span className={styles.navCount}>{l.count}</span> : null}
-    </NavLink>
-  );
+  const renderLink = (l: NavItem) => {
+    const count = l.count ? counts[l.count] : 0;
+    return (
+      <NavLink key={l.to} to={l.to} className={clsx(styles.navLink, isActive(pathname, l.to, l.match) && styles.navActive)}>
+        {ICONS[l.icon]}
+        <span>{tv(l.label)}</span>
+        {count ? <span className={styles.navCount}>{count}</span> : null}
+      </NavLink>
+    );
+  };
 
   return (
     <>
       <div className={clsx(styles.scrim, open && styles.scrimOpen)} onClick={onClose} aria-hidden />
-      <aside className={clsx(styles.sidebar, open && styles.sidebarOpen)} aria-label={t('Navegação principal', 'Main navigation')}>
+      <aside ref={ref} className={clsx(styles.sidebar, open && styles.sidebarOpen)} aria-label={t('Navegação principal', 'Main navigation')}>
         <button type="button" className={styles.sidebarClose} onClick={onClose} aria-label={t('Fechar navegação', 'Close navigation')}>
           <X size={18} />
         </button>
         <nav>
-          <p className={styles.navHeading}>{t('Navegação', 'Navigation')}</p>
-          {nav.map(renderLink)}
-          <p className={styles.navHeading}>{t('Outros', 'Other')}</p>
-          {others.map(renderLink)}
+          {NAV.map((e) => {
+            if (e.kind === 'link') return renderLink(e);
+            const expanded = group === e.id;
+            const badge = e.items.reduce((n, i) => n + (i.count ? counts[i.count] : 0), 0);
+            return (
+              <div key={e.id} className={styles.navGroup}>
+                <button type="button" data-group={e.id} aria-expanded={expanded} aria-controls={`nav-${e.id}`}
+                  className={clsx(styles.navLink, styles.navGroupButton, current === e.id && styles.navActive, expanded && styles.navGroupOpen)}
+                  onClick={() => setGroup(expanded ? null : e.id)}>
+                  {ICONS[e.icon]}
+                  <span>{e.label}</span>
+                  {badge ? <span className={styles.navCount}>{badge}</span> : null}
+                  <ChevronRight size={16} className={styles.navChevron} />
+                </button>
+                {expanded && (
+                  <div id={`nav-${e.id}`} className={styles.flyout} role="group" aria-label={e.label}>
+                    <p className={styles.navHeading}>{e.label}</p>
+                    {e.items.map(renderLink)}
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </nav>
 
         <div className={styles.sidebarArt} aria-hidden>
