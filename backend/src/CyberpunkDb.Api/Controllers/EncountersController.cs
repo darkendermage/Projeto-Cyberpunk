@@ -69,6 +69,10 @@ public sealed class EncountersController(EncounterService encounters) : Controll
     [HttpPost("{id:int}/attack")]
     public Task<EncounterDetailDto> Attack(int id, AttackRequest request, CancellationToken ct) => encounters.AttackAsync(id, request, ct);
 
+    /// <summary>Puts back what the last attack changed, while nothing else happened since.</summary>
+    [HttpPost("{id:int}/undo-attack")]
+    public Task<EncounterDetailDto> UndoAttack(int id, EncounterVersionRequest request, CancellationToken ct) => encounters.UndoAttackAsync(id, request, ct);
+
     [HttpPost("{id:int}/combatants/{combatantId}/armor")]
     public Task<EncounterDetailDto> Armor(int id, string combatantId, CombatantArmorRequest request, CancellationToken ct) =>
         encounters.AdjustArmorAsync(id, combatantId, request, ct);

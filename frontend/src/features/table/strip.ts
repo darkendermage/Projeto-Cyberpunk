@@ -16,6 +16,10 @@ export interface StripFighter {
 /** One card of the "on the scene" strip under the map. */
 export interface StripEntry {
   tokenId: string;
+  /** The fighter the token stands for in the linked fight, when it is linked. */
+  combatantId: string | null;
+  /** A PC's sheet. */
+  characterId: number | null;
   name: string;
   color: string;
   imageUrl: string | null;
@@ -37,7 +41,7 @@ export function buildStrip(tokens: TokenView[], party: PartyMember[], fighters: 
   const out: StripEntry[] = [];
   const seen = new Set<number>();
   for (const tk of tokens) {
-    const base = { tokenId: tk.id, color: tk.color, imageUrl: tk.imageUrl };
+    const base = { tokenId: tk.id, color: tk.color, imageUrl: tk.imageUrl, combatantId: tk.combatantId ?? null, characterId: tk.characterId ?? null };
     const pc = tk.characterId != null ? party.find((p) => p.characterId === tk.characterId) : undefined;
     if (pc) {
       if (seen.has(pc.characterId)) continue;

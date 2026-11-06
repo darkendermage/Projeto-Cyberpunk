@@ -20,8 +20,10 @@ import { forgetSeat, isRefusedKey, rememberSeat, savedSeat } from './lobby';
 import { LangSwitch } from './LangSwitch';
 import { PanelHandle } from './PanelHandle';
 import { RulesDialog } from './RulesDialog';
-import { SceneStrip } from './SceneStrip';
+import { AimBar, SceneStrip } from './SceneStrip';
 import { buildStrip } from './strip';
+import { attackSummary, fighterIdOf, startAim } from './aim';
+import { useQuickAttack } from './useQuickAttack';
 import { NO_SELECTION, useBoardKeys, type Selection } from './useBoardKeys';
 import { PLAYER_PANELS, playerColumns } from './panels';
 import { usePanels } from './usePanels';
@@ -87,7 +89,7 @@ export function PlayerTablePage() {
       void client.invalidateQueries({ queryKey: tableKeys.playerParty(token) });
       void client.invalidateQueries({ queryKey: tableKeys.playerSheet(token) });
     },
-    message: (m) => client.setQueryData<TableMessage[]>(tableKeys.playerMessages(token), (old = []) => (old.some((x) => x.id === m.id) ? old : [...old, m].slice(-300))),
+    message: (m) => client.setQueryData<TableMessage[]>(tableKeys.playerMessages(token), (old = []) => (old.some((x) => x.id === m.id) ? old.map((x) => (x.id === m.id ? m : x)) : [...old, m].slice(-300))),
     tokenDrag: (d) => { if (d.sceneId === shownRef.current) board.current?.showDrag(d.tokenId, d.x, d.y); },
     ping: (p) => { if (p.sceneId === shownRef.current) board.current?.showPing(p); },
     resync: () => void client.invalidateQueries({ queryKey: tableKeys.player(token) }),
@@ -97,18 +99,31 @@ export function PlayerTablePage() {
   const draft: TemplateDraft = ownColor || !seat ? savedDraft : { ...savedDraft, color: seat.color };
   const scene = state.data?.scene ?? null;
   useEffect(() => { shownRef.current = scene?.id ?? null; }, [scene?.id]);
+  const queue = useMemo(() => encounter.data?.queue ?? [], [encounter.data]);
+  const own = queue.find((f) => f.own) ?? null;
+  const quick = useQuickAttack(
+    (aim, targetId) => api.attack({ weapon: aim.weapon.key, mode: aim.mode, targetIds: [targetId] }),
+    (attack) => toast.notify(attackSummary(attack)),
+    (e) => toast.notify(problemMessage(e), 'error'));
+
+  // While aiming, the board lights up the shooter and the target.
+  const aim = quick.aim;
+  const aimTokens = useMemo(() => (aim && scene ? scene.tokens.filter((tk) => {
+    const id = fighterIdOf(tk, queue);
+    return id != null && (id === aim.attackerId || id === aim.targetId);
+  }).map((tk) => tk.id) : null), [aim, scene, queue]);
   const fighters = useMemo(() => new Map((encounter.data?.queue ?? []).map((f) => [f.id, fromPlayerFighter(f)])), [encounter.data]);
   const data: BoardData | null = useMemo(() => scene ? {
     scene,
     fighters,
     activeCombatantId: encounter.data?.activeId ?? null,
-    selectedTokens: selection.tokens,
-    selectedTemplates: selection.templates,
+    selectedTokens: aimTokens ?? selection.tokens,
+    selectedTemplates: aimTokens ? [] : selection.templates,
     // Any player's area (a grenade that went off) is anyone's to move or clear; the GM's stay the GM's.
     canMoveTemplate: (tpl) => !tpl.locked && tpl.ownerSeatId != null,
     gm: false,
     lang,
-  } : null, [scene, fighters, encounter.data, selection]);
+  } : null, [scene, fighters, encounter.data, selection, aimTokens]);
 
   const run = async (fn: () => Promise<SceneView | unknown>) => {
     try {
@@ -125,7 +140,15 @@ export function PlayerTablePage() {
     ?? scene?.tokens.find((tk) => tk.controllable);
 
   const callbacks: BoardCallbacks = {
-    onSelect: (tokens, templates) => setSelection({ tokens, templates }),
+    onSelect: (tokens, templates) => {
+      // While aiming, a click on a token picks the target instead of selecting it.
+      if (quick.aim) {
+        const tk = tokens.length === 1 && templates.length === 0 ? scene?.tokens.find((x) => x.id === tokens[0]) : undefined;
+        if (tk) quick.target(fighterIdOf(tk, queue));
+        return;
+      }
+      setSelection({ tokens, templates });
+    },
     onTokenDrag: (id, x, y) => { if (scene) hub.dragToken(scene.id, id, x, y); },
     onMoveDrop: (tokens, templates) => {
       if (tokens.length === 1 && templates.length === 0) void run(() => api.moveToken(tokens[0].id, { x: tokens[0].x, y: tokens[0].y }));
@@ -149,7 +172,7 @@ export function PlayerTablePage() {
       templates: scene.templates.filter((tp) => tp.ownerSeatId != null && !tp.locked).map((tp) => tp.id),
     });
   };
-  useBoardKeys({ onDelete: removeSelection, onSelectAll: selectAll, onClear: () => setSelection(NO_SELECTION) });
+  useBoardKeys({ onDelete: removeSelection, onSelectAll: selectAll, onClear: () => (quick.aim ? quick.cancel() : setSelection(NO_SELECTION)) });
 
   // A roll with LUCK spends it on the sheet: the panel's LUCK left follows.
   const refreshLuck = () => void client.invalidateQueries({ queryKey: tableKeys.playerCharacter(token) });
@@ -209,7 +232,18 @@ export function PlayerTablePage() {
             )}
             {scene && <span className={styles.hint}>{TOOL_HINT[tool]}</span>}
           </div>
-          {scene && <SceneStrip entries={strip} selected={selection.tokens} onPick={(id) => setSelection({ tokens: [id], templates: [] })} />}
+          {scene && quick.aim && (
+            <AimBar aim={quick.aim} busy={quick.busy} targetName={queue.find((f) => f.id === quick.aim!.targetId)?.name ?? null}
+              onMode={quick.mode} onFire={() => void quick.shoot()} onCancel={quick.cancel} />
+          )}
+          {scene && (
+            <SceneStrip entries={strip} selected={selection.tokens} aim={quick.aim}
+              onPick={(e) => { if (quick.aim) quick.target(fighterIdOf(e, queue)); else setSelection({ tokens: [e.tokenId], templates: [] }); }}
+              weaponsOf={(e) => own && fighterIdOf(e, queue) === own.id
+                ? { weapons: own.weapons ?? [], blocked: encounter.data?.activeId === own.id ? null : t('Aguarde seu turno para atacar.', 'Wait for your Turn to attack.') }
+                : null}
+              onWeapon={(_e, w) => { if (own) quick.start(startAim(own.id, own.name, w)); }} />
+          )}
         </section>
         <PanelHandle className={styles.handleRight} panel="right" width={panels.right} limits={PLAYER_PANELS.right} open={panels.rightOpen}
           onResize={(right) => setPanels({ right })} onToggle={() => setPanels({ rightOpen: !panels.rightOpen })} />

@@ -121,6 +121,10 @@ export interface AttackResult {
   attackTotal: number;
   targets: TargetResult[];
   notes: string[];
+  attackerId: string;
+  /** The fight's attack number. */
+  seq: number;
+  melee: boolean;
 }
 
 export interface EncounterDetail {
@@ -138,6 +142,8 @@ export interface EncounterDetail {
   notes: string | null;
   lastAttack: AttackResult | null;
   notices: string[];
+  /** Set on the answer of an undo: the attack number taken back. */
+  undoneAttack?: number | null;
 }
 
 export interface EncounterSummary {

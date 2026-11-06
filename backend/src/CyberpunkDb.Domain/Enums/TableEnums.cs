@@ -1,6 +1,6 @@
 namespace CyberpunkDb.Domain.Enums;
 
-public enum TableMessageKind { Text, Roll, System }
+public enum TableMessageKind { Text, Roll, System, Attack }
 
 /// <summary>
 /// Who reads a chat line: everyone, the author and the GM (Private), only the GM (Secret: the author sees that a roll

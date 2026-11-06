@@ -15,7 +15,7 @@ namespace CyberpunkDb.Api.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/table/play")]
-public sealed class TablePlayController(SeatService seats, SceneService scenes, EncounterService encounters, CharacterService characters, NpcPortraitService npcImages, ChatService chat, TablePresence presence, TablePartyService party, TableRulesService rules) : ControllerBase
+public sealed class TablePlayController(SeatService seats, SceneService scenes, EncounterService encounters, CharacterService characters, NpcPortraitService npcImages, ChatService chat, TablePresence presence, TablePartyService party, TableRulesService rules, TableAttackService attacks) : ControllerBase
 {
     public const string SeatHeader = "X-Seat";
 
@@ -151,6 +151,11 @@ public sealed class TablePlayController(SeatService seats, SceneService scenes, 
     [HttpPost("armor")]
     public async Task<PlayerCharacterDto> Armor(ArmorAdjustRequest request, CancellationToken ct) =>
         await party.AdjustOwnArmorAsync(await SeatAsync(ct), request, ct);
+
+    /// <summary>An attack with the seat's own character, on its Turn, at fighters it sees; the fight resolves it.</summary>
+    [HttpPost("attack")]
+    public async Task<TableAttack> Attack(QuickAttackRequest request, CancellationToken ct) =>
+        await attacks.PlayerAttackAsync(await SeatAsync(ct), request, ct);
 
     /// <summary>The player's selection moved or cleared at once (their tokens, players' areas).</summary>
     [HttpPost("batch")]

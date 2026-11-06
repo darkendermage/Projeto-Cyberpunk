@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { Dices, EyeOff, Lock, MessageSquareLock, Send } from 'lucide-react';
-import type { RollKind, RollResult, TableMessage, TableVisibility } from '../../../api/tableTypes';
+import type { RollKind, RollResult, TableAttack, TableMessage, TableVisibility } from '../../../api/tableTypes';
 import { Badge, Button, Select } from '../../../components/ui/ui';
-import { t } from '../../../i18n';
+import { t, tv } from '../../../i18n';
+import { MODE_LABEL } from '../../combat/combat';
 import { NumField } from '../NumField';
 import styles from '../Table.module.css';
 
@@ -150,12 +151,38 @@ function MessageCard({ message: m, targets, actions, replaced }: { message: Tabl
           <span className={styles.source}>{time}</span>
         </span>
       </div>
-      {m.kind === 'Roll'
+      {m.kind === 'Attack' && m.attack
+        ? <AttackView attack={m.attack} />
+        : m.kind === 'Roll'
         ? m.concealed
           ? <span className={styles.muted}>{t(`Rolou em segredo: ${m.text}`, `Rolled in secret: ${m.text}`)}</span>
           : <RollView label={m.text} roll={m.roll} />
         : <span className={styles.messageText}>{m.text}</span>}
       {actions}
+    </div>
+  );
+}
+
+/** An attack of the fight: the roll, then each target hit or missed (numbers only where the reader may see them). */
+function AttackView({ attack: a }: { attack: TableAttack }) {
+  return (
+    <div className={`${styles.attackCard} ${a.undone ? styles.attackUndone : ''}`}>
+      <div className={styles.rowBetween}>
+        <span className={styles.messageText}>{tv(a.weapon)} · <span className={styles.source}>{a.mode === 'Single' ? (a.melee ? t('golpe', 'strike') : t('tiro', 'shot')) : MODE_LABEL[a.mode]}</span></span>
+        <span className={styles.rollTotal} title={a.attackRoll != null ? `d10 ${a.attackRoll}` : undefined}>{a.attackTotal}</span>
+      </div>
+      {a.targets.map((target) => (
+        <div key={target.id} className={styles.attackTarget}>
+          <Badge tone={target.hit ? 'red' : undefined}>{target.hit ? t('Acertou', 'Hit') : t('Errou', 'Miss')}</Badge>
+          <span>{target.name}</span>
+          {target.dv != null && <span className={styles.source}>DV {target.dv}{target.defenseRoll != null ? t(` (defesa ${target.defenseRoll})`, ` (defense ${target.defenseRoll})`) : ''}</span>}
+          {target.hit && target.damage != null && (
+            <span className={styles.mono}>{t(`${target.damage} de dano`, `${target.damage} damage`)}{target.through != null ? t(` · ${target.through} no HP`, ` · ${target.through} to HP`) : ''} · {tv(target.location)}</span>
+          )}
+          {target.criticalInjury && <Badge tone="amber">{tv(target.criticalInjury)}</Badge>}
+        </div>
+      ))}
+      {a.undone && <Badge>{t('Desfeito pelo mestre', 'Undone by the GM')}</Badge>}
     </div>
   );
 }

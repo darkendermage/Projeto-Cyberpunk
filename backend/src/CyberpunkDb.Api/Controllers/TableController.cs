@@ -12,7 +12,7 @@ namespace CyberpunkDb.Api.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/table")]
-public sealed class TableController(SeatService seats, MediaService media, SceneService scenes, TableFightService fights, TablePartyService party, TableRulesService rules, ChatService chat, TablePresence presence, TunnelService tunnel) : ControllerBase
+public sealed class TableController(SeatService seats, MediaService media, SceneService scenes, TableFightService fights, TableAttackService attacks, TablePartyService party, TableRulesService rules, ChatService chat, TablePresence presence, TunnelService tunnel) : ControllerBase
 {
     // ------------------------------------------------------------------ internet tunnel
 
@@ -92,6 +92,10 @@ public sealed class TableController(SeatService seats, MediaService media, Scene
     /// <summary>A new fight from the chosen tokens of the map, linked to the scene.</summary>
     [HttpPost("scenes/{id:int}/fight")]
     public Task<SceneView> StartFight(int id, CreateFightRequest request, CancellationToken ct) => fights.StartAsync(id, request, ct);
+
+    /// <summary>The GM's quick attack from the map with any fighter of the scene's fight; the distance comes from the tokens.</summary>
+    [HttpPost("scenes/{id:int}/attack")]
+    public Task<TableAttack> Attack(int id, GmQuickAttackRequest request, CancellationToken ct) => attacks.GmAttackAsync(id, request, ct);
 
     /// <summary>A selection of tokens and areas moved, cleared, hidden or shown in one save.</summary>
     [HttpPost("scenes/{id:int}/batch")]

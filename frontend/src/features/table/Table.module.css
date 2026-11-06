@@ -370,10 +370,31 @@
 
 .strip { display: flex; gap: 8px; padding: 8px; overflow-x: auto; border-top: 1px solid var(--line); background: var(--bg-1); flex-shrink: 0; }
 .stripCard {
-  display: flex; align-items: center; gap: 8px; min-width: 190px; max-width: 240px; padding: 6px 8px;
-  background: var(--bg-2); border: 1px solid var(--line); border-left-width: 3px; color: var(--text); text-align: left; cursor: pointer;
+  display: flex; flex-direction: column; gap: 4px; min-width: 190px; max-width: 250px; padding: 6px 8px; flex-shrink: 0;
+  background: var(--bg-2); border: 1px solid var(--line); border-left-width: 3px; color: var(--text);
 }
 .stripCard:hover { background: var(--bg-3); }
+.stripPick { display: flex; align-items: center; gap: 8px; width: 100%; padding: 0; background: none; border: 0; color: inherit; text-align: left; cursor: pointer; font: inherit; }
+.stripTarget { outline: 2px solid var(--red); box-shadow: 0 0 12px var(--red-glow); }
+.stripShooter { outline: 1px dashed var(--amber); }
+.stripWeapons { display: flex; flex-direction: column; gap: 3px; }
+.weaponChip {
+  display: flex; align-items: center; gap: 4px; width: 100%; padding: 3px 6px; min-height: 26px; text-align: left; cursor: pointer;
+  background: var(--bg-1); border: 1px solid var(--line); color: var(--text); font-family: var(--font-mono); font-size: 11px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.weaponChip:hover:not(:disabled) { border-color: var(--amber); color: var(--amber); }
+.weaponChip:disabled { opacity: 0.45; cursor: not-allowed; }
+.weaponChipOn { border-color: var(--amber); color: var(--amber); background: color-mix(in srgb, var(--amber) 12%, var(--bg-1)); }
+.aimBar {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 6px 10px; flex-shrink: 0;
+  border-top: 1px solid var(--amber); background: color-mix(in srgb, var(--amber) 8%, var(--bg-1));
+}
+.aimIcon { color: var(--amber); flex-shrink: 0; }
+.aimText { flex: 1 1 220px; min-width: 0; font-size: 13px; }
+.attackCard { display: flex; flex-direction: column; gap: 4px; }
+.attackTarget { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: 13px; }
+.attackUndone { text-decoration: line-through; opacity: 0.5; }
 .stripCardOn { outline: 1px solid var(--cyan); }
 .stripAvatar {
   width: 40px; height: 40px; flex-shrink: 0; border-radius: 50%; object-fit: cover;

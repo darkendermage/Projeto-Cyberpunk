@@ -22,7 +22,7 @@ public sealed record RollRequest(string Formula, RollKind Kind = RollKind.Plain,
 /// </summary>
 public sealed record TableMessageDto(
     long Id, DateTime At, int? AuthorSeatId, string AuthorName, string? AuthorColor, TableMessageKind Kind,
-    TableVisibility Visibility, int? TargetSeatId, string Text, RollResult? Roll, bool Concealed);
+    TableVisibility Visibility, int? TargetSeatId, string Text, RollResult? Roll, bool Concealed, TableAttack? Attack = null);
 
 /// <summary>
 /// The table chat and its dice. The server rolls; who reads each line is decided here, per seat, both for the history
@@ -84,35 +84,71 @@ public sealed class ChatService(IAppDbContext db, ITableNotifier notifier, IDice
         return await PostAsync(author, TableMessageKind.Roll, text.Length <= 100 ? text : text[..100], again, m.Visibility, m.TargetSeatId, ct);
     }
 
+    /// <summary>
+    /// The line of an attack of the fight on the live scene, written by the attacker's seat when a player's character
+    /// made it (the GM otherwise). Everyone reads it; players see NPC numbers only as a hit or a miss.
+    /// </summary>
+    public async Task PostAttackAsync(TableAttack attack, int? characterId, CancellationToken ct)
+    {
+        var seat = characterId is { } id ? await db.TableSeats.AsNoTracking().FirstOrDefaultAsync(s => s.CharacterId == id && s.RevokedAt == null, ct) : null;
+        var text = L.T($"{attack.AttackerName} ataca com {attack.Weapon}", $"{attack.AttackerName} attacks with {attack.Weapon}");
+        await PostCoreAsync(seat?.Id, seat?.Label ?? GmName, TableMessageKind.Attack, text.Length <= 200 ? text : text[..200],
+            JsonSerializer.Serialize(attack, SceneService.Json), TableVisibility.Public, null, ct);
+    }
+
+    /// <summary>Marks the line of an attack the GM undid, and sends it again so every screen crosses it out.</summary>
+    public async Task MarkAttackUndoneAsync(int encounterId, int seq, CancellationToken ct)
+    {
+        var recent = await db.TableMessages.Where(m => m.Kind == TableMessageKind.Attack).OrderByDescending(m => m.Id).Take(50).ToListAsync(ct);
+        foreach (var m in recent)
+        {
+            var attack = JsonSerializer.Deserialize<TableAttack>(m.RollJson ?? "null", SceneService.Json);
+            if (attack is null || attack.EncounterId != encounterId || attack.Seq != seq) continue;
+            m.RollJson = JsonSerializer.Serialize(attack with { Undone = true }, SceneService.Json);
+            await db.SaveChangesAsync(ct);
+            await PublishAsync(m, ct);
+            return;
+        }
+    }
+
     /// <summary>Starts a new session's history.</summary>
     public async Task ClearAsync(CancellationToken ct) => await db.TableMessages.ExecuteDeleteAsync(ct);
 
-    private async Task<TableMessageDto> PostAsync(TableSeat? author, TableMessageKind kind, string text, RollResult? roll,
+    private Task<TableMessageDto> PostAsync(TableSeat? author, TableMessageKind kind, string text, RollResult? roll,
+        TableVisibility visibility, int? target, CancellationToken ct) =>
+        PostCoreAsync(author?.Id, author?.Label ?? GmName, kind, text, roll is null ? null : JsonSerializer.Serialize(roll, SceneService.Json), visibility, target, ct);
+
+    private async Task<TableMessageDto> PostCoreAsync(int? authorId, string authorName, TableMessageKind kind, string text, string? payload,
         TableVisibility visibility, int? target, CancellationToken ct)
     {
         if (visibility == TableVisibility.Whisper)
         {
-            if (target is not { } targetId || targetId == author?.Id || !await db.TableSeats.AnyAsync(s => s.Id == targetId && s.RevokedAt == null, ct))
+            if (target is not { } targetId || targetId == authorId || !await db.TableSeats.AnyAsync(s => s.Id == targetId && s.RevokedAt == null, ct))
                 throw RequestValidationException.For("targetSeatId", L.T("Escolha para quem sussurrar.", "Choose who to whisper to."));
         }
         else target = null;
 
         var message = new TableMessage
         {
-            At = DateTime.UtcNow, AuthorSeatId = author?.Id, AuthorName = author?.Label ?? GmName, Kind = kind,
-            Visibility = visibility, TargetSeatId = target, Text = text,
-            RollJson = roll is null ? null : JsonSerializer.Serialize(roll, SceneService.Json),
+            At = DateTime.UtcNow, AuthorSeatId = authorId, AuthorName = authorName.Length <= 60 ? authorName : authorName[..60], Kind = kind,
+            Visibility = visibility, TargetSeatId = target, Text = text, RollJson = payload,
         };
         db.TableMessages.Add(message);
         await db.SaveChangesAsync(ct);
+        var (gm, views) = await PublishAsync(message, ct);
+        return authorId is { } id ? views.GetValueOrDefault(id) ?? gm : gm;
+    }
 
+    /// <summary>Sends a line to every screen allowed to read it, each with its own view.</summary>
+    private async Task<(TableMessageDto Gm, Dictionary<int, TableMessageDto> Seats)> PublishAsync(TableMessage message, CancellationToken ct)
+    {
         var colors = await ColorsAsync(ct);
         var seats = await db.TableSeats.AsNoTracking().Where(s => s.RevokedAt == null).ToListAsync(ct);
         var views = seats.Select(s => (s.Id, View: View(message, s, colors))).Where(x => x.View is not null)
             .ToDictionary(x => x.Id, x => x.View!);
         var gm = View(message, null, colors)!;
         await notifier.MessageAsync(gm, views, ct);
-        return author is null ? gm : views.GetValueOrDefault(author.Id) ?? gm;
+        return (gm, views);
     }
 
     /// <summary>The line as <paramref name="viewer"/> reads it (null viewer: the GM); null when they may not.</summary>
@@ -128,9 +164,16 @@ public sealed class ChatService(IAppDbContext db, ITableNotifier notifier, IDice
         };
         if (!visible) return null;
         var concealed = viewer is not null && m.Visibility == TableVisibility.Secret;
-        var roll = concealed || m.RollJson is null ? null : JsonSerializer.Deserialize<RollResult>(m.RollJson, SceneService.Json);
+        TableAttack? attack = null;
+        RollResult? roll = null;
+        if (m.Kind == TableMessageKind.Attack)
+        {
+            attack = m.RollJson is null ? null : JsonSerializer.Deserialize<TableAttack>(m.RollJson, SceneService.Json);
+            if (attack is not null && viewer is not null) attack = TableAttacks.ForSeat(attack);
+        }
+        else if (!concealed && m.RollJson is not null) roll = JsonSerializer.Deserialize<RollResult>(m.RollJson, SceneService.Json);
         return new TableMessageDto(m.Id, m.At, m.AuthorSeatId, m.AuthorName,
-            m.AuthorSeatId is { } seat ? colors.GetValueOrDefault(seat) : null, m.Kind, m.Visibility, m.TargetSeatId, m.Text, roll, concealed);
+            m.AuthorSeatId is { } seat ? colors.GetValueOrDefault(seat) : null, m.Kind, m.Visibility, m.TargetSeatId, m.Text, roll, concealed, attack);
     }
 
     private async Task<IReadOnlyDictionary<int, string>> ColorsAsync(CancellationToken ct) =>

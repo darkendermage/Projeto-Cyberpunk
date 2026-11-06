@@ -57,14 +57,16 @@ public sealed record TargetResult(
     IReadOnlyList<int> DamageDice, int Damage, string Location, int? CoverAbsorbed, bool CoverDestroyed,
     int? SpBefore, int? Through, bool Critical, string? CriticalInjury, string? WoundState, IReadOnlyList<string> Notes);
 
-public sealed record AttackResult(string Attacker, string Weapon, AttackMode Mode, int? AttackRoll, int AttackTotal, IReadOnlyList<TargetResult> Targets, IReadOnlyList<string> Notes);
+/// <summary>An attack's outcome; <see cref="Seq"/> numbers the fight's attacks, <see cref="Melee"/> tells a blade from a gun.</summary>
+public sealed record AttackResult(string Attacker, string Weapon, AttackMode Mode, int? AttackRoll, int AttackTotal, IReadOnlyList<TargetResult> Targets, IReadOnlyList<string> Notes,
+    string AttackerId = "", int Seq = 0, bool Melee = false);
 
 public sealed record CombatantDto(FighterView View, CombatantKind Kind, bool Active);
 
 public sealed record EncounterDetailDto(
     int Id, string Name, int Version, EncounterStatus Status, int Round, string? ActiveId, DateTime CreatedAt, DateTime UpdatedAt,
     IReadOnlyList<FighterView> Queue, IReadOnlyList<CoverPiece> Covers, IReadOnlyList<CombatLogEntry> Log, string? Notes,
-    AttackResult? LastAttack, IReadOnlyList<string> Notices);
+    AttackResult? LastAttack, IReadOnlyList<string> Notices, int? UndoneAttack = null);
 
 public sealed record EncounterSummaryDto(int Id, string Name, EncounterStatus Status, int Round, int Allies, int Enemies, int Down, DateTime UpdatedAt);
 

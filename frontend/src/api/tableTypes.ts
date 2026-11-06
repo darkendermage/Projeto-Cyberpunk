@@ -1,5 +1,5 @@
 /** Types of /api/table and /api/table/play (Application/Table). */
-import type { CombatantKind, CombatSide, WeaponView, WoundState } from './encounterTypes';
+import type { AttackMode, CombatantKind, CombatSide, WeaponView, WoundState } from './encounterTypes';
 
 export type GridType = 'Square' | 'None';
 export type TokenVisibility = 'All' | 'Gm' | 'Seats';
@@ -276,14 +276,49 @@ export interface TableMessage {
   authorSeatId: number | null;
   authorName: string;
   authorColor: string | null;
-  kind: 'Text' | 'Roll' | 'System';
+  kind: 'Text' | 'Roll' | 'System' | 'Attack';
   visibility: TableVisibility;
   targetSeatId: number | null;
   text: string;
   roll: RollResult | null;
   /** A secret roll seen by its author: they rolled, but not what came up. */
   concealed: boolean;
+  /** Attack lines: the attack of the fight on the live scene. */
+  attack?: TableAttack | null;
 }
+
+/** One target of a table attack; players get null numbers on NPCs (a hit or a miss only). */
+export interface TableAttackTarget {
+  id: string;
+  name: string;
+  pc: boolean;
+  hit: boolean;
+  damage: number | null;
+  through: number | null;
+  location: string;
+  dv: number | null;
+  defenseRoll: number | null;
+  damageDice: number[];
+  criticalInjury: string | null;
+}
+
+/** An attack of the fight on the live scene: the chat card, the effect on the map and the dice. */
+export interface TableAttack {
+  encounterId: number;
+  seq: number;
+  attackerId: string;
+  attackerName: string;
+  attackerPc: boolean;
+  weapon: string;
+  mode: AttackMode;
+  melee: boolean;
+  attackRoll: number | null;
+  attackTotal: number;
+  targets: TableAttackTarget[];
+  undone: boolean;
+}
+
+export interface QuickAttack { weapon: string; mode: AttackMode; targetIds: string[] }
 
 export interface SendMessage { text: string; visibility?: TableVisibility; targetSeatId?: number | null }
 export interface RollRequest {

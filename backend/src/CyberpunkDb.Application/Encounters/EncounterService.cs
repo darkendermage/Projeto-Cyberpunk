@@ -269,13 +269,23 @@ public sealed class EncounterService(
     // ------------------------------------------------------------------ attacks
 
     public Task<EncounterDetailDto> AttackAsync(int id, AttackRequest r, CancellationToken ct) =>
-        MutateAsync(id, r.Version, async (s, _, notices) =>
+        MutateAsync(id, r.Version, async (s, e, notices) =>
         {
             var fighters = await ViewsAsync(s, ct);
             var attacker = fighters.GetValueOrDefault(r.AttackerId) ?? throw new NotFoundException(L.T("Atacante não está no combate.", "The attacker isn't in the fight."));
             if (attacker.Dead) throw RequestValidationException.For("attackerId", L.T($"{attacker.Name} está morto.", $"{attacker.Name} is dead."));
             var targets = r.TargetIds.Distinct().Select(t => fighters.GetValueOrDefault(t) ?? throw new NotFoundException(L.T("Alvo não está no combate.", "The target isn't in the fight."))).ToList();
             var plan = resolver.Resolve(r, attacker, targets, dice);
+
+            // What the undo puts back: the fight as it is now and the sheets of the PCs involved (ammo, damage, injuries).
+            var before = JsonSerializer.Serialize(s, StateJson);
+            var pcs = targets.Prepend(attacker).Select(f => f.CharacterId).OfType<int>().Distinct().ToList();
+            var sheets = new List<SheetSnapshot>();
+            foreach (var pc in pcs)
+            {
+                var (_, json) = await characters.SnapshotAsync(pc, ct);
+                sheets.Add(new SheetSnapshot(pc, 0, json));
+            }
 
             // Ammunition first: if the magazine can't pay, nothing happens.
             s = await SpendAmmoAsync(s, attacker, plan, r.Mode, ct);
@@ -287,7 +297,12 @@ public sealed class EncounterService(
                 s = state;
                 results.Add(result with { Attack = plan.AttackTotal });
             }
-            var attack = new AttackResult(attacker.Name, plan.WeaponName, plan.Mode, plan.AttackRoll, plan.AttackTotal, results, plan.Notes);
+            for (var i = 0; i < sheets.Count; i++)
+                sheets[i] = sheets[i] with { Version = (await characters.SnapshotAsync(sheets[i].CharacterId, ct)).Version };
+            var seq = s.AttackSeq + 1;
+            s = s with { AttackSeq = seq, Undo = new AttackUndo(seq, e.Version + 1, before, sheets) };
+            var melee = attacker.Weapon(plan.WeaponKey)?.Melee ?? false;
+            var attack = new AttackResult(attacker.Name, plan.WeaponName, plan.Mode, plan.AttackRoll, plan.AttackTotal, results, plan.Notes, attacker.Id, seq, melee);
             _lastAttack = attack;
             var summary = plan.Mode == AttackMode.Suppressive
                 ? string.Join("; ", results.Select(t => $"{t.TargetName}: {t.Notes.FirstOrDefault()}"))
@@ -297,6 +312,39 @@ public sealed class EncounterService(
         }, ct);
 
     private AttackResult? _lastAttack;
+
+    /// <summary>
+    /// Puts the fight and the sheets of the PCs involved back as they were before the last attack. Only right after it:
+    /// anything else done in the fight, or on one of those sheets, closes the undo.
+    /// </summary>
+    public async Task<EncounterDetailDto> UndoAttackAsync(int id, EncounterVersionRequest r, CancellationToken ct)
+    {
+        var entity = await FindAsync(id, ct);
+        if (entity.Version != r.Version)
+            throw new ConflictException(L.T("Este combate foi alterado em outra janela. Recarregue para ver a versão atual.", "This fight was changed in another window. Reload to see the current version."));
+        var current = Deserialize(entity.StateJson);
+        if (current.Undo is not { } undo || undo.EncounterVersion != entity.Version)
+            throw new ConflictException(L.T("Não há ataque para desfazer: algo mudou no combate depois dele.", "There's no attack to undo: something changed in the fight after it."));
+        foreach (var sheet in undo.Sheets)
+            if ((await characters.SnapshotAsync(sheet.CharacterId, ct)).Version != sheet.Version)
+                throw new ConflictException(L.T("Uma ficha mudou depois do ataque; desfaça à mão.", "A sheet changed after the attack; undo it by hand."));
+        foreach (var sheet in undo.Sheets)
+            await characters.RestoreAsync(sheet.CharacterId, sheet.Version, sheet.SheetJson, L.T("Ataque desfeito na mesa de combate.", "Attack undone on the combat table."), ct);
+
+        var state = Log(Deserialize(undo.State) with { AttackSeq = current.AttackSeq, Undo = null }, null, "undo", L.T("Último ataque desfeito.", "Last attack undone."));
+        Apply(entity, state, DateTime.UtcNow);
+        try
+        {
+            await db.SaveChangesAsync(ct);
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            throw new ConflictException(L.T("Este combate foi alterado ao mesmo tempo em outra janela. Recarregue e tente de novo.", "This fight was changed at the same time in another window. Reload and try again."));
+        }
+        var detail = await DetailAsync(entity, state, null, [], ct) with { UndoneAttack = undo.Seq };
+        await observer.ChangedAsync(detail, ct);
+        return detail;
+    }
 
     private async Task<EncounterState> SpendAmmoAsync(EncounterState s, FighterView attacker, PlannedAttack plan, AttackMode mode, CancellationToken ct)
     {
@@ -576,7 +624,8 @@ public sealed class EncounterService(
             throw new ConflictException(L.T("Este combate foi alterado em outra janela. Recarregue para ver a versão atual.", "This fight was changed in another window. Reload to see the current version."));
         var notices = new List<string>();
         _lastAttack = null;
-        var state = await operation(Deserialize(entity.StateJson), entity, notices);
+        // The undo of the last attack lasts only until the next change; an attack sets a new one.
+        var state = await operation(Deserialize(entity.StateJson) with { Undo = null }, entity, notices);
         Apply(entity, state, DateTime.UtcNow);
         try
         {

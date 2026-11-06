@@ -2,7 +2,7 @@ import { API_BASE, ApiError, request } from './client';
 import { locale, t } from '../i18n';
 import type {
   ArmorLocation, ClaimResult, Lobby, MediaInfo, PartyMember, PlayerCharacter, PlayerSheet, PlayerEncounter, PlayerSeat, PlayerState, RollRequest, SceneBatch, SceneGrid, SceneSummary, SceneView, Seat,
-  SendMessage, TableMessage, TableRules, TemplateInput, BarrierRequest, TokenInput, TokenMove, TunnelStatus,
+  SendMessage, TableAttack, TableMessage, TableRules, TemplateInput, QuickAttack, BarrierRequest, TokenInput, TokenMove, TunnelStatus,
 } from './tableTypes';
 
 const json = (body: unknown) => JSON.stringify(body);
@@ -23,6 +23,8 @@ export const tableApi = {
   damageBarrier: (id: number, tokenId: string, amount: number) =>
     request<SceneView>(`/table/scenes/${id}/barriers/${tokenId}/damage`, { method: 'POST', body: json({ amount }) }),
   batch: (id: number, body: SceneBatch) => request<SceneView>(`/table/scenes/${id}/batch`, { method: 'POST', body: json(body) }),
+  /** The GM's quick attack with any fighter of the scene's fight; the distance comes from the map. */
+  attack: (id: number, body: QuickAttack & { attackerId: string }) => request<TableAttack>(`/table/scenes/${id}/attack`, { method: 'POST', body: json(body) }),
   party: (id: number) => request<PartyMember[]>(`/table/scenes/${id}/party`),
   rules: () => request<TableRules>('/table/rules'),
   addEncounterTokens: (id: number) => request<SceneView>(`/table/scenes/${id}/encounter-tokens`, { method: 'POST' }),
@@ -106,6 +108,8 @@ export function playerApi(seat: string) {
     party: () => request<PartyMember[]>('/table/play/party', { headers }),
     rules: () => request<TableRules>('/table/play/rules', { headers }),
     reroll: (messageId: number) => request<TableMessage>(`/table/play/rolls/${messageId}/reroll`, { method: 'POST', headers }),
+    /** An attack with the seat's own character, on its Turn. */
+    attack: (body: QuickAttack) => request<TableAttack>('/table/play/attack', { method: 'POST', body: json(body), headers }),
     armor: (location: ArmorLocation, delta: number) => request<PlayerCharacter>('/table/play/armor', { method: 'POST', body: json({ location, delta }), headers }),
     placeToken: (x: number, y: number) => request<SceneView>('/table/play/my-token', { method: 'POST', body: json({ x, y }), headers }),
     addTemplate: (tpl: TemplateInput) => request<SceneView>('/table/play/templates', { method: 'POST', body: json(tpl), headers }),

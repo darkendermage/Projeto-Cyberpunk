@@ -19,8 +19,10 @@ import { CombatTab, InvitesTab, SceneTab, ScenesColumn, TemplateInspector, Token
 import { damageCommand, fromGmFighter } from './tokens';
 import { PanelHandle } from './PanelHandle';
 import { RulesDialog } from './RulesDialog';
-import { SceneStrip } from './SceneStrip';
+import { AimBar, SceneStrip } from './SceneStrip';
 import { buildStrip } from './strip';
+import { attackSummary, fighterIdOf, startAim } from './aim';
+import { useQuickAttack } from './useQuickAttack';
 import { GM_PANELS, gmColumns } from './panels';
 import { usePanels } from './usePanels';
 import { NO_SELECTION, useBoardKeys, type Selection } from './useBoardKeys';
@@ -98,7 +100,7 @@ export function GmTablePage() {
       // Damage to a PC lands on their sheet: the strip's numbers follow.
       void client.invalidateQueries({ queryKey: ['table', 'party'] });
     },
-    message: (m) => client.setQueryData<TableMessage[]>(tableKeys.messages, (old = []) => (old.some((x) => x.id === m.id) ? old : [...old, m].slice(-300))),
+    message: (m) => client.setQueryData<TableMessage[]>(tableKeys.messages, (old = []) => (old.some((x) => x.id === m.id) ? old.map((x) => (x.id === m.id ? m : x)) : [...old, m].slice(-300))),
     // Live effects belong to the live scene: ignored while the GM edits another one.
     tokenDrag: (d) => { if (d.sceneId === shownRef.current) board.current?.showDrag(d.tokenId, d.x, d.y); },
     ping: (p) => { if (p.sceneId === shownRef.current) board.current?.showPing(p); },
@@ -115,20 +117,41 @@ export function GmTablePage() {
   const viewKey = view ? `${view.id}:${view.version}` : '';
   const draftGrid = gridDraft?.key === viewKey ? gridDraft.grid : null;
   const live = view?.active ?? false;
+  const queue = useMemo(() => (encounter.data?.status === 'Active' ? encounter.data.queue : []), [encounter.data]);
+  const quick = useQuickAttack(
+    (aim, targetId) => tableApi.attack(view!.id, { attackerId: aim.attackerId, weapon: aim.weapon.key, mode: aim.mode, targetIds: [targetId] }),
+    (attack) => toast.notify(attackSummary(attack)),
+    (e) => toast.notify(problemMessage(e), 'error'));
+  const tokenFighter = (tokenId: string) => {
+    const tk = view?.tokens.find((x) => x.id === tokenId);
+    return tk ? fighterIdOf(tk, queue) : null;
+  };
+
+  // While aiming, the board lights up the shooter and the target.
+  const aim = quick.aim;
+  const aimTokens = useMemo(() => (aim && view ? view.tokens.filter((tk) => {
+    const id = fighterIdOf(tk, queue);
+    return id != null && (id === aim.attackerId || id === aim.targetId);
+  }).map((tk) => tk.id) : null), [aim, view, queue]);
   const fighters = useMemo(() => new Map((encounter.data?.queue ?? []).map((f) => [f.id, fromGmFighter(f)])), [encounter.data]);
   const data: BoardData | null = useMemo(() => view ? {
     scene: draftGrid ? { ...view, grid: draftGrid } : view,
     fighters,
     activeCombatantId: encounter.data?.status === 'Active' ? encounter.data.activeId : null,
-    selectedTokens: selection.tokens,
-    selectedTemplates: selection.templates,
+    selectedTokens: aimTokens ?? selection.tokens,
+    selectedTemplates: aimTokens ? [] : selection.templates,
     canMoveTemplate: (tpl) => !tpl.locked,
     gm: true,
     lang,
-  } : null, [view, draftGrid, fighters, encounter.data, selection]);
+  } : null, [view, draftGrid, fighters, encounter.data, selection, aimTokens]);
 
   const callbacks: BoardCallbacks = {
-    onSelect: (tokens, templates) => { setSelection({ tokens, templates }); if (tokens.length + templates.length > 0) setTab('token'); },
+    onSelect: (tokens, templates) => {
+      // While aiming, a click on a token picks the target instead of selecting it.
+      if (quick.aim) { if (tokens.length === 1 && templates.length === 0) quick.target(tokenFighter(tokens[0])); return; }
+      setSelection({ tokens, templates });
+      if (tokens.length + templates.length > 0) setTab('token');
+    },
     // Previews only make sense on the scene the players are looking at.
     onTokenDrag: (id, x, y) => { if (live && view) hub.dragToken(view.id, id, x, y); },
     onMoveDrop: (tokens, templates) => {
@@ -156,17 +179,31 @@ export function GmTablePage() {
   const setHidden = (hidden: boolean) => {
     if (view && selection.tokens.length) void act(() => tableApi.batch(view.id, hidden ? { hideTokens: selection.tokens } : { showTokens: selection.tokens }));
   };
-  useBoardKeys({ onDelete: removeSelection, onSelectAll: selectAll, onClear: () => setSelection(NO_SELECTION) });
+  useBoardKeys({ onDelete: removeSelection, onSelectAll: selectAll, onClear: () => (quick.aim ? quick.cancel() : setSelection(NO_SELECTION)) });
   const selectedCount = selection.tokens.length + selection.templates.length;
 
-  const strip = useMemo(() => buildStrip(view?.tokens ?? [], party.data ?? [], new Map((encounter.data?.queue ?? []).map((f) => [f.id, f]))),
-    [view?.tokens, party.data, encounter.data]);
+  const viewTokens = view?.tokens;
+  const strip = useMemo(() => buildStrip(viewTokens ?? [], party.data ?? [], new Map((encounter.data?.queue ?? []).map((f) => [f.id, f]))),
+    [viewTokens, party.data, encounter.data]);
 
   const token = view?.tokens.find((tk) => tk.id === selectedToken);
   const template = view?.templates.find((tp) => tp.id === selectedTemplate);
   const openSeats = (seats.data ?? []).filter((s) => !s.revoked);
 
+  // The GM takes back the last attack of the fight, right after it (the server refuses once anything else happened).
+  const lastAttackId = [...(messages.data ?? [])].reverse().find((m) => m.kind === 'Attack' && m.attack?.encounterId === encounter.data?.id)?.id;
+  const undoAttack = (m: TableMessage) => {
+    if (m.id !== lastAttackId || m.attack?.undone) return null;
+    return (
+      <Button variant="ghost" onClick={() => command.mutate({ path: 'undo-attack' },
+        { onSuccess: () => toast.notify(t('Ataque desfeito.', 'Attack undone.')), onError: (e) => toast.notify(problemMessage(e), 'error') })}>
+        {t('Desfazer ataque', 'Undo attack')}
+      </Button>
+    );
+  };
+
   const applyDamage = (m: TableMessage) => {
+    if (m.kind === 'Attack') return undoAttack(m);
     if (m.kind !== 'Roll' || m.roll?.kind !== 'Damage' || !encounter.data) return null;
     return <ApplyDamage total={m.roll.total} encounter={encounter.data}
       onApply={(id, location) => command.mutate(damageCommand(m.roll!, id, location),
@@ -202,7 +239,16 @@ export function GmTablePage() {
           )}
           {view && <span className={styles.hint}>{TOOL_HINT[tool]}</span>}
         </div>
-        {view && <SceneStrip entries={strip} selected={selection.tokens} onPick={(id) => { selectToken(id); setTab('token'); }} />}
+        {view && quick.aim && (
+          <AimBar aim={quick.aim} busy={quick.busy} targetName={queue.find((f) => f.id === quick.aim!.targetId)?.name ?? null}
+            onMode={quick.mode} onFire={() => void quick.shoot()} onCancel={quick.cancel} />
+        )}
+        {view && (
+          <SceneStrip entries={strip} selected={selection.tokens} aim={quick.aim}
+            onPick={(e) => { if (quick.aim) quick.target(fighterIdOf(e, queue)); else { selectToken(e.tokenId); setTab('token'); } }}
+            weaponsOf={(e) => { const f = queue.find((x) => x.id === fighterIdOf(e, queue)); return f ? { weapons: f.weapons, blocked: null } : null; }}
+            onWeapon={(e, w) => { const f = queue.find((x) => x.id === fighterIdOf(e, queue)); if (f) quick.start(startAim(f.id, f.name, w)); }} />
+        )}
       </section>
 
       <PanelHandle className={styles.handleRight} panel="right" width={panels.right} limits={GM_PANELS.right} open={panels.rightOpen}

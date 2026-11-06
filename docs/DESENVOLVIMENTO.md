@@ -95,7 +95,7 @@ Para produção, rode `npm run build` e copie `frontend/dist` para `backend/src/
 ### Testes
 
 ```bash
-cd backend && dotnet test     # 577 testes: filtros, validação, gerador de NPCs e gangues, Compêndio de NPCs (dados e API), regras de personagem, Night Market, Arquiteturas de NET, Friday Night Firefight (mesa de combate), Mesa Virtual (porta dos jogadores, assentos, link geral, cenas, imagens de NPC nos tokens, combate ao vivo, dados e chat, túnel), atualização automática e integração da API (SQLite + seed real)
+cd backend && dotnet test     # 594 testes: filtros, validação, gerador de NPCs e gangues, Compêndio de NPCs (dados e API), regras de personagem, Night Market, Arquiteturas de NET, Friday Night Firefight (mesa de combate), Mesa Virtual (porta dos jogadores, assentos, link geral, cenas, imagens de NPC nos tokens, combate ao vivo, dados e chat, túnel), atualização automática e integração da API (SQLite + seed real)
 cd frontend && npm test       # filtros, URL, editor de NPCs, Compêndio de NPCs, tabela de alcance, perícias, Lifepath, anatomia do cyberware, Night Market e Mesa Virtual (grade, áreas, tokens, origem do token, entrada)
 ```
 
@@ -518,6 +518,18 @@ Editar a cena usa `Version`; uma versão velha recebe 409. Tokens e áreas são 
 ### Mídia
 
 `MediaAsset` fica no banco e os bytes em `Media:Root` (padrão `%LOCALAPPDATA%\NightCityItemDB\media`). O tipo é lido dos primeiros bytes do arquivo. O limite é 15 MB, e o arquivo é servido com cache imutável. O navegador reduz a imagem antes de enviar (`prepareImage` com `MAP_LIMITS`, em `lib/portrait.ts`).
+
+### Ataque rápido
+
+Os cartões "Na cena", embaixo do mapa, mostram as armas de quem pode atirar. O jogador vê as do próprio personagem e só atira no turno dele. O mestre vê as de todos os combatentes e atira com qualquer um, em qualquer turno.
+
+- **Fluxo:** clicar na arma abre a barra de mira (`AimBar`). O alvo é escolhido clicando no token do mapa ou no cartão, e "Disparar" envia. Esc cancela. A lógica pura fica em `aim.ts`, e o estado em `useQuickAttack.ts`.
+- **Rotas:** `POST /api/table/play/attack` (jogador) e `POST /api/table/scenes/{id}/attack` (mestre), em `TableAttackService`. As duas chamam o `EncounterService.AttackAsync`, e o servidor rola tudo.
+- **Distância:** é medida entre os tokens como na régua (`TableAttacks.Meters`, a mesma regra do `gridDistance`).
+- **Ataques em área:** supressão e explosivos precisam de gabarito e ficam no formulário da mesa de combate.
+- **Chat:** todo ataque do combate da cena ao vivo, feito por onde for, vira uma linha `Attack` (`ChatService.PostAttackAsync`, chamado pelo `EncounterBroadcast`). O ataque fica em `RollJson`. Os jogadores leem acerto ou erro em todos os alvos, mas dano, DV e defesa só nos PCs (`TableAttacks.ForSeat`).
+- **Desfazer:** cada ataque guarda em `EncounterState.Undo` o combate de antes e as fichas dos PCs envolvidos (munição, dano, ferimentos). `POST /api/encounters/{id}/undo-attack` devolve tudo enquanto nada mais mudou: o combate tem que estar na versão que o ataque deixou, e cada ficha também. Qualquer outra ação no combate apaga o desfazer. A linha do chat fica riscada (`MarkAttackUndoneAsync`).
+- **Numeração:** `EncounterState.AttackSeq` numera os ataques. `AttackResult.Seq` é o número que a mesa usa para os efeitos e os dados.
 
 ### Dados
 

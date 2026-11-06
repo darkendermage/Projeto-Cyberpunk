@@ -120,6 +120,29 @@ public sealed class CharacterService(
         return Detail(entity, Deserialize(entity.SheetJson), await catalogs.GetAsync(ct), hasPortrait, []);
     }
 
+    /// <summary>The stored sheet and its version, as the combat table keeps it to undo an attack.</summary>
+    internal async Task<(int Version, string SheetJson)> SnapshotAsync(int id, CancellationToken ct)
+    {
+        var row = await db.Characters.AsNoTracking().Where(c => c.Id == id).Select(c => new { c.Version, c.SheetJson }).FirstOrDefaultAsync(ct)
+                  ?? throw NotFound(id);
+        return (row.Version, row.SheetJson);
+    }
+
+    /// <summary>
+    /// Puts back a sheet taken before a combat action (the undo of the last attack), as long as nothing changed the sheet
+    /// since: it must still be at <paramref name="version"/>.
+    /// </summary>
+    internal async Task RestoreAsync(int id, int version, string sheetJson, string description, CancellationToken ct)
+    {
+        var entity = await db.Characters.FirstOrDefaultAsync(c => c.Id == id, ct) ?? throw NotFound(id);
+        if (entity.Version != version)
+            throw new ConflictException(L.T($"A ficha de {entity.Name} mudou depois do ataque; desfaça à mão.", $"{entity.Name}'s sheet changed after the attack; undo it by hand."));
+        var now = DateTime.UtcNow;
+        Apply(entity, Deserialize(sheetJson), await catalogs.GetAsync(ct), now);
+        AddEvents(entity, [new PendingEvent(CharacterEventKind.Combat, "undo-attack", description, null, null, null, false)], now);
+        await db.SaveChangesAsync(ct);
+    }
+
     /// <summary>The history, newest first. IP spends on skills and Role Ranks say whether they can still be undone.</summary>
     public async Task<IReadOnlyList<CharacterEventDto>> EventsAsync(int id, CharacterEventKind? kind, CancellationToken ct)
     {

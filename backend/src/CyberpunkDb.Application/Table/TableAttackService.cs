@@ -1,0 +1,86 @@
+using CyberpunkDb.Application.Abstractions;
+using CyberpunkDb.Application.Common;
+using CyberpunkDb.Application.Encounters;
+using CyberpunkDb.Application.Encounters.Combat;
+using CyberpunkDb.Application.Encounters.Rules;
+using CyberpunkDb.Application.Localization;
+using CyberpunkDb.Domain.Entities;
+using CyberpunkDb.Domain.Enums;
+using Microsoft.EntityFrameworkCore;
+
+namespace CyberpunkDb.Application.Table;
+
+/// <summary>A quick attack from the cards under the map: the weapon, the mode and who it is aimed at.</summary>
+public sealed record QuickAttackRequest(string Weapon, AttackMode Mode, List<string> TargetIds);
+
+/// <summary>The GM's quick attack: any fighter of the scene's fight.</summary>
+public sealed record GmQuickAttackRequest(string AttackerId, string Weapon, AttackMode Mode, List<string> TargetIds);
+
+/// <summary>
+/// Attacks made from the virtual table. The fight resolves them as on the combat table, with the server rolling every
+/// die; the distance comes from the map, measured between the two tokens like the ruler does. Area attacks (suppressive
+/// fire, explosives) need a template and stay on the combat table's full form.
+/// </summary>
+public sealed class TableAttackService(IAppDbContext db, EncounterService encounters)
+{
+    /// <summary>A player's attack with their own character, on their own Turn, at fighters they can see.</summary>
+    public async Task<TableAttack> PlayerAttackAsync(TableSeat seat, QuickAttackRequest r, CancellationToken ct)
+    {
+        var scene = await db.Scenes.AsNoTracking().FirstOrDefaultAsync(s => s.Active, ct)
+                    ?? throw new ConflictException(L.T("Não há cena aberta na mesa.", "There's no scene open on the table."));
+        var (detail, state) = await FightAsync(scene, ct);
+        var own = seat.CharacterId is { } characterId ? detail.Queue.FirstOrDefault(f => f.CharacterId == characterId) : null;
+        if (own is null) throw new ConflictException(L.T("Seu personagem não está neste combate.", "Your character isn't in this fight."));
+        if (detail.ActiveId != own.Id) throw new ConflictException(L.T("Aguarde seu turno para atacar.", "Wait for your Turn to attack."));
+        var visible = PlayerEncounters.For(detail, seat, state).Queue.Select(f => f.Id).ToHashSet();
+        if (r.TargetIds.Any(id => !visible.Contains(id)))
+            throw RequestValidationException.For("targetIds", L.T("Escolha um alvo que você vê no mapa.", "Pick a target you can see on the map."));
+        var attack = await AttackAsync(detail, state, own.Id, r.Weapon, r.Mode, r.TargetIds, ct);
+        return TableAttacks.ForSeat(attack);
+    }
+
+    /// <summary>The GM's attack with any fighter of the scene's fight, Turn or not.</summary>
+    public async Task<TableAttack> GmAttackAsync(int sceneId, GmQuickAttackRequest r, CancellationToken ct)
+    {
+        var scene = await db.Scenes.AsNoTracking().FirstOrDefaultAsync(s => s.Id == sceneId, ct)
+                    ?? throw new NotFoundException(L.T("Cena não encontrada.", "Scene not found."));
+        var (detail, state) = await FightAsync(scene, ct);
+        return await AttackAsync(detail, state, r.AttackerId, r.Weapon, r.Mode, r.TargetIds, ct);
+    }
+
+    private async Task<(EncounterDetailDto, SceneState)> FightAsync(Scene scene, CancellationToken ct)
+    {
+        if (scene.EncounterId is not { } encounterId)
+            throw new ConflictException(L.T("Esta cena não tem combate ligado.", "This scene has no fight linked."));
+        var detail = await encounters.GetAsync(encounterId, ct);
+        if (detail.Status != EncounterStatus.Active) throw new ConflictException(L.T("Este combate foi encerrado.", "This fight has ended."));
+        return (detail, SceneService.Deserialize(scene.StateJson));
+    }
+
+    private async Task<TableAttack> AttackAsync(EncounterDetailDto detail, SceneState state, string attackerId, string weapon, AttackMode mode,
+        List<string> targetIds, CancellationToken ct)
+    {
+        if (mode is AttackMode.Suppressive or AttackMode.Explosive)
+            throw RequestValidationException.For("mode", L.T("Ataques em área ficam no formulário completo da tela de combate.", "Area attacks stay on the combat table's full form."));
+        if (targetIds.Count == 0) throw RequestValidationException.For("targetIds", L.T("Escolha o alvo.", "Pick the target."));
+        var attacker = detail.Queue.FirstOrDefault(f => f.Id == attackerId) ?? throw new NotFoundException(L.T("Atacante não está no combate.", "The attacker isn't in the fight."));
+        var view = attacker.Weapon(weapon) ?? throw RequestValidationException.For("weapon", L.T("Arma não encontrada.", "Weapon not found."));
+
+        int? range = null;
+        if (!view.Melee)
+        {
+            var from = TokenOf(state, attacker) ?? throw RequestValidationException.For("attackerId", L.T($"Coloque o token de {attacker.Name} no mapa.", $"Put {attacker.Name}'s token on the map."));
+            var target = detail.Queue.FirstOrDefault(f => f.Id == targetIds[0]) ?? throw new NotFoundException(L.T("Alvo não está no combate.", "The target isn't in the fight."));
+            var to = TokenOf(state, target) ?? throw RequestValidationException.For("targetIds", L.T($"Coloque o token de {target.Name} no mapa.", $"Put {target.Name}'s token on the map."));
+            range = (int)Math.Round(TableAttacks.Meters(state.Grid, from, to));
+        }
+
+        var after = await encounters.AttackAsync(detail.Id, new AttackRequest(detail.Version, attackerId, targetIds, weapon, mode, range), ct);
+        return TableAttacks.From(after, after.LastAttack!);
+    }
+
+    /// <summary>The fighter's token: linked to the combatant, or a PC's token linked to the sheet.</summary>
+    private static SceneToken? TokenOf(SceneState state, FighterView f) =>
+        state.Tokens.FirstOrDefault(t => t.CombatantId == f.Id)
+        ?? (f.CharacterId is { } id ? state.Tokens.FirstOrDefault(t => t.CharacterId == id) : null);
+}

@@ -15,6 +15,6 @@ public class TableMessage
     /// <summary>Whisper target.</summary>
     public int? TargetSeatId { get; set; }
     public string Text { get; set; } = string.Empty;
-    /// <summary>The roll, term by term, for roll messages.</summary>
+    /// <summary>The roll, term by term, for roll messages; the attack for attack messages.</summary>
     public string? RollJson { get; set; }
 }

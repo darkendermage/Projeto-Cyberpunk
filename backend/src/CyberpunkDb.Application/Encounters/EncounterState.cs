@@ -20,6 +20,10 @@ public sealed record EncounterState
     public List<CoverPiece> Covers { get; init; } = [];
     public List<CombatLogEntry> Log { get; init; } = [];
     public string? Notes { get; init; }
+    /// <summary>Number of the last attack; the table uses it to tell a new attack from one it already showed.</summary>
+    public int AttackSeq { get; init; }
+    /// <summary>What the last attack changed, kept until anything else happens in the fight.</summary>
+    public AttackUndo? Undo { get; init; }
 
     public Combatant? Find(string? id) => Combatants.FirstOrDefault(c => c.Id == id);
 
@@ -116,5 +120,14 @@ public sealed record CoverPiece
     public int MaxHp { get; init; }
     public int Hp { get; init; }
 }
+
+/// <summary>
+/// The fight before the last attack (<see cref="State"/>) and the sheets of the PCs it touched, valid while the fight
+/// is still at <see cref="EncounterVersion"/> and each sheet at the version the attack left it.
+/// </summary>
+public sealed record AttackUndo(int Seq, int EncounterVersion, string State, List<SheetSnapshot> Sheets);
+
+/// <summary>A character sheet before an attack; <see cref="Version"/> is the one the attack left it at.</summary>
+public sealed record SheetSnapshot(int CharacterId, int Version, string SheetJson);
 
 public sealed record CombatLogEntry(int Round, string? ActorId, string Kind, string Text, DateTime At);
