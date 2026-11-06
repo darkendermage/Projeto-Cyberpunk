@@ -3,7 +3,7 @@ import { Crosshair } from 'lucide-react';
 import type { AttackMode, AttackResult, EncounterDetail, EncounterRules, FighterView } from '../../api/encounterTypes';
 import { Badge, Button, Checkbox, Field, NumberInput, Select, Switch } from '../../components/ui/ui';
 import { diceCount, isArea, MODE_LABEL, modesFor, needsRange, parseDice, THROWN } from './combat';
-import type { Run } from './EncounterView';
+import type { QuickPick, Run } from './EncounterView';
 import styles from './Combat.module.css';
 import { t, tv } from '../../i18n';
 
@@ -11,12 +11,14 @@ import { t, tv } from '../../i18n';
  * The attack form for the selected combatant: weapon (with STAT + skill already added), mode, targets, range and the
  * optional dice the players rolled at the table. Everything else is resolved by the server.
  */
-export function AttackPanel({ detail, rules, attacker, busy, run }: {
+export function AttackPanel({ detail, rules, attacker, busy, run, preset }: {
   detail: EncounterDetail; rules: EncounterRules; attacker: FighterView | null; busy: boolean; run: Run;
+  /** A weapon (and target) picked on the queue: the form starts with them. */
+  preset?: QuickPick | null;
 }) {
-  const [weaponKey, setWeaponKey] = useState('');
+  const [weaponKey, setWeaponKey] = useState(preset?.weaponKey ?? '');
   const [mode, setMode] = useState<AttackMode>('Single');
-  const [targets, setTargets] = useState<string[]>([]);
+  const [targets, setTargets] = useState<string[]>(preset?.targetId ? [preset.targetId] : []);
   const [range, setRange] = useState<number | null>(10);
   const [dodge, setDodge] = useState(false);
   const [modifier, setModifier] = useState<number | null>(0);
@@ -108,7 +110,8 @@ export function AttackPanel({ detail, rules, attacker, busy, run }: {
       <div className={styles.row}>
         {!weapon?.melee && <Switch checked={dodge} onChange={setDodge} label={t(`Alvo esquiva (só REF ${tv(rules.rules.dodgeRef.value)}+)`, `Target dodges (REF ${tv(rules.rules.dodgeRef.value)}+ only)`)} />}
         <Switch checked={ignoreCover} onChange={setIgnoreCover} label={t('Ignorar cobertura (tem linha de visão)', 'Ignore cover (has line of sight)')} />
-        <Button variant="primary" icon={<Crosshair size={15} />} disabled={busy || attacker.dead || target.length === 0 || !(weapon || thrown)} onClick={submit}>
+        <Button variant="primary" icon={<Crosshair size={15} />} disabled={busy || attacker.dead || target.length === 0 || !(weapon || thrown)} onClick={submit}
+          autoFocus={!!preset?.targetId}>
           {t('Atacar', 'Attack')}
         </Button>
       </div>
@@ -122,10 +125,13 @@ export function AttackPanel({ detail, rules, attacker, busy, run }: {
 }
 
 /** The last attack, step by step, like the examples of the book. */
-export function AttackResultView({ result }: { result: AttackResult }) {
+export function AttackResultView({ result, onUndo, busy }: { result: AttackResult; onUndo?: () => void; busy?: boolean }) {
   return (
     <section className={styles.panel}>
-      <h2 className={styles.panelTitle}>{t('Resultado', 'Result')}</h2>
+      <div className={styles.rowBetween}>
+        <h2 className={styles.panelTitle}>{t('Resultado', 'Result')}</h2>
+        {onUndo && <Button variant="ghost" disabled={busy} onClick={onUndo}>{t('Desfazer ataque', 'Undo attack')}</Button>}
+      </div>
       <p>
         <strong>{result.attacker}</strong> · {result.weapon} · {MODE_LABEL[result.mode]} · d10 {result.attackRoll} → <strong>{result.attackTotal}</strong>
       </p>

@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { Link, useNavigate } from 'react-router';
 import {
-  Activity, ArrowLeft, Bandage, ChevronDown, ChevronUp, Copy, Dices, Flag, GripVertical, HeartPulse, IdCard, Shield, SkipForward, Skull, Swords,
+  Activity, ArrowLeft, Bandage, ChevronDown, ChevronUp, Copy, Crosshair, Dices, Flag, GripVertical, HeartPulse, IdCard, Shield, SkipForward, Skull, Swords,
   Trash2, UserPlus, X,
 } from 'lucide-react';
 import clsx from 'clsx';
@@ -19,6 +19,9 @@ import { CONDITIONS, hpPercent, WOUND_LABEL, WOUND_TONE } from './combat';
 import { FighterSheet } from './FighterSheet';
 import styles from './Combat.module.css';
 import { t, tv } from '../../i18n';
+
+/** A weapon picked on a row of the queue, and the target clicked after it. */
+export interface QuickPick { attackerId: string; weaponKey: string; targetId: string | null }
 
 export type Run = (path: string, body?: Record<string, unknown>, done?: string, method?: 'POST' | 'PUT') => void;
 
@@ -38,6 +41,8 @@ function Table({ detail, rules }: { detail: EncounterDetail; rules: EncounterRul
   const command = useEncounterCommand(detail.id);
   const [adding, setAdding] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  // A weapon picked on a row of the queue: the next row clicked is the target, and the attack form comes ready.
+  const [pick, setPick] = useState<QuickPick | null>(null);
   const [sheets, setSheets] = useState<SheetTab[]>([]);
   const [current, setCurrent] = useState<string | null>(null);
   const [dragId, setDragId] = useState<string | null>(null);
@@ -62,6 +67,7 @@ function Table({ detail, rules }: { detail: EncounterDetail; rules: EncounterRul
   const run: Run = (path, body = {}, done, method) =>
     command.mutate({ path, body, method }, {
       onSuccess: (d) => {
+        if (path === 'attack' || path === 'undo-attack') setPick(null);
         if (done) toast.notify(done);
         d.notices.forEach((n) => toast.notify(n, 'info'));
       },
@@ -169,8 +175,22 @@ function Table({ detail, rules }: { detail: EncounterDetail; rules: EncounterRul
                   }}
                   onDrop={(e) => { e.preventDefault(); dropOn(i, drop?.id === f.id && drop.after); }}>
                   {canMove && <GripVertical size={14} className={styles.grip} aria-hidden />}
-                  <QueueRow f={f} active={f.id === detail.activeId} selected={f.id === selected?.id}
-                    cover={detail.covers.find((c) => c.id === f.coverId)?.label} onSelect={() => setSelectedId(f.id)} onOpen={() => openSheet(f.id)} />
+                  <div className={styles.queueStack}>
+                    <QueueRow f={f} active={f.id === detail.activeId} selected={f.id === selected?.id} targeted={pick?.targetId === f.id}
+                      cover={detail.covers.find((c) => c.id === f.coverId)?.label} onOpen={() => openSheet(f.id)}
+                      onSelect={() => (pick && f.id !== pick.attackerId ? setPick({ ...pick, targetId: f.id }) : setSelectedId(f.id))} />
+                    {!f.dead && f.weapons.length > 0 && (
+                      <span className={styles.queueWeapons} role="group" aria-label={t(`Armas de ${tv(f.name)}`, `${tv(f.name)}'s weapons`)}>
+                        {f.weapons.map((w) => (
+                          <button key={w.key} type="button" className={clsx(styles.weaponChip, pick?.attackerId === f.id && pick.weaponKey === w.key && styles.weaponChipOn)}
+                            title={t('Atacar com esta arma: depois clique no alvo na fila', 'Attack with this weapon: then click the target in the queue')}
+                            onClick={() => { setSelectedId(f.id); setPick({ attackerId: f.id, weaponKey: w.key, targetId: null }); }}>
+                            <Crosshair size={11} aria-hidden /> {tv(w.name)} +{w.attackTotal} · {tv(w.damage)}{w.rounds != null ? ` · ${w.rounds}/${w.magazine}` : ''}
+                          </button>
+                        ))}
+                      </span>
+                    )}
+                  </div>
                   {canMove && (
                     <span className={styles.moveButtons}>
                       <IconButton label={t(`Subir ${tv(f.name)} na fila`, `Move ${tv(f.name)} up the queue`)} disabled={i === 0} className={styles.moveButton}
@@ -188,8 +208,18 @@ function Table({ detail, rules }: { detail: EncounterDetail; rules: EncounterRul
           </section>
 
           <div className={styles.main}>
-            <AttackPanel key={selected?.id} detail={detail} rules={rules} attacker={selected} busy={busy} run={run} />
-            {detail.lastAttack && <AttackResultView result={detail.lastAttack} />}
+            {pick && (
+              <div className={styles.pickBar} role="status">
+                <Crosshair size={15} aria-hidden />
+                <span>{pick.targetId
+                  ? t(`Pronto: confira o formulário e ataque ${tv(detail.queue.find((f) => f.id === pick.targetId)?.name ?? '')}.`, `Ready: check the form and attack ${tv(detail.queue.find((f) => f.id === pick.targetId)?.name ?? '')}.`)
+                  : t('Clique no alvo na fila de iniciativa.', 'Click the target in the Initiative Queue.')}</span>
+                <Button variant="ghost" onClick={() => setPick(null)}>{t('Cancelar', 'Cancel')}</Button>
+              </div>
+            )}
+            <AttackPanel key={`${selected?.id}:${pick?.weaponKey ?? ''}:${pick?.targetId ?? ''}`} detail={detail} rules={rules} attacker={selected} busy={busy} run={run}
+              preset={pick && pick.attackerId === selected?.id ? pick : null} />
+            {detail.lastAttack && <AttackResultView result={detail.lastAttack} onUndo={() => run('undo-attack', {}, t('Ataque desfeito.', 'Attack undone.'))} busy={busy} />}
             {selected && <FighterPanel key={selected.id} f={selected} detail={detail} rules={rules} busy={busy} run={run}
               onSheet={() => openSheet(selected.id)} />}
           </div>
@@ -224,13 +254,13 @@ function Table({ detail, rules }: { detail: EncounterDetail; rules: EncounterRul
   );
 }
 
-function QueueRow({ f, active, selected, cover, onSelect, onOpen }: {
-  f: FighterView; active: boolean; selected: boolean; cover?: string; onSelect: () => void; onOpen: () => void;
+function QueueRow({ f, active, selected, targeted, cover, onSelect, onOpen }: {
+  f: FighterView; active: boolean; selected: boolean; targeted: boolean; cover?: string; onSelect: () => void; onOpen: () => void;
 }) {
   return (
     <>
       <button type="button" onClick={onSelect} onDoubleClick={onOpen}
-        className={clsx(styles.queueRow, active && styles.queueActive, selected && styles.queueSelected, f.side === 'Enemy' ? styles.enemy : styles.ally, f.dead && styles.dead)}>
+        className={clsx(styles.queueRow, active && styles.queueActive, selected && styles.queueSelected, targeted && styles.queueTarget, f.side === 'Enemy' ? styles.enemy : styles.ally, f.dead && styles.dead)}>
         <span className={styles.init}>{f.initiative ?? '—'}</span>
         <span className={styles.queueMain}>
           <span className={styles.queueName}>{f.dead && <Skull size={13} />} {tv(f.name)}</span>

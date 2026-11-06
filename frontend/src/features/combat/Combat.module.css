@@ -127,6 +127,17 @@
 .enemy { border-left-color: var(--red); }
 .queueActive { box-shadow: var(--glow-sm); border-color: var(--red); background: rgba(255, 42, 61, 0.08); }
 .queueSelected { outline: 1px solid var(--cyan); }
+.queueTarget { outline: 2px solid var(--red); box-shadow: 0 0 12px var(--red-glow); }
+.queueStack { display: flex; flex-direction: column; gap: 3px; flex: 1; min-width: 0; }
+.queueWeapons { display: flex; flex-wrap: wrap; gap: 3px; padding-left: 38px; }
+.weaponChip {
+  display: inline-flex; align-items: center; gap: 4px; max-width: 100%; padding: 2px 6px; min-height: 24px; cursor: pointer;
+  background: var(--bg-1); border: 1px solid var(--line-strong); color: var(--text-2); font-family: var(--font-mono); font-size: 11px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.weaponChip:hover { border-color: var(--amber); color: var(--amber); }
+.weaponChipOn { border-color: var(--amber); color: var(--amber); }
+.pickBar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 8px 12px; border: 1px solid var(--amber); color: var(--amber); background: rgba(255, 207, 58, 0.06); }
 .dead { opacity: 0.5; }
 .init { min-width: 28px; font-family: var(--font-mono); font-size: 18px; color: var(--text); text-align: center; }
 .queueMain { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 0; }
