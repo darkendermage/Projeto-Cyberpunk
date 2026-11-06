@@ -22934,6 +22934,77 @@
   },
   {
     "ruleSystem": "CyberpunkRed",
+    "source": "Hope Reborn",
+    "slug": "fire-extinguisher",
+    "name": "Fire Extinguisher",
+    "category": "weapons",
+    "manufacturer": null,
+    "description": "A Two-Handed Exotic Very Heavy Pistol with a 5-shot capacity and a maximum range of 6 m/yds (3 squares). The foam produced by the fire extinguisher causes damage to fire with Hit Points, extinguishing the blaze when it hits 0 HP.\n\nOtherwise, a single shot from a Fire Extinguisher will automatically end the On Fire condition of a target. Recharging (reloading) a Fire Extinguisher costs 20eb (Everyday) and access to a charging station. It takes 5 minutes to recharge.",
+    "notes": "Conferido com Hope Reborn, p. 34 e Night Market Index. Ausente do compêndio.",
+    "price": 50,
+    "priceCategory": "Costly",
+    "page": 34,
+    "tags": [
+      "Exótica"
+    ],
+    "attributes": {
+      "weaponClass": "VeryHeavyPistol",
+      "skill": "Handgun",
+      "damage": "Só contra fogo: apaga incêndios e a condição On Fire",
+      "damageDice": null,
+      "rof": 1,
+      "magazine": 5,
+      "maxRange": 6,
+      "hands": 2,
+      "concealable": false,
+      "quality": "Standard",
+      "exotic": true,
+      "calibers": [
+        "Special"
+      ]
+    },
+    "dataOrigin": "Verified"
+  },
+  {
+    "ruleSystem": "CyberpunkRed",
+    "source": "Hope Reborn",
+    "slug": "stage-makeup-kit",
+    "name": "Stage Makeup Kit",
+    "category": "gear",
+    "manufacturer": null,
+    "description": "For 100eb (Premium), they can pick up a Stage Makeup Kit. That and a DV15 Acting or Personal Grooming Check will help change the contours of the face to help defeat facial recognition software.",
+    "notes": "Conferido com Hope Reborn, p. 100 (missão The Devil's Cut). O preço está no texto da missão. Ausente do compêndio.",
+    "price": 100,
+    "priceCategory": "Premium",
+    "page": 100,
+    "tags": [],
+    "attributes": {
+      "gearType": "Tool",
+      "effect": "Com teste DV15 de Acting ou Personal Grooming, muda os contornos do rosto para enganar reconhecimento facial."
+    },
+    "dataOrigin": "Verified"
+  },
+  {
+    "ruleSystem": "CyberpunkRed",
+    "source": "Hope Reborn",
+    "slug": "rad-suit",
+    "name": "Rad Suit",
+    "category": "gear",
+    "manufacturer": null,
+    "description": "Marianne can source rad suits at 500eb (Expensive) apiece. They will protect the Crew from radiation so long as they aren't damaged. If an Edgerunner takes enough damage to ablate their armor, the rad suit becomes worthless.",
+    "notes": "Conferido com Hope Reborn, p. 160 (missão no Hot Zone). O preço está no texto da missão. Ausente do compêndio.",
+    "price": 500,
+    "priceCategory": "Expensive",
+    "page": 160,
+    "tags": [],
+    "attributes": {
+      "gearType": "Survival",
+      "effect": "Protege de radiação enquanto não for danificado. Perde a utilidade se o usuário sofrer dano que abla a armadura."
+    },
+    "dataOrigin": "Verified"
+  },
+  {
+    "ruleSystem": "CyberpunkRed",
     "source": "Hornet's Pharmacy",
     "slug": "suzumebachi-assassin-drone",
     "name": "Suzumebachi Assassin Drone",

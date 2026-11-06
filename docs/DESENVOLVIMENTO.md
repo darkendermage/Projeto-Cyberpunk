@@ -581,7 +581,7 @@ Tela `/weather`, só no frontend (`frontend/src/features/weather`): tabelas, reg
 | Origem | O que é | Como aparece |
 | --- | --- | --- |
 | `Compendium` | 1 item convertido de `data/source/compendio_completo_cyberpunk_red.md` e ainda não conferido (Nanoswarm Incubator) | aviso na ficha: "não conferido com os livros" |
-| `Verified` | 1.071 itens conferidos com PDFs oficiais (*Core Rulebook*, *Black Chrome*, *Black Chrome+*, *Interface RED 1 a 5*, *Edgerunners Mission Kit*, *Danger Gal Dossier*, *Danger Gal Dossier+*, *Hope Reborn+*, *Tales of the RED*, *12 Days of ...*, *Woodchipper's Garage*, *Toggle's Temple*, *Hornet's Pharmacy*, *All About Agents*, *Segotari Power*, *Going Quiet*, *Cyberware Enhancements*, *No Place Like Home*, *Mixing Drinks–Changing Lives*, *Invented Tech Upgrades*); correções em `data/source/errata/` | selo **CONFERIDO**, com fonte e página na ficha |
+| `Verified` | 1.074 itens conferidos com PDFs oficiais (*Core Rulebook*, *Black Chrome*, *Black Chrome+*, *Interface RED 1 a 5*, *Edgerunners Mission Kit*, *Danger Gal Dossier*, *Danger Gal Dossier+*, *Tales of the RED: Hope Reborn*, *Hope Reborn+*, *Tales of the RED*, *12 Days of ...*, *Woodchipper's Garage*, *Toggle's Temple*, *Hornet's Pharmacy*, *All About Agents*, *Segotari Power*, *Going Quiet*, *Cyberware Enhancements*, *No Place Like Home*, *Mixing Drinks–Changing Lives*, *Invented Tech Upgrades*); correções em `data/source/errata/` | selo **CONFERIDO**, com fonte e página na ficha |
 | `Demo` | nenhum no catálogo atual (os de Fashionware e roupas foram trocados pelos do *Core Rulebook*) | selo **DEMO** no card |
 | `Custom` | itens cadastrados à mão em versões antigas (que tinham Administração) | selo **CUSTOM** |
 

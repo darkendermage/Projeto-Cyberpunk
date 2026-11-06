@@ -1,0 +1,64 @@
+{
+  "about": "Conferido com o PDF Tales of the RED: Hope Reborn v1.1 (2024). Os outros itens com preço do livro já estão no catálogo por outras fontes: Breacher e Crunch Whistle (All About Agents), Roller Derby Padding e Skates (Interface RED 5) e as melhorias de HQ (No Place Like Home). Os veículos e armadilhas do apêndice não têm preço. O Fire Extinguisher está no Night Market Index; o Stage Makeup Kit e o Rad Suit só aparecem com preço no texto das missões.",
+  "source": "Hope Reborn",
+  "additions": [
+    {
+      "slug": "fire-extinguisher",
+      "name": "Fire Extinguisher",
+      "category": "weapons",
+      "manufacturer": null,
+      "description": "Very Heavy Pistol Exótica de duas mãos, 5 disparos e alcance máximo de 6 m/yds (3 quadrados). A espuma só causa dano a incêndios com Hit Points e apaga o fogo quando ele chega a 0 HP. Um disparo também acaba com a condição On Fire de um alvo. Recarregar custa 20eb (Everyday), exige uma estação de recarga e leva 5 minutos.",
+      "notes": "Conferido com Hope Reborn, p. 34 e Night Market Index. Ausente do compêndio.",
+      "price": 50,
+      "priceCategory": "Costly",
+      "page": 34,
+      "tags": ["Exótica"],
+      "attributes": {
+        "weaponClass": "VeryHeavyPistol",
+        "skill": "Handgun",
+        "damage": "Só contra fogo: apaga incêndios e a condição On Fire",
+        "damageDice": null,
+        "rof": 1,
+        "magazine": 5,
+        "maxRange": 6,
+        "hands": 2,
+        "concealable": false,
+        "quality": "Standard",
+        "exotic": true,
+        "calibers": ["Special"]
+      }
+    },
+    {
+      "slug": "stage-makeup-kit",
+      "name": "Stage Makeup Kit",
+      "category": "gear",
+      "manufacturer": null,
+      "description": "Maquiagem de palco. Com um teste DV15 de Acting ou Personal Grooming, muda os contornos do rosto para enganar software de reconhecimento facial.",
+      "notes": "Conferido com Hope Reborn, p. 100 (missão The Devil's Cut). O preço está no texto da missão. Ausente do compêndio.",
+      "price": 100,
+      "priceCategory": "Premium",
+      "page": 100,
+      "tags": [],
+      "attributes": {
+        "gearType": "Tool",
+        "effect": "Com teste DV15 de Acting ou Personal Grooming, muda os contornos do rosto para enganar reconhecimento facial."
+      }
+    },
+    {
+      "slug": "rad-suit",
+      "name": "Rad Suit",
+      "category": "gear",
+      "manufacturer": null,
+      "description": "Traje contra radiação. Protege da radiação enquanto não for danificado. Se o usuário sofrer dano suficiente para ablar a armadura, o traje perde a utilidade.",
+      "notes": "Conferido com Hope Reborn, p. 160 (missão no Hot Zone). O preço está no texto da missão. Ausente do compêndio.",
+      "price": 500,
+      "priceCategory": "Expensive",
+      "page": 160,
+      "tags": [],
+      "attributes": {
+        "gearType": "Survival",
+        "effect": "Protege de radiação enquanto não for danificado. Perde a utilidade se o usuário sofrer dano que abla a armadura."
+      }
+    }
+  ]
+}

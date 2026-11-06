@@ -172,14 +172,22 @@ public sealed class ItemWriteService(IAppDbContext db, CategoryRegistry registry
     private async Task<SourceBook?> FindOrCreateSourceAsync(string? name, RuleSystem system, CancellationToken ct)
     {
         if (string.IsNullOrWhiteSpace(name)) return null;
-        var slug = TextNormalizer.Slugify(name);
+        // "Black Chrome+" is its own book, not "Black Chrome": the plus has to survive the slug.
+        var slug = SourceSlug(name);
         var existing = db.SourceBooks.Local.FirstOrDefault(s => s.Slug == slug)
                        ?? await db.SourceBooks.FirstOrDefaultAsync(s => s.Slug == slug, ct);
-        if (existing is not null) return existing;
+        if (existing is not null)
+        {
+            // Older catalogs filed the "+" books under the base slug; the next import puts the right name back.
+            if (existing.Name != name.Trim()) existing.Name = name.Trim();
+            return existing;
+        }
         var created = new SourceBook { Slug = slug, Name = name.Trim(), RuleSystem = system };
         db.SourceBooks.Add(created);
         return created;
     }
+
+    internal static string SourceSlug(string name) => TextNormalizer.Slugify(name.Replace("+", " plus"));
 
     private void DetachPending()
     {

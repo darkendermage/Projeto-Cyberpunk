@@ -224,7 +224,7 @@ const BOOK = {
   IR1: 'Interface 1', IR2: 'Interface 2', IR3: 'Interface 3', IR4: 'Interface 4', IR5: 'Interface 5', 'DL:TT': "Toggle's Temple",
   'DL:WG': "Woodchipper's Garage", 'DL:HP': "Hornet's Pharmacy", 'DL:AAA': 'All About Agents', 'DL:12Gun': '12 Days of Gunmas',
   'DL:12Cy': '12 Days of Cybermas', 'DL:12Gear': '12 Days of Gearmas', 'DL:12RED': '12 Days of REDmas', 'DL:Home': 'No Place Like Home',
-  'DL:Mix': 'Mixing Drinks\u2013Changing Lives', 'T:Hope': 'Tales of the RED', 'T:Street': 'Tales of the RED',
+  'DL:Mix': 'Mixing Drinks\u2013Changing Lives', 'T:Hope': 'Hope Reborn', 'T:Street': 'Tales of the RED',
   'DL:DGD+': 'Danger Gal Dossier+', 'DL:HR+': 'Hope Reborn+',
 };
 

@@ -146,6 +146,33 @@ public class CatalogApiTests(ApiFactory factory)
             .OnlyContain(i => i!["dataOrigin"]!.GetValue<string>() == "Verified" && i["page"] != null);
     }
 
+    [Theory]
+    [InlineData("weapons", "Fire Extinguisher", 50, 34)]
+    [InlineData("gear", "Stage Makeup Kit", 100, 100)]
+    [InlineData("gear", "Rad Suit", 500, 160)]
+    public async Task Hope_Reborn_items_are_in_the_catalog(string category, string name, int price, int page)
+    {
+        var item = (await Search(category, new { q = name }))["items"]!.AsArray()
+            .Single(i => i!["name"]!.GetValue<string>() == name)!;
+        item["price"]!.GetValue<int>().Should().Be(price);
+        item["page"]!.GetValue<int>().Should().Be(page);
+        item["source"]!["name"]!.GetValue<string>().Should().Be("Hope Reborn");
+        item["dataOrigin"]!.GetValue<string>().Should().Be("Verified");
+    }
+
+    [Theory]
+    [InlineData("weapons", "Big Dreem", "Black Chrome+")]
+    [InlineData("cyberware", "Budget Chipware Socket", "Black Chrome")]
+    [InlineData("gear", "Superflash Jacket", "Danger Gal Dossier+")]
+    [InlineData("gear", "Mercurius Cyberchair", "Danger Gal Dossier")]
+    [InlineData("gear", "KillStrom Power Chord", "Hope Reborn+")]
+    public async Task Plus_supplements_keep_their_own_source(string category, string name, string source)
+    {
+        var item = (await Search(category, new { q = name }))["items"]!.AsArray()
+            .Single(i => i!["name"]!.GetValue<string>() == name)!;
+        item["source"]!["name"]!.GetValue<string>().Should().Be(source);
+    }
+
     [Fact]
     public async Task Every_seed_item_is_imported()
     {
