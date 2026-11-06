@@ -539,6 +539,16 @@ Cada linha `Attack` nova que chega pelo hub vira um efeito no mapa de quem está
 - **Desenho:** `BoardController.showAttack` anima no Pixi o clarão, os traçantes, as faíscas e o texto. Sem movimento (interruptor de efeitos do app ou movimento reduzido do sistema), mostra só um clarão e o texto. O elemento do mapa conta os efeitos em `data-effects`, usado pelos testes.
 - **Som:** `sound.ts` sintetiza os sons com Web Audio, sem arquivos. O botão de som da barra do mapa vale para cada pessoa (`tablePrefs.ts`, `localStorage` `ncdb.table.fx`).
 
+### Dados 3D
+
+Toda rolagem e todo ataque novo que chega pelo hub caem como dados 3D sobre o mapa (`features/table/dice3d`). Eles terminam virados para o valor que o servidor sorteou; a animação não decide nada.
+
+- **O que rola:** `dice.ts` (`throwOf`) monta os dados de cada linha como o leitor a vê: os d6 e d10 da fórmula, o d10 extra do crítico, o d10 e os dados de dano de um ataque. Linha secreta vista pelo autor, fórmula sem d6 nem d10, ou dano de NPC escondido do jogador não jogam nada.
+- **Geometria:** `faces.ts` tem o d6 e o d10 (trapezoedro pentagonal com as faces planas; as faces opostas somam 11) e a rotação que deixa a face do valor para cima e o número de pé na tela (`faceUpright`). Tudo isso tem teste.
+- **Cena:** `diceScene.ts` (three.js 0.186.1) desenha os dados num canvas transparente sobre o mapa. Os números são texturas de canvas na fonte e nas cores do app. O arremesso é animado sem física. Esse módulo só carrega na primeira rolagem, num chunk separado.
+- **Bandeja:** `DiceTray.tsx` enfileira as rolagens (no máximo três esperando), mostra o total quando os dados param e toca o som se ele estiver ligado. Sem WebGL, fica só o chat. O elemento conta as rolagens em `data-dice`.
+- **Preferência:** cada pessoa liga ou desliga os dados 3D na barra do mapa (`tablePrefs.ts`).
+
 ### Dados
 
 `Application/Table/Dice/TableDice.cs` aceita fórmulas com termos `NdS` e constantes ligados por `+` e `-`, até 100 dados. Há três modos:

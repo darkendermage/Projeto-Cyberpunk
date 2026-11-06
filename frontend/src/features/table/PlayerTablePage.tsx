@@ -5,7 +5,7 @@ import { problemMessage } from '../../api/characters';
 import { playerApi, tableKeys } from '../../api/table';
 import type { PlayerEncounter, PlayerState, RollKind, SceneView, TableMessage, TableVisibility } from '../../api/tableTypes';
 import { Button, EmptyState, IconButton, Spinner } from '../../components/ui/ui';
-import { Volume2, VolumeX } from 'lucide-react';
+import { Dices, Volume2, VolumeX } from 'lucide-react';
 import { useToast } from '../../state/ToastContext';
 import { lang, t } from '../../i18n';
 import type { BoardCallbacks, BoardData, BoardTool, TemplateDraft } from './board/BoardController';
@@ -27,6 +27,8 @@ import { attackSummary, fighterIdOf, startAim } from './aim';
 import { useQuickAttack } from './useQuickAttack';
 import { useAttackFx } from './useAttackFx';
 import { useTablePrefs } from './tablePrefs';
+import { DiceTray, type DiceTrayHandle } from './dice3d/DiceTray';
+import { throwOf } from './dice3d/dice';
 import { NO_SELECTION, useBoardKeys, type Selection } from './useBoardKeys';
 import { PLAYER_PANELS, playerColumns } from './panels';
 import { usePanels } from './usePanels';
@@ -85,6 +87,7 @@ export function PlayerTablePage() {
 
   const [prefs, setPrefs] = useTablePrefs();
   const playAttack = useAttackFx(board, prefs);
+  const dice = useRef<DiceTrayHandle>(null);
   // The hub's handlers outlive renders: they read the scene and the fight on screen through this.
   const live = useRef<{ scene: SceneView | null; queue: readonly { id: string; characterId: number | null }[] }>({ scene: null, queue: [] });
 
@@ -100,7 +103,10 @@ export function PlayerTablePage() {
     message: (m) => {
       const known = client.getQueryData<TableMessage[]>(tableKeys.playerMessages(token))?.some((x) => x.id === m.id) ?? false;
       client.setQueryData<TableMessage[]>(tableKeys.playerMessages(token), (old = []) => (old.some((x) => x.id === m.id) ? old.map((x) => (x.id === m.id ? m : x)) : [...old, m].slice(-300)));
-      if (!known && m.kind === 'Attack' && m.attack) playAttack(m.attack, live.current.scene, live.current.queue);
+      if (known) return;
+      if (m.kind === 'Attack' && m.attack) playAttack(m.attack, live.current.scene, live.current.queue);
+      const thrown = prefs.dice3d ? throwOf(m) : null;
+      if (thrown) dice.current?.roll(thrown);
     },
     tokenDrag: (d) => { if (d.sceneId === shownRef.current) board.current?.showDrag(d.tokenId, d.x, d.y); },
     ping: (p) => { if (p.sceneId === shownRef.current) board.current?.showPing(p); },
@@ -237,11 +243,14 @@ export function PlayerTablePage() {
                 {tool === 'token' ? t('Cancelar', 'Cancel') : t('Pôr meu token', 'Place my token')}
               </Button>
             )}
+            <IconButton label={prefs.dice3d ? t('Dados 3D: ligados', '3D dice: on') : t('Dados 3D: desligados', '3D dice: off')} active={prefs.dice3d}
+              onClick={() => setPrefs({ dice3d: !prefs.dice3d })}><Dices size={17} /></IconButton>
             <IconButton label={prefs.sound ? t('Som da mesa: ligado', 'Table sound: on') : t('Som da mesa: desligado', 'Table sound: off')} active={prefs.sound}
               onClick={() => setPrefs({ sound: !prefs.sound })}>{prefs.sound ? <Volume2 size={17} /> : <VolumeX size={17} />}</IconButton>
             {deletable.length > 0 && <Button variant="ghost" onClick={removeSelection}>{deletable.length === 1 ? t('Apagar área', 'Delete area') : t(`Apagar ${deletable.length} áreas`, `Delete ${deletable.length} areas`)}</Button>}
           </BoardToolbar>
           <div className={styles.boardArea}>
+            {scene && <DiceTray ref={dice} sound={prefs.sound} />}
             {scene ? <TableBoard ref={board} data={data} tool={tool} draft={draft} callbacks={callbacks} /> : (
               <EmptyState title={t('Aguardando o mestre', 'Waiting for the GM')}>{t('O mestre ainda não mostrou nenhuma cena.', 'The GM hasn\'t shown a scene yet.')}</EmptyState>
             )}

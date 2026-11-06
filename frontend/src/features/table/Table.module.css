@@ -407,3 +407,17 @@
 /* The map and its hint, above the strip. */
 .boardArea { position: relative; flex: 1; min-height: 0; display: flex; flex-direction: column; }
 .messageReplaced { opacity: 0.45; }
+
+/* ------------------------------------------------------------ 3D dice over the map */
+
+.diceTray { position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity 0.2s; z-index: 2; }
+.diceTrayOn { opacity: 1; }
+.diceCanvas { width: 100%; height: 100%; display: block; }
+.diceTotal {
+  position: absolute; left: 50%; bottom: 14%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 2px;
+  padding: 6px 18px; background: rgba(5, 6, 7, 0.78); border: 1px solid var(--red-line); box-shadow: 0 0 18px var(--red-glow);
+}
+.diceTotal strong { font-family: var(--font-display); font-size: 40px; line-height: 1; color: var(--text); text-shadow: 0 0 10px var(--red-glow); }
+.diceLabel { font-size: 13px; color: var(--text-2); max-width: 260px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.diceCrit { font-family: var(--font-display); color: var(--cyan); font-size: 13px; }
+.diceFumble { font-family: var(--font-display); color: var(--red); font-size: 13px; }
