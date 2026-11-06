@@ -4,7 +4,8 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { problemMessage } from '../../api/characters';
 import { playerApi, tableKeys } from '../../api/table';
 import type { PlayerEncounter, PlayerState, RollKind, SceneView, TableMessage, TableVisibility } from '../../api/tableTypes';
-import { Button, EmptyState, Spinner } from '../../components/ui/ui';
+import { Button, EmptyState, IconButton, Spinner } from '../../components/ui/ui';
+import { Volume2, VolumeX } from 'lucide-react';
 import { useToast } from '../../state/ToastContext';
 import { lang, t } from '../../i18n';
 import type { BoardCallbacks, BoardData, BoardTool, TemplateDraft } from './board/BoardController';
@@ -24,6 +25,8 @@ import { AimBar, SceneStrip } from './SceneStrip';
 import { buildStrip } from './strip';
 import { attackSummary, fighterIdOf, startAim } from './aim';
 import { useQuickAttack } from './useQuickAttack';
+import { useAttackFx } from './useAttackFx';
+import { useTablePrefs } from './tablePrefs';
 import { NO_SELECTION, useBoardKeys, type Selection } from './useBoardKeys';
 import { PLAYER_PANELS, playerColumns } from './panels';
 import { usePanels } from './usePanels';
@@ -80,6 +83,11 @@ export function PlayerTablePage() {
     void client.invalidateQueries({ queryKey: tableKeys.playerParty(token) });
   };
 
+  const [prefs, setPrefs] = useTablePrefs();
+  const playAttack = useAttackFx(board, prefs);
+  // The hub's handlers outlive renders: they read the scene and the fight on screen through this.
+  const live = useRef<{ scene: SceneView | null; queue: readonly { id: string; characterId: number | null }[] }>({ scene: null, queue: [] });
+
   const hub = useTableHub(token, {
     scene: setScene,
     encounter: (e) => {
@@ -89,7 +97,11 @@ export function PlayerTablePage() {
       void client.invalidateQueries({ queryKey: tableKeys.playerParty(token) });
       void client.invalidateQueries({ queryKey: tableKeys.playerSheet(token) });
     },
-    message: (m) => client.setQueryData<TableMessage[]>(tableKeys.playerMessages(token), (old = []) => (old.some((x) => x.id === m.id) ? old.map((x) => (x.id === m.id ? m : x)) : [...old, m].slice(-300))),
+    message: (m) => {
+      const known = client.getQueryData<TableMessage[]>(tableKeys.playerMessages(token))?.some((x) => x.id === m.id) ?? false;
+      client.setQueryData<TableMessage[]>(tableKeys.playerMessages(token), (old = []) => (old.some((x) => x.id === m.id) ? old.map((x) => (x.id === m.id ? m : x)) : [...old, m].slice(-300)));
+      if (!known && m.kind === 'Attack' && m.attack) playAttack(m.attack, live.current.scene, live.current.queue);
+    },
     tokenDrag: (d) => { if (d.sceneId === shownRef.current) board.current?.showDrag(d.tokenId, d.x, d.y); },
     ping: (p) => { if (p.sceneId === shownRef.current) board.current?.showPing(p); },
     resync: () => void client.invalidateQueries({ queryKey: tableKeys.player(token) }),
@@ -99,6 +111,7 @@ export function PlayerTablePage() {
   const draft: TemplateDraft = ownColor || !seat ? savedDraft : { ...savedDraft, color: seat.color };
   const scene = state.data?.scene ?? null;
   useEffect(() => { shownRef.current = scene?.id ?? null; }, [scene?.id]);
+  useEffect(() => { live.current = { scene, queue: encounter.data?.queue ?? [] }; });
   const queue = useMemo(() => encounter.data?.queue ?? [], [encounter.data]);
   const own = queue.find((f) => f.own) ?? null;
   const quick = useQuickAttack(
@@ -224,6 +237,8 @@ export function PlayerTablePage() {
                 {tool === 'token' ? t('Cancelar', 'Cancel') : t('Pôr meu token', 'Place my token')}
               </Button>
             )}
+            <IconButton label={prefs.sound ? t('Som da mesa: ligado', 'Table sound: on') : t('Som da mesa: desligado', 'Table sound: off')} active={prefs.sound}
+              onClick={() => setPrefs({ sound: !prefs.sound })}>{prefs.sound ? <Volume2 size={17} /> : <VolumeX size={17} />}</IconButton>
             {deletable.length > 0 && <Button variant="ghost" onClick={removeSelection}>{deletable.length === 1 ? t('Apagar área', 'Delete area') : t(`Apagar ${deletable.length} áreas`, `Delete ${deletable.length} areas`)}</Button>}
           </BoardToolbar>
           <div className={styles.boardArea}>

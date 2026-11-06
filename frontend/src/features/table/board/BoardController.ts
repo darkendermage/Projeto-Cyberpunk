@@ -5,6 +5,7 @@ import { cellToPx, formatMeters, gridDistance, pxToCell, snapCell, type Point } 
 import { templateShape } from '../templates';
 import { initials, tokenStatus, type TokenFighter } from '../tokens';
 import { HOLD_MS, inRect, MOVE_TOLERANCE, rectFrom, toggleSelection } from './gestures';
+import { missPoint, type AttackEffect } from './effects';
 
 export type BoardTool = 'select' | 'ruler' | 'template' | 'token';
 
@@ -47,6 +48,10 @@ const EMPTY_COLS = 30;
 const EMPTY_ROWS = 20;
 const ACTIVE_COLOR = 0xf5e663;
 const PING_MS = 2200;
+const TRACER = 0xffcf3a;
+const BLOOD = 0xff2a3d;
+const FLASH = 0xfff3b0;
+const FIRE = 0xff8a00;
 
 const hex = (color: string) => Number.parseInt(color.replace('#', ''), 16) || 0x00f0ff;
 
@@ -97,6 +102,9 @@ export class BoardController {
   private overrides = new Map<string, Override>();
   private activeRings: Graphics[] = [];
   private pings: { node: Container; born: number }[] = [];
+  /** Attacks being drawn: each redraws itself by age (0 to 1) until it ends. */
+  private effects: { node: Container; born: number; duration: number; update: (age: number) => void }[] = [];
+  private effectCount = 0;
   private ready = false;
   private destroyed = false;
   private fitted = false;
@@ -161,7 +169,12 @@ export class BoardController {
   setData(data: BoardData) {
     const sceneChanged = this.data?.scene.id !== data.scene.id;
     this.data = data;
-    if (sceneChanged) { this.fitted = false; this.overrides.clear(); }
+    if (sceneChanged) {
+      this.fitted = false;
+      this.overrides.clear();
+      for (const fx of this.effects) fx.node.destroy({ children: true });
+      this.effects = [];
+    }
     if (this.ready) this.render();
   }
 
@@ -194,6 +207,96 @@ export class BoardController {
     node.label = ping.color;
     this.overlay.addChild(node);
     this.pings.push({ node, born: performance.now() });
+  }
+
+  /**
+   * An attack on the map: a muzzle flash and a tracer to each target (several for a burst), a blade's arc, or an
+   * explosion; then sparks on a hit and the floating label (the HP lost, a hit or a miss). Without motion (the app's
+   * effects switch or the system's reduced motion), only a flash and the label.
+   */
+  showAttack(effect: AttackEffect, motion: boolean) {
+    if (!this.ready || !this.data) return;
+    const g = this.data.scene.grid;
+    const size = g.sizePx;
+    const px = (p: Point) => cellToPx(g, p.x, p.y);
+    const lerp = (a: Point, b: Point, k: number): Point => ({ x: a.x + (b.x - a.x) * k, y: a.y + (b.y - a.y) * k });
+    const clamp = (v: number) => Math.max(0, Math.min(1, v));
+    const from = px(effect.from);
+    const targets = effect.shots.map((s) => px(s.to));
+    const ends = effect.shots.map((s, i) => (s.hit || effect.kind !== 'shot' && effect.kind !== 'burst' ? targets[i] : px(missPoint(effect.from, s.to))));
+
+    const node = new Container();
+    const lines = new Graphics();
+    node.addChild(lines);
+    const labels = effect.shots.map((s, i) => {
+      const text = new Text({
+        text: s.label,
+        style: { fontFamily: FONT, fontSize: Math.max(18, size * 0.4), fontWeight: '700', fill: s.hit ? BLOOD : 0xd0d6de, stroke: { color: 0x000000, width: 4 } },
+        resolution: 2,
+      });
+      text.anchor.set(0.5, 1);
+      text.position.set(targets[i].x, targets[i].y - size * 0.45);
+      text.alpha = 0;
+      node.addChild(text);
+      return text;
+    });
+    this.overlay.addChild(node);
+
+    const sparks = (p: Point, k: number) => {
+      for (let n = 0; n < 8; n++) {
+        const angle = (n / 8) * Math.PI * 2 + 0.3;
+        const r0 = size * 0.15 * k, r1 = size * (0.2 + 0.45 * k);
+        lines.moveTo(p.x + Math.cos(angle) * r0, p.y + Math.sin(angle) * r0).lineTo(p.x + Math.cos(angle) * r1, p.y + Math.sin(angle) * r1);
+      }
+      lines.stroke({ width: 3, color: BLOOD, alpha: 1 - k });
+    };
+
+    const update = (age: number) => {
+      lines.clear();
+      const impact = 0.28;
+      if (motion) {
+        if ((effect.kind === 'shot' || effect.kind === 'burst') && age < 0.14) {
+          lines.circle(from.x, from.y, size * 0.35 * (1 - age / 0.14)).fill({ color: FLASH, alpha: 0.9 });
+        }
+        effect.shots.forEach((shot, i) => {
+          const end = ends[i];
+          if (effect.kind === 'shot' || effect.kind === 'burst') {
+            const rounds = effect.kind === 'burst' ? 3 : 1;
+            for (let r = 0; r < rounds; r++) {
+              const delay = r * 0.06;
+              const travel = clamp((age - delay) / 0.25);
+              if (travel <= 0) continue;
+              const jitter = (r - (rounds - 1) / 2) * size * 0.12;
+              const dx = end.x - from.x, dy = end.y - from.y, len = Math.hypot(dx, dy) || 1;
+              const off = { x: (-dy / len) * jitter, y: (dx / len) * jitter };
+              const a = lerp(from, { x: end.x + off.x, y: end.y + off.y }, Math.max(0, travel - 0.35));
+              const b = lerp(from, { x: end.x + off.x, y: end.y + off.y }, travel);
+              lines.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 3, color: TRACER, alpha: 1 - clamp((age - 0.35) / 0.2) });
+            }
+          } else if (effect.kind === 'melee') {
+            const sweep = clamp(age / 0.3);
+            const start = Math.atan2(targets[i].y - from.y, targets[i].x - from.x) - 1.1;
+            lines.arc(targets[i].x, targets[i].y, size * 0.6, start, start + 2.2 * sweep).stroke({ width: 5, color: 0xffffff, alpha: 1 - clamp((age - 0.3) / 0.25) });
+          } else {
+            const k = clamp(age / 0.6);
+            lines.circle(targets[i].x, targets[i].y, size * (0.3 + 2 * k)).fill({ color: FIRE, alpha: (1 - k) * 0.55 });
+            lines.circle(targets[i].x, targets[i].y, size * (0.5 + 2.4 * k)).stroke({ width: 4, color: FLASH, alpha: 1 - k });
+          }
+          if (shot.hit && age >= impact && effect.kind !== 'blast') sparks(targets[i], clamp((age - impact) / 0.35));
+        });
+      } else if (age < 0.5) {
+        targets.forEach((p, i) => lines.circle(p.x, p.y, size * 0.5).fill({ color: effect.shots[i].hit ? BLOOD : 0xd0d6de, alpha: 0.35 * (1 - age / 0.5) }));
+      }
+      labels.forEach((label, i) => {
+        const start = motion ? impact : 0;
+        label.alpha = age < start ? 0 : age < 0.82 ? 1 : 1 - (age - 0.82) / 0.18;
+        label.y = targets[i].y - size * 0.45 - (motion ? size * 0.6 * Math.max(0, age - start) : 0);
+      });
+    };
+    update(0);
+    this.effects.push({ node, born: performance.now(), duration: motion ? 1500 : 1200, update });
+    // Counted on the board element, so the page (and its tests) can tell an effect played.
+    this.host.dataset.effects = String(++this.effectCount);
   }
 
   /** Zoom to show the whole map. */
@@ -479,6 +582,12 @@ export class BoardController {
     const pulse = 0.55 + 0.45 * Math.sin(now / 260);
     for (const ring of this.activeRings) if (!ring.destroyed) ring.alpha = pulse;
     for (const id of this.overrides.keys()) this.placeToken(id);
+    this.effects = this.effects.filter((fx) => {
+      const age = (now - fx.born) / fx.duration;
+      if (age >= 1) { fx.node.destroy({ children: true }); return false; }
+      fx.update(age);
+      return true;
+    });
     this.pings = this.pings.filter(({ node, born }) => {
       const age = (now - born) / PING_MS;
       if (age >= 1) { node.destroy({ children: true }); return false; }

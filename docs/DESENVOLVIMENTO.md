@@ -531,6 +531,14 @@ Os cartões "Na cena", embaixo do mapa, mostram as armas de quem pode atirar. O 
 - **Desfazer:** cada ataque guarda em `EncounterState.Undo` o combate de antes e as fichas dos PCs envolvidos (munição, dano, ferimentos). `POST /api/encounters/{id}/undo-attack` devolve tudo enquanto nada mais mudou: o combate tem que estar na versão que o ataque deixou, e cada ficha também. Qualquer outra ação no combate apaga o desfazer. A linha do chat fica riscada (`MarkAttackUndoneAsync`).
 - **Numeração:** `EncounterState.AttackSeq` numera os ataques. `AttackResult.Seq` é o número que a mesa usa para os efeitos e os dados.
 
+### Efeitos no mapa
+
+Cada linha `Attack` nova que chega pelo hub vira um efeito no mapa de quem está vendo a cena do combate (`useAttackFx.ts`).
+
+- **Cálculo:** `board/effects.ts` decide, em lógica pura, o tipo de efeito (tiro, rajada para autofire e shotgun, golpe, explosão), de onde sai e onde cai cada traçante. Também decide o texto que sobe em cada alvo: o HP perdido ou só "ACERTO" e "ERROU", com a mesma regra do cartão do chat. Um atirador sem token na tela (NPC oculto) não desenha nada.
+- **Desenho:** `BoardController.showAttack` anima no Pixi o clarão, os traçantes, as faíscas e o texto. Sem movimento (interruptor de efeitos do app ou movimento reduzido do sistema), mostra só um clarão e o texto. O elemento do mapa conta os efeitos em `data-effects`, usado pelos testes.
+- **Som:** `sound.ts` sintetiza os sons com Web Audio, sem arquivos. O botão de som da barra do mapa vale para cada pessoa (`tablePrefs.ts`, `localStorage` `ncdb.table.fx`).
+
 ### Dados
 
 `Application/Table/Dice/TableDice.cs` aceita fórmulas com termos `NdS` e constantes ligados por `+` e `-`, até 100 dados. Há três modos:

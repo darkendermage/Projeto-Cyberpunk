@@ -1,5 +1,6 @@
 import { useEffect, useImperativeHandle, useRef, type Ref } from 'react';
 import type { Ping } from '../../../api/tableTypes';
+import type { AttackEffect } from './effects';
 import { BoardController, type BoardCallbacks, type BoardData, type BoardTool, type TemplateDraft } from './BoardController';
 import styles from '../Table.module.css';
 
@@ -9,6 +10,7 @@ const BOARD_FONTS = ['600 14px Rajdhani', '700 14px Rajdhani'];
 export interface BoardHandle {
   showDrag: (tokenId: string, x: number, y: number) => void;
   showPing: (ping: Ping) => void;
+  showAttack: (effect: AttackEffect, motion: boolean) => void;
   fit: () => void;
   zoomBy: (factor: number) => void;
 }
@@ -59,6 +61,7 @@ export function TableBoard({ data, tool, draft, callbacks, ref }: {
   useImperativeHandle(ref, () => ({
     showDrag: (tokenId, x, y) => controller.current?.showDrag(tokenId, x, y),
     showPing: (ping) => controller.current?.showPing(ping),
+    showAttack: (effect, motion) => controller.current?.showAttack(effect, motion),
     fit: () => controller.current?.fit(),
     zoomBy: (factor) => controller.current?.zoomBy(factor),
   }), []);

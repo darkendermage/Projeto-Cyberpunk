@@ -5,7 +5,7 @@ import { encounterKeys, useEncounter, useEncounterCommand } from '../../api/enco
 import type { EncounterDetail, InjuryLocation } from '../../api/encounterTypes';
 import { tableApi, tableKeys } from '../../api/table';
 import type { SceneGrid, SceneView, TableMessage } from '../../api/tableTypes';
-import { Trash2 } from 'lucide-react';
+import { Trash2, Volume2, VolumeX } from 'lucide-react';
 import { Button, EmptyState, ErrorState, IconButton, Select, Spinner } from '../../components/ui/ui';
 import { useToast } from '../../state/ToastContext';
 import { lang, t } from '../../i18n';
@@ -23,6 +23,8 @@ import { AimBar, SceneStrip } from './SceneStrip';
 import { buildStrip } from './strip';
 import { attackSummary, fighterIdOf, startAim } from './aim';
 import { useQuickAttack } from './useQuickAttack';
+import { useAttackFx } from './useAttackFx';
+import { useTablePrefs } from './tablePrefs';
 import { GM_PANELS, gmColumns } from './panels';
 import { usePanels } from './usePanels';
 import { NO_SELECTION, useBoardKeys, type Selection } from './useBoardKeys';
@@ -92,6 +94,11 @@ export function GmTablePage() {
     }
   }, [client, putScene, toast]);
 
+  const [prefs, setPrefs] = useTablePrefs();
+  const playAttack = useAttackFx(board, prefs);
+  // The hub's handlers outlive renders: they read the scene and the fight on screen through this.
+  const onScreen = useRef<{ scene: SceneView | undefined; queue: readonly { id: string; characterId: number | null }[] }>({ scene: undefined, queue: [] });
+
   const hub = useTableHub(null, {
     scene: (view) => { if (view) putScene(view); },
     sceneRemoved: () => void client.invalidateQueries({ queryKey: tableKeys.scenes, exact: true }),
@@ -100,7 +107,11 @@ export function GmTablePage() {
       // Damage to a PC lands on their sheet: the strip's numbers follow.
       void client.invalidateQueries({ queryKey: ['table', 'party'] });
     },
-    message: (m) => client.setQueryData<TableMessage[]>(tableKeys.messages, (old = []) => (old.some((x) => x.id === m.id) ? old.map((x) => (x.id === m.id ? m : x)) : [...old, m].slice(-300))),
+    message: (m) => {
+      const known = client.getQueryData<TableMessage[]>(tableKeys.messages)?.some((x) => x.id === m.id) ?? false;
+      client.setQueryData<TableMessage[]>(tableKeys.messages, (old = []) => (old.some((x) => x.id === m.id) ? old.map((x) => (x.id === m.id ? m : x)) : [...old, m].slice(-300)));
+      if (!known && m.kind === 'Attack' && m.attack) playAttack(m.attack, onScreen.current.scene, onScreen.current.queue);
+    },
     // Live effects belong to the live scene: ignored while the GM edits another one.
     tokenDrag: (d) => { if (d.sceneId === shownRef.current) board.current?.showDrag(d.tokenId, d.x, d.y); },
     ping: (p) => { if (p.sceneId === shownRef.current) board.current?.showPing(p); },
@@ -112,6 +123,7 @@ export function GmTablePage() {
   });
 
   const view = scene.data;
+  useEffect(() => { onScreen.current = { scene: view, queue: encounter.data?.queue ?? [] }; });
   const shownRef = useRef<number | null>(null);
   useEffect(() => { shownRef.current = view?.id ?? null; }, [view?.id]);
   const viewKey = view ? `${view.id}:${view.version}` : '';
@@ -221,6 +233,8 @@ export function GmTablePage() {
 
       <section className={`${styles.stage} ${styles.colMain}`}>
         <BoardToolbar tool={tool} onTool={setTool} draft={draft} onDraft={setDraft} board={board} onSelectAll={view ? selectAll : undefined} onTables={() => setTablesOpen(true)}>
+          <IconButton label={prefs.sound ? t('Som da mesa: ligado', 'Table sound: on') : t('Som da mesa: desligado', 'Table sound: off')} active={prefs.sound}
+            onClick={() => setPrefs({ sound: !prefs.sound })}>{prefs.sound ? <Volume2 size={17} /> : <VolumeX size={17} />}</IconButton>
           {selectedCount > 0 && (
             <IconButton label={t(`Apagar seleção (${selectedCount}) — Delete`, `Delete selection (${selectedCount}) — Delete`)} onClick={removeSelection}><Trash2 size={17} /></IconButton>
           )}
