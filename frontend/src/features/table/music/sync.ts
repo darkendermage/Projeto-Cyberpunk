@@ -1,5 +1,8 @@
 import type { TableMusic } from '../../../api/tableTypes';
 
+/** The GM's music state in the query cache. */
+export const musicKey = ['table', 'music'] as const;
+
 /** How far from the table's position a player may drift (ads, a slow network) before it is put back. */
 export const DRIFT_SECONDS = 2;
 

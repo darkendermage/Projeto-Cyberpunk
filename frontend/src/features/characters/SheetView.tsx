@@ -10,7 +10,8 @@ import {
 } from './characterLabels';
 import { CyberEffectsPanel, Portrait, RoleAbilityButton, SheetPanel, StateTag } from './CharacterUi';
 import { ArmorPanel, HealthPanel, InjuriesPanel, type Run, WeaponsPanel } from './CombatPanels';
-import { RoleSplitDialog, splitTotal } from './RoleSplitDialog';
+import { RoleSplitDialog } from './RoleSplitDialog';
+import { splitTotal } from './roleSplit';
 import { ProgressionPanel } from './ProgressionPanel';
 import type { SheetEditor } from './useSheetEditor';
 import styles from './Characters.module.css';

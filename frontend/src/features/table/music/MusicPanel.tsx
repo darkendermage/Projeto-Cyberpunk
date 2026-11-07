@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { FastForward, Pause, Play, Rewind, SkipForward, Square } from 'lucide-react';
 import { problemMessage } from '../../../api/characters';
@@ -7,10 +7,8 @@ import type { TableMusicState } from '../../../api/tableTypes';
 import { Button, IconButton } from '../../../components/ui/ui';
 import { useToast } from '../../../state/ToastContext';
 import { t } from '../../../i18n';
-import { expectedPosition } from './sync';
+import { expectedPosition, musicKey } from './sync';
 import styles from '../Table.module.css';
-
-export const musicKey = ['table', 'music'] as const;
 
 const clock = (s: number) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
 
@@ -26,7 +24,13 @@ export function MusicPanel() {
   const [title, setTitle] = useState('');
   const music = state.data?.music ?? null;
   const apply = (p: Promise<TableMusicState>) => p.then((s) => client.setQueryData(musicKey, s), (e) => toast.notify(problemMessage(e), 'error'));
-  const now = music ? expectedPosition(music, Date.now()) : 0;
+  // The clock ticks each second so the position shown follows the track.
+  const [clockMs, setClockMs] = useState(() => Date.now());
+  useEffect(() => {
+    const id = window.setInterval(() => setClockMs(Date.now()), 1000);
+    return () => window.clearInterval(id);
+  }, []);
+  const now = music ? expectedPosition(music, clockMs) : 0;
 
   return (
     <div className={styles.stack}>

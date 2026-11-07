@@ -3,10 +3,9 @@ import type { RoleSplitRule } from '../../api/characterTypes';
 import { Button, Modal } from '../../components/ui/ui';
 import { t } from '../../i18n';
 import { NumField } from '../table/NumField';
+import { splitTotal } from './roleSplit';
 import styles from './Characters.module.css';
 
-/** The total a split may use at this Rank. */
-export const splitTotal = (rule: RoleSplitRule, rank: number) => (rule.max === '2xrank' ? rank * 2 : rank);
 
 /**
  * Divides a Role Ability's Rank among its parts: the Tech's specialties (two per Rank, CP:R p.147) or the Solo's
