@@ -110,6 +110,8 @@ export function playerApi(seat: string) {
     reroll: (messageId: number) => request<TableMessage>(`/table/play/rolls/${messageId}/reroll`, { method: 'POST', headers }),
     /** An attack with the seat's own character, on its Turn. */
     attack: (body: QuickAttack) => request<TableAttack>('/table/play/attack', { method: 'POST', body: json(body), headers }),
+    /** Ends the seat's own Turn in the live scene's fight. */
+    endTurn: () => request<PlayerEncounter>('/table/play/end-turn', { method: 'POST', headers }),
     armor: (location: ArmorLocation, delta: number) => request<PlayerCharacter>('/table/play/armor', { method: 'POST', body: json({ location, delta }), headers }),
     placeToken: (x: number, y: number) => request<SceneView>('/table/play/my-token', { method: 'POST', body: json({ x, y }), headers }),
     addTemplate: (tpl: TemplateInput) => request<SceneView>('/table/play/templates', { method: 'POST', body: json(tpl), headers }),

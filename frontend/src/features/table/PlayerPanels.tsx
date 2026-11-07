@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Crosshair, Dices, HeartPulse, RotateCcw, RotateCw } from 'lucide-react';
+import { Crosshair, Dices, HeartPulse, RotateCcw, RotateCw, SkipForward } from 'lucide-react';
 import type { ArmorLocation, RollKind, TableVisibility, TokenView, PlayerCharacter, PlayerEncounter } from '../../api/tableTypes';
 import { Badge, Button, IconButton, Segmented } from '../../components/ui/ui';
 import { skillName, t } from '../../i18n';
@@ -153,7 +153,7 @@ export function CharacterPanel({ character, encounter, token, onRoll, onTurn, on
 }
 
 /** The Initiative order of the fight on screen, with the fighter whose turn it is on top of the attention. */
-export function InitiativePanel({ encounter }: { encounter: PlayerEncounter | null }) {
+export function InitiativePanel({ encounter, onEndTurn, busy }: { encounter: PlayerEncounter | null; onEndTurn?: () => void; busy?: boolean }) {
   if (!encounter) return <span className={styles.muted}>{t('Nenhum combate na cena agora.', 'No fight on the scene right now.')}</span>;
   const active = encounter.queue.find((f) => f.id === encounter.activeId);
   return (
@@ -162,7 +162,12 @@ export function InitiativePanel({ encounter }: { encounter: PlayerEncounter | nu
         <span className={styles.title}>{encounter.name}</span>
         <Badge tone="red">{t(`Rodada ${encounter.round}`, `Round ${encounter.round}`)}</Badge>
       </div>
-      {active?.own && <Badge tone="amber">{t('Sua vez! 1 movimento + 1 ação (CP:R p.168)', 'Your turn! 1 move + 1 action (CP:R p.168)')}</Badge>}
+      {active?.own && (
+        <div className={styles.row}>
+          <Badge tone="amber">{t('Sua vez! 1 movimento + 1 ação (CP:R p.168)', 'Your turn! 1 move + 1 action (CP:R p.168)')}</Badge>
+          {onEndTurn && <Button icon={<SkipForward size={14} />} disabled={busy} onClick={onEndTurn}>{t('Passar o turno', 'End turn')}</Button>}
+        </div>
+      )}
       <div className={styles.queue}>
         {encounter.queue.map((f) => (
           <div key={f.id} className={`${styles.queueRow} ${f.side === 'Ally' ? styles.queueAlly : styles.queueEnemy} ${f.id === encounter.activeId ? styles.queueActive : ''}`}>

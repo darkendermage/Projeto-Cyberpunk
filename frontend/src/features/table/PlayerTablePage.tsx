@@ -75,6 +75,7 @@ export function PlayerTablePage() {
   const messages = useQuery({ queryKey: tableKeys.playerMessages(token), queryFn: api.messages, enabled: state.isSuccess });
   const party = useQuery({ queryKey: tableKeys.playerParty(token), queryFn: api.party, enabled: state.isSuccess });
   const [armorBusy, setArmorBusy] = useState(false);
+  const [turnBusy, setTurnBusy] = useState(false);
 
   const setScene = (scene: SceneView | null) => {
     const before = client.getQueryData<PlayerState>(tableKeys.player(token));
@@ -301,7 +302,13 @@ export function PlayerTablePage() {
               onTurn={(delta) => { if (myToken) void run(() => api.moveToken(myToken.id, { x: myToken.x, y: myToken.y, rotation: (myToken.rotation + delta + 360) % 360 })); }} />
           )}
           {tab === 'sheet' && (sheet.isLoading ? <Spinner /> : <PlayerSheetPanel sheet={sheet.data ?? null} />)}
-          {tab === 'initiative' && <InitiativePanel encounter={encounter.data ?? null} />}
+          {tab === 'initiative' && (
+            <InitiativePanel encounter={encounter.data ?? null} busy={turnBusy}
+              onEndTurn={() => {
+                setTurnBusy(true);
+                void run(async () => { client.setQueryData(tableKeys.playerEncounter(token), await api.endTurn()); }).finally(() => setTurnBusy(false));
+              }} />
+          )}
           {tab === 'chat' && (
             <ChatPanel gm={false} messages={messages.data ?? []}
               onSend={(text, visibility) => api.send({ text, visibility })}
