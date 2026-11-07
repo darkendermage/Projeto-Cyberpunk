@@ -22,6 +22,8 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
 
     public const int MaxTokens = 300;
     public const int MaxTemplates = 100;
+    public const int MaxImages = 200;
+    public const int MaxImagesPerSeat = 10;
     private const double MinCell = -100, MaxCell = 2000;
 
     // ------------------------------------------------------------------ library
@@ -292,6 +294,136 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
             RequirePlayerTemplate(state, templateId);
             return state with { Templates = state.Templates.Where(t => t.Id != templateId).ToList() };
         }, ct);
+
+    // ------------------------------------------------------------------ images over the map (round 5)
+
+    public Task<SceneView> AddImageAsync(int id, ImageInput input, CancellationToken ct) =>
+        MutateAsync(id, null, async (_, state) => AddImage(state, input, null, await RequireImageMediaAsync(input, ct)), bumpVersion: false, ct);
+
+    public Task<SceneView> UpdateImageAsync(int id, string imageId, ImageInput input, CancellationToken ct) =>
+        MutateAsync(id, null, (_, state) =>
+        {
+            var current = RequireImage(state, imageId, null);
+            // The GM's lock is the GM's: only the GM puts it on or takes it off.
+            return Task.FromResult(ReplaceImage(state, Changed(current, input) with
+            {
+                Locked = input.Locked, LockedByGm = input.Locked, Hidden = input.Hidden,
+            }));
+        }, bumpVersion: false, ct);
+
+    public Task<SceneView> OrderImageAsync(int id, string imageId, ImageOrderRequest r, CancellationToken ct) =>
+        MutateAsync(id, null, (_, state) => { RequireImage(state, imageId, null); return Task.FromResult(Reorder(state, imageId, r.Above)); }, bumpVersion: false, ct);
+
+    public Task<SceneView> RemoveImageAsync(int id, string imageId, CancellationToken ct) =>
+        MutateAsync(id, null, (_, state) => { RequireImage(state, imageId, null); return Task.FromResult(WithoutImage(state, imageId)); }, bumpVersion: false, ct);
+
+    public async Task<SceneView> PlayerAddImageAsync(TableSeat seat, ImageInput input, CancellationToken ct)
+    {
+        var media = await RequireImageMediaAsync(input, ct);
+        return await PlayerMutateAsync(seat, (_, state) =>
+        {
+            if (state.Images.Count(i => i.OwnerSeatId == seat.Id) >= MaxImagesPerSeat)
+                throw RequestValidationException.For("images", L.T($"Cada jogador põe até {MaxImagesPerSeat} imagens por cena.", $"Each player places up to {MaxImagesPerSeat} images per scene."));
+            return AddImage(state, input with { Hidden = false }, seat.Id, media);
+        }, ct);
+    }
+
+    public Task<SceneView> PlayerUpdateImageAsync(TableSeat seat, string imageId, ImageInput input, CancellationToken ct) =>
+        PlayerMutateAsync(seat, (_, state) =>
+        {
+            var current = RequireOwnImage(state, imageId, seat);
+            if (current.LockedByGm) throw new ForbiddenException(L.T("O mestre travou esta imagem.", "The GM locked this image."));
+            // Locked by the player: only the lock itself can change (taking it off), nothing else.
+            if (current.Locked && !input.Locked)
+                return ReplaceImage(state, current with { Locked = false });
+            if (current.Locked) throw new ForbiddenException(L.T("Destrave a imagem antes de mexer nela.", "Unlock the image before changing it."));
+            return ReplaceImage(state, Changed(current, input) with { Locked = input.Locked, LockedByGm = false });
+        }, ct);
+
+    public Task<SceneView> PlayerOrderImageAsync(TableSeat seat, string imageId, ImageOrderRequest r, CancellationToken ct) =>
+        PlayerMutateAsync(seat, (_, state) =>
+        {
+            var current = RequireOwnImage(state, imageId, seat);
+            if (current.Locked) throw new ForbiddenException(L.T("Destrave a imagem antes de mexer nela.", "Unlock the image before changing it."));
+            if (r.Above is { } above && !state.Images.Any(i => i.Id == above && !i.Hidden))
+                throw new NotFoundException(L.T("Imagem não encontrada.", "Image not found."));
+            return Reorder(state, imageId, r.Above);
+        }, ct);
+
+    public Task<SceneView> PlayerRemoveImageAsync(TableSeat seat, string imageId, CancellationToken ct) =>
+        PlayerMutateAsync(seat, (_, state) =>
+        {
+            var current = RequireOwnImage(state, imageId, seat);
+            if (current.Locked) throw new ForbiddenException(L.T("Destrave a imagem antes de apagá-la.", "Unlock the image before deleting it."));
+            return WithoutImage(state, imageId);
+        }, ct);
+
+    private async Task<Guid> RequireImageMediaAsync(ImageInput input, CancellationToken ct)
+    {
+        if (input.MediaId is not { } media) throw RequestValidationException.For("mediaId", L.T("Envie a imagem primeiro.", "Upload the image first."));
+        await RequireMediaAsync(media, "mediaId", ct);
+        return media;
+    }
+
+    private static SceneState AddImage(SceneState state, ImageInput input, int? seatId, Guid media)
+    {
+        if (state.Images.Count >= MaxImages)
+            throw RequestValidationException.For("images", L.T($"Uma cena comporta até {MaxImages} imagens.", $"A scene holds up to {MaxImages} images."));
+        var image = Changed(new SceneImage { Id = NextId("I", state.Images.Select(i => i.Id)), MediaId = media, OwnerSeatId = seatId, Width = 4, Height = 4 }, input)
+            with { Order = state.Images.Count, Hidden = seatId is null && input.Hidden, Locked = input.Locked, LockedByGm = seatId is null && input.Locked };
+        return state with { Images = [.. state.Images, image] };
+    }
+
+    /// <summary>The image with what the input changes, checked: size 0.25–200 cells, opacity 0.1–1, name up to 60.</summary>
+    private static SceneImage Changed(SceneImage current, ImageInput i)
+    {
+        var width = i.Width ?? current.Width;
+        var height = i.Height ?? current.Height;
+        if (!double.IsFinite(i.X) || !double.IsFinite(i.Y) || Math.Abs(i.X) > 5000 || Math.Abs(i.Y) > 5000)
+            throw RequestValidationException.For("x", L.T("Posição inválida.", "Invalid position."));
+        if (!double.IsFinite(width) || !double.IsFinite(height) || width is < 0.25 or > 200 || height is < 0.25 or > 200)
+            throw RequestValidationException.For("width", L.T("O tamanho da imagem vai de 0,25 a 200 células.", "The image size goes from 0.25 to 200 cells."));
+        if (!double.IsFinite(i.Opacity) || i.Opacity is < 0.1 or > 1)
+            throw RequestValidationException.For("opacity", L.T("A opacidade vai de 10% a 100%.", "Opacity goes from 10% to 100%."));
+        if (!double.IsFinite(i.Rotation)) throw RequestValidationException.For("rotation", L.T("Giro inválido.", "Invalid rotation."));
+        var name = string.IsNullOrWhiteSpace(i.Name) ? (current.Name.Length > 0 ? current.Name : L.T("Imagem", "Image")) : i.Name.Trim();
+        return current with
+        {
+            Name = name.Length <= 60 ? name : name[..60], X = i.X, Y = i.Y, Width = width, Height = height,
+            Rotation = ((i.Rotation % 360) + 360) % 360, Opacity = i.Opacity,
+        };
+    }
+
+    private static SceneImage RequireImage(SceneState state, string imageId, TableSeat? seat) =>
+        state.Images.FirstOrDefault(i => i.Id == imageId && (seat is null || !i.Hidden))
+        ?? throw new NotFoundException(L.T("Imagem não encontrada.", "Image not found."));
+
+    /// <summary>An image a player may change: theirs (a hidden one doesn't exist for them).</summary>
+    private static SceneImage RequireOwnImage(SceneState state, string imageId, TableSeat seat)
+    {
+        var image = RequireImage(state, imageId, seat);
+        return image.OwnerSeatId == seat.Id ? image : throw new ForbiddenException(L.T("Só quem pôs a imagem (ou o mestre) mexe nela.", "Only who placed the image (or the GM) can change it."));
+    }
+
+    private static SceneState ReplaceImage(SceneState state, SceneImage image) =>
+        state with { Images = state.Images.Select(i => i.Id == image.Id ? image : i).ToList() };
+
+    private static SceneState WithoutImage(SceneState state, string imageId) =>
+        Renumber(state with { Images = state.Images.Where(i => i.Id != imageId).ToList() }, state.Images.Where(i => i.Id != imageId).OrderBy(i => i.Order).Select(i => i.Id).ToList());
+
+    /// <summary>Moves an image right under <paramref name="above"/> in the stack (null: to the top), renumbering 0..n−1.</summary>
+    private static SceneState Reorder(SceneState state, string imageId, string? above)
+    {
+        var stack = state.Images.OrderBy(i => i.Order).Select(i => i.Id).Where(id => id != imageId).ToList();
+        var at = above is null ? stack.Count : stack.IndexOf(above);
+        if (at < 0) throw new NotFoundException(L.T("Imagem não encontrada.", "Image not found."));
+        stack.Insert(at, imageId);
+        return Renumber(state, stack);
+    }
+
+    /// <summary>Order = position in <paramref name="bottomToTop"/>.</summary>
+    private static SceneState Renumber(SceneState state, List<string> bottomToTop) =>
+        state with { Images = state.Images.Select(i => i with { Order = bottomToTop.IndexOf(i.Id) }).ToList() };
 
     /// <summary>Sends again every scene with a token that <paramref name="shows"/> an image that just changed.</summary>
     public async Task RepublishTokensOfAsync(Func<SceneToken, bool> shows, CancellationToken ct)
@@ -669,7 +801,7 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
 
     private static string Truncate(string value, int max) => value.Length <= max ? value : value[..max];
 
-    internal static SceneState Deserialize(string json) => JsonSerializer.Deserialize<SceneState>(json, Json) ?? new SceneState();
+    public static SceneState Deserialize(string json) => JsonSerializer.Deserialize<SceneState>(json, Json) ?? new SceneState();
 
     private static string Serialize(SceneState state) => JsonSerializer.Serialize(state, Json);
 

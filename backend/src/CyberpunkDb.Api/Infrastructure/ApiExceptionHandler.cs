@@ -20,6 +20,7 @@ public sealed class ApiExceptionHandler(IProblemDetailsService problemDetails, I
             NotFoundException n => new ProblemDetails { Status = StatusCodes.Status404NotFound, Title = n.Message },
             UnauthorizedException u => new ProblemDetails { Status = StatusCodes.Status401Unauthorized, Title = u.Message },
             ConflictException c => new ProblemDetails { Status = StatusCodes.Status409Conflict, Title = c.Message },
+            ForbiddenException f => new ProblemDetails { Status = StatusCodes.Status403Forbidden, Title = f.Message },
             BadHttpRequestException b => new ProblemDetails { Status = StatusCodes.Status400BadRequest, Title = b.Message },
             OperationCanceledException => new ProblemDetails { Status = 499, Title = L.T("Requisição cancelada.", "Request canceled.") },
             _ => new ProblemDetails

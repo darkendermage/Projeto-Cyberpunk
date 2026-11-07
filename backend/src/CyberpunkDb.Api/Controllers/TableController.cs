@@ -226,6 +226,20 @@ public sealed class TableController(SeatService seats, MediaService media, Scene
 
     // ------------------------------------------------------------------ images
 
+    // ------------------------------------------------------------------ images over the map (round 5)
+
+    [HttpPost("scenes/{id:int}/images")]
+    public Task<SceneView> AddImage(int id, ImageInput input, CancellationToken ct) => scenes.AddImageAsync(id, input, ct);
+
+    [HttpPut("scenes/{id:int}/images/{imageId}")]
+    public Task<SceneView> UpdateImage(int id, string imageId, ImageInput input, CancellationToken ct) => scenes.UpdateImageAsync(id, imageId, input, ct);
+
+    [HttpPost("scenes/{id:int}/images/{imageId}/order")]
+    public Task<SceneView> OrderImage(int id, string imageId, ImageOrderRequest request, CancellationToken ct) => scenes.OrderImageAsync(id, imageId, request, ct);
+
+    [HttpDelete("scenes/{id:int}/images/{imageId}")]
+    public Task<SceneView> RemoveImage(int id, string imageId, CancellationToken ct) => scenes.RemoveImageAsync(id, imageId, ct);
+
     [HttpPost("media")]
     [RequestSizeLimit(MediaService.MaxBytes + 64 * 1024)]
     [RequestFormLimits(MultipartBodyLengthLimit = MediaService.MaxBytes + 64 * 1024)]

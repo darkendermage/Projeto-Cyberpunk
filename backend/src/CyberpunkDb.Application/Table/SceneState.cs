@@ -38,6 +38,31 @@ public sealed record SceneState
     public SceneBackground Background { get; init; } = new();
     public List<SceneToken> Tokens { get; init; } = [];
     public List<SceneTemplate> Templates { get; init; } = [];
+    /// <summary>Images over the map, below every token (round 5), drawn by <see cref="SceneImage.Order"/>.</summary>
+    public List<SceneImage> Images { get; init; } = [];
+}
+
+/// <summary>
+/// An image laid over the map like a layer: centre and size in cells (free fractions), rotation, opacity and its place
+/// in the stack (<see cref="Order"/>, higher on top). <see cref="OwnerSeatId"/> is the player who placed it (null: the GM).
+/// A lock stops moving and resizing; <see cref="LockedByGm"/> means only the GM takes it off.
+/// </summary>
+public sealed record SceneImage
+{
+    public string Id { get; init; } = "";
+    public Guid MediaId { get; init; }
+    public string Name { get; init; } = "";
+    public double X { get; init; }
+    public double Y { get; init; }
+    public double Width { get; init; } = 4;
+    public double Height { get; init; } = 4;
+    public double Rotation { get; init; }
+    public double Opacity { get; init; } = 1;
+    public int Order { get; init; }
+    public bool Locked { get; init; }
+    public bool LockedByGm { get; init; }
+    public bool Hidden { get; init; }
+    public int? OwnerSeatId { get; init; }
 }
 
 /// <summary>The grid: cell size and offset in image pixels, and how many meters a cell is (2 m in Cyberpunk RED).</summary>

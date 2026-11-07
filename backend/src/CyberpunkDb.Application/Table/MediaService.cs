@@ -13,10 +13,13 @@ public sealed class MediaService(IAppDbContext db, IMediaStore store)
 
     public static string UrlOf(Guid id) => $"/api/table/media/{id:N}";
 
-    public async Task<MediaDto> UploadAsync(Stream content, long length, CancellationToken ct)
+    /// <summary>A player's image over the map (round 5): smaller, the browser already shrank it.</summary>
+    public const long PlayerMaxBytes = 2 * 1024 * 1024;
+
+    public async Task<MediaDto> UploadAsync(Stream content, long length, CancellationToken ct, long maxBytes = MaxBytes)
     {
-        if (length <= 0 || length > MaxBytes)
-            throw RequestValidationException.For("file", L.T("A imagem deve ter até 15 MB.", "The image must be 15 MB or less."));
+        if (length <= 0 || length > maxBytes)
+            throw RequestValidationException.For("file", L.T($"A imagem deve ter até {maxBytes / (1024 * 1024)} MB.", $"The image must be {maxBytes / (1024 * 1024)} MB or less."));
         using var buffer = new MemoryStream();
         await content.CopyToAsync(buffer, ct);
         var type = Sniff(buffer.GetBuffer().AsSpan(0, (int)buffer.Length))

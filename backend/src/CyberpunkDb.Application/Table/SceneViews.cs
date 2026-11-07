@@ -21,14 +21,17 @@ public static class SceneViews
     };
 
     public static SceneView ForGm(Scene scene, SceneState state, TokenImages images, IReadOnlyDictionary<string, int>? covers = null) =>
-        View(scene, state, state.Tokens.Select(t => Token(t, GmImage(t, images), true, covers, Focus(t, images))));
+        View(scene, state, state.Tokens.Select(t => Token(t, GmImage(t, images), true, covers, Focus(t, images))),
+            state.Images.Select(i => Image(i, true)));
 
     /// <summary>
     /// The seat's view. Stored images go through the player API with the seat link in the query string, because images
     /// load without custom headers.
     /// </summary>
     public static SceneView ForSeat(Scene scene, SceneState state, TableSeat seat, TokenImages images, IReadOnlyDictionary<string, int>? covers = null) =>
-        View(scene, state, state.Tokens.Where(t => CanSee(t, seat)).Select(t => Token(t, SeatImage(t, seat, images), CanControl(t, seat), covers, Focus(t, images))));
+        View(scene, state, state.Tokens.Where(t => CanSee(t, seat)).Select(t => Token(t, SeatImage(t, seat, images), CanControl(t, seat), covers, Focus(t, images))),
+            // Hidden images never reach a player, not even their address.
+            state.Images.Where(i => !i.Hidden).Select(i => Image(i, i.OwnerSeatId == seat.Id && !i.Locked)));
 
     /// <summary>The framing of a PC's portrait, when the token shows that portrait.</summary>
     private static CyberpunkDb.Application.Characters.PortraitFocus? Focus(SceneToken t, TokenImages images) =>
@@ -47,10 +50,14 @@ public static class SceneViews
         return null;
     }
 
-    private static SceneView View(Scene scene, SceneState state, IEnumerable<TokenView> tokens) =>
+    private static SceneView View(Scene scene, SceneState state, IEnumerable<TokenView> tokens, IEnumerable<SceneImageView> images) =>
         new(scene.Id, scene.Name, scene.Version, scene.Active, scene.EncounterId, state.Grid,
             new BackgroundView(state.Background.MediaId, state.Background.MediaId is { } m ? MediaService.UrlOf(m) : null, state.Background.Width, state.Background.Height),
-            tokens.ToList(), state.Templates, scene.UpdatedAt);
+            tokens.ToList(), state.Templates, scene.UpdatedAt, images.OrderBy(i => i.Order).ToList());
+
+    private static SceneImageView Image(SceneImage i, bool editable) =>
+        new(i.Id, MediaService.UrlOf(i.MediaId), i.Name, i.X, i.Y, i.Width, i.Height, i.Rotation, i.Opacity, i.Order,
+            i.Locked, i.LockedByGm, i.Hidden, i.OwnerSeatId, editable);
 
     private static TokenView Token(SceneToken t, string? image, bool controllable, IReadOnlyDictionary<string, int>? covers, CyberpunkDb.Application.Characters.PortraitFocus? focus = null) =>
         new(t.Id, t.Label, t.X, t.Y, t.Width, t.Height, t.Rotation, t.Locked, t.ImageMediaId, image, t.Color, t.OwnerSeatId,

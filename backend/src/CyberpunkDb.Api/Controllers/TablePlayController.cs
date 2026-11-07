@@ -15,7 +15,7 @@ namespace CyberpunkDb.Api.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/table/play")]
-public sealed class TablePlayController(SeatService seats, SceneService scenes, EncounterService encounters, CharacterService characters, NpcPortraitService npcImages, ChatService chat, TablePresence presence, TablePartyService party, TableRulesService rules, TableAttackService attacks, TableTurnService turns, TableMusicService music) : ControllerBase
+public sealed class TablePlayController(SeatService seats, SceneService scenes, EncounterService encounters, CharacterService characters, NpcPortraitService npcImages, ChatService chat, TablePresence presence, TablePartyService party, TableRulesService rules, TableAttackService attacks, TableTurnService turns, TableMusicService music, MediaService media) : ControllerBase
 {
     public const string SeatHeader = "X-Seat";
 
@@ -190,6 +190,29 @@ public sealed class TablePlayController(SeatService seats, SceneService scenes, 
     /// <summary>The player's own dice color (#rrggbb; null for the seat's color).</summary>
     [HttpPut("dice-color")]
     public async Task<PlayerSeatDto> DiceColor(DiceColorRequest request, CancellationToken ct) => await seats.SetDiceColorAsync(await SeatAsync(ct), request, ct);
+
+    /// <summary>A player's image for the map (up to 2 MB; the browser shrinks it first).</summary>
+    [HttpPost("media")]
+    [RequestSizeLimit(MediaService.PlayerMaxBytes + 64 * 1024)]
+    [RequestFormLimits(MultipartBodyLengthLimit = MediaService.PlayerMaxBytes + 64 * 1024)]
+    public async Task<ActionResult<MediaDto>> Upload(IFormFile file, CancellationToken ct)
+    {
+        await SeatAsync(ct);
+        await using var stream = file.OpenReadStream();
+        return StatusCode(StatusCodes.Status201Created, await media.UploadAsync(stream, file.Length, ct, MediaService.PlayerMaxBytes));
+    }
+
+    [HttpPost("images")]
+    public async Task<SceneView> AddImage(ImageInput input, CancellationToken ct) => await scenes.PlayerAddImageAsync(await SeatAsync(ct), input, ct);
+
+    [HttpPut("images/{imageId}")]
+    public async Task<SceneView> UpdateImage(string imageId, ImageInput input, CancellationToken ct) => await scenes.PlayerUpdateImageAsync(await SeatAsync(ct), imageId, input, ct);
+
+    [HttpPost("images/{imageId}/order")]
+    public async Task<SceneView> OrderImage(string imageId, ImageOrderRequest request, CancellationToken ct) => await scenes.PlayerOrderImageAsync(await SeatAsync(ct), imageId, request, ct);
+
+    [HttpDelete("images/{imageId}")]
+    public async Task<SceneView> RemoveImage(string imageId, CancellationToken ct) => await scenes.PlayerRemoveImageAsync(await SeatAsync(ct), imageId, ct);
 
     /// <summary>The player ends their own Turn.</summary>
     [HttpPost("end-turn")]

@@ -10,7 +10,21 @@ public sealed record SceneSummaryDto(int Id, string Name, bool Active, int SortO
 /// </summary>
 public sealed record SceneView(
     int Id, string Name, int Version, bool Active, int? EncounterId, SceneGrid Grid, BackgroundView Background,
-    IReadOnlyList<TokenView> Tokens, IReadOnlyList<SceneTemplate> Templates, DateTime UpdatedAt);
+    IReadOnlyList<TokenView> Tokens, IReadOnlyList<SceneTemplate> Templates, DateTime UpdatedAt,
+    IReadOnlyList<SceneImageView>? Images = null);
+
+/// <summary>An image as one screen sees it: its URL, and whether this viewer may move and resize it now.</summary>
+public sealed record SceneImageView(
+    string Id, string Url, string Name, double X, double Y, double Width, double Height, double Rotation, double Opacity, int Order,
+    bool Locked, bool LockedByGm, bool Hidden, int? OwnerSeatId, bool Editable);
+
+/// <summary>An image placed or changed. <see cref="MediaId"/> only when adding; no size fits 4×4 cells.</summary>
+public sealed record ImageInput(
+    Guid? MediaId, string? Name, double X, double Y, double? Width = null, double? Height = null, double Rotation = 0, double Opacity = 1,
+    bool Locked = false, bool Hidden = false);
+
+/// <summary>Where an image goes in the stack: right under <see cref="Above"/> (null: on top of all).</summary>
+public sealed record ImageOrderRequest(string? Above);
 
 public sealed record BackgroundView(Guid? MediaId, string? Url, int Width, int Height);
 

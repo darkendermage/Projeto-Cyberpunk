@@ -15,5 +15,8 @@ public sealed class NotFoundException(string message) : Exception(message);
 
 public sealed class ConflictException(string message) : Exception(message);
 
+/// <summary>The caller is known but may not do this (a player editing another seat's image). Mapped to HTTP 403.</summary>
+public sealed class ForbiddenException(string message) : Exception(message);
+
 /// <summary>The request has no valid credential (a virtual table seat link that is wrong or revoked). Mapped to HTTP 401.</summary>
 public sealed class UnauthorizedException(string message) : Exception(message);
