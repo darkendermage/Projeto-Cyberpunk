@@ -21,6 +21,17 @@ public sealed class PlayerSurfaceGuard(RequestDelegate next, IOptions<TableOptio
         var request = context.Request;
         if (options.Value.IsPlayerSurface(context))
         {
+            // The player's own sheet ("Minha ficha"): only with the seat's key, only that character (SeatCharacterAccess).
+            if (SeatCharacterAccess.IsCandidate(request.Path))
+            {
+                if (!await SeatCharacterAccess.AllowedAsync(context))
+                {
+                    context.Response.StatusCode = StatusCodes.Status404NotFound;
+                    return;
+                }
+                await next(context);
+                return;
+            }
             if (!PlayerMayReach(request))
             {
                 context.Response.StatusCode = StatusCodes.Status404NotFound;

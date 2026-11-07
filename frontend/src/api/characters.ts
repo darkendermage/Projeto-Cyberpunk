@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { API_BASE, ApiError, request } from './client';
+import { API_BASE, ApiError, request, seatContext } from './client';
 import type {
   CharacterDetail, CharacterEvent, CharacterEventKind, CharacterRules, CharacterSheet, CharacterSummary,
   CreateCharacterRequest, InstallPreview, InstallRequestBody, StorePage,
@@ -34,7 +34,8 @@ export const characterApi = {
   command: (id: number, path: string, body: Record<string, unknown>) => post<CharacterDetail>(`/characters/${id}/${path}`, body),
   previewInstall: (id: number, body: InstallRequestBody, signal?: AbortSignal) =>
     request<InstallPreview>(`/characters/${id}/cyberware/preview`, { method: 'POST', body: json({ version: 0, ...body }), signal }),
-  portraitUrl: (id: number, stamp: string) => `${API_BASE}/characters/${id}/portrait?v=${encodeURIComponent(stamp)}`,
+  // Images load without headers: on a player's screen the seat key goes in the query string.
+  portraitUrl: (id: number, stamp: string) => `${API_BASE}/characters/${id}/portrait?v=${encodeURIComponent(stamp)}${seatContext() ? `&seat=${encodeURIComponent(seatContext()!)}` : ''}`,
   uploadPortrait: async (id: number, file: File) => {
     const form = new FormData();
     form.append('file', file);
@@ -64,7 +65,7 @@ export const characterKeys = {
 export const useCharacterRules = () =>
   useQuery({ queryKey: characterKeys.rules, queryFn: ({ signal }) => characterApi.rules(signal), staleTime: Infinity });
 
-export const useCharacters = () => useQuery({ queryKey: characterKeys.list, queryFn: characterApi.list });
+export const useCharacters = (enabled = true) => useQuery({ queryKey: characterKeys.list, queryFn: characterApi.list, enabled });
 
 export const useCharacter = (id: number) =>
   useQuery({ queryKey: characterKeys.detail(id), queryFn: ({ signal }) => characterApi.get(id, signal), enabled: id > 0 });

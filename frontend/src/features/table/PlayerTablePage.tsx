@@ -5,7 +5,7 @@ import { problemMessage } from '../../api/characters';
 import { playerApi, tableKeys } from '../../api/table';
 import type { PlayerEncounter, PlayerState, RollKind, SceneView, TableMessage, TableVisibility } from '../../api/tableTypes';
 import { Button, EmptyState, IconButton, Spinner } from '../../components/ui/ui';
-import { Dices, Volume2, VolumeX } from 'lucide-react';
+import { Dices, IdCard, Volume2, VolumeX } from 'lucide-react';
 import { useToast } from '../../state/ToastContext';
 import { lang, t } from '../../i18n';
 import type { BoardCallbacks, BoardData, BoardTool, TemplateDraft } from './board/BoardController';
@@ -23,6 +23,8 @@ import { PanelHandle } from './PanelHandle';
 import { RulesDialog } from './RulesDialog';
 import { AimBar, SceneStrip } from './SceneStrip';
 import { PendingCard } from './PendingCard';
+import { MySheetDialog } from './MySheetDialog';
+import { setSeatContext } from '../../api/client';
 import { buildStrip } from './strip';
 import { attackSummary, fighterIdOf, startAim } from './aim';
 import { useQuickAttack } from './useQuickAttack';
@@ -61,6 +63,9 @@ export function PlayerTablePage() {
   };
   const [selection, setSelection] = useState<Selection>(NO_SELECTION);
   const [tablesOpen, setTablesOpen] = useState(false);
+  const [sheetOpen, setSheetOpen] = useState(false);
+  // Every API call of this screen carries the seat key (the "Minha ficha" popup reaches the character API with it).
+  useEffect(() => { setSeatContext(token); return () => setSeatContext(null); }, [token]);
 
   const navigate = useNavigate();
   const [panels, setPanels] = usePanels('ncdb.table.player-panels', PLAYER_PANELS);
@@ -119,6 +124,8 @@ export function PlayerTablePage() {
       if (characterId != null && characterId === client.getQueryData<PlayerState>(tableKeys.player(token))?.seat?.characterId) {
         void client.invalidateQueries({ queryKey: tableKeys.playerCharacter(token) });
         void client.invalidateQueries({ queryKey: tableKeys.playerSheet(token) });
+        // The open "Minha ficha" popup follows changes made elsewhere (the GM's app, the fight).
+        void client.invalidateQueries({ queryKey: ['characters', characterId] });
       }
     },
     resync: () => void client.invalidateQueries({ queryKey: tableKeys.player(token) }),
@@ -261,6 +268,9 @@ export function PlayerTablePage() {
             {HUB_TEXT[hub.status]}
           </span>
           {hub.status === 'offline' && <Button variant="ghost" onClick={hub.reconnect}>{t('Reconectar', 'Reconnect')}</Button>}
+          {seat?.characterId != null && (
+            <Button icon={<IdCard size={15} />} onClick={() => setSheetOpen(true)}>{t('Minha ficha', 'My sheet')}</Button>
+          )}
           <LangSwitch />
         </span>
       </header>
@@ -349,6 +359,7 @@ export function PlayerTablePage() {
         </aside>
       </div>
       <RulesDialog open={tablesOpen} onClose={() => setTablesOpen(false)} load={api.rules} />
+      {seat?.characterId != null && <MySheetDialog characterId={seat.characterId} open={sheetOpen} onClose={() => setSheetOpen(false)} />}
     </div>
   );
 }

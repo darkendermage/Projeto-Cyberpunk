@@ -47,8 +47,10 @@ export function CharacterPage() {
  * The full character sheet inside another page (a tab of the combat table). The section tabs switch through onTab
  * instead of the URL, so the host page stays where it is. onVersion reports each new sheet version to the host.
  */
-export function EmbeddedCharacter({ id, tab, onTab, onVersion }: {
+export function EmbeddedCharacter({ id, tab, onTab, onVersion, player }: {
   id: number; tab: CharacterTab; onTab: (tab: CharacterTab) => void; onVersion?: (version: number) => void;
+  /** On a player's screen (the table's "Minha ficha"): no link to the app's sheet page, no export. */
+  player?: boolean;
 }) {
   const character = useCharacter(id);
   const rules = useCharacterRules();
@@ -60,21 +62,22 @@ export function EmbeddedCharacter({ id, tab, onTab, onVersion }: {
   if (rules.error || !rules.data) return <ErrorState error={rules.error} onRetry={() => rules.refetch()} />;
   const creating = !character.data.sheet.creation.finalized;
   const shown = tab === 'criacao' && !creating ? 'ficha' : tab;
-  return <CharacterWorkspace key={id} detail={character.data} rules={rules.data} tab={shown} onTab={onTab} />;
+  return <CharacterWorkspace key={id} detail={character.data} rules={rules.data} tab={shown} onTab={onTab} player={player} />;
 }
 
-function CharacterWorkspace({ detail, rules, tab, onTab }: {
-  detail: CharacterDetail; rules: CharacterRules; tab: CharacterTab; onTab?: (tab: CharacterTab) => void;
+function CharacterWorkspace({ detail, rules, tab, onTab, player }: {
+  detail: CharacterDetail; rules: CharacterRules; tab: CharacterTab; onTab?: (tab: CharacterTab) => void; player?: boolean;
 }) {
   const editor = useSheetEditor(detail);
   const navigate = useNavigate();
   const toast = useToast();
-  const list = useCharacters();
+  const embedded = onTab != null;
+  // The character switcher only exists on the sheet page (a player's screen can't list characters anyway).
+  const list = useCharacters(!embedded);
   const { duplicate } = useCharacterLibrary();
   const creating = !detail.sheet.creation.finalized;
   const tone = detail.status === 'Complete' ? 'ok' : detail.status === 'Creating' ? 'warn' : 'bad';
   const identity = editor.draft.identity;
-  const embedded = onTab != null;
 
   // Alt+1..4 jump between Personagem, Caminho de Vida, Equipamento and Cyberware; Ctrl+S saves (see useSheetEditor).
   useEffect(() => {
@@ -125,7 +128,7 @@ function CharacterWorkspace({ detail, rules, tab, onTab }: {
         </nav>
 
         <div className={styles.topbarRight}>
-          {embedded ? (
+          {player ? null : embedded ? (
             <Link to={`/characters/${detail.id}/${tab}`} className={styles.tab} title={t('Abrir a ficha fora da mesa', 'Open the sheet outside the table')}>
               <ExternalLink size={14} /> {t('Página da ficha', 'Sheet page')}
             </Link>
@@ -141,9 +144,11 @@ function CharacterWorkspace({ detail, rules, tab, onTab }: {
               })}><Copy size={16} /></IconButton>
             </>
           )}
-          <IconButton label={t('Exportar para arquivo', 'Export to file')} onClick={() => void editor.flush().then(() => downloadCharacter(detail.id))}>
-            <Download size={16} />
-          </IconButton>
+          {!player && (
+            <IconButton label={t('Exportar para arquivo', 'Export to file')} onClick={() => void editor.flush().then(() => downloadCharacter(detail.id))}>
+              <Download size={16} />
+            </IconButton>
+          )}
           <SaveIndicator status={editor.status} />
         </div>
       </div>

@@ -8,6 +8,14 @@ import { locale, t, tv } from '../i18n';
 export const API_BASE = import.meta.env.VITE_API_BASE ?? '/api';
 const BASE = API_BASE;
 
+/**
+ * The seat key a player's screen sends with every API call (the "Minha ficha" popup reaches the character API through
+ * the tunnel with it); null on the GM's app.
+ */
+let seatKey: string | null = null;
+export const setSeatContext = (seat: string | null) => { seatKey = seat; };
+export const seatContext = () => seatKey;
+
 /** Error carrying the RFC 7807 payload returned by the API (title + per-field errors). */
 export class ApiError extends Error {
   readonly status: number;
@@ -29,7 +37,10 @@ export async function request<T>(path: string, init?: RequestInit): Promise<T> {
   try {
     response = await fetch(`${BASE}${path}`, {
       ...init,
-      headers: { Accept: 'application/json', 'Accept-Language': locale, ...(init?.body ? { 'Content-Type': 'application/json' } : {}), ...init?.headers },
+      headers: {
+        Accept: 'application/json', 'Accept-Language': locale, ...(init?.body ? { 'Content-Type': 'application/json' } : {}),
+        ...(seatKey ? { 'X-Seat': seatKey } : {}), ...init?.headers,
+      },
     });
   } catch (error) {
     if ((error as Error).name === 'AbortError') throw error;
