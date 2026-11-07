@@ -115,6 +115,16 @@ public sealed class TablePlayController(SeatService seats, SceneService scenes, 
         return File(data, type, lastModified: updated, entityTag: new Microsoft.Net.Http.Headers.EntityTagHeaderValue($"\"{updated.Ticks}\""));
     }
 
+    /// <summary>A party member's portrait (the strip's cards of PCs with no token on the scene).</summary>
+    [HttpGet("party/{characterId:int}/portrait")]
+    public async Task<IActionResult> PartyPortrait(int characterId, CancellationToken ct)
+    {
+        await SeatAsync(ct);
+        var (data, type, updated) = await party.PortraitAsync(characterId, ct);
+        Response.Headers.CacheControl = "private, no-cache";
+        return File(data, type, lastModified: updated, entityTag: new Microsoft.Net.Http.Headers.EntityTagHeaderValue($"\"{updated.Ticks}\""));
+    }
+
     /// <summary>The seat's own sheet to read (204 when the seat plays no character).</summary>
     [HttpGet("sheet")]
     public async Task<PlayerSheetDto?> Sheet(CancellationToken ct)

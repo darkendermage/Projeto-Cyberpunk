@@ -253,6 +253,13 @@ export interface PartyMember {
   maxSpHead: number | null;
   spBody: number;
   maxSpBody: number | null;
+  /** The seat that plays this PC. */
+  seatId: number;
+  /** Its player is connected now. */
+  online: boolean;
+  /** The PC has a token on the scene being looked at. */
+  inScene: boolean;
+  imageUrl: string | null;
 }
 
 export interface RolledTerm { expression: string; sign: number; dice: number[]; extra: number | null; value: number }

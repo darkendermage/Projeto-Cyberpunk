@@ -421,3 +421,15 @@
 .diceLabel { font-size: 13px; color: var(--text-2); max-width: 260px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .diceCrit { font-family: var(--font-display); color: var(--cyan); font-size: 13px; }
 .diceFumble { font-family: var(--font-display); color: var(--red); font-size: 13px; }
+
+/* A PC of the table with no token on this scene. */
+.stripCardOff { opacity: 0.55; border-style: dashed; }
+.stripCardOff .stripPick { cursor: default; }
+.stripTag {
+  margin-left: 6px;
+  font-size: 0.72em;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-faint);
+}
+.stripName .dot { display: inline-block; margin-right: 5px; vertical-align: middle; }

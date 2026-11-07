@@ -54,14 +54,23 @@ public sealed class TableHub(SeatService seats, SceneService scenes, TablePresen
             await Groups.AddToGroupAsync(Context.ConnectionId, Gm);
         }
         presence.Add(Context, seat?.Id);
-        if (seat is not null) await Clients.Group(Gm).SendAsync("seats");
+        if (seat is not null)
+        {
+            await Clients.Group(Gm).SendAsync("seats");
+            // The party strip shows who is connected, to the GM and to the players.
+            await Clients.Groups(Gm, Players).SendAsync("party", new { characterId = (int?)null });
+        }
         await base.OnConnectedAsync();
     }
 
     public override async Task OnDisconnectedAsync(Exception? exception)
     {
         presence.Remove(Context.ConnectionId);
-        if (CurrentSeat is not null) await Clients.Group(Gm).SendAsync("seats");
+        if (CurrentSeat is not null)
+        {
+            await Clients.Group(Gm).SendAsync("seats");
+            await Clients.Groups(Gm, Players).SendAsync("party", new { characterId = (int?)null });
+        }
         await base.OnDisconnectedAsync(exception);
     }
 

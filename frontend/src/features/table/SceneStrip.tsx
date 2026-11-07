@@ -30,19 +30,24 @@ export function SceneStrip({ entries, selected, onPick, weaponsOf, aim, onWeapon
     <div className={styles.strip} role="list" aria-label={t('Na cena', 'On the scene')}>
       {entries.map((e) => {
         const ratio = e.hp != null && e.maxHp ? Math.max(0, Math.min(1, e.hp / e.maxHp)) : null;
-        const armed = weaponsOf?.(e) ?? null;
+        const armed = e.offScene ? null : weaponsOf?.(e) ?? null;
         const shooter = aim != null && e.combatantId === aim.attackerId;
         const targeted = aim != null && e.combatantId != null && e.combatantId === aim.targetId;
         return (
           <div key={e.tokenId} role="listitem" style={{ borderColor: e.color }}
-            className={`${styles.stripCard} ${selected.includes(e.tokenId) ? styles.stripCardOn : ''} ${targeted ? styles.stripTarget : ''} ${shooter ? styles.stripShooter : ''}`}>
-            <button type="button" className={styles.stripPick} onClick={() => onPick(e)}
-              aria-label={aim && !shooter ? t(`Mirar em ${e.name}`, `Aim at ${e.name}`) : e.name}>
+            className={`${styles.stripCard} ${selected.includes(e.tokenId) ? styles.stripCardOn : ''} ${targeted ? styles.stripTarget : ''} ${shooter ? styles.stripShooter : ''} ${e.offScene ? styles.stripCardOff : ''}`}>
+            <button type="button" className={styles.stripPick} onClick={() => { if (!e.offScene) onPick(e); }} aria-disabled={e.offScene || undefined}
+              title={e.offScene ? t('Fora da cena: sem token neste mapa', 'Off scene: no token on this map') : undefined}
+              aria-label={e.offScene ? t(`${e.name} (fora da cena)`, `${e.name} (off scene)`) : aim && !shooter ? t(`Mirar em ${e.name}`, `Aim at ${e.name}`) : e.name}>
               {e.imageUrl
                 ? <img className={styles.stripAvatar} src={e.imageUrl} alt="" />
                 : <span className={styles.stripAvatar} style={{ background: e.color }}>{initials(e.name)}</span>}
               <span className={styles.stripBody}>
-                <span className={styles.stripName}>{e.name}</span>
+                <span className={styles.stripName}>
+                  {e.online != null && <span className={`${styles.dot} ${e.online ? styles.dotOn : styles.dotOff}`} title={e.online ? t('Conectado', 'Connected') : t('Desconectado', 'Offline')} />}
+                  {e.name}
+                  {e.offScene && <span className={styles.stripTag}>{t('fora da cena', 'off scene')}</span>}
+                </span>
                 {ratio != null ? (
                   <span className={styles.stripHp}>
                     <span className={styles.meter}><span className={styles.meterFill} style={{ width: `${ratio * 100}%` }} /></span>

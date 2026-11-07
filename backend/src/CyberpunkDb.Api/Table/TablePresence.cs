@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.SignalR;
 namespace CyberpunkDb.Api.Table;
 
 /// <summary>Who is connected to the table hub, so a revoked seat can be thrown out at once.</summary>
-public sealed class TablePresence
+public sealed class TablePresence : CyberpunkDb.Application.Table.ITablePresence
 {
     private readonly ConcurrentDictionary<string, (int? SeatId, HubCallerContext Context)> _connections = new();
 

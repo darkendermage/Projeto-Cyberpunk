@@ -91,6 +91,7 @@ public static class DependencyInjection
         services.AddSingleton<SceneLocks>();
         services.AddSingleton<TableLobby>();
         services.TryAddSingleton<ITableNotifier, NullTableNotifier>();
+        services.TryAddSingleton<ITablePresence, NoTablePresence>();
         services.AddScoped<IEncounterObserver, EncounterBroadcast>();
         services.AddScoped<Characters.ICharacterObserver, CharacterBroadcast>();
         services.AddValidatorsFromAssemblyContaining<GearListUpsertValidator>(ServiceLifetime.Singleton);
