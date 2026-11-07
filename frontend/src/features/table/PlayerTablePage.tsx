@@ -25,6 +25,7 @@ import { AimBar, SceneStrip } from './SceneStrip';
 import { PendingCard } from './PendingCard';
 import { MySheetDialog } from './MySheetDialog';
 import { DiceColorPicker } from './DiceColorPicker';
+import { MusicPlayer } from './music/MusicPlayer';
 import { setSeatContext } from '../../api/client';
 import { buildStrip } from './strip';
 import { attackSummary, fighterIdOf, startAim } from './aim';
@@ -129,6 +130,7 @@ export function PlayerTablePage() {
         void client.invalidateQueries({ queryKey: ['characters', characterId] });
       }
     },
+    music: (music) => client.setQueryData<PlayerState>(tableKeys.player(token), (old) => (old ? { ...old, music } : old)),
     resync: () => void client.invalidateQueries({ queryKey: tableKeys.player(token) }),
   }, state.isSuccess);
 
@@ -298,6 +300,7 @@ export function PlayerTablePage() {
           </BoardToolbar>
           <div className={styles.boardArea}>
             {scene && <DiceTray ref={dice} sound={prefs.sound} />}
+            <MusicPlayer music={state.data?.music ?? null} prefs={prefs} onPrefs={setPrefs} />
             {scene ? <TableBoard ref={board} data={data} tool={tool} draft={draft} callbacks={callbacks} /> : (
               <EmptyState title={t('Aguardando o mestre', 'Waiting for the GM')}>{t('O mestre ainda não mostrou nenhuma cena.', 'The GM hasn\'t shown a scene yet.')}</EmptyState>
             )}

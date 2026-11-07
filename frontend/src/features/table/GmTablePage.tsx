@@ -4,7 +4,7 @@ import { problemMessage } from '../../api/characters';
 import { encounterKeys, useEncounter, useEncounterCommand } from '../../api/encounters';
 import type { EncounterDetail, InjuryLocation } from '../../api/encounterTypes';
 import { tableApi, tableKeys } from '../../api/table';
-import type { SceneGrid, SceneView, TableMessage } from '../../api/tableTypes';
+import type { SceneGrid, SceneView, TableMessage, TableMusicState } from '../../api/tableTypes';
 import { Dices, Trash2, Volume2, VolumeX, History } from 'lucide-react';
 import { Button, EmptyState, ErrorState, IconButton, Select, Spinner } from '../../components/ui/ui';
 import { useToast } from '../../state/ToastContext';
@@ -23,6 +23,8 @@ import { AimBar, SceneStrip } from './SceneStrip';
 import { PendingCard } from './PendingCard';
 import { SessionsDialog } from './SessionsDialog';
 import { DiceColorPicker } from './DiceColorPicker';
+import { MusicPlayer } from './music/MusicPlayer';
+import { MusicPanel, musicKey } from './music/MusicPanel';
 import { buildStrip } from './strip';
 import { attackSummary, fighterIdOf, startAim } from './aim';
 import { useQuickAttack } from './useQuickAttack';
@@ -36,7 +38,7 @@ import { NO_SELECTION, useBoardKeys, type Selection } from './useBoardKeys';
 import { HUB_TEXT, useTableHub } from './useTableHub';
 import styles from './Table.module.css';
 
-type Tab = 'scene' | 'token' | 'combat' | 'invites' | 'chat';
+type Tab = 'scene' | 'token' | 'combat' | 'invites' | 'chat' | 'music';
 
 const TABS: { id: Tab; label: string }[] = [
   { id: 'scene', label: t('Cena', 'Scene') },
@@ -44,6 +46,7 @@ const TABS: { id: Tab; label: string }[] = [
   { id: 'combat', label: t('Combate', 'Fight') },
   { id: 'invites', label: t('Convites', 'Invites') },
   { id: 'chat', label: 'Chat' },
+  { id: 'music', label: t('Música', 'Music') },
 ];
 
 
@@ -77,6 +80,7 @@ export function GmTablePage() {
   const [tablesOpen, setTablesOpen] = useState(false);
   const [sessionsOpen, setSessionsOpen] = useState(false);
   const gmDice = useQuery({ queryKey: ['table', 'gm-dice'], queryFn: tableApi.gmDiceColor });
+  const gmMusic = useQuery({ queryKey: musicKey, queryFn: tableApi.music });
   const selectedToken = selection.tokens.length === 1 && selection.templates.length === 0 ? selection.tokens[0] : null;
   const selectedTemplate = selection.templates.length === 1 && selection.tokens.length === 0 ? selection.templates[0] : null;
   const selectToken = (id: string | null) => setSelection(id ? { tokens: [id], templates: [] } : NO_SELECTION);
@@ -131,6 +135,7 @@ export function GmTablePage() {
       void client.invalidateQueries({ queryKey: tableKeys.online });
     },
     party: () => void client.invalidateQueries({ queryKey: ['table', 'party'] }),
+    music: (music) => client.setQueryData<TableMusicState>(musicKey, (old) => ({ music, recent: old?.recent ?? [] })),
     resync: () => void client.invalidateQueries({ queryKey: ['table'] }),
   });
 
@@ -272,6 +277,8 @@ export function GmTablePage() {
             <TableBoard ref={board} data={data} tool={tool} draft={draft} callbacks={callbacks} />
           )}
           {view && <DiceTray ref={dice} sound={prefs.sound} />}
+          <MusicPlayer music={gmMusic.data?.music ?? null} prefs={prefs} onPrefs={setPrefs}
+            onBlocked={() => toast.notify(t('Este vídeo não permite tocar fora do YouTube. Escolha outro link.', "This video can't play outside YouTube. Pick another link."), 'error')} />
           {view && <span className={styles.hint}>{TOOL_HINT[tool]}</span>}
         </div>
         {view && encounter.data?.pending && (
@@ -333,6 +340,7 @@ export function GmTablePage() {
         )}
         {tab === 'combat' && view && <CombatTab scene={view} encounter={encounter.data} act={act} onSelectToken={(id) => { selectToken(id); setTab('token'); }} />}
         {tab === 'invites' && <InvitesTab seats={seats.data ?? []} act={act} />}
+        {tab === 'music' && <MusicPanel />}
         {tab === 'chat' && (
           <ChatPanel gm messages={messages.data ?? []} targets={openSeats.map((s) => ({ id: s.id, label: s.label }))}
             onSend={(text, visibility, targetSeatId) => tableApi.send({ text, visibility, targetSeatId })}

@@ -164,7 +164,15 @@ export interface ClaimResult { token: string }
 
 export interface PlayerSeat { id: number; label: string; color: string; characterId: number | null; diceColor?: string | null }
 
-export interface PlayerState { seat: PlayerSeat; scene: SceneView | null }
+export interface PlayerState { seat: PlayerSeat; scene: SceneView | null; music?: TableMusic | null }
+
+/** What the table is playing (YouTube), as of updatedAt. */
+export interface TableMusic {
+  videoId: string | null; playlistId: string | null; title: string | null; playing: boolean; positionSeconds: number; updatedAt: string;
+  volume: number; index: number;
+}
+
+export interface TableMusicState { music: TableMusic | null; recent: { videoId: string | null; playlistId: string | null; title: string | null }[] }
 
 export interface MediaInfo { id: string; url: string; contentType: string; length: number }
 

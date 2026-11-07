@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { HubConnectionBuilder, HubConnectionState, LogLevel, type HubConnection } from '@microsoft/signalr';
 import type { EncounterDetail } from '../../api/encounterTypes';
-import type { Ping, PlayerEncounter, SceneView, TableMessage, TokenDrag } from '../../api/tableTypes';
+import type { Ping, PlayerEncounter, SceneView, TableMessage, TableMusic, TokenDrag } from '../../api/tableTypes';
 import { t } from '../../i18n';
 
 export type HubStatus = 'connecting' | 'online' | 'reconnecting' | 'offline';
@@ -26,6 +26,8 @@ export interface HubHandlers {
   seats?: () => void;
   /** A character's sheet changed, or a player came or went (characterId null): refresh the party strip. */
   party?: (change: { characterId: number | null }) => void;
+  /** The table's music changed (null: stopped). */
+  music?: (music: TableMusic | null) => void;
   /** After a reconnection: whatever was missed must be fetched again. */
   resync?: () => void;
 }
@@ -67,6 +69,7 @@ export function useTableHub(seat: string | null, handlers: HubHandlers, enabled 
     on('ping', 'ping');
     on('seats', 'seats');
     on('party', 'party');
+    on('music', 'music');
     // A connection closed by this effect's cleanup (StrictMode, a new seat) must not touch the next one's status.
     let disposed = false;
     connection.onreconnecting(() => { if (!disposed) setStatus('reconnecting'); });

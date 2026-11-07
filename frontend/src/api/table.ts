@@ -2,7 +2,7 @@ import { API_BASE, ApiError, request } from './client';
 import { locale, t } from '../i18n';
 import type {
   ArmorLocation, ClaimResult, Lobby, MediaInfo, PartyMember, PlayerCharacter, PlayerSheet, PlayerEncounter, PlayerSeat, PlayerState, RollRequest, SceneBatch, SceneGrid, SceneSummary, SceneView, Seat,
-  SendMessage, TableMessage, TableRules, TemplateInput, QuickAttack, BarrierRequest, TokenInput, TokenMove, TunnelStatus, QuickAttackResult, TableSession,
+  SendMessage, TableMessage, TableRules, TemplateInput, QuickAttack, BarrierRequest, TokenInput, TokenMove, TunnelStatus, QuickAttackResult, TableSession, TableMusicState,
 } from './tableTypes';
 
 const json = (body: unknown) => JSON.stringify(body);
@@ -57,6 +57,14 @@ export const tableApi = {
   send: (body: SendMessage) => request<TableMessage>('/table/messages', { method: 'POST', body: json(body) }),
   roll: (body: RollRequest) => request<TableMessage>('/table/rolls', { method: 'POST', body: json(body) }),
   sessions: () => request<TableSession[]>('/table/sessions'),
+  music: () => request<TableMusicState>('/table/music'),
+  loadMusic: (body: { url: string; title: string | null }) => request<TableMusicState>('/table/music', { method: 'PUT', body: json(body) }),
+  playMusic: (positionSeconds: number | null) => request<TableMusicState>('/table/music/play', { method: 'POST', body: json({ positionSeconds }) }),
+  pauseMusic: () => request<TableMusicState>('/table/music/pause', { method: 'POST' }),
+  seekMusic: (positionSeconds: number) => request<TableMusicState>('/table/music/seek', { method: 'POST', body: json({ positionSeconds }) }),
+  nextMusic: () => request<TableMusicState>('/table/music/next', { method: 'POST' }),
+  musicVolume: (volume: number) => request<TableMusicState>('/table/music/volume', { method: 'POST', body: json({ volume }) }),
+  stopMusic: () => request<TableMusicState>('/table/music', { method: 'DELETE' }),
   gmDiceColor: () => request<{ color: string | null }>('/table/dice-color'),
   setGmDiceColor: (color: string | null) => request<{ color: string | null }>('/table/dice-color', { method: 'PUT', body: json({ color }) }),
   /** Ends the open session with this name and starts an empty chat. */

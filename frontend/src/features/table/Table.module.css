@@ -459,3 +459,19 @@
 /* The dice color picker next to the 3D dice toggle (E3). */
 .dicePicker { display: inline-flex; align-items: center; }
 .dicePicker input[type='color'] { width: 30px; height: 30px; padding: 0; border: 1px solid var(--line); background: transparent; cursor: pointer; }
+
+/* The table's music (G): a small, visible YouTube player in a corner of the board. */
+.musicBox {
+  position: absolute; right: 10px; bottom: 10px; z-index: 6; width: 240px;
+  background: var(--bg-1); border: 1px solid var(--line); box-shadow: 0 4px 18px rgba(0, 0, 0, 0.5);
+}
+.musicBar { display: flex; align-items: center; gap: 4px; padding: 3px 6px; font-size: 12px; }
+.musicBar input[type='range'] { width: 64px; }
+.musicTitle { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.musicFrame { width: 240px; height: 200px; }
+.musicFrame iframe { width: 100%; height: 100%; display: block; border: 0; }
+.musicUnlock { position: absolute; inset: 28px 0 0 0; display: grid; place-items: center; background: rgba(0, 0, 0, 0.55); }
+.musicPill {
+  position: absolute; right: 10px; bottom: 10px; z-index: 6; display: inline-flex; gap: 6px; align-items: center;
+  padding: 4px 10px; background: var(--bg-1); border: 1px solid var(--line); color: inherit; cursor: pointer; font-size: 12px;
+}
