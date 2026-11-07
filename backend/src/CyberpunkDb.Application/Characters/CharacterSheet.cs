@@ -47,7 +47,7 @@ public sealed record CharacterSheet
     public CharacterSheet Normalize() => this with
     {
         Identity = (Identity ?? new()).Normalize(),
-        Roles = Roles ?? [],
+        Roles = (Roles ?? []).Select(r => r with { Split = new Dictionary<string, int>(r.Split ?? [], StringComparer.OrdinalIgnoreCase) }).ToList(),
         Creation = Creation is null ? new() : Creation with
         {
             StatRolls = new Dictionary<string, int>(Creation.StatRolls ?? [], StringComparer.OrdinalIgnoreCase),
@@ -127,6 +127,11 @@ public sealed record CharacterRole
     public int Rank { get; init; }
     /// <summary>Improvement Points spent on this Role's ranks after creation.</summary>
     public int IpInvested { get; init; }
+    /// <summary>
+    /// How the Role Ability's Rank is divided where the Role does that: the Tech's Maker specialties (CP:R p.147) and the
+    /// Solo's Combat Awareness points (CP:R p.146), by the keys of character-rules.json (<c>ability.split</c>).
+    /// </summary>
+    public Dictionary<string, int> Split { get; init; } = new(StringComparer.OrdinalIgnoreCase);
     public DateTime? AcquiredAt { get; init; }
     public string? Notes { get; init; }
 }

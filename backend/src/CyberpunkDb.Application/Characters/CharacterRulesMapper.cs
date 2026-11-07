@@ -36,7 +36,7 @@ internal static class CharacterRulesMapper
             ],
             r.Lifepath.Questions.Select(q => new LifepathQuestionDto(q.Id, q.Label, q.LabelPt, q.Dice, q.Options, q.ShowIf?.Question, q.ShowIf?.Value)).ToList(),
             r.Lifepath.Source,
-            new RoleAbilityDto(r.Ability.Name, r.Ability.Source, r.Ability.Summary, r.Ability.Points))).ToList();
+            new RoleAbilityDto(r.Ability.Name, r.Ability.Source, r.Ability.Summary, r.Ability.Points, r.Ability.Split))).ToList();
 
         var skills = rules.Skills.Select(s => new SkillDto(s.Id, s.Name, s.Stat, s.Category, s.Combat, s.DoubleCost, s.Specialized, s.Page, s.NamePt)).ToList();
 

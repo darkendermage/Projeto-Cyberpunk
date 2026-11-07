@@ -471,6 +471,9 @@ public sealed class CharacterService(
     public Task<CharacterDetailDto> ImproveRoleAsync(int id, ImproveRoleRequest r, CancellationToken ct) =>
         MutateAsync(id, r.Version, c => progression.ImproveRole(c.Sheet, r, c), ct);
 
+    public Task<CharacterDetailDto> SetRoleSplitAsync(int id, RoleSplitRequest r, CancellationToken ct) =>
+        MutateAsync(id, r.Version, c => progression.SetRoleSplit(c.Sheet, r, c), ct);
+
     public Task<CharacterDetailDto> AddRoleAsync(int id, AddRoleRequest r, CancellationToken ct) =>
         MutateAsync(id, r.Version, c => progression.AddRole(c.Sheet, r, c), ct);
 

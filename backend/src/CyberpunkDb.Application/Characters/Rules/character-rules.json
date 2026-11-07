@@ -173,6 +173,22 @@
           "Precision Attack: 3/6/9 pontos dão +1/+2/+3 nos ataques.",
           "Spot Weakness: +1 por ponto no dano (antes da armadura) do primeiro ataque certeiro da Rodada.",
           "Threat Detection: +1 por ponto em testes de Perception."
+        ],
+        "split": {
+          "source": "CP:R p.146",
+          "keys": [
+            { "id": "damageDeflection", "label": "Damage Deflection", "labelPt": "Damage Deflection" },
+            { "id": "fumbleRecovery", "label": "Fumble Recovery", "labelPt": "Fumble Recovery" },
+            { "id": "initiativeReaction", "label": "Initiative Reaction", "labelPt": "Initiative Reaction" },
+            { "id": "precisionAttack", "label": "Precision Attack", "labelPt": "Precision Attack" },
+            { "id": "spotWeakness", "label": "Spot Weakness", "labelPt": "Spot Weakness" },
+            { "id": "threatDetection", "label": "Threat Detection", "labelPt": "Threat Detection" }
+          ],
+          "max": "rank",
+          "allowed": { "fumbleRecovery": [0, 4] }
+        },
+        "skillBonuses": [
+          { "skills": ["perception"], "from": "split:threatDetection", "label": "Threat Detection", "source": "CP:R p.146" }
         ]
       },
       "statTable": {
@@ -342,6 +358,20 @@
           "Fabrication Expertise: fabrica itens existentes ou inventados, com materiais uma categoria de preço abaixo.",
           "Invention Expertise: inventa itens ou melhorias; você descreve o funcionamento e o Mestre define as regras e a categoria de preço.",
           "DV e tempo pelo preço: Cheap 9 (1 h), Costly 13 (6 h), Premium 17 (1 dia), Expensive 21 (1 semana), Very Expensive 24 (2 semanas), Luxury 29 (1 mês), Super Luxury 29 (1 mês a cada 10.000 eb)."
+        ],
+        "split": {
+          "source": "CP:R p.147",
+          "keys": [
+            { "id": "field", "label": "Field Expertise", "labelPt": "Field Expertise" },
+            { "id": "upgrade", "label": "Upgrade Expertise", "labelPt": "Upgrade Expertise" },
+            { "id": "fabrication", "label": "Fabrication Expertise", "labelPt": "Fabrication Expertise" },
+            { "id": "invention", "label": "Invention Expertise", "labelPt": "Invention Expertise" }
+          ],
+          "max": "2xrank",
+          "perKeyMax": "rank"
+        },
+        "skillBonuses": [
+          { "skills": ["basic-tech", "cybertech", "electronics-security-tech", "weaponstech", "land-vehicle-tech", "air-vehicle-tech", "sea-vehicle-tech"], "from": "split:field", "label": "Field Expertise", "source": "CP:R p.147" }
         ]
       },
       "statTable": {
@@ -861,6 +891,9 @@
           "A cada Rank ganho: um veículo da frota da Família (do seu Rank ou abaixo) ou uma melhoria num veículo que você já usa.",
           "Ranks 1–4: Compact Groundcar, Gyrocopter, Jetski, Roadbike. 5–6: Helicopter, High Performance Groundcar, Speedboat. 7–8: AV-4, Cabin Cruiser, Superbike. 9–10: Aerozep, AV-9, Super Groundcar, Yacht.",
           "Um veículo da Família por vez; se for destruído, a Família conserta em uma semana por 500 eb. No Rank 10 você vira liderança e pode usar todos ao mesmo tempo."
+        ],
+        "skillBonuses": [
+          { "skills": ["drive-land-vehicle", "pilot-air-vehicle", "pilot-sea-vehicle", "land-vehicle-tech", "air-vehicle-tech", "sea-vehicle-tech"], "from": "rank", "label": "Moto", "source": "CP:R p.161" }
         ]
       },
       "statTable": {

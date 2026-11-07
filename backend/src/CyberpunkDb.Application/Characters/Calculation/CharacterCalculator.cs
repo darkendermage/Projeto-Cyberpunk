@@ -392,6 +392,7 @@ public sealed class CharacterCalculator(CharacterRuleBook rules)
             ? rules.RoleSkillLevels(r.Role, home, sheet.Creation.SkillChoices).Keys.ToHashSet(StringComparer.OrdinalIgnoreCase)
             : new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         var roleIds = roleSkills.Select(k => SkillKey.Parse(k).Id).ToHashSet(StringComparer.OrdinalIgnoreCase);
+        var roleBonuses = RoleSkillBonuses(sheet);
 
         var lines = new List<CharacterSkillLine>();
         foreach (var def in rules.Skills)
@@ -417,6 +418,8 @@ public sealed class CharacterCalculator(CharacterRuleBook rules)
                 // Cyberware: an unconditional bonus joins the Base; a situational one ("for Checks which include sight") is only noted.
                 var forSkill = effects.Where(a => a.Effect.Skills.Contains(def.Id, StringComparer.OrdinalIgnoreCase)).ToList();
                 modifierParts.AddRange(forSkill.Where(a => a.Effect.Condition is null).Select(a => new ValuePart(a.Label, a.Bonus)));
+                // Role Abilities that add to Skills (Moto, Field Expertise, Threat Detection).
+                if (roleBonuses.TryGetValue(def.Id, out var fromRoles)) modifierParts.AddRange(fromRoles);
                 var situational = forSkill.Where(a => a.Effect.Condition is not null)
                     .Select(a => $"+{a.Bonus} {a.Effect.Condition} ({a.Label})").ToList();
                 var modifier = modifierParts.Sum(p => p.Value);
@@ -432,7 +435,42 @@ public sealed class CharacterCalculator(CharacterRuleBook rules)
         return lines;
     }
 
-    // ------------------------------------------------------------ roles and injuries
+/// <summary>
+    /// What each Role of the sheet adds to Skills, by skill id: the Rank ("Moto (Rank 4)") or a part of the Rank's split
+    /// ("Field Expertise 2"), as character-rules.json lists under <c>ability.skillBonuses</c>.
+    /// </summary>
+    private Dictionary<string, List<ValuePart>> RoleSkillBonuses(CharacterSheet sheet)
+    {
+        var result = new Dictionary<string, List<ValuePart>>(StringComparer.OrdinalIgnoreCase);
+        foreach (var role in sheet.Roles)
+        {
+            if (rules.FindRole(role.Role)?.Ability is not { } ability) continue;
+            foreach (var bonus in ability.SkillBonuses)
+            {
+                int value;
+                string label;
+                if (bonus.From.StartsWith("split:", StringComparison.OrdinalIgnoreCase))
+                {
+                    value = role.Split.GetValueOrDefault(bonus.From["split:".Length..]);
+                    label = $"{bonus.Label} {value}";
+                }
+                else
+                {
+                    value = role.Rank;
+                    label = $"{bonus.Label} (Rank {role.Rank})";
+                }
+                if (value <= 0) continue;
+                foreach (var skill in bonus.Skills)
+                {
+                    if (!result.TryGetValue(skill, out var parts)) result[skill] = parts = [];
+                    parts.Add(new ValuePart(label, value));
+                }
+            }
+        }
+        return result;
+    }
+
+        // ------------------------------------------------------------ roles and injuries
 
     private List<RoleLine> ComputeRoles(CharacterSheet sheet) =>
         sheet.Roles.Select((r, i) =>

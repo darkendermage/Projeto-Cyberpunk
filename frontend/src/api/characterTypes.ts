@@ -39,6 +39,8 @@ export interface CharacterRole {
   ipInvested: number;
   acquiredAt?: string | null;
   notes?: string | null;
+  /** How the ability's Rank is divided, by the keys of the rules. */
+  split?: Record<string, number>;
 }
 
 export interface CampaignOverrides {
@@ -563,7 +565,19 @@ export interface RoleRules {
 }
 
 /** Role Ability explained for the player, summarized from the book pages in `source`. */
-export interface RoleAbilityInfo { name: string; source: string; summary: string; points: string[] }
+export interface RoleAbilityInfo { name: string; source: string; summary: string; points: string[]; split?: RoleSplitRule | null }
+
+/** How a Role Ability's Rank is divided (Tech specialties, Solo Combat Awareness). */
+export interface RoleSplitRule {
+  source: string;
+  keys: { id: string; label: string; labelPt: string | null }[];
+  /** "rank" or "2xrank": the total to divide. */
+  max: string;
+  /** "rank": no part above the Rank. */
+  perKeyMax: string | null;
+  /** The only values some parts take (Fumble Recovery: 0 or 4). */
+  allowed: Record<string, number[]>;
+}
 
 export interface CreationMethodRules {
   method: CreationMethod;

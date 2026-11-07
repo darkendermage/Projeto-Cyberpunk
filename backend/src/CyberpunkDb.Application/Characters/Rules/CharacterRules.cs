@@ -136,6 +136,36 @@ public sealed record RoleAbilityInfo
     /// <summary>What the ability does, summarized in Portuguese from the pages in <see cref="Source"/>.</summary>
     public string Summary { get; init; } = "";
     public string[] Points { get; init; } = [];
+    /// <summary>How the Rank is divided among the ability's parts (Tech specialties, Solo Combat Awareness); null when it isn't.</summary>
+    public RoleSplitRule? Split { get; init; }
+    /// <summary>Skills the ability adds to, from the Rank or from one part of the split.</summary>
+    public RoleSkillBonus[] SkillBonuses { get; init; } = [];
+}
+
+/// <summary>
+/// A Role Ability whose Rank is divided: <see cref="Max"/> is "rank" or "2xrank" (the total), <see cref="PerKeyMax"/>
+/// "rank" or null, and <see cref="Allowed"/> lists the only values some keys take (Fumble Recovery: 0 or 4).
+/// </summary>
+public sealed record RoleSplitRule
+{
+    public string Source { get; init; } = "";
+    public RoleSplitKey[] Keys { get; init; } = [];
+    public string Max { get; init; } = "rank";
+    public string? PerKeyMax { get; init; }
+    public Dictionary<string, int[]> Allowed { get; init; } = new(StringComparer.OrdinalIgnoreCase);
+
+    public int TotalFor(int rank) => Max == "2xrank" ? rank * 2 : rank;
+}
+
+public sealed record RoleSplitKey(string Id, string Label, string? LabelPt);
+
+/// <summary>Adds to <see cref="Skills"/>: the Rank (<c>from: "rank"</c>) or one part of the split (<c>"split:field"</c>).</summary>
+public sealed record RoleSkillBonus
+{
+    public string[] Skills { get; init; } = [];
+    public string From { get; init; } = "rank";
+    public string Label { get; init; } = "";
+    public string Source { get; init; } = "";
 }
 
 /// <summary>1d10 template table (CP:R p.74–77); each row lists the ten STATs in <c>statOrder</c>.</summary>

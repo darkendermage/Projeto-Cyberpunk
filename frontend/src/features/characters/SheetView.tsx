@@ -10,6 +10,7 @@ import {
 } from './characterLabels';
 import { CyberEffectsPanel, Portrait, RoleAbilityButton, SheetPanel, StateTag } from './CharacterUi';
 import { ArmorPanel, HealthPanel, InjuriesPanel, type Run, WeaponsPanel } from './CombatPanels';
+import { RoleSplitDialog, splitTotal } from './RoleSplitDialog';
 import { ProgressionPanel } from './ProgressionPanel';
 import type { SheetEditor } from './useSheetEditor';
 import styles from './Characters.module.css';
@@ -89,6 +90,7 @@ function IdentityColumn({ detail, rules, editor, run, busy }: { detail: Characte
             </div>
             <span className={styles.small}>
               {t('Habilidade de Role: ', 'Role Ability: ')}<RoleAbilityButton rules={rules} role={x.role} /> <span className={styles.source}>CP:R p.{x.abilityPage}</span>
+              <RoleSplitButton detail={detail} rules={rules} role={x.role} rank={x.rank} run={run} busy={busy} />
             </span>
           </div>
         ))}
@@ -126,6 +128,29 @@ function IdentityColumn({ detail, rules, editor, run, busy }: { detail: Characte
         </div>
       </SheetPanel>
     </div>
+  );
+}
+
+/** "Divide" next to a Role Ability whose Rank is divided (Tech specialties, Solo Combat Awareness), with the current split. */
+function RoleSplitButton({ detail, rules, role, rank, run, busy }: { detail: CharacterDetail; rules: CharacterRules; role: string; rank: number; run: Run; busy: boolean }) {
+  const [open, setOpen] = useState(false);
+  const rule = rules.roles.find((r) => r.id === role)?.abilityInfo.split;
+  if (!rule) return null;
+  const split = detail.sheet.roles.find((r) => r.role === role)?.split ?? {};
+  const used = Object.values(split).reduce((a, b) => a + b, 0);
+  const shown = rule.keys.filter((k) => (split[k.id] ?? 0) > 0).map((k) => `${t(k.labelPt ?? k.label, k.label)} ${split[k.id]}`).join(' · ');
+  return (
+    <>
+      {' · '}
+      <button type="button" className={styles.linkButton} onClick={() => setOpen(true)} title={shown || undefined}>
+        {t(`Distribuir (${used}/${splitTotal(rule, rank)})`, `Divide (${used}/${splitTotal(rule, rank)})`)}
+      </button>
+      {shown && <div className={styles.source}>{shown}</div>}
+      {open && (
+        <RoleSplitDialog open onClose={() => setOpen(false)} role={role} rank={rank} rule={rule} split={split} busy={busy}
+          onSave={async (next) => { if (await run('role-split', { role, split: next }, t('Distribuição salva.', 'Split saved.'))) setOpen(false); }} />
+      )}
+    </>
   );
 }
 

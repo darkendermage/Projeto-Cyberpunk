@@ -66,6 +66,42 @@ public sealed partial class ProgressionOperations(CharacterRuleBook rules)
     }
 
     /// <summary>
+    /// Divides a Role Ability's Rank among its parts: the Tech puts each Rank into two different specialties, at most the
+    /// Rank in each (CP:R p.147); the Solo spreads points equal to the Rank, Fumble Recovery taking 0 or 4 (CP:R p.146).
+    /// </summary>
+    public CharacterSheet SetRoleSplit(CharacterSheet sheet, RoleSplitRequest request, CharacterChange change)
+    {
+        var index = sheet.Roles.FindIndex(r => r.Role.Equals(request.Role, StringComparison.OrdinalIgnoreCase));
+        if (index < 0) throw CharacterChange.Refuse("role", L.T($"O personagem não tem a Role {request.Role}.", $"The character doesn't have the {request.Role} Role."));
+        var role = sheet.Roles[index];
+        var rule = rules.FindRole(role.Role)?.Ability.Split
+                   ?? throw CharacterChange.Refuse("role", L.T($"A habilidade de {role.Role} não se divide.", $"{role.Role}'s ability isn't divided."));
+        var keys = rule.Keys.Select(k => k.Id).ToHashSet(StringComparer.OrdinalIgnoreCase);
+        var split = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+        foreach (var (key, value) in request.Split ?? [])
+        {
+            if (!keys.Contains(key)) throw CharacterChange.Refuse("split", L.T($"Parte desconhecida: {key}.", $"Unknown part: {key}."));
+            if (value < 0) throw CharacterChange.Refuse("split", L.T("Os pontos não podem ser negativos.", "Points can't be negative."));
+            if (rule.PerKeyMax == "rank" && value > role.Rank)
+                throw CharacterChange.Refuse("split", L.T($"{key} vai até o Rank ({role.Rank}) ({rule.Source}).", $"{key} goes up to the Rank ({role.Rank}) ({rule.Source})."));
+            var allowed = rule.Allowed.FirstOrDefault(a => a.Key.Equals(key, StringComparison.OrdinalIgnoreCase)).Value;
+            if (allowed is not null && !allowed.Contains(value))
+                throw CharacterChange.Refuse("split", L.T($"{key} aceita só {string.Join(" ou ", allowed)} ({rule.Source}).", $"{key} only takes {string.Join(" or ", allowed)} ({rule.Source})."));
+            if (value > 0) split[rule.Keys.First(k => k.Id.Equals(key, StringComparison.OrdinalIgnoreCase)).Id] = value;
+        }
+        var total = rule.TotalFor(role.Rank);
+        if (split.Values.Sum() > total)
+            throw CharacterChange.Refuse("split", L.T($"São {total} pontos para dividir no Rank {role.Rank} ({rule.Source}).", $"There are {total} points to divide at Rank {role.Rank} ({rule.Source})."));
+        change.Log(CharacterEventKind.Progression, "role-split", L.T($"{rules.Role(role.Role).Ability.Name}: {Describe(split)}.", $"{rules.Role(role.Role).Ability.Name}: {Describe(split)}."), null, null, null);
+        var roles = sheet.Roles.ToList();
+        roles[index] = role with { Split = split };
+        return sheet with { Roles = roles };
+    }
+
+    private static string Describe(Dictionary<string, int> split) =>
+        split.Count == 0 ? "—" : string.Join(", ", split.Select(kv => $"{kv.Key} {kv.Value}"));
+
+    /// <summary>
     /// Takes up a new Role at Rank 1, bought with IP, once the current Role has at least 4 Ranks (CP:R p.142). The new
     /// Role becomes the current one; earlier Roles keep their Ranks and features.
     /// </summary>

@@ -150,6 +150,9 @@ public enum FireMode { Single, Autofire, Suppressive }
 public sealed record FireRequest(int Version, string InstanceId, FireMode Mode = FireMode.Single, int? Rounds = null);
 
 /// <summary>Reloads from an ammunition entry of the inventory (null = the compatible entry with most rounds).</summary>
+/// <summary>How a Role Ability's Rank is divided (Tech specialties, Solo Combat Awareness), by the keys of the rules.</summary>
+public sealed record RoleSplitRequest(int Version, string Role, Dictionary<string, int> Split);
+
 public sealed record ReloadRequest(int Version, string InstanceId, string? AmmoInstanceId = null);
 
 public sealed record AdjustBalanceRequest(int Version, int Amount, string Reason);
@@ -204,7 +207,7 @@ public sealed record RoleDto(
     RoleAbilityDto AbilityInfo);
 
 /// <summary>Role Ability explained for the player: a summary and the main mechanics, with the pages.</summary>
-public sealed record RoleAbilityDto(string Name, string Source, string Summary, IReadOnlyList<string> Points);
+public sealed record RoleAbilityDto(string Name, string Source, string Summary, IReadOnlyList<string> Points, Rules.RoleSplitRule? Split = null);
 
 public sealed record StartingSectionDto(string Key, string Label, string Source, int? HumanityLoss, IReadOnlyList<StartingGroupDto> Groups);
 
