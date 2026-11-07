@@ -24,6 +24,8 @@ export interface HubHandlers {
   ping?: (ping: Ping) => void;
   /** GM only: seats changed hands (picked at the entrance, entered, left, released). */
   seats?: () => void;
+  /** A character's sheet changed, or a player came or went (characterId null): refresh the party strip. */
+  party?: (change: { characterId: number | null }) => void;
   /** After a reconnection: whatever was missed must be fetched again. */
   resync?: () => void;
 }
@@ -64,6 +66,7 @@ export function useTableHub(seat: string | null, handlers: HubHandlers, enabled 
     on('tokenDrag', 'tokenDrag');
     on('ping', 'ping');
     on('seats', 'seats');
+    on('party', 'party');
     // A connection closed by this effect's cleanup (StrictMode, a new seat) must not touch the next one's status.
     let disposed = false;
     connection.onreconnecting(() => { if (!disposed) setStatus('reconnecting'); });

@@ -328,8 +328,9 @@ public sealed class EncounterService(
         foreach (var sheet in undo.Sheets)
             if ((await characters.SnapshotAsync(sheet.CharacterId, ct)).Version != sheet.Version)
                 throw new ConflictException(L.T("Uma ficha mudou depois do ataque; desfaça à mão.", "A sheet changed after the attack; undo it by hand."));
-        foreach (var sheet in undo.Sheets)
-            await characters.RestoreAsync(sheet.CharacterId, sheet.Version, sheet.SheetJson, L.T("Ataque desfeito na mesa de combate.", "Attack undone on the combat table."), ct);
+        using (Table.CharacterBroadcast.Quiet())
+            foreach (var sheet in undo.Sheets)
+                await characters.RestoreAsync(sheet.CharacterId, sheet.Version, sheet.SheetJson, L.T("Ataque desfeito na mesa de combate.", "Attack undone on the combat table."), ct);
 
         var state = Log(Deserialize(undo.State) with { AttackSeq = current.AttackSeq, Undo = null }, null, "undo", L.T("Último ataque desfeito.", "Last attack undone."));
         Apply(entity, state, DateTime.UtcNow);
@@ -624,16 +625,21 @@ public sealed class EncounterService(
             throw new ConflictException(L.T("Este combate foi alterado em outra janela. Recarregue para ver a versão atual.", "This fight was changed in another window. Reload to see the current version."));
         var notices = new List<string>();
         _lastAttack = null;
-        // The undo of the last attack lasts only until the next change; an attack sets a new one.
-        var state = await operation(Deserialize(entity.StateJson) with { Undo = null }, entity, notices);
-        Apply(entity, state, DateTime.UtcNow);
-        try
+        // Sheets changed by this fight change (ammo, damage) don't broadcast on their own: the fight sends the result below.
+        EncounterState state;
+        using (Table.CharacterBroadcast.Quiet())
         {
-            await db.SaveChangesAsync(ct);
-        }
-        catch (DbUpdateConcurrencyException)
-        {
-            throw new ConflictException(L.T("Este combate foi alterado ao mesmo tempo em outra janela. Recarregue e tente de novo.", "This fight was changed at the same time in another window. Reload and try again."));
+            // The undo of the last attack lasts only until the next change; an attack sets a new one.
+            state = await operation(Deserialize(entity.StateJson) with { Undo = null }, entity, notices);
+            Apply(entity, state, DateTime.UtcNow);
+            try
+            {
+                await db.SaveChangesAsync(ct);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw new ConflictException(L.T("Este combate foi alterado ao mesmo tempo em outra janela. Recarregue e tente de novo.", "This fight was changed at the same time in another window. Reload and try again."));
+            }
         }
         var detail = await DetailAsync(entity, state, _lastAttack, notices, ct);
         await observer.ChangedAsync(detail, ct);

@@ -33,7 +33,8 @@ public sealed class CharacterService(
     EconomyOperations economy,
     CombatOperations combat,
     WearableOperations wearables,
-    NpcCatalogProvider catalogs)
+    NpcCatalogProvider catalogs,
+    ICharacterObserver observer)
 {
     internal static readonly JsonSerializerOptions SheetJson = new(JsonSerializerDefaults.Web)
     {
@@ -140,7 +141,7 @@ public sealed class CharacterService(
         var now = DateTime.UtcNow;
         Apply(entity, Deserialize(sheetJson), await catalogs.GetAsync(ct), now);
         AddEvents(entity, [new PendingEvent(CharacterEventKind.Combat, "undo-attack", description, null, null, null, false)], now);
-        await db.SaveChangesAsync(ct);
+        await db.SaveChangesAsync(ct);    await observer.ChangedAsync(id, ct);
     }
 
     /// <summary>The history, newest first. IP spends on skills and Role Ranks say whether they can still be undone.</summary>
@@ -551,6 +552,7 @@ public sealed class CharacterService(
         }
         entity.UpdatedAt = now;
         await db.SaveChangesAsync(ct);
+        await observer.ChangedAsync(id, ct);
     }
 
     /// <summary>The image rules shared by every stored portrait (characters, saved NPCs, compendium NPCs).</summary>
@@ -568,6 +570,7 @@ public sealed class CharacterService(
         if (p is null) return;
         db.CharacterPortraits.Remove(p);
         await db.SaveChangesAsync(ct);
+        await observer.ChangedAsync(id, ct);
     }
 
     // ------------------------------------------------------------ plumbing
@@ -594,7 +597,9 @@ public sealed class CharacterService(
             throw new ConflictException(L.T("Esta ficha foi alterada ao mesmo tempo em outra janela. Recarregue e tente de novo.", "This sheet was changed at the same time in another window. Reload and try again."));
         }
         var hasPortrait = await db.CharacterPortraits.AnyAsync(p => p.CharacterId == id, ct);
-        return Detail(entity, sheet, catalog, hasPortrait, change.Notices);
+        var detail = Detail(entity, sheet, catalog, hasPortrait, change.Notices);
+        await observer.ChangedAsync(id, ct);
+        return detail;
     }
 
     private void Apply(Character entity, CharacterSheet sheet, NpcCatalog catalog, DateTime now)

@@ -26,6 +26,12 @@ public interface ITableNotifier
 
     /// <summary>Seats changed hands (picked at the entrance, entered, released): the GM's invites refresh.</summary>
     Task SeatsAsync(CancellationToken ct);
+
+    /// <summary>
+    /// A character's sheet changed, or a player came or went (<paramref name="characterId"/> null): every screen
+    /// refreshes the party strip, and the owner their own sheet.
+    /// </summary>
+    Task PartyAsync(int? characterId, CancellationToken ct);
 }
 
 /// <summary>For hosts without live screens (and tests that don't care).</summary>
@@ -37,4 +43,5 @@ public sealed class NullTableNotifier : ITableNotifier
     public Task EncounterRemovedAsync(int id, IReadOnlyDictionary<int, PlayerEncounterDto?>? seats, CancellationToken ct) => Task.CompletedTask;
     public Task MessageAsync(TableMessageDto gm, IReadOnlyDictionary<int, TableMessageDto> seats, CancellationToken ct) => Task.CompletedTask;
     public Task SeatsAsync(CancellationToken ct) => Task.CompletedTask;
+    public Task PartyAsync(int? characterId, CancellationToken ct) => Task.CompletedTask;
 }

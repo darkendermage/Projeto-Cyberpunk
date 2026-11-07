@@ -16,7 +16,7 @@ public sealed record PartyMemberDto(
 /// The characters on a scene (the players see each other's numbers; NPCs stay with the fight's Wound State), and a
 /// player's own armor adjusted from the table.
 /// </summary>
-public sealed class TablePartyService(SceneService scenes, CharacterService characters, EncounterService encounters, IEncounterObserver observer)
+public sealed class TablePartyService(SceneService scenes, CharacterService characters)
 {
     /// <summary>The PCs whose token the seat sees on the live scene.</summary>
     public async Task<IReadOnlyList<PartyMemberDto>> ForSeatAsync(TableSeat seat, CancellationToken ct) =>
@@ -26,22 +26,13 @@ public sealed class TablePartyService(SceneService scenes, CharacterService char
     public async Task<IReadOnlyList<PartyMemberDto>> ForSceneAsync(int sceneId, CancellationToken ct) =>
         await MembersAsync((await scenes.GetAsync(sceneId, ct)).Tokens, ct);
 
-    /// <summary>The seat's own armor up or down; the fight on the players' screens follows when the PC is in it.</summary>
+    /// <summary>The seat's own armor up or down; the fight and the party follow through the sheet's broadcast.</summary>
     public async Task<PlayerCharacterDto> AdjustOwnArmorAsync(TableSeat seat, ArmorAdjustRequest r, CancellationToken ct)
     {
         if (seat.CharacterId is not { } id)
             throw RequestValidationException.For("location", L.T("Este convite não tem personagem.", "This invite has no character."));
+        // The sheet's own broadcast (CharacterBroadcast) refreshes the fight and the party.
         var detail = await characters.AdjustArmorAsync(id, r.Location, r.Delta, L.T("Mesa virtual", "Virtual table"), ct);
-        var (encounterId, _) = await scenes.ActiveAsync(ct);
-        if (encounterId is { } fight)
-        {
-            try
-            {
-                var current = await encounters.GetAsync(fight, ct);
-                if (current.Queue.Any(f => f.CharacterId == id)) await observer.ChangedAsync(current, ct);
-            }
-            catch (NotFoundException) { /* the fight is gone: nothing to refresh */ }
-        }
         return PlayerCharacters.From(detail);
     }
 

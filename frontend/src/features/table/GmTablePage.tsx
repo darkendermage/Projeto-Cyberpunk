@@ -125,6 +125,7 @@ export function GmTablePage() {
       void client.invalidateQueries({ queryKey: tableKeys.seats });
       void client.invalidateQueries({ queryKey: tableKeys.online });
     },
+    party: () => void client.invalidateQueries({ queryKey: ['table', 'party'] }),
     resync: () => void client.invalidateQueries({ queryKey: ['table'] }),
   });
 

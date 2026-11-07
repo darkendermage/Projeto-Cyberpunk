@@ -110,6 +110,14 @@ export function PlayerTablePage() {
     },
     tokenDrag: (d) => { if (d.sceneId === shownRef.current) board.current?.showDrag(d.tokenId, d.x, d.y); },
     ping: (p) => { if (p.sceneId === shownRef.current) board.current?.showPing(p); },
+    party: ({ characterId }) => {
+      void client.invalidateQueries({ queryKey: tableKeys.playerParty(token) });
+      // The player's own sheet changed elsewhere (the GM's app, the popup): their panels follow.
+      if (characterId != null && characterId === client.getQueryData<PlayerState>(tableKeys.player(token))?.seat?.characterId) {
+        void client.invalidateQueries({ queryKey: tableKeys.playerCharacter(token) });
+        void client.invalidateQueries({ queryKey: tableKeys.playerSheet(token) });
+      }
+    },
     resync: () => void client.invalidateQueries({ queryKey: tableKeys.player(token) }),
   }, state.isSuccess);
 
