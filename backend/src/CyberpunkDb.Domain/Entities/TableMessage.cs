@@ -17,4 +17,6 @@ public class TableMessage
     public string Text { get; set; } = string.Empty;
     /// <summary>The roll, term by term, for roll messages; the attack for attack messages.</summary>
     public string? RollJson { get; set; }
+    /// <summary>The session the line belongs to; null only for lines written before sessions existed (adopted by the first one).</summary>
+    public int? SessionId { get; set; }
 }

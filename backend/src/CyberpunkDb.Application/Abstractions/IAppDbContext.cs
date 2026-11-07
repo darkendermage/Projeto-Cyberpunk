@@ -23,6 +23,8 @@ public interface IAppDbContext
     DbSet<Scene> Scenes { get; }
     DbSet<TableSeat> TableSeats { get; }
     DbSet<TableMessage> TableMessages { get; }
+    DbSet<TableSession> TableSessions { get; }
+    DbSet<TableSetting> TableSettings { get; }
     DbSet<MediaAsset> MediaAssets { get; }
 
     DbSet<TEntity> Set<TEntity>() where TEntity : class;

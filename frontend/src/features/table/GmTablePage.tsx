@@ -5,7 +5,7 @@ import { encounterKeys, useEncounter, useEncounterCommand } from '../../api/enco
 import type { EncounterDetail, InjuryLocation } from '../../api/encounterTypes';
 import { tableApi, tableKeys } from '../../api/table';
 import type { SceneGrid, SceneView, TableMessage } from '../../api/tableTypes';
-import { Dices, Trash2, Volume2, VolumeX } from 'lucide-react';
+import { Dices, Trash2, Volume2, VolumeX, History } from 'lucide-react';
 import { Button, EmptyState, ErrorState, IconButton, Select, Spinner } from '../../components/ui/ui';
 import { useToast } from '../../state/ToastContext';
 import { lang, t } from '../../i18n';
@@ -21,6 +21,7 @@ import { PanelHandle } from './PanelHandle';
 import { RulesDialog } from './RulesDialog';
 import { AimBar, SceneStrip } from './SceneStrip';
 import { PendingCard } from './PendingCard';
+import { SessionsDialog } from './SessionsDialog';
 import { buildStrip } from './strip';
 import { attackSummary, fighterIdOf, startAim } from './aim';
 import { useQuickAttack } from './useQuickAttack';
@@ -73,6 +74,7 @@ export function GmTablePage() {
   const [gridDraft, setGridDraft] = useState<{ key: string; grid: SceneGrid } | null>(null);
   const [selection, setSelection] = useState<Selection>(NO_SELECTION);
   const [tablesOpen, setTablesOpen] = useState(false);
+  const [sessionsOpen, setSessionsOpen] = useState(false);
   const selectedToken = selection.tokens.length === 1 && selection.templates.length === 0 ? selection.tokens[0] : null;
   const selectedTemplate = selection.templates.length === 1 && selection.tokens.length === 0 ? selection.templates[0] : null;
   const selectToken = (id: string | null) => setSelection(id ? { tokens: [id], templates: [] } : NO_SELECTION);
@@ -333,14 +335,12 @@ export function GmTablePage() {
             onRoll={(formula, kind, visibility, targetSeatId) => tableApi.roll({ formula, kind, visibility, targetSeatId })}
             renderActions={applyDamage} />
         )}
-        {tab === 'chat' && (messages.data?.length ?? 0) > 0 && (
-          <Button variant="ghost" onClick={() => {
-            if (window.confirm(t('Apagar o histórico do chat para começar uma sessão nova?', 'Clear the chat history to start a new session?')))
-              void tableApi.clearMessages().then(() => client.setQueryData(tableKeys.messages, []), (e) => toast.notify(problemMessage(e), 'error'));
-          }}>{t('Limpar histórico', 'Clear history')}</Button>
+        {tab === 'chat' && (
+          <Button variant="ghost" icon={<History size={15} />} onClick={() => setSessionsOpen(true)}>{t('Sessões (nova sessão, anteriores)', 'Sessions (new, previous)')}</Button>
         )}
       </aside>
       <RulesDialog open={tablesOpen} onClose={() => setTablesOpen(false)} load={tableApi.rules} />
+      <SessionsDialog open={sessionsOpen} onClose={() => setSessionsOpen(false)} />
     </div>
   );
 }

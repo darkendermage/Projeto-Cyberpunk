@@ -2,7 +2,7 @@ import { API_BASE, ApiError, request } from './client';
 import { locale, t } from '../i18n';
 import type {
   ArmorLocation, ClaimResult, Lobby, MediaInfo, PartyMember, PlayerCharacter, PlayerSheet, PlayerEncounter, PlayerSeat, PlayerState, RollRequest, SceneBatch, SceneGrid, SceneSummary, SceneView, Seat,
-  SendMessage, TableMessage, TableRules, TemplateInput, QuickAttack, BarrierRequest, TokenInput, TokenMove, TunnelStatus, QuickAttackResult,
+  SendMessage, TableMessage, TableRules, TemplateInput, QuickAttack, BarrierRequest, TokenInput, TokenMove, TunnelStatus, QuickAttackResult, TableSession,
 } from './tableTypes';
 
 const json = (body: unknown) => JSON.stringify(body);
@@ -56,7 +56,12 @@ export const tableApi = {
   messages: () => request<TableMessage[]>('/table/messages'),
   send: (body: SendMessage) => request<TableMessage>('/table/messages', { method: 'POST', body: json(body) }),
   roll: (body: RollRequest) => request<TableMessage>('/table/rolls', { method: 'POST', body: json(body) }),
-  clearMessages: () => request<void>('/table/messages', { method: 'DELETE' }),
+  sessions: () => request<TableSession[]>('/table/sessions'),
+  /** Ends the open session with this name and starts an empty chat. */
+  newSession: (body: { name: string | null }) => request<TableSession>('/table/sessions', { method: 'POST', body: json(body) }),
+  sessionMessages: (id: number) => request<TableMessage[]>(`/table/sessions/${id}/messages`),
+  renameSession: (id: number, body: { name: string }) => request<TableSession>(`/table/sessions/${id}`, { method: 'PUT', body: json(body) }),
+  deleteSession: (id: number) => request<void>(`/table/sessions/${id}`, { method: 'DELETE' }),
 
   tunnel: () => request<TunnelStatus>('/table/tunnel'),
   startTunnel: () => request<TunnelStatus>('/table/tunnel/start', { method: 'POST' }),
@@ -135,6 +140,7 @@ export function playerApi(seat: string) {
 export type PlayerApi = ReturnType<typeof playerApi>;
 
 export const tableKeys = {
+  sessions: ['table', 'sessions'] as const,
   scenes: ['table', 'scenes'] as const,
   scene: (id: number) => ['table', 'scene', id] as const,
   seats: ['table', 'seats'] as const,

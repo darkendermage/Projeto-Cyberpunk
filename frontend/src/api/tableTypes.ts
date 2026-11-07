@@ -285,6 +285,12 @@ export interface RollResult {
   rerollOf?: number | null;
 }
 
+/** A session of the table (its chat and the fights used in it). */
+export interface TableSession {
+  id: number; name: string; startedAt: string; endedAt: string | null; open: boolean; messages: number;
+  fights: { id: number; name: string; status: string }[];
+}
+
 export interface TableMessage {
   id: number;
   at: string;

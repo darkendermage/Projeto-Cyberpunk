@@ -247,6 +247,7 @@ internal static class CatalogModelConfiguration
             e.Property(x => x.StateJson).IsRequired();
             if (isPostgres) e.Property(x => x.StateJson).HasColumnType("jsonb");
             e.HasIndex(x => x.UpdatedAt);
+            e.HasIndex(x => x.SessionId);
         });
 
         b.Entity<Encounter>(e =>
@@ -285,6 +286,23 @@ internal static class CatalogModelConfiguration
             e.Property(x => x.Text).HasMaxLength(2000).IsRequired();
             if (isPostgres) e.Property(x => x.RollJson).HasColumnType("jsonb");
             e.HasIndex(x => x.At);
+            e.HasIndex(x => x.SessionId);
+            e.HasOne<TableSession>().WithMany().HasForeignKey(x => x.SessionId).OnDelete(DeleteBehavior.Cascade);
+        });
+
+        b.Entity<TableSession>(e =>
+        {
+            e.ToTable("TableSessions");
+            e.Property(x => x.Name).HasMaxLength(80).IsRequired();
+            e.HasIndex(x => x.EndedAt);
+        });
+
+        b.Entity<TableSetting>(e =>
+        {
+            e.ToTable("TableSettings");
+            e.HasKey(x => x.Key);
+            e.Property(x => x.Key).HasMaxLength(60);
+            e.Property(x => x.Value).HasMaxLength(8000).IsRequired();
         });
 
         b.Entity<MediaAsset>(e =>

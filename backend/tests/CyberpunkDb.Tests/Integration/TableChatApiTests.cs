@@ -115,7 +115,7 @@ public class TableChatApiTests(ApiFactory factory)
     }
 
     [Fact]
-    public async Task Bad_input_is_refused_and_the_gm_can_clear_the_session()
+    public async Task Bad_input_is_refused_and_a_new_session_starts_an_empty_chat()
     {
         var a = await NewSeat("Golf");
         await Send<object>(_player, HttpMethod.Post, "/api/table/play/rolls", new RollRequest("1d10+abc"), a.Token, HttpStatusCode.BadRequest);
@@ -124,7 +124,8 @@ public class TableChatApiTests(ApiFactory factory)
         await Send<object>(_player, HttpMethod.Post, "/api/table/play/messages", new SendMessageRequest("oi"), null, HttpStatusCode.Unauthorized);
 
         await Send<TableMessageDto>(_gm, HttpMethod.Post, "/api/table/rolls", new RollRequest("3d6", RollKind.Damage, "Dano"));
-        await Send<object>(_gm, HttpMethod.Delete, "/api/table/messages", expected: HttpStatusCode.NoContent);
+        // A new session starts an empty chat (round 4: the old one is archived, not deleted).
+        await Send<TableSessionDto>(_gm, HttpMethod.Post, "/api/table/sessions", new NewSessionRequest(null));
         (await History(null)).Should().BeEmpty();
     }
 }

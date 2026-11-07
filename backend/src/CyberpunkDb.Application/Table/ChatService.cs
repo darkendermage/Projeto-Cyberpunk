@@ -29,16 +29,26 @@ public sealed record TableMessageDto(
 /// and for the live push: Public reaches everyone, Private the author and the GM, Secret only the GM (its author sees a
 /// concealed line), Whisper the author, its target and the GM.
 /// </summary>
-public sealed class ChatService(IAppDbContext db, ITableNotifier notifier, IDiceRoller dice, CharacterService characters)
+public sealed class ChatService(IAppDbContext db, ITableNotifier notifier, IDiceRoller dice, CharacterService characters, TableSessionService sessions)
 {
     public const int HistorySize = 300;
     public const string GmName = "GM";
 
     public async Task<IReadOnlyList<TableMessageDto>> HistoryAsync(TableSeat? viewer, CancellationToken ct)
     {
-        var rows = await db.TableMessages.AsNoTracking().OrderByDescending(m => m.Id).Take(HistorySize).ToListAsync(ct);
+        // The open session's lines only; older sessions are read from the GM's session list.
+        var session = await sessions.CurrentIdAsync(ct);
+        var rows = await db.TableMessages.AsNoTracking().Where(m => m.SessionId == session).OrderByDescending(m => m.Id).Take(HistorySize).ToListAsync(ct);
         var colors = await ColorsAsync(ct);
         return rows.AsEnumerable().Reverse().Select(m => View(m, viewer, colors)).OfType<TableMessageDto>().ToList();
+    }
+
+    /// <summary>An archived session's lines, as the GM sees them (every roll and attack, whispers included).</summary>
+    public async Task<IReadOnlyList<TableMessageDto>> SessionHistoryAsync(int sessionId, CancellationToken ct)
+    {
+        var rows = await db.TableMessages.AsNoTracking().Where(m => m.SessionId == sessionId).OrderBy(m => m.Id).ToListAsync(ct);
+        var colors = await ColorsAsync(ct);
+        return rows.Select(m => View(m, null, colors)).OfType<TableMessageDto>().ToList();
     }
 
     public async Task<TableMessageDto> SendAsync(TableSeat? author, SendMessageRequest r, CancellationToken ct)
@@ -111,8 +121,6 @@ public sealed class ChatService(IAppDbContext db, ITableNotifier notifier, IDice
         }
     }
 
-    /// <summary>Starts a new session's history.</summary>
-    public async Task ClearAsync(CancellationToken ct) => await db.TableMessages.ExecuteDeleteAsync(ct);
 
     private Task<TableMessageDto> PostAsync(TableSeat? author, TableMessageKind kind, string text, RollResult? roll,
         TableVisibility visibility, int? target, CancellationToken ct) =>
@@ -131,7 +139,7 @@ public sealed class ChatService(IAppDbContext db, ITableNotifier notifier, IDice
         var message = new TableMessage
         {
             At = DateTime.UtcNow, AuthorSeatId = authorId, AuthorName = authorName.Length <= 60 ? authorName : authorName[..60], Kind = kind,
-            Visibility = visibility, TargetSeatId = target, Text = text, RollJson = payload,
+            Visibility = visibility, TargetSeatId = target, Text = text, RollJson = payload, SessionId = await sessions.CurrentIdAsync(ct),
         };
         db.TableMessages.Add(message);
         await db.SaveChangesAsync(ct);

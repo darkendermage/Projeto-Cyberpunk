@@ -12,7 +12,7 @@ namespace CyberpunkDb.Api.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/table")]
-public sealed class TableController(SeatService seats, MediaService media, SceneService scenes, TableFightService fights, TableAttackService attacks, TablePartyService party, TableRulesService rules, ChatService chat, TablePresence presence, TunnelService tunnel) : ControllerBase
+public sealed class TableController(SeatService seats, MediaService media, SceneService scenes, TableFightService fights, TableAttackService attacks, TablePartyService party, TableRulesService rules, ChatService chat, TablePresence presence, TunnelService tunnel, TableSessionService sessions) : ControllerBase
 {
     // ------------------------------------------------------------------ internet tunnel
 
@@ -39,10 +39,25 @@ public sealed class TableController(SeatService seats, MediaService media, Scene
     [HttpPost("rolls")]
     public Task<TableMessageDto> Roll(RollRequest request, CancellationToken ct) => chat.RollAsync(null, request, ct);
 
-    [HttpDelete("messages")]
-    public async Task<IActionResult> ClearMessages(CancellationToken ct)
+    // ------------------------------------------------------------------ sessions
+
+    [HttpGet("sessions")]
+    public Task<IReadOnlyList<TableSessionDto>> Sessions(CancellationToken ct) => sessions.ListAsync(ct);
+
+    /// <summary>"New session": the open one closes with the name given and an empty chat starts.</summary>
+    [HttpPost("sessions")]
+    public Task<TableSessionDto> NewSession(NewSessionRequest request, CancellationToken ct) => sessions.StartNewAsync(request, ct);
+
+    [HttpGet("sessions/{id:int}/messages")]
+    public Task<IReadOnlyList<TableMessageDto>> SessionMessages(int id, CancellationToken ct) => chat.SessionHistoryAsync(id, ct);
+
+    [HttpPut("sessions/{id:int}")]
+    public Task<TableSessionDto> RenameSession(int id, RenameSessionRequest request, CancellationToken ct) => sessions.RenameAsync(id, request, ct);
+
+    [HttpDelete("sessions/{id:int}")]
+    public async Task<IActionResult> DeleteSession(int id, CancellationToken ct)
     {
-        await chat.ClearAsync(ct);
+        await sessions.DeleteAsync(id, ct);
         return NoContent();
     }
 

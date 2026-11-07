@@ -16,7 +16,7 @@ namespace CyberpunkDb.Application.Table;
 /// Settings edits (map, grid, linked fight) carry the scene version; token and template changes are last-write-wins,
 /// serialized per scene.
 /// </summary>
-public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotifier notifier, NpcCompendium compendium)
+public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotifier notifier, NpcCompendium compendium, TableSessionService sessions)
 {
     internal static readonly JsonSerializerOptions Json = new(JsonSerializerDefaults.Web) { Converters = { new JsonStringEnumConverter() } };
 
@@ -68,6 +68,8 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
             if (r.EncounterId is { } encounterId && encounterId != scene.EncounterId && !await db.Encounters.AnyAsync(e => e.Id == encounterId, ct))
                 throw RequestValidationException.For("encounterId", L.T("Combate não encontrado.", "Fight not found."));
             scene.EncounterId = r.EncounterId;
+            // A fight linked on the table belongs to the open session (E2).
+            if (r.EncounterId is { } linked) await sessions.StampFightAsync(linked, ct);
             if (r.BackgroundMediaId is { } media) await RequireMediaAsync(media, "backgroundMediaId", ct);
             if (r.BackgroundWidth is < 0 or > 20000 || r.BackgroundHeight is < 0 or > 20000)
                 throw RequestValidationException.For("backgroundWidth", L.T("Tamanho de mapa inválido.", "Invalid map size."));
@@ -188,10 +190,11 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
 
     /// <summary>Links the scene to a fight and its tokens to the fight's combatants (token id → combatant id).</summary>
     public Task<SceneView> LinkFightAsync(int id, int encounterId, IReadOnlyDictionary<string, string> combatants, CancellationToken ct) =>
-        MutateAsync(id, null, (scene, state) =>
+        MutateAsync(id, null, async (scene, state) =>
         {
             scene.EncounterId = encounterId;
-            return Task.FromResult(state with { Tokens = state.Tokens.Select(t => combatants.TryGetValue(t.Id, out var c) ? t with { CombatantId = c } : t).ToList() });
+            await sessions.StampFightAsync(encounterId, ct);
+            return state with { Tokens = state.Tokens.Select(t => combatants.TryGetValue(t.Id, out var c) ? t with { CombatantId = c } : t).ToList() };
         }, bumpVersion: true, ct);
 
     public Task<SceneView> AddTemplateAsync(int id, TemplateInput input, CancellationToken ct) =>

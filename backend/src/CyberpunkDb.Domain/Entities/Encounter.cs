@@ -18,4 +18,6 @@ public class Encounter
     public string StateJson { get; set; } = "{}";
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
+    /// <summary>The table session in which the fight was started or linked to a scene (null: never used on the table).</summary>
+    public int? SessionId { get; set; }
 }
