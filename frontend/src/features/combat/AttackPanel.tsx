@@ -51,6 +51,8 @@ export function AttackPanel({ detail, rules, attacker, busy, run, preset }: {
     damageDice: parseDice(damageText),
     thrownDamage: thrown ? thrownDamage || null : null,
     ignoreCover,
+    // Without "dodge" checked, a target with REF 8+ is asked, and two 6s wait for the Critical Injury roll (round 4).
+    interactive: !dodge,
   });
 
   return (

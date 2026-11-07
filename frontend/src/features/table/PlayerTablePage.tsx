@@ -22,6 +22,7 @@ import { LangSwitch } from './LangSwitch';
 import { PanelHandle } from './PanelHandle';
 import { RulesDialog } from './RulesDialog';
 import { AimBar, SceneStrip } from './SceneStrip';
+import { PendingCard } from './PendingCard';
 import { buildStrip } from './strip';
 import { attackSummary, fighterIdOf, startAim } from './aim';
 import { useQuickAttack } from './useQuickAttack';
@@ -76,6 +77,7 @@ export function PlayerTablePage() {
   const party = useQuery({ queryKey: tableKeys.playerParty(token), queryFn: api.party, enabled: state.isSuccess });
   const [armorBusy, setArmorBusy] = useState(false);
   const [turnBusy, setTurnBusy] = useState(false);
+  const [pendingBusy, setPendingBusy] = useState(false);
 
   const setScene = (scene: SceneView | null) => {
     const before = client.getQueryData<PlayerState>(tableKeys.player(token));
@@ -131,7 +133,9 @@ export function PlayerTablePage() {
   const own = queue.find((f) => f.own) ?? null;
   const quick = useQuickAttack(
     (aim, targetId) => api.attack({ weapon: aim.weapon.key, mode: aim.mode, targetIds: [targetId] }),
-    (attack) => toast.notify(attackSummary(attack)),
+    (result) => toast.notify(result.attack ? attackSummary(result.attack)
+      : result.pending?.step === 'Defense' ? t(`${result.pending.targetName} decide se esquiva…`, `${result.pending.targetName} chooses whether to dodge…`)
+      : t('Dois 6! Falta rolar a Critical Injury.', 'Two 6s! The Critical Injury roll is next.')),
     (e) => toast.notify(problemMessage(e), 'error'));
 
   // While aiming, the board lights up the shooter and the target.
@@ -204,6 +208,12 @@ export function PlayerTablePage() {
   };
   useBoardKeys({ onDelete: removeSelection, onSelectAll: selectAll, onClear: () => (quick.aim ? quick.cancel() : setSelection(NO_SELECTION)) });
 
+  // A pending attack's step answered by this seat (its dodge, its Critical Injury roll): the fight comes back.
+  const answerPending = (step: () => Promise<PlayerEncounter>) => {
+    setPendingBusy(true);
+    void run(async () => { client.setQueryData(tableKeys.playerEncounter(token), await step()); }).finally(() => setPendingBusy(false));
+  };
+
   // A reload: the fight (in one) or the character's weapons (out of one) come back from the server.
   const reloadWeapon = (weapon: string) => void run(async () => {
     const result = await api.reload(weapon);
@@ -275,6 +285,11 @@ export function PlayerTablePage() {
             )}
             {scene && <span className={styles.hint}>{TOOL_HINT[tool]}</span>}
           </div>
+          {scene && encounter.data?.pending && (
+            <PendingCard pending={encounter.data.pending} mine={encounter.data.pendingMine ?? false} gm={false} busy={pendingBusy}
+              onDodge={(dodge) => answerPending(() => api.defense(dodge))}
+              onCritical={() => answerPending(() => api.critical())} />
+          )}
           {scene && quick.aim && (
             <AimBar aim={quick.aim} busy={quick.busy} targetName={queue.find((f) => f.id === quick.aim!.targetId)?.name ?? null}
               onMode={quick.mode} onFire={() => void quick.shoot()} onCancel={quick.cancel} />
@@ -316,7 +331,7 @@ export function PlayerTablePage() {
           )}
           {tab === 'sheet' && (sheet.isLoading ? <Spinner /> : <PlayerSheetPanel sheet={sheet.data ?? null} />)}
           {tab === 'initiative' && (
-            <InitiativePanel encounter={encounter.data ?? null} busy={turnBusy}
+            <InitiativePanel encounter={encounter.data ?? null} busy={turnBusy || !!encounter.data?.pending}
               onEndTurn={() => {
                 setTurnBusy(true);
                 void run(async () => { client.setQueryData(tableKeys.playerEncounter(token), await api.endTurn()); }).finally(() => setTurnBusy(false));

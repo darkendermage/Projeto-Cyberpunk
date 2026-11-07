@@ -20,6 +20,7 @@ import { damageCommand, fromGmFighter } from './tokens';
 import { PanelHandle } from './PanelHandle';
 import { RulesDialog } from './RulesDialog';
 import { AimBar, SceneStrip } from './SceneStrip';
+import { PendingCard } from './PendingCard';
 import { buildStrip } from './strip';
 import { attackSummary, fighterIdOf, startAim } from './aim';
 import { useQuickAttack } from './useQuickAttack';
@@ -139,7 +140,9 @@ export function GmTablePage() {
   const queue = useMemo(() => (encounter.data?.status === 'Active' ? encounter.data.queue : []), [encounter.data]);
   const quick = useQuickAttack(
     (aim, targetId) => tableApi.attack(view!.id, { attackerId: aim.attackerId, weapon: aim.weapon.key, mode: aim.mode, targetIds: [targetId] }),
-    (attack) => toast.notify(attackSummary(attack)),
+    (result) => toast.notify(result.attack ? attackSummary(result.attack)
+      : result.pending?.step === 'Defense' ? t(`${result.pending.targetName} decide se esquiva…`, `${result.pending.targetName} chooses whether to dodge…`)
+      : t('Dois 6! Falta rolar a Critical Injury.', 'Two 6s! The Critical Injury roll is next.')),
     (e) => toast.notify(problemMessage(e), 'error'));
   const tokenFighter = (tokenId: string) => {
     const tk = view?.tokens.find((x) => x.id === tokenId);
@@ -265,6 +268,12 @@ export function GmTablePage() {
           {view && <DiceTray ref={dice} sound={prefs.sound} />}
           {view && <span className={styles.hint}>{TOOL_HINT[tool]}</span>}
         </div>
+        {view && encounter.data?.pending && (
+          <PendingCard pending={encounter.data.pending} mine={false} gm busy={command.isPending}
+            onDodge={(dodge) => command.mutate({ path: 'pending/defense', body: { targetId: encounter.data!.pending!.targetId, dodge } }, { onError: (e) => toast.notify(problemMessage(e), 'error') })}
+            onCritical={() => command.mutate({ path: 'pending/critical', body: { targetId: encounter.data!.pending!.targetId } }, { onError: (e) => toast.notify(problemMessage(e), 'error') })}
+            onCancel={() => command.mutate({ path: 'pending/cancel' }, { onSuccess: () => toast.notify(t('Ataque cancelado.', 'Attack cancelled.')), onError: (e) => toast.notify(problemMessage(e), 'error') })} />
+        )}
         {view && quick.aim && (
           <AimBar aim={quick.aim} busy={quick.busy} targetName={queue.find((f) => f.id === quick.aim!.targetId)?.name ?? null}
             onMode={quick.mode} onFire={() => void quick.shoot()} onCancel={quick.cancel} />

@@ -148,6 +148,27 @@ export interface EncounterDetail {
   notices: string[];
   /** Set on the answer of an undo: the attack number taken back. */
   undoneAttack?: number | null;
+  /** An attack waiting on the target's dodge or the attacker's Critical Injury roll. */
+  pending?: PendingView | null;
+}
+
+export type PendingStep = 'Defense' | 'CriticalInjury';
+
+/** A pending attack (no attack total: the target decides without it). */
+export interface PendingView {
+  seq: number;
+  attackerId: string;
+  attackerName: string;
+  weapon: string;
+  targetId: string;
+  targetName: string;
+  step: PendingStep;
+  /** The range DV the target faces if they don't dodge. */
+  rangeDv: number | null;
+  /** The target's Evasion (DEX + skill) if they dodge. */
+  evasion: number | null;
+  attackerCharacterId: number | null;
+  targetCharacterId: number | null;
 }
 
 export interface EncounterSummary {

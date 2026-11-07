@@ -17,6 +17,7 @@ import { AddCombatantsDialog } from './AddCombatantsDialog';
 import { AttackPanel, AttackResultView } from './AttackPanel';
 import { CONDITIONS, hpPercent, WOUND_LABEL, WOUND_TONE } from './combat';
 import { FighterSheet } from './FighterSheet';
+import { PendingCard } from '../table/PendingCard';
 import styles from './Combat.module.css';
 import { t, tv } from '../../i18n';
 
@@ -67,7 +68,7 @@ function Table({ detail, rules }: { detail: EncounterDetail; rules: EncounterRul
   const run: Run = (path, body = {}, done, method) =>
     command.mutate({ path, body, method }, {
       onSuccess: (d) => {
-        if (path === 'attack' || path === 'undo-attack') setPick(null);
+        if (path === 'attack' || path === 'undo-attack' || path.startsWith('pending/')) setPick(null);
         if (done) toast.notify(done);
         d.notices.forEach((n) => toast.notify(n, 'info'));
       },
@@ -159,6 +160,12 @@ function Table({ detail, rules }: { detail: EncounterDetail; rules: EncounterRul
         <div className={styles.layout}>
           <section className={styles.panel} aria-label={t('Fila de iniciativa', 'Initiative Queue')}>
             <h2 className={styles.panelTitle}>{t('Fila de iniciativa', 'Initiative Queue')}</h2>
+            {detail.pending && (
+              <PendingCard pending={detail.pending} mine={false} gm busy={command.isPending}
+                onDodge={(dodge) => run('pending/defense', { targetId: detail.pending!.targetId, dodge })}
+                onCritical={() => run('pending/critical', { targetId: detail.pending!.targetId })}
+                onCancel={() => run('pending/cancel', {}, t('Ataque cancelado.', 'Attack cancelled.'))} />
+            )}
             <ol className={styles.queue}>
               {detail.queue.map((f, i) => (
                 <li key={f.id} draggable={canMove}

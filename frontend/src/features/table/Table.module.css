@@ -436,3 +436,16 @@
 }
 .stripName .dot { display: inline-block; margin-right: 5px; vertical-align: middle; }
 .weaponChipGroup { display: inline-flex; gap: 2px; }
+
+/* A pending attack: the decision it waits on (dodge, Critical Injury). */
+.pendingCard {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 12px;
+  margin: 6px 0;
+  background: var(--bg-2);
+  border: 1px solid var(--amber);
+  border-left: 4px solid var(--amber);
+}
+.pendingMine { border-color: var(--red); border-left-color: var(--red); box-shadow: 0 0 14px rgba(255, 42, 61, 0.35); }

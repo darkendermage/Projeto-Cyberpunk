@@ -1,6 +1,6 @@
 import type { PortraitFocus } from '../lib/portraitFocus';
 /** Types of /api/table and /api/table/play (Application/Table). */
-import type { AttackMode, CombatantKind, CombatSide, WeaponView, WoundState } from './encounterTypes';
+import type { AttackMode, CombatantKind, CombatSide, PendingView, WeaponView, WoundState } from './encounterTypes';
 
 export type GridType = 'Square' | 'None';
 export type TokenVisibility = 'All' | 'Gm' | 'Seats';
@@ -196,7 +196,12 @@ export interface PlayerFighter {
   weapons: WeaponView[] | null;
 }
 
-export interface PlayerEncounter { id: number; name: string; round: number; activeId: string | null; queue: PlayerFighter[] }
+export interface PlayerEncounter {
+  id: number; name: string; round: number; activeId: string | null; queue: PlayerFighter[];
+  /** An attack waiting on a dodge or a Critical Injury roll; pendingMine when this seat must answer it. */
+  pending?: PendingView | null;
+  pendingMine?: boolean;
+}
 
 export interface PlayerSkill { key: string; skillId: string; name: string; namePt: string | null; specialization: string | null; category: string; total: number }
 
@@ -328,7 +333,12 @@ export interface TableAttack {
   undone: boolean;
   /** The extra d10 of a natural 10 (positive) or 1 (negative), CP:R p.130. */
   attackExtra?: number | null;
+  /** The Critical Injury's 2d6, when it was rolled. */
+  critDice?: number[] | null;
 }
+
+/** A quick attack's answer: the attack, or the step it waits on. */
+export interface QuickAttackResult { attack: TableAttack | null; pending: PendingView | null }
 
 export interface QuickAttack { weapon: string; mode: AttackMode; targetIds: string[] }
 

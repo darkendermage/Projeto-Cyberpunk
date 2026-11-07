@@ -2,7 +2,7 @@ import { API_BASE, ApiError, request } from './client';
 import { locale, t } from '../i18n';
 import type {
   ArmorLocation, ClaimResult, Lobby, MediaInfo, PartyMember, PlayerCharacter, PlayerSheet, PlayerEncounter, PlayerSeat, PlayerState, RollRequest, SceneBatch, SceneGrid, SceneSummary, SceneView, Seat,
-  SendMessage, TableAttack, TableMessage, TableRules, TemplateInput, QuickAttack, BarrierRequest, TokenInput, TokenMove, TunnelStatus,
+  SendMessage, TableMessage, TableRules, TemplateInput, QuickAttack, BarrierRequest, TokenInput, TokenMove, TunnelStatus, QuickAttackResult,
 } from './tableTypes';
 
 const json = (body: unknown) => JSON.stringify(body);
@@ -24,7 +24,7 @@ export const tableApi = {
     request<SceneView>(`/table/scenes/${id}/barriers/${tokenId}/damage`, { method: 'POST', body: json({ amount }) }),
   batch: (id: number, body: SceneBatch) => request<SceneView>(`/table/scenes/${id}/batch`, { method: 'POST', body: json(body) }),
   /** The GM's quick attack with any fighter of the scene's fight; the distance comes from the map. */
-  attack: (id: number, body: QuickAttack & { attackerId: string }) => request<TableAttack>(`/table/scenes/${id}/attack`, { method: 'POST', body: json(body) }),
+  attack: (id: number, body: QuickAttack & { attackerId: string }) => request<QuickAttackResult>(`/table/scenes/${id}/attack`, { method: 'POST', body: json(body) }),
   party: (id: number) => request<PartyMember[]>(`/table/scenes/${id}/party`),
   rules: () => request<TableRules>('/table/rules'),
   addEncounterTokens: (id: number) => request<SceneView>(`/table/scenes/${id}/encounter-tokens`, { method: 'POST' }),
@@ -109,7 +109,11 @@ export function playerApi(seat: string) {
     rules: () => request<TableRules>('/table/play/rules', { headers }),
     reroll: (messageId: number) => request<TableMessage>(`/table/play/rolls/${messageId}/reroll`, { method: 'POST', headers }),
     /** An attack with the seat's own character, on its Turn. */
-    attack: (body: QuickAttack) => request<TableAttack>('/table/play/attack', { method: 'POST', body: json(body), headers }),
+    attack: (body: QuickAttack) => request<QuickAttackResult>('/table/play/attack', { method: 'POST', body: json(body), headers }),
+    /** The target's player answers a pending shot: dodge (roll Evasion) or not. */
+    defense: (dodge: boolean) => request<PlayerEncounter>('/table/play/defense', { method: 'POST', body: json({ dodge }), headers }),
+    /** The attacker's player rolls the pending Critical Injury. */
+    critical: () => request<PlayerEncounter>('/table/play/critical', { method: 'POST', headers }),
     /** Reloads one of the seat's character's weapons (on its Turn when it is in the fight). */
     reload: (weapon: string) => request<{ encounter: PlayerEncounter | null; character: PlayerCharacter | null }>('/table/play/reload', { method: 'POST', body: json({ weapon }), headers }),
     /** Clears a jammed weapon of the seat's character (an Action on its Turn). */

@@ -434,7 +434,7 @@ export function CombatTab({ scene, encounter, act, onSelectToken }: { scene: Sce
       </div>
       <div className={styles.row}>
         <Button disabled={command.isPending} onClick={() => run('initiative')}>{rolled ? t('Rolar iniciativa de novo', 'Re-roll Initiative') : t('Rolar iniciativa', 'Roll Initiative')}</Button>
-        <Button variant="primary" icon={<SkipForward size={15} />} disabled={command.isPending || !rolled} onClick={() => run('next-turn')}>{t('Próximo turno', 'Next turn')}</Button>
+        <Button variant="primary" icon={<SkipForward size={15} />} disabled={command.isPending || !rolled || !!encounter.pending} onClick={() => run('next-turn')}>{t('Próximo turno', 'Next turn')}</Button>
       </div>
       <div className={styles.queue}>
         {encounter.queue.map((f, i, queue) => {
