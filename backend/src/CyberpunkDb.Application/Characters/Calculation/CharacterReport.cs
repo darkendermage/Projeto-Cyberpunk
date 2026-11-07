@@ -148,7 +148,13 @@ public sealed record WeaponLine(
     // Poor, Standard or Excellent: the copy's own, else the catalog's (A4).
     WeaponQuality Quality = WeaponQuality.Standard,
     // Jammed by a natural 1 (Poor Quality, CP:R p.344).
-    bool Jammed = false);
+    bool Jammed = false,
+    // What adds to attacks with this weapon besides the skill: Excellent quality, a working Smartgun (D4).
+    IReadOnlyList<ValuePart>? AttackBonuses = null)
+{
+    /// <summary>Skill total plus the weapon's own bonuses: what the attack check adds to 1d10.</summary>
+    public int AttackTotal => SkillTotal + (AttackBonuses?.Sum(p => p.Value) ?? 0);
+}
 
 public sealed record CyberLine(
     string InstanceId,

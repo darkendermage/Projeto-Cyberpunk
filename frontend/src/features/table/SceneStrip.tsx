@@ -3,7 +3,7 @@ import type { AttackMode, WeaponView } from '../../api/encounterTypes';
 import { Button, Select } from '../../components/ui/ui';
 import { t, tv } from '../../i18n';
 import { MODE_LABEL, WOUND_LABEL } from '../combat/combat';
-import { cannotFire, canReload, quickModes, weaponLabel, type Aim } from './aim';
+import { attackBreakdown, cannotFire, canReload, quickModes, weaponLabel, type Aim } from './aim';
 import { ArmorControl } from './ArmorControl';
 import type { StripEntry } from './strip';
 import { initials } from './tokens';
@@ -117,7 +117,7 @@ export function AimBar({ aim, targetName, busy, onMode, onFire, onCancel }: {
     <div className={styles.aimBar} role="region" aria-label={t('Mira', 'Aim')}>
       <Crosshair size={16} className={styles.aimIcon} aria-hidden />
       <span className={styles.aimText}>
-        <strong>{aim.attackerName}</strong> · {tv(aim.weapon.name)}
+        <strong>{aim.attackerName}</strong> · {tv(aim.weapon.name)} <span className={styles.muted} title={t('Total de ataque (+1d10)', 'Attack total (+1d10)')}>({attackBreakdown(aim.weapon)})</span>
         {' → '}
         {targetName ? <strong>{targetName}</strong> : <span className={styles.muted}>{t('clique no alvo no mapa ou num cartão', 'click the target on the map or on a card')}</span>}
       </span>

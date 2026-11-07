@@ -114,6 +114,9 @@ public sealed class CharacterCalculator(CharacterRuleBook rules)
     private List<WeaponLine> WeaponLines(CharacterSheet sheet, NpcCatalog catalog, List<CharacterSkillLine> skills)
     {
         var lines = new List<WeaponLine>();
+        // A Smartgun works through a Neural Link with Interface Plugs or a Subdermal Grip (smartgun-link's description).
+        var cyber = sheet.Cyberware.Select(c => catalog.Find(c.ItemId)?.Slug).OfType<string>().ToHashSet(StringComparer.OrdinalIgnoreCase);
+        var smartUser = cyber.Contains("neural-link") && (cyber.Contains("interface-plugs") || cyber.Contains("subdermal-grip"));
         var slots = rules.Document.Combat.AttachmentSlots.Value;
         foreach (var e in sheet.Inventory)
         {
@@ -127,12 +130,19 @@ public sealed class CharacterCalculator(CharacterRuleBook rules)
                 .Select(i => i is null ? "?" : catalog.Find(i.ItemId)?.Name ?? "?")
                 .ToList();
             var ranged = w.Calibers.Count > 0;
+            var bonuses = new List<ValuePart>();
+            // CP:R p.344: an Excellent Quality weapon adds +1 to attack Checks.
+            if ((e.Quality ?? w.Quality) == WeaponQuality.Excellent) bonuses.Add(new ValuePart(L.T("Qualidade Excellent (CP:R p.344)", "Excellent Quality (CP:R p.344)"), 1));
+            // smartgun-link: a Smartgun adds +1 to Ranged Attack Checks.
+            var linked = state.Attachments.Any(id => sheet.Inventory.FirstOrDefault(i => i.InstanceId == id) is { } a
+                                                     && catalog.Find(a.ItemId)?.Slug.Equals("smartgun-link", StringComparison.OrdinalIgnoreCase) == true);
+            if (ranged && linked && smartUser) bonuses.Add(new ValuePart("Smartgun Link", 1));
             lines.Add(new WeaponLine(
                 e.InstanceId, e.ItemId, item.Name, w.Class, skillId, skill?.NamePt ?? skill?.Name,
                 skill?.Total ?? 0, w.Damage, w.Rof, w.Magazine, state.LoadedRounds, state.LoadedAmmoItemId,
                 state.LoadedAmmoItemId is { } ammo ? catalog.Find(ammo)?.Name : null,
                 w.AutofireMultiplier, autofire?.Total, w.Calibers, w.Exotic,
-                ranged && !w.Exotic ? slots : 0, attachments, e.State == ItemState.Equipped, e.Quality ?? w.Quality, state.Jammed));
+                ranged && !w.Exotic ? slots : 0, attachments, e.State == ItemState.Equipped, e.Quality ?? w.Quality, state.Jammed, bonuses));
         }
         return lines;
     }

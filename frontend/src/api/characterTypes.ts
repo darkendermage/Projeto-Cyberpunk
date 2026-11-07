@@ -332,6 +332,11 @@ export interface WeaponLine {
   equipped: boolean;
   /** The copy's quality (its own, else the catalog's). */
   quality: WeaponQuality;
+  jammed?: boolean;
+  /** Excellent quality, a working Smartgun: what adds to the skill on attacks. */
+  attackBonuses?: { label: string; value: number }[] | null;
+  /** Skill total plus the bonuses. */
+  attackTotal?: number;
 }
 
 export interface CyberLine {

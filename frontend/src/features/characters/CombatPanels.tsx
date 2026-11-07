@@ -176,7 +176,7 @@ export function WeaponsPanel({ detail, run, busy, locked }: Props) {
                       {w.attachmentSlots > 0 ? t(` · anexos ${w.attachments.length}/${w.attachmentSlots}`, ` · attachments ${w.attachments.length}/${w.attachmentSlots}`) : ''}
                     </div>
                   </td>
-                  <td className={styles.total}>{w.skillTotal}</td>
+                  <td className={styles.total} title={(w.attackBonuses ?? []).map((p) => `${tv(p.label)} +${p.value}`).join('\n') || undefined}>{w.attackTotal ?? w.skillTotal}</td>
                   <td className={styles.num}>{tv(w.damage)}</td>
                   <td className={styles.num}>{w.rof}</td>
                   <td className={styles.num} title={w.loadedAmmo ?? undefined}>{ranged ? `${w.loadedRounds}/${w.magazine ?? '—'}` : '—'}</td>

@@ -60,6 +60,12 @@ public sealed class AttackResolver(CombatRuleBook combat, CharacterRuleBook char
         }
         else baseTotal = weapon.AttackTotal;
         if (aimed) baseTotal += doc.AimedShot.Value.Penalty;
+        // targeting-scope (Cybereye option): +1 to the Check of an Aimed Shot.
+        if (aimed && attacker.HasCyberware("targeting-scope"))
+        {
+            baseTotal += 1;
+            notes.Add(L.T("Targeting Scope: +1 no tiro mirado.", "Targeting Scope: +1 to the aimed shot."));
+        }
         baseTotal += r.Modifier;
         if (weapon.Rounds is { } loaded && weapon.Magazine is not null && loaded < rounds)
             throw RequestValidationException.For("weapon", L.T($"{weapon.Name} tem {loaded} bala(s) no pente; {(autofire ? "Autofire e Suppressive Fire precisam de " + rounds : "recarregue")}.", $"{weapon.Name} has {loaded} round(s) in the magazine; {(autofire ? "Autofire and Suppressive Fire need " + rounds : "reload")}."));

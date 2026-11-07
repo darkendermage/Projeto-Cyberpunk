@@ -35,6 +35,13 @@ export function cannotFire(w: WeaponView): string | null {
   return null;
 }
 
+/** The attack total spelled out: "Handgun 12 + Precision Attack 1 + Excellent Quality 1". */
+export function attackBreakdown(w: WeaponView): string {
+  const parts = w.attackParts ?? [];
+  if (parts.length <= 1) return `${w.attackTotal}`;
+  return `${w.attackTotal} = ${parts.map((p, i) => (i === 0 ? `${p.label} ${p.value}` : `${p.label} ${p.value >= 0 ? '+' : '−'}${Math.abs(p.value)}`)).join(' + ')}`;
+}
+
 /** Why a weapon can't be reloaded, or null when it can (a magazine that isn't full). */
 export function canReload(w: WeaponView): string | null {
   if (w.melee || w.magazine == null) return t('Sem pente.', 'No magazine.');

@@ -28,6 +28,8 @@ export interface WeaponView {
   quality?: 'Poor' | 'Standard' | 'Excellent';
   /** Jammed by a natural 1: no attack until an Action unjams it. */
   jammed?: boolean;
+  /** How attackTotal is made: the skill, then each bonus. */
+  attackParts?: { label: string; value: number }[] | null;
 }
 
 export interface InjuryView {

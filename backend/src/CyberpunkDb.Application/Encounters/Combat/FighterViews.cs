@@ -17,7 +17,9 @@ public sealed record WeaponView(
     string Key, string Name, WeaponClass? Class, string Skill, int AttackTotal, int? AutofireTotal, string Damage, int Rof,
     int? Rounds, int? Magazine, int? AutofireMultiplier, bool Melee, bool HalvesArmor, int?[]? RangeDv = null, bool? AutofireOnly = null,
     // CP:R p.344: Excellent +1 to attacks; a Poor one jams on a natural 1 and can't fire until unjammed (an Action).
-    WeaponQuality Quality = WeaponQuality.Standard, bool Jammed = false);
+    WeaponQuality Quality = WeaponQuality.Standard, bool Jammed = false,
+    // How AttackTotal is made: the skill, then each bonus ("Handgun 12", "Precision Attack +1", "Excellent +1").
+    IReadOnlyList<ValuePart>? AttackParts = null);
 
 public sealed record InjuryView(string Name, InjuryLocation Location, string? Effect, bool DeathSave);
 
@@ -35,8 +37,12 @@ public sealed record FighterView(
     // NPCs and generic enemies: the STATs and Skills of the snapshot, for the read-only sheet. PCs read their own sheet.
     IReadOnlyList<NamedValueDto>? Stats = null, IReadOnlyList<NamedValueDto>? Skills = null,
     // A Solo's Combat Awareness points by part (CP:R p.146), from the sheet; empty for everyone else.
-    IReadOnlyDictionary<string, int>? CombatAwareness = null)
+    IReadOnlyDictionary<string, int>? CombatAwareness = null,
+    // Installed cyberware by slug (PCs): Targeting Scope on aimed shots, the Ranger boomerang's return.
+    IReadOnlyList<string>? Cyberware = null)
 {
+    public bool HasCyberware(string slug) => Cyberware?.Contains(slug, StringComparer.OrdinalIgnoreCase) ?? false;
+
     /// <summary>Points the Solo put in one part of Combat Awareness (0 when none).</summary>
     public int Awareness(string key) => CombatAwareness?.GetValueOrDefault(key) ?? 0;
 
@@ -61,17 +67,26 @@ public sealed class FighterViews(CharacterRuleBook characterRules, CharacterCalc
         var body = r.Health.BodyForDerived;
         var cyberarm = r.Cyberware.Any(x => x.Slug.Equals("cyberarm", StringComparison.OrdinalIgnoreCase));
 
-        var weapons = r.Weapons.Where(w => w.Equipped).Select(w => new WeaponView(
-            w.InstanceId, w.Name, w.Class, w.SkillId ?? "", w.SkillTotal, w.AutofireTotal, w.Damage ?? "", w.Rof ?? 1,
-            w.Magazine is null ? null : w.LoadedRounds, w.Magazine, w.AutofireMultiplier, w.SkillId == "melee-weapon", w.SkillId == "melee-weapon",
-            Quality: w.Quality, Jammed: w.Jammed)).ToList();
+        var weapons = r.Weapons.Where(w => w.Equipped).Select(w =>
+        {
+            var bonus = w.AttackBonuses?.Sum(p => p.Value) ?? 0;
+            return new WeaponView(
+                w.InstanceId, w.Name, w.Class, w.SkillId ?? "", w.AttackTotal, w.AutofireTotal + bonus, w.Damage ?? "", w.Rof ?? 1,
+                w.Magazine is null ? null : w.LoadedRounds, w.Magazine, w.AutofireMultiplier, w.SkillId == "melee-weapon", w.SkillId == "melee-weapon",
+                Quality: w.Quality, Jammed: w.Jammed,
+                AttackParts: [new ValuePart(w.SkillName ?? w.SkillId ?? w.Name, w.SkillTotal), .. w.AttackBonuses ?? []]);
+        }).ToList();
         weapons.AddRange(Unarmed(body, cyberarm, Skill(Brawling, "DEX"),
             r.Skills.Where(s => s.SkillId == MartialArtsPrefix && s.Level > 0).Select(s => (s.Key, s.Specialization ?? "", s.Total))));
         // CP:R p.146: Precision Attack, 3/6/9 points of Combat Awareness give +1/+2/+3 to attacks.
         var awareness = detail.Sheet.Roles.FirstOrDefault(x => x.Role.Equals("Solo", StringComparison.OrdinalIgnoreCase))?.Split;
         var precision = Math.Min(3, (awareness?.GetValueOrDefault("precisionAttack") ?? 0) / 3);
         if (precision > 0)
-            weapons = weapons.Select(w => w with { AttackTotal = w.AttackTotal + precision, AutofireTotal = w.AutofireTotal + precision }).ToList();
+            weapons = weapons.Select(w => w with
+            {
+                AttackTotal = w.AttackTotal + precision, AutofireTotal = w.AutofireTotal + precision,
+                AttackParts = [.. w.AttackParts ?? [new ValuePart(w.Name, w.AttackTotal)], new ValuePart("Precision Attack", precision)],
+            }).ToList();
 
         return new FighterView(c.Id, c.Kind, c.Name, c.Side, c.Initiative,
             r.Health.CurrentHp, r.Health.MaxHp, r.Health.WoundState, r.ActionPenalty, r.Health.StabilizationDv,
@@ -83,7 +98,7 @@ public sealed class FighterViews(CharacterRuleBook characterRules, CharacterCalc
             [.. detail.Sheet.Combat.Conditions, .. c.Conditions],
             r.Health.DeathSavePenalty, r.Health.DeathSave, r.Health.MustRollDeathSave, detail.Sheet.Combat.Conditions.Contains("Morto"),
             detail.Sheet.Combat.Stabilized, c.CoverId, c.CharacterId, detail.Version, null,
-            CombatAwareness: awareness);
+            CombatAwareness: awareness, Cyberware: r.Cyberware.Select(x => x.Slug).ToList());
     }
 
     // ------------------------------------------------------------------ NPCs and generic enemies

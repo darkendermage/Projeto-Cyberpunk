@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { WeaponView } from '../../api/encounterTypes';
 import type { TableAttack } from '../../api/tableTypes';
-import { aimAt, attackSummary, cannotFire, canReload, quickModes, startAim, weaponLabel } from './aim';
+import { aimAt, attackBreakdown, attackSummary, cannotFire, canReload, quickModes, startAim, weaponLabel } from './aim';
 
 const rifle: WeaponView = {
   key: 'w1', name: 'Assault Rifle', class: 'AssaultRifle', skill: 'shoulder-arms', attackTotal: 14, autofireTotal: 12, damage: '5d6',
@@ -49,4 +49,12 @@ describe('canReload', () => {
 
 describe('cannotFire', () => {
   it('blocks a jammed weapon', () => expect(cannotFire({ ...rifle, jammed: true })).not.toBeNull());
+});
+
+describe('attackBreakdown', () => {
+  it('joins the parts', () => {
+    const w = { ...rifle, attackTotal: 14, attackParts: [{ label: 'Handgun', value: 12 }, { label: 'Precision Attack', value: 1 }, { label: 'Excellent', value: 1 }] };
+    expect(attackBreakdown(w)).toBe('14 = Handgun 12 + Precision Attack +1 + Excellent +1');
+  });
+  it('shows just the total without bonuses', () => expect(attackBreakdown(rifle)).toBe('14'));
 });
