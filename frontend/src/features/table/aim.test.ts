@@ -49,6 +49,7 @@ describe('canReload', () => {
 
 describe('cannotFire', () => {
   it('blocks a jammed weapon', () => expect(cannotFire({ ...rifle, jammed: true })).not.toBeNull());
+  it('blocks a thrown boomerang until it is back', () => expect(cannotFire({ ...rifle, magazine: null, rounds: null, thrownOnly: true, thrown: true })).not.toBeNull());
 });
 
 describe('attackBreakdown', () => {

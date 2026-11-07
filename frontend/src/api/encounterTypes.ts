@@ -30,6 +30,10 @@ export interface WeaponView {
   jammed?: boolean;
   /** How attackTotal is made: the skill, then each bonus. */
   attackParts?: { label: string; value: number }[] | null;
+  /** Attacks only by throwing (the Ranger boomerang). */
+  thrownOnly?: boolean;
+  /** Out of hand after a throw: back with a Targeting Scope, or picked up. */
+  thrown?: boolean;
 }
 
 export interface InjuryView {

@@ -69,6 +69,8 @@ public sealed record Combatant
     public Dictionary<string, int> Ammo { get; init; } = [];
     /// <summary>Weapons jammed by a natural 1 (Poor Quality, CP:R p.344), NPCs and generic enemies; PCs keep it on the sheet.</summary>
     public List<string> Jammed { get; init; } = [];
+    /// <summary>Thrown-only weapons out of hand (the Ranger boomerang), until they come back or are picked up.</summary>
+    public List<string> Thrown { get; init; } = [];
     /// <summary>Once-a-Round effects already used this Round ("spotWeakness", "damageDeflection"); cleared when the Round turns.</summary>
     public List<string> RoundFlags { get; init; } = [];
 }

@@ -19,7 +19,9 @@ public sealed record WeaponView(
     // CP:R p.344: Excellent +1 to attacks; a Poor one jams on a natural 1 and can't fire until unjammed (an Action).
     WeaponQuality Quality = WeaponQuality.Standard, bool Jammed = false,
     // How AttackTotal is made: the skill, then each bonus ("Handgun 12", "Precision Attack +1", "Excellent +1").
-    IReadOnlyList<ValuePart>? AttackParts = null);
+    IReadOnlyList<ValuePart>? AttackParts = null,
+    // Attacks only by throwing (the Ranger boomerang), whether it is out of hand now, and the cyberware that brings it back.
+    bool ThrownOnly = false, bool Thrown = false, string? ReturnsWith = null);
 
 public sealed record InjuryView(string Name, InjuryLocation Location, string? Effect, bool DeathSave);
 
@@ -59,6 +61,24 @@ public sealed class FighterViews(CharacterRuleBook characterRules, CharacterCalc
 
     // ------------------------------------------------------------------ player characters
 
+    /// <summary>
+    /// A weapon with its own rules (combat-rules.json specialWeapons): the Ranger boomerang is thrown, never swung, still
+    /// halves SP, and is out of hand once thrown.
+    /// </summary>
+    private WeaponView Special(WeaponView v, string? slug, Combatant c)
+    {
+        if (slug is null || combatRules.Document.SpecialWeapons.Value?.GetValueOrDefault(slug) is not { } rule) return v;
+        return v with
+        {
+            Melee = rule.ThrownOnly ? false : v.Melee,
+            HalvesArmor = rule.HalvesArmor || v.HalvesArmor,
+            Rof = rule.Rof ?? v.Rof,
+            ThrownOnly = rule.ThrownOnly,
+            Thrown = c.Thrown.Contains(v.Key),
+            ReturnsWith = rule.ReturnsWith,
+        };
+    }
+
     public FighterView ForPc(Combatant c, CharacterDetailDto detail)
     {
         var r = detail.Report;
@@ -75,7 +95,7 @@ public sealed class FighterViews(CharacterRuleBook characterRules, CharacterCalc
                 w.Magazine is null ? null : w.LoadedRounds, w.Magazine, w.AutofireMultiplier, w.SkillId == "melee-weapon", w.SkillId == "melee-weapon",
                 Quality: w.Quality, Jammed: w.Jammed,
                 AttackParts: [new ValuePart(w.SkillName ?? w.SkillId ?? w.Name, w.SkillTotal), .. w.AttackBonuses ?? []]);
-        }).ToList();
+        }).Select(v => Special(v, r.Weapons.First(x => x.InstanceId == v.Key).Slug, c)).ToList();
         weapons.AddRange(Unarmed(body, cyberarm, Skill(Brawling, "DEX"),
             r.Skills.Where(s => s.SkillId == MartialArtsPrefix && s.Level > 0).Select(s => (s.Key, s.Specialization ?? "", s.Total))));
         // CP:R p.146: Precision Attack, 3/6/9 points of Combat Awareness give +1/+2/+3 to attacks.

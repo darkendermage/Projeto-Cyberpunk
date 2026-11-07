@@ -283,6 +283,10 @@ export function GmTablePage() {
             onPick={(e) => { if (quick.aim) quick.target(fighterIdOf(e, queue)); else { selectToken(e.tokenId); setTab('token'); } }}
             weaponsOf={(e) => { const f = queue.find((x) => x.id === fighterIdOf(e, queue)); return f ? { weapons: f.weapons, blocked: null } : null; }}
             onWeapon={(e, w) => { const f = queue.find((x) => x.id === fighterIdOf(e, queue)); if (f) quick.start(startAim(f.id, f.name, w)); }}
+            onPickUp={(e, w) => {
+              const id = fighterIdOf(e, queue);
+              if (id) command.mutate({ path: `combatants/${id}/pick-up`, body: { weapon: w.key } }, { onError: (err) => toast.notify(problemMessage(err), 'error') });
+            }}
             onUnjam={(e, w) => {
               const id = fighterIdOf(e, queue);
               if (id) command.mutate({ path: `combatants/${id}/unjam`, body: { weapon: w.key } },

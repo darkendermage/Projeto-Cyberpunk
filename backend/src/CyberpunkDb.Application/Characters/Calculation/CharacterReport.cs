@@ -150,7 +150,9 @@ public sealed record WeaponLine(
     // Jammed by a natural 1 (Poor Quality, CP:R p.344).
     bool Jammed = false,
     // What adds to attacks with this weapon besides the skill: Excellent quality, a working Smartgun (D4).
-    IReadOnlyList<ValuePart>? AttackBonuses = null)
+    IReadOnlyList<ValuePart>? AttackBonuses = null,
+    // The catalog item, for weapons with their own combat rules (combat-rules.json specialWeapons).
+    string? Slug = null)
 {
     /// <summary>Skill total plus the weapon's own bonuses: what the attack check adds to 1d10.</summary>
     public int AttackTotal => SkillTotal + (AttackBonuses?.Sum(p => p.Value) ?? 0);

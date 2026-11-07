@@ -302,7 +302,8 @@ export function PlayerTablePage() {
                 : null}
               onWeapon={(_e, w) => { if (own) quick.start(startAim(own.id, own.name, w)); }}
               onReload={(_e, w) => reloadWeapon(w.key)}
-              onUnjam={(_e, w) => void run(async () => { client.setQueryData(tableKeys.playerEncounter(token), await api.unjam(w.key)); })} />
+              onUnjam={(_e, w) => void run(async () => { client.setQueryData(tableKeys.playerEncounter(token), await api.unjam(w.key)); })}
+              onPickUp={(_e, w) => void run(async () => { client.setQueryData(tableKeys.playerEncounter(token), await api.pickUp(w.key)); })} />
           )}
         </section>
         <PanelHandle className={styles.handleRight} panel="right" width={panels.right} limits={PLAYER_PANELS.right} open={panels.rightOpen}
@@ -317,6 +318,7 @@ export function PlayerTablePage() {
             <CharacterPanel character={character.data ?? null} encounter={encounter.data ?? null} token={myToken} onRoll={roll} busy={armorBusy}
               onAim={(w, mode) => { if (own) quick.start({ ...startAim(own.id, own.name, w), mode }); }}
               onReload={reloadWeapon}
+              onPickUp={(weapon) => void run(async () => { client.setQueryData(tableKeys.playerEncounter(token), await api.pickUp(weapon)); })}
               onUnjam={(weapon) => void run(async () => { client.setQueryData(tableKeys.playerEncounter(token), await api.unjam(weapon)); toast.notify(t('Destravada.', 'Unjammed.')); })}
               onArmor={(location, delta) => {
                 setArmorBusy(true);

@@ -78,6 +78,8 @@
   "grapple": { "value": "Grab: DEX + Brawling contra DEX + Brawling; no Grapple os dois ficam com −2 em tudo. Choke e Throw causam BODY direto no HP, sem armadura e sem ablação; Choke por 3 rodadas seguidas deixa inconsciente.", "source": "CP:R p.177" },
   "thrown": { "value": { "maxMeters": 25, "row": "grenadeLauncher", "check": "DEX + Athletics + 1d10" }, "source": "CP:R p.177 (Throw an object: DEX + Athletics + 1d10, up to 25m/yds, using the Grenade Launcher DV entry; melee weapons deal their damage but don't halve SP)" },
 
+  "specialWeapons": { "value": { "ranger-combat-boomerang": { "thrownOnly": true, "halvesArmor": true, "rof": 2, "returnsWith": "targeting-scope" } }, "source": "Black Chrome p.100 (Ranger Combat Boomerang: can't make a melee attack, thrown it still halves SP, counts as half of a 2 ROF attack, returns at the start of your next Turn with Targeting Scope cyberware)" },
+
   "shotgunShell": { "value": { "dv": 13, "damage": "3d6", "rangeMeters": 6 }, "source": "CP:R p.174 (Shotgun Shell: vs. a DV13; every target in front of you within 6m/yds takes 3d6; damage rolled once)" },
   "explosives": { "value": "Área de 10×10 m; um só dano para todos. Errou: o Mestre decide onde caiu. REF 8+ pode esquivar rolando acima do ataque. A cobertura só protege se aguentar o dano; se for destruída, o alvo leva o dano todo.", "source": "CP:R p.174 (Explosives)" },
   "suppressive": { "value": { "check": "WILL + Concentration + 1d10 contra REF + Autofire + 1d10", "rangeMeters": 25, "effect": "Quem falha usa o próximo Move Action (e o Run, se precisar) para ir para a cobertura." }, "source": "CP:R p.174 (Suppressive Fire)" },

@@ -19,7 +19,7 @@ const signed = (n: number) => (n >= 0 ? `+${n}` : `${n}`);
  * The player's quick panel: their character's numbers, weapons and skills, each a click away from a server roll,
  * and their token's facing. In a fight the numbers come from the combat table; otherwise from the sheet.
  */
-export function CharacterPanel({ character, encounter, token, onRoll, onTurn, onArmor, onAim, onReload, onUnjam, busy }: {
+export function CharacterPanel({ character, encounter, token, onRoll, onTurn, onArmor, onAim, onReload, onUnjam, onPickUp, busy }: {
   character: PlayerCharacter | null;
   encounter: PlayerEncounter | null;
   token: TokenView | undefined;
@@ -33,6 +33,8 @@ export function CharacterPanel({ character, encounter, token, onRoll, onTurn, on
   onReload?: (weaponKey: string) => void;
   /** Clears a jammed weapon (an Action on the player's Turn). */
   onUnjam?: (weaponKey: string) => void;
+  /** Picks a thrown weapon up (on the player's Turn). */
+  onPickUp?: (weaponKey: string) => void;
   busy?: boolean;
 }) {
   const [visibility, setVisibility] = useState<TableVisibility>('Public');
@@ -127,6 +129,13 @@ export function CharacterPanel({ character, encounter, token, onRoll, onTurn, on
                     <Button variant="ghost" disabled={!!blocked} title={blocked ?? undefined}
                       onClick={() => (fightWeapon ? onAim!(fightWeapon, 'Autofire') : check(`1d10${signed(w.autofireTotal!)}`, t(`Autofire: ${w.name}`, `Autofire: ${w.name}`)))}>
                       Autofire {signed(w.autofireTotal)}
+                    </Button>
+                  )}
+                  {onPickUp && fightWeapon?.thrown && (
+                    <Button variant="ghost" disabled={busy || encounter?.activeId !== fighter!.id}
+                      title={t('Arremessada: pegar do chão (o mestre diz onde caiu).', 'Thrown: pick it up (the GM says where it landed).')}
+                      onClick={() => onPickUp(w.key)}>
+                      {t('Pegar do chão', 'Pick up')}
                     </Button>
                   )}
                   {onUnjam && fightWeapon?.jammed && (

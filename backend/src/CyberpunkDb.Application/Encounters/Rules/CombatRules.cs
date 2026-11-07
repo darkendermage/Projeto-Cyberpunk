@@ -32,6 +32,8 @@ public sealed record CombatRulesDocument
     public Ruled<bool> MartialArtsHalvesArmor { get; init; } = new();
     public Ruled<string> Grapple { get; init; } = new();
     public Ruled<ThrownRule> Thrown { get; init; } = new();
+    /// <summary>Weapons with their own rules, by catalog slug (the Ranger Combat Boomerang).</summary>
+    public Ruled<Dictionary<string, SpecialWeaponRule>> SpecialWeapons { get; init; } = new();
     public Ruled<ShotgunShellRule> ShotgunShell { get; init; } = new();
     public Ruled<string> Explosives { get; init; } = new();
     public Ruled<SuppressiveRule> Suppressive { get; init; } = new();
@@ -128,4 +130,17 @@ public sealed class CombatRuleBook
     }
 
     private static int DiceCount(string dice) => int.TryParse(dice.Split('d')[0], out var n) ? n : 0;
+}
+
+/// <summary>
+/// A weapon that breaks the usual rules: <see cref="ThrownOnly"/> attacks only by throwing (DEX + Athletics, the thrown
+/// row of the range table), <see cref="HalvesArmor"/> even when thrown, and comes back to hand at the start of the
+/// thrower's next Turn when they have the <see cref="ReturnsWith"/> cyberware.
+/// </summary>
+public sealed record SpecialWeaponRule
+{
+    public bool ThrownOnly { get; init; }
+    public bool HalvesArmor { get; init; }
+    public int? Rof { get; init; }
+    public string? ReturnsWith { get; init; }
 }

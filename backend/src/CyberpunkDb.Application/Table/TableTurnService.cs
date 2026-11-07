@@ -86,6 +86,14 @@ public sealed class TableTurnService(IAppDbContext db, EncounterService encounte
         return PlayerEncounters.For(after, seat, state);
     }
 
+    /// <summary>Picks a thrown weapon of the seat's character up, on its own Turn.</summary>
+    public async Task<PlayerEncounterDto> PickUpAsync(TableSeat seat, PlayerWeaponRequest r, CancellationToken ct)
+    {
+        var (detail, own, state) = await OwnFighterAsync(seat, ownTurn: true, ct);
+        var after = await encounters.PickUpAsync(detail.Id, own.Id, new UnjamRequest(detail.Version, r.Weapon), ct);
+        return PlayerEncounters.For(after, seat, state);
+    }
+
     /// <summary>Whether the character fights in the active fight of the live scene.</summary>
     private async Task<bool> InFightAsync(int characterId, CancellationToken ct)
     {

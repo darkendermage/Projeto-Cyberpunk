@@ -195,6 +195,12 @@ function Table({ detail, rules }: { detail: EncounterDetail; rules: EncounterRul
                               onClick={() => { setSelectedId(f.id); setPick({ attackerId: f.id, weaponKey: w.key, targetId: null }); }}>
                               <Crosshair size={11} aria-hidden /> {tv(w.name)} +{w.attackTotal} · {tv(w.damage)}{w.rounds != null ? ` · ${w.rounds}/${w.magazine}` : ''}
                             </button>
+                            {w.thrown && (
+                              <button type="button" className={styles.weaponChip} title={t('Arremessada: pegar do chão', 'Thrown: pick it up')}
+                                onClick={() => run(`combatants/${f.id}/pick-up`, { weapon: w.key })}>
+                                {t('Pegar do chão', 'Pick up')}
+                              </button>
+                            )}
                             {w.jammed && (
                               <button type="button" className={styles.weaponChip} title={t('Travada: destravar gasta uma Ação (CP:R p.344)', 'Jammed: unjamming takes an Action (CP:R p.344)')}
                                 onClick={() => run(`combatants/${f.id}/unjam`, { weapon: w.key }, t('Destravada.', 'Unjammed.'))}>

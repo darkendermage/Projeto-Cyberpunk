@@ -183,6 +183,10 @@ public sealed class TablePlayController(SeatService seats, SceneService scenes, 
     [HttpPost("critical")]
     public async Task<PlayerEncounterDto> Critical(CancellationToken ct) => await turns.CriticalAsync(await SeatAsync(ct), ct);
 
+    /// <summary>Picks a thrown weapon of the seat's character up (on its Turn).</summary>
+    [HttpPost("pick-up")]
+    public async Task<PlayerEncounterDto> PickUp(PlayerWeaponRequest request, CancellationToken ct) => await turns.PickUpAsync(await SeatAsync(ct), request, ct);
+
     /// <summary>The player ends their own Turn.</summary>
     [HttpPost("end-turn")]
     public async Task<PlayerEncounterDto> EndTurn(CancellationToken ct) => await turns.EndTurnAsync(await SeatAsync(ct), ct);

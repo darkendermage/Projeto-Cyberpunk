@@ -39,6 +39,8 @@ public sealed class AttackResolver(CombatRuleBook combat, CharacterRuleBook char
                 r.ThrownDamage ?? "1d6", 1, null, null, null, false, false)
             : attacker.Weapon(r.Weapon) ?? throw RequestValidationException.For("weapon", L.T($"{attacker.Name} não tem essa arma pronta.", $"{attacker.Name} doesn't have that weapon ready."));
 
+        if (weapon.Thrown)
+            throw RequestValidationException.For("weapon", L.T($"{weapon.Name} ainda não voltou: pegue-a do chão (ou espere o Targeting Scope trazê-la).", $"{weapon.Name} hasn't come back yet: pick it up (or wait for the Targeting Scope to bring it back)."));
         if (weapon.Jammed)
             throw RequestValidationException.For("weapon", L.T($"{weapon.Name} está travada: gaste uma Ação para destravar (CP:R p.344).", $"{weapon.Name} is jammed: spend an Action to unjam (CP:R p.344)."));
 
@@ -200,6 +202,8 @@ public sealed class AttackResolver(CombatRuleBook combat, CharacterRuleBook char
             return doc.ShotgunShell.Value.Dv;
         }
         var range = r.Range ?? throw RequestValidationException.For("range", L.T("Informe a distância até o alvo em metros.", "Enter the distance to the target in meters."));
+        // A thrown-only weapon (the Ranger boomerang) is thrown like any object (CP:R p.177).
+        thrown = thrown || weapon.ThrownOnly;
         if (thrown && range > doc.Thrown.Value.MaxMeters)
             throw RequestValidationException.For("range", L.T($"Arremesso vai até {doc.Thrown.Value.MaxMeters} m ({doc.Thrown.Source}).", $"Throws reach up to {doc.Thrown.Value.MaxMeters} m ({doc.Thrown.Source})."));
         // A sheet that prints its own range table uses it for every shot, Autofire included.

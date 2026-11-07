@@ -116,6 +116,8 @@ export function playerApi(seat: string) {
     critical: () => request<PlayerEncounter>('/table/play/critical', { method: 'POST', headers }),
     /** Reloads one of the seat's character's weapons (on its Turn when it is in the fight). */
     reload: (weapon: string) => request<{ encounter: PlayerEncounter | null; character: PlayerCharacter | null }>('/table/play/reload', { method: 'POST', body: json({ weapon }), headers }),
+    /** Picks a thrown weapon of the seat's character up (on its Turn). */
+    pickUp: (weapon: string) => request<PlayerEncounter>('/table/play/pick-up', { method: 'POST', body: json({ weapon }), headers }),
     /** Clears a jammed weapon of the seat's character (an Action on its Turn). */
     unjam: (weapon: string) => request<PlayerEncounter>('/table/play/unjam', { method: 'POST', body: json({ weapon }), headers }),
     /** Ends the seat's own Turn in the live scene's fight. */

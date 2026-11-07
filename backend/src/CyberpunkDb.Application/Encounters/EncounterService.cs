@@ -267,6 +267,16 @@ public sealed partial class EncounterService(
                 next = Log(next, null, "round", $"Rodada {round}.");
             }
             var view = fighters[actor.Id];
+            // At the start of the thrower's Turn, a Ranger boomerang comes back to a Targeting Scope (Black Chrome p.100).
+            if (next.Find(actor.Id) is { Thrown.Count: > 0 } thrower)
+            {
+                var back = thrower.Thrown.Where(k => view.Weapon(k)?.ReturnsWith is { } scope && view.HasCyberware(scope)).ToList();
+                if (back.Count > 0)
+                {
+                    next = Replace(next, thrower with { Thrown = thrower.Thrown.Except(back).ToList() });
+                    foreach (var k in back) next = Log(next, actor.Id, "return", L.T($"{view.Weapon(k)!.Name} volta para a mão de {actor.Name}.", $"{view.Weapon(k)!.Name} comes back to {actor.Name}'s hand."));
+                }
+            }
             if (view.MustDeathSave) notices.Add(L.T($"{actor.Name} está Mortally Wounded: role o Death Save antes do turno (CP:R p.188).", $"{actor.Name} is Mortally Wounded: roll the Death Save before the turn (CP:R p.188)."));
             if (actor.Conditions.Contains("Prone")) notices.Add(L.T($"{actor.Name} está Prone: precisa do Get Up antes de mover (CP:R p.169).", $"{actor.Name} is Prone: needs a Get Up before moving (CP:R p.169)."));
             entity.Round = round;
@@ -308,6 +318,9 @@ public sealed partial class EncounterService(
         s = await SpendAmmoAsync(s, attacker, plan, r.Mode, ct);
         // A Poor Quality weapon that rolled a natural 1 jams after the shot (CP:R p.344).
         if (plan.Jammed) s = await SetJammedAsync(s, attacker, plan.WeaponKey, true, ct);
+        // A thrown-only weapon leaves the hand (Black Chrome p.100).
+        if (attacker.Weapon(plan.WeaponKey)?.ThrownOnly == true && s.Find(attacker.Id) is { } thrower)
+            s = Replace(s, thrower with { Thrown = [.. thrower.Thrown.Where(k => k != plan.WeaponKey), plan.WeaponKey] });
 
         var results = new List<TargetResult>();
         foreach (var planned in plan.Hits)
@@ -369,6 +382,17 @@ public sealed partial class EncounterService(
     }
 
     private AttackResult? _lastAttack;
+
+    /// <summary>A thrown weapon picked up from the ground (the GM decides where it landed).</summary>
+    public Task<EncounterDetailDto> PickUpAsync(int id, string combatantId, UnjamRequest r, CancellationToken ct) =>
+        MutateAsync(id, r.Version, async (s, _, _) =>
+        {
+            var c = Require(s, combatantId);
+            if (!c.Thrown.Contains(r.Weapon)) throw RequestValidationException.For("weapon", L.T("Essa arma não está no chão.", "That weapon isn't on the ground."));
+            var name = (await ViewsAsync(s, ct))[c.Id].Weapon(r.Weapon)?.Name ?? r.Weapon;
+            return Log(Replace(s, c with { Thrown = c.Thrown.Where(k => k != r.Weapon).ToList() }), c.Id, "pick-up",
+                L.T($"{c.Name} pega {name} do chão.", $"{c.Name} picks {name} up."));
+        }, ct);
 
     /// <summary>A jammed weapon cleared with an Action (CP:R p.344).</summary>
     public Task<EncounterDetailDto> UnjamAsync(int id, string combatantId, UnjamRequest r, CancellationToken ct) =>

@@ -17,7 +17,7 @@ export interface CardWeapons { weapons: WeaponView[]; blocked: string | null }
  * (NPCs show only their Wound State to the players). A click selects the token, or picks the target while aiming. The
  * cards of whoever may shoot (the player's own character, any fighter for the GM) list their weapons: a click aims.
  */
-export function SceneStrip({ entries, selected, onPick, weaponsOf, aim, onWeapon, onReload, onUnjam }: {
+export function SceneStrip({ entries, selected, onPick, weaponsOf, aim, onWeapon, onReload, onUnjam, onPickUp }: {
   entries: StripEntry[];
   selected: readonly string[];
   onPick: (entry: StripEntry) => void;
@@ -28,6 +28,8 @@ export function SceneStrip({ entries, selected, onPick, weaponsOf, aim, onWeapon
   onReload?: (entry: StripEntry, weapon: WeaponView) => void;
   /** Clears a jammed weapon (an Action). */
   onUnjam?: (entry: StripEntry, weapon: WeaponView) => void;
+  /** Picks a thrown weapon up. */
+  onPickUp?: (entry: StripEntry, weapon: WeaponView) => void;
 }) {
   if (entries.length === 0) return null;
   return (
@@ -77,6 +79,12 @@ export function SceneStrip({ entries, selected, onPick, weaponsOf, aim, onWeapon
                         onClick={() => onWeapon?.(e, w)}>
                         <Crosshair size={11} aria-hidden /> {tv(weaponLabel(w))}
                       </button>
+                      {onPickUp && w.thrown && (
+                        <button type="button" className={styles.weaponChip} disabled={!!armed.blocked}
+                          title={armed.blocked ?? t('Pegar do chão', 'Pick up')} onClick={() => onPickUp(e, w)}>
+                          {t('Pegar', 'Pick up')}
+                        </button>
+                      )}
                       {onUnjam && w.jammed && (
                         <button type="button" className={styles.weaponChip} disabled={!!armed.blocked}
                           title={armed.blocked ?? t('Destravar (uma Ação)', 'Unjam (an Action)')} onClick={() => onUnjam(e, w)}>
