@@ -146,7 +146,9 @@ public sealed record WeaponLine(
     IReadOnlyList<string> Attachments,
     bool Equipped,
     // Poor, Standard or Excellent: the copy's own, else the catalog's (A4).
-    WeaponQuality Quality = WeaponQuality.Standard);
+    WeaponQuality Quality = WeaponQuality.Standard,
+    // Jammed by a natural 1 (Poor Quality, CP:R p.344).
+    bool Jammed = false);
 
 public sealed record CyberLine(
     string InstanceId,

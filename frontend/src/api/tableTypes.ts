@@ -326,6 +326,8 @@ export interface TableAttack {
   attackTotal: number;
   targets: TableAttackTarget[];
   undone: boolean;
+  /** The extra d10 of a natural 10 (positive) or 1 (negative), CP:R p.130. */
+  attackExtra?: number | null;
 }
 
 export interface QuickAttack { weapon: string; mode: AttackMode; targetIds: string[] }

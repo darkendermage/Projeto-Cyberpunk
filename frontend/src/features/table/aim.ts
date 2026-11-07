@@ -30,6 +30,7 @@ export function weaponLabel(w: WeaponView): string {
 
 /** Why a weapon can't fire right now, or null when it can. */
 export function cannotFire(w: WeaponView): string | null {
+  if (w.jammed) return t('Travada: gaste uma Ação para destravar.', 'Jammed: spend an Action to unjam.');
   if (!w.melee && w.magazine != null && (w.rounds ?? 0) <= 0) return t('Sem munição: recarregue.', 'Out of ammo: reload.');
   return null;
 }

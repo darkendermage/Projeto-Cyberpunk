@@ -286,7 +286,8 @@ export function PlayerTablePage() {
                 ? { weapons: own.weapons ?? [], blocked: encounter.data?.activeId === own.id ? null : t('Aguarde seu turno para atacar.', 'Wait for your Turn to attack.') }
                 : null}
               onWeapon={(_e, w) => { if (own) quick.start(startAim(own.id, own.name, w)); }}
-              onReload={(_e, w) => reloadWeapon(w.key)} />
+              onReload={(_e, w) => reloadWeapon(w.key)}
+              onUnjam={(_e, w) => void run(async () => { client.setQueryData(tableKeys.playerEncounter(token), await api.unjam(w.key)); })} />
           )}
         </section>
         <PanelHandle className={styles.handleRight} panel="right" width={panels.right} limits={PLAYER_PANELS.right} open={panels.rightOpen}
@@ -301,6 +302,7 @@ export function PlayerTablePage() {
             <CharacterPanel character={character.data ?? null} encounter={encounter.data ?? null} token={myToken} onRoll={roll} busy={armorBusy}
               onAim={(w, mode) => { if (own) quick.start({ ...startAim(own.id, own.name, w), mode }); }}
               onReload={reloadWeapon}
+              onUnjam={(weapon) => void run(async () => { client.setQueryData(tableKeys.playerEncounter(token), await api.unjam(weapon)); toast.notify(t('Destravada.', 'Unjammed.')); })}
               onArmor={(location, delta) => {
                 setArmorBusy(true);
                 void run(async () => {

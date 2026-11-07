@@ -19,7 +19,7 @@ const signed = (n: number) => (n >= 0 ? `+${n}` : `${n}`);
  * The player's quick panel: their character's numbers, weapons and skills, each a click away from a server roll,
  * and their token's facing. In a fight the numbers come from the combat table; otherwise from the sheet.
  */
-export function CharacterPanel({ character, encounter, token, onRoll, onTurn, onArmor, onAim, onReload, busy }: {
+export function CharacterPanel({ character, encounter, token, onRoll, onTurn, onArmor, onAim, onReload, onUnjam, busy }: {
   character: PlayerCharacter | null;
   encounter: PlayerEncounter | null;
   token: TokenView | undefined;
@@ -31,6 +31,8 @@ export function CharacterPanel({ character, encounter, token, onRoll, onTurn, on
   onAim?: (weapon: WeaponView, mode: AttackMode) => void;
   /** Reloads a weapon by its key (an Action on the player's Turn in a fight). */
   onReload?: (weaponKey: string) => void;
+  /** Clears a jammed weapon (an Action on the player's Turn). */
+  onUnjam?: (weaponKey: string) => void;
   busy?: boolean;
 }) {
   const [visibility, setVisibility] = useState<TableVisibility>('Public');
@@ -113,7 +115,7 @@ export function CharacterPanel({ character, encounter, token, onRoll, onTurn, on
             return (
               <div key={w.key} className={styles.weapon}>
                 <div className={styles.rowBetween}>
-                  <strong>{w.name}</strong>
+                  <strong>{w.name}{fightWeapon?.quality && fightWeapon.quality !== 'Standard' && <> <Badge tone={fightWeapon.quality === 'Excellent' ? 'cyan' : 'amber'}>{fightWeapon.quality}</Badge></>}{fightWeapon?.jammed && <> <Badge tone="red">{t('travada', 'jammed')}</Badge></>}</strong>
                   {w.magazine != null && <span className={styles.stat}>{w.rounds ?? 0}/{w.magazine}</span>}
                 </div>
                 <div className={styles.row}>
@@ -125,6 +127,13 @@ export function CharacterPanel({ character, encounter, token, onRoll, onTurn, on
                     <Button variant="ghost" disabled={!!blocked} title={blocked ?? undefined}
                       onClick={() => (fightWeapon ? onAim!(fightWeapon, 'Autofire') : check(`1d10${signed(w.autofireTotal!)}`, t(`Autofire: ${w.name}`, `Autofire: ${w.name}`)))}>
                       Autofire {signed(w.autofireTotal)}
+                    </Button>
+                  )}
+                  {onUnjam && fightWeapon?.jammed && (
+                    <Button variant="danger" disabled={busy || encounter?.activeId !== fighter!.id}
+                      title={t('Travada (Poor Quality): destravar gasta uma Ação (CP:R p.344).', 'Jammed (Poor Quality): unjamming takes an Action (CP:R p.344).')}
+                      onClick={() => onUnjam(w.key)}>
+                      {t('Destravar', 'Unjam')}
                     </Button>
                   )}
                   {onReload && w.magazine != null && (

@@ -62,6 +62,8 @@ public sealed record Combatant
     public string? CoverId { get; init; }
     /// <summary>Rounds left in each weapon's magazine (NPCs and generic enemies).</summary>
     public Dictionary<string, int> Ammo { get; init; } = [];
+    /// <summary>Weapons jammed by a natural 1 (Poor Quality, CP:R p.344), NPCs and generic enemies; PCs keep it on the sheet.</summary>
+    public List<string> Jammed { get; init; } = [];
 }
 
 /// <summary>What the combat table needs from an NPC sheet, taken when it joins the encounter.</summary>

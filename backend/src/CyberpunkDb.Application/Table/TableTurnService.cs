@@ -55,6 +55,14 @@ public sealed class TableTurnService(IAppDbContext db, EncounterService encounte
         return new PlayerReloadResult(null, PlayerCharacters.From(reloaded));
     }
 
+    /// <summary>Clears a jammed weapon of the seat's character: an Action on its own Turn (CP:R p.344).</summary>
+    public async Task<PlayerEncounterDto> UnjamAsync(TableSeat seat, PlayerWeaponRequest r, CancellationToken ct)
+    {
+        var (detail, own, state) = await OwnFighterAsync(seat, ownTurn: true, ct);
+        var after = await encounters.UnjamAsync(detail.Id, own.Id, new UnjamRequest(detail.Version, r.Weapon), ct);
+        return PlayerEncounters.For(after, seat, state);
+    }
+
     /// <summary>Whether the character fights in the active fight of the live scene.</summary>
     private async Task<bool> InFightAsync(int characterId, CancellationToken ct)
     {

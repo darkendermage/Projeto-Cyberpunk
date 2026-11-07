@@ -33,6 +33,7 @@ describe('throwOf', () => {
     expect(throwOf(message({ kind: 'Attack', attack }))!.dice).toEqual([{ sides: 10, value: 7 }, { sides: 6, value: 4 }, { sides: 6, value: 6 }, { sides: 6, value: 2 }]);
     expect(throwOf(message({ kind: 'Attack', attack: { ...attack, targets: [{ ...attack.targets[0], damageDice: [] }] } }))!.dice).toHaveLength(1);
     expect(throwOf(message({ kind: 'Attack', attack: { ...attack, undone: true } }))).toBeNull();
+    expect(throwOf(message({ kind: 'Attack', attack: { ...attack, attackRoll: 10, attackExtra: 6 } }))!.dice.slice(0, 2)).toEqual([{ sides: 10, value: 10 }, { sides: 10, value: 6 }]);
   });
 });
 

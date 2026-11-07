@@ -16,7 +16,7 @@ public sealed record TableAttackTarget(
 /// </summary>
 public sealed record TableAttack(
     int EncounterId, int Seq, string AttackerId, string AttackerName, bool AttackerPc, string Weapon, AttackMode Mode, bool Melee,
-    int? AttackRoll, int AttackTotal, IReadOnlyList<TableAttackTarget> Targets, bool Undone = false);
+    int? AttackRoll, int AttackTotal, IReadOnlyList<TableAttackTarget> Targets, bool Undone = false, int? AttackExtra = null);
 
 public static class TableAttacks
 {
@@ -26,7 +26,7 @@ public static class TableAttacks
         bool IsPc(string id) => detail.Queue.FirstOrDefault(f => f.Id == id)?.Kind == CombatantKind.Pc;
         return new TableAttack(detail.Id, a.Seq, a.AttackerId, a.Attacker, IsPc(a.AttackerId), a.Weapon, a.Mode, a.Melee, a.AttackRoll, a.AttackTotal,
             a.Targets.Select(t => new TableAttackTarget(t.TargetId, t.TargetName, IsPc(t.TargetId), t.Hit, t.Damage, t.Through, t.Location, t.Dv,
-                t.DefenseRoll, t.DamageDice, t.CriticalInjury)).ToList());
+                t.DefenseRoll, t.DamageDice, t.CriticalInjury)).ToList(), AttackExtra: a.AttackExtra);
     }
 
     /// <summary>

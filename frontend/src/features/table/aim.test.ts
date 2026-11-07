@@ -46,3 +46,7 @@ describe('canReload', () => {
   it('refuses a weapon without a magazine', () => expect(canReload({ ...rifle, magazine: null, rounds: null })).not.toBeNull());
   it('refuses a melee weapon', () => expect(canReload({ ...rifle, melee: true, rounds: 0 })).not.toBeNull());
 });
+
+describe('cannotFire', () => {
+  it('blocks a jammed weapon', () => expect(cannotFire({ ...rifle, jammed: true })).not.toBeNull());
+});

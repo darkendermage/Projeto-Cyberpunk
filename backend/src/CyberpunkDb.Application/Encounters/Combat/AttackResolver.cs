@@ -15,7 +15,7 @@ public sealed record PlannedHit(
 
 public sealed record PlannedAttack(
     string WeaponName, string WeaponKey, AttackMode Mode, int? AttackRoll, int AttackTotal, int Rounds, IReadOnlyList<PlannedHit> Hits,
-    IReadOnlyList<string> Notes);
+    IReadOnlyList<string> Notes, int? AttackExtra = null, bool Jammed = false);
 
 /// <summary>
 /// Resolves an attack the way the Core does (CP:R p.170-178): the attacker's STAT + skill + 1d10 against the range DV
@@ -38,6 +38,9 @@ public sealed class AttackResolver(CombatRuleBook combat, CharacterRuleBook char
             ? new WeaponView(Thrown, L.T("Objeto arremessado", "Thrown object"), WeaponClass.GrenadeLauncher, "athletics", attacker.Athletics, null,
                 r.ThrownDamage ?? "1d6", 1, null, null, null, false, false)
             : attacker.Weapon(r.Weapon) ?? throw RequestValidationException.For("weapon", L.T($"{attacker.Name} não tem essa arma pronta.", $"{attacker.Name} doesn't have that weapon ready."));
+
+        if (weapon.Jammed)
+            throw RequestValidationException.For("weapon", L.T($"{weapon.Name} está travada: gaste uma Ação para destravar (CP:R p.344).", $"{weapon.Name} is jammed: spend an Action to unjam (CP:R p.344)."));
 
         var notes = new List<string>();
         var aimed = r.Mode is AttackMode.AimedHead or AttackMode.AimedHand or AttackMode.AimedLeg;
@@ -62,7 +65,27 @@ public sealed class AttackResolver(CombatRuleBook combat, CharacterRuleBook char
             throw RequestValidationException.For("weapon", L.T($"{weapon.Name} tem {loaded} bala(s) no pente; {(autofire ? "Autofire e Suppressive Fire precisam de " + rounds : "recarregue")}.", $"{weapon.Name} has {loaded} round(s) in the magazine; {(autofire ? "Autofire and Suppressive Fire need " + rounds : "reload")}."));
 
         var attackRoll = CheckD10(r.AttackRoll, dice, "attackRoll");
-        var attackTotal = baseTotal + attackRoll;
+        // CP:R p.130: a natural 10 rolls one more d10 and adds it; a natural 1 rolls one more and subtracts it.
+        int? extra = null;
+        if (attackRoll == 10)
+        {
+            extra = CheckD10(r.AttackExtra, dice, "attackExtra");
+            notes.Add(L.T($"Crítico: 10 natural, +{extra} (CP:R p.130).", $"Critical success: natural 10, +{extra} (CP:R p.130)."));
+        }
+        else if (attackRoll == 1)
+        {
+            // CP:R p.146: a Solo with 4 points in Fumble Recovery ignores critical failures when attacking.
+            if (attacker.Awareness("fumbleRecovery") >= 4) notes.Add(L.T("1 natural ignorado por Fumble Recovery (CP:R p.146).", "Natural 1 ignored by Fumble Recovery (CP:R p.146)."));
+            else
+            {
+                extra = -CheckD10(r.AttackExtra, dice, "attackExtra");
+                notes.Add(L.T($"Falha crítica: 1 natural, {extra} (CP:R p.130).", $"Critical failure: natural 1, {extra} (CP:R p.130)."));
+            }
+        }
+        var attackTotal = baseTotal + attackRoll + (extra ?? 0);
+        // CP:R p.344: a Poor Quality weapon jams on a natural 1 (the die still shows 1, whatever Fumble Recovery does).
+        var jammed = attackRoll == 1 && weapon.Quality == WeaponQuality.Poor && !thrown;
+        if (jammed) notes.Add(L.T($"{weapon.Name} travou (Poor Quality, CP:R p.344): uma Ação para destravar.", $"{weapon.Name} jammed (Poor Quality, CP:R p.344): an Action to unjam."));
 
         // ---------------------------------------------------------------- Suppressive Fire: no damage, only the WILL check
         if (r.Mode == AttackMode.Suppressive)
@@ -78,7 +101,7 @@ public sealed class AttackResolver(CombatRuleBook combat, CharacterRuleBook char
                     r.Mode, false, [held ? L.T("Segurou a posição.", "Held their ground.") : L.T($"Precisa usar o próximo Move Action (e Run, se preciso) para ir para a cobertura ({doc.Suppressive.Source}).", $"Must use the next Move Action (and Run, if needed) to get to cover ({doc.Suppressive.Source}).")]);
             }).ToList();
             notes.Add(L.T($"Atinge quem está a pé, fora de cobertura e à vista, até {range} m.", $"Hits anyone on foot, out of cover and in sight, up to {range} m."));
-            return new PlannedAttack(weapon.Name, weapon.Key, r.Mode, attackRoll, attackTotal, rounds, hits, notes);
+            return new PlannedAttack(weapon.Name, weapon.Key, r.Mode, attackRoll, attackTotal, rounds, hits, notes, extra, jammed);
         }
 
         // ---------------------------------------------------------------- damage (rolled once for area attacks)
@@ -141,7 +164,7 @@ public sealed class AttackResolver(CombatRuleBook combat, CharacterRuleBook char
         }
         if (sixes) notes.Add(L.T("Dois ou mais 6 no dano: Critical Injury em quem foi atingido (CP:R p.187).", "Two or more 6s on the damage: Critical Injury to whoever was hit (CP:R p.187)."));
         if (r.Mode == AttackMode.ShotgunShell) notes.Add(L.T($"Shotgun Shell: todos à frente até {doc.ShotgunShell.Value.RangeMeters} m, dano rolado uma vez ({doc.ShotgunShell.Source}).", $"Shotgun Shell: everyone in front up to {doc.ShotgunShell.Value.RangeMeters} m, damage rolled once ({doc.ShotgunShell.Source})."));
-        return new PlannedAttack(weapon.Name, weapon.Key, r.Mode, attackRoll, attackTotal, rounds, planned, notes);
+        return new PlannedAttack(weapon.Name, weapon.Key, r.Mode, attackRoll, attackTotal, rounds, planned, notes, extra, jammed);
     }
 
     private int RangeDv(WeaponView weapon, AttackRequest r, bool thrown)

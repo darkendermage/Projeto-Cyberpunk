@@ -36,13 +36,17 @@ public sealed record MoveInQueueRequest(int Version, string? BeforeId = null);
 public sealed record AttackRequest(
     int Version, string AttackerId, List<string> TargetIds, string Weapon, AttackMode Mode = AttackMode.Single, int? Range = null,
     bool Dodge = false, int Modifier = 0, int? AttackRoll = null, Dictionary<string, int>? DefenseRolls = null,
-    List<int>? DamageDice = null, string? ThrownDamage = null, bool IgnoreCover = false, int? CritRoll = null);
+    List<int>? DamageDice = null, string? ThrownDamage = null, bool IgnoreCover = false, int? CritRoll = null,
+    // The extra d10 of a natural 10 or 1 (CP:R p.130), typed like the other dice; rolled when missing.
+    int? AttackExtra = null);
 
 public sealed record ManualDamageRequest(
     int Version, int Amount, InjuryLocation Location = InjuryLocation.Body, bool BypassArmor = false, bool HalveArmor = false,
     bool Critical = false, string? Description = null);
 public sealed record EnvironmentDamageRequest(int Version, string EnvironmentId, List<int>? Dice = null);
 public sealed record HealCombatantRequest(int Version, int Amount);
+/// <summary>Clears a jammed weapon (an Action, CP:R p.344).</summary>
+public sealed record UnjamRequest(int Version, string Weapon);
 /// <summary>Reloads one of the fighter's weapons (an Action, CP:R p.171).</summary>
 public sealed record ReloadCombatantRequest(int Version, string Weapon);
 /// <summary>SP of one location up or down (ablation or repair), within the armor's full SP.</summary>
@@ -61,7 +65,7 @@ public sealed record TargetResult(
 
 /// <summary>An attack's outcome; <see cref="Seq"/> numbers the fight's attacks, <see cref="Melee"/> tells a blade from a gun.</summary>
 public sealed record AttackResult(string Attacker, string Weapon, AttackMode Mode, int? AttackRoll, int AttackTotal, IReadOnlyList<TargetResult> Targets, IReadOnlyList<string> Notes,
-    string AttackerId = "", int Seq = 0, bool Melee = false);
+    string AttackerId = "", int Seq = 0, bool Melee = false, int? AttackExtra = null);
 
 public sealed record CombatantDto(FighterView View, CombatantKind Kind, bool Active);
 

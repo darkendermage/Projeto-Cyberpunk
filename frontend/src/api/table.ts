@@ -112,6 +112,8 @@ export function playerApi(seat: string) {
     attack: (body: QuickAttack) => request<TableAttack>('/table/play/attack', { method: 'POST', body: json(body), headers }),
     /** Reloads one of the seat's character's weapons (on its Turn when it is in the fight). */
     reload: (weapon: string) => request<{ encounter: PlayerEncounter | null; character: PlayerCharacter | null }>('/table/play/reload', { method: 'POST', body: json({ weapon }), headers }),
+    /** Clears a jammed weapon of the seat's character (an Action on its Turn). */
+    unjam: (weapon: string) => request<PlayerEncounter>('/table/play/unjam', { method: 'POST', body: json({ weapon }), headers }),
     /** Ends the seat's own Turn in the live scene's fight. */
     endTurn: () => request<PlayerEncounter>('/table/play/end-turn', { method: 'POST', headers }),
     armor: (location: ArmorLocation, delta: number) => request<PlayerCharacter>('/table/play/armor', { method: 'POST', body: json({ location, delta }), headers }),

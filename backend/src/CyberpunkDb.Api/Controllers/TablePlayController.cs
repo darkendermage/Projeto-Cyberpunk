@@ -171,6 +171,10 @@ public sealed class TablePlayController(SeatService seats, SceneService scenes, 
     [HttpPost("reload")]
     public async Task<PlayerReloadResult> Reload(PlayerWeaponRequest request, CancellationToken ct) => await turns.ReloadAsync(await SeatAsync(ct), request, ct);
 
+    /// <summary>Clears a jammed weapon of the seat's character (an Action on its Turn).</summary>
+    [HttpPost("unjam")]
+    public async Task<PlayerEncounterDto> Unjam(PlayerWeaponRequest request, CancellationToken ct) => await turns.UnjamAsync(await SeatAsync(ct), request, ct);
+
     /// <summary>The player ends their own Turn.</summary>
     [HttpPost("end-turn")]
     public async Task<PlayerEncounterDto> EndTurn(CancellationToken ct) => await turns.EndTurnAsync(await SeatAsync(ct), ct);

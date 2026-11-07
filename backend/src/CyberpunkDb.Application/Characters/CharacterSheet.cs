@@ -242,6 +242,8 @@ public sealed record WeaponState
     public int? LoadedAmmoItemId { get; init; }
     /// <summary>Inventory instances of the attachments installed in the weapon's slots (CP:R p.95).</summary>
     public List<string> Attachments { get; init; } = [];
+    /// <summary>A Poor Quality weapon jammed by a natural 1 (CP:R p.344): it can't fire until an Action unjams it.</summary>
+    public bool Jammed { get; init; }
 }
 
 /// <summary>

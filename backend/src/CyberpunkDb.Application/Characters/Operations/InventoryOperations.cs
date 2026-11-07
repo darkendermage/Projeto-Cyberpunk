@@ -308,6 +308,18 @@ public sealed class InventoryOperations(CharacterRuleBook rules, CyberwareOperat
         return Replace(sheet, entry with { Quality = request.Quality });
     }
 
+    /// <summary>A weapon copy jammed (natural 1 with Poor Quality) or cleared (an Action), CP:R p.344.</summary>
+    public static CharacterSheet SetJammed(CharacterSheet sheet, string instanceId, bool jammed, CharacterChange change)
+    {
+        var entry = Find(sheet, instanceId);
+        var item = change.Item(entry.ItemId);
+        var state = entry.Weapon ?? new WeaponState();
+        if (state.Jammed == jammed) return sheet;
+        change.Log(CharacterEventKind.Combat, jammed ? "jam" : "unjam",
+            jammed ? L.T($"{item.Name} travou (Poor Quality).", $"{item.Name} jammed (Poor Quality).") : L.T($"{item.Name} destravada.", $"{item.Name} unjammed."));
+        return Replace(sheet, entry with { Weapon = state with { Jammed = jammed } });
+    }
+
     public CharacterSheet Reload(CharacterSheet sheet, ReloadRequest request, CharacterChange change)
     {
         var entry = Find(sheet, request.InstanceId);

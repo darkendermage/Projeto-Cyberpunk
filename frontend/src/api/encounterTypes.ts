@@ -24,6 +24,10 @@ export interface WeaponView {
   autofireOnly?: boolean | null;
   melee: boolean;
   halvesArmor: boolean;
+  /** CP:R p.344: Excellent +1 to attacks, Poor jams on a natural 1. */
+  quality?: 'Poor' | 'Standard' | 'Excellent';
+  /** Jammed by a natural 1: no attack until an Action unjams it. */
+  jammed?: boolean;
 }
 
 export interface InjuryView {

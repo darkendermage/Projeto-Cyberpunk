@@ -132,7 +132,7 @@ public sealed class CharacterCalculator(CharacterRuleBook rules)
                 skill?.Total ?? 0, w.Damage, w.Rof, w.Magazine, state.LoadedRounds, state.LoadedAmmoItemId,
                 state.LoadedAmmoItemId is { } ammo ? catalog.Find(ammo)?.Name : null,
                 w.AutofireMultiplier, autofire?.Total, w.Calibers, w.Exotic,
-                ranged && !w.Exotic ? slots : 0, attachments, e.State == ItemState.Equipped, e.Quality ?? w.Quality));
+                ranged && !w.Exotic ? slots : 0, attachments, e.State == ItemState.Equipped, e.Quality ?? w.Quality, state.Jammed));
         }
         return lines;
     }

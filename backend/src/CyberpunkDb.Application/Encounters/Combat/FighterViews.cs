@@ -15,7 +15,9 @@ namespace CyberpunkDb.Application.Encounters.Combat;
 /// <summary>An attack option with everything but the d10 already added (STAT + skill + penalties).</summary>
 public sealed record WeaponView(
     string Key, string Name, WeaponClass? Class, string Skill, int AttackTotal, int? AutofireTotal, string Damage, int Rof,
-    int? Rounds, int? Magazine, int? AutofireMultiplier, bool Melee, bool HalvesArmor, int?[]? RangeDv = null, bool? AutofireOnly = null);
+    int? Rounds, int? Magazine, int? AutofireMultiplier, bool Melee, bool HalvesArmor, int?[]? RangeDv = null, bool? AutofireOnly = null,
+    // CP:R p.344: Excellent +1 to attacks; a Poor one jams on a natural 1 and can't fire until unjammed (an Action).
+    WeaponQuality Quality = WeaponQuality.Standard, bool Jammed = false);
 
 public sealed record InjuryView(string Name, InjuryLocation Location, string? Effect, bool DeathSave);
 
@@ -31,8 +33,13 @@ public sealed record FighterView(
     int DeathSavePenalty, int DeathSaveTarget, bool MustDeathSave, bool Dead, bool Stabilized,
     string? CoverId, int? CharacterId, int? CharacterVersion, string? Source,
     // NPCs and generic enemies: the STATs and Skills of the snapshot, for the read-only sheet. PCs read their own sheet.
-    IReadOnlyList<NamedValueDto>? Stats = null, IReadOnlyList<NamedValueDto>? Skills = null)
+    IReadOnlyList<NamedValueDto>? Stats = null, IReadOnlyList<NamedValueDto>? Skills = null,
+    // A Solo's Combat Awareness points by part (CP:R p.146), from the sheet; empty for everyone else.
+    IReadOnlyDictionary<string, int>? CombatAwareness = null)
 {
+    /// <summary>Points the Solo put in one part of Combat Awareness (0 when none).</summary>
+    public int Awareness(string key) => CombatAwareness?.GetValueOrDefault(key) ?? 0;
+
     public bool CanDodge(int dodgeRef) => Ref >= dodgeRef;
     public bool CrackedSkull => Injuries.Any(i => i.Name.Equals("Cracked Skull", StringComparison.OrdinalIgnoreCase));
     public WeaponView? Weapon(string key) => Weapons.FirstOrDefault(w => w.Key == key);
@@ -56,7 +63,8 @@ public sealed class FighterViews(CharacterRuleBook characterRules, CharacterCalc
 
         var weapons = r.Weapons.Where(w => w.Equipped).Select(w => new WeaponView(
             w.InstanceId, w.Name, w.Class, w.SkillId ?? "", w.SkillTotal, w.AutofireTotal, w.Damage ?? "", w.Rof ?? 1,
-            w.Magazine is null ? null : w.LoadedRounds, w.Magazine, w.AutofireMultiplier, w.SkillId == "melee-weapon", w.SkillId == "melee-weapon")).ToList();
+            w.Magazine is null ? null : w.LoadedRounds, w.Magazine, w.AutofireMultiplier, w.SkillId == "melee-weapon", w.SkillId == "melee-weapon",
+            Quality: w.Quality, Jammed: w.Jammed)).ToList();
         weapons.AddRange(Unarmed(body, cyberarm, Skill(Brawling, "DEX"),
             r.Skills.Where(s => s.SkillId == MartialArtsPrefix && s.Level > 0).Select(s => (s.Key, s.Specialization ?? "", s.Total))));
 
@@ -69,7 +77,8 @@ public sealed class FighterViews(CharacterRuleBook characterRules, CharacterCalc
             r.ActiveInjuries.Where(i => i.Status == InjuryStatus.Active).Select(i => new InjuryView(i.Name, i.Location, i.Effect, i.RaisesDeathSave)).ToList(),
             [.. detail.Sheet.Combat.Conditions, .. c.Conditions],
             r.Health.DeathSavePenalty, r.Health.DeathSave, r.Health.MustRollDeathSave, detail.Sheet.Combat.Conditions.Contains("Morto"),
-            detail.Sheet.Combat.Stabilized, c.CoverId, c.CharacterId, detail.Version, null);
+            detail.Sheet.Combat.Stabilized, c.CoverId, c.CharacterId, detail.Version, null,
+            CombatAwareness: detail.Sheet.Roles.FirstOrDefault(x => x.Role.Equals("Solo", StringComparison.OrdinalIgnoreCase))?.Split);
     }
 
     // ------------------------------------------------------------------ NPCs and generic enemies
@@ -104,7 +113,8 @@ public sealed class FighterViews(CharacterRuleBook characterRules, CharacterCalc
         var weapons = s.Weapons.Select(w => new WeaponView(
             w.Key, w.Name, w.Class, w.Skill, (w.AttackBase ?? Skill(w.Skill)) + (w.AttackBase is null ? 0 : penalty),
             w.AutofireMultiplier is null ? null : Skill("autofire"), w.Damage, w.Rof,
-            w.Magazine is null ? null : c.Ammo.GetValueOrDefault(w.Key, w.Magazine.Value), w.Magazine, w.AutofireMultiplier, w.Melee, w.HalvesArmor ?? w.Melee, w.RangeDv, w.AutofireOnly)).ToList();
+            w.Magazine is null ? null : c.Ammo.GetValueOrDefault(w.Key, w.Magazine.Value), w.Magazine, w.AutofireMultiplier, w.Melee, w.HalvesArmor ?? w.Melee, w.RangeDv, w.AutofireOnly,
+            Jammed: c.Jammed.Contains(w.Key))).ToList();
         weapons.AddRange(Unarmed(s.Body, s.Cyberarm, Skill(Brawling),
             s.Skills.Keys.Where(k => k.StartsWith(MartialArtsPrefix + ":", StringComparison.OrdinalIgnoreCase)).Select(k => (k, k.Split(':')[1], Skill(k)))));
 

@@ -29,6 +29,8 @@ export function throwOf(m: TableMessage): DiceThrow | null {
   if (m.kind === 'Attack' && m.attack && !m.attack.undone) {
     const a = m.attack;
     if (a.attackRoll != null) add(10, a.attackRoll);
+    // The extra d10 of a natural 10 or 1 (CP:R p.130).
+    if (a.attackExtra != null) add(10, Math.abs(a.attackExtra));
     a.targets.find((target) => target.hit && target.damageDice.length > 0)?.damageDice.forEach((d) => add(6, d));
     return dice.length ? { id: m.id, dice, total: a.attackTotal, label: t(`Ataque: ${a.weapon}`, `Attack: ${a.weapon}`), critical: null } : null;
   }

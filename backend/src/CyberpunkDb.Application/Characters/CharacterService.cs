@@ -426,6 +426,13 @@ public sealed class CharacterService(
     public Task<CharacterDetailDto> ReloadAsync(int id, ReloadRequest r, CancellationToken ct) =>
         MutateAsync(id, r.Version, c => inventory.Reload(c.Sheet, r, c), ct);
 
+    /// <summary>Jams or clears a weapon copy (Poor Quality on a natural 1, CP:R p.344); the combat table calls it.</summary>
+    internal async Task<CharacterDetailDto> SetJammedAsync(int id, string instanceId, bool jammed, CancellationToken ct)
+    {
+        var version = (await SnapshotAsync(id, ct)).Version;
+        return await MutateAsync(id, version, c => InventoryOperations.SetJammed(c.Sheet, instanceId, jammed, c), ct);
+    }
+
     public Task<CharacterDetailDto> SetWeaponQualityAsync(int id, WeaponQualityRequest r, CancellationToken ct) =>
         MutateAsync(id, r.Version, c => InventoryOperations.SetQuality(c.Sheet, r, c), ct);
 

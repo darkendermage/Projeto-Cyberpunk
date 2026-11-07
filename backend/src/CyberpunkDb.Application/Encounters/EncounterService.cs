@@ -289,6 +289,8 @@ public sealed class EncounterService(
 
             // Ammunition first: if the magazine can't pay, nothing happens.
             s = await SpendAmmoAsync(s, attacker, plan, r.Mode, ct);
+            // A Poor Quality weapon that rolled a natural 1 jams after the shot (CP:R p.344).
+            if (plan.Jammed) s = await SetJammedAsync(s, attacker, plan.WeaponKey, true, ct);
 
             var results = new List<TargetResult>();
             foreach (var hit in plan.Hits)
@@ -302,7 +304,7 @@ public sealed class EncounterService(
             var seq = s.AttackSeq + 1;
             s = s with { AttackSeq = seq, Undo = new AttackUndo(seq, e.Version + 1, before, sheets) };
             var melee = attacker.Weapon(plan.WeaponKey)?.Melee ?? false;
-            var attack = new AttackResult(attacker.Name, plan.WeaponName, plan.Mode, plan.AttackRoll, plan.AttackTotal, results, plan.Notes, attacker.Id, seq, melee);
+            var attack = new AttackResult(attacker.Name, plan.WeaponName, plan.Mode, plan.AttackRoll, plan.AttackTotal, results, plan.Notes, attacker.Id, seq, melee, plan.AttackExtra);
             _lastAttack = attack;
             var summary = plan.Mode == AttackMode.Suppressive
                 ? string.Join("; ", results.Select(t => $"{t.TargetName}: {t.Notes.FirstOrDefault()}"))
@@ -312,6 +314,32 @@ public sealed class EncounterService(
         }, ct);
 
     private AttackResult? _lastAttack;
+
+    /// <summary>A jammed weapon cleared with an Action (CP:R p.344).</summary>
+    public Task<EncounterDetailDto> UnjamAsync(int id, string combatantId, UnjamRequest r, CancellationToken ct) =>
+        MutateAsync(id, r.Version, async (s, _, _) =>
+        {
+            var c = Require(s, combatantId);
+            var fighter = (await ViewsAsync(s, ct))[c.Id];
+            var weapon = fighter.Weapon(r.Weapon) ?? throw RequestValidationException.For("weapon", L.T("Arma não encontrada.", "Weapon not found."));
+            if (!weapon.Jammed) throw RequestValidationException.For("weapon", L.T($"{weapon.Name} não está travada.", $"{weapon.Name} isn't jammed."));
+            s = await SetJammedAsync(s, fighter, weapon.Key, false, ct);
+            return Log(s, c.Id, "unjam", L.T($"{c.Name} destrava {weapon.Name} (Ação).", $"{c.Name} unjams {weapon.Name} (Action)."));
+        }, ct);
+
+    /// <summary>Jams or clears a weapon: on the PC's sheet, or on the NPC's running state.</summary>
+    private async Task<EncounterState> SetJammedAsync(EncounterState s, FighterView fighter, string weaponKey, bool jammed, CancellationToken ct)
+    {
+        if (fighter.Kind == CombatantKind.Pc && fighter.CharacterId is { } characterId)
+        {
+            await characters.SetJammedAsync(characterId, weaponKey, jammed, ct);
+            return s;
+        }
+        var c = Require(s, fighter.Id);
+        var list = c.Jammed.Where(k => k != weaponKey).ToList();
+        if (jammed) list.Add(weaponKey);
+        return Replace(s, c with { Jammed = list });
+    }
 
     /// <summary>
     /// Puts the fight and the sheets of the PCs involved back as they were before the last attack. Only right after it:
