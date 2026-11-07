@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
-import { Music, Volume2, VolumeX, X } from 'lucide-react';
+import { Maximize2, Minimize2, Music, Volume2, VolumeX } from 'lucide-react';
 import type { TableMusic } from '../../../api/tableTypes';
 import { Button, IconButton } from '../../../components/ui/ui';
 import { t } from '../../../i18n';
 import type { TablePrefs } from '../tablePrefs';
-import { expectedPosition, needsSeek } from './sync';
+import { expectedPosition, musicAction, needsSeek } from './sync';
 import { isEmbedBlocked, loadYouTube, type YtPlayer } from './youtube';
 import styles from '../Table.module.css';
 
@@ -16,7 +16,8 @@ const onTrack = (p: YtPlayer, m: TableMusic) => !m.playlistId || p.getPlaylistIn
 /**
  * The table's music on one screen (G): a small YouTube player in a corner of the board (visible, as YouTube requires),
  * kept on the GM's track and position. The browser plays sound only after a click: "Enable sound" unlocks it. Volume
- * and mute are each person's own. "Hide" stops the music on this screen only (a hidden player can't keep playing).
+ * and mute are each person's own. "Minimize" (round 6) folds it into a bar and keeps playing: the video goes on off
+ * screen, since YouTube has no audio-only stream.
  */
 export function MusicPlayer({ music, prefs, onPrefs, onBlocked, onEnded }: {
   music: TableMusic | null;
@@ -32,14 +33,16 @@ export function MusicPlayer({ music, prefs, onPrefs, onBlocked, onEnded }: {
   const loaded = useRef<string | null>(null);
   const live = useRef(music);
   const [ready, setReady] = useState(false);
-  const [hidden, setHidden] = useState(false);
   // Browsers play sound only after a click on this page load: not kept across visits.
   const [unlocked, setUnlocked] = useState(false);
+  const unlockedRef = useRef(false);
+  useEffect(() => { unlockedRef.current = unlocked; }, [unlocked]);
   // Callbacks change on every render of the page: the player reads the latest ones and is not rebuilt for them.
   const callbacks = useRef({ onBlocked, onEnded });
   useEffect(() => { live.current = music; callbacks.current = { onBlocked, onEnded }; });
 
-  const show = music != null && !hidden;
+  const show = music != null;
+  const minimized = prefs.musicMinimized;
 
   // The player is created once there is music, and destroyed with it.
   useEffect(() => {
@@ -77,8 +80,10 @@ export function MusicPlayer({ music, prefs, onPrefs, onBlocked, onEnded }: {
     const at = expectedPosition(music, Date.now());
     if (loaded.current !== key) {
       loaded.current = key;
-      if (music.playlistId) p.loadPlaylist({ list: music.playlistId, listType: 'playlist', index: music.index, startSeconds: at });
-      else if (music.videoId) p.loadVideoById(music.videoId, at);
+      // A track that loads while the table is paused is only cued: "load" would start it on its own.
+      const play = music.playing && unlocked;
+      if (music.playlistId) (play ? p.loadPlaylist : p.cuePlaylist).call(p, { list: music.playlistId, listType: 'playlist', index: music.index, startSeconds: at });
+      else if (music.videoId) (play ? p.loadVideoById : p.cueVideoById).call(p, music.videoId, at);
     } else if (onTrack(p, music) && needsSeek(p.getCurrentTime(), at)) p.seekTo(at, true);
     if (music.playing && unlocked) p.playVideo(); else p.pauseVideo();
   }, [ready, music, unlocked]);
@@ -97,7 +102,12 @@ export function MusicPlayer({ music, prefs, onPrefs, onBlocked, onEnded }: {
     const id = window.setInterval(() => {
       const p = player.current;
       const m = live.current;
-      if (!p || !m?.playing) return;
+      if (!p || !m) return;
+      // Play or pause again when the player drifted from the table (a pause that arrived while it was loading).
+      const action = musicAction(p.getPlayerState(), m, unlockedRef.current);
+      if (action === 'pause') p.pauseVideo();
+      else if (action === 'play') p.playVideo();
+      if (!m.playing) return;
       const at = expectedPosition(m, Date.now());
       // A playlist that moved on by itself waits for the table's next track instead of seeking the new one.
       if (onTrack(p, m) && needsSeek(p.getCurrentTime(), at)) p.seekTo(at, true);
@@ -106,27 +116,26 @@ export function MusicPlayer({ music, prefs, onPrefs, onBlocked, onEnded }: {
   }, [ready]);
 
   if (!music) return null;
-  if (hidden) {
-    return (
-      <button type="button" className={styles.musicPill} onClick={() => setHidden(false)} title={t('Mostrar a música da mesa', 'Show the table music')}>
-        <Music size={14} /> {music.title ?? t('Música da mesa', 'Table music')}
-      </button>
-    );
-  }
+  const title = music.title ?? t('Música da mesa', 'Table music');
+  // One tree for both looks: the player's frame never unmounts (that would reload the video), it only moves off screen.
   return (
-    <div className={styles.musicBox} role="region" aria-label={t('Música da mesa', 'Table music')}>
+    <div className={minimized ? styles.musicBoxMin : styles.musicBox} role="region" aria-label={t('Música da mesa', 'Table music')}>
       <div className={styles.musicBar}>
         <Music size={13} aria-hidden />
-        <span className={styles.musicTitle}>{music.title ?? t('Música da mesa', 'Table music')}</span>
+        <span className={styles.musicTitle} title={title}>{title}</span>
         <input type="range" min={0} max={100} value={prefs.musicVolume} aria-label={t('Seu volume', 'Your volume')}
           onChange={(e) => onPrefs({ musicVolume: Number(e.target.value) })} />
         <IconButton label={prefs.musicMuted ? t('Ligar som', 'Unmute') : t('Mudo', 'Mute')} onClick={() => onPrefs({ musicMuted: !prefs.musicMuted })}>
           {prefs.musicMuted ? <VolumeX size={13} /> : <Volume2 size={13} />}
         </IconButton>
-        <IconButton label={t('Esconder (para a música só nesta tela)', 'Hide (stops the music on this screen only)')} onClick={() => setHidden(true)}><X size={13} /></IconButton>
+        <IconButton label={minimized ? t('Mostrar o vídeo', 'Show the video') : t('Minimizar (a música continua)', 'Minimize (the music goes on)')}
+          onClick={() => onPrefs({ musicMinimized: !minimized })}>
+          {minimized ? <Maximize2 size={13} /> : <Minimize2 size={13} />}
+        </IconButton>
+        {minimized && !unlocked && <Button variant="primary" icon={<Volume2 size={13} />} onClick={() => setUnlocked(true)}>{t('Ativar som', 'Enable sound')}</Button>}
       </div>
-      <div ref={host} className={styles.musicFrame} />
-      {!unlocked && (
+      <div ref={host} className={minimized ? styles.musicFrameOff : styles.musicFrame} />
+      {!minimized && !unlocked && (
         <div className={styles.musicUnlock}>
           <Button variant="primary" icon={<Volume2 size={14} />} onClick={() => setUnlocked(true)}>{t('Ativar som', 'Enable sound')}</Button>
         </div>

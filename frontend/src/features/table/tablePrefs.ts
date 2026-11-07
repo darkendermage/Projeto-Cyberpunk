@@ -2,10 +2,10 @@ import { useCallback, useState } from 'react';
 import { readStorage, writeStorage } from '../../lib/hooks';
 
 /** What each person turns on or off for themselves at the table: the sounds, the 3D dice and the music's volume. */
-export interface TablePrefs { sound: boolean; dice3d: boolean; musicVolume: number; musicMuted: boolean }
+export interface TablePrefs { sound: boolean; dice3d: boolean; musicVolume: number; musicMuted: boolean; musicMinimized: boolean }
 
 const KEY = 'ncdb.table.fx';
-const DEFAULTS: TablePrefs = { sound: true, dice3d: true, musicVolume: 80, musicMuted: false };
+const DEFAULTS: TablePrefs = { sound: true, dice3d: true, musicVolume: 80, musicMuted: false, musicMinimized: false };
 
 export function readTablePrefs(): TablePrefs {
   return { ...DEFAULTS, ...readStorage<Partial<TablePrefs>>(KEY, {}) };
