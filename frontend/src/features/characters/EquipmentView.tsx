@@ -1,11 +1,12 @@
-import { useState } from 'react';
-import { Crosshair, Gift, Glasses, Package, Shirt, ShoppingBag, Trash2, Wallet, X } from 'lucide-react';
+import { useState, type ReactNode } from 'react';
+import { Crosshair, Gift, Glasses, Package, Shield, Shirt, ShoppingBag, Trash2, Wallet, X } from 'lucide-react';
 import { problemMessage, useCharacterCommand, useCharacterEvents } from '../../api/characters';
 import type { CharacterDetail, CharacterRules, InventoryLine, WearableLine } from '../../api/characterTypes';
 import { Button, IconButton, Modal, NumberInput, Select } from '../../components/ui/ui';
 import { formatEb } from '../../lib/format';
 import { useToast } from '../../state/ToastContext';
-import { CATEGORY_LABEL, formatDate, ITEM_STATE_LABEL, signed } from './characterLabels';
+import { CATEGORY_LABEL, formatDate, ITEM_STATE_LABEL, QUALITY_LABEL, signed } from './characterLabels';
+import { groupInventory } from './inventoryGroups';
 import { RefundButton, SheetPanel, SortButton, SortHeader, StateTag } from './CharacterUi';
 import { Attachments, type Run } from './CombatPanels';
 import { ariaSort, sortRows, type SortState } from './sorting';
@@ -132,19 +133,19 @@ const RECEIVED_LABEL: Partial<Record<InventoryLine['origin'], string>> = { Trade
 function InventoryPanels({ detail, run, busy }: { detail: CharacterDetail; run: Run; busy: boolean }) {
   const [removing, setRemoving] = useState<InventoryLine | null>(null);
   const finalized = detail.sheet.creation.finalized;
-  const gear = detail.report.inventory.filter((i) => !i.fashion);
-  const fashion = detail.report.inventory.filter((i) => i.fashion);
+  const groups = groupInventory(detail.report.inventory);
   const table = { run, busy, finalized, onRemove: setRemoving };
+  const panel = (items: InventoryLine[], title: string, icon: ReactNode, empty: string, weapons = false) => (
+    <SheetPanel title={`${title} (${items.length})`} icon={icon}>
+      {items.length === 0 ? <p className={`${styles.small} ${styles.muted}`}>{empty}</p> : <InventoryTable items={items} weapons={weapons} {...table} />}
+    </SheetPanel>
+  );
   return (
     <>
-      <SheetPanel title={t('Inventário', 'Inventory')} icon={<Package size={16} />}>
-        {gear.length === 0 ? <p className={styles.muted}>{t('Nenhum equipamento.', 'No gear.')}</p> : <InventoryTable items={gear} {...table} />}
-      </SheetPanel>
-      <SheetPanel title={t('Moda', 'Fashion')} icon={<Shirt size={16} />}>
-        {fashion.length === 0
-          ? <p className={`${styles.small} ${styles.muted}`}>{t('Roupas e Fashionware do personagem aparecem aqui.', 'The character\'s clothes and Fashionware show up here.')}</p>
-          : <InventoryTable items={fashion} {...table} />}
-      </SheetPanel>
+      {panel(groups.weapons, t('Armas', 'Weapons'), <Crosshair size={16} />, t('Nenhuma arma, munição ou acessório.', 'No weapons, ammo or attachments.'), true)}
+      {panel(groups.armor, t('Armaduras', 'Armor'), <Shield size={16} />, t('Nenhuma armadura ou escudo.', 'No armor or shields.'))}
+      {panel(groups.misc, t('Itens diversos', 'Misc items'), <Package size={16} />, t('Nenhum outro item.', 'No other items.'))}
+      {panel(groups.clothing, t('Roupas', 'Clothing'), <Shirt size={16} />, t('Roupas e Fashionware do personagem aparecem aqui.', "The character's clothes and Fashionware show up here."))}
       {removing && <RemoveItemDialog item={removing} onClose={() => setRemoving(null)} run={run} busy={busy} />}
     </>
   );
@@ -152,8 +153,8 @@ function InventoryPanels({ detail, run, busy }: { detail: CharacterDetail; run: 
 
 type InventorySort = 'name' | 'category' | 'qty' | 'paid' | 'state';
 
-function InventoryTable({ items, run, busy, finalized, onRemove }: {
-  items: InventoryLine[]; run: Run; busy: boolean; finalized: boolean; onRemove: (item: InventoryLine) => void;
+function InventoryTable({ items, run, busy, finalized, onRemove, weapons }: {
+  items: InventoryLine[]; run: Run; busy: boolean; finalized: boolean; onRemove: (item: InventoryLine) => void; weapons?: boolean;
 }) {
   const [sort, setSort] = useState<SortState<InventorySort> | null>(null);
   const rows = sortRows(items, sort, (i, k) => k === 'name' ? tv(i.name) : k === 'category' ? CATEGORY_LABEL[i.category] ?? i.category
@@ -185,6 +186,13 @@ function InventoryTable({ items, run, busy, finalized, onRemove }: {
                 {tv(i.name)}
                 {i.caliber && <span className={styles.muted}> ({i.caliber})</span>}
                 <div className={styles.source}>{CATEGORY_LABEL[i.category] ?? i.category}</div>
+                {weapons && i.quality && (
+                  <Select style={{ minWidth: 100, marginTop: 4 }} value={i.quality} disabled={busy} aria-label={t(`Qualidade de ${tv(i.name)}`, `Quality of ${tv(i.name)}`)}
+                    title={t('Excellent: +1 nos ataques. Poor: trava no 1 natural (CP:R p.344).', 'Excellent: +1 to attacks. Poor: jams on a natural 1 (CP:R p.344).')}
+                    onChange={(e) => void run('weapon-quality', { instanceId: i.instanceId, quality: e.target.value })}>
+                    {(['Poor', 'Standard', 'Excellent'] as const).map((q) => <option key={q} value={q}>{QUALITY_LABEL[q]}</option>)}
+                  </Select>
+                )}
               </td>
               <td className={styles.num}>{i.rounds ?? i.quantity}</td>
               <td className={styles.num}>
