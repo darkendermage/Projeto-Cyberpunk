@@ -161,6 +161,10 @@ export class BoardController {
     // Scenery (barriers, cars) over the map and under the areas and the characters.
     this.world.addChild(this.backgroundLayer, this.imageLayer, this.gridLayer, this.sceneryLayer, this.templateLayer, this.tokenLayer, this.overlay);
     this.overlay.addChild(this.imageHandles, this.preview, this.ruler, this.rulerText, this.lasso);
+    // Lines drawn over the images must not catch their clicks: under a static stage every child is hit-tested, and a
+    // click right on a grid line (an image centre snaps to one) would land on the grid and fall through to the stage.
+    this.gridLayer.eventMode = 'none';
+    for (const g of [this.preview, this.ruler, this.rulerText, this.lasso]) g.eventMode = 'none';
     this.app.stage.on('pointerdown', (e) => this.onDown(e, null));
     this.app.stage.on('globalpointermove', (e) => this.onMove(e));
     this.app.stage.on('pointerup', (e) => this.onUp(e));
