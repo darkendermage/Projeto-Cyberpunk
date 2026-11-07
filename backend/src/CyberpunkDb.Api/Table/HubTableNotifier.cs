@@ -40,6 +40,8 @@ public sealed class HubTableNotifier(IHubContext<TableHub> hub) : ITableNotifier
 
     public Task SeatsAsync(CancellationToken ct) => hub.Clients.Group(TableHub.Gm).SendAsync("seats", ct);
 
+    public Task ChatResetAsync(CancellationToken ct) => hub.Clients.Groups(TableHub.Gm, TableHub.Players).SendAsync("chatReset", ct);
+
     public Task MusicAsync(TableMusic? music, CancellationToken ct) =>
         hub.Clients.Groups(TableHub.Gm, TableHub.Players).SendAsync("music", music, ct);
 

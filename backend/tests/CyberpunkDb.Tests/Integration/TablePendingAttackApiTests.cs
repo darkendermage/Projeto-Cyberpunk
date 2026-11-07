@@ -218,4 +218,39 @@ public class TablePendingAttackApiTests(ApiFactory factory)
         pending.ContainsKey("attackTotal").Should().BeFalse();
         pending.ContainsKey("attackRoll").Should().BeFalse();
     }
+
+    [Fact]
+    public async Task Interactive_suppressive_fire_resolves()
+    {
+        var s = await _t.FightOnTheTable("PendSupressao", row: 2);
+        var fight = await _t.Send<EncounterDetailDto>(_t.Gm, HttpMethod.Get, $"/api/encounters/{s.EncounterId}");
+        var sheet = await _t.Send<CharacterDetailDto>(_t.Gm, HttpMethod.Get, $"/api/characters/{s.CharacterId}");
+        var rifle = fight.Queue.Single(f => f.Id == s.PcCombatantId).Weapons.First(w => w.AutofireMultiplier is not null).Key;
+        await _t.Send<CharacterDetailDto>(_t.Gm, HttpMethod.Post, $"/api/characters/{s.CharacterId}/weapons/reload", new ReloadRequest(sheet.Version, rifle));
+
+        var detail = await _t.Send<EncounterDetailDto>(_t.Gm, HttpMethod.Post, $"/api/encounters/{s.EncounterId}/attack", new
+        {
+            version = await _t.VersionOf(s.EncounterId), attackerId = s.PcCombatantId, targetIds = s.GangerIds, weapon = rifle,
+            mode = "Suppressive", attackRoll = 5, interactive = true,
+        });
+
+        detail.Pending.Should().BeNull();
+        detail.LastAttack!.Targets.Should().HaveCount(2);
+    }
+
+    [Fact]
+    public async Task An_attack_that_cannot_resolve_never_pauses()
+    {
+        var s = await _t.FightOnTheTable("PendInvalido", row: 2);
+
+        // No range for a shot: refused at once, instead of a pending dodge that could never resolve.
+        var response = await _t.Raw(_t.Gm, HttpMethod.Post, $"/api/encounters/{s.EncounterId}/attack", new
+        {
+            version = await _t.VersionOf(s.EncounterId), attackerId = s.GangerIds[0], targetIds = new[] { s.PcCombatantId }, weapon = "w0",
+            mode = "Single", attackRoll = 8, interactive = true,
+        });
+
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        (await _t.Send<EncounterDetailDto>(_t.Gm, HttpMethod.Get, $"/api/encounters/{s.EncounterId}")).Pending.Should().BeNull();
+    }
 }

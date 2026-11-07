@@ -136,6 +136,7 @@ export function GmTablePage() {
       void client.invalidateQueries({ queryKey: tableKeys.online });
     },
     party: () => void client.invalidateQueries({ queryKey: ['table', 'party'] }),
+    chatReset: () => client.setQueryData<TableMessage[]>(tableKeys.messages, []),
     music: (music) => client.setQueryData<TableMusicState>(musicKey, (old) => ({ music, recent: old?.recent ?? [] })),
     resync: () => void client.invalidateQueries({ queryKey: ['table'] }),
   });
@@ -279,6 +280,7 @@ export function GmTablePage() {
           )}
           {view && <DiceTray ref={dice} sound={prefs.sound} />}
           <MusicPlayer music={gmMusic.data?.music ?? null} prefs={prefs} onPrefs={setPrefs}
+            onEnded={() => { if (gmMusic.data?.music?.playlistId) void tableApi.nextMusic().then((s) => client.setQueryData(musicKey, s), () => {}); }}
             onBlocked={() => toast.notify(t('Este vídeo não permite tocar fora do YouTube. Escolha outro link.', "This video can't play outside YouTube. Pick another link."), 'error')} />
           {view && <span className={styles.hint}>{TOOL_HINT[tool]}</span>}
         </div>

@@ -41,7 +41,7 @@ export const characterApi = {
     form.append('file', file);
     let response: Response;
     try {
-      response = await fetch(`${API_BASE}/characters/${id}/portrait`, { method: 'PUT', body: form, headers: { 'Accept-Language': locale } });
+      response = await fetch(`${API_BASE}/characters/${id}/portrait`, { method: 'PUT', body: form, headers: { 'Accept-Language': locale, ...(seatContext() ? { 'X-Seat': seatContext()! } : {}) } });
     } catch {
       // The server closes the connection on an oversized upload, so the browser only sees a network failure.
       throw new ApiError(0, { title: t('Não deu para enviar o retrato. Verifique se a imagem tem até 2 MB e se o programa está aberto.', 'Couldn\'t upload the portrait. Check that the image is 2 MB or less and that the program is open.') });

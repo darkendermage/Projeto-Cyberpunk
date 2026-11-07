@@ -10,17 +10,22 @@ import styles from '../Table.module.css';
 
 const CHECK_MS = 3000;
 
+/** Whether the player is on the table's track (a playlist may have moved on by itself at the end of a track). */
+const onTrack = (p: YtPlayer, m: TableMusic) => !m.playlistId || p.getPlaylistIndex() === m.index;
+
 /**
  * The table's music on one screen (G): a small YouTube player in a corner of the board (visible, as YouTube requires),
  * kept on the GM's track and position. The browser plays sound only after a click: "Enable sound" unlocks it. Volume
  * and mute are each person's own. "Hide" stops the music on this screen only (a hidden player can't keep playing).
  */
-export function MusicPlayer({ music, prefs, onPrefs, onBlocked }: {
+export function MusicPlayer({ music, prefs, onPrefs, onBlocked, onEnded }: {
   music: TableMusic | null;
   prefs: TablePrefs;
   onPrefs: (patch: Partial<TablePrefs>) => void;
   /** The video can't play outside YouTube (errors 101/150): the GM is told. */
   onBlocked?: () => void;
+  /** The track ended (the GM's screen moves the whole table to the next one of the playlist). */
+  onEnded?: () => void;
 }) {
   const host = useRef<HTMLDivElement>(null);
   const player = useRef<YtPlayer | null>(null);
@@ -30,7 +35,9 @@ export function MusicPlayer({ music, prefs, onPrefs, onBlocked }: {
   const [hidden, setHidden] = useState(false);
   // Browsers play sound only after a click on this page load: not kept across visits.
   const [unlocked, setUnlocked] = useState(false);
-  useEffect(() => { live.current = music; });
+  // Callbacks change on every render of the page: the player reads the latest ones and is not rebuilt for them.
+  const callbacks = useRef({ onBlocked, onEnded });
+  useEffect(() => { live.current = music; callbacks.current = { onBlocked, onEnded }; });
 
   const show = music != null && !hidden;
 
@@ -47,7 +54,9 @@ export function MusicPlayer({ music, prefs, onPrefs, onBlocked }: {
         playerVars: { autoplay: 0, controls: 0, disablekb: 1, modestbranding: 1, playsinline: 1, rel: 0 },
         events: {
           onReady: () => { if (!gone) setReady(true); },
-          onError: (e) => { if (isEmbedBlocked(e.data)) onBlocked?.(); },
+          onError: (e) => { if (isEmbedBlocked(e.data)) callbacks.current.onBlocked?.(); },
+          // 0 = ended: the GM's screen moves everyone to the next track of the playlist.
+          onStateChange: (e) => { if (e.data === 0) callbacks.current.onEnded?.(); },
         },
       });
     }, () => { /* YouTube unreachable: the table goes on without music */ });
@@ -58,7 +67,7 @@ export function MusicPlayer({ music, prefs, onPrefs, onBlocked }: {
       loaded.current = null;
       setReady(false);
     };
-  }, [show, onBlocked]);
+  }, [show]);
 
   // Follows the GM: another track loads; the same one seeks when it drifted, and plays or pauses.
   useEffect(() => {
@@ -70,7 +79,7 @@ export function MusicPlayer({ music, prefs, onPrefs, onBlocked }: {
       loaded.current = key;
       if (music.playlistId) p.loadPlaylist({ list: music.playlistId, listType: 'playlist', index: music.index, startSeconds: at });
       else if (music.videoId) p.loadVideoById(music.videoId, at);
-    } else if (needsSeek(p.getCurrentTime(), at)) p.seekTo(at, true);
+    } else if (onTrack(p, music) && needsSeek(p.getCurrentTime(), at)) p.seekTo(at, true);
     if (music.playing && unlocked) p.playVideo(); else p.pauseVideo();
   }, [ready, music, unlocked]);
 
@@ -90,7 +99,8 @@ export function MusicPlayer({ music, prefs, onPrefs, onBlocked }: {
       const m = live.current;
       if (!p || !m?.playing) return;
       const at = expectedPosition(m, Date.now());
-      if (needsSeek(p.getCurrentTime(), at)) p.seekTo(at, true);
+      // A playlist that moved on by itself waits for the table's next track instead of seeking the new one.
+      if (onTrack(p, m) && needsSeek(p.getCurrentTime(), at)) p.seekTo(at, true);
     }, CHECK_MS);
     return () => window.clearInterval(id);
   }, [ready]);

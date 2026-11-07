@@ -105,8 +105,10 @@ export function PlayerTablePage() {
     scene: setScene,
     encounter: (e) => {
       client.setQueryData(tableKeys.playerEncounter(token), e as PlayerEncounter | null);
-      // A hit or a heal changes the sheet too, and the party's numbers.
+      // A hit or a heal changes the sheet too, and the party's numbers (and the open "Minha ficha" popup).
       void client.invalidateQueries({ queryKey: tableKeys.playerCharacter(token) });
+      const own = client.getQueryData<PlayerState>(tableKeys.player(token))?.seat?.characterId;
+      if (own != null) void client.invalidateQueries({ queryKey: ['characters', own] });
       void client.invalidateQueries({ queryKey: tableKeys.playerParty(token) });
       void client.invalidateQueries({ queryKey: tableKeys.playerSheet(token) });
     },
@@ -130,6 +132,7 @@ export function PlayerTablePage() {
         void client.invalidateQueries({ queryKey: ['characters', characterId] });
       }
     },
+    chatReset: () => client.setQueryData<TableMessage[]>(tableKeys.playerMessages(token), []),
     music: (music) => client.setQueryData<PlayerState>(tableKeys.player(token), (old) => (old ? { ...old, music } : old)),
     resync: () => void client.invalidateQueries({ queryKey: tableKeys.player(token) }),
   }, state.isSuccess);

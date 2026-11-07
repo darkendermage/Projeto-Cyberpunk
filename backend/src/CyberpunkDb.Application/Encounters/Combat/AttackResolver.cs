@@ -101,7 +101,7 @@ public sealed class AttackResolver(CombatRuleBook combat, CharacterRuleBook char
             var range = doc.Suppressive.Value.RangeMeters;
             var hits = targets.Select(t =>
             {
-                var roll = CheckD10(r.DefenseRolls?.GetValueOrDefault(t.Id), dice, "defenseRolls");
+                var roll = CheckD10(TypedDefense(r, t.Id), dice, "defenseRolls");
                 var check = t.Concentration + roll; // the Concentration total already holds WILL
 
                 var held = check >= attackTotal;
@@ -133,13 +133,13 @@ public sealed class AttackResolver(CombatRuleBook combat, CharacterRuleBook char
             if (weapon.Melee)
             {
                 // CP:R p.176: melee is always opposed by DEX + Evasion + 1d10.
-                defenseRoll = CheckD10(r.DefenseRolls?.GetValueOrDefault(t.Id), dice, "defenseRolls");
+                defenseRoll = CheckD10(TypedDefense(r, t.Id), dice, "defenseRolls");
                 dv = t.Evasion + defenseRoll;
                 defense = $"Evasion {t.Evasion} + d10 {defenseRoll} = {dv}";
             }
             else if ((r.Dodge || (r.DodgeTargets?.Contains(t.Id) ?? false)) && t.CanDodge(doc.DodgeRef.Value) && r.Mode != AttackMode.Explosive)
             {
-                defenseRoll = CheckD10(r.DefenseRolls?.GetValueOrDefault(t.Id), dice, "defenseRolls");
+                defenseRoll = CheckD10(TypedDefense(r, t.Id), dice, "defenseRolls");
                 dv = t.Evasion + defenseRoll;
                 defense = $"esquiva (REF {t.Ref}): Evasion {t.Evasion} + d10 {defenseRoll} = {dv}";
             }
@@ -154,7 +154,7 @@ public sealed class AttackResolver(CombatRuleBook combat, CharacterRuleBook char
             if (r.Mode == AttackMode.Explosive && hit && r.Dodge && t.CanDodge(doc.DodgeRef.Value))
             {
                 // CP:R p.174: REF 8+ dodges a blast by rolling higher than the attack.
-                defenseRoll = CheckD10(r.DefenseRolls?.GetValueOrDefault(t.Id), dice, "defenseRolls");
+                defenseRoll = CheckD10(TypedDefense(r, t.Id), dice, "defenseRolls");
                 var dodge = t.Evasion + defenseRoll.Value;
                 if (dodge > attackTotal) { hit = false; targetNotes.Add(L.T($"Saiu da área da explosão (Evasion {dodge} contra {attackTotal}).", $"Got out of the blast area (Evasion {dodge} against {attackTotal}).")); }
             }
@@ -241,6 +241,10 @@ public sealed class AttackResolver(CombatRuleBook combat, CharacterRuleBook char
         }
         return Enumerable.Range(0, count).Select(_ => dice.Roll(sides)).ToList();
     }
+
+    /// <summary>A target's typed defense d10, or null when none was typed (a missing key is not a 0).</summary>
+    private static int? TypedDefense(AttackRequest r, string targetId) =>
+        r.DefenseRolls is { } rolls && rolls.TryGetValue(targetId, out var roll) ? roll : null;
 
     private static int CheckD10(int? typed, IDiceRoller dice, string field)
     {

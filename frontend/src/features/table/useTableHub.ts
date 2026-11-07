@@ -28,6 +28,8 @@ export interface HubHandlers {
   party?: (change: { characterId: number | null }) => void;
   /** The table's music changed (null: stopped). */
   music?: (music: TableMusic | null) => void;
+  /** A new session started: the chat starts over. */
+  chatReset?: () => void;
   /** After a reconnection: whatever was missed must be fetched again. */
   resync?: () => void;
 }
@@ -70,6 +72,7 @@ export function useTableHub(seat: string | null, handlers: HubHandlers, enabled 
     on('seats', 'seats');
     on('party', 'party');
     on('music', 'music');
+    on('chatReset', 'chatReset');
     // A connection closed by this effect's cleanup (StrictMode, a new seat) must not touch the next one's status.
     let disposed = false;
     connection.onreconnecting(() => { if (!disposed) setStatus('reconnecting'); });

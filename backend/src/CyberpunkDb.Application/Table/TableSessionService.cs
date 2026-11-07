@@ -22,13 +22,31 @@ public sealed record RenameSessionRequest(string Name);
 /// The sessions of the virtual table (E2). One is always open: chat lines go to it and fights started or linked on the
 /// table are stamped with it. Lines written before sessions existed are adopted by the first session.
 /// </summary>
-public sealed class TableSessionService(IAppDbContext db)
+public sealed class TableSessionService(IAppDbContext db, ITableNotifier notifier)
 {
+    // One app process serves the table: this keeps two first requests from each opening a "Session 1".
+    private static readonly SemaphoreSlim Opening = new(1, 1);
+
     /// <summary>The open session's id, opening "Session 1" (with the older lines) when there is none.</summary>
     public async Task<int> CurrentIdAsync(CancellationToken ct)
     {
-        var open = await db.TableSessions.Where(s => s.EndedAt == null).OrderByDescending(s => s.Id).Select(s => (int?)s.Id).FirstOrDefaultAsync(ct);
-        if (open is { } id) return id;
+        if (await OpenIdAsync(ct) is { } open) return open;
+        await Opening.WaitAsync(ct);
+        try
+        {
+            return await OpenIdAsync(ct) ?? await OpenFirstAsync(ct);
+        }
+        finally
+        {
+            Opening.Release();
+        }
+    }
+
+    private Task<int?> OpenIdAsync(CancellationToken ct) =>
+        db.TableSessions.Where(s => s.EndedAt == null).OrderByDescending(s => s.Id).Select(s => (int?)s.Id).FirstOrDefaultAsync(ct);
+
+    private async Task<int> OpenFirstAsync(CancellationToken ct)
+    {
         var first = await db.TableMessages.OrderBy(m => m.At).Select(m => (DateTime?)m.At).FirstOrDefaultAsync(ct);
         var session = new TableSession { Name = L.T("Sessão 1", "Session 1"), StartedAt = first ?? DateTime.UtcNow };
         db.TableSessions.Add(session);
@@ -44,12 +62,15 @@ public sealed class TableSessionService(IAppDbContext db)
         var current = await db.TableSessions.FirstAsync(s => s.Id == currentId, ct);
         var now = DateTime.UtcNow;
         current.EndedAt = now;
+        // Any other session left open (a race before this fix) closes too.
+        foreach (var stray in await db.TableSessions.Where(s => s.EndedAt == null && s.Id != currentId).ToListAsync(ct)) stray.EndedAt = now;
         if (Clean(r.Name) is { } name) current.Name = name;
         else if (current.Name.Length == 0) current.Name = L.T($"Sessão de {current.StartedAt:dd/MM/yyyy}", $"Session of {current.StartedAt:yyyy-MM-dd}");
         var count = await db.TableSessions.CountAsync(ct);
         var next = new TableSession { Name = L.T($"Sessão {count + 1}", $"Session {count + 1}"), StartedAt = now };
         db.TableSessions.Add(next);
         await db.SaveChangesAsync(ct);
+        await notifier.ChatResetAsync(ct);
         return await DtoAsync(next, ct);
     }
 

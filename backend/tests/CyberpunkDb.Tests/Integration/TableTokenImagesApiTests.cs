@@ -203,7 +203,7 @@ public class TableTokenImagesApiTests(ApiFactory factory)
         await using var db = new AppDbContext(new DbContextOptionsBuilder<AppDbContext>()
             .UseSqlite($"Data Source={factory.DbPath};Pooling=False").AddInterceptors(log).Options);
         var compendium = factory.Services.GetRequiredService<NpcCompendium>();
-        var scenes = new SceneService(db, new SceneLocks(), new NullTableNotifier(), compendium, new TableSessionService(db));
+        var scenes = new SceneService(db, new SceneLocks(), new NullTableNotifier(), compendium, new TableSessionService(db, new NullTableNotifier()));
         var portraits = new NpcPortraitService(db, compendium, scenes);
 
         var view = await scenes.GetAsync(scene.Id, default);

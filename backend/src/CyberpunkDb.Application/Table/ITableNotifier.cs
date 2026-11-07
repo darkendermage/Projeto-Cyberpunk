@@ -35,6 +35,9 @@ public interface ITableNotifier
 
     /// <summary>The table's music changed (null: stopped): every screen follows.</summary>
     Task MusicAsync(TableMusic? music, CancellationToken ct);
+
+    /// <summary>A new session started: every screen's chat starts over.</summary>
+    Task ChatResetAsync(CancellationToken ct);
 }
 
 /// <summary>For hosts without live screens (and tests that don't care).</summary>
@@ -48,4 +51,5 @@ public sealed class NullTableNotifier : ITableNotifier
     public Task SeatsAsync(CancellationToken ct) => Task.CompletedTask;
     public Task PartyAsync(int? characterId, CancellationToken ct) => Task.CompletedTask;
     public Task MusicAsync(TableMusic? music, CancellationToken ct) => Task.CompletedTask;
+    public Task ChatResetAsync(CancellationToken ct) => Task.CompletedTask;
 }

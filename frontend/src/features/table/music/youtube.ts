@@ -4,6 +4,7 @@ export interface YtPlayer {
   pauseVideo(): void;
   seekTo(seconds: number, allowSeekAhead: boolean): void;
   getCurrentTime(): number;
+  getPlaylistIndex(): number;
   setVolume(volume: number): void;
   mute(): void;
   unMute(): void;

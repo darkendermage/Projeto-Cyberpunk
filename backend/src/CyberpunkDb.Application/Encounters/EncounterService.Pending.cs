@@ -35,6 +35,9 @@ public sealed partial class EncounterService
         r = r with { AttackRoll = r.AttackRoll ?? dice.Roll(10) };
         if (r.AttackRoll is 10 or 1 && r.AttackExtra is null) r = r with { AttackExtra = dice.Roll(10) };
         var seq = s.AttackSeq + 1;
+        // Everything the attack itself refuses (range, rounds, a thrown weapon, the aimed ROF…) refuses now, before
+        // anyone is asked to dodge an attack that could never resolve. The result is discarded.
+        resolver.Resolve(r, attacker, targets, dice);
 
         foreach (var t in targets)
             if (!decided.Contains(t.Id) && NeedsDefense(weapon, r, t))
@@ -43,7 +46,9 @@ public sealed partial class EncounterService
         // Every defense is known: preview the attack to fix the damage and the defense rolls left to the dice.
         var plan = resolver.Resolve(r, attacker, targets, dice);
         var defenses = new Dictionary<string, int>(r.DefenseRolls ?? []);
-        foreach (var hit in plan.Hits.Where(h => h.DefenseRoll is not null)) defenses[hit.TargetId] = hit.DefenseRoll!.Value;
+        // Suppressive Fire's "defense roll" is the whole WILL check, not a d10: it can't be fixed as a die (and has no damage).
+        if (plan.Mode != AttackMode.Suppressive)
+            foreach (var hit in plan.Hits.Where(h => h.DefenseRoll is not null)) defenses[hit.TargetId] = hit.DefenseRoll!.Value;
         r = r with
         {
             DefenseRolls = defenses,
