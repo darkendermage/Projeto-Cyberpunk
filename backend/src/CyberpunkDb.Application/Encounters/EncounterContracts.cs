@@ -43,6 +43,8 @@ public sealed record ManualDamageRequest(
     bool Critical = false, string? Description = null);
 public sealed record EnvironmentDamageRequest(int Version, string EnvironmentId, List<int>? Dice = null);
 public sealed record HealCombatantRequest(int Version, int Amount);
+/// <summary>Reloads one of the fighter's weapons (an Action, CP:R p.171).</summary>
+public sealed record ReloadCombatantRequest(int Version, string Weapon);
 /// <summary>SP of one location up or down (ablation or repair), within the armor's full SP.</summary>
 public sealed record CombatantArmorRequest(int Version, Npcs.ArmorSlot Location, int Delta);
 public sealed record DeathSaveCombatantRequest(int Version, int? Roll = null);

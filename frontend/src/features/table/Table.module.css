@@ -435,3 +435,4 @@
   color: var(--text-faint);
 }
 .stripName .dot { display: inline-block; margin-right: 5px; vertical-align: middle; }
+.weaponChipGroup { display: inline-flex; gap: 2px; }

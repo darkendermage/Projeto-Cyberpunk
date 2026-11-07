@@ -167,6 +167,10 @@ public sealed class TablePlayController(SeatService seats, SceneService scenes, 
     public async Task<TableAttack> Attack(QuickAttackRequest request, CancellationToken ct) =>
         await attacks.PlayerAttackAsync(await SeatAsync(ct), request, ct);
 
+    /// <summary>Reloads one of the seat's character's weapons (on its Turn when it is in the fight).</summary>
+    [HttpPost("reload")]
+    public async Task<PlayerReloadResult> Reload(PlayerWeaponRequest request, CancellationToken ct) => await turns.ReloadAsync(await SeatAsync(ct), request, ct);
+
     /// <summary>The player ends their own Turn.</summary>
     [HttpPost("end-turn")]
     public async Task<PlayerEncounterDto> EndTurn(CancellationToken ct) => await turns.EndTurnAsync(await SeatAsync(ct), ct);

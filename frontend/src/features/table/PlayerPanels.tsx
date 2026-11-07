@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Crosshair, Dices, HeartPulse, RotateCcw, RotateCw, SkipForward } from 'lucide-react';
+import { Crosshair, Dices, HeartPulse, RefreshCw, RotateCcw, RotateCw, SkipForward } from 'lucide-react';
 import type { AttackMode, WeaponView } from '../../api/encounterTypes';
 import type { ArmorLocation, RollKind, TableVisibility, TokenView, PlayerCharacter, PlayerEncounter } from '../../api/tableTypes';
 import { Badge, Button, IconButton, Segmented } from '../../components/ui/ui';
@@ -19,7 +19,7 @@ const signed = (n: number) => (n >= 0 ? `+${n}` : `${n}`);
  * The player's quick panel: their character's numbers, weapons and skills, each a click away from a server roll,
  * and their token's facing. In a fight the numbers come from the combat table; otherwise from the sheet.
  */
-export function CharacterPanel({ character, encounter, token, onRoll, onTurn, onArmor, onAim, busy }: {
+export function CharacterPanel({ character, encounter, token, onRoll, onTurn, onArmor, onAim, onReload, busy }: {
   character: PlayerCharacter | null;
   encounter: PlayerEncounter | null;
   token: TokenView | undefined;
@@ -29,6 +29,8 @@ export function CharacterPanel({ character, encounter, token, onRoll, onTurn, on
   onArmor?: (location: ArmorLocation, delta: number) => void;
   /** In a fight: aim with this weapon, as the strip's weapon chips do (target, mode, aimed shot). */
   onAim?: (weapon: WeaponView, mode: AttackMode) => void;
+  /** Reloads a weapon by its key (an Action on the player's Turn in a fight). */
+  onReload?: (weaponKey: string) => void;
   busy?: boolean;
 }) {
   const [visibility, setVisibility] = useState<TableVisibility>('Public');
@@ -123,6 +125,15 @@ export function CharacterPanel({ character, encounter, token, onRoll, onTurn, on
                     <Button variant="ghost" disabled={!!blocked} title={blocked ?? undefined}
                       onClick={() => (fightWeapon ? onAim!(fightWeapon, 'Autofire') : check(`1d10${signed(w.autofireTotal!)}`, t(`Autofire: ${w.name}`, `Autofire: ${w.name}`)))}>
                       Autofire {signed(w.autofireTotal)}
+                    </Button>
+                  )}
+                  {onReload && w.magazine != null && (
+                    <Button variant="ghost" icon={<RefreshCw size={14} />}
+                      disabled={busy || (w.rounds ?? 0) >= w.magazine || (fightWeapon != null && encounter?.activeId !== fighter!.id)}
+                      title={(w.rounds ?? 0) >= w.magazine ? t('Pente cheio.', 'Full magazine.') : fightWeapon && encounter?.activeId !== fighter!.id
+                        ? t('Aguarde seu turno: recarregar é uma Ação.', 'Wait for your Turn: reloading is an Action.') : t('Recarregar com a munição do inventário', 'Reload from the inventory ammo')}
+                      onClick={() => onReload(w.key)}>
+                      {t('Recarregar', 'Reload')}
                     </Button>
                   )}
                   {damage && (

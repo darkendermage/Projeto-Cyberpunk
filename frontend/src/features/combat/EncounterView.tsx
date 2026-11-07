@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { Link, useNavigate } from 'react-router';
 import {
-  Activity, ArrowLeft, Bandage, ChevronDown, ChevronUp, Copy, Crosshair, Dices, Flag, GripVertical, HeartPulse, IdCard, Shield, SkipForward, Skull, Swords,
+  Activity, ArrowLeft, Bandage, ChevronDown, ChevronUp, Copy, Crosshair, Dices, Flag, GripVertical, HeartPulse, IdCard, RefreshCw, Shield, SkipForward, Skull, Swords,
   Trash2, UserPlus, X,
 } from 'lucide-react';
 import clsx from 'clsx';
@@ -182,11 +182,21 @@ function Table({ detail, rules }: { detail: EncounterDetail; rules: EncounterRul
                     {!f.dead && f.weapons.length > 0 && (
                       <span className={styles.queueWeapons} role="group" aria-label={t(`Armas de ${tv(f.name)}`, `${tv(f.name)}'s weapons`)}>
                         {f.weapons.map((w) => (
-                          <button key={w.key} type="button" className={clsx(styles.weaponChip, pick?.attackerId === f.id && pick.weaponKey === w.key && styles.weaponChipOn)}
-                            title={t('Atacar com esta arma: depois clique no alvo na fila', 'Attack with this weapon: then click the target in the queue')}
-                            onClick={() => { setSelectedId(f.id); setPick({ attackerId: f.id, weaponKey: w.key, targetId: null }); }}>
-                            <Crosshair size={11} aria-hidden /> {tv(w.name)} +{w.attackTotal} · {tv(w.damage)}{w.rounds != null ? ` · ${w.rounds}/${w.magazine}` : ''}
-                          </button>
+                          <span key={w.key} className={styles.weaponChipGroup}>
+                            <button type="button" className={clsx(styles.weaponChip, pick?.attackerId === f.id && pick.weaponKey === w.key && styles.weaponChipOn)}
+                              title={t('Atacar com esta arma: depois clique no alvo na fila', 'Attack with this weapon: then click the target in the queue')}
+                              onClick={() => { setSelectedId(f.id); setPick({ attackerId: f.id, weaponKey: w.key, targetId: null }); }}>
+                              <Crosshair size={11} aria-hidden /> {tv(w.name)} +{w.attackTotal} · {tv(w.damage)}{w.rounds != null ? ` · ${w.rounds}/${w.magazine}` : ''}
+                            </button>
+                            {w.magazine != null && !w.melee && (
+                              <button type="button" className={styles.weaponChip} disabled={(w.rounds ?? 0) >= w.magazine}
+                                aria-label={t(`Recarregar ${tv(w.name)}`, `Reload ${tv(w.name)}`)}
+                                title={(w.rounds ?? 0) >= w.magazine ? t('Pente cheio.', 'Full magazine.') : t('Recarregar (uma Ação)', 'Reload (an Action)')}
+                                onClick={() => run(`combatants/${f.id}/reload`, { weapon: w.key }, t('Recarregada.', 'Reloaded.'))}>
+                                <RefreshCw size={11} aria-hidden />
+                              </button>
+                            )}
+                          </span>
                         ))}
                       </span>
                     )}

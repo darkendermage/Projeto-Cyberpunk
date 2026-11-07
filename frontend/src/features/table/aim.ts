@@ -30,7 +30,14 @@ export function weaponLabel(w: WeaponView): string {
 
 /** Why a weapon can't fire right now, or null when it can. */
 export function cannotFire(w: WeaponView): string | null {
-  if (!w.melee && w.magazine != null && (w.rounds ?? 0) <= 0) return t('Sem munição: recarregue na ficha.', 'Out of ammo: reload on the sheet.');
+  if (!w.melee && w.magazine != null && (w.rounds ?? 0) <= 0) return t('Sem munição: recarregue.', 'Out of ammo: reload.');
+  return null;
+}
+
+/** Why a weapon can't be reloaded, or null when it can (a magazine that isn't full). */
+export function canReload(w: WeaponView): string | null {
+  if (w.melee || w.magazine == null) return t('Sem pente.', 'No magazine.');
+  if ((w.rounds ?? 0) >= w.magazine) return t('Pente cheio.', 'Full magazine.');
   return null;
 }
 

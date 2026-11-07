@@ -9,11 +9,17 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CyberpunkDb.Application.Table;
 
+/// <summary>A reload from the table: the fight as the seat sees it when there is one, else the character's numbers.</summary>
+public sealed record PlayerReloadResult(PlayerEncounterDto? Encounter, PlayerCharacterDto? Character);
+
+/// <summary>A weapon of the seat's own character, by its key (the inventory copy for PCs).</summary>
+public sealed record PlayerWeaponRequest(string Weapon);
+
 /// <summary>
 /// What a player does with their own character in the fight of the live scene, other than attacking: pass the Turn,
 /// reload, unjam, pick a thrown weapon up. Each answers the seat's view of the fight.
 /// </summary>
-public sealed class TableTurnService(IAppDbContext db, EncounterService encounters)
+public sealed class TableTurnService(IAppDbContext db, EncounterService encounters, Characters.CharacterService characters)
 {
     /// <summary>The seat's character's fighter in the live scene's fight; <paramref name="ownTurn"/> demands it is its Turn.</summary>
     internal async Task<(EncounterDetailDto Detail, FighterView Own, SceneState State)> OwnFighterAsync(TableSeat seat, bool ownTurn, CancellationToken ct)
@@ -28,6 +34,41 @@ public sealed class TableTurnService(IAppDbContext db, EncounterService encounte
         if (own is null) throw new ConflictException(L.T("Seu personagem não está neste combate.", "Your character isn't in this fight."));
         if (ownTurn && detail.ActiveId != own.Id) throw new ConflictException(L.T("Aguarde seu turno.", "Wait for your Turn."));
         return (detail, own, SceneService.Deserialize(scene.StateJson));
+    }
+
+    /// <summary>
+    /// Reloads one of the seat's character's weapons. In the live scene's fight it is an Action on the character's own
+    /// Turn (CP:R p.171); out of a fight it can be done any time.
+    /// </summary>
+    public async Task<PlayerReloadResult> ReloadAsync(TableSeat seat, PlayerWeaponRequest r, CancellationToken ct)
+    {
+        if (seat.CharacterId is not { } characterId)
+            throw RequestValidationException.For("weapon", L.T("Este convite não tem personagem.", "This invite has no character."));
+        if (await InFightAsync(characterId, ct))
+        {
+            var (detail, own, state) = await OwnFighterAsync(seat, ownTurn: true, ct);
+            var after = await encounters.ReloadAsync(detail.Id, own.Id, new ReloadCombatantRequest(detail.Version, r.Weapon), ct);
+            return new PlayerReloadResult(PlayerEncounters.For(after, seat, state), null);
+        }
+        var sheet = await characters.GetAsync(characterId, ct);
+        var reloaded = await characters.ReloadAsync(characterId, new Characters.ReloadRequest(sheet.Version, r.Weapon), ct);
+        return new PlayerReloadResult(null, PlayerCharacters.From(reloaded));
+    }
+
+    /// <summary>Whether the character fights in the active fight of the live scene.</summary>
+    private async Task<bool> InFightAsync(int characterId, CancellationToken ct)
+    {
+        var scene = await db.Scenes.AsNoTracking().FirstOrDefaultAsync(s => s.Active, ct);
+        if (scene?.EncounterId is not { } id) return false;
+        try
+        {
+            var detail = await encounters.GetAsync(id, ct);
+            return detail.Status == EncounterStatus.Active && detail.Queue.Any(f => f.CharacterId == characterId);
+        }
+        catch (NotFoundException)
+        {
+            return false;
+        }
     }
 
     /// <summary>The player ends their own Turn (CP:R p.168); the GM's "Next turn" still forces it.</summary>

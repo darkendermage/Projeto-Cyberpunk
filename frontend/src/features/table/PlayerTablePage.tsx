@@ -204,6 +204,14 @@ export function PlayerTablePage() {
   };
   useBoardKeys({ onDelete: removeSelection, onSelectAll: selectAll, onClear: () => (quick.aim ? quick.cancel() : setSelection(NO_SELECTION)) });
 
+  // A reload: the fight (in one) or the character's weapons (out of one) come back from the server.
+  const reloadWeapon = (weapon: string) => void run(async () => {
+    const result = await api.reload(weapon);
+    if (result.encounter) client.setQueryData(tableKeys.playerEncounter(token), result.encounter);
+    if (result.character) client.setQueryData(tableKeys.playerCharacter(token), result.character);
+    toast.notify(t('Recarregada.', 'Reloaded.'));
+  });
+
   // A roll with LUCK spends it on the sheet: the panel's LUCK left follows.
   const refreshLuck = () => void client.invalidateQueries({ queryKey: tableKeys.playerCharacter(token) });
   const roll = (formula: string, kind: RollKind, label: string | null, visibility: TableVisibility, luck = 0) =>
@@ -277,7 +285,8 @@ export function PlayerTablePage() {
               weaponsOf={(e) => own && fighterIdOf(e, queue) === own.id
                 ? { weapons: own.weapons ?? [], blocked: encounter.data?.activeId === own.id ? null : t('Aguarde seu turno para atacar.', 'Wait for your Turn to attack.') }
                 : null}
-              onWeapon={(_e, w) => { if (own) quick.start(startAim(own.id, own.name, w)); }} />
+              onWeapon={(_e, w) => { if (own) quick.start(startAim(own.id, own.name, w)); }}
+              onReload={(_e, w) => reloadWeapon(w.key)} />
           )}
         </section>
         <PanelHandle className={styles.handleRight} panel="right" width={panels.right} limits={PLAYER_PANELS.right} open={panels.rightOpen}
@@ -291,6 +300,7 @@ export function PlayerTablePage() {
           {tab === 'character' && (
             <CharacterPanel character={character.data ?? null} encounter={encounter.data ?? null} token={myToken} onRoll={roll} busy={armorBusy}
               onAim={(w, mode) => { if (own) quick.start({ ...startAim(own.id, own.name, w), mode }); }}
+              onReload={reloadWeapon}
               onArmor={(location, delta) => {
                 setArmorBusy(true);
                 void run(async () => {

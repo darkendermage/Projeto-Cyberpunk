@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { WeaponView } from '../../api/encounterTypes';
 import type { TableAttack } from '../../api/tableTypes';
-import { aimAt, attackSummary, cannotFire, quickModes, startAim, weaponLabel } from './aim';
+import { aimAt, attackSummary, cannotFire, canReload, quickModes, startAim, weaponLabel } from './aim';
 
 const rifle: WeaponView = {
   key: 'w1', name: 'Assault Rifle', class: 'AssaultRifle', skill: 'shoulder-arms', attackTotal: 14, autofireTotal: 12, damage: '5d6',
@@ -38,4 +38,11 @@ describe('aim', () => {
     expect(attackSummary({ ...base, targets: [{ ...target, damage: null, through: null }] })).not.toMatch(/\d/);
     expect(attackSummary({ ...base, targets: [{ ...target, hit: false }] })).toMatch(/Errou|Missed/);
   });
+});
+
+describe('canReload', () => {
+  it('allows a magazine that is not full', () => expect(canReload({ ...rifle, rounds: 10 })).toBeNull());
+  it('refuses a full magazine', () => expect(canReload(rifle)).not.toBeNull());
+  it('refuses a weapon without a magazine', () => expect(canReload({ ...rifle, magazine: null, rounds: null })).not.toBeNull());
+  it('refuses a melee weapon', () => expect(canReload({ ...rifle, melee: true, rounds: 0 })).not.toBeNull());
 });

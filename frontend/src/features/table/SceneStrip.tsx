@@ -1,9 +1,9 @@
-import { Crosshair, X } from 'lucide-react';
+import { Crosshair, RefreshCw, X } from 'lucide-react';
 import type { AttackMode, WeaponView } from '../../api/encounterTypes';
 import { Button, Select } from '../../components/ui/ui';
 import { t, tv } from '../../i18n';
 import { MODE_LABEL, WOUND_LABEL } from '../combat/combat';
-import { cannotFire, quickModes, weaponLabel, type Aim } from './aim';
+import { cannotFire, canReload, quickModes, weaponLabel, type Aim } from './aim';
 import { ArmorControl } from './ArmorControl';
 import type { StripEntry } from './strip';
 import { initials } from './tokens';
@@ -17,13 +17,15 @@ export interface CardWeapons { weapons: WeaponView[]; blocked: string | null }
  * (NPCs show only their Wound State to the players). A click selects the token, or picks the target while aiming. The
  * cards of whoever may shoot (the player's own character, any fighter for the GM) list their weapons: a click aims.
  */
-export function SceneStrip({ entries, selected, onPick, weaponsOf, aim, onWeapon }: {
+export function SceneStrip({ entries, selected, onPick, weaponsOf, aim, onWeapon, onReload }: {
   entries: StripEntry[];
   selected: readonly string[];
   onPick: (entry: StripEntry) => void;
   weaponsOf?: (entry: StripEntry) => CardWeapons | null;
   aim?: Aim | null;
   onWeapon?: (entry: StripEntry, weapon: WeaponView) => void;
+  /** Reloads a weapon with a magazine (an Action in a fight). */
+  onReload?: (entry: StripEntry, weapon: WeaponView) => void;
 }) {
   if (entries.length === 0) return null;
   return (
@@ -64,12 +66,24 @@ export function SceneStrip({ entries, selected, onPick, weaponsOf, aim, onWeapon
                 {armed.weapons.map((w) => {
                   const why = armed.blocked ?? cannotFire(w) ?? (e.dead ? t('Morto não ataca.', 'The dead don\'t attack.') : null);
                   const on = shooter && aim?.weapon.key === w.key;
+                  const reload = canReload(w);
+                  const reloadWhy = armed.blocked ?? reload ?? (e.dead ? t('Morto não recarrega.', "The dead don't reload.") : null);
                   return (
-                    <button key={w.key} type="button" className={`${styles.weaponChip} ${on ? styles.weaponChipOn : ''}`} disabled={!!why}
-                      title={why ?? t('Atirar: escolha o alvo no mapa ou num cartão', 'Shoot: pick the target on the map or on a card')}
-                      onClick={() => onWeapon?.(e, w)}>
-                      <Crosshair size={11} aria-hidden /> {tv(weaponLabel(w))}
-                    </button>
+                    <span key={w.key} className={styles.weaponChipGroup}>
+                      <button type="button" className={`${styles.weaponChip} ${on ? styles.weaponChipOn : ''}`} disabled={!!why}
+                        title={why ?? t('Atirar: escolha o alvo no mapa ou num cartão', 'Shoot: pick the target on the map or on a card')}
+                        onClick={() => onWeapon?.(e, w)}>
+                        <Crosshair size={11} aria-hidden /> {tv(weaponLabel(w))}
+                      </button>
+                      {onReload && w.magazine != null && !w.melee && (
+                        <button type="button" className={styles.weaponChip} disabled={!!reloadWhy}
+                          aria-label={t(`Recarregar ${tv(w.name)}`, `Reload ${tv(w.name)}`)}
+                          title={reloadWhy ?? t(`Recarregar (${w.rounds ?? 0}/${w.magazine}) — uma Ação em combate`, `Reload (${w.rounds ?? 0}/${w.magazine}) — an Action in a fight`)}
+                          onClick={() => onReload(e, w)}>
+                          <RefreshCw size={11} aria-hidden />
+                        </button>
+                      )}
+                    </span>
                   );
                 })}
               </span>

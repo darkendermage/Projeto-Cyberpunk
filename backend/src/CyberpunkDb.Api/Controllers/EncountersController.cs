@@ -85,6 +85,10 @@ public sealed class EncountersController(EncounterService encounters) : Controll
     public Task<EncounterDetailDto> Environment(int id, string combatantId, EnvironmentDamageRequest request, CancellationToken ct) =>
         encounters.EnvironmentAsync(id, combatantId, request, ct);
 
+    [HttpPost("{id:int}/combatants/{combatantId}/reload")]
+    public Task<EncounterDetailDto> Reload(int id, string combatantId, ReloadCombatantRequest r, CancellationToken ct) =>
+        encounters.ReloadAsync(id, combatantId, r, ct);
+
     [HttpPost("{id:int}/combatants/{combatantId}/heal")]
     public Task<EncounterDetailDto> Heal(int id, string combatantId, HealCombatantRequest request, CancellationToken ct) =>
         encounters.HealAsync(id, combatantId, request, ct);

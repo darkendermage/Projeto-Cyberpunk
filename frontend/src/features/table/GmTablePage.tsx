@@ -273,7 +273,12 @@ export function GmTablePage() {
           <SceneStrip entries={strip} selected={selection.tokens} aim={quick.aim}
             onPick={(e) => { if (quick.aim) quick.target(fighterIdOf(e, queue)); else { selectToken(e.tokenId); setTab('token'); } }}
             weaponsOf={(e) => { const f = queue.find((x) => x.id === fighterIdOf(e, queue)); return f ? { weapons: f.weapons, blocked: null } : null; }}
-            onWeapon={(e, w) => { const f = queue.find((x) => x.id === fighterIdOf(e, queue)); if (f) quick.start(startAim(f.id, f.name, w)); }} />
+            onWeapon={(e, w) => { const f = queue.find((x) => x.id === fighterIdOf(e, queue)); if (f) quick.start(startAim(f.id, f.name, w)); }}
+            onReload={(e, w) => {
+              const id = fighterIdOf(e, queue);
+              if (id) command.mutate({ path: `combatants/${id}/reload`, body: { weapon: w.key } },
+                { onSuccess: () => toast.notify(t('Recarregada.', 'Reloaded.')), onError: (err) => toast.notify(problemMessage(err), 'error') });
+            }} />
         )}
       </section>
 

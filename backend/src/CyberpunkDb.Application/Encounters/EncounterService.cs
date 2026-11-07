@@ -498,6 +498,29 @@ public sealed class EncounterService(
         return (s, already is null ? name : $"{already}, {name}");
     }
 
+    /// <summary>
+    /// Reloads a weapon, an Action (CP:R p.171): a PC takes the rounds from the sheet's ammunition (the loaded kind
+    /// first), an NPC or generic enemy gets a full magazine (their ammo isn't tracked beyond the magazine).
+    /// </summary>
+    public Task<EncounterDetailDto> ReloadAsync(int id, string combatantId, ReloadCombatantRequest r, CancellationToken ct) =>
+        MutateAsync(id, r.Version, async (s, _, notices) =>
+        {
+            var c = Require(s, combatantId);
+            var fighters = await ViewsAsync(s, ct);
+            var weapon = fighters[c.Id].Weapon(r.Weapon) ?? throw RequestValidationException.For("weapon", L.T("Arma não encontrada.", "Weapon not found."));
+            if (weapon.Magazine is not { } magazine || weapon.Melee)
+                throw RequestValidationException.For("weapon", L.T($"{weapon.Name} não tem pente.", $"{weapon.Name} has no magazine."));
+            if ((weapon.Rounds ?? 0) >= magazine)
+                throw RequestValidationException.For("weapon", L.T($"{weapon.Name} já está com o pente cheio.", $"{weapon.Name} already has a full magazine."));
+            if (c.Kind == CombatantKind.Pc)
+            {
+                var sheet = await characters.GetAsync(c.CharacterId!.Value, ct);
+                notices.AddRange((await characters.ReloadAsync(c.CharacterId.Value, new ReloadRequest(sheet.Version, weapon.Key), ct)).Notices);
+            }
+            else s = Replace(s, c with { Ammo = new Dictionary<string, int>(c.Ammo) { [weapon.Key] = magazine } });
+            return Log(s, c.Id, "reload", L.T($"{c.Name} recarrega {weapon.Name} (Ação).", $"{c.Name} reloads {weapon.Name} (Action)."));
+        }, ct);
+
     public Task<EncounterDetailDto> HealAsync(int id, string combatantId, HealCombatantRequest r, CancellationToken ct) =>
         MutateAsync(id, r.Version, async (s, _, notices) =>
         {
