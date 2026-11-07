@@ -7,6 +7,7 @@ import { initials, tokenStatus, type TokenFighter } from '../tokens';
 import { HOLD_MS, inRect, MOVE_TOLERANCE, rectFrom, toggleSelection } from './gestures';
 import { missPoint, type AttackEffect } from './effects';
 import { spriteFit } from '../../../lib/portraitFocus';
+import { arcPositions, drawInjuryIcon, injuryIcon } from './injuryIcons';
 
 export type BoardTool = 'select' | 'ruler' | 'template' | 'token';
 
@@ -486,12 +487,13 @@ export class BoardController {
         .rect(-barW / 2 + 1, h / 2 + 4, Math.max(0, (barW - 2) * status.ratio), 5).fill({ color: status.color });
       node.addChild(bar);
       let bx = -w / 2;
-      for (const badge of status.badges.slice(0, 4)) {
+      for (const badge of status.conditions.slice(0, 3)) {
         const b = new Text({ text: badge.slice(0, 10), style: { fontFamily: FONT, fontSize: 11, fontWeight: '700', fill: 0xffcf3a, stroke: { color: 0x000000, width: 3 } }, resolution: 2 });
-        b.position.set(bx, -h / 2 - 15);
+        b.position.set(bx, h / 2 + 30);
         bx += b.width + 4;
         node.addChild(b);
       }
+      this.drawInjuries(node, status.injuries, w, h);
     }
     const label = new Text({ text: token.label, style: { fontFamily: FONT, fontSize: 14, fontWeight: '600', fill: 0xe9edf2, stroke: { color: 0x000000, width: 3 } }, resolution: 2 });
     // Neighbours' names must not run into each other: long ones are cut to about the token's width.
@@ -504,6 +506,41 @@ export class BoardController {
     node.addChild(label);
 
     node.alpha = data.gm && token.visibility !== 'All' ? 0.55 : 1;
+  }
+
+  /**
+   * Critical Injuries as small icons in an arc over the token (the eighth slot shows "+N" when there are more);
+   * hovering one names it.
+   */
+  private drawInjuries(node: Container, injuries: readonly string[], w: number, h: number) {
+    if (injuries.length === 0) return;
+    const r = Math.max(7, Math.min(11, Math.min(w, h) * 0.14));
+    const slots = arcPositions(injuries.length, Math.max(w, h) / 2 + r * 0.6);
+    slots.forEach((p, i) => {
+      const more = i === 7 && injuries.length > 8;
+      const icon = new Container();
+      icon.position.set(p.x, p.y);
+      icon.eventMode = 'static';
+      icon.cursor = 'help';
+      const g = new Graphics().circle(0, 0, r).fill({ color: 0x14070a, alpha: 0.95 }).stroke({ width: 2, color: 0xff2a3d });
+      if (!more) drawInjuryIcon(g, injuryIcon(injuries[i]), r);
+      icon.addChild(g);
+      if (more) {
+        const plus = new Text({ text: `+${injuries.length - 7}`, style: { fontFamily: FONT, fontSize: r, fontWeight: '700', fill: 0xffffff }, resolution: 2 });
+        plus.anchor.set(0.5);
+        icon.addChild(plus);
+      }
+      const name = more ? injuries.slice(7).join(', ') : injuries[i];
+      let label: Text | null = null;
+      icon.on('pointerover', () => {
+        label = new Text({ text: name, style: { fontFamily: FONT, fontSize: 12, fontWeight: '700', fill: 0xffffff, stroke: { color: 0x000000, width: 3 } }, resolution: 2 });
+        label.anchor.set(0.5, 1);
+        label.position.set(0, -r - 2);
+        icon.addChild(label);
+      });
+      icon.on('pointerout', () => { label?.destroy(); label = null; });
+      node.addChild(icon);
+    });
   }
 
   /** A barrier: the material's drawn texture, its HP under it, cracked and faded at 0 HP. */

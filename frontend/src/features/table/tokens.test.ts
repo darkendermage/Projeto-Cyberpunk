@@ -14,10 +14,11 @@ describe('tokenStatus', () => {
     expect(tokenStatus({ woundState: 'Mortally', dead: false, conditions: [], injuries: [] }).exact).toBe(false);
   });
 
-  it('empties the bar of the dead and lists conditions and injuries as badges', () => {
+  it('empties the bar of the dead and keeps conditions (text) apart from injuries (icons)', () => {
     const s = tokenStatus({ woundState: 'Mortally', dead: true, conditions: ['Prone', 'OnFire:fire-strong'], injuries: ['Broken Arm'] });
     expect(s.ratio).toBe(0);
-    expect(s.badges).toEqual(['Prone', 'OnFire', 'Broken Arm']);
+    expect(s.conditions).toEqual(['Prone', 'OnFire']);
+    expect(s.injuries).toEqual(['Broken Arm']);
   });
 });
 

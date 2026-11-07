@@ -22,14 +22,14 @@ const WOUND_RATIO: Record<WoundState, number> = { Unhurt: 1, Lightly: 0.7, Serio
 
 export const WOUND_COLOR: Record<WoundState, number> = { Unhurt: 0x3dff9a, Lightly: 0x3de0ff, Seriously: 0xffcf3a, Mortally: 0xff2a3d };
 
-export interface TokenStatus { ratio: number; exact: boolean; color: number; badges: string[] }
+/** The bar, and what goes around the token: conditions as short text, Critical Injuries as icons. */
+export interface TokenStatus { ratio: number; exact: boolean; color: number; conditions: string[]; injuries: string[] }
 
 export function tokenStatus(f: TokenFighter): TokenStatus {
   const exact = f.hp != null && f.maxHp != null && f.maxHp > 0;
   const ratio = f.dead ? 0 : exact ? Math.max(0, Math.min(1, f.hp! / f.maxHp!)) : WOUND_RATIO[f.woundState];
   // Conditions may carry a detail after a colon ("OnFire:fire-strong"); the badge shows the name only.
-  const badges = [...f.conditions.map((c) => c.split(':')[0]), ...f.injuries];
-  return { ratio, exact, color: f.dead ? 0x535a66 : WOUND_COLOR[f.woundState], badges };
+  return { ratio, exact, color: f.dead ? 0x535a66 : WOUND_COLOR[f.woundState], conditions: f.conditions.map((c) => c.split(':')[0]), injuries: [...f.injuries] };
 }
 
 /** The dice part of a weapon's damage ("3d6 (Shotgun Shell)" → "3d6"); null when there is none to roll. */
