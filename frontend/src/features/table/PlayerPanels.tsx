@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Crosshair, Dices, HeartPulse, RotateCcw, RotateCw, SkipForward } from 'lucide-react';
+import type { AttackMode, WeaponView } from '../../api/encounterTypes';
 import type { ArmorLocation, RollKind, TableVisibility, TokenView, PlayerCharacter, PlayerEncounter } from '../../api/tableTypes';
 import { Badge, Button, IconButton, Segmented } from '../../components/ui/ui';
 import { skillName, t } from '../../i18n';
@@ -7,6 +8,7 @@ import { WOUND_LABEL, WOUND_TONE } from '../combat/combat';
 import { ArmorControl } from './ArmorControl';
 import { NumField } from './NumField';
 import { damageFormula } from './tokens';
+import { cannotFire, quickModes } from './aim';
 import styles from './Table.module.css';
 
 type Roll = (formula: string, kind: RollKind, label: string, visibility: TableVisibility, luck: number) => void;
@@ -17,7 +19,7 @@ const signed = (n: number) => (n >= 0 ? `+${n}` : `${n}`);
  * The player's quick panel: their character's numbers, weapons and skills, each a click away from a server roll,
  * and their token's facing. In a fight the numbers come from the combat table; otherwise from the sheet.
  */
-export function CharacterPanel({ character, encounter, token, onRoll, onTurn, onArmor, busy }: {
+export function CharacterPanel({ character, encounter, token, onRoll, onTurn, onArmor, onAim, busy }: {
   character: PlayerCharacter | null;
   encounter: PlayerEncounter | null;
   token: TokenView | undefined;
@@ -25,6 +27,8 @@ export function CharacterPanel({ character, encounter, token, onRoll, onTurn, on
   onTurn: (delta: number) => void;
   /** The player's own armor up or down (ablation, repair). */
   onArmor?: (location: ArmorLocation, delta: number) => void;
+  /** In a fight: aim with this weapon, as the strip's weapon chips do (target, mode, aimed shot). */
+  onAim?: (weapon: WeaponView, mode: AttackMode) => void;
   busy?: boolean;
 }) {
   const [visibility, setVisibility] = useState<TableVisibility>('Public');
@@ -101,6 +105,9 @@ export function CharacterPanel({ character, encounter, token, onRoll, onTurn, on
           <span className={styles.label}>{t('Armas', 'Weapons')}</span>
           {weapons.map((w) => {
             const damage = damageFormula(w.damage ?? '');
+            // In a fight the buttons aim through the map like the strip's chips; out of one, they roll in the chat.
+            const fightWeapon = fighter && onAim ? fighter.weapons?.find((x) => x.key === w.key) ?? null : null;
+            const blocked = fightWeapon ? (encounter?.activeId === fighter!.id ? cannotFire(fightWeapon) : t('Aguarde seu turno para atacar.', 'Wait for your Turn to attack.')) : null;
             return (
               <div key={w.key} className={styles.weapon}>
                 <div className={styles.rowBetween}>
@@ -108,11 +115,13 @@ export function CharacterPanel({ character, encounter, token, onRoll, onTurn, on
                   {w.magazine != null && <span className={styles.stat}>{w.rounds ?? 0}/{w.magazine}</span>}
                 </div>
                 <div className={styles.row}>
-                  <Button icon={<Crosshair size={14} />} onClick={() => check(`1d10${signed(w.attackTotal)}`, t(`Ataque: ${w.name}`, `Attack: ${w.name}`))}>
+                  <Button icon={<Crosshair size={14} />} disabled={!!blocked} title={blocked ?? undefined}
+                    onClick={() => (fightWeapon ? onAim!(fightWeapon, quickModes(fightWeapon)[0] ?? 'Single') : check(`1d10${signed(w.attackTotal)}`, t(`Ataque: ${w.name}`, `Attack: ${w.name}`)))}>
                     {t('Ataque', 'Attack')} {signed(w.attackTotal)}
                   </Button>
                   {w.autofireTotal != null && (
-                    <Button variant="ghost" onClick={() => check(`1d10${signed(w.autofireTotal!)}`, t(`Autofire: ${w.name}`, `Autofire: ${w.name}`))}>
+                    <Button variant="ghost" disabled={!!blocked} title={blocked ?? undefined}
+                      onClick={() => (fightWeapon ? onAim!(fightWeapon, 'Autofire') : check(`1d10${signed(w.autofireTotal!)}`, t(`Autofire: ${w.name}`, `Autofire: ${w.name}`)))}>
                       Autofire {signed(w.autofireTotal)}
                     </Button>
                   )}
@@ -125,7 +134,7 @@ export function CharacterPanel({ character, encounter, token, onRoll, onTurn, on
               </div>
             );
           })}
-          <span className={styles.muted}>{t('Defesa, alcance e a munição gasta são resolvidos pelo mestre na mesa de combate.', 'Defense, range and spent ammo are resolved by the GM on the combat table.')}</span>
+          {!fighter && <span className={styles.muted}>{t('Fora de combate as rolagens vão para o chat; em combate, os botões miram pelo mapa.', 'Out of a fight the rolls go to the chat; in one, the buttons aim through the map.')}</span>}
         </div>
       )}
 

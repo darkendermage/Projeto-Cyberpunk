@@ -290,6 +290,7 @@ export function PlayerTablePage() {
           </div>
           {tab === 'character' && (
             <CharacterPanel character={character.data ?? null} encounter={encounter.data ?? null} token={myToken} onRoll={roll} busy={armorBusy}
+              onAim={(w, mode) => { if (own) quick.start({ ...startAim(own.id, own.name, w), mode }); }}
               onArmor={(location, delta) => {
                 setArmorBusy(true);
                 void run(async () => {

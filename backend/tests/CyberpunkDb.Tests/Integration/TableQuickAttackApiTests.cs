@@ -107,21 +107,27 @@ public class TableQuickAttackApiTests(ApiFactory factory)
             attack.AttackerId.Should().Be(s.SoloId);
             attack.Seq.Should().Be(i + 1);
             var target = attack.Targets.Single();
-            // The player reads a hit or a miss on an NPC, never its numbers.
-            target.Damage.Should().BeNull();
-            target.Dv.Should().BeNull();
-            if (target.Hit) hit = attack;
+            // Everyone reads the roll, the DV and the damage dealt (C5); only how much went into an NPC's HP stays hidden.
+            target.Dv.Should().NotBeNull();
+            target.Through.Should().BeNull();
+            if (target.Hit)
+            {
+                target.Damage.Should().NotBeNull();
+                target.DamageDice.Should().NotBeEmpty();
+                hit = attack;
+            }
         }
 
         hit.Should().NotBeNull("eight shots at close range should land at least once");
         HpOf(await Fight(s.EncounterId), s.GangerId).Should().BeLessThan(before);
 
-        // The chat carries the attack: the GM with the numbers, the player without them.
+        // The chat carries the attack: the GM with every number, the player without the NPC's HP.
         var gmLine = (await Send<List<TableMessageDto>>(_gm, HttpMethod.Get, "/api/table/messages")).Last(m => m.Kind == TableMessageKind.Attack);
         gmLine.Attack!.Targets.Single().Dv.Should().NotBeNull();
         gmLine.AuthorSeatId.Should().Be(s.Seat.Id);
         var playerLine = (await Send<List<TableMessageDto>>(_player, HttpMethod.Get, "/api/table/play/messages", seat: s.Seat.Token)).Last(m => m.Kind == TableMessageKind.Attack);
-        playerLine.Attack!.Targets.Single().Dv.Should().BeNull();
+        playerLine.Attack!.Targets.Single().Dv.Should().NotBeNull();
+        playerLine.Attack.Targets.Single().Through.Should().BeNull();
         playerLine.Attack.Seq.Should().Be(gmLine.Attack.Seq);
     }
 

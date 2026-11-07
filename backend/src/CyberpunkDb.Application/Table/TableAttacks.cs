@@ -30,12 +30,12 @@ public static class TableAttacks
     }
 
     /// <summary>
-    /// What a player reads: a hit or a miss on everyone, but the damage, the DV and the defense roll only on PCs, the same
-    /// line the fight draws for NPCs everywhere else (their Wound State, never their numbers).
+    /// What a player reads: the attack roll, the DV or defense, the damage dice and the damage dealt on every target, so
+    /// the whole table follows the shot; only how much went into an NPC's HP stays hidden (their Wound State tells the rest).
     /// </summary>
     public static TableAttack ForSeat(TableAttack a) => a with
     {
-        Targets = a.Targets.Select(t => t.Pc ? t : t with { Damage = null, Through = null, Dv = null, DefenseRoll = null, DamageDice = [] }).ToList(),
+        Targets = a.Targets.Select(t => t.Pc ? t : t with { Through = null }).ToList(),
     };
 
     /// <summary>
