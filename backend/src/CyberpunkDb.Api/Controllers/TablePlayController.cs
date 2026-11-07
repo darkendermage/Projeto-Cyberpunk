@@ -164,7 +164,7 @@ public sealed class TablePlayController(SeatService seats, SceneService scenes, 
 
     /// <summary>An attack with the seat's own character, on its Turn, at fighters it sees; the fight resolves it.</summary>
     [HttpPost("attack")]
-    public async Task<TableAttack> Attack(QuickAttackRequest request, CancellationToken ct) =>
+    public async Task<QuickAttackResult> Attack(QuickAttackRequest request, CancellationToken ct) =>
         await attacks.PlayerAttackAsync(await SeatAsync(ct), request, ct);
 
     /// <summary>Reloads one of the seat's character's weapons (on its Turn when it is in the fight).</summary>
@@ -174,6 +174,14 @@ public sealed class TablePlayController(SeatService seats, SceneService scenes, 
     /// <summary>Clears a jammed weapon of the seat's character (an Action on its Turn).</summary>
     [HttpPost("unjam")]
     public async Task<PlayerEncounterDto> Unjam(PlayerWeaponRequest request, CancellationToken ct) => await turns.UnjamAsync(await SeatAsync(ct), request, ct);
+
+    /// <summary>The target's player answers a pending shot: dodge or not.</summary>
+    [HttpPost("defense")]
+    public async Task<PlayerEncounterDto> Defense(PlayerDefenseRequest request, CancellationToken ct) => await turns.DefenseAsync(await SeatAsync(ct), request, ct);
+
+    /// <summary>The attacker's player rolls the pending Critical Injury.</summary>
+    [HttpPost("critical")]
+    public async Task<PlayerEncounterDto> Critical(CancellationToken ct) => await turns.CriticalAsync(await SeatAsync(ct), ct);
 
     /// <summary>The player ends their own Turn.</summary>
     [HttpPost("end-turn")]

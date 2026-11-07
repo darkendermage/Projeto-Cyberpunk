@@ -30,6 +30,23 @@ public class TableQuickAttackApiTests(ApiFactory factory)
         return (await response.Content.ReadFromJsonAsync<T>(Json))!;
     }
 
+    /// <summary>
+    /// A quick attack that always resolves: two 6s on the damage pause it for the Critical Injury roll (round 4, D1), which
+    /// the GM rolls here; the attack is then read from the chat as <paramref name="client"/> sees it.
+    /// </summary>
+    private async Task<TableAttack> Shoot(HttpClient client, string url, object body, int encounterId, string? seat = null)
+    {
+        var result = await Send<QuickAttackResult>(client, HttpMethod.Post, url, body, seat);
+        if (result.Attack is { } attack) return attack;
+        result.Pending!.Step.Should().Be(PendingStep.CriticalInjury, "the gangers have REF 6 and can't dodge");
+        var fight = await Send<JsonNode>(_gm, HttpMethod.Get, $"/api/encounters/{encounterId}");
+        await Send<JsonNode>(_gm, HttpMethod.Post, $"/api/encounters/{encounterId}/pending/critical", new { version = V(fight), targetId = result.Pending.TargetId });
+        var messages = seat is null
+            ? await Send<List<TableMessageDto>>(_gm, HttpMethod.Get, "/api/table/messages")
+            : await Send<List<TableMessageDto>>(_player, HttpMethod.Get, "/api/table/play/messages", seat: seat);
+        return messages.Last(m => m.Kind == TableMessageKind.Attack).Attack!;
+    }
+
     private async Task<CharacterDetailDto> FinalizedSolo(string name)
     {
         var c = await Send<CharacterDetailDto>(_gm, HttpMethod.Post, "/api/characters",
@@ -102,8 +119,7 @@ public class TableQuickAttackApiTests(ApiFactory factory)
         TableAttack? hit = null;
         for (var i = 0; i < 8 && hit is null; i++)
         {
-            var attack = await Send<TableAttack>(_player, HttpMethod.Post, "/api/table/play/attack",
-                new QuickAttackRequest(gun, AttackMode.Single, [s.GangerId]), s.Seat.Token);
+            var attack = await Shoot(_player, "/api/table/play/attack", new QuickAttackRequest(gun, AttackMode.Single, [s.GangerId]), s.EncounterId, s.Seat.Token);
             attack.AttackerId.Should().Be(s.SoloId);
             attack.Seq.Should().Be(i + 1);
             var target = attack.Targets.Single();
@@ -150,8 +166,7 @@ public class TableQuickAttackApiTests(ApiFactory factory)
         var ammoBefore = RoundsOf(await Fight(s.EncounterId), s.SoloId, gun);
 
         // The GM may attack with anyone, whoever's Turn it is.
-        var attack = await Send<TableAttack>(_gm, HttpMethod.Post, $"/api/table/scenes/{s.SceneId}/attack",
-            new GmQuickAttackRequest(s.SoloId, gun, AttackMode.Single, [s.GangerId]));
+        var attack = await Shoot(_gm, $"/api/table/scenes/{s.SceneId}/attack", new GmQuickAttackRequest(s.SoloId, gun, AttackMode.Single, [s.GangerId]), s.EncounterId);
         attack.Targets.Single().Dv.Should().NotBeNull();
         RoundsOf(await Fight(s.EncounterId), s.SoloId, gun).Should().Be(ammoBefore - 1);
 
@@ -165,7 +180,7 @@ public class TableQuickAttackApiTests(ApiFactory factory)
 
         // Only once, and only right after the attack.
         await Send<JsonNode>(_gm, HttpMethod.Post, $"/api/encounters/{s.EncounterId}/undo-attack", new { version = V(await Fight(s.EncounterId)) }, expected: HttpStatusCode.Conflict);
-        await Send<TableAttack>(_gm, HttpMethod.Post, $"/api/table/scenes/{s.SceneId}/attack", new GmQuickAttackRequest(s.SoloId, gun, AttackMode.Single, [s.GangerId]));
+        await Shoot(_gm, $"/api/table/scenes/{s.SceneId}/attack", new GmQuickAttackRequest(s.SoloId, gun, AttackMode.Single, [s.GangerId]), s.EncounterId);
         await SetActive(s, s.GangerId);
         await Send<JsonNode>(_gm, HttpMethod.Post, $"/api/encounters/{s.EncounterId}/undo-attack", new { version = V(await Fight(s.EncounterId)) }, expected: HttpStatusCode.Conflict);
     }

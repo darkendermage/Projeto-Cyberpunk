@@ -129,7 +129,7 @@ public sealed class AttackResolver(CombatRuleBook combat, CharacterRuleBook char
                 dv = t.Evasion + defenseRoll;
                 defense = $"Evasion {t.Evasion} + d10 {defenseRoll} = {dv}";
             }
-            else if (r.Dodge && t.CanDodge(doc.DodgeRef.Value) && r.Mode != AttackMode.Explosive)
+            else if ((r.Dodge || (r.DodgeTargets?.Contains(t.Id) ?? false)) && t.CanDodge(doc.DodgeRef.Value) && r.Mode != AttackMode.Explosive)
             {
                 defenseRoll = CheckD10(r.DefenseRolls?.GetValueOrDefault(t.Id), dice, "defenseRolls");
                 dv = t.Evasion + defenseRoll;
@@ -165,6 +165,24 @@ public sealed class AttackResolver(CombatRuleBook combat, CharacterRuleBook char
         if (sixes) notes.Add(L.T("Dois ou mais 6 no dano: Critical Injury em quem foi atingido (CP:R p.187).", "Two or more 6s on the damage: Critical Injury to whoever was hit (CP:R p.187)."));
         if (r.Mode == AttackMode.ShotgunShell) notes.Add(L.T($"Shotgun Shell: todos à frente até {doc.ShotgunShell.Value.RangeMeters} m, dano rolado uma vez ({doc.ShotgunShell.Source}).", $"Shotgun Shell: everyone in front up to {doc.ShotgunShell.Value.RangeMeters} m, damage rolled once ({doc.ShotgunShell.Source})."));
         return new PlannedAttack(weapon.Name, weapon.Key, r.Mode, attackRoll, attackTotal, rounds, planned, notes, extra, jammed);
+    }
+
+    /// <summary>The range DV a ranged shot faces (what a target weighs before dodging); null when it can't be told.</summary>
+    public int? RangeDvFor(AttackRequest r, FighterView attacker)
+    {
+        var thrown = r.Weapon == Thrown;
+        var weapon = thrown
+            ? new WeaponView(Thrown, "", WeaponClass.GrenadeLauncher, "athletics", 0, null, r.ThrownDamage ?? "1d6", 1, null, null, null, false, false)
+            : attacker.Weapon(r.Weapon);
+        if (weapon is null || weapon.Melee) return null;
+        try
+        {
+            return RangeDv(weapon, r, thrown);
+        }
+        catch (RequestValidationException)
+        {
+            return null;
+        }
     }
 
     private int RangeDv(WeaponView weapon, AttackRequest r, bool thrown)

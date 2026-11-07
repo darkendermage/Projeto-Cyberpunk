@@ -24,6 +24,11 @@ public sealed record EncounterState
     public int AttackSeq { get; init; }
     /// <summary>What the last attack changed, kept until anything else happens in the fight.</summary>
     public AttackUndo? Undo { get; init; }
+    /// <summary>
+    /// An attack stopped on a step someone must take: the target's dodge (REF 8+) or the attacker's Critical Injury roll.
+    /// While it waits, the fight takes no other action but those steps and the GM's cancel.
+    /// </summary>
+    public PendingAttack? Pending { get; init; }
 
     public Combatant? Find(string? id) => Combatants.FirstOrDefault(c => c.Id == id);
 

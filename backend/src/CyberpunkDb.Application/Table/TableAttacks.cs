@@ -16,7 +16,11 @@ public sealed record TableAttackTarget(
 /// </summary>
 public sealed record TableAttack(
     int EncounterId, int Seq, string AttackerId, string AttackerName, bool AttackerPc, string Weapon, AttackMode Mode, bool Melee,
-    int? AttackRoll, int AttackTotal, IReadOnlyList<TableAttackTarget> Targets, bool Undone = false, int? AttackExtra = null);
+    int? AttackRoll, int AttackTotal, IReadOnlyList<TableAttackTarget> Targets, bool Undone = false, int? AttackExtra = null,
+    IReadOnlyList<int>? CritDice = null);
+
+/// <summary>A quick attack's answer: the resolved attack, or the step it waits on (the target's dodge, the Critical Injury roll).</summary>
+public sealed record QuickAttackResult(TableAttack? Attack, PendingView? Pending);
 
 public static class TableAttacks
 {
@@ -26,7 +30,7 @@ public static class TableAttacks
         bool IsPc(string id) => detail.Queue.FirstOrDefault(f => f.Id == id)?.Kind == CombatantKind.Pc;
         return new TableAttack(detail.Id, a.Seq, a.AttackerId, a.Attacker, IsPc(a.AttackerId), a.Weapon, a.Mode, a.Melee, a.AttackRoll, a.AttackTotal,
             a.Targets.Select(t => new TableAttackTarget(t.TargetId, t.TargetName, IsPc(t.TargetId), t.Hit, t.Damage, t.Through, t.Location, t.Dv,
-                t.DefenseRoll, t.DamageDice, t.CriticalInjury)).ToList(), AttackExtra: a.AttackExtra);
+                t.DefenseRoll, t.DamageDice, t.CriticalInjury)).ToList(), AttackExtra: a.AttackExtra, CritDice: a.CritDice);
     }
 
     /// <summary>

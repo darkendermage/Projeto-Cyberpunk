@@ -95,7 +95,7 @@ public sealed class TableController(SeatService seats, MediaService media, Scene
 
     /// <summary>The GM's quick attack from the map with any fighter of the scene's fight; the distance comes from the tokens.</summary>
     [HttpPost("scenes/{id:int}/attack")]
-    public Task<TableAttack> Attack(int id, GmQuickAttackRequest request, CancellationToken ct) => attacks.GmAttackAsync(id, request, ct);
+    public Task<QuickAttackResult> Attack(int id, GmQuickAttackRequest request, CancellationToken ct) => attacks.GmAttackAsync(id, request, ct);
 
     /// <summary>A selection of tokens and areas moved, cleared, hidden or shown in one save.</summary>
     [HttpPost("scenes/{id:int}/batch")]

@@ -12,6 +12,9 @@ namespace CyberpunkDb.Application.Table;
 /// <summary>A reload from the table: the fight as the seat sees it when there is one, else the character's numbers.</summary>
 public sealed record PlayerReloadResult(PlayerEncounterDto? Encounter, PlayerCharacterDto? Character);
 
+/// <summary>A player's answer to a shot at their character: dodge or not.</summary>
+public sealed record PlayerDefenseRequest(bool Dodge);
+
 /// <summary>A weapon of the seat's own character, by its key (the inventory copy for PCs).</summary>
 public sealed record PlayerWeaponRequest(string Weapon);
 
@@ -60,6 +63,26 @@ public sealed class TableTurnService(IAppDbContext db, EncounterService encounte
     {
         var (detail, own, state) = await OwnFighterAsync(seat, ownTurn: true, ct);
         var after = await encounters.UnjamAsync(detail.Id, own.Id, new UnjamRequest(detail.Version, r.Weapon), ct);
+        return PlayerEncounters.For(after, seat, state);
+    }
+
+    /// <summary>The target's player answers a pending shot at their character: dodge (Evasion roll) or not (CP:R p.172).</summary>
+    public async Task<PlayerEncounterDto> DefenseAsync(TableSeat seat, PlayerDefenseRequest r, CancellationToken ct)
+    {
+        var (detail, own, state) = await OwnFighterAsync(seat, ownTurn: false, ct);
+        if (detail.Pending is not { Step: PendingStep.Defense } p || p.TargetId != own.Id)
+            throw new ConflictException(L.T("Não há tiro esperando a sua esquiva.", "No shot is waiting for your dodge."));
+        var after = await encounters.AnswerDefenseAsync(detail.Id, new PendingDefenseRequest(detail.Version, own.Id, r.Dodge), ct);
+        return PlayerEncounters.For(after, seat, state);
+    }
+
+    /// <summary>The attacker's player rolls the Critical Injury of their pending attack (CP:R p.187).</summary>
+    public async Task<PlayerEncounterDto> CriticalAsync(TableSeat seat, CancellationToken ct)
+    {
+        var (detail, own, state) = await OwnFighterAsync(seat, ownTurn: false, ct);
+        if (detail.Pending is not { Step: PendingStep.CriticalInjury } p || p.AttackerId != own.Id)
+            throw new ConflictException(L.T("Não há Critical Injury esperando a sua rolagem.", "No Critical Injury is waiting for your roll."));
+        var after = await encounters.RollPendingCriticalAsync(detail.Id, new PendingCriticalRequest(detail.Version, p.TargetId), ct);
         return PlayerEncounters.For(after, seat, state);
     }
 

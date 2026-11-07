@@ -17,7 +17,8 @@ public sealed record PlayerFighterDto(
     IReadOnlyList<WeaponView>? Weapons);
 
 /// <summary>The fight linked to the active scene, as one seat sees it. The combat log stays with the GM.</summary>
-public sealed record PlayerEncounterDto(int Id, string Name, int Round, string? ActiveId, IReadOnlyList<PlayerFighterDto> Queue);
+public sealed record PlayerEncounterDto(int Id, string Name, int Round, string? ActiveId, IReadOnlyList<PlayerFighterDto> Queue,
+    PendingView? Pending = null, bool PendingMine = false);
 
 public static class PlayerEncounters
 {
@@ -36,7 +37,12 @@ public static class PlayerEncounters
         }
         var queue = detail.Queue.Where(f => !hidden.Contains(f.Id)).Select(f => Fighter(f, seat)).ToList();
         var active = detail.ActiveId is { } id && hidden.Contains(id) ? null : detail.ActiveId;
-        return new PlayerEncounterDto(detail.Id, detail.Name, detail.Round, active, queue);
+        // A pending attack: everyone sees it; the seat that must answer (the target's player for a dodge, the attacker's
+        // for a Critical Injury) gets the buttons.
+        var pending = detail.Pending;
+        var mine = pending is not null && seat.CharacterId is { } own
+                   && (pending.Step == PendingStep.Defense ? pending.TargetCharacterId == own : pending.AttackerCharacterId == own);
+        return new PlayerEncounterDto(detail.Id, detail.Name, detail.Round, active, queue, pending, mine);
     }
 
     private static PlayerFighterDto Fighter(FighterView f, TableSeat seat)

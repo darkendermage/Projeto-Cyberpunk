@@ -35,13 +35,13 @@ internal sealed class TableScenario(ApiFactory factory)
         return await client.SendAsync(request);
     }
 
-    /// <summary>A finalized Streetrat Solo (template row 6), as in EncountersApiTests.</summary>
-    public async Task<CharacterDetailDto> FinalizedSolo(string name)
+    /// <summary>A finalized Streetrat Solo: template row 6 (REF 7) as in EncountersApiTests, or row 2 (REF 8, can dodge bullets).</summary>
+    public async Task<CharacterDetailDto> FinalizedSolo(string name, int row = 6)
     {
         var c = await Send<CharacterDetailDto>(Gm, HttpMethod.Post, "/api/characters",
             new CreateCharacterRequest { Name = name, Method = CreationMethod.Streetrat, Role = "Solo", NativeLanguage = "English", Home = "Watson" },
             expected: HttpStatusCode.Created);
-        c = await Send<CharacterDetailDto>(Gm, HttpMethod.Post, $"/api/characters/{c.Id}/creation/template-row", new TemplateRowRequest(c.Version, 6));
+        c = await Send<CharacterDetailDto>(Gm, HttpMethod.Post, $"/api/characters/{c.Id}/creation/template-row", new TemplateRowRequest(c.Version, row));
         c = await Send<CharacterDetailDto>(Gm, HttpMethod.Put, $"/api/characters/{c.Id}", new SaveSheetRequest(c.Version, c.Sheet with
         {
             Creation = c.Sheet.Creation with { StartingChoices = new Dictionary<string, int> { ["weapons:2"] = 0, ["cyberware:2"] = 0 } },
@@ -52,14 +52,14 @@ internal sealed class TableScenario(ApiFactory factory)
     public sealed record Fight(int EncounterId, int SceneId, SeatDto Seat, int CharacterId, string PcCombatantId, IReadOnlyList<string> GangerIds);
 
     /// <summary>A Solo and two gangers on the live scene, every token visible to the players.</summary>
-    public async Task<Fight> FightOnTheTable(string name, int gangers = 2)
+    public async Task<Fight> FightOnTheTable(string name, int gangers = 2, int row = 6, int gangerRef = 6)
     {
-        var solo = await FinalizedSolo(name);
+        var solo = await FinalizedSolo(name, row);
         var seat = await Send<SeatDto>(Gm, HttpMethod.Post, "/api/table/seats", new CreateSeatRequest($"Jogador de {name}", solo.Id), expected: HttpStatusCode.Created);
         var e = await Send<JsonNode>(Gm, HttpMethod.Post, "/api/encounters", new { name = $"Tiroteio de {name}" }, expected: HttpStatusCode.Created);
         var id = e["id"]!.GetValue<int>();
         e = await Send<JsonNode>(Gm, HttpMethod.Post, $"/api/encounters/{id}/combatants", new { version = e["version"]!.GetValue<int>(), side = "Ally", characterId = solo.Id });
-        e = await Send<JsonNode>(Gm, HttpMethod.Post, $"/api/encounters/{id}/combatants", new { version = e["version"]!.GetValue<int>(), side = "Enemy", generic = new { name = "Ganger" }, count = gangers });
+        e = await Send<JsonNode>(Gm, HttpMethod.Post, $"/api/encounters/{id}/combatants", new { version = e["version"]!.GetValue<int>(), side = "Enemy", generic = new { name = "Ganger", @ref = gangerRef }, count = gangers });
 
         var scene = await Send<SceneView>(Gm, HttpMethod.Post, "/api/table/scenes", new CreateSceneRequest($"Rua de {name}"), expected: HttpStatusCode.Created);
         scene = await Send<SceneView>(Gm, HttpMethod.Put, $"/api/table/scenes/{scene.Id}", new UpdateSceneRequest(scene.Version, scene.Name, scene.Grid, null, 0, 0, id));

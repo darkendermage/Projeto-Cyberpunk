@@ -38,7 +38,13 @@ public sealed record AttackRequest(
     bool Dodge = false, int Modifier = 0, int? AttackRoll = null, Dictionary<string, int>? DefenseRolls = null,
     List<int>? DamageDice = null, string? ThrownDamage = null, bool IgnoreCover = false, int? CritRoll = null,
     // The extra d10 of a natural 10 or 1 (CP:R p.130), typed like the other dice; rolled when missing.
-    int? AttackExtra = null);
+    int? AttackExtra = null,
+    // Targets that chose to dodge (REF 8+): their Evasion roll is the DV (CP:R p.172).
+    List<string>? DodgeTargets = null,
+    // The Critical Injury's 2d6, when rolled step by step (CritRoll is their sum).
+    List<int>? CritDice = null,
+    // Stop for the target's dodge and the attacker's Critical Injury roll instead of rolling them at once.
+    bool Interactive = false);
 
 public sealed record ManualDamageRequest(
     int Version, int Amount, InjuryLocation Location = InjuryLocation.Body, bool BypassArmor = false, bool HalveArmor = false,
@@ -65,15 +71,21 @@ public sealed record TargetResult(
 
 /// <summary>An attack's outcome; <see cref="Seq"/> numbers the fight's attacks, <see cref="Melee"/> tells a blade from a gun.</summary>
 public sealed record AttackResult(string Attacker, string Weapon, AttackMode Mode, int? AttackRoll, int AttackTotal, IReadOnlyList<TargetResult> Targets, IReadOnlyList<string> Notes,
-    string AttackerId = "", int Seq = 0, bool Melee = false, int? AttackExtra = null);
+    string AttackerId = "", int Seq = 0, bool Melee = false, int? AttackExtra = null, IReadOnlyList<int>? CritDice = null);
 
 public sealed record CombatantDto(FighterView View, CombatantKind Kind, bool Active);
 
 public sealed record EncounterDetailDto(
     int Id, string Name, int Version, EncounterStatus Status, int Round, string? ActiveId, DateTime CreatedAt, DateTime UpdatedAt,
     IReadOnlyList<FighterView> Queue, IReadOnlyList<CoverPiece> Covers, IReadOnlyList<CombatLogEntry> Log, string? Notes,
-    AttackResult? LastAttack, IReadOnlyList<string> Notices, int? UndoneAttack = null);
+    AttackResult? LastAttack, IReadOnlyList<string> Notices, int? UndoneAttack = null, PendingView? Pending = null);
 
 public sealed record EncounterSummaryDto(int Id, string Name, EncounterStatus Status, int Round, int Allies, int Enemies, int Down, DateTime UpdatedAt);
 
 public sealed record EncounterRulesDto(CombatRulesDocument Rules, object CharacterCombat);
+
+/// <summary>The target's choice on a pending attack: dodge (roll Evasion as the DV) or take the range DV.</summary>
+public sealed record PendingDefenseRequest(int Version, string TargetId, bool Dodge);
+
+/// <summary>The attacker's Critical Injury roll on a pending attack.</summary>
+public sealed record PendingCriticalRequest(int Version, string TargetId);

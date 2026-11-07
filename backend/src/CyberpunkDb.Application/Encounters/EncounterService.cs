@@ -22,7 +22,7 @@ namespace CyberpunkDb.Application.Encounters;
 /// their sheets, so every hit on a PC goes through the sheet's own combat operations. Each write carries the
 /// encounter version (409 on a stale one).
 /// </summary>
-public sealed class EncounterService(
+public sealed partial class EncounterService(
     IAppDbContext db,
     CombatRuleBook combat,
     CharacterRuleBook characterRules,
@@ -272,46 +272,66 @@ public sealed class EncounterService(
         MutateAsync(id, r.Version, async (s, e, notices) =>
         {
             var fighters = await ViewsAsync(s, ct);
-            var attacker = fighters.GetValueOrDefault(r.AttackerId) ?? throw new NotFoundException(L.T("Atacante não está no combate.", "The attacker isn't in the fight."));
-            if (attacker.Dead) throw RequestValidationException.For("attackerId", L.T($"{attacker.Name} está morto.", $"{attacker.Name} is dead."));
-            var targets = r.TargetIds.Distinct().Select(t => fighters.GetValueOrDefault(t) ?? throw new NotFoundException(L.T("Alvo não está no combate.", "The target isn't in the fight."))).ToList();
-            var plan = resolver.Resolve(r, attacker, targets, dice);
-
-            // What the undo puts back: the fight as it is now and the sheets of the PCs involved (ammo, damage, injuries).
-            var before = JsonSerializer.Serialize(s, StateJson);
-            var pcs = targets.Prepend(attacker).Select(f => f.CharacterId).OfType<int>().Distinct().ToList();
-            var sheets = new List<SheetSnapshot>();
-            foreach (var pc in pcs)
-            {
-                var (_, json) = await characters.SnapshotAsync(pc, ct);
-                sheets.Add(new SheetSnapshot(pc, 0, json));
-            }
-
-            // Ammunition first: if the magazine can't pay, nothing happens.
-            s = await SpendAmmoAsync(s, attacker, plan, r.Mode, ct);
-            // A Poor Quality weapon that rolled a natural 1 jams after the shot (CP:R p.344).
-            if (plan.Jammed) s = await SetJammedAsync(s, attacker, plan.WeaponKey, true, ct);
-
-            var results = new List<TargetResult>();
-            foreach (var hit in plan.Hits)
-            {
-                var (state, result) = await ApplyHitAsync(s, fighters[hit.TargetId], hit, r, notices, ct);
-                s = state;
-                results.Add(result with { Attack = plan.AttackTotal });
-            }
-            for (var i = 0; i < sheets.Count; i++)
-                sheets[i] = sheets[i] with { Version = (await characters.SnapshotAsync(sheets[i].CharacterId, ct)).Version };
-            var seq = s.AttackSeq + 1;
-            s = s with { AttackSeq = seq, Undo = new AttackUndo(seq, e.Version + 1, before, sheets) };
-            var melee = attacker.Weapon(plan.WeaponKey)?.Melee ?? false;
-            var attack = new AttackResult(attacker.Name, plan.WeaponName, plan.Mode, plan.AttackRoll, plan.AttackTotal, results, plan.Notes, attacker.Id, seq, melee, plan.AttackExtra);
-            _lastAttack = attack;
-            var summary = plan.Mode == AttackMode.Suppressive
-                ? string.Join("; ", results.Select(t => $"{t.TargetName}: {t.Notes.FirstOrDefault()}"))
-                : string.Join("; ", results.Select(t => t.Hit ? L.T($"{t.TargetName}: acertou, {t.Damage} de dano{(t.Through is { } th ? $", {th} no HP" : "")}{(t.CriticalInjury is { } ci ? $", {ci}" : "")}", $"{t.TargetName}: hit, {t.Damage} damage{(t.Through is { } th2 ? $", {th2} to HP" : "")}{(t.CriticalInjury is { } ci2 ? $", {ci2}" : "")}") : $"{t.TargetName}: errou"));
-            return Log(s, attacker.Id, "attack",
-                L.T($"{attacker.Name} ataca com {plan.WeaponName} ({ModeLabel(plan.Mode)}): d10 {plan.AttackRoll} → {plan.AttackTotal}. {summary}.", $"{attacker.Name} attacks with {plan.WeaponName} ({ModeLabel(plan.Mode)}): d10 {plan.AttackRoll} → {plan.AttackTotal}. {summary}."));
+            // From the table (and the combat page without typed dice) the attack stops for the target's dodge and the
+            // attacker's Critical Injury roll; otherwise it resolves at once.
+            return r.Interactive
+                ? await ContinueAttackAsync(s, e, notices, fighters, r, [], ct)
+                : await ApplyAttackAsync(s, e, notices, fighters, r, ct);
         }, ct);
+
+    /// <summary>Resolves and applies an attack whose dice are all typed or left to roll: ammo, hits, the undo and the log.</summary>
+    private async Task<EncounterState> ApplyAttackAsync(EncounterState s, Encounter e, List<string> notices, Dictionary<string, FighterView> fighters,
+        AttackRequest r, CancellationToken ct)
+    {
+        s = s with { Pending = null };
+        var (attacker, targets) = Participants(fighters, r);
+        var plan = resolver.Resolve(r, attacker, targets, dice);
+
+        // What the undo puts back: the fight as it is now and the sheets of the PCs involved (ammo, damage, injuries).
+        var before = JsonSerializer.Serialize(s, StateJson);
+        var pcs = targets.Prepend(attacker).Select(f => f.CharacterId).OfType<int>().Distinct().ToList();
+        var sheets = new List<SheetSnapshot>();
+        foreach (var pc in pcs)
+        {
+            var (_, json) = await characters.SnapshotAsync(pc, ct);
+            sheets.Add(new SheetSnapshot(pc, 0, json));
+        }
+
+        // Ammunition first: if the magazine can't pay, nothing happens.
+        s = await SpendAmmoAsync(s, attacker, plan, r.Mode, ct);
+        // A Poor Quality weapon that rolled a natural 1 jams after the shot (CP:R p.344).
+        if (plan.Jammed) s = await SetJammedAsync(s, attacker, plan.WeaponKey, true, ct);
+
+        var results = new List<TargetResult>();
+        foreach (var hit in plan.Hits)
+        {
+            var (state, result) = await ApplyHitAsync(s, fighters[hit.TargetId], hit, r, notices, ct);
+            s = state;
+            results.Add(result with { Attack = plan.AttackTotal });
+        }
+        for (var i = 0; i < sheets.Count; i++)
+            sheets[i] = sheets[i] with { Version = (await characters.SnapshotAsync(sheets[i].CharacterId, ct)).Version };
+        var seq = s.AttackSeq + 1;
+        s = s with { AttackSeq = seq, Undo = new AttackUndo(seq, e.Version + 1, before, sheets) };
+        var melee = attacker.Weapon(plan.WeaponKey)?.Melee ?? false;
+        var attack = new AttackResult(attacker.Name, plan.WeaponName, plan.Mode, plan.AttackRoll, plan.AttackTotal, results, plan.Notes, attacker.Id, seq, melee,
+            plan.AttackExtra, r.CritDice);
+        _lastAttack = attack;
+        var summary = plan.Mode == AttackMode.Suppressive
+            ? string.Join("; ", results.Select(t => $"{t.TargetName}: {t.Notes.FirstOrDefault()}"))
+            : string.Join("; ", results.Select(t => t.Hit ? L.T($"{t.TargetName}: acertou, {t.Damage} de dano{(t.Through is { } th ? $", {th} no HP" : "")}{(t.CriticalInjury is { } ci ? $", {ci}" : "")}", $"{t.TargetName}: hit, {t.Damage} damage{(t.Through is { } th2 ? $", {th2} to HP" : "")}{(t.CriticalInjury is { } ci2 ? $", {ci2}" : "")}") : $"{t.TargetName}: errou"));
+        return Log(s, attacker.Id, "attack",
+            L.T($"{attacker.Name} ataca com {plan.WeaponName} ({ModeLabel(plan.Mode)}): d10 {plan.AttackRoll} → {plan.AttackTotal}. {summary}.", $"{attacker.Name} attacks with {plan.WeaponName} ({ModeLabel(plan.Mode)}): d10 {plan.AttackRoll} → {plan.AttackTotal}. {summary}."));
+    }
+
+    /// <summary>The attacker (alive) and the targets of an attack, from the fight's fighters.</summary>
+    private static (FighterView Attacker, List<FighterView> Targets) Participants(Dictionary<string, FighterView> fighters, AttackRequest r)
+    {
+        var attacker = fighters.GetValueOrDefault(r.AttackerId) ?? throw new NotFoundException(L.T("Atacante não está no combate.", "The attacker isn't in the fight."));
+        if (attacker.Dead) throw RequestValidationException.For("attackerId", L.T($"{attacker.Name} está morto.", $"{attacker.Name} is dead."));
+        var targets = r.TargetIds.Distinct().Select(t => fighters.GetValueOrDefault(t) ?? throw new NotFoundException(L.T("Alvo não está no combate.", "The target isn't in the fight."))).ToList();
+        return (attacker, targets);
+    }
 
     private AttackResult? _lastAttack;
 
@@ -669,11 +689,14 @@ public sealed class EncounterService(
     // ------------------------------------------------------------------ plumbing
 
     private async Task<EncounterDetailDto> MutateAsync(int id, int version,
-        Func<EncounterState, Encounter, List<string>, Task<EncounterState>> operation, CancellationToken ct)
+        Func<EncounterState, Encounter, List<string>, Task<EncounterState>> operation, CancellationToken ct, bool allowPending = false)
     {
         var entity = await FindAsync(id, ct);
         if (entity.Version != version)
             throw new ConflictException(L.T("Este combate foi alterado em outra janela. Recarregue para ver a versão atual.", "This fight was changed in another window. Reload to see the current version."));
+        // An attack waiting on a dodge or a Critical Injury roll holds the fight: only its steps (and the GM's cancel) go on.
+        if (!allowPending && Deserialize(entity.StateJson).Pending is not null)
+            throw new ConflictException(L.T("Há um ataque esperando decisão (esquiva ou Critical Injury). Resolva ou cancele antes.", "An attack is waiting for a decision (dodge or Critical Injury). Resolve or cancel it first."));
         var notices = new List<string>();
         _lastAttack = null;
         // Sheets changed by this fight change (ammo, damage) don't broadcast on their own: the fight sends the result below.
@@ -701,7 +724,8 @@ public sealed class EncounterService(
     {
         var fighters = await ViewsAsync(s, ct);
         return new EncounterDetailDto(e.Id, e.Name, e.Version, e.Status, s.Round, s.ActiveId, e.CreatedAt, e.UpdatedAt,
-            s.Queue.Select(c => fighters[c.Id]).ToList(), s.Covers, s.Log.TakeLast(200).ToList(), s.Notes, attack, notices);
+            s.Queue.Select(c => fighters[c.Id]).ToList(), s.Covers, s.Log.TakeLast(200).ToList(), s.Notes, attack, notices,
+            Pending: PendingViewOf(s.Pending, fighters));
     }
 
     /// <summary>Every combatant as the table sees it; a PC whose sheet was deleted shows up as a placeholder.</summary>

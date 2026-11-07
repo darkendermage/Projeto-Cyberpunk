@@ -24,7 +24,7 @@ public sealed record GmQuickAttackRequest(string AttackerId, string Weapon, Atta
 public sealed class TableAttackService(IAppDbContext db, EncounterService encounters)
 {
     /// <summary>A player's attack with their own character, on their own Turn, at fighters they can see.</summary>
-    public async Task<TableAttack> PlayerAttackAsync(TableSeat seat, QuickAttackRequest r, CancellationToken ct)
+    public async Task<QuickAttackResult> PlayerAttackAsync(TableSeat seat, QuickAttackRequest r, CancellationToken ct)
     {
         var scene = await db.Scenes.AsNoTracking().FirstOrDefaultAsync(s => s.Active, ct)
                     ?? throw new ConflictException(L.T("Não há cena aberta na mesa.", "There's no scene open on the table."));
@@ -35,12 +35,12 @@ public sealed class TableAttackService(IAppDbContext db, EncounterService encoun
         var visible = PlayerEncounters.For(detail, seat, state).Queue.Select(f => f.Id).ToHashSet();
         if (r.TargetIds.Any(id => !visible.Contains(id)))
             throw RequestValidationException.For("targetIds", L.T("Escolha um alvo que você vê no mapa.", "Pick a target you can see on the map."));
-        var attack = await AttackAsync(detail, state, own.Id, r.Weapon, r.Mode, r.TargetIds, ct);
-        return TableAttacks.ForSeat(attack);
+        var result = await AttackAsync(detail, state, own.Id, r.Weapon, r.Mode, r.TargetIds, ct);
+        return result with { Attack = result.Attack is { } a ? TableAttacks.ForSeat(a) : null };
     }
 
     /// <summary>The GM's attack with any fighter of the scene's fight, Turn or not.</summary>
-    public async Task<TableAttack> GmAttackAsync(int sceneId, GmQuickAttackRequest r, CancellationToken ct)
+    public async Task<QuickAttackResult> GmAttackAsync(int sceneId, GmQuickAttackRequest r, CancellationToken ct)
     {
         var scene = await db.Scenes.AsNoTracking().FirstOrDefaultAsync(s => s.Id == sceneId, ct)
                     ?? throw new NotFoundException(L.T("Cena não encontrada.", "Scene not found."));
@@ -57,7 +57,7 @@ public sealed class TableAttackService(IAppDbContext db, EncounterService encoun
         return (detail, SceneService.Deserialize(scene.StateJson));
     }
 
-    private async Task<TableAttack> AttackAsync(EncounterDetailDto detail, SceneState state, string attackerId, string weapon, AttackMode mode,
+    private async Task<QuickAttackResult> AttackAsync(EncounterDetailDto detail, SceneState state, string attackerId, string weapon, AttackMode mode,
         List<string> targetIds, CancellationToken ct)
     {
         if (mode is AttackMode.Suppressive or AttackMode.Explosive)
@@ -75,8 +75,9 @@ public sealed class TableAttackService(IAppDbContext db, EncounterService encoun
             range = (int)Math.Round(TableAttacks.Meters(state.Grid, from, to));
         }
 
-        var after = await encounters.AttackAsync(detail.Id, new AttackRequest(detail.Version, attackerId, targetIds, weapon, mode, range), ct);
-        return TableAttacks.From(after, after.LastAttack!);
+        // The table's attacks wait for the target's dodge (REF 8+) and the attacker's Critical Injury roll.
+        var after = await encounters.AttackAsync(detail.Id, new AttackRequest(detail.Version, attackerId, targetIds, weapon, mode, range, Interactive: true), ct);
+        return after.LastAttack is { } done ? new QuickAttackResult(TableAttacks.From(after, done), null) : new QuickAttackResult(null, after.Pending);
     }
 
     /// <summary>The fighter's token: linked to the combatant, or a PC's token linked to the sheet.</summary>

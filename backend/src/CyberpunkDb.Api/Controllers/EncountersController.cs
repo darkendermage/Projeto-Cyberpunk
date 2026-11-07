@@ -70,6 +70,18 @@ public sealed class EncountersController(EncounterService encounters) : Controll
     public Task<EncounterDetailDto> Attack(int id, AttackRequest request, CancellationToken ct) => encounters.AttackAsync(id, request, ct);
 
     /// <summary>Puts back what the last attack changed, while nothing else happened since.</summary>
+    /// <summary>A pending attack's dodge choice, answered by the GM (any target).</summary>
+    [HttpPost("{id:int}/pending/defense")]
+    public Task<EncounterDetailDto> PendingDefense(int id, PendingDefenseRequest r, CancellationToken ct) => encounters.AnswerDefenseAsync(id, r, ct);
+
+    /// <summary>A pending attack's Critical Injury, rolled by the GM.</summary>
+    [HttpPost("{id:int}/pending/critical")]
+    public Task<EncounterDetailDto> PendingCritical(int id, PendingCriticalRequest r, CancellationToken ct) => encounters.RollPendingCriticalAsync(id, r, ct);
+
+    /// <summary>Drops a pending attack: nothing is spent or applied.</summary>
+    [HttpPost("{id:int}/pending/cancel")]
+    public Task<EncounterDetailDto> PendingCancel(int id, EncounterVersionRequest r, CancellationToken ct) => encounters.CancelPendingAsync(id, r, ct);
+
     [HttpPost("{id:int}/undo-attack")]
     public Task<EncounterDetailDto> UndoAttack(int id, EncounterVersionRequest request, CancellationToken ct) => encounters.UndoAttackAsync(id, request, ct);
 
