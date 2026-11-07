@@ -137,6 +137,8 @@ public sealed class CharacterCalculator(CharacterRuleBook rules)
             var linked = state.Attachments.Any(id => sheet.Inventory.FirstOrDefault(i => i.InstanceId == id) is { } a
                                                      && catalog.Find(a.ItemId)?.Slug.Equals("smartgun-link", StringComparison.OrdinalIgnoreCase) == true);
             if (ranged && linked && smartUser) bonuses.Add(new ValuePart("Smartgun Link", 1));
+            // CP:R p.146: the Solo's Precision Attack, 3/6/9 points of Combat Awareness give +1/+2/+3 to attacks.
+            if (PrecisionAttack(sheet) is > 0 and var precision) bonuses.Add(new ValuePart("Precision Attack", precision));
             lines.Add(new WeaponLine(
                 e.InstanceId, e.ItemId, item.Name, w.Class, skillId, skill?.NamePt ?? skill?.Name,
                 skill?.Total ?? 0, w.Damage, w.Rof, w.Magazine, state.LoadedRounds, state.LoadedAmmoItemId,
@@ -146,6 +148,10 @@ public sealed class CharacterCalculator(CharacterRuleBook rules)
         }
         return lines;
     }
+
+    /// <summary>The Solo's Precision Attack bonus (CP:R p.146): +1 per 3 points of Combat Awareness, up to +3.</summary>
+    public static int PrecisionAttack(CharacterSheet sheet) =>
+        Math.Min(3, (sheet.Roles.FirstOrDefault(r => r.Role.Equals("Solo", StringComparison.OrdinalIgnoreCase))?.Split.GetValueOrDefault("precisionAttack") ?? 0) / 3);
 
     /// <summary>Slot rules for this character: doubled in a Full Body Conversion body (Interface RED 3 p.93).</summary>
     private NpcMechanics Mechanics(CharacterSheet sheet, NpcCatalog catalog) =>

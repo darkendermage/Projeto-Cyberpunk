@@ -41,7 +41,9 @@ public sealed record FighterView(
     // A Solo's Combat Awareness points by part (CP:R p.146), from the sheet; empty for everyone else.
     IReadOnlyDictionary<string, int>? CombatAwareness = null,
     // Installed cyberware by slug (PCs): Targeting Scope on aimed shots, the Ranger boomerang's return.
-    IReadOnlyList<string>? Cyberware = null)
+    IReadOnlyList<string>? Cyberware = null,
+    // Once-a-Round effects already used this Round ("spotWeakness", "damageDeflection"), for the Combat Awareness block.
+    IReadOnlyList<string>? RoundFlags = null)
 {
     public bool HasCyberware(string slug) => Cyberware?.Contains(slug, StringComparer.OrdinalIgnoreCase) ?? false;
 
@@ -96,17 +98,17 @@ public sealed class FighterViews(CharacterRuleBook characterRules, CharacterCalc
                 Quality: w.Quality, Jammed: w.Jammed,
                 AttackParts: [new ValuePart(w.SkillName ?? w.SkillId ?? w.Name, w.SkillTotal), .. w.AttackBonuses ?? []]);
         }).Select(v => Special(v, r.Weapons.First(x => x.InstanceId == v.Key).Slug, c)).ToList();
-        weapons.AddRange(Unarmed(body, cyberarm, Skill(Brawling, "DEX"),
-            r.Skills.Where(s => s.SkillId == MartialArtsPrefix && s.Level > 0).Select(s => (s.Key, s.Specialization ?? "", s.Total))));
-        // CP:R p.146: Precision Attack, 3/6/9 points of Combat Awareness give +1/+2/+3 to attacks.
+        var unarmed = Unarmed(body, cyberarm, Skill(Brawling, "DEX"),
+            r.Skills.Where(s => s.SkillId == MartialArtsPrefix && s.Level > 0).Select(s => (s.Key, s.Specialization ?? "", s.Total)));
+        // CP:R p.146: Precision Attack. The sheet's weapons already carry it (CharacterCalculator); the unarmed attacks,
+        // which aren't on the sheet, get it here.
         var awareness = detail.Sheet.Roles.FirstOrDefault(x => x.Role.Equals("Solo", StringComparison.OrdinalIgnoreCase))?.Split;
-        var precision = Math.Min(3, (awareness?.GetValueOrDefault("precisionAttack") ?? 0) / 3);
-        if (precision > 0)
-            weapons = weapons.Select(w => w with
-            {
-                AttackTotal = w.AttackTotal + precision, AutofireTotal = w.AutofireTotal + precision,
-                AttackParts = [.. w.AttackParts ?? [new ValuePart(w.Name, w.AttackTotal)], new ValuePart("Precision Attack", precision)],
-            }).ToList();
+        var precision = Characters.Calculation.CharacterCalculator.PrecisionAttack(detail.Sheet);
+        weapons.AddRange(precision == 0 ? unarmed : unarmed.Select(w => w with
+        {
+            AttackTotal = w.AttackTotal + precision,
+            AttackParts = [.. w.AttackParts ?? [new ValuePart(w.Name, w.AttackTotal)], new ValuePart("Precision Attack", precision)],
+        }));
 
         return new FighterView(c.Id, c.Kind, c.Name, c.Side, c.Initiative,
             r.Health.CurrentHp, r.Health.MaxHp, r.Health.WoundState, r.ActionPenalty, r.Health.StabilizationDv,

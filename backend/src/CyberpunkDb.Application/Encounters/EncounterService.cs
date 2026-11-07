@@ -745,6 +745,22 @@ public sealed partial class EncounterService(
                 label is null ? L.T($"{c.Name} saiu da cobertura.", $"{c.Name} left cover.") : L.T($"{c.Name} está atrás de {label}.", $"{c.Name} is behind {L.D(label)}.")));
         }, ct);
 
+    /// <summary>
+    /// A Solo redistributed Combat Awareness: a running fight they are in notes it as an Action (CP:R p.146). Nothing is
+    /// blocked; the GM judges the Turn.
+    /// </summary>
+    public async Task LogAwarenessAsync(int characterId, CancellationToken ct)
+    {
+        var running = await db.Encounters.Where(e => e.Status == EncounterStatus.Active).ToListAsync(ct);
+        foreach (var e in running)
+        {
+            if (Deserialize(e.StateJson).Combatants.FirstOrDefault(c => c.CharacterId == characterId) is not { } c) continue;
+            await MutateAsync(e.Id, e.Version, (s, _, _) => Task.FromResult(Log(s, c.Id, "awareness",
+                L.T($"{c.Name} redistribui o Combat Awareness (gasta uma Ação, CP:R p.146).", $"{c.Name} redistributes Combat Awareness (spends an Action, CP:R p.146)."))),
+                ct, allowPending: true);
+        }
+    }
+
     // ------------------------------------------------------------------ plumbing
 
     private async Task<EncounterDetailDto> MutateAsync(int id, int version,
@@ -796,7 +812,7 @@ public sealed partial class EncounterService(
             if (c.Kind != CombatantKind.Pc) { result[c.Id] = views.ForNpc(c); continue; }
             try
             {
-                result[c.Id] = views.ForPc(c, await characters.GetAsync(c.CharacterId!.Value, ct));
+                result[c.Id] = views.ForPc(c, await characters.GetAsync(c.CharacterId!.Value, ct)) with { RoundFlags = c.RoundFlags };
             }
             catch (NotFoundException)
             {

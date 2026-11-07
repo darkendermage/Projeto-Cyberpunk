@@ -81,6 +81,10 @@ export interface FighterView {
   /** NPCs and generic enemies: STATs and Skills of the snapshot (PCs read their own sheet). */
   stats?: NamedValue[] | null;
   skills?: NamedValue[] | null;
+  /** A Solo's Combat Awareness points by part (CP:R p.146). */
+  combatAwareness?: Record<string, number> | null;
+  /** Once-a-Round effects already used this Round ("spotWeakness", "damageDeflection"). */
+  roundFlags?: string[] | null;
 }
 
 export interface NamedValue { id: string; label: string; value: number }

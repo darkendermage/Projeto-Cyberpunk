@@ -1,3 +1,4 @@
+using CyberpunkDb.Application.Encounters;
 using CyberpunkDb.Application.Characters;
 using CyberpunkDb.Application.Characters.Transfer;
 using CyberpunkDb.Domain.Enums;
@@ -11,7 +12,7 @@ namespace CyberpunkDb.Api.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/characters")]
-public sealed class CharactersController(CharacterService characters) : ControllerBase
+public sealed class CharactersController(CharacterService characters, EncounterService encounters) : ControllerBase
 {
     [HttpGet("rules")]
     public Task<CharacterRulesDto> GetRules(CancellationToken ct) => characters.GetRulesAsync(ct);
@@ -159,7 +160,13 @@ public sealed class CharactersController(CharacterService characters) : Controll
     public Task<CharacterDetailDto> SetWeaponQuality(int id, WeaponQualityRequest r, CancellationToken ct) => characters.SetWeaponQualityAsync(id, r, ct);
 
     [HttpPost("{id:int}/role-split")]
-    public Task<CharacterDetailDto> RoleSplit(int id, RoleSplitRequest r, CancellationToken ct) => characters.SetRoleSplitAsync(id, r, ct);
+    public async Task<CharacterDetailDto> RoleSplit(int id, RoleSplitRequest r, CancellationToken ct)
+    {
+        var detail = await characters.SetRoleSplitAsync(id, r, ct);
+        // Redistributing Combat Awareness in a fight costs an Action (CP:R p.146): the fight's log notes it.
+        if (r.Role.Equals("Solo", StringComparison.OrdinalIgnoreCase)) await encounters.LogAwarenessAsync(id, ct);
+        return detail;
+    }
 
     /// <summary>Undoes one IP spend of the history (a skill level or a Role Rank) and returns its IP.</summary>
     [HttpPost("{id:int}/progression/undo")]

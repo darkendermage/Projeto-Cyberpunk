@@ -347,6 +347,8 @@ export interface TableAttackTarget {
   defenseRoll: number | null;
   damageDice: number[];
   criticalInjury: string | null;
+  /** Combat Awareness lines that changed the damage (Spot Weakness, Damage Deflection). */
+  notes?: string[] | null;
 }
 
 /** An attack of the fight on the live scene: the chat card, the effect on the map and the dice. */
@@ -369,6 +371,8 @@ export interface TableAttack {
   critDice?: number[] | null;
   /** The attacker's dice color. */
   diceColor?: string | null;
+  /** Combat Awareness lines of the attack itself (Precision Attack). */
+  notes?: string[] | null;
 }
 
 /** A quick attack's answer: the attack, or the step it waits on. */

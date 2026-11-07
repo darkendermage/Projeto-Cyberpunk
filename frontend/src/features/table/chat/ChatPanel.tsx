@@ -5,6 +5,7 @@ import { Badge, Button, Select } from '../../../components/ui/ui';
 import { t, tv } from '../../../i18n';
 import { MODE_LABEL } from '../../combat/combat';
 import { NumField } from '../NumField';
+import { attackDice } from './attackDice';
 import styles from '../Table.module.css';
 
 export interface ChatTarget { id: number; label: string }
@@ -171,6 +172,20 @@ function AttackView({ attack: a }: { attack: TableAttack }) {
         <span className={styles.messageText}>{tv(a.weapon)} · <span className={styles.source}>{a.mode === 'Single' ? (a.melee ? t('golpe', 'strike') : t('tiro', 'shot')) : MODE_LABEL[a.mode]}</span></span>
         <span className={styles.rollTotal} title={a.attackRoll != null ? `d10 ${a.attackRoll}` : undefined}>{a.attackTotal}</span>
       </div>
+      {/* Every die of the shot, so the roll is plain to the whole table. */}
+      {attackDice(a).map((g) => (
+        <div key={g.label} className={styles.attackDiceRow}>
+          <span className={styles.source}>{g.label}</span>
+          <span className={styles.dice}>
+            {g.dice.map((d, i) => (
+              <span key={i} className={`${styles.die} ${d.extra ? (d.value > 0 ? styles.dieHigh : styles.dieLow) : d.value === d.sides ? styles.dieHigh : d.value === 1 ? styles.dieLow : ''}`}>
+                {d.extra && d.value > 0 ? `+${d.value}` : d.value < 0 ? `−${-d.value}` : d.value}
+              </span>
+            ))}
+          </span>
+        </div>
+      ))}
+      {(a.notes ?? []).map((n) => <span key={n} className={styles.attackNote}>{n}</span>)}
       {a.targets.map((target) => (
         <div key={target.id} className={styles.attackTarget}>
           <Badge tone={target.hit ? 'red' : undefined}>{target.hit ? t('Acertou', 'Hit') : t('Errou', 'Miss')}</Badge>
@@ -180,6 +195,7 @@ function AttackView({ attack: a }: { attack: TableAttack }) {
             <span className={styles.mono}>{t(`${target.damage} de dano`, `${target.damage} damage`)}{target.through != null ? t(` · ${target.through} no HP`, ` · ${target.through} to HP`) : ''} · {tv(target.location)}</span>
           )}
           {target.criticalInjury && <Badge tone="amber">{tv(target.criticalInjury)}</Badge>}
+          {(target.notes ?? []).map((n) => <span key={n} className={styles.attackNote}>{tv(n)}</span>)}
         </div>
       ))}
       {a.undone && <Badge>{t('Desfeito pelo mestre', 'Undone by the GM')}</Badge>}

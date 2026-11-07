@@ -268,6 +268,8 @@
 }
 .dieHigh { border-color: var(--green); color: var(--green); }
 .dieLow { border-color: var(--red); color: var(--red-bright); }
+.attackDiceRow { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+.attackNote { font-size: 11.5px; color: var(--cyan, #00f0ff); }
 .composer { display: flex; flex-direction: column; gap: 6px; }
 .composer textarea { min-height: 54px; resize: vertical; }
 .quickDice { display: flex; flex-wrap: wrap; gap: 4px; }
@@ -437,7 +439,7 @@
 .stripName .dot { display: inline-block; margin-right: 5px; vertical-align: middle; }
 .weaponChipGroup { display: flex; gap: 2px; min-width: 0; }
 .weaponChipGroup > :first-child { flex: 1; min-width: 0; }
-.weaponChipGroup > :not(:first-child) { flex: none; }
+.weaponChipGroup > :not(:first-child) { flex: none; width: auto; }
 
 /* A pending attack: the decision it waits on (dodge, Critical Injury). */
 .pendingCard {
