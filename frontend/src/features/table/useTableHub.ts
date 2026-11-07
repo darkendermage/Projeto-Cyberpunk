@@ -30,6 +30,8 @@ export interface HubHandlers {
   music?: (music: TableMusic | null) => void;
   /** A new session started: the chat starts over. */
   chatReset?: () => void;
+  /** Someone is moving, resizing or turning an image (round 5). */
+  imageDrag?: (drag: { sceneId: number; imageId: string; x: number; y: number; width: number; height: number; rotation: number }) => void;
   /** After a reconnection: whatever was missed must be fetched again. */
   resync?: () => void;
 }
@@ -73,6 +75,7 @@ export function useTableHub(seat: string | null, handlers: HubHandlers, enabled 
     on('party', 'party');
     on('music', 'music');
     on('chatReset', 'chatReset');
+    on('imageDrag', 'imageDrag');
     // A connection closed by this effect's cleanup (StrictMode, a new seat) must not touch the next one's status.
     let disposed = false;
     connection.onreconnecting(() => { if (!disposed) setStatus('reconnecting'); });
@@ -102,8 +105,17 @@ export function useTableHub(seat: string | null, handlers: HubHandlers, enabled 
     send('DragToken', sceneId, tokenId, x, y);
   }, [send]);
 
+  /** An image being dragged, throttled like the tokens. */
+  const lastImage = useRef(0);
+  const dragImage = useCallback((sceneId: number, imageId: string, r: { x: number; y: number; width: number; height: number; rotation: number }) => {
+    const now = performance.now();
+    if (now - lastImage.current < DRAG_INTERVAL_MS) return;
+    lastImage.current = now;
+    send('DragImage', sceneId, imageId, r.x, r.y, r.width, r.height, r.rotation);
+  }, [send]);
+
   const ping = useCallback((sceneId: number, x: number, y: number) => send('Ping', sceneId, x, y), [send]);
   const reconnect = useCallback(() => { setStatus('connecting'); setAttempt((n) => n + 1); }, []);
 
-  return { status, dragToken, ping, reconnect };
+  return { status, dragToken, dragImage, ping, reconnect };
 }

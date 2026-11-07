@@ -1,5 +1,6 @@
 import { Application, Container, Graphics, Sprite, Text, Texture, type FederatedPointerEvent } from 'pixi.js';
-import type { BarrierView, Ping, SceneGrid, SceneTemplate, SceneView, TemplateShapeName, TokenView } from '../../../api/tableTypes';
+import type { BarrierView, Ping, SceneGrid, SceneImageView, SceneTemplate, SceneView, TemplateShapeName, TokenView } from '../../../api/tableTypes';
+import { resizeFromCorner, rotationFor, snapHalf as snapHalfCell, type Corner, type ImgRect } from '../images';
 import { barrierLook, barrierState } from './barriers';
 import { cellToPx, formatMeters, gridDistance, pxToCell, snapCell, type Point } from '../grid';
 import { templateShape } from '../templates';
@@ -27,6 +28,8 @@ export interface BoardData {
   canMoveTemplate: (t: SceneTemplate) => boolean;
   /** The GM sees hidden tokens dimmed. */
   gm: boolean;
+  /** The image selected in the layers list or on the map (round 5). */
+  selectedImage?: string | null;
   lang: 'pt' | 'en';
 }
 
@@ -40,6 +43,12 @@ export interface BoardCallbacks {
   onPing: (x: number, y: number) => void;
   /** With the 'token' tool: the cell a player picked for their own token. */
   onTokenPlace?: (x: number, y: number) => void;
+  /** An image was clicked (null: none). */
+  onImageSelect?: (id: string | null) => void;
+  /** An image is being moved, resized or turned (live preview for the others). */
+  onImageDrag?: (id: string, rect: ImgRect) => void;
+  /** A move, resize or turn of an image ended. */
+  onImageChange?: (id: string, rect: ImgRect) => void;
 }
 
 const FONT = 'Rajdhani, "Segoe UI", sans-serif';
@@ -92,6 +101,11 @@ export class BoardController {
   private readonly templateLayer = new Container();
   private readonly tokenLayer = new Container();
   private readonly overlay = new Container();
+  /** Images over the map, below the grid and everything else (round 5). */
+  private readonly imageLayer = new Container();
+  private readonly imageHandles = new Container();
+  private images = new Map<string, { node: Container; sprite: Sprite | null; url: string }>();
+  private imageOverrides = new Map<string, ImgRect & { until: number }>();
   private readonly ruler = new Graphics();
   private readonly rulerText = new Text({ text: '', style: { fontFamily: FONT, fontSize: 18, fontWeight: '700', fill: 0xffffff, stroke: { color: 0x000000, width: 4 } }, resolution: 2 });
   private readonly preview = new Graphics();
@@ -124,6 +138,7 @@ export class BoardController {
     | { kind: 'done' }
     | { kind: 'ruler'; from: Point }
     | { kind: 'place'; origin: Point }
+    | { kind: 'image'; id: string; mode: 'move' | 'resize' | 'rotate'; corner: Corner; start: Point; rect: ImgRect; last: ImgRect }
     | null = null;
   /** Fingers on the board, for the two-finger pinch. */
   private touches = new Map<number, Point>();
@@ -144,8 +159,8 @@ export class BoardController {
     this.app.stage.hitArea = this.app.screen;
     this.app.stage.addChild(this.world);
     // Scenery (barriers, cars) over the map and under the areas and the characters.
-    this.world.addChild(this.backgroundLayer, this.gridLayer, this.sceneryLayer, this.templateLayer, this.tokenLayer, this.overlay);
-    this.overlay.addChild(this.preview, this.ruler, this.rulerText, this.lasso);
+    this.world.addChild(this.backgroundLayer, this.imageLayer, this.gridLayer, this.sceneryLayer, this.templateLayer, this.tokenLayer, this.overlay);
+    this.overlay.addChild(this.imageHandles, this.preview, this.ruler, this.rulerText, this.lasso);
     this.app.stage.on('pointerdown', (e) => this.onDown(e, null));
     this.app.stage.on('globalpointermove', (e) => this.onMove(e));
     this.app.stage.on('pointerup', (e) => this.onUp(e));
@@ -188,6 +203,13 @@ export class BoardController {
   }
 
   setDraft(draft: TemplateDraft) { this.draft = draft; }
+
+  /** The cell at the middle of what the board shows (where a new image goes). */
+  centerCell(): Point | null {
+    if (!this.ready || !this.data) return null;
+    const p = this.world.toLocal({ x: this.app.screen.width / 2, y: this.app.screen.height / 2 });
+    return pxToCell(this.data.scene.grid, p.x, p.y);
+  }
 
   /** Someone else is dragging a token: slide it there for a moment. */
   showDrag(tokenId: string, x: number, y: number) {
@@ -329,6 +351,7 @@ export class BoardController {
   private render() {
     const data = this.data!;
     this.renderBackground(data.scene);
+    this.renderImages(data);
     this.renderGrid(data.scene.grid);
     this.renderTemplates(data);
     this.renderTokens(data);
@@ -351,6 +374,141 @@ export class BoardController {
       sprite.height = scene.background.height || texture.height;
       this.backgroundLayer.addChild(sprite);
     }).catch(() => { /* broken image: the dark floor stays */ });
+  }
+
+  // ------------------------------------------------------------------ images over the map (round 5)
+
+  /** The image's rectangle now: the data, or a live drag (this screen's or someone else's) not yet saved. */
+  private imageRect(img: SceneImageView): ImgRect {
+    const o = this.imageOverrides.get(img.id);
+    if (o) {
+      const same = Math.abs(o.x - img.x) < 0.001 && Math.abs(o.y - img.y) < 0.001 && Math.abs(o.width - img.width) < 0.001
+        && Math.abs(o.height - img.height) < 0.001 && Math.abs(o.rotation - img.rotation) < 0.01;
+      if (same || performance.now() > o.until) this.imageOverrides.delete(img.id);
+      else return o;
+    }
+    return { x: img.x, y: img.y, width: img.width, height: img.height, rotation: img.rotation };
+  }
+
+  private renderImages(data: BoardData) {
+    const list = [...(data.scene.images ?? [])].sort((a, b) => a.order - b.order);
+    const seen = new Set<string>();
+    list.forEach((img, index) => {
+      seen.add(img.id);
+      let entry = this.images.get(img.id);
+      if (entry && entry.url !== img.url) { entry.node.destroy({ children: true }); entry = undefined; }
+      if (!entry) {
+        const node = new Container();
+        node.eventMode = 'static';
+        const id = img.id;
+        node.on('pointerdown', (e) => this.onImageDown(e, id));
+        const created: { node: Container; sprite: Sprite | null; url: string } = { node, sprite: null, url: img.url };
+        this.images.set(img.id, created);
+        loadTexture(img.url).then((texture) => {
+          if (node.destroyed) return;
+          const sprite = new Sprite(texture);
+          sprite.anchor.set(0.5);
+          node.removeChildren().forEach((c) => c.destroy());
+          node.addChild(sprite);
+          created.sprite = sprite;
+          this.placeImage(id);
+        }).catch(() => { /* broken image: nothing to draw */ });
+        entry = created;
+      }
+      if (entry.node.parent !== this.imageLayer) this.imageLayer.addChild(entry.node);
+      this.imageLayer.setChildIndex(entry.node, Math.min(index, this.imageLayer.children.length - 1));
+      entry.node.cursor = img.editable ? 'move' : 'pointer';
+      this.placeImage(img.id);
+    });
+    for (const [id, entry] of this.images) {
+      if (seen.has(id)) continue;
+      entry.node.destroy({ children: true });
+      this.images.delete(id);
+    }
+    this.drawImageHandles();
+  }
+
+  /** Puts an image where its rectangle says: centre, size in pixels, rotation, opacity (the GM sees hidden ones dimmed). */
+  private placeImage(id: string) {
+    const entry = this.images.get(id);
+    const img = this.data?.scene.images?.find((i) => i.id === id);
+    if (!entry || !img || !this.data) return;
+    const g = this.data.scene.grid;
+    const r = this.imageRect(img);
+    const p = cellToPx(g, r.x, r.y);
+    entry.node.position.set(p.x, p.y);
+    entry.node.rotation = (r.rotation * Math.PI) / 180;
+    entry.node.alpha = img.opacity * (this.data.gm && img.hidden ? 0.5 : 1);
+    if (entry.sprite) { entry.sprite.width = r.width * g.sizePx; entry.sprite.height = r.height * g.sizePx; }
+    if (entry.sprite == null) {
+      // Until the picture loads, an outline shows where it goes (and catches clicks).
+      entry.node.removeChildren().forEach((c) => c.destroy());
+      entry.node.addChild(new Graphics().rect(-r.width * g.sizePx / 2, -r.height * g.sizePx / 2, r.width * g.sizePx, r.height * g.sizePx)
+        .fill({ color: 0x0d0f13, alpha: 0.4 }).stroke({ width: 2, color: 0x5c6370 }));
+    }
+  }
+
+  /** Corner squares and a turn knob on the selected image, when this screen may change it. */
+  private drawImageHandles() {
+    this.imageHandles.removeChildren().forEach((c) => c.destroy({ children: true }));
+    const d = this.data;
+    const img = d?.selectedImage ? d.scene.images?.find((i) => i.id === d.selectedImage) : undefined;
+    if (!d || !img) return;
+    const g = d.scene.grid;
+    const r = this.imageRect(img);
+    const centre = cellToPx(g, r.x, r.y);
+    const w = r.width * g.sizePx;
+    const h = r.height * g.sizePx;
+    const frame = new Container();
+    frame.position.set(centre.x, centre.y);
+    frame.rotation = (r.rotation * Math.PI) / 180;
+    const scale = 1 / Math.max(0.2, this.world.scale.x);
+    frame.addChild(new Graphics().rect(-w / 2, -h / 2, w, h).stroke({ width: 2 * scale, color: img.editable ? 0x00f0ff : 0x8a93a0, alpha: 0.95 }));
+    if (img.editable) {
+      const size = 12 * scale;
+      const corners: [Corner, number, number][] = [['nw', -w / 2, -h / 2], ['ne', w / 2, -h / 2], ['se', w / 2, h / 2], ['sw', -w / 2, h / 2]];
+      for (const [corner, x, y] of corners) {
+        const handle = new Graphics().rect(x - size / 2, y - size / 2, size, size).fill({ color: 0x00f0ff }).stroke({ width: 1.5 * scale, color: 0x000000 });
+        handle.eventMode = 'static';
+        handle.cursor = corner === 'nw' || corner === 'se' ? 'nwse-resize' : 'nesw-resize';
+        handle.on('pointerdown', (e) => this.startImageGesture(e, img.id, 'resize', corner));
+        frame.addChild(handle);
+      }
+      const knobY = -h / 2 - 28 * scale;
+      frame.addChild(new Graphics().moveTo(0, -h / 2).lineTo(0, knobY).stroke({ width: 1.5 * scale, color: 0x00f0ff }));
+      const knob = new Graphics().circle(0, knobY, 8 * scale).fill({ color: 0x00f0ff }).stroke({ width: 1.5 * scale, color: 0x000000 });
+      knob.eventMode = 'static';
+      knob.cursor = 'grab';
+      knob.on('pointerdown', (e) => this.startImageGesture(e, img.id, 'rotate', 'se'));
+      frame.addChild(knob);
+    }
+    this.imageHandles.addChild(frame);
+  }
+
+  /** A press on an image: selects it, and starts moving it when this screen may (tokens above it take their own clicks). */
+  private onImageDown(e: FederatedPointerEvent, id: string) {
+    if (this.tool !== 'select' || e.button !== 0 || e.altKey || (e.pointerType === 'touch' && this.touches.size > 0)) { this.onDown(e, null); return; }
+    e.stopPropagation();
+    if (this.gesture) return;
+    this.callbacks.onImageSelect?.(id);
+    const img = this.data?.scene.images?.find((i) => i.id === id);
+    if (img?.editable) this.startImageGesture(e, id, 'move', 'se');
+  }
+
+  private startImageGesture(e: FederatedPointerEvent, id: string, mode: 'move' | 'resize' | 'rotate', corner: Corner) {
+    e.stopPropagation();
+    const img = this.data?.scene.images?.find((i) => i.id === id);
+    if (!img || !img.editable) return;
+    const rect = this.imageRect(img);
+    this.gesture = { kind: 'image', id, mode, corner, start: this.cellPoint(e), rect, last: rect };
+  }
+
+  /** Someone else is moving an image: show it there for a moment. */
+  showImageDrag(id: string, rect: ImgRect) {
+    if (this.gesture?.kind === 'image' && this.gesture.id === id) return;
+    this.imageOverrides.set(id, { ...rect, until: performance.now() + 1500 });
+    this.placeImage(id);
+    if (this.data?.selectedImage === id) this.drawImageHandles();
   }
 
   private renderGrid(g: SceneGrid) {
@@ -796,6 +954,24 @@ export class BoardController {
       case 'place':
         this.drawPreview(this.cellPoint(e));
         break;
+      case 'image': {
+        const cell = this.cellPoint(e);
+        const r = gesture.rect;
+        let next: ImgRect;
+        if (gesture.mode === 'move') {
+          const x = r.x + cell.x - gesture.start.x;
+          const y = r.y + cell.y - gesture.start.y;
+          // The centre snaps to half cells; Alt drops it.
+          next = { ...r, x: e.altKey ? x : snapHalfCell(x), y: e.altKey ? y : snapHalfCell(y) };
+        } else if (gesture.mode === 'resize') next = resizeFromCorner(r, gesture.corner, cell, !e.shiftKey);
+        else next = { ...r, rotation: rotationFor({ x: r.x, y: r.y }, cell, e.shiftKey) };
+        gesture.last = next;
+        this.imageOverrides.set(gesture.id, { ...next, until: Number.POSITIVE_INFINITY });
+        this.placeImage(gesture.id);
+        this.drawImageHandles();
+        this.callbacks.onImageDrag?.(gesture.id, next);
+        break;
+      }
     }
   }
 
@@ -809,6 +985,16 @@ export class BoardController {
     if (!gesture || !this.data) return;
     const g = this.data.scene.grid;
     switch (gesture.kind) {
+      case 'image': {
+        const { rect: r, last } = gesture;
+        const moved = last.x !== r.x || last.y !== r.y || last.width !== r.width || last.height !== r.height || last.rotation !== r.rotation;
+        if (moved) {
+          // Held where it was dropped until the saved scene comes back.
+          this.imageOverrides.set(gesture.id, { ...last, until: performance.now() + 4000 });
+          this.callbacks.onImageChange?.(gesture.id, last);
+        } else this.imageOverrides.delete(gesture.id);
+        break;
+      }
       case 'press': {
         window.clearTimeout(gesture.timer);
         const d = this.data;

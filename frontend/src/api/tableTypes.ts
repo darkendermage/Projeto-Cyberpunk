@@ -23,6 +23,20 @@ export interface SceneGrid {
 export interface BackgroundView { mediaId: string | null; url: string | null; width: number; height: number }
 
 /** Position (top-left) and size in cells, rotation in degrees. */
+/** An image over the map (round 5), as this screen sees it. */
+export interface SceneImageView {
+  id: string; url: string; name: string; x: number; y: number; width: number; height: number; rotation: number; opacity: number; order: number;
+  locked: boolean; lockedByGm: boolean; hidden: boolean; ownerSeatId: number | null;
+  /** This viewer may move and resize it now. */
+  editable: boolean;
+}
+
+/** An image placed or changed (mediaId only when adding). */
+export interface ImageInput {
+  mediaId?: string | null; name?: string | null; x: number; y: number; width?: number | null; height?: number | null;
+  rotation?: number; opacity?: number; locked?: boolean; hidden?: boolean;
+}
+
 export interface TokenView {
   id: string;
   label: string;
@@ -85,6 +99,8 @@ export interface SceneView {
   tokens: TokenView[];
   templates: SceneTemplate[];
   updatedAt: string;
+  /** Images over the map, bottom first (round 5). */
+  images?: SceneImageView[];
 }
 
 export interface SceneSummary {

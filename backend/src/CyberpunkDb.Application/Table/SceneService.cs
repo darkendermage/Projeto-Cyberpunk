@@ -466,6 +466,18 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
         return token.Visibility == TokenVisibility.All;
     }
 
+    /// <summary>
+    /// Who sees an image being dragged on the live scene: null when the dragger may not move it; false when only the GM
+    /// may see it (hidden); true for everyone.
+    /// </summary>
+    public async Task<bool?> ImageDragTargetAsync(TableSeat? seat, int sceneId, string imageId, CancellationToken ct)
+    {
+        var scene = await db.Scenes.AsNoTracking().FirstOrDefaultAsync(s => s.Active && s.Id == sceneId, ct);
+        var image = scene is null ? null : Deserialize(scene.StateJson).Images.FirstOrDefault(i => i.Id == imageId);
+        if (image is null || (seat is not null && (image.OwnerSeatId != seat.Id || image.Locked || image.Hidden))) return null;
+        return !image.Hidden;
+    }
+
     // ------------------------------------------------------------------ plumbing
 
     private async Task<SceneView> MutateAsync(int id, int? version, Func<Scene, SceneState, Task<SceneState>> operation, bool bumpVersion, CancellationToken ct)

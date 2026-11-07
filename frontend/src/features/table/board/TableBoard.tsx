@@ -1,6 +1,8 @@
 import { useEffect, useImperativeHandle, useRef, type Ref } from 'react';
 import type { Ping } from '../../../api/tableTypes';
 import type { AttackEffect } from './effects';
+import type { ImgRect } from '../images';
+import type { Point } from '../grid';
 import { BoardController, type BoardCallbacks, type BoardData, type BoardTool, type TemplateDraft } from './BoardController';
 import styles from '../Table.module.css';
 
@@ -11,6 +13,9 @@ export interface BoardHandle {
   showDrag: (tokenId: string, x: number, y: number) => void;
   showPing: (ping: Ping) => void;
   showAttack: (effect: AttackEffect, motion: boolean) => void;
+  showImageDrag: (id: string, rect: ImgRect) => void;
+  /** The cell at the middle of the view (null before the board is ready). */
+  centerCell: () => Point | null;
   fit: () => void;
   zoomBy: (factor: number) => void;
 }
@@ -41,6 +46,9 @@ export function TableBoard({ data, tool, draft, callbacks, ref }: {
       onTemplatePlace: (x, y, angle) => callbacksRef.current.onTemplatePlace(x, y, angle),
       onPing: (x, y) => callbacksRef.current.onPing(x, y),
       onTokenPlace: (x, y) => callbacksRef.current.onTokenPlace?.(x, y),
+      onImageSelect: (id) => callbacksRef.current.onImageSelect?.(id),
+      onImageDrag: (id, rect) => callbacksRef.current.onImageDrag?.(id, rect),
+      onImageChange: (id, rect) => callbacksRef.current.onImageChange?.(id, rect),
     });
     controller.current = board;
     board.init().catch(() => { /* WebGL unavailable: the board stays empty */ });
@@ -62,6 +70,8 @@ export function TableBoard({ data, tool, draft, callbacks, ref }: {
     showDrag: (tokenId, x, y) => controller.current?.showDrag(tokenId, x, y),
     showPing: (ping) => controller.current?.showPing(ping),
     showAttack: (effect, motion) => controller.current?.showAttack(effect, motion),
+    showImageDrag: (id, rect) => controller.current?.showImageDrag(id, rect),
+    centerCell: () => controller.current?.centerCell() ?? null,
     fit: () => controller.current?.fit(),
     zoomBy: (factor) => controller.current?.zoomBy(factor),
   }), []);

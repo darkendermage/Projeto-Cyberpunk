@@ -74,6 +74,17 @@ public sealed class TableHub(SeatService seats, SceneService scenes, TablePresen
         await base.OnDisconnectedAsync(exception);
     }
 
+    /// <summary>An image being moved, resized or turned (the drop goes through the API); a hidden one previews to the GM only.</summary>
+    public async Task DragImage(int sceneId, string imageId, double x, double y, double width, double height, double rotation)
+    {
+        if (!double.IsFinite(x) || !double.IsFinite(y) || !double.IsFinite(width) || !double.IsFinite(height) || !double.IsFinite(rotation) || imageId.Length > 20) return;
+        var everyone = await scenes.ImageDragTargetAsync(CurrentSeat, sceneId, imageId, Context.ConnectionAborted);
+        if (everyone is null) return;
+        var preview = new { sceneId, imageId, x, y, width, height, rotation };
+        if (everyone.Value) await Clients.Others.SendAsync("imageDrag", preview);
+        else await Clients.GroupExcept(Gm, Context.ConnectionId).SendAsync("imageDrag", preview);
+    }
+
     /// <summary>
     /// Where a token is while someone drags it (the drop goes through the API). Others see it slide; a token hidden
     /// from some players only previews to the GM.
