@@ -192,6 +192,8 @@
   border: 1px solid var(--line);
   border-left: 3px solid var(--text-faint);
 }
+.queueRowEdit { grid-template-columns: 22px 54px minmax(0, 1fr) auto; }
+.queueRowEdit .queueInit input { width: 100%; text-align: center; }
 .queueAlly { border-left-color: var(--cyan); }
 .queueEnemy { border-left-color: var(--red); }
 .queueActive { background: rgba(245, 230, 99, 0.12); border-color: rgba(245, 230, 99, 0.6); }

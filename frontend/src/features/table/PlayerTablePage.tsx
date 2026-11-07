@@ -161,7 +161,9 @@ export function PlayerTablePage() {
     }
   };
 
-  const strip = useMemo(() => buildStrip(scene?.tokens ?? [], party.data ?? [], new Map((encounter.data?.queue ?? []).map((f) => [f.id, f]))),
+  const strip = useMemo(() => buildStrip(scene?.tokens ?? [], party.data ?? [], new Map((encounter.data?.queue ?? []).map((f) => [f.id, f])),
+    // In a fight the cards follow the Initiative order.
+    encounter.data?.queue),
     [scene?.tokens, party.data, encounter.data]);
   const myToken = scene?.tokens.find((tk) => tk.controllable && seat?.characterId != null && tk.characterId === seat.characterId)
     ?? scene?.tokens.find((tk) => tk.controllable);

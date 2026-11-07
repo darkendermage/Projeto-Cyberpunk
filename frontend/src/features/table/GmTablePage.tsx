@@ -202,7 +202,9 @@ export function GmTablePage() {
   const selectedCount = selection.tokens.length + selection.templates.length;
 
   const viewTokens = view?.tokens;
-  const strip = useMemo(() => buildStrip(viewTokens ?? [], party.data ?? [], new Map((encounter.data?.queue ?? []).map((f) => [f.id, f]))),
+  const strip = useMemo(() => buildStrip(viewTokens ?? [], party.data ?? [], new Map((encounter.data?.queue ?? []).map((f) => [f.id, f])),
+    // In a fight the cards follow the Initiative order.
+    encounter.data?.status === 'Active' ? encounter.data.queue : undefined),
     [viewTokens, party.data, encounter.data]);
 
   const token = view?.tokens.find((tk) => tk.id === selectedToken);

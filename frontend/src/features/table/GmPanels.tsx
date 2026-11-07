@@ -417,7 +417,7 @@ export function CombatTab({ scene, encounter, act, onSelectToken }: { scene: Sce
     );
   }
   if (!encounter) return <Spinner />;
-  const run = (path: string) => command.mutate({ path }, { onError: (e) => toast.notify(problemMessage(e), 'error') });
+  const run = (path: string, body?: Record<string, unknown>) => command.mutate({ path, body }, { onError: (e) => toast.notify(problemMessage(e), 'error') });
   // The combat page's dialog, wired to this fight.
   const addRun: Run = (path, body = {}, done, method) =>
     command.mutate({ path, body, method }, {
@@ -437,11 +437,18 @@ export function CombatTab({ scene, encounter, act, onSelectToken }: { scene: Sce
         <Button variant="primary" icon={<SkipForward size={15} />} disabled={command.isPending || !rolled} onClick={() => run('next-turn')}>{t('Próximo turno', 'Next turn')}</Button>
       </div>
       <div className={styles.queue}>
-        {encounter.queue.map((f) => {
+        {encounter.queue.map((f, i, queue) => {
           const token = scene.tokens.find((tk) => tk.combatantId === f.id);
           return (
-            <div key={f.id} className={`${styles.queueRow} ${f.side === 'Ally' ? styles.queueAlly : styles.queueEnemy} ${f.id === encounter.activeId ? styles.queueActive : ''}`}>
-              <span className={styles.queueInit}>{f.initiative ?? '–'}</span>
+            <div key={f.id} className={`${styles.queueRow} ${styles.queueRowEdit} ${f.side === 'Ally' ? styles.queueAlly : styles.queueEnemy} ${f.id === encounter.activeId ? styles.queueActive : ''}`}>
+              <span className={styles.stack} style={{ gap: 0 }}>
+                <IconButton label={t(`Subir ${f.name} na fila`, `Move ${f.name} up`)} disabled={command.isPending || i === 0 || !rolled}
+                  onClick={() => run(`combatants/${f.id}/move`, { beforeId: queue[i - 1].id })}><ArrowUp size={12} /></IconButton>
+                <IconButton label={t(`Descer ${f.name} na fila`, `Move ${f.name} down`)} disabled={command.isPending || i === queue.length - 1 || !rolled}
+                  onClick={() => run(`combatants/${f.id}/move`, { beforeId: queue[i + 2]?.id ?? null })}><ArrowDown size={12} /></IconButton>
+              </span>
+              <InitiativeField key={`${f.id}:${f.initiative ?? ''}`} value={f.initiative} label={t(`Iniciativa de ${f.name}`, `${f.name}'s Initiative`)}
+                onSave={(initiative) => run(`combatants/${f.id}/initiative`, { initiative })} />
               <span className={styles.stack} style={{ gap: 2 }}>
                 <span className={styles.queueName}>{f.name}</span>
                 <span className={styles.row}>
@@ -461,6 +468,17 @@ export function CombatTab({ scene, encounter, act, onSelectToken }: { scene: Sce
       <Link to={`/combat/${scene.encounterId}`} target="_blank" className={styles.link}>{t('Ataques, dano e cobertura na mesa de combate completa', 'Attacks, damage and cover on the full combat table')} <ExternalLink size={12} /></Link>
       {rules.data && <AddCombatantsDialog open={adding} onClose={() => setAdding(false)} rules={rules.data} busy={command.isPending} run={addRun} />}
     </div>
+  );
+}
+
+/** A fighter's Initiative, typed by the GM: saved when the field loses focus (or on Enter) if it changed. */
+function InitiativeField({ value, label, onSave }: { value: number | null; label: string; onSave: (n: number) => void }) {
+  const [draft, setDraft] = useState(value);
+  const save = () => { if (draft != null && draft !== value) onSave(draft); };
+  return (
+    <span className={styles.queueInit} onBlur={save} onKeyDown={(e) => { if (e.key === 'Enter') save(); }}>
+      <NumField label={label} min={-10} max={60} value={draft ?? 0} onChange={(n) => setDraft(Math.round(n))} />
+    </span>
   );
 }
 
