@@ -391,6 +391,7 @@
   position: absolute; top: 4px; right: 4px; display: grid; place-items: center; width: 22px; height: 22px; padding: 0; cursor: pointer;
   background: var(--bg-1); border: 1px solid var(--line); color: var(--muted, #8a93a0);
 }
+.stripCard:has(.stripSheet) .stripPick { padding-right: 22px; }
 .stripSheet:hover { border-color: var(--cyan, #00f0ff); color: var(--cyan, #00f0ff); }
 .stripPick { display: flex; align-items: center; gap: 8px; width: 100%; padding: 0; background: none; border: 0; color: inherit; text-align: left; cursor: pointer; font: inherit; }
 .stripTarget { outline: 2px solid var(--red); box-shadow: 0 0 12px var(--red-glow); }

@@ -755,9 +755,16 @@ public sealed partial class EncounterService(
         foreach (var e in running)
         {
             if (Deserialize(e.StateJson).Combatants.FirstOrDefault(c => c.CharacterId == characterId) is not { } c) continue;
-            await MutateAsync(e.Id, e.Version, (s, _, _) => Task.FromResult(Log(s, c.Id, "awareness",
-                L.T($"{c.Name} redistribui o Combat Awareness (gasta uma Ação, CP:R p.146).", $"{c.Name} redistributes Combat Awareness (spends an Action, CP:R p.146)."))),
-                ct, allowPending: true);
+            try
+            {
+                await MutateAsync(e.Id, e.Version, (s, _, _) => Task.FromResult(Log(s, c.Id, "awareness",
+                    L.T($"{c.Name} redistribui o Combat Awareness (gasta uma Ação, CP:R p.146).", $"{c.Name} redistributes Combat Awareness (spends an Action, CP:R p.146)."))),
+                    ct, allowPending: true);
+            }
+            catch (ConflictException)
+            {
+                // The fight changed at that very moment: the split is saved all the same; only the log line is lost.
+            }
         }
     }
 
