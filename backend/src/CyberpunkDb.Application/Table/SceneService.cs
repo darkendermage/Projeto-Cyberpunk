@@ -304,10 +304,11 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
         MutateAsync(id, null, (_, state) =>
         {
             var current = RequireImage(state, imageId, null);
-            // The GM's lock is the GM's: only the GM puts it on or takes it off.
+            // The GM's lock is the GM's: only the GM puts it on or takes it off. A lock that stays on keeps its owner
+            // (the GM hiding a player's locked image doesn't make the lock the GM's).
             return Task.FromResult(ReplaceImage(state, Changed(current, input) with
             {
-                Locked = input.Locked, LockedByGm = input.Locked, Hidden = input.Hidden,
+                Locked = input.Locked, LockedByGm = input.Locked && (!current.Locked || current.LockedByGm), Hidden = input.Hidden,
             }));
         }, bumpVersion: false, ct);
 

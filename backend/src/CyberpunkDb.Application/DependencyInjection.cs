@@ -93,6 +93,8 @@ public static class DependencyInjection
         services.AddScoped<TableRulesService>();
         services.AddScoped<ChatService>();
         services.AddSingleton<SceneLocks>();
+        services.TryAddSingleton(TimeProvider.System);
+        services.AddSingleton<PlayerUploadLimit>();
         services.AddSingleton<TableLobby>();
         services.TryAddSingleton<ITableNotifier, NullTableNotifier>();
         services.TryAddSingleton<ITablePresence, NoTablePresence>();

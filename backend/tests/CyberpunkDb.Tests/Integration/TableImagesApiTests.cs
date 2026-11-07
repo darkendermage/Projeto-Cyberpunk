@@ -169,6 +169,65 @@ public class TableImagesApiTests(ApiFactory factory)
     }
 
     [Fact]
+    public async Task Seat_order_does_not_reveal_hidden_images()
+    {
+        var (scene, seat, _) = await LiveScene("Buraco");
+        var media = await Upload(_t.Gm);
+        await _t.Send<SceneView>(_t.Gm, HttpMethod.Post, $"/api/table/scenes/{scene.Id}/images", Input(media.Id, 1, 1));
+        await _t.Send<SceneView>(_t.Gm, HttpMethod.Post, $"/api/table/scenes/{scene.Id}/images", Input(media.Id, 2, 2, hidden: true));
+        await _t.Send<SceneView>(_t.Gm, HttpMethod.Post, $"/api/table/scenes/{scene.Id}/images", Input(media.Id, 3, 3));
+
+        var state = await _t.Send<PlayerStateDto>(_t.Player, HttpMethod.Get, "/api/table/play/state", seat: seat.Token);
+
+        state.Scene!.Images!.Select(i => i.Order).Should().Equal(0, 1);
+    }
+
+    [Fact]
+    public async Task Gm_edit_keeps_the_players_own_lock()
+    {
+        var (scene, seat, _) = await LiveScene("Cadeado");
+        var media = await Upload(_t.Player, seat.Token);
+        var v = await _t.Send<SceneView>(_t.Player, HttpMethod.Post, "/api/table/play/images", Input(media.Id), seat.Token);
+        var mine = v.Images!.Single(i => i.OwnerSeatId == seat.Id);
+        await _t.Send<SceneView>(_t.Player, HttpMethod.Put, $"/api/table/play/images/{mine.Id}", Input(null, locked: true), seat.Token);
+
+        // The GM changes something else (the eye, the opacity...) and sends the lock as it is.
+        var gm = await _t.Send<SceneView>(_t.Gm, HttpMethod.Put, $"/api/table/scenes/{scene.Id}/images/{mine.Id}", Input(null, locked: true, hidden: true));
+        gm.Images!.Single(i => i.Id == mine.Id).LockedByGm.Should().BeFalse("the lock is still the player's");
+        await _t.Send<SceneView>(_t.Gm, HttpMethod.Put, $"/api/table/scenes/{scene.Id}/images/{mine.Id}", Input(null, locked: true));
+
+        await _t.Send<SceneView>(_t.Player, HttpMethod.Put, $"/api/table/play/images/{mine.Id}", Input(null, locked: false), seat.Token);
+    }
+
+    [Fact]
+    public async Task Locked_image_is_not_editable_on_the_gm_board()
+    {
+        var (scene, _, _) = await LiveScene("Fixa");
+        var media = await Upload(_t.Gm);
+        var v = await _t.Send<SceneView>(_t.Gm, HttpMethod.Post, $"/api/table/scenes/{scene.Id}/images", Input(media.Id, locked: true));
+        var img = v.Images!.Single();
+        img.Editable.Should().BeFalse("a lock stops everyone until it comes off");
+
+        v = await _t.Send<SceneView>(_t.Gm, HttpMethod.Put, $"/api/table/scenes/{scene.Id}/images/{img.Id}", Input(null, locked: false));
+        v.Images!.Single().Editable.Should().BeTrue();
+    }
+
+    [Fact]
+    public async Task Player_uploads_are_limited_per_hour()
+    {
+        var (_, seat, other) = await LiveScene("Enxurrada");
+        for (var i = 0; i < PlayerUploadLimit.PerHour; i++) await Upload(_t.Player, seat.Token);
+
+        using var request = new HttpRequestMessage(HttpMethod.Post, "/api/table/play/media")
+        {
+            Content = new MultipartFormDataContent { { new ByteArrayContent(TableFoundationApiTests.Png), "file", "img.png" } },
+        };
+        request.Headers.Add("X-Seat", seat.Token);
+        (await _t.Player.SendAsync(request)).StatusCode.Should().Be(HttpStatusCode.TooManyRequests);
+        await Upload(_t.Player, other.Token); // another seat has its own count
+    }
+
+    [Fact]
     public void Old_scene_json_loads()
     {
         var state = SceneService.Deserialize("""{"grid":{},"background":{},"tokens":[],"templates":[]}""");

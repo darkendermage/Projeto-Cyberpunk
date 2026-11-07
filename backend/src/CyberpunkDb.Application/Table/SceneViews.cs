@@ -22,7 +22,8 @@ public static class SceneViews
 
     public static SceneView ForGm(Scene scene, SceneState state, TokenImages images, IReadOnlyDictionary<string, int>? covers = null) =>
         View(scene, state, state.Tokens.Select(t => Token(t, GmImage(t, images), true, covers, Focus(t, images))),
-            state.Images.Select(i => Image(i, true)));
+            // A lock stops the GM on the board too; the Imagens tab takes it off.
+            state.Images.Select(i => Image(i, !i.Locked)));
 
     /// <summary>
     /// The seat's view. Stored images go through the player API with the seat link in the query string, because images
@@ -30,8 +31,9 @@ public static class SceneViews
     /// </summary>
     public static SceneView ForSeat(Scene scene, SceneState state, TableSeat seat, TokenImages images, IReadOnlyDictionary<string, int>? covers = null) =>
         View(scene, state, state.Tokens.Where(t => CanSee(t, seat)).Select(t => Token(t, SeatImage(t, seat, images), CanControl(t, seat), covers, Focus(t, images))),
-            // Hidden images never reach a player, not even their address.
-            state.Images.Where(i => !i.Hidden).Select(i => Image(i, i.OwnerSeatId == seat.Id && !i.Locked)));
+            // Hidden images never reach a player, not even their address or a gap in the order numbers.
+            state.Images.Where(i => !i.Hidden).OrderBy(i => i.Order)
+                .Select((i, n) => Image(i with { Order = n }, i.OwnerSeatId == seat.Id && !i.Locked)));
 
     /// <summary>The framing of a PC's portrait, when the token shows that portrait.</summary>
     private static CyberpunkDb.Application.Characters.PortraitFocus? Focus(SceneToken t, TokenImages images) =>

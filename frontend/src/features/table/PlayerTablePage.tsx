@@ -88,7 +88,6 @@ export function PlayerTablePage() {
   const [armorBusy, setArmorBusy] = useState(false);
   const [turnBusy, setTurnBusy] = useState(false);
   const [pendingBusy, setPendingBusy] = useState(false);
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [imageBusy, setImageBusy] = useState(false);
 
   const setScene = (scene: SceneView | null) => {
@@ -146,6 +145,10 @@ export function PlayerTablePage() {
   const seat = state.data?.seat;
   const draft: TemplateDraft = ownColor || !seat ? savedDraft : { ...savedDraft, color: seat.color };
   const scene = state.data?.scene ?? null;
+  // The selected image, tied to its scene: image ids repeat across scenes (I1), so another scene starts with none.
+  const [imageSel, setImageSel] = useState<{ scene: number; id: string } | null>(null);
+  const selectedImage = imageSel && imageSel.scene === scene?.id ? imageSel.id : null;
+  const setSelectedImage = (id: string | null) => setImageSel(id && scene ? { scene: scene.id, id } : null);
   useEffect(() => { shownRef.current = scene?.id ?? null; }, [scene?.id]);
   useEffect(() => { live.current = { scene, queue: encounter.data?.queue ?? [] }; });
   const queue = useMemo(() => encounter.data?.queue ?? [], [encounter.data]);
@@ -233,12 +236,13 @@ export function PlayerTablePage() {
   };
   const selectAll = () => {
     if (!scene) return;
+    setImageSel(null);
     setSelection({
       tokens: scene.tokens.filter((tk) => tk.controllable && !tk.locked).map((tk) => tk.id),
       templates: scene.templates.filter((tp) => tp.ownerSeatId != null && !tp.locked).map((tp) => tp.id),
     });
   };
-  useBoardKeys({ onDelete: removeSelection, onSelectAll: selectAll, onClear: () => (quick.aim ? quick.cancel() : setSelection(NO_SELECTION)) });
+  useBoardKeys({ onDelete: removeSelection, onSelectAll: selectAll, onClear: () => { if (quick.aim) quick.cancel(); else { setImageSel(null); setSelection(NO_SELECTION); } } });
 
   // A pending attack's step answered by this seat (its dodge, its Critical Injury roll): the fight comes back.
   const answerPending = (step: () => Promise<PlayerEncounter>) => {
@@ -339,7 +343,7 @@ export function PlayerTablePage() {
           )}
           {scene && (
             <SceneStrip entries={strip} selected={selection.tokens} aim={quick.aim}
-              onPick={(e) => { if (quick.aim) quick.target(fighterIdOf(e, queue)); else setSelection({ tokens: [e.tokenId], templates: [] }); }}
+              onPick={(e) => { if (quick.aim) quick.target(fighterIdOf(e, queue)); else { setImageSel(null); setSelection({ tokens: [e.tokenId], templates: [] }); } }}
               weaponsOf={(e) => own && fighterIdOf(e, queue) === own.id
                 ? { weapons: own.weapons ?? [], blocked: encounter.data?.activeId === own.id ? null : t('Aguarde seu turno para atacar.', 'Wait for your Turn to attack.') }
                 : null}

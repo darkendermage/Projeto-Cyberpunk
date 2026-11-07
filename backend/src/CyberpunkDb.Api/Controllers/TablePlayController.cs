@@ -15,7 +15,7 @@ namespace CyberpunkDb.Api.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/table/play")]
-public sealed class TablePlayController(SeatService seats, SceneService scenes, EncounterService encounters, CharacterService characters, NpcPortraitService npcImages, ChatService chat, TablePresence presence, TablePartyService party, TableRulesService rules, TableAttackService attacks, TableTurnService turns, TableMusicService music, MediaService media) : ControllerBase
+public sealed class TablePlayController(SeatService seats, SceneService scenes, EncounterService encounters, CharacterService characters, NpcPortraitService npcImages, ChatService chat, TablePresence presence, TablePartyService party, TableRulesService rules, TableAttackService attacks, TableTurnService turns, TableMusicService music, MediaService media, PlayerUploadLimit uploads) : ControllerBase
 {
     public const string SeatHeader = "X-Seat";
 
@@ -197,7 +197,7 @@ public sealed class TablePlayController(SeatService seats, SceneService scenes, 
     [RequestFormLimits(MultipartBodyLengthLimit = MediaService.PlayerMaxBytes + 64 * 1024)]
     public async Task<ActionResult<MediaDto>> Upload(IFormFile file, CancellationToken ct)
     {
-        await SeatAsync(ct);
+        uploads.Take((await SeatAsync(ct)).Id);
         await using var stream = file.OpenReadStream();
         return StatusCode(StatusCodes.Status201Created, await media.UploadAsync(stream, file.Length, ct, MediaService.PlayerMaxBytes));
     }

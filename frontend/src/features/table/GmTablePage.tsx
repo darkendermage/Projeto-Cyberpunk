@@ -84,13 +84,12 @@ export function GmTablePage() {
   const [selection, setSelection] = useState<Selection>(NO_SELECTION);
   const [tablesOpen, setTablesOpen] = useState(false);
   const [sessionsOpen, setSessionsOpen] = useState(false);
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [imageBusy, setImageBusy] = useState(false);
   const gmDice = useQuery({ queryKey: ['table', 'gm-dice'], queryFn: tableApi.gmDiceColor });
   const gmMusic = useQuery({ queryKey: musicKey, queryFn: tableApi.music });
   const selectedToken = selection.tokens.length === 1 && selection.templates.length === 0 ? selection.tokens[0] : null;
   const selectedTemplate = selection.templates.length === 1 && selection.tokens.length === 0 ? selection.templates[0] : null;
-  const selectToken = (id: string | null) => setSelection(id ? { tokens: [id], templates: [] } : NO_SELECTION);
+  const selectToken = (id: string | null) => { setImageSel(null); setSelection(id ? { tokens: [id], templates: [] } : NO_SELECTION); };
 
   const putScene = useCallback((view: SceneView) => {
     client.setQueryData(tableKeys.scene(view.id), view);
@@ -149,6 +148,10 @@ export function GmTablePage() {
   });
 
   const view = scene.data;
+  // The selected image, tied to its scene: image ids repeat across scenes (I1), so another scene starts with none.
+  const [imageSel, setImageSel] = useState<{ scene: number; id: string } | null>(null);
+  const selectedImage = imageSel && imageSel.scene === view?.id ? imageSel.id : null;
+  const setSelectedImage = (id: string | null) => setImageSel(id && view ? { scene: view.id, id } : null);
   useEffect(() => { onScreen.current = { scene: view, queue: encounter.data?.queue ?? [] }; });
   const shownRef = useRef<number | null>(null);
   useEffect(() => { shownRef.current = view?.id ?? null; }, [view?.id]);
@@ -229,11 +232,11 @@ export function GmTablePage() {
     if (n > 0 && !window.confirm(t(n === 1 ? 'Remover o token selecionado?' : `Remover os ${n} tokens selecionados?`, n === 1 ? 'Remove the selected token?' : `Remove the ${n} selected tokens?`))) return;
     void act(async () => { const v = await tableApi.batch(view.id, { removeTokens: selection.tokens, removeTemplates: selection.templates }); setSelection(NO_SELECTION); return v; });
   };
-  const selectAll = () => { if (view) setSelection({ tokens: view.tokens.map((tk) => tk.id), templates: view.templates.map((tp) => tp.id) }); };
+  const selectAll = () => { if (!view) return; setImageSel(null); setSelection({ tokens: view.tokens.map((tk) => tk.id), templates: view.templates.map((tp) => tp.id) }); };
   const setHidden = (hidden: boolean) => {
     if (view && selection.tokens.length) void act(() => tableApi.batch(view.id, hidden ? { hideTokens: selection.tokens } : { showTokens: selection.tokens }));
   };
-  useBoardKeys({ onDelete: removeSelection, onSelectAll: selectAll, onClear: () => (quick.aim ? quick.cancel() : setSelection(NO_SELECTION)) });
+  useBoardKeys({ onDelete: removeSelection, onSelectAll: selectAll, onClear: () => { if (quick.aim) quick.cancel(); else { setImageSel(null); setSelection(NO_SELECTION); } } });
   const selectedCount = selection.tokens.length + selection.templates.length;
 
   const viewTokens = view?.tokens;

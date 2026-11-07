@@ -131,7 +131,7 @@ export class BoardController {
    */
   private gesture:
     | { kind: 'pan'; start: Point; origin: Point }
-    | { kind: 'press'; target: Target | null; screen: Point; cell: Point; additive: boolean; touch: boolean; timer: number }
+    | { kind: 'press'; target: Target | null; screen: Point; cell: Point; additive: boolean; touch: boolean; timer: number; image?: string }
     | { kind: 'group'; start: Point; tokens: { id: string; x: number; y: number; size: number }[]; templates: { id: string; x: number; y: number }[] }
     | { kind: 'lasso'; start: Point; additive: boolean }
     | { kind: 'pinch' }
@@ -201,8 +201,7 @@ export class BoardController {
 
   setTool(tool: BoardTool) {
     this.tool = tool;
-    this.gesture = null;
-    this.preview.clear();
+    this.cancelGesture();
     if (this.ready) this.app.canvas.style.cursor = tool === 'select' ? 'default' : 'crosshair';
   }
 
@@ -469,7 +468,9 @@ export class BoardController {
     frame.position.set(centre.x, centre.y);
     frame.rotation = (r.rotation * Math.PI) / 180;
     const scale = 1 / Math.max(0.2, this.world.scale.x);
-    frame.addChild(new Graphics().rect(-w / 2, -h / 2, w, h).stroke({ width: 2 * scale, color: img.editable ? 0x00f0ff : 0x8a93a0, alpha: 0.95 }));
+    const outline = new Graphics().rect(-w / 2, -h / 2, w, h).stroke({ width: 2 * scale, color: img.editable ? 0x00f0ff : 0x8a93a0, alpha: 0.95 });
+    outline.eventMode = 'none';
+    frame.addChild(outline);
     if (img.editable) {
       const size = 12 * scale;
       const corners: [Corner, number, number][] = [['nw', -w / 2, -h / 2], ['ne', w / 2, -h / 2], ['se', w / 2, h / 2], ['sw', -w / 2, h / 2]];
@@ -481,7 +482,9 @@ export class BoardController {
         frame.addChild(handle);
       }
       const knobY = -h / 2 - 28 * scale;
-      frame.addChild(new Graphics().moveTo(0, -h / 2).lineTo(0, knobY).stroke({ width: 1.5 * scale, color: 0x00f0ff }));
+      const stem = new Graphics().moveTo(0, -h / 2).lineTo(0, knobY).stroke({ width: 1.5 * scale, color: 0x00f0ff });
+      stem.eventMode = 'none';
+      frame.addChild(stem);
       const knob = new Graphics().circle(0, knobY, 8 * scale).fill({ color: 0x00f0ff }).stroke({ width: 1.5 * scale, color: 0x000000 });
       knob.eventMode = 'static';
       knob.cursor = 'grab';
@@ -494,11 +497,20 @@ export class BoardController {
   /** A press on an image: selects it, and starts moving it when this screen may (tokens above it take their own clicks). */
   private onImageDown(e: FederatedPointerEvent, id: string) {
     if (this.tool !== 'select' || e.button !== 0 || e.altKey || (e.pointerType === 'touch' && this.touches.size > 0)) { this.onDown(e, null); return; }
+    const img = this.data?.scene.images?.find((i) => i.id === id);
+    if (!img?.editable) {
+      // An image this screen can't change behaves like the ground under it (lasso, hold to ping, finger pan), except
+      // that a plain click selects it.
+      this.onDown(e, null);
+      if (this.gesture?.kind === 'press') this.gesture.image = id;
+      return;
+    }
     e.stopPropagation();
+    // The first finger counts for a pinch, even on an image.
+    if (e.pointerType === 'touch') this.touches.set(e.pointerId, { x: e.global.x, y: e.global.y });
     if (this.gesture) return;
     this.callbacks.onImageSelect?.(id);
-    const img = this.data?.scene.images?.find((i) => i.id === id);
-    if (img?.editable) this.startImageGesture(e, id, 'move', 'se');
+    this.startImageGesture(e, id, 'move', 'se');
   }
 
   private startImageGesture(e: FederatedPointerEvent, id: string, mode: 'move' | 'resize' | 'rotate', corner: Corner) {
@@ -864,6 +876,7 @@ export class BoardController {
     if (g?.kind === 'press') window.clearTimeout(g.timer);
     if (g?.kind === 'group') for (const t of g.tokens) { this.overrides.delete(t.id); this.placeToken(t.id); }
     if (g?.kind === 'group' && this.data) this.renderTemplates(this.data);
+    if (g?.kind === 'image') { this.imageOverrides.delete(g.id); this.placeImage(g.id); this.drawImageHandles(); }
     this.lasso.clear();
     this.preview.clear();
     this.gesture = null;
@@ -910,6 +923,7 @@ export class BoardController {
         const wy = (p.mid.y - p.origin.y) / p.scale;
         this.world.scale.set(scale);
         this.world.position.set(mid.x - wx * scale, mid.y - wy * scale);
+        this.drawImageHandles();
         break;
       }
       case 'press': {
@@ -1004,7 +1018,11 @@ export class BoardController {
       case 'press': {
         window.clearTimeout(gesture.timer);
         const d = this.data;
-        if (!gesture.target) { if (!gesture.additive) this.callbacks.onSelect([], []); break; }
+        if (!gesture.target) {
+          if (gesture.image) this.callbacks.onImageSelect?.(gesture.image);
+          else if (!gesture.additive) this.callbacks.onSelect([], []);
+          break;
+        }
         // A plain click on something already selected keeps only it; Shift+click on it takes it out.
         const id = gesture.target.tokenId ?? gesture.target.template!.id;
         const wasSelected = gesture.target.tokenId ? d.selectedTokens.includes(id) : d.selectedTemplates.includes(id);
@@ -1067,6 +1085,7 @@ export class BoardController {
     const wy = (screen.y - this.world.position.y) / old;
     this.world.scale.set(scale);
     this.world.position.set(screen.x - wx * scale, screen.y - wy * scale);
+    this.drawImageHandles();
   }
 
   // ------------------------------------------------------------------ tools
