@@ -343,6 +343,7 @@ export function PlayerTablePage() {
           )}
           {scene && (
             <SceneStrip entries={strip} selected={selection.tokens} aim={quick.aim}
+              sheetOf={(e) => (seat?.characterId != null && e.characterId === seat.characterId ? () => setSheetOpen(true) : null)}
               onPick={(e) => { if (quick.aim) quick.target(fighterIdOf(e, queue)); else { setImageSel(null); setSelection({ tokens: [e.tokenId], templates: [] }); } }}
               weaponsOf={(e) => own && fighterIdOf(e, queue) === own.id
                 ? { weapons: own.weapons ?? [], blocked: encounter.data?.activeId === own.id ? null : t('Aguarde seu turno para atacar.', 'Wait for your Turn to attack.') }

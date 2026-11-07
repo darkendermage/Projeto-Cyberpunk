@@ -1,4 +1,4 @@
-import { Crosshair, RefreshCw, X } from 'lucide-react';
+import { Crosshair, FileText, RefreshCw, X } from 'lucide-react';
 import type { AttackMode, WeaponView } from '../../api/encounterTypes';
 import { Button, Select } from '../../components/ui/ui';
 import { t, tv } from '../../i18n';
@@ -17,7 +17,7 @@ export interface CardWeapons { weapons: WeaponView[]; blocked: string | null }
  * (NPCs show only their Wound State to the players). A click selects the token, or picks the target while aiming. The
  * cards of whoever may shoot (the player's own character, any fighter for the GM) list their weapons: a click aims.
  */
-export function SceneStrip({ entries, selected, onPick, weaponsOf, aim, onWeapon, onReload, onUnjam, onPickUp }: {
+export function SceneStrip({ entries, selected, onPick, weaponsOf, aim, onWeapon, onReload, onUnjam, onPickUp, sheetOf }: {
   entries: StripEntry[];
   selected: readonly string[];
   onPick: (entry: StripEntry) => void;
@@ -30,6 +30,8 @@ export function SceneStrip({ entries, selected, onPick, weaponsOf, aim, onWeapon
   onUnjam?: (entry: StripEntry, weapon: WeaponView) => void;
   /** Picks a thrown weapon up. */
   onPickUp?: (entry: StripEntry, weapon: WeaponView) => void;
+  /** Opens the card's sheet, when this screen may see it (the player's own; any PC for the GM); null hides the icon. */
+  sheetOf?: (entry: StripEntry) => (() => void) | null;
 }) {
   if (entries.length === 0) return null;
   return (
@@ -39,9 +41,15 @@ export function SceneStrip({ entries, selected, onPick, weaponsOf, aim, onWeapon
         const armed = e.offScene ? null : weaponsOf?.(e) ?? null;
         const shooter = aim != null && e.combatantId === aim.attackerId;
         const targeted = aim != null && e.combatantId != null && e.combatantId === aim.targetId;
+        const openSheet = sheetOf?.(e) ?? null;
         return (
           <div key={e.tokenId} role="listitem" style={{ borderColor: e.color }}
             className={`${styles.stripCard} ${selected.includes(e.tokenId) ? styles.stripCardOn : ''} ${targeted ? styles.stripTarget : ''} ${shooter ? styles.stripShooter : ''} ${e.offScene ? styles.stripCardOff : ''}`}>
+            {openSheet && (
+              <button type="button" className={styles.stripSheet} onClick={openSheet} aria-label={t(`Ficha de ${e.name}`, `${e.name}'s sheet`)} title={t('Ver ficha', 'View sheet')}>
+                <FileText size={13} />
+              </button>
+            )}
             <button type="button" className={styles.stripPick} onClick={() => { if (!e.offScene) onPick(e); }} aria-disabled={e.offScene || undefined}
               title={e.offScene ? t('Fora da cena: sem token neste mapa', 'Off scene: no token on this map') : undefined}
               aria-label={e.offScene ? t(`${e.name} (fora da cena)`, `${e.name} (off scene)`) : aim && !shooter ? t(`Mirar em ${e.name}`, `Aim at ${e.name}`) : e.name}>

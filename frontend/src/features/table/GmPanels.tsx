@@ -2,11 +2,11 @@ import { useRef, useState } from 'react';
 import { Link } from 'react-router';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import {
-  ArrowDown, ArrowUp, Copy, Download, ExternalLink, Plus, Power, Radio, RotateCcw, RotateCw, SkipForward, Swords, Trash2, Upload,
+  Crosshair, ArrowDown, ArrowUp, Copy, Download, ExternalLink, Plus, Power, Radio, RotateCcw, RotateCw, SkipForward, Swords, Trash2, Upload,
 } from 'lucide-react';
 import { problemMessage, useCharacters } from '../../api/characters';
 import { useEncounterCommand, useEncounterRules, useEncounters } from '../../api/encounters';
-import type { EncounterDetail } from '../../api/encounterTypes';
+import type { EncounterDetail, WeaponView } from '../../api/encounterTypes';
 import { tableApi, tableKeys } from '../../api/table';
 import type {
   SceneGrid, SceneSummary, SceneTemplate, SceneView, Seat, TemplateShapeName, TokenInput, TokenView, TokenVisibility, TunnelStatus,
@@ -29,6 +29,7 @@ import { sourceFields, tokenInputOf, type TokenSource } from './sources';
 import { DEFAULT_GRID, pxToCell } from './grid';
 import { SHAPE_LABEL } from './templates';
 import styles from './Table.module.css';
+import { cannotFire } from './aim';
 import { AwarenessBlock } from './AwarenessBlock';
 
 export type Act = (fn: () => Promise<SceneView | void>, done?: string) => Promise<void>;
@@ -246,8 +247,10 @@ export function SceneTab({ scene, act, onGridDraft }: { scene: SceneView; act: A
 // ------------------------------------------------------------------ token and template inspector
 
 /** Mounted per token (key). */
-export function TokenInspector({ scene, token, seats, encounter, act, onDone }: {
+export function TokenInspector({ scene, token, seats, encounter, act, onDone, onAim }: {
   scene: SceneView; token: TokenView; seats: Seat[]; encounter: EncounterDetail | undefined; act: Act; onDone: () => void;
+  /** Aims an attack with this fighter's weapon, like the scene cards (round 6). */
+  onAim?: (fighter: EncounterDetail['queue'][number], weapon: WeaponView) => void;
 }) {
   const toast = useToast();
   const sources = useTokenSources();
@@ -322,7 +325,7 @@ export function TokenInspector({ scene, token, seats, encounter, act, onDone }: 
         </div>
       </div>
 
-      {fighter && encounter && <FighterQuick fighter={fighter} encounterId={encounter.id} />}
+      {fighter && encounter && <FighterQuick fighter={fighter} encounterId={encounter.id} onAim={onAim ? (w) => onAim(fighter, w) : undefined} />}
 
       <div className={styles.rowBetween}>
         <Button variant="primary" onClick={() => save()}>{t('Salvar', 'Save')}</Button>
@@ -336,7 +339,7 @@ export function TokenInspector({ scene, token, seats, encounter, act, onDone }: 
  * The fighter behind a token, for the GM: armor of head and body with +/− (a PC's lands on their sheet), and the
  * weapons with Attack and Damage rolled in the chat.
  */
-function FighterQuick({ fighter, encounterId }: { fighter: EncounterDetail['queue'][number]; encounterId: number }) {
+function FighterQuick({ fighter, encounterId, onAim }: { fighter: EncounterDetail['queue'][number]; encounterId: number; onAim?: (weapon: WeaponView) => void }) {
   const toast = useToast();
   const command = useEncounterCommand(encounterId);
   const [secret, setSecret] = useState(false);
@@ -364,7 +367,14 @@ function FighterQuick({ fighter, encounterId }: { fighter: EncounterDetail['queu
                   {w.magazine != null && <span className={styles.stat}>{w.rounds ?? 0}/{w.magazine}</span>}
                 </div>
                 <div className={styles.row}>
-                  <Button onClick={() => void roll(`1d10${signed(w.attackTotal)}`, 'Check', t(`ataque com ${w.name}`, `attack with ${w.name}`))}>{t('Ataque', 'Attack')} {signed(w.attackTotal)}</Button>
+                  {onAim ? (
+                    // Same as the cards: pick the target on the map or on a card, then fire.
+                    <Button icon={<Crosshair size={14} />} disabled={!!(cannotFire(w) ?? (fighter.dead ? t('Morto não ataca.', "The dead don't attack.") : null))}
+                      title={cannotFire(w) ?? t('Atacar: escolha o alvo no mapa ou num cartão', 'Attack: pick the target on the map or on a card')}
+                      onClick={() => onAim(w)}>{t('Atacar', 'Attack')} {signed(w.attackTotal)}</Button>
+                  ) : (
+                    <Button onClick={() => void roll(`1d10${signed(w.attackTotal)}`, 'Check', t(`ataque com ${w.name}`, `attack with ${w.name}`))}>{t('Ataque', 'Attack')} {signed(w.attackTotal)}</Button>
+                  )}
                   {damage && <Button variant="ghost" onClick={() => void roll(damage, 'Damage', t(`dano de ${w.name}`, `${w.name} damage`))}>{t('Dano', 'Damage')} {w.damage}</Button>}
                 </div>
               </div>

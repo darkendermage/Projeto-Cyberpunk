@@ -22,6 +22,7 @@ import { RulesDialog } from './RulesDialog';
 import { AimBar, SceneStrip } from './SceneStrip';
 import { PendingCard } from './PendingCard';
 import { SessionsDialog } from './SessionsDialog';
+import { MySheetDialog } from './MySheetDialog';
 import { ImagesTab } from './ImagesTab';
 import { fitInitial, inputOf, snapHalf } from './images';
 import { MAP_LIMITS, prepareImage } from '../../lib/portrait';
@@ -84,6 +85,7 @@ export function GmTablePage() {
   const [selection, setSelection] = useState<Selection>(NO_SELECTION);
   const [tablesOpen, setTablesOpen] = useState(false);
   const [sessionsOpen, setSessionsOpen] = useState(false);
+  const [sheetFor, setSheetFor] = useState<{ id: number; name: string } | null>(null);
   const [imageBusy, setImageBusy] = useState(false);
   const gmDice = useQuery({ queryKey: ['table', 'gm-dice'], queryFn: tableApi.gmDiceColor });
   const gmMusic = useQuery({ queryKey: musicKey, queryFn: tableApi.music });
@@ -320,6 +322,7 @@ export function GmTablePage() {
         )}
         {view && (
           <SceneStrip entries={strip} selected={selection.tokens} aim={quick.aim}
+            sheetOf={(e) => (e.characterId != null ? () => setSheetFor({ id: e.characterId!, name: e.name }) : null)}
             onPick={(e) => { if (quick.aim) quick.target(fighterIdOf(e, queue)); else { selectToken(e.tokenId); setTab('token'); } }}
             weaponsOf={(e) => { const f = queue.find((x) => x.id === fighterIdOf(e, queue)); return f ? { weapons: f.weapons, blocked: null } : null; }}
             onWeapon={(e, w) => { const f = queue.find((x) => x.id === fighterIdOf(e, queue)); if (f) quick.start(startAim(f.id, f.name, w)); }}
@@ -348,7 +351,8 @@ export function GmTablePage() {
         </div>
         {tab === 'scene' && (view ? <SceneTab key={viewKey} scene={view} act={act} onGridDraft={(grid) => setGridDraft(grid ? { key: viewKey, grid } : null)} /> : <span className={styles.muted}>{t('Escolha uma cena.', 'Pick a scene.')}</span>)}
         {tab === 'token' && view && (
-          token ? <TokenInspector key={token.id} scene={view} token={token} seats={seats.data ?? []} encounter={encounter.data} act={act} onDone={() => selectToken(null)} />
+          token ? <TokenInspector key={token.id} scene={view} token={token} seats={seats.data ?? []} encounter={encounter.data} act={act} onDone={() => selectToken(null)}
+            onAim={(f, w) => quick.start(startAim(f.id, f.name, w))} />
           : template ? <TemplateInspector key={template.id} template={template} editable
               onSave={(tpl) => act(() => tableApi.updateTemplate(view.id, tpl.id, tpl), t('Área salva.', 'Area saved.'))}
               onRemove={() => act(async () => { const v = await tableApi.removeTemplate(view.id, template.id); setSelection(NO_SELECTION); return v; })} />
@@ -397,6 +401,7 @@ export function GmTablePage() {
       </aside>
       <RulesDialog open={tablesOpen} onClose={() => setTablesOpen(false)} load={tableApi.rules} />
       <SessionsDialog open={sessionsOpen} onClose={() => setSessionsOpen(false)} />
+      {sheetFor && <MySheetDialog characterId={sheetFor.id} open onClose={() => setSheetFor(null)} title={sheetFor.name} player={false} />}
     </div>
   );
 }
