@@ -55,7 +55,10 @@ public sealed class TableSessionService(IAppDbContext db, ITableNotifier notifie
         return session.Id;
     }
 
-    /// <summary>Closes the open session with <paramref name="r"/>'s name (or its date) and opens the next one.</summary>
+    /// <summary>
+    /// Closes the open session (it keeps its name) and opens the next one under <paramref name="r"/>'s name, or
+    /// "Session N" with a number no session has used (round 6: the sessions page names the session that starts).
+    /// </summary>
     public async Task<TableSessionDto> StartNewAsync(NewSessionRequest r, CancellationToken ct)
     {
         var currentId = await CurrentIdAsync(ct);
@@ -64,14 +67,22 @@ public sealed class TableSessionService(IAppDbContext db, ITableNotifier notifie
         current.EndedAt = now;
         // Any other session left open (a race before this fix) closes too.
         foreach (var stray in await db.TableSessions.Where(s => s.EndedAt == null && s.Id != currentId).ToListAsync(ct)) stray.EndedAt = now;
-        if (Clean(r.Name) is { } name) current.Name = name;
-        else if (current.Name.Length == 0) current.Name = L.T($"Sessão de {current.StartedAt:dd/MM/yyyy}", $"Session of {current.StartedAt:yyyy-MM-dd}");
-        var count = await db.TableSessions.CountAsync(ct);
-        var next = new TableSession { Name = L.T($"Sessão {count + 1}", $"Session {count + 1}"), StartedAt = now };
+        if (current.Name.Length == 0) current.Name = L.T($"Sessão de {current.StartedAt:dd/MM/yyyy}", $"Session of {current.StartedAt:yyyy-MM-dd}");
+        var next = new TableSession { Name = Clean(r.Name) ?? await NextNumberedNameAsync(ct), StartedAt = now };
         db.TableSessions.Add(next);
         await db.SaveChangesAsync(ct);
         await notifier.ChatResetAsync(ct);
         return await DtoAsync(next, ct);
+    }
+
+    /// <summary>"Session N" past every number in use (and past the count), so a deleted session's number isn't reused.</summary>
+    private async Task<string> NextNumberedNameAsync(CancellationToken ct)
+    {
+        var names = await db.TableSessions.Select(s => s.Name).ToListAsync(ct);
+        var used = names.Select(n => System.Text.RegularExpressions.Regex.Match(n, @"^(?:Sessão|Session) (\d+)$"))
+            .Where(m => m.Success).Select(m => int.Parse(m.Groups[1].Value)).DefaultIfEmpty(0).Max();
+        var n = Math.Max(used, names.Count) + 1;
+        return L.T($"Sessão {n}", $"Session {n}");
     }
 
     public async Task<IReadOnlyList<TableSessionDto>> ListAsync(CancellationToken ct)

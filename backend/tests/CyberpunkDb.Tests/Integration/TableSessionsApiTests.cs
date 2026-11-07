@@ -28,11 +28,25 @@ public class TableSessionsApiTests(ApiFactory factory)
         var opened = await _t.Send<TableSessionDto>(_t.Gm, HttpMethod.Post, "/api/table/sessions", new NewSessionRequest("Sessão do teste"));
 
         opened.Open.Should().BeTrue();
+        opened.Name.Should().Be("Sessão do teste", "the name typed is the new session's (round 6)");
         (await _t.Send<List<TableMessageDto>>(_t.Gm, HttpMethod.Get, "/api/table/messages")).Should().BeEmpty();
         var archived = (await Sessions()).Single(s => s.Id == before.Id);
         archived.Open.Should().BeFalse();
-        archived.Name.Should().Be("Sessão do teste");
+        archived.Name.Should().Be(before.Name, "the session that ends keeps its name");
         archived.Messages.Should().BeGreaterThan(0);
+    }
+
+    [Fact]
+    public async Task Session_numbers_never_repeat_after_a_delete()
+    {
+        var first = await _t.Send<TableSessionDto>(_t.Gm, HttpMethod.Post, "/api/table/sessions", new NewSessionRequest(null));
+        await _t.Send<TableSessionDto>(_t.Gm, HttpMethod.Post, "/api/table/sessions", new NewSessionRequest(null));
+        (await _t.Raw(_t.Gm, HttpMethod.Delete, $"/api/table/sessions/{first.Id}")).StatusCode.Should().Be(HttpStatusCode.NoContent);
+
+        await _t.Send<TableSessionDto>(_t.Gm, HttpMethod.Post, "/api/table/sessions", new NewSessionRequest(null));
+
+        var names = (await Sessions()).Select(s => s.Name).ToList();
+        names.Should().OnlyHaveUniqueItems();
     }
 
     [Fact]

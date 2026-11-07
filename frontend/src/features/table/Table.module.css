@@ -472,6 +472,13 @@
 .sessionList { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
 .sessionList li { padding: 6px 8px; background: var(--bg-2); border: 1px solid var(--line); }
 .archive { list-style: none; margin: 0; padding: 0; max-height: 60vh; overflow: auto; display: flex; flex-direction: column; gap: 3px; }
+.sessionOpen {
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; padding: 14px 16px; margin: 12px 0;
+  background: var(--bg-2); border: 1px solid var(--cyan, #00f0ff); border-left-width: 4px;
+}
+.sessionName { font-size: 16px; }
+.sessionCards { list-style: none; margin: 8px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
+.sessionCard { display: flex; flex-direction: column; gap: 6px; padding: 10px 12px; background: var(--bg-2); border: 1px solid var(--line); }
 .archivedLine { font-size: 13px; line-height: 1.35; }
 
 /* The dice color picker next to the 3D dice toggle (E3). */

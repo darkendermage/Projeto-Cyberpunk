@@ -6,6 +6,7 @@ import { playerApi, tableKeys } from '../../api/table';
 import type { PlayerEncounter, PlayerState, RollKind, SceneView, TableMessage, TableVisibility } from '../../api/tableTypes';
 import { Button, EmptyState, IconButton, Spinner } from '../../components/ui/ui';
 import { Dices, IdCard, Volume2, VolumeX } from 'lucide-react';
+import { readCharacterFile } from '../../api/characters';
 import { useToast } from '../../state/ToastContext';
 import { lang, t } from '../../i18n';
 import type { BoardCallbacks, BoardData, BoardTool, TemplateDraft } from './board/BoardController';
@@ -368,7 +369,7 @@ export function PlayerTablePage() {
               onReload={reloadWeapon}
               onImport={(file) => void run(async () => {
                 // The file exported on the player's PC; the server checks the format and links it to this seat.
-                const content: unknown = JSON.parse(await file.text());
+                const content = await readCharacterFile(file);
                 await api.importCharacter(content);
                 await client.invalidateQueries({ queryKey: ['table', 'player', token] });
                 toast.notify(t('Ficha importada e ligada ao seu lugar.', 'Sheet imported and linked to your seat.'));

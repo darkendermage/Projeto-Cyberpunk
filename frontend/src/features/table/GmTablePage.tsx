@@ -6,6 +6,7 @@ import type { EncounterDetail, InjuryLocation } from '../../api/encounterTypes';
 import { tableApi, tableKeys } from '../../api/table';
 import type { SceneGrid, SceneView, TableMessage, TableMusicState } from '../../api/tableTypes';
 import { Dices, Trash2, Volume2, VolumeX, History } from 'lucide-react';
+import { useNavigate } from 'react-router';
 import { Button, EmptyState, ErrorState, IconButton, Select, Spinner } from '../../components/ui/ui';
 import { useToast } from '../../state/ToastContext';
 import { lang, t } from '../../i18n';
@@ -21,7 +22,6 @@ import { PanelHandle } from './PanelHandle';
 import { RulesDialog } from './RulesDialog';
 import { AimBar, SceneStrip } from './SceneStrip';
 import { PendingCard } from './PendingCard';
-import { SessionsDialog } from './SessionsDialog';
 import { MySheetDialog } from './MySheetDialog';
 import { ImagesTab } from './ImagesTab';
 import { fitInitial, inputOf, snapHalf } from './images';
@@ -61,6 +61,7 @@ const TABS: { id: Tab; label: string }[] = [
  * fight, invite players and talk to them. The scene on the players' screens is the one marked live.
  */
 export function GmTablePage() {
+  const navigate = useNavigate();
   const client = useQueryClient();
   const toast = useToast();
   const board = useRef<BoardHandle>(null);
@@ -84,7 +85,6 @@ export function GmTablePage() {
   const [gridDraft, setGridDraft] = useState<{ key: string; grid: SceneGrid } | null>(null);
   const [selection, setSelection] = useState<Selection>(NO_SELECTION);
   const [tablesOpen, setTablesOpen] = useState(false);
-  const [sessionsOpen, setSessionsOpen] = useState(false);
   const [sheetFor, setSheetFor] = useState<{ id: number; name: string } | null>(null);
   const [imageBusy, setImageBusy] = useState(false);
   const gmDice = useQuery({ queryKey: ['table', 'gm-dice'], queryFn: tableApi.gmDiceColor });
@@ -396,11 +396,10 @@ export function GmTablePage() {
             renderActions={applyDamage} />
         )}
         {tab === 'chat' && (
-          <Button variant="ghost" icon={<History size={15} />} onClick={() => setSessionsOpen(true)}>{t('Sessões (nova sessão, anteriores)', 'Sessions (new, previous)')}</Button>
+          <Button variant="ghost" icon={<History size={15} />} onClick={() => navigate('/mesa')}>{t('Sessões (nova sessão, anteriores)', 'Sessions (new, previous)')}</Button>
         )}
       </aside>
       <RulesDialog open={tablesOpen} onClose={() => setTablesOpen(false)} load={tableApi.rules} />
-      <SessionsDialog open={sessionsOpen} onClose={() => setSessionsOpen(false)} />
       {sheetFor && <MySheetDialog characterId={sheetFor.id} open onClose={() => setSheetFor(null)} title={sheetFor.name} player={false} />}
     </div>
   );

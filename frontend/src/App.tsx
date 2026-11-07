@@ -24,6 +24,7 @@ const WeatherPage = lazy(() => import('./features/weather/WeatherPage').then((m)
 const NightMarketPage = lazy(() => import('./features/night-market/NightMarketPage').then((m) => ({ default: m.NightMarketPage })));
 const CombatPage = lazy(() => import('./features/combat/CombatPage').then((m) => ({ default: m.CombatPage })));
 const GmTablePage = lazy(() => import('./features/table/GmTablePage').then((m) => ({ default: m.GmTablePage })));
+const SessionsPage = lazy(() => import('./features/table/SessionsPage').then((m) => ({ default: m.SessionsPage })));
 const PlayerTablePage = lazy(() => import('./features/table/PlayerTablePage').then((m) => ({ default: m.PlayerTablePage })));
 const LobbyPage = lazy(() => import('./features/table/LobbyPage').then((m) => ({ default: m.LobbyPage })));
 const NetArchitecturePage = lazy(() => import('./features/net-architecture/NetArchitecturePage').then((m) => ({ default: m.NetArchitecturePage })));
@@ -66,7 +67,8 @@ export default function App() {
           <Route path="/night-market/:id" element={<NightMarketPage />} />
           <Route path="/combat" element={<CombatPage />} />
           <Route path="/combat/:id" element={<CombatPage />} />
-          <Route path="/mesa" element={<GmTablePage />} />
+          <Route path="/mesa" element={<SessionsPage />} />
+          <Route path="/mesa/jogar" element={<GmTablePage />} />
           <Route path="/net-architecture" element={<NetArchitecturePage />} />
           <Route path="/net-architecture/:id" element={<NetArchitecturePage />} />
           <Route path="/characters" element={<CharactersPage />} />
