@@ -57,6 +57,8 @@ export const tableApi = {
   send: (body: SendMessage) => request<TableMessage>('/table/messages', { method: 'POST', body: json(body) }),
   roll: (body: RollRequest) => request<TableMessage>('/table/rolls', { method: 'POST', body: json(body) }),
   sessions: () => request<TableSession[]>('/table/sessions'),
+  gmDiceColor: () => request<{ color: string | null }>('/table/dice-color'),
+  setGmDiceColor: (color: string | null) => request<{ color: string | null }>('/table/dice-color', { method: 'PUT', body: json({ color }) }),
   /** Ends the open session with this name and starts an empty chat. */
   newSession: (body: { name: string | null }) => request<TableSession>('/table/sessions', { method: 'POST', body: json(body) }),
   sessionMessages: (id: number) => request<TableMessage[]>(`/table/sessions/${id}/messages`),
@@ -125,6 +127,8 @@ export function playerApi(seat: string) {
     pickUp: (weapon: string) => request<PlayerEncounter>('/table/play/pick-up', { method: 'POST', body: json({ weapon }), headers }),
     /** Clears a jammed weapon of the seat's character (an Action on its Turn). */
     unjam: (weapon: string) => request<PlayerEncounter>('/table/play/unjam', { method: 'POST', body: json({ weapon }), headers }),
+    /** The player's own dice color (null: the seat's color). */
+    setDiceColor: (color: string | null) => request<PlayerSeat>('/table/play/dice-color', { method: 'PUT', body: json({ color }), headers }),
     /** Ends the seat's own Turn in the live scene's fight. */
     endTurn: () => request<PlayerEncounter>('/table/play/end-turn', { method: 'POST', headers }),
     armor: (location: ArmorLocation, delta: number) => request<PlayerCharacter>('/table/play/armor', { method: 'POST', body: json({ location, delta }), headers }),

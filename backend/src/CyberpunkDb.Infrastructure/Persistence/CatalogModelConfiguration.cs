@@ -276,6 +276,7 @@ internal static class CatalogModelConfiguration
             e.Property(x => x.Token).HasMaxLength(64).IsRequired();
             e.Property(x => x.Label).HasMaxLength(60).IsRequired();
             e.Property(x => x.Color).HasMaxLength(20).IsRequired();
+            e.Property(x => x.DiceColor).HasMaxLength(20);
             e.HasIndex(x => x.Token).IsUnique();
         });
 

@@ -22,6 +22,7 @@ import { RulesDialog } from './RulesDialog';
 import { AimBar, SceneStrip } from './SceneStrip';
 import { PendingCard } from './PendingCard';
 import { SessionsDialog } from './SessionsDialog';
+import { DiceColorPicker } from './DiceColorPicker';
 import { buildStrip } from './strip';
 import { attackSummary, fighterIdOf, startAim } from './aim';
 import { useQuickAttack } from './useQuickAttack';
@@ -75,6 +76,7 @@ export function GmTablePage() {
   const [selection, setSelection] = useState<Selection>(NO_SELECTION);
   const [tablesOpen, setTablesOpen] = useState(false);
   const [sessionsOpen, setSessionsOpen] = useState(false);
+  const gmDice = useQuery({ queryKey: ['table', 'gm-dice'], queryFn: tableApi.gmDiceColor });
   const selectedToken = selection.tokens.length === 1 && selection.templates.length === 0 ? selection.tokens[0] : null;
   const selectedTemplate = selection.templates.length === 1 && selection.tokens.length === 0 ? selection.templates[0] : null;
   const selectToken = (id: string | null) => setSelection(id ? { tokens: [id], templates: [] } : NO_SELECTION);
@@ -249,6 +251,8 @@ export function GmTablePage() {
         <BoardToolbar tool={tool} onTool={setTool} draft={draft} onDraft={setDraft} board={board} onSelectAll={view ? selectAll : undefined} onTables={() => setTablesOpen(true)}>
           <IconButton label={prefs.dice3d ? t('Dados 3D: ligados', '3D dice: on') : t('Dados 3D: desligados', '3D dice: off')} active={prefs.dice3d}
             onClick={() => setPrefs({ dice3d: !prefs.dice3d })}><Dices size={17} /></IconButton>
+          <DiceColorPicker value={gmDice.data?.color ?? null}
+            onChange={(color) => tableApi.setGmDiceColor(color).then((r) => client.setQueryData(['table', 'gm-dice'], r), (e) => toast.notify(problemMessage(e), 'error'))} />
           <IconButton label={prefs.sound ? t('Som da mesa: ligado', 'Table sound: on') : t('Som da mesa: desligado', 'Table sound: off')} active={prefs.sound}
             onClick={() => setPrefs({ sound: !prefs.sound })}>{prefs.sound ? <Volume2 size={17} /> : <VolumeX size={17} />}</IconButton>
           {selectedCount > 0 && (

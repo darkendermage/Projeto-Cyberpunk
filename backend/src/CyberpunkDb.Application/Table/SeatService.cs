@@ -133,7 +133,16 @@ public sealed class SeatService(IAppDbContext db, TableLobby lobby, ITableNotifi
         return ToDto(seat);
     }
 
-    public static PlayerSeatDto ToPlayer(TableSeat s) => new(s.Id, s.Label, s.Color, s.CharacterId);
+    public static PlayerSeatDto ToPlayer(TableSeat s) => new(s.Id, s.Label, s.Color, s.CharacterId, s.DiceColor);
+
+    /// <summary>The player's own dice color (#rrggbb; null goes back to the seat's color).</summary>
+    public async Task<PlayerSeatDto> SetDiceColorAsync(TableSeat seat, DiceColorRequest r, CancellationToken ct)
+    {
+        var tracked = await FindAsync(seat.Id, ct);
+        tracked.DiceColor = TableSettingsService.CleanColor(r.Color);
+        await db.SaveChangesAsync(ct);
+        return ToPlayer(tracked);
+    }
 
     private SeatDto ToDto(TableSeat s) => new(s.Id, s.Label, s.Color, s.CharacterId, s.Token, s.CreatedAt, s.RevokedAt is not null, lobby.IsClaimed(s.Id));
 

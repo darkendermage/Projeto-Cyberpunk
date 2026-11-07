@@ -17,7 +17,7 @@ public sealed record TableAttackTarget(
 public sealed record TableAttack(
     int EncounterId, int Seq, string AttackerId, string AttackerName, bool AttackerPc, string Weapon, AttackMode Mode, bool Melee,
     int? AttackRoll, int AttackTotal, IReadOnlyList<TableAttackTarget> Targets, bool Undone = false, int? AttackExtra = null,
-    IReadOnlyList<int>? CritDice = null);
+    IReadOnlyList<int>? CritDice = null, string? DiceColor = null);
 
 /// <summary>A quick attack's answer: the resolved attack, or the step it waits on (the target's dodge, the Critical Injury roll).</summary>
 public sealed record QuickAttackResult(TableAttack? Attack, PendingView? Pending);

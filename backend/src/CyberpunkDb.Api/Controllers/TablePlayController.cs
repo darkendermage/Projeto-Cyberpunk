@@ -187,6 +187,10 @@ public sealed class TablePlayController(SeatService seats, SceneService scenes, 
     [HttpPost("pick-up")]
     public async Task<PlayerEncounterDto> PickUp(PlayerWeaponRequest request, CancellationToken ct) => await turns.PickUpAsync(await SeatAsync(ct), request, ct);
 
+    /// <summary>The player's own dice color (#rrggbb; null for the seat's color).</summary>
+    [HttpPut("dice-color")]
+    public async Task<PlayerSeatDto> DiceColor(DiceColorRequest request, CancellationToken ct) => await seats.SetDiceColorAsync(await SeatAsync(ct), request, ct);
+
     /// <summary>The player ends their own Turn.</summary>
     [HttpPost("end-turn")]
     public async Task<PlayerEncounterDto> EndTurn(CancellationToken ct) => await turns.EndTurnAsync(await SeatAsync(ct), ct);

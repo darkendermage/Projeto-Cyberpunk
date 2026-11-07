@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { Vector3 } from 'three';
 import type { TableMessage } from '../../../api/tableTypes';
-import { throwOf } from './dice';
+import { inkFor, throwOf } from './dice';
 import { D6_VALUES, d10Normal, d10Shape, d6Normal, faceNormal, faceUp, UP } from './faces';
 
 const message = (change: Partial<TableMessage>): TableMessage => ({
@@ -74,5 +74,18 @@ describe('upright numbers', () => {
       up.y = 0;
       expect(up.normalize().distanceTo(SCREEN_UP)).toBeLessThan(1e-6);
     }
+  });
+});
+
+describe('dice color', () => {
+  it('picks dark numbers on light dice and light ones on dark dice', () => {
+    expect(inkFor('#ffffff')).toBe('#0b0d10');
+    expect(inkFor('#101010')).toBe('#f4f6f8');
+  });
+
+  it('passes the roller\'s color to the tray', () => {
+    const m = message({ roll: { formula: '1d6', kind: 'Plain', total: 4, critical: null, criticalInjury: false, diceColor: '#12ab34',
+      terms: [{ expression: '1d6', sign: 1, dice: [4], extra: null, value: 4 }] } });
+    expect(throwOf(m)!.color).toBe('#12ab34');
   });
 });

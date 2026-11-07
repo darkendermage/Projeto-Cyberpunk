@@ -2,7 +2,7 @@ import {
   AmbientLight, BoxGeometry, BufferGeometry, CanvasTexture, DirectionalLight, Float32BufferAttribute, Mesh, MeshStandardMaterial,
   PerspectiveCamera, PointLight, Quaternion, Scene, SRGBColorSpace, Vector3, WebGLRenderer, type Material,
 } from 'three';
-import type { DiceThrow, DieRoll } from './dice';
+import { inkFor, type DiceThrow, type DieRoll } from './dice';
 import { D6_VALUES, d10Normal, d10Shape, d10TextureUp, d6Normal, faceUpright } from './faces';
 
 const D6_COLOR = '#3de0ff';
@@ -37,12 +37,12 @@ function kiteUv(): KiteUv {
 const KITE = kiteUv();
 
 /** A face of a die: the number in the app's display font and neon color, with a thin frame; 6 and 9 underlined. */
-function faceTexture(value: number, color: string, kite: boolean): CanvasTexture {
+function faceTexture(value: number, color: string, kite: boolean, background = FACE_BG): CanvasTexture {
   const size = 256;
   const canvas = document.createElement('canvas');
   canvas.width = canvas.height = size;
   const g = canvas.getContext('2d')!;
-  g.fillStyle = FACE_BG;
+  g.fillStyle = background;
   g.fillRect(0, 0, size, size);
   g.strokeStyle = color;
   g.globalAlpha = 0.55;
@@ -150,7 +150,7 @@ export class DiceScene {
       const inRow = Math.min(perRow, roll.dice.length - row * perRow);
       const col = i % perRow;
       const end = new Vector3((col - (inRow - 1) / 2) * 2.1, 0, (row - (rows - 1) / 2) * 2.1);
-      const mesh = this.mesh(die);
+      const mesh = this.mesh(die, roll.color ?? null);
       this.scene.add(mesh);
       this.dice.push(mesh);
       return {
@@ -215,15 +215,17 @@ export class DiceScene {
     return new Vector3(position.getX(high) - position.getX(low), position.getY(high) - position.getY(low), position.getZ(high) - position.getZ(low)).normalize();
   }
 
-  private texture(value: number, color: string, kite: boolean): CanvasTexture {
-    const key = `${value}:${color}:${kite}`;
+  private texture(value: number, color: string, kite: boolean, background = FACE_BG): CanvasTexture {
+    const key = `${value}:${color}:${kite}:${background}`;
     let texture = this.textures.get(key);
-    if (!texture) this.textures.set(key, texture = faceTexture(value, color, kite));
+    if (!texture) this.textures.set(key, texture = faceTexture(value, color, kite, background));
     return texture;
   }
 
-  private mesh(die: DieRoll): Mesh {
-    if (die.sides === 6) return new Mesh(this.d6Mesh, D6_VALUES.map((v) => material(this.texture(v, D6_COLOR, false))) as Material[]);
-    return new Mesh(this.d10Mesh, this.d10.values.map((v) => material(this.texture(v, D10_COLOR, true))) as Material[]);
+  /** A die in the roller's color (the body), with numbers that read on it; without one, the neon dice of the table. */
+  private mesh(die: DieRoll, body: string | null): Mesh {
+    const ink = body ? inkFor(body) : null;
+    if (die.sides === 6) return new Mesh(this.d6Mesh, D6_VALUES.map((v) => material(this.texture(v, ink ?? D6_COLOR, false, body ?? FACE_BG))) as Material[]);
+    return new Mesh(this.d10Mesh, this.d10.values.map((v) => material(this.texture(v, ink ?? D10_COLOR, true, body ?? FACE_BG))) as Material[]);
   }
 }

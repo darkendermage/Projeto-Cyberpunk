@@ -162,7 +162,7 @@ export interface Lobby { open: boolean; seats: LobbySeat[] }
 
 export interface ClaimResult { token: string }
 
-export interface PlayerSeat { id: number; label: string; color: string; characterId: number | null }
+export interface PlayerSeat { id: number; label: string; color: string; characterId: number | null; diceColor?: string | null }
 
 export interface PlayerState { seat: PlayerSeat; scene: SceneView | null }
 
@@ -283,6 +283,8 @@ export interface RollResult {
   luck?: number;
   /** The roll this one replaces (the 1-LUCK reroll). */
   rerollOf?: number | null;
+  /** The roller's dice color (#rrggbb); null for the default dice. */
+  diceColor?: string | null;
 }
 
 /** A session of the table (its chat and the fights used in it). */
@@ -341,6 +343,8 @@ export interface TableAttack {
   attackExtra?: number | null;
   /** The Critical Injury's 2d6, when it was rolled. */
   critDice?: number[] | null;
+  /** The attacker's dice color. */
+  diceColor?: string | null;
 }
 
 /** A quick attack's answer: the attack, or the step it waits on. */

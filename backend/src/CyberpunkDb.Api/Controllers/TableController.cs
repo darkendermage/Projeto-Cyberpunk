@@ -12,7 +12,7 @@ namespace CyberpunkDb.Api.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/table")]
-public sealed class TableController(SeatService seats, MediaService media, SceneService scenes, TableFightService fights, TableAttackService attacks, TablePartyService party, TableRulesService rules, ChatService chat, TablePresence presence, TunnelService tunnel, TableSessionService sessions) : ControllerBase
+public sealed class TableController(SeatService seats, MediaService media, SceneService scenes, TableFightService fights, TableAttackService attacks, TablePartyService party, TableRulesService rules, ChatService chat, TablePresence presence, TunnelService tunnel, TableSessionService sessions, TableSettingsService settings) : ControllerBase
 {
     // ------------------------------------------------------------------ internet tunnel
 
@@ -38,6 +38,18 @@ public sealed class TableController(SeatService seats, MediaService media, Scene
 
     [HttpPost("rolls")]
     public Task<TableMessageDto> Roll(RollRequest request, CancellationToken ct) => chat.RollAsync(null, request, ct);
+
+    /// <summary>The GM's dice color (null: the default dice).</summary>
+    [HttpGet("dice-color")]
+    public async Task<DiceColorRequest> GmDiceColor(CancellationToken ct) => new(await settings.GetAsync(TableSettingsService.GmDiceColor, ct));
+
+    [HttpPut("dice-color")]
+    public async Task<DiceColorRequest> SetGmDiceColor(DiceColorRequest request, CancellationToken ct)
+    {
+        var color = TableSettingsService.CleanColor(request.Color);
+        await settings.SetAsync(TableSettingsService.GmDiceColor, color, ct);
+        return new DiceColorRequest(color);
+    }
 
     // ------------------------------------------------------------------ sessions
 

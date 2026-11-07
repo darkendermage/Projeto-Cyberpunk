@@ -29,7 +29,7 @@ public sealed record TableMessageDto(
 /// and for the live push: Public reaches everyone, Private the author and the GM, Secret only the GM (its author sees a
 /// concealed line), Whisper the author, its target and the GM.
 /// </summary>
-public sealed class ChatService(IAppDbContext db, ITableNotifier notifier, IDiceRoller dice, CharacterService characters, TableSessionService sessions)
+public sealed class ChatService(IAppDbContext db, ITableNotifier notifier, IDiceRoller dice, CharacterService characters, TableSessionService sessions, TableSettingsService settings)
 {
     public const int HistorySize = 300;
     public const string GmName = "GM";
@@ -71,6 +71,8 @@ public sealed class ChatService(IAppDbContext db, ITableNotifier notifier, IDice
         }
         var label = r.Label?.Trim();
         var text = string.IsNullOrEmpty(label) ? roll.Formula : label.Length <= 80 ? label : label[..80];
+        // Everyone throws these dice in the roller's color (E3).
+        roll = roll with { DiceColor = await DiceColorAsync(author, ct) };
         return await PostAsync(author, TableMessageKind.Roll, text, roll, r.Visibility, r.TargetSeatId, ct);
     }
 
@@ -89,7 +91,7 @@ public sealed class ChatService(IAppDbContext db, ITableNotifier notifier, IDice
             throw RequestValidationException.For("messageId", L.T("Essa rolagem já foi rerrolada.", "That roll was already rerolled."));
         await characters.SpendLuckAsync(characterId, 1, ct);
         var again = TableRoller.Roll(old.Formula, RollKind.Check, dice);
-        again = again with { Total = again.Total + old.Luck, Luck = old.Luck, RerollOf = messageId };
+        again = again with { Total = again.Total + old.Luck, Luck = old.Luck, RerollOf = messageId, DiceColor = await DiceColorAsync(author, ct) };
         var text = $"{m.Text} {L.T("(rerrolada)", "(rerolled)")}";
         return await PostAsync(author, TableMessageKind.Roll, text.Length <= 100 ? text : text[..100], again, m.Visibility, m.TargetSeatId, ct);
     }
@@ -101,6 +103,7 @@ public sealed class ChatService(IAppDbContext db, ITableNotifier notifier, IDice
     public async Task PostAttackAsync(TableAttack attack, int? characterId, CancellationToken ct)
     {
         var seat = characterId is { } id ? await db.TableSeats.AsNoTracking().FirstOrDefaultAsync(s => s.CharacterId == id && s.RevokedAt == null, ct) : null;
+        attack = attack with { DiceColor = await DiceColorAsync(seat, ct) };
         var text = L.T($"{attack.AttackerName} ataca com {attack.Weapon}", $"{attack.AttackerName} attacks with {attack.Weapon}");
         await PostCoreAsync(seat?.Id, seat?.Label ?? GmName, TableMessageKind.Attack, text.Length <= 200 ? text : text[..200],
             JsonSerializer.Serialize(attack, SceneService.Json), TableVisibility.Public, null, ct);
@@ -182,6 +185,14 @@ public sealed class ChatService(IAppDbContext db, ITableNotifier notifier, IDice
         else if (!concealed && m.RollJson is not null) roll = JsonSerializer.Deserialize<RollResult>(m.RollJson, SceneService.Json);
         return new TableMessageDto(m.Id, m.At, m.AuthorSeatId, m.AuthorName,
             m.AuthorSeatId is { } seat ? colors.GetValueOrDefault(seat) : null, m.Kind, m.Visibility, m.TargetSeatId, m.Text, roll, concealed, attack);
+    }
+
+    /// <summary>The roller's dice color: the seat's choice, else the seat's color; for the GM, the GM's choice (or none).</summary>
+    private async Task<string?> DiceColorAsync(TableSeat? seat, CancellationToken ct)
+    {
+        if (seat is null) return await settings.GetAsync(TableSettingsService.GmDiceColor, ct);
+        var current = await db.TableSeats.AsNoTracking().Where(s => s.Id == seat.Id).Select(s => new { s.DiceColor, s.Color }).FirstOrDefaultAsync(ct);
+        return current?.DiceColor ?? current?.Color ?? seat.Color;
     }
 
     private async Task<IReadOnlyDictionary<int, string>> ColorsAsync(CancellationToken ct) =>

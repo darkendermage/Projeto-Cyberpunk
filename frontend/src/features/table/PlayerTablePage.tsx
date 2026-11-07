@@ -24,6 +24,7 @@ import { RulesDialog } from './RulesDialog';
 import { AimBar, SceneStrip } from './SceneStrip';
 import { PendingCard } from './PendingCard';
 import { MySheetDialog } from './MySheetDialog';
+import { DiceColorPicker } from './DiceColorPicker';
 import { setSeatContext } from '../../api/client';
 import { buildStrip } from './strip';
 import { attackSummary, fighterIdOf, startAim } from './aim';
@@ -284,6 +285,13 @@ export function PlayerTablePage() {
             )}
             <IconButton label={prefs.dice3d ? t('Dados 3D: ligados', '3D dice: on') : t('Dados 3D: desligados', '3D dice: off')} active={prefs.dice3d}
               onClick={() => setPrefs({ dice3d: !prefs.dice3d })}><Dices size={17} /></IconButton>
+            {seat && (
+              <DiceColorPicker value={seat.diceColor ?? seat.color}
+                onChange={(color) => void run(async () => {
+                  const updated = await api.setDiceColor(color);
+                  client.setQueryData<PlayerState>(tableKeys.player(token), (old) => (old ? { ...old, seat: updated } : old));
+                })} />
+            )}
             <IconButton label={prefs.sound ? t('Som da mesa: ligado', 'Table sound: on') : t('Som da mesa: desligado', 'Table sound: off')} active={prefs.sound}
               onClick={() => setPrefs({ sound: !prefs.sound })}>{prefs.sound ? <Volume2 size={17} /> : <VolumeX size={17} />}</IconButton>
             {deletable.length > 0 && <Button variant="ghost" onClick={removeSelection}>{deletable.length === 1 ? t('Apagar área', 'Delete area') : t(`Apagar ${deletable.length} áreas`, `Delete ${deletable.length} areas`)}</Button>}

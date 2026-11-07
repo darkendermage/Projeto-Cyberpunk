@@ -5,7 +5,7 @@ namespace CyberpunkDb.Application.Table;
 public sealed record SeatDto(int Id, string Label, string Color, int? CharacterId, string Token, DateTime CreatedAt, bool Revoked, bool Claimed);
 
 /// <summary>The seat as its player sees it (no token: the player already has it).</summary>
-public sealed record PlayerSeatDto(int Id, string Label, string Color, int? CharacterId);
+public sealed record PlayerSeatDto(int Id, string Label, string Color, int? CharacterId, string? DiceColor = null);
 
 public sealed record CreateSeatRequest(string Label, int? CharacterId = null, string? Color = null);
 public sealed record UpdateSeatRequest(string Label, int? CharacterId, string Color);

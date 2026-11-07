@@ -73,7 +73,7 @@ public sealed record RolledTerm(string Expression, int Sign, IReadOnlyList<int> 
 /// </summary>
 public sealed record RollResult(
     string Formula, RollKind Kind, IReadOnlyList<RolledTerm> Terms, int Total, CriticalResult? Critical, bool CriticalInjury,
-    int Luck = 0, long? RerollOf = null);
+    int Luck = 0, long? RerollOf = null, string? DiceColor = null);
 
 /// <summary>The server rolls every die of the virtual table, so nobody's dice can be doctored.</summary>
 public static class TableRoller
