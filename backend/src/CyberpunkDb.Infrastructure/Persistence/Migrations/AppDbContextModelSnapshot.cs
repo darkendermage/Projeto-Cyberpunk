@@ -208,6 +208,9 @@ namespace CyberpunkDb.Infrastructure.Persistence.Migrations
                     b.Property<int>("Round")
                         .HasColumnType("integer");
 
+                    b.Property<int?>("SessionId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("StateJson")
                         .IsRequired()
                         .HasColumnType("jsonb");
@@ -225,6 +228,8 @@ namespace CyberpunkDb.Infrastructure.Persistence.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("SessionId");
 
                     b.HasIndex("UpdatedAt");
 
@@ -751,6 +756,9 @@ namespace CyberpunkDb.Infrastructure.Persistence.Migrations
                     b.Property<string>("RollJson")
                         .HasColumnType("jsonb");
 
+                    b.Property<int?>("SessionId")
+                        .HasColumnType("integer");
+
                     b.Property<int?>("TargetSeatId")
                         .HasColumnType("integer");
 
@@ -767,6 +775,8 @@ namespace CyberpunkDb.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("At");
+
+                    b.HasIndex("SessionId");
 
                     b.ToTable("TableMessages", (string)null);
                 });
@@ -790,6 +800,10 @@ namespace CyberpunkDb.Infrastructure.Persistence.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("DiceColor")
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
                     b.Property<string>("Label")
                         .IsRequired()
                         .HasMaxLength(60)
@@ -809,6 +823,48 @@ namespace CyberpunkDb.Infrastructure.Persistence.Migrations
                         .IsUnique();
 
                     b.ToTable("TableSeats", (string)null);
+                });
+
+            modelBuilder.Entity("CyberpunkDb.Domain.Entities.TableSession", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("EndedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .HasColumnType("character varying(80)");
+
+                    b.Property<DateTime>("StartedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EndedAt");
+
+                    b.ToTable("TableSessions", (string)null);
+                });
+
+            modelBuilder.Entity("CyberpunkDb.Domain.Entities.TableSetting", b =>
+                {
+                    b.Property<string>("Key")
+                        .HasMaxLength(60)
+                        .HasColumnType("character varying(60)");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(8000)
+                        .HasColumnType("character varying(8000)");
+
+                    b.HasKey("Key");
+
+                    b.ToTable("TableSettings", (string)null);
                 });
 
             modelBuilder.Entity("CyberpunkDb.Domain.Entities.WeaponAttachmentClass", b =>
@@ -1432,6 +1488,14 @@ namespace CyberpunkDb.Infrastructure.Persistence.Migrations
                         .HasForeignKey("CyberpunkDb.Domain.Entities.NpcPortrait", "NpcId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("CyberpunkDb.Domain.Entities.TableMessage", b =>
+                {
+                    b.HasOne("CyberpunkDb.Domain.Entities.TableSession", null)
+                        .WithMany()
+                        .HasForeignKey("SessionId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("CyberpunkDb.Domain.Entities.WeaponAttachmentClass", b =>

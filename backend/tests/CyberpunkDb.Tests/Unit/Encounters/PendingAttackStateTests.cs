@@ -1,6 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using CyberpunkDb.Application.Encounters;
+using CyberpunkDb.Application.Encounters.Rules;
 using FluentAssertions;
 
 namespace CyberpunkDb.Tests.Unit.Encounters;

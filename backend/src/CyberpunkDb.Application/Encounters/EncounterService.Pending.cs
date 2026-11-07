@@ -1,5 +1,6 @@
 using CyberpunkDb.Application.Common;
 using CyberpunkDb.Application.Encounters.Combat;
+using CyberpunkDb.Application.Encounters.Rules;
 using CyberpunkDb.Application.Localization;
 using CyberpunkDb.Domain.Entities;
 using CyberpunkDb.Domain.Enums;

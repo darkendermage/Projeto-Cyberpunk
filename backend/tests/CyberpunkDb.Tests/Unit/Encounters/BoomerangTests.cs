@@ -1,3 +1,4 @@
+using CyberpunkDb.Application.Characters.Calculation;
 using CyberpunkDb.Application.Common;
 using CyberpunkDb.Application.Encounters;
 using CyberpunkDb.Application.Encounters.Combat;
@@ -36,7 +37,7 @@ public class BoomerangTests
     public void Boomerang_uses_the_thrown_dv_and_halves_armor()
     {
         var shot = new AttackRequest(1, "A", ["B"], "boom", AttackMode.Single, 10, false, 0, 5, null, [1, 1, 1]);
-        var thrownObject = shot with { Weapon = AttackResolver.Thrown };
+        var thrownObject = shot with { Weapon = AttackResolver.Thrown, ThrownDamage = "3d6" };
 
         var boomerang = Resolver.Resolve(shot, Fighter("A", Boomerang()), [Fighter("B")], new FixedDice(1)).Hits.Single();
         var rock = Resolver.Resolve(thrownObject, Fighter("A", Boomerang()), [Fighter("B")], new FixedDice(1)).Hits.Single();

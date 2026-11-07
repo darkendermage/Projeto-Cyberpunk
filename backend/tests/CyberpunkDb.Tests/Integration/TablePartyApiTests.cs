@@ -49,6 +49,7 @@ public class TablePartyApiTests(ApiFactory factory)
         var s = await _t.FightOnTheTable("Online");
         await using var hub = TableFoundationApiTests.Hub(factory, s.Seat.Token, playerPort: true);
         await hub.StartAsync();
+        await Task.Delay(300);
 
         var party = await _t.Send<List<PartyMemberDto>>(_t.Gm, HttpMethod.Get, $"/api/table/scenes/{s.SceneId}/party");
 

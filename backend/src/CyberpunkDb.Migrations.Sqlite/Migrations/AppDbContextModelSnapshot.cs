@@ -196,6 +196,9 @@ namespace CyberpunkDb.Migrations.Sqlite.Migrations
                     b.Property<int>("Round")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("SessionId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("StateJson")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -213,6 +216,8 @@ namespace CyberpunkDb.Migrations.Sqlite.Migrations
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("SessionId");
 
                     b.HasIndex("UpdatedAt");
 
@@ -714,6 +719,9 @@ namespace CyberpunkDb.Migrations.Sqlite.Migrations
                     b.Property<string>("RollJson")
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("SessionId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int?>("TargetSeatId")
                         .HasColumnType("INTEGER");
 
@@ -730,6 +738,8 @@ namespace CyberpunkDb.Migrations.Sqlite.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("At");
+
+                    b.HasIndex("SessionId");
 
                     b.ToTable("TableMessages", (string)null);
                 });
@@ -751,6 +761,10 @@ namespace CyberpunkDb.Migrations.Sqlite.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("DiceColor")
+                        .HasMaxLength(20)
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Label")
                         .IsRequired()
                         .HasMaxLength(60)
@@ -770,6 +784,46 @@ namespace CyberpunkDb.Migrations.Sqlite.Migrations
                         .IsUnique();
 
                     b.ToTable("TableSeats", (string)null);
+                });
+
+            modelBuilder.Entity("CyberpunkDb.Domain.Entities.TableSession", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("EndedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("StartedAt")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EndedAt");
+
+                    b.ToTable("TableSessions", (string)null);
+                });
+
+            modelBuilder.Entity("CyberpunkDb.Domain.Entities.TableSetting", b =>
+                {
+                    b.Property<string>("Key")
+                        .HasMaxLength(60)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(8000)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Key");
+
+                    b.ToTable("TableSettings", (string)null);
                 });
 
             modelBuilder.Entity("CyberpunkDb.Domain.Entities.WeaponAttachmentClass", b =>
@@ -1393,6 +1447,14 @@ namespace CyberpunkDb.Migrations.Sqlite.Migrations
                         .HasForeignKey("CyberpunkDb.Domain.Entities.NpcPortrait", "NpcId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("CyberpunkDb.Domain.Entities.TableMessage", b =>
+                {
+                    b.HasOne("CyberpunkDb.Domain.Entities.TableSession", null)
+                        .WithMany()
+                        .HasForeignKey("SessionId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("CyberpunkDb.Domain.Entities.WeaponAttachmentClass", b =>

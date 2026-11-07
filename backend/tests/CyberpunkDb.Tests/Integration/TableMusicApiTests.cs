@@ -1,6 +1,7 @@
 using System.Net;
 using System.Text.Json;
 using CyberpunkDb.Application.Table;
+using Microsoft.AspNetCore.SignalR.Client;
 using FluentAssertions;
 
 namespace CyberpunkDb.Tests.Integration;
@@ -55,6 +56,7 @@ public class TableMusicApiTests(ApiFactory factory)
         var got = new SemaphoreSlim(0);
         hub.On<JsonElement>("music", _ => got.Release());
         await hub.StartAsync();
+        await Task.Delay(300); // long polling: let the connection join its groups
 
         await _t.Send<TableMusicStateDto>(_t.Gm, HttpMethod.Put, "/api/table/music", new LoadMusicRequest("https://youtu.be/dQw4w9WgXcQ", null));
 

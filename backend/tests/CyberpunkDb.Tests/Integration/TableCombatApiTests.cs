@@ -195,11 +195,13 @@ public class TableCombatApiTests(ApiFactory factory)
         await Send<SceneView>(_gm, HttpMethod.Post, $"/api/table/scenes/{scene.Id}/activate");
 
         var party = await Send<List<PartyMemberDto>>(_player, HttpMethod.Get, "/api/table/play/party", seat: seat.Token);
-        party.Select(p => p.CharacterId).Should().BeEquivalentTo([mine.Id, friend.Id]);
+        // Round 4 (B3): every seat's PC is listed; the ones on the scene are those whose token the seat can see.
+        party.Where(p => p.InScene).Select(p => p.CharacterId).Should().BeEquivalentTo([mine.Id, friend.Id]);
+        party.Should().NotContain(p => p.CharacterId == hidden.Id);
         party.Should().OnlyContain(p => p.Hp > 0 && p.MaxHp > 0);
 
         var gmParty = await Send<List<PartyMemberDto>>(_gm, HttpMethod.Get, $"/api/table/scenes/{scene.Id}/party");
-        gmParty.Select(p => p.CharacterId).Should().BeEquivalentTo([mine.Id, friend.Id, hidden.Id]);
+        gmParty.Where(p => p.InScene).Select(p => p.CharacterId).Should().BeEquivalentTo([mine.Id, friend.Id, hidden.Id]);
     }
 
     [Fact]

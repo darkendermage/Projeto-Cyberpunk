@@ -1,3 +1,4 @@
+using CyberpunkDb.Application.Characters.Calculation;
 using CyberpunkDb.Application.Common;
 using CyberpunkDb.Application.Encounters;
 using CyberpunkDb.Application.Encounters.Combat;
@@ -88,6 +89,6 @@ public class AttackCriticalTests
     {
         var act = () => Resolver.Resolve(Shot(5, null), Fighter("A", Rifle(jammed: true)), [Fighter("B")], new FixedDice(1));
 
-        act.Should().Throw<RequestValidationException>().Which.Errors["weapon"].Single().Should().ContainAny("Travada", "Jammed");
+        act.Should().Throw<RequestValidationException>().Which.Errors["weapon"].Single().ToLowerInvariant().Should().ContainAny("travada", "jammed");
     }
 }

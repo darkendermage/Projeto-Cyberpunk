@@ -25,6 +25,7 @@ public class TableLiveSyncApiTests(ApiFactory factory)
         var got = new SemaphoreSlim(0);
         player.On<PlayerEncounterDto?>("encounter", f => { lock (fights) fights.Add(f); got.Release(); });
         await player.StartAsync();
+        await Task.Delay(300); // long polling: let the connection join its groups
 
         await _t.Send<CharacterDetailDto>(_t.Gm, HttpMethod.Post, $"/api/characters/{s.CharacterId}/equip",
             new EquipRequest(sheet.Version, body, ItemState.Stored));
@@ -41,6 +42,7 @@ public class TableLiveSyncApiTests(ApiFactory factory)
         var count = 0;
         player.On<JsonElement>("encounter", _ => Interlocked.Increment(ref count));
         await player.StartAsync();
+        await Task.Delay(300);
 
         // Damage to the PC through the fight changes the sheet inside the fight's own change: one push, not two.
         await _t.Send<JsonElement>(_t.Gm, HttpMethod.Post, $"/api/encounters/{s.EncounterId}/combatants/{s.PcCombatantId}/damage",
@@ -61,6 +63,7 @@ public class TableLiveSyncApiTests(ApiFactory factory)
         player.On<JsonElement>("party", _ => party.Release());
         player.On<JsonElement>("encounter", _ => Interlocked.Increment(ref fights));
         await player.StartAsync();
+        await Task.Delay(300);
 
         await _t.Send<CharacterDetailDto>(_t.Gm, HttpMethod.Post, $"/api/characters/{solo.Id}/luck", new LuckRequest(solo.Version, 1));
 

@@ -1,5 +1,6 @@
 using System.Net;
 using CyberpunkDb.Application.Table;
+using CyberpunkDb.Domain.Enums;
 using FluentAssertions;
 
 namespace CyberpunkDb.Tests.Integration;

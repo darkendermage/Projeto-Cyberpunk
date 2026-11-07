@@ -1,6 +1,7 @@
 using System.Net;
 using CyberpunkDb.Application.Characters;
 using CyberpunkDb.Application.Encounters;
+using CyberpunkDb.Application.Encounters.Combat;
 using CyberpunkDb.Application.Table;
 using FluentAssertions;
 

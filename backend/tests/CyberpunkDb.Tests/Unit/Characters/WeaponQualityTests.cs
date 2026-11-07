@@ -3,6 +3,7 @@ using System.Text.Json.Nodes;
 using CyberpunkDb.Application.Characters;
 using CyberpunkDb.Application.Characters.Operations;
 using CyberpunkDb.Application.Common;
+using CyberpunkDb.Application.Npcs;
 using CyberpunkDb.Domain.Enums;
 using FluentAssertions;
 using static CyberpunkDb.Tests.Unit.Characters.CharacterTestData;

@@ -247,7 +247,6 @@ internal static class CatalogModelConfiguration
             e.Property(x => x.StateJson).IsRequired();
             if (isPostgres) e.Property(x => x.StateJson).HasColumnType("jsonb");
             e.HasIndex(x => x.UpdatedAt);
-            e.HasIndex(x => x.SessionId);
         });
 
         b.Entity<Encounter>(e =>
@@ -258,6 +257,7 @@ internal static class CatalogModelConfiguration
             e.Property(x => x.StateJson).IsRequired();
             if (isPostgres) e.Property(x => x.StateJson).HasColumnType("jsonb");
             e.HasIndex(x => x.UpdatedAt);
+            e.HasIndex(x => x.SessionId);
         });
 
         b.Entity<Scene>(e =>
