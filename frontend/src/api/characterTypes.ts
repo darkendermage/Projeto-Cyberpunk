@@ -302,7 +302,12 @@ export interface InventoryLine {
   paidFrom: BudgetPool;
   fashion: boolean;
   notes: string | null;
+  /** Weapons only: the copy's quality. */
+  quality?: WeaponQuality | null;
 }
+
+/** Weapon quality (CP:R p.344): Excellent +1 to attacks, Poor jams on a natural 1. */
+export type WeaponQuality = 'Poor' | 'Standard' | 'Excellent';
 
 export interface WeaponLine {
   instanceId: string;
@@ -325,6 +330,8 @@ export interface WeaponLine {
   attachmentSlots: number;
   attachments: string[];
   equipped: boolean;
+  /** The copy's quality (its own, else the catalog's). */
+  quality: WeaponQuality;
 }
 
 export interface CyberLine {

@@ -426,6 +426,9 @@ public sealed class CharacterService(
     public Task<CharacterDetailDto> ReloadAsync(int id, ReloadRequest r, CancellationToken ct) =>
         MutateAsync(id, r.Version, c => inventory.Reload(c.Sheet, r, c), ct);
 
+    public Task<CharacterDetailDto> SetWeaponQualityAsync(int id, WeaponQualityRequest r, CancellationToken ct) =>
+        MutateAsync(id, r.Version, c => InventoryOperations.SetQuality(c.Sheet, r, c), ct);
+
     public Task<CharacterDetailDto> AdjustBalanceAsync(int id, AdjustBalanceRequest r, CancellationToken ct) =>
         MutateAsync(id, r.Version, c => InventoryOperations.AdjustBalance(c.Sheet, r, c), ct);
 

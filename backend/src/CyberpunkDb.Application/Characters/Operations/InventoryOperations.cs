@@ -295,6 +295,19 @@ public sealed class InventoryOperations(CharacterRuleBook rules, CyberwareOperat
     /// Fills the magazine from a compatible ammunition entry. Switching ammunition type first returns the loaded rounds
     /// to the inventory, so no bullet is created or lost.
     /// </summary>
+    /// <summary>A weapon copy's quality (CP:R p.344): Excellent adds +1 to attacks, a Poor one jams on a natural 1.</summary>
+    public static CharacterSheet SetQuality(CharacterSheet sheet, WeaponQualityRequest request, CharacterChange change)
+    {
+        var entry = Find(sheet, request.InstanceId);
+        var item = change.Item(entry.ItemId);
+        if (item.Weapon is null) throw CharacterChange.Refuse("instanceId", L.T($"{item.Name} não é uma arma.", $"{item.Name} isn't a weapon."));
+        var before = entry.Quality ?? item.Weapon.Quality;
+        if (before == request.Quality) return sheet;
+        change.Log(CharacterEventKind.Edit, "weapon-quality", L.T($"{item.Name}: qualidade {before} → {request.Quality}.", $"{item.Name}: quality {before} → {request.Quality}."),
+            null, before.ToString(), request.Quality.ToString());
+        return Replace(sheet, entry with { Quality = request.Quality });
+    }
+
     public CharacterSheet Reload(CharacterSheet sheet, ReloadRequest request, CharacterChange change)
     {
         var entry = Find(sheet, request.InstanceId);

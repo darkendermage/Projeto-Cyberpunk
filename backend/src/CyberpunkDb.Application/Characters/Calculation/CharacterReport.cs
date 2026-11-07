@@ -119,7 +119,9 @@ public sealed record InventoryLine(
     ItemOrigin Origin,
     BudgetPool PaidFrom,
     bool Fashion,
-    string? Notes);
+    string? Notes,
+    // Weapons only: the copy's quality (its own, else the catalog's).
+    WeaponQuality? Quality = null);
 
 public sealed record WeaponLine(
     string InstanceId,
@@ -142,7 +144,9 @@ public sealed record WeaponLine(
     bool Exotic,
     int AttachmentSlots,
     IReadOnlyList<string> Attachments,
-    bool Equipped);
+    bool Equipped,
+    // Poor, Standard or Excellent: the copy's own, else the catalog's (A4).
+    WeaponQuality Quality = WeaponQuality.Standard);
 
 public sealed record CyberLine(
     string InstanceId,

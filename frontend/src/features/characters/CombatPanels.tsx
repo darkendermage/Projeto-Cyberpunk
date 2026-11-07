@@ -4,7 +4,7 @@ import {
 } from 'lucide-react';
 import type { CharacterDetail, CharacterRules, InjuryLocation, InjuryStatus } from '../../api/characterTypes';
 import { Button, IconButton, NumberInput, Select, Switch } from '../../components/ui/ui';
-import { INJURY_STATUS_LABEL, signed, WOUND_LABEL } from './characterLabels';
+import { INJURY_STATUS_LABEL, signed, WOUND_LABEL, QUALITY_LABEL } from './characterLabels';
 import { SheetPanel, StateTag } from './CharacterUi';
 import { healing } from './healing';
 import styles from './Characters.module.css';
@@ -170,7 +170,7 @@ export function WeaponsPanel({ detail, run, busy, locked }: Props) {
                 <Fragment key={w.instanceId}>
                 <tr className={w.equipped ? undefined : styles.dim}>
                   <td>
-                    <div>{tv(w.name)}</div>
+                    <div>{tv(w.name)}{w.quality !== 'Standard' && <span className={styles.tag} title={QUALITY_LABEL[w.quality]}>{w.quality === 'Excellent' ? 'Excellent' : 'Poor'}</span>}</div>
                     <div className={styles.source}>
                       {w.skillName}{w.autofireMultiplier ? ` · Autofire ${w.autofireMultiplier} (base ${w.autofireTotal})` : ''}
                       {w.attachmentSlots > 0 ? t(` · anexos ${w.attachments.length}/${w.attachmentSlots}`, ` · attachments ${w.attachments.length}/${w.attachmentSlots}`) : ''}

@@ -154,6 +154,10 @@ public sealed class CharactersController(CharacterService characters) : Controll
     public Task<CharacterDetailDto> ImproveRole(int id, ImproveRoleRequest r, CancellationToken ct) => characters.ImproveRoleAsync(id, r, ct);
 
     /// <summary>Divides a Role Ability's Rank (Tech specialties, Solo Combat Awareness).</summary>
+    /// <summary>A weapon copy's quality (Poor, Standard, Excellent).</summary>
+    [HttpPost("{id:int}/weapon-quality")]
+    public Task<CharacterDetailDto> SetWeaponQuality(int id, WeaponQualityRequest r, CancellationToken ct) => characters.SetWeaponQualityAsync(id, r, ct);
+
     [HttpPost("{id:int}/role-split")]
     public Task<CharacterDetailDto> RoleSplit(int id, RoleSplitRequest r, CancellationToken ct) => characters.SetRoleSplitAsync(id, r, ct);
 

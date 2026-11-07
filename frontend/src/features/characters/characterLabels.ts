@@ -125,3 +125,8 @@ export function formatDate(iso: string | null | undefined): string {
   if (!iso) return '—';
   return new Date(iso).toLocaleString(locale, { dateStyle: 'short', timeStyle: 'short' });
 }
+
+/** Weapon quality (CP:R p.344). */
+export const QUALITY_LABEL: Record<string, string> = {
+  Poor: t('Baixa qualidade', 'Poor quality'), Standard: t('Padrão', 'Standard'), Excellent: t('Qualidade excelente', 'Excellent quality'),
+};

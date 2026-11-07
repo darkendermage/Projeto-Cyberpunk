@@ -153,6 +153,9 @@ public sealed record FireRequest(int Version, string InstanceId, FireMode Mode =
 /// <summary>How a Role Ability's Rank is divided (Tech specialties, Solo Combat Awareness), by the keys of the rules.</summary>
 public sealed record RoleSplitRequest(int Version, string Role, Dictionary<string, int> Split);
 
+/// <summary>A weapon copy's quality: Poor, Standard or Excellent (CP:R p.344).</summary>
+public sealed record WeaponQualityRequest(int Version, string InstanceId, WeaponQuality Quality);
+
 public sealed record ReloadRequest(int Version, string InstanceId, string? AmmoInstanceId = null);
 
 public sealed record AdjustBalanceRequest(int Version, int Amount, string Reason);

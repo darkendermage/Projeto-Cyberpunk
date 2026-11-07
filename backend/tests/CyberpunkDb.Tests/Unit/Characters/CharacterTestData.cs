@@ -68,6 +68,8 @@ internal static class CharacterTestData
         Weapon: new WeaponInfo(WeaponClass.HeavyPistol, WeaponSkill.Handgun, WeaponQuality.Standard, false, null, "3d6", 2, 1, true, 8, [Caliber.HeavyPistol])));
     public static readonly CatalogItem ExoticPistol = Add(new CatalogItem(++_id, "stun-gun", "Stun Gun", ItemCategory.Weapon, 100, Core, 92,
         Weapon: new WeaponInfo(WeaponClass.HeavyPistol, WeaponSkill.Handgun, WeaponQuality.Standard, true, null, "3d6", 2, 1, true, 8, [Caliber.HeavyPistol])));
+    public static readonly CatalogItem PoorPistol = Add(new CatalogItem(++_id, "toggles-poor-pistol", "Poor Quality Heavy Pistol", ItemCategory.Weapon, 50, Core, 91,
+        Weapon: new WeaponInfo(WeaponClass.HeavyPistol, WeaponSkill.Handgun, WeaponQuality.Poor, false, null, "3d6", 2, 1, true, 8, [Caliber.HeavyPistol])));
     public static readonly CatalogItem SmartgunLink = Attachment("smartgun-link", 500, WeaponAttachmentType.SmartLink, 2, false,
         [WeaponClass.HeavyPistol, WeaponClass.AssaultRifle]);
     public static readonly CatalogItem Underbarrel = Attachment("grenade-launcher-underbarrel", 500, WeaponAttachmentType.Underbarrel, 2, false,

@@ -107,7 +107,8 @@ public sealed class CharacterCalculator(CharacterRuleBook rules)
                 item?.Armor?.Sp, item?.Armor?.Sp is { } sp ? e.CurrentSp ?? sp : null,
                 isShield ? e.CurrentHp ?? shieldMax : null, shieldMax,
                 item?.Price, e.PricePaid, e.Origin, e.PaidFrom,
-                item is not null && Validation.CharacterValidator.IsFashion(item), e.Notes);
+                item is not null && Validation.CharacterValidator.IsFashion(item), e.Notes,
+                item?.Weapon is { } weapon ? e.Quality ?? weapon.Quality : null);
         }).ToList();
 
     private List<WeaponLine> WeaponLines(CharacterSheet sheet, NpcCatalog catalog, List<CharacterSkillLine> skills)
@@ -131,7 +132,7 @@ public sealed class CharacterCalculator(CharacterRuleBook rules)
                 skill?.Total ?? 0, w.Damage, w.Rof, w.Magazine, state.LoadedRounds, state.LoadedAmmoItemId,
                 state.LoadedAmmoItemId is { } ammo ? catalog.Find(ammo)?.Name : null,
                 w.AutofireMultiplier, autofire?.Total, w.Calibers, w.Exotic,
-                ranged && !w.Exotic ? slots : 0, attachments, e.State == ItemState.Equipped));
+                ranged && !w.Exotic ? slots : 0, attachments, e.State == ItemState.Equipped, e.Quality ?? w.Quality));
         }
         return lines;
     }
