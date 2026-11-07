@@ -69,6 +69,7 @@ function IdentityColumn({ detail, rules, editor, run, busy }: { detail: Characte
   return (
     <div className={styles.column}>
       <Portrait detail={detail} onFocus={(portraitFocus) => set({ portraitFocus })} />
+      <WalletBlock detail={detail} />
       <section className={styles.panel}>
         <label className={styles.idField}>
           <span className={styles.idLabel}>{t('Nome', 'Name')}</span>
@@ -96,7 +97,6 @@ function IdentityColumn({ detail, rules, editor, run, busy }: { detail: Characte
           <dt>{t('Idioma de origem', 'Native language')}</dt><dd>{id.nativeLanguage ?? '—'}</dd>
           <dt>{t('Bairro', 'Neighborhood')}</dt><dd>{id.home}</dd>
           <dt>{t('Reputação', 'Reputation')}</dt><dd>{id.reputation}</dd>
-          <dt>{t('Saldo', 'Balance')}</dt><dd>{formatEb(detail.sheet.wallet.balance)}</dd>
         </dl>
       </section>
 
@@ -126,6 +126,24 @@ function IdentityColumn({ detail, rules, editor, run, busy }: { detail: Characte
         </div>
       </SheetPanel>
     </div>
+  );
+}
+
+/** Money and Improvement Points side by side, at the top of the Character tab. */
+function WalletBlock({ detail }: { detail: CharacterDetail }) {
+  const { ip, ipEarned } = detail.sheet.progress;
+  return (
+    <section className={`${styles.panel} ${styles.walletBlock}`} aria-label={t('Carteira', 'Wallet')}>
+      <div className={styles.walletItem}>
+        <span className={styles.idLabel}>{t('Saldo', 'Balance')}</span>
+        <strong className={styles.walletValue}>{formatEb(detail.sheet.wallet.balance)}</strong>
+      </div>
+      <div className={styles.walletItem}>
+        <span className={styles.idLabel}>IP</span>
+        <strong className={`${styles.walletValue} ${styles.cyan}`}>{ip}</strong>
+        <span className={styles.muted}>{t(`de ${ipEarned} ganhos`, `of ${ipEarned} earned`)}</span>
+      </div>
+    </section>
   );
 }
 
