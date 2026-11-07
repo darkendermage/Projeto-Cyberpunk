@@ -32,6 +32,7 @@ Primeiro vêm os bugs. O pacote D, de regras, é o mais pesado e fica para depoi
 | 16 | Ranger Combat Boomerang | D |
 | 17 | Botão "Ataque" da aba Personagem igual aos cartões | C |
 | — | Música da mesa pelo YouTube | G |
+| — | Qualidade da arma (Poor/Excellent) na ficha | A (campo) + D (efeito) |
 
 ## Decisões tomadas
 
@@ -144,6 +145,20 @@ Primeiro vêm os bugs. O pacote D, de regras, é o mais pesado e fica para depoi
   - Distribuição inválida é recusada.
   - Ficha antiga, sem `Split`, continua válida.
 
+### A4. Qualidade da arma (pedido extra do Yuri)
+- **Dado:** `WeaponState.Quality`, com os valores `Standard`, `Poor` e `Excellent`, e padrão `Standard`. Fica por exemplar do inventário, então dois exemplares do mesmo item podem ter qualidades diferentes.
+- **Padrão ao comprar ou adicionar:** se o item do catálogo se declara Poor ou Excellent Quality no nome ou na descrição (por exemplo, as armas Poor Quality da Toggle's Temple), o exemplar já nasce com essa qualidade. Dá para mudar depois.
+- **Tela:**
+  - Na aba Equipamento, cada arma ganha um seletor "Qualidade" (Poor, Standard, Excellent).
+  - Na ficha (painel de armas) e na mesa, a qualidade aparece como etiqueta ao lado do nome quando não é Standard.
+- **Efeito no combate** (CP:R p.344, com a página conferida na implementação):
+  - **Excellent:** +1 nos ataques com a arma. Aparece na conta do ataque (D4).
+  - **Poor:** no 1 natural do d10 de ataque, a arma trava. Ver D2.
+- **Testes:**
+  - A qualidade é salva por exemplar.
+  - O padrão vem do catálogo.
+  - Excellent soma +1 no `WeaponLine` e no `FighterView`.
+
 ---
 
 ## Pacote C: combate na mesa (itens 8, 11, 17 e a parte visível do 10)
@@ -231,7 +246,12 @@ Primeiro vêm os bugs. O pacote D, de regras, é o mais pesado e fica para depoi
 - O `AttackResolver` passa a tratar o d10 de ataque: no 10 rola mais 1d10 e soma; no 1 rola mais 1d10 e subtrai. Tudo automático.
 - O resultado guarda os dois dados, e o cartão e os dados 3D mostram o extra.
 - **Fumble Recovery do Solo (D3):** ignora o 1 natural. O dado não subtrai e não há falha crítica.
-- **Testes:** com dados fixos para 10, 1 e Fumble Recovery.
+- **Arma Poor Quality (A4):** no 1 natural, a arma trava.
+  - O exemplar ganha a marca "travada", que fica no `WeaponState` para PCs e no combatente para NPCs.
+  - Travada, a arma aparece desligada nos chips e na mira, com a dica "Travada: gaste uma Ação para destravar".
+  - Um botão "Destravar" limpa a marca, e o log registra a Ação. Ele aparece para o jogador no turno dele e para o mestre a qualquer hora.
+  - Fumble Recovery não impede a trava: ele anula a falha crítica, mas o dado continua sendo 1.
+- **Testes:** com dados fixos para 10, 1, Fumble Recovery, a trava da Poor e o destravar.
 
 ### D3. Combat Awareness do Solo (item 15)
 A distribuição vem de `CharacterRole.Split` (A3), e cada efeito cita CP:R p.146:
@@ -245,7 +265,8 @@ A distribuição vem de `CharacterRole.Split` (A3), e cada efeito cita CP:R p.14
 As marcas por rodada zeram quando a rodada vira.
 
 ### D4. Outros modificadores de ataque (item 15, "outras regras")
-- **Candidatos:** arma de qualidade Excellent, Smartgun Link com arma smart e Targeting Scope em tiro mirado.
+- **Qualidade Excellent (+1):** entra com certeza, a partir do campo de A4.
+- **Outros candidatos:** Smartgun Link com arma smart e Targeting Scope em tiro mirado.
 - **Critério:** cada um só entra depois de eu confirmar a regra e o valor nos dados de livro do repositório (descrições, compêndio, `combat-rules.json`). Os que não forem confirmados ficam fora, e eu aviso o Yuri.
 - **Conta visível:** o total de ataque passa a vir com as partes, `AttackParts`, por exemplo "Handgun 12, Precision Attack +1, Excellent +1". A `AimBar` e o cartão de ataque mostram a conta.
 
