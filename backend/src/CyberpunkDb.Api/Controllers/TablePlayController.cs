@@ -191,6 +191,20 @@ public sealed class TablePlayController(SeatService seats, SceneService scenes, 
     [HttpPut("dice-color")]
     public async Task<PlayerSeatDto> DiceColor(DiceColorRequest request, CancellationToken ct) => await seats.SetDiceColorAsync(await SeatAsync(ct), request, ct);
 
+    /// <summary>
+    /// The player brings their own sheet (round 6): a file exported from the characters page of their copy of the app.
+    /// Only a seat without a character takes one; the new sheet is linked to it.
+    /// </summary>
+    [HttpPost("character/import")]
+    [RequestSizeLimit(CharacterService.ImportMaxBytes)]
+    public async Task<ActionResult<PlayerSeatDto>> ImportCharacter(CyberpunkDb.Application.Characters.Transfer.CharacterExportFile file, CancellationToken ct)
+    {
+        var seat = await SeatAsync(ct);
+        SeatService.RequireNoCharacter(seat);
+        var created = await characters.ImportAsync(file, ct);
+        return StatusCode(StatusCodes.Status201Created, await seats.LinkImportedAsync(seat, created.Id, ct));
+    }
+
     /// <summary>A player's image for the map (up to 2 MB; the browser shrinks it first).</summary>
     [HttpPost("media")]
     [RequestSizeLimit(MediaService.PlayerMaxBytes + 64 * 1024)]

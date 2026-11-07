@@ -133,6 +133,25 @@ public sealed class SeatService(IAppDbContext db, TableLobby lobby, ITableNotifi
         return ToDto(seat);
     }
 
+    /// <summary>Refuses (409) a seat that already has a character: an imported sheet never replaces one.</summary>
+    public static void RequireNoCharacter(TableSeat seat)
+    {
+        if (seat.CharacterId is not null)
+            throw new ConflictException(L.T("Este lugar já tem um personagem. Peça ao mestre para desligá-lo antes de importar outro.", "This seat already has a character. Ask the GM to unlink it before importing another."));
+    }
+
+    /// <summary>Links a sheet the player just imported to their seat (round 6) and tells the table.</summary>
+    public async Task<PlayerSeatDto> LinkImportedAsync(TableSeat seat, int characterId, CancellationToken ct)
+    {
+        var tracked = await FindAsync(seat.Id, ct);
+        RequireNoCharacter(tracked);
+        tracked.CharacterId = characterId;
+        await db.SaveChangesAsync(ct);
+        await notifier.SeatsAsync(ct);
+        await notifier.PartyAsync(characterId, ct);
+        return ToPlayer(tracked);
+    }
+
     public static PlayerSeatDto ToPlayer(TableSeat s) => new(s.Id, s.Label, s.Color, s.CharacterId, s.DiceColor);
 
     /// <summary>The player's own dice color (#rrggbb; null goes back to the seat's color).</summary>

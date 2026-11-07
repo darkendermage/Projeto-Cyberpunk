@@ -137,6 +137,8 @@ export function playerApi(seat: string) {
     critical: () => request<PlayerEncounter>('/table/play/critical', { method: 'POST', headers }),
     /** Reloads one of the seat's character's weapons (on its Turn when it is in the fight). */
     reload: (weapon: string) => request<{ encounter: PlayerEncounter | null; character: PlayerCharacter | null }>('/table/play/reload', { method: 'POST', body: json({ weapon }), headers }),
+    /** The player's own sheet, exported on their PC, for a seat without a character (round 6). */
+    importCharacter: (file: unknown) => request<PlayerSeat>('/table/play/character/import', { method: 'POST', body: json(file), headers }),
     /** A player's image for the map (up to 2 MB, shrunk by prepareImage). */
     uploadMedia: async (file: File): Promise<MediaInfo> => {
       const form = new FormData();

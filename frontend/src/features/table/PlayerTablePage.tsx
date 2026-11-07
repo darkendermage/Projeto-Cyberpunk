@@ -366,6 +366,13 @@ export function PlayerTablePage() {
             <CharacterPanel character={character.data ?? null} encounter={encounter.data ?? null} token={myToken} onRoll={roll} busy={armorBusy}
               onAim={(w, mode) => { if (own) quick.start({ ...startAim(own.id, own.name, w), mode }); }}
               onReload={reloadWeapon}
+              onImport={(file) => void run(async () => {
+                // The file exported on the player's PC; the server checks the format and links it to this seat.
+                const content: unknown = JSON.parse(await file.text());
+                await api.importCharacter(content);
+                await client.invalidateQueries({ queryKey: ['table', 'player', token] });
+                toast.notify(t('Ficha importada e ligada ao seu lugar.', 'Sheet imported and linked to your seat.'));
+              })}
               onPickUp={(weapon) => void run(async () => { client.setQueryData(tableKeys.playerEncounter(token), await api.pickUp(weapon)); })}
               onUnjam={(weapon) => void run(async () => { client.setQueryData(tableKeys.playerEncounter(token), await api.unjam(weapon)); toast.notify(t('Destravada.', 'Unjammed.')); })}
               onArmor={(location, delta) => {

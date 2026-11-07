@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Crosshair, Dices, HeartPulse, RefreshCw, RotateCcw, RotateCw, SkipForward } from 'lucide-react';
+import { Crosshair, Dices, HeartPulse, RefreshCw, RotateCcw, RotateCw, SkipForward, Upload } from 'lucide-react';
 import type { AttackMode, WeaponView } from '../../api/encounterTypes';
 import type { ArmorLocation, RollKind, TableVisibility, TokenView, PlayerCharacter, PlayerEncounter } from '../../api/tableTypes';
 import { Badge, Button, IconButton, Segmented } from '../../components/ui/ui';
@@ -20,7 +20,7 @@ const signed = (n: number) => (n >= 0 ? `+${n}` : `${n}`);
  * The player's quick panel: their character's numbers, weapons and skills, each a click away from a server roll,
  * and their token's facing. In a fight the numbers come from the combat table; otherwise from the sheet.
  */
-export function CharacterPanel({ character, encounter, token, onRoll, onTurn, onArmor, onAim, onReload, onUnjam, onPickUp, busy }: {
+export function CharacterPanel({ character, encounter, token, onRoll, onTurn, onArmor, onAim, onReload, onUnjam, onPickUp, onImport, busy }: {
   character: PlayerCharacter | null;
   encounter: PlayerEncounter | null;
   token: TokenView | undefined;
@@ -32,6 +32,8 @@ export function CharacterPanel({ character, encounter, token, onRoll, onTurn, on
   onAim?: (weapon: WeaponView, mode: AttackMode) => void;
   /** Reloads a weapon by its key (an Action on the player's Turn in a fight). */
   onReload?: (weaponKey: string) => void;
+  /** Imports the player's own sheet when the seat has none (round 6). */
+  onImport?: (file: File) => void;
   /** Clears a jammed weapon (an Action on the player's Turn). */
   onUnjam?: (weaponKey: string) => void;
   /** Picks a thrown weapon up (on the player's Turn). */
@@ -46,7 +48,21 @@ export function CharacterPanel({ character, encounter, token, onRoll, onTurn, on
   const check = (formula: string, label: string) => { onRoll(formula, 'Check', label, visibility, spend); setLuck(0); };
   const [filter, setFilter] = useState('');
   const fighter = encounter?.queue.find((f) => f.own);
-  if (!character && !fighter) return <span className={styles.muted}>{t('O mestre não ligou um personagem a este convite.', 'The GM didn\'t link a character to this invite.')}</span>;
+  if (!character && !fighter) return (
+    <div className={styles.stack}>
+      <span className={styles.muted}>{t('O mestre não ligou um personagem a este convite.', 'The GM didn\'t link a character to this invite.')}</span>
+      {onImport && (
+        <>
+          <span className={styles.muted}>{t('Tem sua ficha no seu PC? Exporte-a na tela Personagens do seu aplicativo e importe aqui.', 'Have your sheet on your PC? Export it on the Characters page of your copy of the app and import it here.')}</span>
+          <label className={styles.importButton}>
+            <Upload size={15} /> {t('Importar minha ficha (.json)', 'Import my sheet (.json)')}
+            <input type="file" accept="application/json,.json" hidden disabled={busy}
+              onChange={(e) => { const f = e.target.files?.[0]; if (f) onImport(f); e.target.value = ''; }} />
+          </label>
+        </>
+      )}
+    </div>
+  );
 
   const hp = fighter?.hp ?? character?.hp ?? 0;
   // In a fight the combat table's numbers; otherwise the sheet's.
