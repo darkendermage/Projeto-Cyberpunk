@@ -130,7 +130,8 @@ public class TableQuickAttackApiTests(ApiFactory factory)
             {
                 target.Damage.Should().NotBeNull();
                 target.DamageDice.Should().NotBeEmpty();
-                hit = attack;
+                // A hit the armor stops whole leaves the HP alone: keep shooting until one goes through.
+                if (HpOf(await Fight(s.EncounterId), s.GangerId) < before) hit = attack;
             }
         }
 
