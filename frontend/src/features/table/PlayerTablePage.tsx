@@ -24,6 +24,9 @@ import { RulesDialog } from './RulesDialog';
 import { AimBar, SceneStrip } from './SceneStrip';
 import { PendingCard } from './PendingCard';
 import { MySheetDialog } from './MySheetDialog';
+import { ImagesTab } from './ImagesTab';
+import { fitInitial, inputOf, snapHalf } from './images';
+import { PORTRAIT_LIMITS, prepareImage } from '../../lib/portrait';
 import { DiceColorPicker } from './DiceColorPicker';
 import { MusicPlayer } from './music/MusicPlayer';
 import { setSeatContext } from '../../api/client';
@@ -40,7 +43,7 @@ import { usePanels } from './usePanels';
 import { HUB_TEXT, useTableHub } from './useTableHub';
 import styles from './Table.module.css';
 
-type Tab = 'character' | 'sheet' | 'initiative' | 'chat';
+type Tab = 'character' | 'sheet' | 'initiative' | 'images' | 'chat';
 
 /**
  * A player's screen (/mesa/j/:token), reached through the GM's tunnel. It lives outside the app shell: the players'
@@ -85,6 +88,8 @@ export function PlayerTablePage() {
   const [armorBusy, setArmorBusy] = useState(false);
   const [turnBusy, setTurnBusy] = useState(false);
   const [pendingBusy, setPendingBusy] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [imageBusy, setImageBusy] = useState(false);
 
   const setScene = (scene: SceneView | null) => {
     const before = client.getQueryData<PlayerState>(tableKeys.player(token));
@@ -122,6 +127,7 @@ export function PlayerTablePage() {
     },
     tokenDrag: (d) => { if (d.sceneId === shownRef.current) board.current?.showDrag(d.tokenId, d.x, d.y); },
     ping: (p) => { if (p.sceneId === shownRef.current) board.current?.showPing(p); },
+    imageDrag: (d) => { if (d.sceneId === shownRef.current) board.current?.showImageDrag(d.imageId, d); },
     party: ({ characterId }) => {
       void client.invalidateQueries({ queryKey: tableKeys.playerParty(token) });
       // The player's own sheet changed elsewhere (the GM's app, the popup): their panels follow.
@@ -168,7 +174,8 @@ export function PlayerTablePage() {
     canMoveTemplate: (tpl) => !tpl.locked && tpl.ownerSeatId != null,
     gm: false,
     lang,
-  } : null, [scene, fighters, encounter.data, selection, aimTokens]);
+    selectedImage,
+  } : null, [scene, fighters, encounter.data, selection, aimTokens, selectedImage]);
 
   const run = async (fn: () => Promise<SceneView | unknown>) => {
     try {
@@ -194,6 +201,7 @@ export function PlayerTablePage() {
         if (tk) quick.target(fighterIdOf(tk, queue));
         return;
       }
+      setSelectedImage(null);
       setSelection({ tokens, templates });
     },
     onTokenDrag: (id, x, y) => { if (scene) hub.dragToken(scene.id, id, x, y); },
@@ -204,11 +212,22 @@ export function PlayerTablePage() {
     onTemplatePlace: (x, y, angle) => void run(() => api.addTemplate({ shape: draft.shape, x, y, sizeMeters: draft.sizeMeters, angle, color: draft.color })),
     onPing: (x, y) => { if (scene) hub.ping(scene.id, x, y); },
     onTokenPlace: (x, y) => { setTool('select'); void run(() => api.placeToken(x, y)); },
+    onImageSelect: (id) => { setSelectedImage(id); setSelection(NO_SELECTION); },
+    onImageDrag: (id, rect) => { if (scene) hub.dragImage(scene.id, id, rect); },
+    onImageChange: (id, rect) => {
+      const img = scene?.images?.find((i) => i.id === id);
+      if (img) void run(() => api.updateImage(id, inputOf(img, rect)));
+    },
   };
 
   // A player clears players' areas; tokens stay (only the GM removes them).
   const deletable = (scene?.templates ?? []).filter((tp) => selection.templates.includes(tp.id) && tp.ownerSeatId != null && !tp.locked).map((tp) => tp.id);
   const removeSelection = () => {
+    const image = scene?.images?.find((i) => i.id === selectedImage && i.editable);
+    if (image) {
+      if (window.confirm(t(`Apagar "${image.name}"?`, `Delete "${image.name}"?`))) void run(async () => { const v = await api.removeImage(image.id); setSelectedImage(null); return v; });
+      return;
+    }
     if (deletable.length === 0) return;
     void run(async () => { const v = await api.batch({ removeTemplates: deletable }); setSelection(NO_SELECTION); return v; });
   };
@@ -334,7 +353,7 @@ export function PlayerTablePage() {
           onResize={(right) => setPanels({ right })} onToggle={() => setPanels({ rightOpen: !panels.rightOpen })} />
         <aside className={`${styles.column} ${styles.colRight} ${panels.rightOpen ? '' : styles.collapsed}`}>
           <div className={styles.tabs} role="tablist">
-            {([['character', t('Personagem', 'Character')], ['sheet', t('Ficha', 'Sheet')], ['initiative', t('Iniciativa', 'Initiative')], ['chat', 'Chat']] as [Tab, string][]).map(([id, label]) => (
+            {([['character', t('Personagem', 'Character')], ['sheet', t('Ficha', 'Sheet')], ['initiative', t('Iniciativa', 'Initiative')], ['images', t('Imagens', 'Images')], ['chat', 'Chat']] as [Tab, string][]).map(([id, label]) => (
               <Button key={id} role="tab" aria-selected={tab === id} variant={tab === id ? 'primary' : 'ghost'} onClick={() => setTab(id)}>{label}</Button>
             ))}
           </div>
@@ -356,6 +375,24 @@ export function PlayerTablePage() {
               onTurn={(delta) => { if (myToken) void run(() => api.moveToken(myToken.id, { x: myToken.x, y: myToken.y, rotation: (myToken.rotation + delta + 360) % 360 })); }} />
           )}
           {tab === 'sheet' && (sheet.isLoading ? <Spinner /> : <PlayerSheetPanel sheet={sheet.data ?? null} />)}
+          {tab === 'images' && scene && (
+            <ImagesTab images={scene.images ?? []} selected={selectedImage} gm={false} mySeatId={seat?.id} limit={10} busy={imageBusy}
+              ownerName={(seatId) => (seatId == null ? t('Mestre', 'GM') : seatId === seat?.id ? t('Você', 'You')
+                : party.data?.find((p) => p.seatId === seatId)?.name ?? t('Outro jogador', 'Another player'))}
+              onSelect={(id) => { setSelectedImage(id); setSelection(NO_SELECTION); }}
+              onAdd={(file) => {
+                setImageBusy(true);
+                void run(async () => {
+                  const prepared = await prepareImage(file, PORTRAIT_LIMITS);
+                  const media = await api.uploadMedia(prepared.file);
+                  const centre = board.current?.centerCell() ?? { x: 5, y: 5 };
+                  return api.addImage({ mediaId: media.id, name: file.name.replace(/\.[^.]+$/, ''), x: snapHalf(centre.x), y: snapHalf(centre.y), ...fitInitial(prepared.width, prepared.height) });
+                }).finally(() => setImageBusy(false));
+              }}
+              onChange={(img, input) => void run(() => api.updateImage(img.id, input))}
+              onOrder={(id, above) => void run(() => api.orderImage(id, above))}
+              onRemove={(img) => void run(async () => { const v = await api.removeImage(img.id); if (selectedImage === img.id) setSelectedImage(null); return v; })} />
+          )}
           {tab === 'initiative' && (
             <InitiativePanel encounter={encounter.data ?? null} busy={turnBusy || !!encounter.data?.pending}
               onEndTurn={() => {

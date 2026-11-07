@@ -1,3 +1,4 @@
+import type { ImageInput, SceneImageView } from '../../api/tableTypes';
 import type { Point } from './grid';
 
 /** An image's place on the map: centre and size in cells, rotation in degrees. */
@@ -73,3 +74,8 @@ export function aboveForMove(images: readonly { id: string; order: number }[], i
   if (dir === 'up') return at === stack.length - 1 ? undefined : stack[at + 2] ?? null;
   return at === 0 ? undefined : stack[at - 1];
 }
+
+/** The whole image as the API takes it, with <paramref name="change"/> applied. */
+export const inputOf = (i: SceneImageView, change: Partial<ImageInput> = {}): ImageInput => ({
+  name: i.name, x: i.x, y: i.y, width: i.width, height: i.height, rotation: i.rotation, opacity: i.opacity, locked: i.locked, hidden: i.hidden, ...change,
+});

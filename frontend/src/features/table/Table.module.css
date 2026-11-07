@@ -477,3 +477,15 @@
   position: absolute; right: 10px; bottom: 10px; z-index: 6; display: inline-flex; gap: 6px; align-items: center;
   padding: 4px 10px; background: var(--bg-1); border: 1px solid var(--line); color: inherit; cursor: pointer; font-size: 12px;
 }
+
+/* The "Imagens" tab: layers like Photoshop (round 5). */
+.layerList { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.layerRow { display: grid; grid-template-columns: 48px minmax(0, 1fr) auto; gap: 6px; align-items: center; padding: 4px; background: var(--bg-2); border: 1px solid var(--line); }
+.layerRowOn { border-color: var(--cyan); box-shadow: 0 0 0 1px var(--cyan) inset; }
+.layerHidden { opacity: 0.6; border-style: dashed; }
+.layerThumb { width: 48px; height: 48px; padding: 0; border: 1px solid var(--line); background: repeating-conic-gradient(#1a1d23 0% 25%, #111316 0% 50%) 50% / 12px 12px; cursor: pointer; }
+.layerThumb img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.layerBody { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.layerBody input[type='range'] { width: 100%; }
+.layerName { font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; cursor: text; }
+.layerActions { display: flex; gap: 2px; flex-wrap: wrap; justify-content: flex-end; max-width: 120px; }

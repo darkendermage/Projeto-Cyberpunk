@@ -2,7 +2,7 @@ import { API_BASE, ApiError, request } from './client';
 import { locale, t } from '../i18n';
 import type {
   ArmorLocation, ClaimResult, Lobby, MediaInfo, PartyMember, PlayerCharacter, PlayerSheet, PlayerEncounter, PlayerSeat, PlayerState, RollRequest, SceneBatch, SceneGrid, SceneSummary, SceneView, Seat,
-  SendMessage, TableMessage, TableRules, TemplateInput, QuickAttack, BarrierRequest, TokenInput, TokenMove, TunnelStatus, QuickAttackResult, TableSession, TableMusicState,
+  SendMessage, TableMessage, TableRules, TemplateInput, QuickAttack, BarrierRequest, TokenInput, TokenMove, TunnelStatus, QuickAttackResult, TableSession, TableMusicState, ImageInput,
 } from './tableTypes';
 
 const json = (body: unknown) => JSON.stringify(body);
@@ -57,6 +57,12 @@ export const tableApi = {
   send: (body: SendMessage) => request<TableMessage>('/table/messages', { method: 'POST', body: json(body) }),
   roll: (body: RollRequest) => request<TableMessage>('/table/rolls', { method: 'POST', body: json(body) }),
   sessions: () => request<TableSession[]>('/table/sessions'),
+  addImage: (sceneId: number, input: ImageInput) => request<SceneView>(`/table/scenes/${sceneId}/images`, { method: 'POST', body: json(input) }),
+  updateImage: (sceneId: number, id: string, input: ImageInput) =>
+    request<SceneView>(`/table/scenes/${sceneId}/images/${encodeURIComponent(id)}`, { method: 'PUT', body: json(input) }),
+  orderImage: (sceneId: number, id: string, above: string | null) =>
+    request<SceneView>(`/table/scenes/${sceneId}/images/${encodeURIComponent(id)}/order`, { method: 'POST', body: json({ above }) }),
+  removeImage: (sceneId: number, id: string) => request<SceneView>(`/table/scenes/${sceneId}/images/${encodeURIComponent(id)}`, { method: 'DELETE' }),
   music: () => request<TableMusicState>('/table/music'),
   loadMusic: (body: { url: string; title: string | null }) => request<TableMusicState>('/table/music', { method: 'PUT', body: json(body) }),
   playMusic: (positionSeconds: number | null) => request<TableMusicState>('/table/music/play', { method: 'POST', body: json({ positionSeconds }) }),
@@ -131,6 +137,23 @@ export function playerApi(seat: string) {
     critical: () => request<PlayerEncounter>('/table/play/critical', { method: 'POST', headers }),
     /** Reloads one of the seat's character's weapons (on its Turn when it is in the fight). */
     reload: (weapon: string) => request<{ encounter: PlayerEncounter | null; character: PlayerCharacter | null }>('/table/play/reload', { method: 'POST', body: json({ weapon }), headers }),
+    /** A player's image for the map (up to 2 MB, shrunk by prepareImage). */
+    uploadMedia: async (file: File): Promise<MediaInfo> => {
+      const form = new FormData();
+      form.append('file', file);
+      const response = await fetch(`${API_BASE}/table/play/media`, { method: 'POST', body: form, headers: { 'Accept-Language': locale, ...headers } });
+      if (!response.ok) {
+        let problem = { title: t(`Erro ${response.status}`, `Error ${response.status}`) } as { title?: string; errors?: Record<string, string[]> };
+        try { problem = await response.json(); } catch { /* non-JSON */ }
+        throw new ApiError(response.status, problem);
+      }
+      return response.json() as Promise<MediaInfo>;
+    },
+    addImage: (input: ImageInput) => request<SceneView>('/table/play/images', { method: 'POST', body: json(input), headers }),
+    updateImage: (id: string, input: ImageInput) => request<SceneView>(`/table/play/images/${encodeURIComponent(id)}`, { method: 'PUT', body: json(input), headers }),
+    orderImage: (id: string, above: string | null) =>
+      request<SceneView>(`/table/play/images/${encodeURIComponent(id)}/order`, { method: 'POST', body: json({ above }), headers }),
+    removeImage: (id: string) => request<SceneView>(`/table/play/images/${encodeURIComponent(id)}`, { method: 'DELETE', headers }),
     /** Picks a thrown weapon of the seat's character up (on its Turn). */
     pickUp: (weapon: string) => request<PlayerEncounter>('/table/play/pick-up', { method: 'POST', body: json({ weapon }), headers }),
     /** Clears a jammed weapon of the seat's character (an Action on its Turn). */

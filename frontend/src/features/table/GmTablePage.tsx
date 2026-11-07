@@ -22,6 +22,9 @@ import { RulesDialog } from './RulesDialog';
 import { AimBar, SceneStrip } from './SceneStrip';
 import { PendingCard } from './PendingCard';
 import { SessionsDialog } from './SessionsDialog';
+import { ImagesTab } from './ImagesTab';
+import { fitInitial, inputOf, snapHalf } from './images';
+import { MAP_LIMITS, prepareImage } from '../../lib/portrait';
 import { DiceColorPicker } from './DiceColorPicker';
 import { MusicPlayer } from './music/MusicPlayer';
 import { MusicPanel } from './music/MusicPanel';
@@ -39,11 +42,12 @@ import { NO_SELECTION, useBoardKeys, type Selection } from './useBoardKeys';
 import { HUB_TEXT, useTableHub } from './useTableHub';
 import styles from './Table.module.css';
 
-type Tab = 'scene' | 'token' | 'combat' | 'invites' | 'chat' | 'music';
+type Tab = 'scene' | 'token' | 'images' | 'combat' | 'invites' | 'chat' | 'music';
 
 const TABS: { id: Tab; label: string }[] = [
   { id: 'scene', label: t('Cena', 'Scene') },
   { id: 'token', label: t('Seleção', 'Selection') },
+  { id: 'images', label: t('Imagens', 'Images') },
   { id: 'combat', label: t('Combate', 'Fight') },
   { id: 'invites', label: t('Convites', 'Invites') },
   { id: 'chat', label: 'Chat' },
@@ -80,6 +84,8 @@ export function GmTablePage() {
   const [selection, setSelection] = useState<Selection>(NO_SELECTION);
   const [tablesOpen, setTablesOpen] = useState(false);
   const [sessionsOpen, setSessionsOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [imageBusy, setImageBusy] = useState(false);
   const gmDice = useQuery({ queryKey: ['table', 'gm-dice'], queryFn: tableApi.gmDiceColor });
   const gmMusic = useQuery({ queryKey: musicKey, queryFn: tableApi.music });
   const selectedToken = selection.tokens.length === 1 && selection.templates.length === 0 ? selection.tokens[0] : null;
@@ -131,6 +137,7 @@ export function GmTablePage() {
     // Live effects belong to the live scene: ignored while the GM edits another one.
     tokenDrag: (d) => { if (d.sceneId === shownRef.current) board.current?.showDrag(d.tokenId, d.x, d.y); },
     ping: (p) => { if (p.sceneId === shownRef.current) board.current?.showPing(p); },
+    imageDrag: (d) => { if (d.sceneId === shownRef.current) board.current?.showImageDrag(d.imageId, d); },
     seats: () => {
       void client.invalidateQueries({ queryKey: tableKeys.seats });
       void client.invalidateQueries({ queryKey: tableKeys.online });
@@ -176,12 +183,14 @@ export function GmTablePage() {
     canMoveTemplate: (tpl) => !tpl.locked,
     gm: true,
     lang,
-  } : null, [view, draftGrid, fighters, encounter.data, selection, aimTokens]);
+    selectedImage,
+  } : null, [view, draftGrid, fighters, encounter.data, selection, aimTokens, selectedImage]);
 
   const callbacks: BoardCallbacks = {
     onSelect: (tokens, templates) => {
       // While aiming, a click on a token picks the target instead of selecting it.
       if (quick.aim) { if (tokens.length === 1 && templates.length === 0) quick.target(tokenFighter(tokens[0])); return; }
+      setSelectedImage(null);
       setSelection({ tokens, templates });
       if (tokens.length + templates.length > 0) setTab('token');
     },
@@ -195,6 +204,12 @@ export function GmTablePage() {
     onTemplatePlace: (x, y, angle) => {
       if (view) void act(() => tableApi.addTemplate(view.id, { shape: draft.shape, x, y, sizeMeters: draft.sizeMeters, angle, color: draft.color }));
     },
+    onImageSelect: (id) => { setSelectedImage(id); setSelection(NO_SELECTION); if (id) setTab('images'); },
+    onImageDrag: (id, rect) => { if (live && view) hub.dragImage(view.id, id, rect); },
+    onImageChange: (id, rect) => {
+      const img = view?.images?.find((i) => i.id === id);
+      if (view && img) void act(() => tableApi.updateImage(view.id, id, inputOf(img, rect)));
+    },
     onPing: (x, y) => {
       if (live && view) hub.ping(view.id, x, y);
       else board.current?.showPing({ sceneId: view?.id ?? 0, x, y, color: '#f5e663', label: 'GM' });
@@ -203,6 +218,12 @@ export function GmTablePage() {
 
   /** Clears the selection (tokens after a confirmation: there is no undo). */
   const removeSelection = () => {
+    // The selected image goes with Delete too (round 5).
+    const image = view?.images?.find((i) => i.id === selectedImage);
+    if (view && image) {
+      if (window.confirm(t(`Apagar "${image.name}"?`, `Delete "${image.name}"?`))) void act(async () => { const v = await tableApi.removeImage(view.id, image.id); setSelectedImage(null); return v; });
+      return;
+    }
     if (!view || selection.tokens.length + selection.templates.length === 0) return;
     const n = selection.tokens.length;
     if (n > 0 && !window.confirm(t(n === 1 ? 'Remover o token selecionado?' : `Remover os ${n} tokens selecionados?`, n === 1 ? 'Remove the selected token?' : `Remove the ${n} selected tokens?`))) return;
@@ -340,6 +361,23 @@ export function GmTablePage() {
             </div>
           )
           : <span className={styles.muted}>{t('Clique num token ou numa área do mapa para editá-lo. Arraste no vazio para selecionar vários; Ctrl+A seleciona tudo.', 'Click a token or an area on the map to edit it. Drag on empty ground to select several; Ctrl+A selects all.')}</span>
+        )}
+        {tab === 'images' && view && (
+          <ImagesTab images={view.images ?? []} selected={selectedImage} gm busy={imageBusy}
+            ownerName={(seatId) => (seatId == null ? t('Mestre', 'GM') : seats.data?.find((s) => s.id === seatId)?.label ?? t('Jogador', 'Player'))}
+            onSelect={(id) => { setSelectedImage(id); setSelection(NO_SELECTION); }}
+            onAdd={(file) => {
+              setImageBusy(true);
+              void act(async () => {
+                const prepared = await prepareImage(file, MAP_LIMITS);
+                const media = await tableApi.upload(prepared.file);
+                const centre = board.current?.centerCell() ?? { x: 5, y: 5 };
+                return tableApi.addImage(view.id, { mediaId: media.id, name: file.name.replace(/\.[^.]+$/, ''), x: snapHalf(centre.x), y: snapHalf(centre.y), ...fitInitial(prepared.width, prepared.height) });
+              }).finally(() => setImageBusy(false));
+            }}
+            onChange={(img, input) => void act(() => tableApi.updateImage(view.id, img.id, input))}
+            onOrder={(id, above) => void act(() => tableApi.orderImage(view.id, id, above))}
+            onRemove={(img) => void act(async () => { const v = await tableApi.removeImage(view.id, img.id); if (selectedImage === img.id) setSelectedImage(null); return v; })} />
         )}
         {tab === 'combat' && view && <CombatTab scene={view} encounter={encounter.data} act={act} onSelectToken={(id) => { selectToken(id); setTab('token'); }} />}
         {tab === 'invites' && <InvitesTab seats={seats.data ?? []} act={act} />}
