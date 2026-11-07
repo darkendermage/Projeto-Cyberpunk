@@ -460,13 +460,21 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
         var npcs = tokens.Where(t => t.NpcId is not null).Select(t => t.NpcId!.Value).Distinct().ToList();
         var book = tokens.Where(t => t.CompendiumNpcId is not null).Select(t => t.CompendiumNpcId!).Distinct().ToList();
         if (characters.Count + npcs.Count + book.Count == 0) return TokenImages.None;
+        var focus = new Dictionary<int, CyberpunkDb.Application.Characters.PortraitFocus>();
+        if (characters.Count > 0)
+        {
+            var sheets = await db.Characters.AsNoTracking().Where(c => characters.Contains(c.Id)).Select(c => new { c.Id, c.SheetJson }).ToListAsync(ct);
+            foreach (var row in sheets)
+                if (CyberpunkDb.Application.Characters.CharacterService.PortraitFocusOf(row.SheetJson) is { } f) focus[row.Id] = f;
+        }
         return new TokenImages(
             characters.Count == 0 ? TokenImages.None.Characters
                 : await db.CharacterPortraits.AsNoTracking().Where(p => characters.Contains(p.CharacterId)).Select(p => new { p.CharacterId, p.UpdatedAt }).ToDictionaryAsync(p => p.CharacterId, p => p.UpdatedAt, ct),
             npcs.Count == 0 ? TokenImages.None.Npcs
                 : await db.NpcPortraits.AsNoTracking().Where(p => npcs.Contains(p.NpcId)).Select(p => new { p.NpcId, p.UpdatedAt }).ToDictionaryAsync(p => p.NpcId, p => p.UpdatedAt, ct),
             book.Count == 0 ? TokenImages.None.Compendium
-                : await db.CompendiumPortraits.AsNoTracking().Where(p => book.Contains(p.CompendiumId)).Select(p => new { p.CompendiumId, p.UpdatedAt }).ToDictionaryAsync(p => p.CompendiumId, p => p.UpdatedAt, ct));
+                : await db.CompendiumPortraits.AsNoTracking().Where(p => book.Contains(p.CompendiumId)).Select(p => new { p.CompendiumId, p.UpdatedAt }).ToDictionaryAsync(p => p.CompendiumId, p => p.UpdatedAt, ct),
+            focus);
     }
 
     /// <summary>Applies a selection's changes; <paramref name="seat"/> null is the GM. Anything not allowed refuses the whole batch.</summary>

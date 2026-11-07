@@ -21,14 +21,18 @@ public static class SceneViews
     };
 
     public static SceneView ForGm(Scene scene, SceneState state, TokenImages images, IReadOnlyDictionary<string, int>? covers = null) =>
-        View(scene, state, state.Tokens.Select(t => Token(t, GmImage(t, images), true, covers)));
+        View(scene, state, state.Tokens.Select(t => Token(t, GmImage(t, images), true, covers, Focus(t, images))));
 
     /// <summary>
     /// The seat's view. Stored images go through the player API with the seat link in the query string, because images
     /// load without custom headers.
     /// </summary>
     public static SceneView ForSeat(Scene scene, SceneState state, TableSeat seat, TokenImages images, IReadOnlyDictionary<string, int>? covers = null) =>
-        View(scene, state, state.Tokens.Where(t => CanSee(t, seat)).Select(t => Token(t, SeatImage(t, seat, images), CanControl(t, seat), covers)));
+        View(scene, state, state.Tokens.Where(t => CanSee(t, seat)).Select(t => Token(t, SeatImage(t, seat, images), CanControl(t, seat), covers, Focus(t, images))));
+
+    /// <summary>The framing of a PC's portrait, when the token shows that portrait.</summary>
+    private static CyberpunkDb.Application.Characters.PortraitFocus? Focus(SceneToken t, TokenImages images) =>
+        ImageSource(t, images) is { Kind: TokenImageKind.Character } && t.CharacterId is { } c && images.CharacterFocus?.TryGetValue(c, out var f) == true ? f : null;
 
     /// <summary>
     /// The stored image a token shows when no image was put on the token itself: the character's portrait, else the
@@ -48,10 +52,10 @@ public static class SceneViews
             new BackgroundView(state.Background.MediaId, state.Background.MediaId is { } m ? MediaService.UrlOf(m) : null, state.Background.Width, state.Background.Height),
             tokens.ToList(), state.Templates, scene.UpdatedAt);
 
-    private static TokenView Token(SceneToken t, string? image, bool controllable, IReadOnlyDictionary<string, int>? covers) =>
+    private static TokenView Token(SceneToken t, string? image, bool controllable, IReadOnlyDictionary<string, int>? covers, CyberpunkDb.Application.Characters.PortraitFocus? focus = null) =>
         new(t.Id, t.Label, t.X, t.Y, t.Width, t.Height, t.Rotation, t.Locked, t.ImageMediaId, image, t.Color, t.OwnerSeatId,
             t.Visibility, t.VisibleSeatIds, t.CharacterId, t.CombatantId, t.RangeRingMeters, controllable, t.NpcId, t.CompendiumNpcId,
-            t.Layer, t.Barrier is { } b ? new BarrierView(b.Material, b.Thick, b.MaxHp, CoverHp(b, covers), b.CoverId) : null);
+            t.Layer, t.Barrier is { } b ? new BarrierView(b.Material, b.Thick, b.MaxHp, CoverHp(b, covers), b.CoverId) : null, focus);
 
     /// <summary>A barrier that is a fight's cover shows the cover's HP (damage is done on the combat table too).</summary>
     private static int CoverHp(SceneBarrier b, IReadOnlyDictionary<string, int>? covers) =>

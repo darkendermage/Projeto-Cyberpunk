@@ -68,7 +68,7 @@ function IdentityColumn({ detail, rules, editor, run, busy }: { detail: Characte
 
   return (
     <div className={styles.column}>
-      <Portrait detail={detail} />
+      <Portrait detail={detail} onFocus={(portraitFocus) => set({ portraitFocus })} />
       <section className={styles.panel}>
         <label className={styles.idField}>
           <span className={styles.idLabel}>{t('Nome', 'Name')}</span>

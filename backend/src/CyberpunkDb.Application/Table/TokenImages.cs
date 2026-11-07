@@ -7,7 +7,8 @@ public sealed record TokenImageSource(TokenImageKind Kind, string Key, DateTime 
 
 /// <summary>When each stored image a scene's tokens may show last changed: characters, saved NPCs and compendium NPCs.</summary>
 public sealed record TokenImages(
-    IReadOnlyDictionary<int, DateTime> Characters, IReadOnlyDictionary<int, DateTime> Npcs, IReadOnlyDictionary<string, DateTime> Compendium)
+    IReadOnlyDictionary<int, DateTime> Characters, IReadOnlyDictionary<int, DateTime> Npcs, IReadOnlyDictionary<string, DateTime> Compendium,
+    IReadOnlyDictionary<int, CyberpunkDb.Application.Characters.PortraitFocus>? CharacterFocus = null)
 {
     public static readonly TokenImages None = new(new Dictionary<int, DateTime>(), new Dictionary<int, DateTime>(), new Dictionary<string, DateTime>());
 }

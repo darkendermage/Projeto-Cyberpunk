@@ -11,7 +11,7 @@ namespace CyberpunkDb.Application.Characters;
 public sealed record CharacterSummaryDto(
     int Id, string Name, string? Handle, string? Role, int? RoleRank, CreationMethod Method, CharacterStatus Status,
     int ErrorCount, int WarningCount, int MaxHp, int CurrentHp, int Humanity, int HumanityMax, int Balance,
-    bool HasPortrait, DateTime CreatedAt, DateTime UpdatedAt);
+    bool HasPortrait, DateTime CreatedAt, DateTime UpdatedAt, PortraitFocus? PortraitFocus = null);
 
 public sealed record CharacterDetailDto(
     int Id, int Version, CharacterStatus Status, bool HasPortrait, DateTime CreatedAt, DateTime UpdatedAt,

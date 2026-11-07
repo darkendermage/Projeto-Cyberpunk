@@ -1,3 +1,4 @@
+import type { PortraitFocus } from '../lib/portraitFocus';
 /** Types of /api/table and /api/table/play (Application/Table). */
 import type { AttackMode, CombatantKind, CombatSide, WeaponView, WoundState } from './encounterTypes';
 
@@ -48,6 +49,8 @@ export interface TokenView {
   /** Scenery sits over the map and under the characters. */
   layer?: TokenLayer;
   barrier?: BarrierView | null;
+  /** The framing of a PC's portrait when the token shows it. */
+  imageFocus?: PortraitFocus | null;
 }
 
 export type TokenLayer = 'Token' | 'Scenery';

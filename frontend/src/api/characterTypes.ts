@@ -1,3 +1,4 @@
+import type { PortraitFocus } from '../lib/portraitFocus';
 // Types of the player-character API (Application/Characters). Derived values always come from the server report.
 import type { ArmorSlot, RuleFact } from './types';
 
@@ -28,6 +29,8 @@ export interface CharacterIdentity {
   nativeLanguage?: string | null;
   home: string;
   reputation: number;
+  /** How the uploaded portrait is framed; null is centered at full size. */
+  portraitFocus?: PortraitFocus | null;
 }
 
 export interface CharacterRole {
@@ -517,6 +520,7 @@ export interface CharacterSummary {
   hasPortrait: boolean;
   createdAt: string;
   updatedAt: string;
+  portraitFocus?: PortraitFocus | null;
 }
 
 export interface CharacterEvent {

@@ -238,6 +238,8 @@
   object-fit: cover;
   display: block;
 }
+.portraitFraming { cursor: grab; outline: 2px dashed var(--amber, #ffcf3a); outline-offset: -2px; touch-action: none; }
+.portraitFraming img { user-select: none; }
 .portraitEmpty {
   position: absolute;
   inset: 0;

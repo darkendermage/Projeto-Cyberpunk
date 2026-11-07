@@ -6,6 +6,7 @@ import { templateShape } from '../templates';
 import { initials, tokenStatus, type TokenFighter } from '../tokens';
 import { HOLD_MS, inRect, MOVE_TOLERANCE, rectFrom, toggleSelection } from './gestures';
 import { missPoint, type AttackEffect } from './effects';
+import { spriteFit } from '../../../lib/portraitFocus';
 
 export type BoardTool = 'select' | 'ruler' | 'template' | 'token';
 
@@ -456,10 +457,11 @@ export class BoardController {
       loadTexture(url).then((texture) => {
         if (body.destroyed) return;
         const sprite = new Sprite(texture);
-        // Cover the shape, keeping the picture's proportion.
-        const scale = Math.max((w - inset * 2) / texture.width, (h - inset * 2) / texture.height);
-        sprite.scale.set(scale);
+        // Cover the shape, keeping the picture's proportion, framed as the PC's portrait is on the sheet.
+        const fit = spriteFit(texture.width, texture.height, w - inset * 2, h - inset * 2, token.imageFocus);
+        sprite.scale.set(fit.scale);
         sprite.anchor.set(0.5);
+        sprite.position.set(fit.x, fit.y);
         sprite.mask = mask;
         body.addChildAt(sprite, 1);
       }).catch(() => { /* broken image: the initials stay */ });

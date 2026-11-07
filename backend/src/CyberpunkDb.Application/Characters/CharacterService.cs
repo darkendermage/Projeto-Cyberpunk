@@ -110,7 +110,7 @@ public sealed class CharacterService(
             return new CharacterSummaryDto(r.Id, sheet.Identity.Name, sheet.Identity.Handle, sheet.PrimaryRole?.Role, sheet.PrimaryRole?.Rank,
                 r.CreationMethod, validation.Status, validation.ErrorCount, validation.WarningCount,
                 report.Health.MaxHp, report.Health.CurrentHp, report.Humanity.Current, report.Humanity.Max, sheet.Wallet.Balance,
-                r.HasPortrait, r.CreatedAt, r.UpdatedAt);
+                r.HasPortrait, r.CreatedAt, r.UpdatedAt, sheet.Identity.PortraitFocus);
         }).ToList();
     }
 
@@ -122,6 +122,19 @@ public sealed class CharacterService(
     }
 
     /// <summary>The stored sheet and its version, as the combat table keeps it to undo an attack.</summary>
+    /// <summary>The portrait framing stored in a sheet's JSON (the table's tokens use it without loading the whole report).</summary>
+    internal static PortraitFocus? PortraitFocusOf(string sheetJson)
+    {
+        try
+        {
+            return Deserialize(sheetJson).Identity.PortraitFocus?.Clamp();
+        }
+        catch (JsonException)
+        {
+            return null;
+        }
+    }
+
     internal async Task<(int Version, string SheetJson)> SnapshotAsync(int id, CancellationToken ct)
     {
         var row = await db.Characters.AsNoTracking().Where(c => c.Id == id).Select(c => new { c.Version, c.SheetJson }).FirstOrDefaultAsync(ct)

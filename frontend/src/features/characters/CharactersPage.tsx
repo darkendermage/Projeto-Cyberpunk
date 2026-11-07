@@ -7,6 +7,7 @@ import {
 import type { CharacterSummary, CreationMethod } from '../../api/characterTypes';
 import { Button, EmptyState, ErrorState, Field, IconButton, Modal, Select, Spinner } from '../../components/ui/ui';
 import { formatEb } from '../../lib/format';
+import { focusStyle } from '../../lib/portraitFocus';
 import { useToast } from '../../state/ToastContext';
 import page from '../../styles/Page.module.css';
 import { formatDate, languagesFor, METHOD_HINT, METHOD_LABEL, STATUS_LABEL, withCurrent } from './characterLabels';
@@ -99,7 +100,7 @@ function CharacterCard({ character: c }: { character: CharacterSummary }) {
   return (
     <article className={styles.card}>
       {c.hasPortrait
-        ? <img className={styles.avatar} src={characterApi.portraitUrl(c.id, c.updatedAt)} alt="" />
+        ? <span className={styles.avatar} style={{ overflow: 'hidden' }}><img src={characterApi.portraitUrl(c.id, c.updatedAt)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', ...focusStyle(c.portraitFocus) }} /></span>
         : <div className={styles.avatar}><UserRound size={34} /></div>}
       <div className={styles.cardBody}>
         <Link to={target} className={styles.cardName}>{tv(c.name)}{c.handle && <span className={styles.muted}> “{c.handle}”</span>}</Link>

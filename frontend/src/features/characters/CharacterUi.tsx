@@ -1,12 +1,13 @@
-import { useRef, useState, type ReactNode } from 'react';
+import { useRef, useState, type PointerEvent as ReactPointerEvent, type ReactNode } from 'react';
 import {
-  AlertTriangle, ArrowDown, ArrowUp, ArrowUpDown, CheckCircle2, CircleDot, Cpu, ImagePlus, Info, Loader2, Minus, Plus, Trash2, Undo2, UserRound, XCircle,
+  AlertTriangle, ArrowDown, ArrowUp, ArrowUpDown, Check, CheckCircle2, CircleDot, Cpu, Crop, ImagePlus, Info, Loader2, Minus, Plus, Trash2, Undo2, UserRound, X, XCircle,
 } from 'lucide-react';
 import { characterApi, problemMessage, useStoreCharacter } from '../../api/characters';
 import type { CharacterDetail, CharacterIssue, CharacterRules, CreationBudget } from '../../api/characterTypes';
 import { Button, IconButton, Modal } from '../../components/ui/ui';
 import { formatEb } from '../../lib/format';
 import { PortraitError, preparePortrait } from '../../lib/portrait';
+import { focusStyle, moveFocus, type PortraitFocus } from '../../lib/portraitFocus';
 import { useToast } from '../../state/ToastContext';
 import { ariaSort, nextSort, type SortState } from './sorting';
 import type { SaveStatus } from './useSheetEditor';
@@ -150,12 +151,20 @@ export function StateTag({ tone, children, title }: { tone: 'ok' | 'warn' | 'bad
   return <span className={styles.state} data-tone={tone} title={title}>{icon}{children}</span>;
 }
 
-/** Portrait with upload and removal; the image is stored with the character. */
-export function Portrait({ detail, compact }: { detail: CharacterDetail; compact?: boolean }) {
+/**
+ * Portrait with upload and removal; the image is stored with the character. With <paramref name="onFocus"/>, "Frame"
+ * lets the picture be dragged and zoomed inside the frame; the framing is saved on the sheet (and used by the token).
+ */
+export function Portrait({ detail, compact, onFocus }: { detail: CharacterDetail; compact?: boolean; onFocus?: (focus: PortraitFocus | null) => void }) {
   const input = useRef<HTMLInputElement>(null);
+  const frame = useRef<HTMLDivElement>(null);
+  const drag = useRef<{ x: number; y: number } | null>(null);
   const toast = useToast();
   const store = useStoreCharacter();
   const [busy, setBusy] = useState(false);
+  const saved = detail.sheet.identity.portraitFocus ?? null;
+  const [framing, setFraming] = useState<PortraitFocus | null>(null);
+  const focus = framing ?? saved;
   const refresh = async () => store(await characterApi.get(detail.id));
 
   const upload = async (file: File | undefined) => {
@@ -181,16 +190,44 @@ export function Portrait({ detail, compact }: { detail: CharacterDetail; compact
     }
   };
 
+  const onPointerDown = (e: ReactPointerEvent) => {
+    if (!framing) return;
+    drag.current = { x: e.clientX, y: e.clientY };
+    (e.target as Element).setPointerCapture?.(e.pointerId);
+  };
+  const onPointerMove = (e: ReactPointerEvent) => {
+    if (!framing || !drag.current || !frame.current) return;
+    const { width, height } = frame.current.getBoundingClientRect();
+    const next = moveFocus(framing, e.clientX - drag.current.x, e.clientY - drag.current.y, width, height);
+    drag.current = { x: e.clientX, y: e.clientY };
+    setFraming(next);
+  };
+
   return (
-    <div className={styles.portrait} style={compact ? { aspectRatio: '1' } : undefined}>
+    <div ref={frame} className={`${styles.portrait} ${framing ? styles.portraitFraming : ''}`} style={compact ? { aspectRatio: '1' } : undefined}
+      onPointerDown={onPointerDown} onPointerMove={onPointerMove} onPointerUp={() => { drag.current = null; }}>
       {detail.hasPortrait
-        ? <img src={characterApi.portraitUrl(detail.id, detail.updatedAt)} alt={t(`Retrato de ${tv(detail.sheet.identity.name)}`, `Portrait of ${tv(detail.sheet.identity.name)}`)} />
+        ? <img src={characterApi.portraitUrl(detail.id, detail.updatedAt)} alt={t(`Retrato de ${tv(detail.sheet.identity.name)}`, `Portrait of ${tv(detail.sheet.identity.name)}`)}
+            style={focusStyle(focus)} draggable={false} />
         : <div className={styles.portraitEmpty}><UserRound size={compact ? 32 : 72} /></div>}
-      <div className={styles.portraitActions}>
-        <input ref={input} type="file" accept="image/png,image/jpeg,image/webp,image/gif" hidden onChange={(e) => upload(e.target.files?.[0])} />
-        <IconButton label={t('Trocar retrato (imagens grandes são reduzidas)', 'Change portrait (large images are shrunk)')} onClick={() => input.current?.click()} disabled={busy}><ImagePlus size={16} /></IconButton>
-        {detail.hasPortrait && <IconButton label={t('Remover retrato', 'Remove portrait')} onClick={remove} disabled={busy}><Trash2 size={16} /></IconButton>}
-      </div>
+      {framing ? (
+        <div className={styles.portraitActions}>
+          <input type="range" min={1} max={3} step={0.05} value={framing.zoom} aria-label={t('Zoom do retrato', 'Portrait zoom')}
+            onChange={(e) => setFraming({ ...framing, zoom: Number(e.target.value) })} />
+          <IconButton label={t('Salvar enquadramento', 'Save framing')} onClick={() => { onFocus?.(framing); setFraming(null); }}><Check size={16} /></IconButton>
+          <IconButton label={t('Cancelar', 'Cancel')} onClick={() => setFraming(null)}><X size={16} /></IconButton>
+        </div>
+      ) : (
+        <div className={styles.portraitActions}>
+          <input ref={input} type="file" accept="image/png,image/jpeg,image/webp,image/gif" hidden onChange={(e) => upload(e.target.files?.[0])} />
+          {detail.hasPortrait && onFocus && (
+            <IconButton label={t('Enquadrar: arraste a foto e ajuste o zoom', 'Frame: drag the picture and set the zoom')} disabled={busy}
+              onClick={() => setFraming(saved ?? { x: 50, y: 50, zoom: 1 })}><Crop size={16} /></IconButton>
+          )}
+          <IconButton label={t('Trocar retrato (imagens grandes são reduzidas)', 'Change portrait (large images are shrunk)')} onClick={() => input.current?.click()} disabled={busy}><ImagePlus size={16} /></IconButton>
+          {detail.hasPortrait && <IconButton label={t('Remover retrato', 'Remove portrait')} onClick={remove} disabled={busy}><Trash2 size={16} /></IconButton>}
+        </div>
+      )}
     </div>
   );
 }

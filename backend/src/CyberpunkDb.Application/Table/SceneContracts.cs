@@ -18,7 +18,7 @@ public sealed record TokenView(
     string Id, string Label, double X, double Y, double Width, double Height, double Rotation, bool Locked,
     Guid? ImageMediaId, string? ImageUrl, string Color, int? OwnerSeatId, TokenVisibility Visibility, IReadOnlyList<int> VisibleSeatIds,
     int? CharacterId, string? CombatantId, double? RangeRingMeters, bool Controllable, int? NpcId, string? CompendiumNpcId,
-    TokenLayer Layer = TokenLayer.Token, BarrierView? Barrier = null);
+    TokenLayer Layer = TokenLayer.Token, BarrierView? Barrier = null, CyberpunkDb.Application.Characters.PortraitFocus? ImageFocus = null);
 
 /// <summary>A barrier as shown: with a fight, the HP is the fight's cover HP.</summary>
 public sealed record BarrierView(string Material, bool Thick, int MaxHp, int Hp, string? CoverId);

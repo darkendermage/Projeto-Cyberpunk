@@ -91,9 +91,12 @@ public sealed record CharacterIdentity
     /// <summary>Where the character lives: the specialization of Local Expert (Your Home).</summary>
     public string Home { get; init; } = "Watson";
     public int Reputation { get; init; }
+    /// <summary>How the uploaded portrait is framed (sheet, list and token); null is centered at full size.</summary>
+    public PortraitFocus? PortraitFocus { get; init; }
 
     public CharacterIdentity Normalize() => this with
     {
+        PortraitFocus = PortraitFocus?.Clamp(),
         Name = Name?.Trim() ?? "",
         Handle = Blank(Handle),
         Pronouns = Blank(Pronouns),
@@ -103,6 +106,15 @@ public sealed record CharacterIdentity
     };
 
     internal static string? Blank(string? s) => string.IsNullOrWhiteSpace(s) ? null : s.Trim();
+}
+
+/// <summary>The portrait's focal point in % of the picture (0–100) and its zoom (1–3).</summary>
+public sealed record PortraitFocus(double X = 50, double Y = 50, double Zoom = 1)
+{
+    public PortraitFocus Clamp() => new(
+        double.IsFinite(X) ? Math.Clamp(X, 0, 100) : 50,
+        double.IsFinite(Y) ? Math.Clamp(Y, 0, 100) : 50,
+        double.IsFinite(Zoom) ? Math.Clamp(Zoom, 1, 3) : 1);
 }
 
 /// <summary>
