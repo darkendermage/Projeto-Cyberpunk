@@ -67,6 +67,11 @@ public sealed class FighterViews(CharacterRuleBook characterRules, CharacterCalc
             Quality: w.Quality, Jammed: w.Jammed)).ToList();
         weapons.AddRange(Unarmed(body, cyberarm, Skill(Brawling, "DEX"),
             r.Skills.Where(s => s.SkillId == MartialArtsPrefix && s.Level > 0).Select(s => (s.Key, s.Specialization ?? "", s.Total))));
+        // CP:R p.146: Precision Attack, 3/6/9 points of Combat Awareness give +1/+2/+3 to attacks.
+        var awareness = detail.Sheet.Roles.FirstOrDefault(x => x.Role.Equals("Solo", StringComparison.OrdinalIgnoreCase))?.Split;
+        var precision = Math.Min(3, (awareness?.GetValueOrDefault("precisionAttack") ?? 0) / 3);
+        if (precision > 0)
+            weapons = weapons.Select(w => w with { AttackTotal = w.AttackTotal + precision, AutofireTotal = w.AutofireTotal + precision }).ToList();
 
         return new FighterView(c.Id, c.Kind, c.Name, c.Side, c.Initiative,
             r.Health.CurrentHp, r.Health.MaxHp, r.Health.WoundState, r.ActionPenalty, r.Health.StabilizationDv,
@@ -78,7 +83,7 @@ public sealed class FighterViews(CharacterRuleBook characterRules, CharacterCalc
             [.. detail.Sheet.Combat.Conditions, .. c.Conditions],
             r.Health.DeathSavePenalty, r.Health.DeathSave, r.Health.MustRollDeathSave, detail.Sheet.Combat.Conditions.Contains("Morto"),
             detail.Sheet.Combat.Stabilized, c.CoverId, c.CharacterId, detail.Version, null,
-            CombatAwareness: detail.Sheet.Roles.FirstOrDefault(x => x.Role.Equals("Solo", StringComparison.OrdinalIgnoreCase))?.Split);
+            CombatAwareness: awareness);
     }
 
     // ------------------------------------------------------------------ NPCs and generic enemies

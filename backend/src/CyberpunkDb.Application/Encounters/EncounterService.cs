@@ -187,8 +187,10 @@ public sealed partial class EncounterService(
                 if (!who.Contains(c.Id)) return c;
                 var roll = r.Rolls?.GetValueOrDefault(c.Id) is int typed and >= 1 and <= 10 ? typed : dice.Roll(10);
                 var reflex = fighters[c.Id].Ref;
-                lines.Add($"{c.Name}: REF {reflex} + {roll} = {reflex + roll}");
-                return c with { Initiative = reflex + roll, TieBreak = 0 };
+                // CP:R p.146: Initiative Reaction, +1 per point of the Solo's Combat Awareness.
+                var reaction = fighters[c.Id].Awareness("initiativeReaction");
+                lines.Add($"{c.Name}: REF {reflex} + {roll}{(reaction > 0 ? $" + Initiative Reaction {reaction}" : "")} = {reflex + roll + reaction}");
+                return c with { Initiative = reflex + roll + reaction, TieBreak = 0 };
             }).ToList();
             list = BreakTies(list);
             var next = s with { Combatants = list };
@@ -258,7 +260,12 @@ public sealed partial class EncounterService(
             }
             var actor = queue[index];
             var next = s with { ActiveId = actor.Id, Round = round };
-            if (round != s.Round) next = Log(next, null, "round", $"Rodada {round}.");
+            if (round != s.Round)
+            {
+                // Once-a-Round effects (Spot Weakness, Damage Deflection) come back with the new Round.
+                next = next with { Combatants = next.Combatants.Select(c => c.RoundFlags.Count == 0 ? c : c with { RoundFlags = [] }).ToList() };
+                next = Log(next, null, "round", $"Rodada {round}.");
+            }
             var view = fighters[actor.Id];
             if (view.MustDeathSave) notices.Add(L.T($"{actor.Name} está Mortally Wounded: role o Death Save antes do turno (CP:R p.188).", $"{actor.Name} is Mortally Wounded: roll the Death Save before the turn (CP:R p.188)."));
             if (actor.Conditions.Contains("Prone")) notices.Add(L.T($"{actor.Name} está Prone: precisa do Get Up antes de mover (CP:R p.169).", $"{actor.Name} is Prone: needs a Get Up before moving (CP:R p.169)."));
@@ -303,8 +310,10 @@ public sealed partial class EncounterService(
         if (plan.Jammed) s = await SetJammedAsync(s, attacker, plan.WeaponKey, true, ct);
 
         var results = new List<TargetResult>();
-        foreach (var hit in plan.Hits)
+        foreach (var planned in plan.Hits)
         {
+            var hit = planned;
+            (s, hit) = AwarenessOnHit(s, attacker, fighters[hit.TargetId], hit);
             var (state, result) = await ApplyHitAsync(s, fighters[hit.TargetId], hit, r, notices, ct);
             s = state;
             results.Add(result with { Attack = plan.AttackTotal });
@@ -323,6 +332,32 @@ public sealed partial class EncounterService(
         return Log(s, attacker.Id, "attack",
             L.T($"{attacker.Name} ataca com {plan.WeaponName} ({ModeLabel(plan.Mode)}): d10 {plan.AttackRoll} → {plan.AttackTotal}. {summary}.", $"{attacker.Name} attacks with {plan.WeaponName} ({ModeLabel(plan.Mode)}): d10 {plan.AttackRoll} → {plan.AttackTotal}. {summary}."));
     }
+
+    /// <summary>
+    /// The Solo's once-a-Round Combat Awareness on a hit (CP:R p.146): Spot Weakness adds its points to the damage of the
+    /// attacker's first hit of the Round; Damage Deflection takes 1 per 2 points (up to 5) off the first damage the target
+    /// takes in the Round. Both before armor.
+    /// </summary>
+    private (EncounterState, PlannedHit) AwarenessOnHit(EncounterState s, FighterView attacker, FighterView target, PlannedHit hit)
+    {
+        if (!hit.Hit || hit.Damage <= 0) return (s, hit);
+        var spot = attacker.Awareness("spotWeakness");
+        if (spot > 0 && s.Find(attacker.Id) is { } a && !a.RoundFlags.Contains(SpotWeakness))
+        {
+            hit = hit with { Damage = hit.Damage + spot, Notes = [.. hit.Notes, L.T($"Spot Weakness: +{spot} no dano (CP:R p.146).", $"Spot Weakness: +{spot} damage (CP:R p.146).")] };
+            s = Replace(s, a with { RoundFlags = [.. a.RoundFlags, SpotWeakness] });
+        }
+        var deflect = Math.Min(5, target.Awareness("damageDeflection") / 2);
+        if (deflect > 0 && s.Find(target.Id) is { } t && !t.RoundFlags.Contains(DamageDeflection))
+        {
+            hit = hit with { Damage = Math.Max(0, hit.Damage - deflect), Notes = [.. hit.Notes, L.T($"Damage Deflection: −{deflect} no dano (CP:R p.146).", $"Damage Deflection: −{deflect} damage (CP:R p.146).")] };
+            s = Replace(s, t with { RoundFlags = [.. t.RoundFlags, DamageDeflection] });
+        }
+        return (s, hit);
+    }
+
+    private const string SpotWeakness = "spotWeakness";
+    private const string DamageDeflection = "damageDeflection";
 
     /// <summary>The attacker (alive) and the targets of an attack, from the fight's fighters.</summary>
     private static (FighterView Attacker, List<FighterView> Targets) Participants(Dictionary<string, FighterView> fighters, AttackRequest r)
