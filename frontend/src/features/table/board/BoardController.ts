@@ -1,4 +1,4 @@
-import { Application, Container, Graphics, Sprite, Text, Texture, type FederatedPointerEvent } from 'pixi.js';
+import { Application, Container, Graphics, Rectangle, Sprite, Text, Texture, type FederatedPointerEvent } from 'pixi.js';
 import type { BarrierView, Ping, SceneGrid, SceneImageView, SceneTemplate, SceneView, TemplateShapeName, TokenView } from '../../../api/tableTypes';
 import { resizeFromCorner, rotationFor, snapHalf as snapHalfCell, type Corner, type ImgRect } from '../images';
 import { barrierLook, barrierState } from './barriers';
@@ -439,6 +439,8 @@ export class BoardController {
     entry.node.position.set(p.x, p.y);
     entry.node.rotation = (r.rotation * Math.PI) / 180;
     entry.node.alpha = img.opacity * (this.data.gm && img.hidden ? 0.5 : 1);
+    // The whole rectangle takes clicks (the picture loads later, and its own bounds are not hit-tested reliably).
+    entry.node.hitArea = new Rectangle((-r.width * g.sizePx) / 2, (-r.height * g.sizePx) / 2, r.width * g.sizePx, r.height * g.sizePx);
     if (entry.sprite) { entry.sprite.width = r.width * g.sizePx; entry.sprite.height = r.height * g.sizePx; }
     if (entry.sprite == null) {
       // Until the picture loads, an outline shows where it goes (and catches clicks).
