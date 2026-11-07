@@ -10,6 +10,7 @@ import { NumField } from './NumField';
 import { damageFormula } from './tokens';
 import { cannotFire, quickModes } from './aim';
 import styles from './Table.module.css';
+import { AwarenessBlock } from './AwarenessBlock';
 
 type Roll = (formula: string, kind: RollKind, label: string, visibility: TableVisibility, luck: number) => void;
 
@@ -68,6 +69,7 @@ export function CharacterPanel({ character, encounter, token, onRoll, onTurn, on
         <span className={styles.rowBetween}><span className={styles.label}>HP</span><span><span className={styles.statBig}>{hp}</span><span className={styles.stat}> / {maxHp}</span></span></span>
         <div className={styles.meter}><div className={styles.meterFill} style={{ width: `${maxHp > 0 ? Math.max(0, Math.min(100, (hp / maxHp) * 100)) : 0}%` }} /></div>
       </div>
+      {character && <AwarenessBlock characterId={character.id} roundFlags={fighter?.roundFlags} />}
       <div className={styles.row}>
         {character && <span><span className={styles.label}>{t('Sorte', 'Luck')} </span><span className={styles.stat}>{character.luckAvailable}/{character.luck}</span></span>}
       </div>

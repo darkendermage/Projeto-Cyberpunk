@@ -218,6 +218,8 @@ export interface PlayerFighter {
   mustDeathSave: boolean | null;
   deathSaveTarget: number | null;
   weapons: WeaponView[] | null;
+  /** The own fighter's once-a-Round effects already used (Combat Awareness). */
+  roundFlags?: string[] | null;
 }
 
 export interface PlayerEncounter {

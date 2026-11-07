@@ -14,7 +14,7 @@ public sealed record PlayerFighterDto(
     string Id, string Name, CombatSide Side, CombatantKind Kind, int? Initiative, WoundState WoundState, bool Dead,
     bool Stabilized, IReadOnlyList<string> Conditions, IReadOnlyList<string> Injuries, int? CharacterId, bool Own,
     int? Hp, int? MaxHp, int? SpBody, int? SpHead, int? MaxSpBody, int? MaxSpHead, bool? MustDeathSave, int? DeathSaveTarget,
-    IReadOnlyList<WeaponView>? Weapons);
+    IReadOnlyList<WeaponView>? Weapons, IReadOnlyList<string>? RoundFlags = null);
 
 /// <summary>The fight linked to the active scene, as one seat sees it. The combat log stays with the GM.</summary>
 public sealed record PlayerEncounterDto(int Id, string Name, int Round, string? ActiveId, IReadOnlyList<PlayerFighterDto> Queue,
@@ -55,6 +55,6 @@ public static class PlayerEncounters
             f.Injuries.Select(i => i.Name).ToList(), f.CharacterId, own,
             numbers ? f.Hp : null, numbers ? f.MaxHp : null, numbers ? f.SpBody : null, numbers ? f.SpHead : null,
             numbers ? f.MaxSpBody : null, numbers ? f.MaxSpHead : null, own ? f.MustDeathSave : null, own ? f.DeathSaveTarget : null,
-            own ? f.Weapons : null);
+            own ? f.Weapons : null, own ? f.RoundFlags : null);
     }
 }

@@ -29,6 +29,7 @@ import { sourceFields, tokenInputOf, type TokenSource } from './sources';
 import { DEFAULT_GRID, pxToCell } from './grid';
 import { SHAPE_LABEL } from './templates';
 import styles from './Table.module.css';
+import { AwarenessBlock } from './AwarenessBlock';
 
 export type Act = (fn: () => Promise<SceneView | void>, done?: string) => Promise<void>;
 
@@ -264,6 +265,7 @@ export function TokenInspector({ scene, token, seats, encounter, act, onDone }: 
         <input className={styles.grow} aria-label={t('Nome', 'Name')} value={form.label} maxLength={40} onChange={(e) => setForm({ ...form, label: e.target.value })} />
         <input type="color" aria-label={t('Cor', 'Color')} value={form.color ?? '#00f0ff'} onChange={(e) => setForm({ ...form, color: e.target.value })} />
       </div>
+      {token.characterId != null && <AwarenessBlock characterId={token.characterId} roundFlags={fighter?.roundFlags} />}
       <div className={styles.row}>
         <Field label={t('Largura', 'Width')}><NumField label={t('Largura em células', 'Width in cells')} value={form.width ?? 1} min={0.25} max={20} step={0.25} onChange={(width) => setForm({ ...form, width })} /></Field>
         <Field label={t('Altura', 'Height')}><NumField label={t('Altura em células', 'Height in cells')} value={form.height ?? 1} min={0.25} max={20} step={0.25} onChange={(height) => setForm({ ...form, height })} /></Field>
