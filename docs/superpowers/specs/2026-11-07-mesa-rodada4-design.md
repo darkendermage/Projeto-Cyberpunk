@@ -34,6 +34,7 @@ Primeiro vêm os bugs. O pacote D, de regras, é o mais pesado e fica para depoi
 | — | Música da mesa pelo YouTube | G |
 | — | Qualidade da arma (Poor/Excellent) na ficha | A (campo) + D (efeito) |
 | — | Aba Equipamento separada em Armas, Armaduras, Itens diversos e Roupas | A |
+| — | Botão de recarregar a arma na mesa e no combate | C |
 
 ## Decisões tomadas
 
@@ -206,6 +207,35 @@ Primeiro vêm os bugs. O pacote D, de regras, é o mais pesado e fica para depoi
 - **Continua oculto do jogador:** só o `Through` (quanto passou para o HP) e o estado numérico do NPC. O HP restante do NPC já não está na mensagem.
 - **Dados 3D:** os dados de ataque e de dano de qualquer alvo animam para todos (`throwOf`).
 - **Testes:** `ForSeat` com alvo NPC passa a carregar o dano e os dados, mas não o `Through`.
+
+### C6. Botão de recarregar (pedido extra do Yuri)
+**Como é hoje:**
+- A ficha já sabe recarregar um PC (`InventoryOperations.Reload`). A rotina tira as balas da munição compatível do inventário e prefere o tipo já carregado.
+- Na mesa, porém, não há botão para isso.
+- No combate, NPCs e genéricos não têm como recarregar o pente (`Combatant.Ammo`).
+
+**Mudança:**
+- **Botão "Recarregar":** fica em cada arma com pente.
+  - Na aba Personagem do jogador.
+  - Nos chips de arma da faixa e na fila do /combat: o jogador vê nas próprias armas, o mestre nas de qualquer combatente.
+  - Fica desligado quando o pente está cheio. A dica mostra balas/pente.
+- **Em combate:**
+  - Recarregar é uma Ação (CP:R p.168/171), e o log registra "{nome} recarrega {arma} (Ação)".
+  - O jogador só recarrega no próprio turno, como no ataque. O mestre recarrega a qualquer momento.
+  - Durante um ataque pendente (D1), recarregar é recusado como as outras ações.
+- **Fora de combate:** o jogador recarrega o próprio PC pela mesa a qualquer hora.
+- **De onde vêm as balas:**
+  - **PC:** usa `CharacterService.ReloadAsync` (munição do inventário, tipo carregado primeiro). Sem munição compatível, aparece a mensagem que já existe.
+  - **NPC e genérico:** o pente volta ao cheio, porque eles não têm inventário de munição.
+- **Rotas:**
+  - `POST /api/table/play/reload { weapon }`;
+  - `POST /api/encounters/{id}/combatants/{cid}/reload { version, weapon }`.
+- **Testes:**
+  - O PC recarrega pelo inventário dentro do combate.
+  - O NPC volta ao pente cheio.
+  - O jogador fora do turno recebe 409.
+  - Pente cheio é recusado.
+  - Arma sem pente é recusada.
 
 ---
 

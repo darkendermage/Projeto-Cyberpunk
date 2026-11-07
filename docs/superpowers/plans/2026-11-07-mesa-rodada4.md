@@ -322,6 +322,37 @@
 - [ ] **Step 4: Run, expect PASS; check in the browser** that the button opens the `AimBar` exactly like the chip.
 - [ ] **Step 5: Commit** `Mesa: botão Ataque da aba Personagem mira como os cartões; acerto e dano visíveis a todos`
 
+### Task 11b: Reload button (C6)
+
+**Files:**
+- Modify: `backend/src/CyberpunkDb.Application/Encounters/EncounterService.cs` (new `ReloadAsync`), `EncounterContracts.cs` (`ReloadCombatantRequest`)
+- Modify: `backend/src/CyberpunkDb.Api/Controllers/EncountersController.cs`, `TablePlayController.cs`, `backend/src/CyberpunkDb.Application/Table/TableTurnService.cs` (from Task 10: `ReloadAsync(seat, weapon)`)
+- Modify: `frontend/src/api/table.ts` (`playerApi.reload`), `frontend/src/api/encounters.ts`, `frontend/src/features/table/PlayerPanels.tsx`, `SceneStrip.tsx` (a reload icon next to each magazine chip), `PlayerTablePage.tsx`, `GmTablePage.tsx`, `frontend/src/features/combat/EncounterView.tsx` (queue weapon chips)
+- Test: `backend/tests/CyberpunkDb.Tests/Integration/TableReloadApiTests.cs`
+
+**Interfaces:**
+- Produces:
+  - `record ReloadCombatantRequest(int Version, string Weapon)`;
+  - `EncounterService.ReloadAsync(int id, string combatantId, ReloadCombatantRequest r, CancellationToken ct)`:
+    - **PC:** calls `characters.ReloadAsync(charId, new ReloadRequest(sheetVersion, weapon))`;
+    - **NPC and generic:** `Ammo[weapon] = Magazine`;
+    - logs `"{name} recarrega {weapon} (Ação)"`;
+    - refuses a weapon without a magazine or with a full one (400).
+  - `POST /api/encounters/{id}/combatants/{cid}/reload` and `POST /api/table/play/reload { weapon }`.
+    - In a fight (the PC is in the active scene's fight): only on the PC's turn, otherwise 409.
+    - Outside a fight: `characters.ReloadAsync` directly.
+  - TS `canReload(w: WeaponView): string | null`: null when `magazine != null && (rounds ?? 0) < magazine`, otherwise the reason ("Pente cheio / Full magazine", "Sem pente / No magazine").
+
+- [ ] **Step 1: Failing tests:**
+  - `Pc_reloads_from_inventory_in_fight` (fire 1 round, reload → rounds = magazine, the inventory ammo drops);
+  - `Npc_reload_refills_magazine`;
+  - `Player_reload_out_of_turn_is_409`;
+  - `Full_magazine_is_400`;
+  - `Player_reload_outside_fight_works`;
+  - vitest `canReload`.
+- [ ] **Step 2: Implement** the routes and the "Recarregar / Reload" buttons (player: own weapons, disabled out of turn in a fight; GM: any fighter's chips and /combat queue chips).
+- [ ] **Step 3: Commit** `Mesa e combate: botão de recarregar (PC pelo inventário, NPC enche o pente)`
+
 ---
 
 ## Package F — injury icons
