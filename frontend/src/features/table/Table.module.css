@@ -435,7 +435,9 @@
   color: var(--text-faint);
 }
 .stripName .dot { display: inline-block; margin-right: 5px; vertical-align: middle; }
-.weaponChipGroup { display: inline-flex; gap: 2px; }
+.weaponChipGroup { display: flex; gap: 2px; min-width: 0; }
+.weaponChipGroup > :first-child { flex: 1; min-width: 0; }
+.weaponChipGroup > :not(:first-child) { flex: none; }
 
 /* A pending attack: the decision it waits on (dodge, Critical Injury). */
 .pendingCard {

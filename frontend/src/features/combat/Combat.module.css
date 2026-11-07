@@ -261,4 +261,6 @@
 .actionsHelp { display: flex; flex-direction: column; gap: 6px; padding-left: 18px; font-size: 13.5px; color: var(--text-2); }
 
 .dialog { display: flex; flex-direction: column; gap: 14px; }
-.weaponChipGroup { display: inline-flex; gap: 2px; }
+.weaponChipGroup { display: flex; gap: 2px; min-width: 0; }
+.weaponChipGroup > :first-child { flex: 1; min-width: 0; }
+.weaponChipGroup > :not(:first-child) { flex: none; }
