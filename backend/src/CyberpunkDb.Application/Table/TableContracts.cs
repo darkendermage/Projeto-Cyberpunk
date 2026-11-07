@@ -11,7 +11,7 @@ public sealed record CreateSeatRequest(string Label, int? CharacterId = null, st
 public sealed record UpdateSeatRequest(string Label, int? CharacterId, string Color);
 
 /// <summary>A player's screen on load: their seat and the active scene (null when the GM shows none).</summary>
-public sealed record PlayerStateDto(PlayerSeatDto Seat, SceneView? Scene);
+public sealed record PlayerStateDto(PlayerSeatDto Seat, SceneView? Scene, TableMusic? Music = null);
 
 /// <summary>A free seat as the general link's entrance shows it: never its key.</summary>
 public sealed record LobbySeatDto(int Id, string Label, string Color, string? CharacterName, bool HasPortrait);

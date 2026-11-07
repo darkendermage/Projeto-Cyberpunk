@@ -32,6 +32,9 @@ public interface ITableNotifier
     /// refreshes the party strip, and the owner their own sheet.
     /// </summary>
     Task PartyAsync(int? characterId, CancellationToken ct);
+
+    /// <summary>The table's music changed (null: stopped): every screen follows.</summary>
+    Task MusicAsync(TableMusic? music, CancellationToken ct);
 }
 
 /// <summary>For hosts without live screens (and tests that don't care).</summary>
@@ -44,4 +47,5 @@ public sealed class NullTableNotifier : ITableNotifier
     public Task MessageAsync(TableMessageDto gm, IReadOnlyDictionary<int, TableMessageDto> seats, CancellationToken ct) => Task.CompletedTask;
     public Task SeatsAsync(CancellationToken ct) => Task.CompletedTask;
     public Task PartyAsync(int? characterId, CancellationToken ct) => Task.CompletedTask;
+    public Task MusicAsync(TableMusic? music, CancellationToken ct) => Task.CompletedTask;
 }

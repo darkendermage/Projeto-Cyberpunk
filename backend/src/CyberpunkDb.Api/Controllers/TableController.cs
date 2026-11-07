@@ -12,7 +12,7 @@ namespace CyberpunkDb.Api.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/table")]
-public sealed class TableController(SeatService seats, MediaService media, SceneService scenes, TableFightService fights, TableAttackService attacks, TablePartyService party, TableRulesService rules, ChatService chat, TablePresence presence, TunnelService tunnel, TableSessionService sessions, TableSettingsService settings) : ControllerBase
+public sealed class TableController(SeatService seats, MediaService media, SceneService scenes, TableFightService fights, TableAttackService attacks, TablePartyService party, TableRulesService rules, ChatService chat, TablePresence presence, TunnelService tunnel, TableSessionService sessions, TableSettingsService settings, TableMusicService music) : ControllerBase
 {
     // ------------------------------------------------------------------ internet tunnel
 
@@ -50,6 +50,33 @@ public sealed class TableController(SeatService seats, MediaService media, Scene
         await settings.SetAsync(TableSettingsService.GmDiceColor, color, ct);
         return new DiceColorRequest(color);
     }
+
+    // ------------------------------------------------------------------ music (YouTube)
+
+    [HttpGet("music")]
+    public Task<TableMusicStateDto> Music(CancellationToken ct) => music.StateAsync(ct);
+
+    /// <summary>Loads a YouTube video or playlist link, paused at the start.</summary>
+    [HttpPut("music")]
+    public Task<TableMusicStateDto> LoadMusic(LoadMusicRequest request, CancellationToken ct) => music.LoadAsync(request, ct);
+
+    [HttpPost("music/play")]
+    public Task<TableMusicStateDto> PlayMusic(MusicPositionRequest request, CancellationToken ct) => music.PlayAsync(request, ct);
+
+    [HttpPost("music/pause")]
+    public Task<TableMusicStateDto> PauseMusic(CancellationToken ct) => music.PauseAsync(ct);
+
+    [HttpPost("music/seek")]
+    public Task<TableMusicStateDto> SeekMusic(MusicPositionRequest request, CancellationToken ct) => music.SeekAsync(request, ct);
+
+    [HttpPost("music/next")]
+    public Task<TableMusicStateDto> NextMusic(CancellationToken ct) => music.NextAsync(ct);
+
+    [HttpPost("music/volume")]
+    public Task<TableMusicStateDto> MusicVolume(MusicVolumeRequest request, CancellationToken ct) => music.VolumeAsync(request, ct);
+
+    [HttpDelete("music")]
+    public Task<TableMusicStateDto> StopMusic(CancellationToken ct) => music.StopAsync(ct);
 
     // ------------------------------------------------------------------ sessions
 

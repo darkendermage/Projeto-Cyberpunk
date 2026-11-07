@@ -15,7 +15,7 @@ namespace CyberpunkDb.Api.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/table/play")]
-public sealed class TablePlayController(SeatService seats, SceneService scenes, EncounterService encounters, CharacterService characters, NpcPortraitService npcImages, ChatService chat, TablePresence presence, TablePartyService party, TableRulesService rules, TableAttackService attacks, TableTurnService turns) : ControllerBase
+public sealed class TablePlayController(SeatService seats, SceneService scenes, EncounterService encounters, CharacterService characters, NpcPortraitService npcImages, ChatService chat, TablePresence presence, TablePartyService party, TableRulesService rules, TableAttackService attacks, TableTurnService turns, TableMusicService music) : ControllerBase
 {
     public const string SeatHeader = "X-Seat";
 
@@ -52,7 +52,7 @@ public sealed class TablePlayController(SeatService seats, SceneService scenes, 
     public async Task<PlayerStateDto> State(CancellationToken ct)
     {
         var seat = await SeatAsync(ct);
-        return new PlayerStateDto(SeatService.ToPlayer(seat), await scenes.PlayerSceneAsync(seat, ct));
+        return new PlayerStateDto(SeatService.ToPlayer(seat), await scenes.PlayerSceneAsync(seat, ct), await music.CurrentAsync(ct));
     }
 
     /// <summary>The fight linked to the active scene, as this seat sees it (204 when there is none).</summary>
