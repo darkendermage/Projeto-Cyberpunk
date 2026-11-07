@@ -33,6 +33,7 @@ Primeiro vêm os bugs. O pacote D, de regras, é o mais pesado e fica para depoi
 | 17 | Botão "Ataque" da aba Personagem igual aos cartões | C |
 | — | Música da mesa pelo YouTube | G |
 | — | Qualidade da arma (Poor/Excellent) na ficha | A (campo) + D (efeito) |
+| — | Aba Equipamento separada em Armas, Armaduras, Itens diversos e Roupas | A |
 
 ## Decisões tomadas
 
@@ -158,6 +159,22 @@ Primeiro vêm os bugs. O pacote D, de regras, é o mais pesado e fica para depoi
   - A qualidade é salva por exemplar.
   - O padrão vem do catálogo.
   - Excellent soma +1 no `WeaponLine` e no `FighterView`.
+
+### A5. Equipamento separado por tipo (pedido extra do Yuri)
+**Como é hoje:** a aba Equipamento tem só dois painéis, "Inventário" (tudo que não é moda) e "Moda".
+
+**Mudança:** quatro painéis, nesta ordem:
+- **Armas:** categorias `Weapon`, `WeaponAttachment` e `Ammunition`, porque munição e acessórios ficam junto das armas. O seletor de Qualidade de A4 fica neste painel.
+- **Armaduras:** categoria `Armor` que não é moda, ou seja, as linhas com SP, incluindo escudos (`shieldHp`).
+- **Itens diversos:** todo o resto que não é moda (`Gear`, `Drug`, `Netrunning`, `Vehicle`, upgrades etc.).
+- **Roupas:** as linhas com `fashion`, roupas e Fashionware. É o antigo "Moda".
+
+**Regras da tela:**
+- Cada painel mostra a contagem no título e uma mensagem curta quando está vazio.
+- A ordenação por coluna continua funcionando dentro de cada painel.
+- A regra de agrupamento fica numa função pura (`groupInventory`), que é a mesma usada no popup "Minha ficha" (E1).
+
+**Testes:** vitest para `groupInventory` (arma, munição, acessório, armadura, escudo, roupa, Fashionware e item avulso).
 
 ---
 
