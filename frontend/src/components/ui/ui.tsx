@@ -329,6 +329,9 @@ export function Tooltip({ content, children }: { content?: ReactNode; children: 
   );
 }
 
+/** Open windows, the topmost last: only it answers Esc and keeps Tab inside (a window opened from another one). */
+const openModals: object[] = [];
+
 export function Modal({
   open, onClose, title, children, wide, labelledBy, variant = 'center',
 }: {
@@ -350,7 +353,10 @@ export function Modal({
   useEffect(() => {
     if (!open) return;
     const previous = document.activeElement as HTMLElement | null;
+    const token = {};
+    openModals.push(token);
     const onKey = (e: KeyboardEvent) => {
+      if (openModals[openModals.length - 1] !== token) return;
       if (e.key === 'Escape') close.current();
       if (e.key === 'Tab' && ref.current) {
         const focusable = ref.current.querySelectorAll<HTMLElement>(
@@ -367,7 +373,8 @@ export function Modal({
     requestAnimationFrame(() => ref.current?.querySelector<HTMLElement>('[data-autofocus]')?.focus() ?? ref.current?.focus());
     return () => {
       document.removeEventListener('keydown', onKey);
-      document.body.style.overflow = '';
+      openModals.splice(openModals.indexOf(token), 1);
+      if (openModals.length === 0) document.body.style.overflow = '';
       previous?.focus?.();
     };
   }, [open]);
