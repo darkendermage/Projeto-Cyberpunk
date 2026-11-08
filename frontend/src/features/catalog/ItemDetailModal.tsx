@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import { AlertTriangle, BadgeCheck, ExternalLink } from 'lucide-react';
 import type { FieldDescriptor, Item } from '../../api/types';
 import { useCategoryKey, useItemDetail, useSchema } from '../../api/hooks';
+import { seatContext } from '../../api/client';
 import { ItemArt } from '../../components/art/ItemArt';
 import { ErrorState, Modal, Spinner } from '../../components/ui/ui';
 import { DATA_ORIGIN_LABEL, formatAttribute, formatEb, PRICE_CATEGORY_LABEL, RULE_SYSTEM_LABEL } from '../../lib/format';
@@ -20,6 +21,8 @@ export function ItemDetailModal({ itemId, onClose }: { itemId: number | null; on
   const schema = useSchema(item?.category);
   const navigate = useNavigate();
   const keyFor = useCategoryKey();
+  // On a player's screen (the Gear tab through the table): read only, no favorites, lists or jumps into the catalog.
+  const player = seatContext() != null;
 
   const openRelated = (category: string, id: number) => navigate(`/catalog/${keyFor(category)}?item=${id}`);
 
@@ -46,11 +49,13 @@ export function ItemDetailModal({ itemId, onClose }: { itemId: number | null; on
                 {item.priceCategory && <span className={styles.priceCat}>{PRICE_CATEGORY_LABEL[item.priceCategory] ?? item.priceCategory}</span>}
               </div>
               {item.priceNote && <p className={styles.priceNote}>{item.priceNote}</p>}
-              <div className={styles.actions}>
-                <FavoriteButton item={item} variant="inline" />
-                <CompareButton item={item} variant="inline" />
-                <AddToListMenu item={item} />
-              </div>
+              {!player && (
+                <div className={styles.actions}>
+                  <FavoriteButton item={item} variant="inline" />
+                  <CompareButton item={item} variant="inline" />
+                  <AddToListMenu item={item} />
+                </div>
+              )}
             </div>
           </header>
 
@@ -93,7 +98,7 @@ export function ItemDetailModal({ itemId, onClose }: { itemId: number | null; on
 
           {item.category === 'weapons' && <WeaponRangeSection item={item} />}
 
-          {detail.data!.relations.length > 0 && (
+          {!player && detail.data!.relations.length > 0 && (
             <section className={styles.relations}>
               {detail.data!.relations.map((group) => (
                 <div key={group.key}>

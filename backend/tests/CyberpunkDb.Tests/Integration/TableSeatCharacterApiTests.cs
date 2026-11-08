@@ -43,6 +43,22 @@ public class TableSeatCharacterApiTests(ApiFactory factory)
         (await _t.Raw(_t.Player, HttpMethod.Get, "/api/characters/store?q=pistol&page=1&pageSize=12", seat: seat.Token)).StatusCode.Should().Be(HttpStatusCode.OK);
     }
 
+    [Fact]
+    public async Task Item_page_reads_pass_on_player_port()
+    {
+        // The Gear tab opens an item's catalog page (round 7): the item, the category list and its schema.
+        var (seat, own, _) = await Seated("PaginaItem");
+        var itemId = own.Report.Inventory.First().ItemId;
+        var item = await _t.Send<System.Text.Json.Nodes.JsonObject>(_t.Gm, HttpMethod.Get, $"/api/items/{itemId}");
+        var category = item["item"]!["category"]!.GetValue<string>();
+
+        (await _t.Raw(_t.Player, HttpMethod.Get, $"/api/items/{itemId}", seat: seat.Token)).StatusCode.Should().Be(HttpStatusCode.OK);
+        (await _t.Raw(_t.Player, HttpMethod.Get, "/api/categories", seat: seat.Token)).StatusCode.Should().Be(HttpStatusCode.OK);
+        (await _t.Raw(_t.Player, HttpMethod.Get, $"/api/categories/{category}/schema", seat: seat.Token)).StatusCode.Should().Be(HttpStatusCode.OK);
+        (await _t.Raw(_t.Player, HttpMethod.Post, "/api/catalog/weapons/search", new { }, seat.Token)).StatusCode.Should().Be(HttpStatusCode.NotFound);
+        (await _t.Raw(_t.Player, HttpMethod.Get, "/api/favorites/ids", seat: seat.Token)).StatusCode.Should().Be(HttpStatusCode.NotFound);
+    }
+
     [Theory]
     [InlineData("/api/characters/{other}")]
     [InlineData("/api/characters/{own}/../{other}")]

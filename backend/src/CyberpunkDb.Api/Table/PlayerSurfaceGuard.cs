@@ -4,8 +4,9 @@ namespace CyberpunkDb.Api.Table;
 
 /// <summary>
 /// The players reach the app through a public tunnel, so their port answers only what the virtual table needs: the
-/// player API (which also checks the seat link), the table hub, uploaded images and the frontend files. Everything
-/// else — the catalog, sheets, the updater — answers 404 there. The tunnel arrives from 127.0.0.1, so the port, not
+/// player API (which also checks the seat link), the table hub, uploaded images, the catalog's category list and schemas
+/// (the item page of the Gear tab) and the frontend files. Everything else — catalog searches, lists, sheets, the
+/// updater — answers 404 there. The tunnel arrives from 127.0.0.1, so the port, not
 /// the address, tells the two apart.
 ///
 /// On the GM's port, the table routes refuse cross-site requests: a WebSocket skips CORS, and a page on another site
@@ -56,11 +57,28 @@ public sealed class PlayerSurfaceGuard(RequestDelegate next, IOptions<TableOptio
         var path = request.Path;
         if (path.StartsWithSegments("/api"))
             return path.StartsWithSegments("/api/table/play")
-                   || (path.StartsWithSegments("/api/table/media") && (HttpMethods.IsGet(request.Method) || HttpMethods.IsHead(request.Method)));
+                   || (path.StartsWithSegments("/api/table/media") && (HttpMethods.IsGet(request.Method) || HttpMethods.IsHead(request.Method)))
+                   || CatalogPageRead(request);
         if (path.StartsWithSegments("/hubs")) return path.StartsWithSegments("/hubs/table");
         if (path.StartsWithSegments("/swagger")) return false;
         // The frontend bundle and its index.html: read-only files.
         return HttpMethods.IsGet(request.Method) || HttpMethods.IsHead(request.Method);
+    }
+
+    /// <summary>
+    /// What the item page the Gear tab opens needs besides the item (which SeatCharacterAccess serves with the seat key):
+    /// the category list and a category's schema, read only (round 7). Searches, lists and favorites stay closed.
+    /// </summary>
+    private static bool CatalogPageRead(HttpRequest request)
+    {
+        if (!HttpMethods.IsGet(request.Method)) return false;
+        var segments = (request.Path.Value ?? "").Trim('/').Split('/');
+        return segments switch
+        {
+            ["api", "categories"] => true,
+            ["api", "categories", _, "schema"] => true,
+            _ => false,
+        };
     }
 
     private const string SeatPage = "/mesa/j/";

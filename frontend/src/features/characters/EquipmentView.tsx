@@ -1,15 +1,14 @@
-import { useState, type ReactNode } from 'react';
-import { Crosshair, Gift, Glasses, Package, Shield, Shirt, ShoppingBag, Trash2, Wallet, X } from 'lucide-react';
+import { useState } from 'react';
+import { Crosshair, Gift, Glasses, History, ShoppingBag, Wallet, X } from 'lucide-react';
 import { problemMessage, useCharacterCommand, useCharacterEvents } from '../../api/characters';
 import type { CharacterDetail, CharacterRules, InventoryLine, WearableLine } from '../../api/characterTypes';
-import { Button, IconButton, Modal, NumberInput, Select } from '../../components/ui/ui';
+import { Button, Modal, NumberInput, Select } from '../../components/ui/ui';
 import { formatEb } from '../../lib/format';
 import { useToast } from '../../state/ToastContext';
-import { CATEGORY_LABEL, formatDate, ITEM_STATE_LABEL, QUALITY_LABEL, signed } from './characterLabels';
-import { groupInventory } from './inventoryGroups';
-import { RefundButton, SheetPanel, SortButton, SortHeader, StateTag } from './CharacterUi';
+import { formatDate, signed } from './characterLabels';
+import { SheetPanel, StateTag } from './CharacterUi';
+import { EquippedSection, GearStats, InventorySection, ItemPage, type GearActions } from './GearSections';
 import { Attachments, type Run } from './CombatPanels';
-import { ariaSort, sortRows, type SortState } from './sorting';
 import { StorePicker, type PurchaseInput } from './StorePicker';
 import type { SheetEditor } from './useSheetEditor';
 import styles from './Characters.module.css';
@@ -37,19 +36,35 @@ export function EquipmentView({ detail, editor }: Props) {
     }
   };
   const busy = command.isPending;
+  const finalized = detail.sheet.creation.finalized;
+  const [store, setStore] = useState<StoreMode | null>(null);
+  const [removing, setRemoving] = useState<InventoryLine | null>(null);
+  const [opened, setOpened] = useState<InventoryLine | null>(null);
+  const actions: GearActions = { run, busy, finalized, onOpen: setOpened, onRemove: setRemoving };
 
+  // Round 7: totals, what the character has on them beside what is stored (paged), then weapon and wearable
+  // upgrades, then the money.
   return (
-    <div className={styles.lifepath}>
-      <div className={styles.column}>
-        <WalletPanel detail={detail} run={run} busy={busy} />
+    <div className={styles.gear}>
+      <GearStats detail={detail} />
+      <div className={styles.gearColumns}>
+        <EquippedSection detail={detail} actions={actions} />
+        <InventorySection detail={detail} actions={actions} onAdd={finalized ? () => setStore('buy') : undefined} />
       </div>
-      <div className={styles.column}>
-        <InventoryPanels detail={detail} run={run} busy={busy} />
-      </div>
-      <div className={styles.column}>
-        <AttachmentsPanel detail={detail} run={run} busy={busy} />
-        <WearablesPanel detail={detail} run={run} busy={busy} />
-      </div>
+      <section className={styles.gearPanel} aria-label={t('Modificações', 'Upgrades')}>
+        <header className={styles.gearHead}>
+          <h3 className={styles.gearTitle}><span>03 /</span> {t('Modificações', 'Upgrades')}</h3>
+          <span className={styles.muted}>{t('upgrades das armas e vestíveis', 'weapon and wearable upgrades')}</span>
+        </header>
+        <div className={styles.gearMods}>
+          <AttachmentsPanel detail={detail} run={run} busy={busy} />
+          <WearablesPanel detail={detail} run={run} busy={busy} />
+        </div>
+      </section>
+      <FinancePanel detail={detail} run={run} busy={busy} onStore={setStore} />
+      <StoreModal detail={detail} mode={store} busy={busy} run={run} onClose={() => setStore(null)} />
+      {removing && <RemoveItemDialog item={removing} onClose={() => setRemoving(null)} run={run} busy={busy} />}
+      <ItemPage item={opened} onClose={() => setOpened(null)} />
     </div>
   );
 }
@@ -58,175 +73,87 @@ export function EquipmentView({ detail, editor }: Props) {
 
 type StoreMode = 'buy' | 'receive';
 
-function WalletPanel({ detail, run, busy }: { detail: CharacterDetail; run: Run; busy: boolean }) {
-  const [store, setStore] = useState<StoreMode | null>(null);
+/** Financeiro: the balance, the last transaction, buy and receive, and the history (with manual entries) in a window. */
+function FinancePanel({ detail, run, busy, onStore }: { detail: CharacterDetail; run: Run; busy: boolean; onStore: (mode: StoreMode) => void }) {
+  const [history, setHistory] = useState(false);
   const [amount, setAmount] = useState('');
   const [reason, setReason] = useState('');
   const ledger = useCharacterEvents(detail.id);
   const finalized = detail.sheet.creation.finalized;
-  const entries = (ledger.data ?? []).filter((e) => e.kind === 'Ledger').slice(0, 20);
-
-  const buy = async (input: PurchaseInput) => { await run('purchase', { ...input }, input.received ? t('Item recebido.', 'Item received.') : t('Compra registrada.', 'Purchase recorded.')); };
+  const entries = (ledger.data ?? []).filter((e) => e.kind === 'Ledger');
+  const last = entries[0];
 
   return (
-    <SheetPanel title={t('Dinheiro e compras', 'Money and purchases')} icon={<Wallet size={16} />}
-      actions={(
-        <>
+    <section className={`${styles.gearPanel} ${styles.gearFinance}`} aria-label={t('Financeiro', 'Money')}>
+      <div className={styles.column} style={{ gap: 2 }}>
+        <span className={styles.gearFinanceTitle}><Wallet size={15} aria-hidden /> {t('Financeiro', 'Money')}</span>
+        <span className={styles.muted}>{last ? t(`Última movimentação: ${tv(last.description)}`, `Last transaction: ${tv(last.description)}`) : t('Nenhuma movimentação.', 'No transactions.')}</span>
+      </div>
+      <div className={styles.gearFinanceRight}>
+        <strong className={`${styles.green} ${styles.gearBalance}`}>{formatEb(detail.sheet.wallet.balance)} eb</strong>
+        <div className={styles.row}>
           <Button icon={<ShoppingBag size={14} />} disabled={!finalized} title={finalized ? t('Comprar com o saldo', 'Buy with the balance') : t('Compras da criação ficam no passo Equipamento', 'Creation purchases are in the Gear step')}
-            onClick={() => setStore('buy')}>{t('Comprar', 'Buy')}</Button>
+            onClick={() => onStore('buy')}>{t('Comprar', 'Buy')}</Button>
           <Button icon={<Gift size={14} />} disabled={!finalized}
             title={finalized ? t('Troca, presente ou saque: entra sem pagar', 'Trade, gift or loot: comes in without paying') : t('Itens sem custo só entram depois da criação', 'Free items only come in after creation')}
-            onClick={() => setStore('receive')}>{t('Receber', 'Receive')}</Button>
-        </>
-      )}>
-      <div className={styles.bigNumbers}>
-        <strong>{formatEb(detail.sheet.wallet.balance)}</strong>
-        <span className={styles.muted}>{t('eurodólares', 'eurodollars')}</span>
-      </div>
-      {finalized && (
-        <div className={styles.row}>
-          <input className={`${styles.input} ${styles.inputSmall}`} style={{ width: 90 }} type="number" value={amount} placeholder="± eb"
-            aria-label={t('Valor do ajuste', 'Adjustment amount')} onChange={(e) => setAmount(e.target.value)} />
-          <input className={`${styles.input} ${styles.grow}`} value={reason} placeholder={t('Motivo (pagamento, despesa…)', 'Reason (payment, expense…)')} aria-label={t('Motivo', 'Reason')}
-            onChange={(e) => setReason(e.target.value)} />
-          <Button disabled={busy || !Number(amount) || !reason.trim()} onClick={async () => {
-            if (await run('balance', { amount: Number(amount), reason }, t('Saldo ajustado.', 'Balance adjusted.'))) { setAmount(''); setReason(''); }
-          }}>{t('Lançar', 'Record')}</Button>
+            onClick={() => onStore('receive')}>{t('Receber', 'Receive')}</Button>
+          <Button variant="ghost" icon={<History size={14} />} onClick={() => setHistory(true)}>{t('Ver histórico', 'View history')}</Button>
         </div>
-      )}
-
-      <div className={styles.column} style={{ gap: 4 }}>
-        <span className={styles.idLabel}>{t('Movimentações', 'Transactions')}</span>
-        {entries.length === 0 && <span className={`${styles.small} ${styles.muted}`}>{t('Nenhuma movimentação.', 'No transactions.')}</span>}
-        <ul className={styles.list}>
-          {entries.map((e) => (
-            <li key={e.id} className={styles.listItem}>
-              <span className={`${styles.small} ${styles.grow}`}>{tv(e.description)}{e.isManual && <span className={styles.tag}>manual</span>}
-                <span className={styles.source}> · {formatDate(e.createdAt)}</span></span>
-              {e.amount != null && e.amount !== 0 && <span className={`${styles.mono} ${e.amount > 0 ? styles.green : styles.red}`}>{signed(e.amount)}</span>}
-            </li>
-          ))}
-        </ul>
       </div>
 
-      <Modal open={store !== null} onClose={() => setStore(null)} title={store === 'receive' ? t('Receber itens sem pagar', 'Receive items without paying') : t('Comprar itens', 'Buy items')} wide>
+      <Modal open={history} onClose={() => setHistory(false)} title={t('Histórico financeiro', 'Money history')}>
         <div className={styles.panel} style={{ clipPath: 'none', border: 'none' }}>
-          <p className={styles.small}>
-            {store === 'receive'
-              ? t('Itens trocados com outros jogadores, presentes e saques entram sem custo e ficam no histórico com a origem. Cyberware recebido vai para o inventário; instalar continua custando Humanity.', 'Items traded with other players, gifts and loot come in free and stay in the history with their origin. Received cyberware goes to the inventory; installing it still costs Humanity.')
-              : t(`Saldo: ${formatEb(detail.sheet.wallet.balance)}. Compras saem do saldo e o servidor recusa as que passam dele.`, `Balance: ${formatEb(detail.sheet.wallet.balance)}. Purchases come out of the balance and the server refuses those that go over it.`)}
-            {' '}{t('Nada é equipado automaticamente.', 'Nothing is equipped automatically.')}
-          </p>
-          <StorePicker busy={busy} creationBudgets={false} onBuy={buy} creating={false} receiving={store === 'receive'}
-            available={{ balance: detail.sheet.wallet.balance }} />
+          <div className={styles.bigNumbers}>
+            <strong>{formatEb(detail.sheet.wallet.balance)}</strong>
+            <span className={styles.muted}>{t('eurodólares', 'eurodollars')}</span>
+          </div>
+          {finalized && (
+            <div className={styles.row}>
+              <input className={`${styles.input} ${styles.inputSmall}`} style={{ width: 90 }} type="number" value={amount} placeholder="± eb"
+                aria-label={t('Valor do ajuste', 'Adjustment amount')} onChange={(e) => setAmount(e.target.value)} />
+              <input className={`${styles.input} ${styles.grow}`} value={reason} placeholder={t('Motivo (pagamento, despesa…)', 'Reason (payment, expense…)')} aria-label={t('Motivo', 'Reason')}
+                onChange={(e) => setReason(e.target.value)} />
+              <Button disabled={busy || !Number(amount) || !reason.trim()} onClick={async () => {
+                if (await run('balance', { amount: Number(amount), reason }, t('Saldo ajustado.', 'Balance adjusted.'))) { setAmount(''); setReason(''); }
+              }}>{t('Lançar', 'Record')}</Button>
+            </div>
+          )}
+          {entries.length === 0 && <span className={`${styles.small} ${styles.muted}`}>{t('Nenhuma movimentação.', 'No transactions.')}</span>}
+          <ul className={styles.list}>
+            {entries.slice(0, 100).map((e) => (
+              <li key={e.id} className={styles.listItem}>
+                <span className={`${styles.small} ${styles.grow}`}>{tv(e.description)}{e.isManual && <span className={styles.tag}>manual</span>}
+                  <span className={styles.source}> · {formatDate(e.createdAt)}</span></span>
+                {e.amount != null && e.amount !== 0 && <span className={`${styles.mono} ${e.amount > 0 ? styles.green : styles.red}`}>{signed(e.amount)}</span>}
+              </li>
+            ))}
+          </ul>
         </div>
       </Modal>
-    </SheetPanel>
+    </section>
   );
 }
 
-// ------------------------------------------------------------ inventory
-
-const RECEIVED_LABEL: Partial<Record<InventoryLine['origin'], string>> = { Trade: 'troca', Gift: 'presente', Loot: 'saque' };
-
-/** Gear and fashion (clothing and Fashionware, CP:R p.111) in separate panels, so the outfit doesn't bury the arsenal. */
-function InventoryPanels({ detail, run, busy }: { detail: CharacterDetail; run: Run; busy: boolean }) {
-  const [removing, setRemoving] = useState<InventoryLine | null>(null);
-  const finalized = detail.sheet.creation.finalized;
-  const groups = groupInventory(detail.report.inventory);
-  const table = { run, busy, finalized, onRemove: setRemoving };
-  const panel = (items: InventoryLine[], title: string, icon: ReactNode, empty: string, weapons = false) => (
-    <SheetPanel title={`${title} (${items.length})`} icon={icon}>
-      {items.length === 0 ? <p className={`${styles.small} ${styles.muted}`}>{empty}</p> : <InventoryTable items={items} weapons={weapons} {...table} />}
-    </SheetPanel>
-  );
+/** The store: buying from the balance, or receiving for free (trade, gift, loot). */
+function StoreModal({ detail, mode, busy, run, onClose }: { detail: CharacterDetail; mode: StoreMode | null; busy: boolean; run: Run; onClose: () => void }) {
+  const buy = async (input: PurchaseInput) => { await run('purchase', { ...input }, input.received ? t('Item recebido.', 'Item received.') : t('Compra registrada.', 'Purchase recorded.')); };
   return (
-    <>
-      {panel(groups.weapons, t('Armas', 'Weapons'), <Crosshair size={16} />, t('Nenhuma arma, munição ou acessório.', 'No weapons, ammo or attachments.'), true)}
-      {panel(groups.armor, t('Armaduras', 'Armor'), <Shield size={16} />, t('Nenhuma armadura ou escudo.', 'No armor or shields.'))}
-      {panel(groups.misc, t('Itens diversos', 'Misc items'), <Package size={16} />, t('Nenhum outro item.', 'No other items.'))}
-      {panel(groups.clothing, t('Roupas', 'Clothing'), <Shirt size={16} />, t('Roupas e Fashionware do personagem aparecem aqui.', "The character's clothes and Fashionware show up here."))}
-      {removing && <RemoveItemDialog item={removing} onClose={() => setRemoving(null)} run={run} busy={busy} />}
-    </>
+    <Modal open={mode !== null} onClose={onClose} title={mode === 'receive' ? t('Receber itens sem pagar', 'Receive items without paying') : t('Comprar itens', 'Buy items')} wide>
+      <div className={styles.panel} style={{ clipPath: 'none', border: 'none' }}>
+        <p className={styles.small}>
+          {mode === 'receive'
+            ? t('Itens trocados com outros jogadores, presentes e saques entram sem custo e ficam no histórico com a origem. Cyberware recebido vai para o inventário; instalar continua custando Humanity.', 'Items traded with other players, gifts and loot come in free and stay in the history with their origin. Received cyberware goes to the inventory; installing it still costs Humanity.')
+            : t(`Saldo: ${formatEb(detail.sheet.wallet.balance)}. Compras saem do saldo e o servidor recusa as que passam dele.`, `Balance: ${formatEb(detail.sheet.wallet.balance)}. Purchases come out of the balance and the server refuses those that go over it.`)}
+          {' '}{t('Nada é equipado automaticamente.', 'Nothing is equipped automatically.')}
+        </p>
+        <StorePicker busy={busy} creationBudgets={false} onBuy={buy} creating={false} receiving={mode === 'receive'}
+          available={{ balance: detail.sheet.wallet.balance }} />
+      </div>
+    </Modal>
   );
 }
 
-type InventorySort = 'name' | 'category' | 'qty' | 'paid' | 'state';
-
-function InventoryTable({ items, run, busy, finalized, onRemove, weapons }: {
-  items: InventoryLine[]; run: Run; busy: boolean; finalized: boolean; onRemove: (item: InventoryLine) => void; weapons?: boolean;
-}) {
-  const [sort, setSort] = useState<SortState<InventorySort> | null>(null);
-  const rows = sortRows(items, sort, (i, k) => k === 'name' ? tv(i.name) : k === 'category' ? CATEGORY_LABEL[i.category] ?? i.category
-    : k === 'qty' ? i.rounds ?? i.quantity : k === 'paid' ? i.pricePaid : ITEM_STATE_LABEL[i.state] ?? i.state);
-  return (
-    <table className={styles.table}>
-      <thead>
-        <tr>
-          <th aria-sort={ariaSort(sort, ['name', 'category'])}>
-            <span className={styles.row} style={{ gap: 8 }}>
-              <SortButton label="Item" column="name" sort={sort} onSort={setSort} />
-              <SortButton label={t('Categoria', 'Category')} column="category" sort={sort} onSort={setSort} />
-            </span>
-          </th>
-          <SortHeader label={t('Qtd', 'Qty')} column="qty" sort={sort} onSort={setSort} className={styles.num} />
-          <SortHeader label={t('Pago', 'Paid')} column="paid" sort={sort} onSort={setSort} className={styles.num} />
-          <SortHeader label={t('Estado', 'State')} column="state" sort={sort} onSort={setSort} />
-          <th />
-        </tr>
-      </thead>
-      <tbody>
-        {rows.map((i) => {
-          // Purchases come back in full: any of them during creation, afterwards what was paid from the balance.
-          const refundable = i.origin === 'Purchase' && (!finalized || i.paidFrom === 'Balance');
-          const armor = i.sp != null;
-          return (
-            <tr key={i.instanceId}>
-              <td>
-                {tv(i.name)}
-                {i.caliber && <span className={styles.muted}> ({i.caliber})</span>}
-                <div className={styles.source}>{CATEGORY_LABEL[i.category] ?? i.category}</div>
-                {weapons && i.quality && (
-                  <Select style={{ minWidth: 100, marginTop: 4 }} value={i.quality} disabled={busy} aria-label={t(`Qualidade de ${tv(i.name)}`, `Quality of ${tv(i.name)}`)}
-                    title={t('Excellent: +1 nos ataques. Poor: trava no 1 natural (CP:R p.344).', 'Excellent: +1 to attacks. Poor: jams on a natural 1 (CP:R p.344).')}
-                    onChange={(e) => void run('weapon-quality', { instanceId: i.instanceId, quality: e.target.value })}>
-                    {(['Poor', 'Standard', 'Excellent'] as const).map((q) => <option key={q} value={q}>{QUALITY_LABEL[q]}</option>)}
-                  </Select>
-                )}
-              </td>
-              <td className={styles.num}>{i.rounds ?? i.quantity}</td>
-              <td className={styles.num}>
-                {RECEIVED_LABEL[i.origin] ? <span className={styles.tag} title={tv(i.notes) ?? undefined}>{RECEIVED_LABEL[i.origin]}</span> : i.pricePaid ? formatEb(i.pricePaid) : '—'}
-              </td>
-              <td>
-                <Select style={{ minWidth: 100 }} value={i.state === 'Equipped' && i.worn ? `Equipped:${i.worn}` : i.state} disabled={busy} aria-label={t(`Estado de ${tv(i.name)}`, `State of ${tv(i.name)}`)}
-                  onChange={(e) => {
-                    const [state, worn] = e.target.value.split(':');
-                    void run('equip', { instanceId: i.instanceId, state, worn: worn ?? null });
-                  }}>
-                  {armor ? (
-                    <>
-                      <option value="Equipped:Body">{t('No corpo', 'On the body')}</option>
-                      <option value="Equipped:Head">{t('Na cabeça', 'On the head')}</option>
-                    </>
-                  ) : <option value="Equipped">{ITEM_STATE_LABEL.Equipped}</option>}
-                  <option value="Carried">{ITEM_STATE_LABEL.Carried}</option>
-                  <option value="Stored">{ITEM_STATE_LABEL.Stored}</option>
-                </Select>
-              </td>
-              <td>
-                <span className={styles.row} style={{ flexWrap: 'nowrap', gap: 2 }}>
-                  {refundable && <RefundButton compact name={tv(i.name)} amount={i.pricePaid} confirm={finalized} disabled={busy} onRefund={() => void run('purchase/undo', { instanceId: i.instanceId }, t('Compra reembolsada.', 'Purchase refunded.'))} />}
-                  {finalized && <IconButton label={t(`Vender ou descartar ${tv(i.name)}`, `Sell or discard ${tv(i.name)}`)} onClick={() => onRemove(i)}><Trash2 size={14} /></IconButton>}
-                </span>
-              </td>
-            </tr>
-          );
-        })}
-      </tbody>
-    </table>
-  );
-}
+// ------------------------------------------------------------ inventory: sell or discard
 
 function RemoveItemDialog({ item, onClose, run, busy }: { item: InventoryLine; onClose: () => void; run: Run; busy: boolean }) {
   const held = item.rounds ?? item.quantity;
