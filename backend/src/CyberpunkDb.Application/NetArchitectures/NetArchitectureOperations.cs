@@ -148,7 +148,8 @@ public sealed class NetArchitectureOperations(NetArchitectureRuleBook rules, Net
         if (r.Interface is < 1 or > 10) throw RequestValidationException.For("interface", L.T("Interface vai de 1 a 10.", "Interface goes from 1 to 10."));
         if (r.PathfinderBonus is < 0 or > 10) throw RequestValidationException.For("pathfinderBonus", L.T("O bônus de Pathfinder vai de 0 a 10.", "The Pathfinder bonus goes from 0 to 10."));
         var floor = r.FloorId is null ? state.Main.Floors[^1] : Locate(state, r.FloorId).Floor;
-        return new NetWatcher { Id = id, Name = r.Name.Trim()[..Math.Min(r.Name.Trim().Length, 60)], Interface = r.Interface, PathfinderBonus = r.PathfinderBonus, FloorId = floor.Id };
+        return new NetWatcher { Id = id, Name = r.Name.Trim()[..Math.Min(r.Name.Trim().Length, 60)],
+            Interface = r.Interface, PathfinderBonus = r.PathfinderBonus, FloorId = floor.Id };
     }
 
     private static (NetBranch Branch, int Index, NetFloor Floor) Locate(ArchitectureState state, string floorId)

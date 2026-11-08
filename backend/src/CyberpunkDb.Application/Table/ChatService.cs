@@ -24,7 +24,8 @@ public sealed record TableMessageDto(
 // Table chat. The server rolls the dice, and visibility is decided here per seat (history and live push):
 // Public = everyone, Private = author + GM, Secret = GM only (author sees a concealed line), Whisper = author,
 // target + GM.
-public sealed class ChatService(IAppDbContext db, ITableNotifier notifier, IDiceRoller dice, CharacterService characters, TableSessionService sessions, TableSettingsService settings)
+public sealed class ChatService(IAppDbContext db, ITableNotifier notifier, IDiceRoller dice,
+    CharacterService characters, TableSessionService sessions, TableSettingsService settings)
 {
     public const int HistorySize = 300;
     public const string GmName = "GM";

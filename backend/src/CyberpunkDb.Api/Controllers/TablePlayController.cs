@@ -13,7 +13,12 @@ namespace CyberpunkDb.Api.Controllers;
 // (or ?seat= on images, since <img> can't send headers). Wrong or revoked token -> 401.
 [ApiController]
 [Route("api/table/play")]
-public sealed class TablePlayController(SeatService seats, SceneService scenes, EncounterService encounters, CharacterService characters, NpcPortraitService npcImages, ChatService chat, TablePresence presence, TablePartyService party, TableRulesService rules, TableAttackService attacks, TableTurnService turns, TableMusicService music, MediaService media, PlayerUploadLimit uploads) : ControllerBase
+public sealed class TablePlayController(
+    SeatService seats, SceneService scenes, EncounterService encounters, CharacterService characters,
+    NpcPortraitService npcImages, ChatService chat, TablePresence presence,
+    TablePartyService party, TableRulesService rules, TableAttackService attacks,
+    TableTurnService turns, TableMusicService music, MediaService media,
+    PlayerUploadLimit uploads) : ControllerBase
 {
     public const string SeatHeader = "X-Seat";
 
@@ -208,10 +213,12 @@ public sealed class TablePlayController(SeatService seats, SceneService scenes, 
     public async Task<SceneView> AddImage(ImageInput input, CancellationToken ct) => await scenes.PlayerAddImageAsync(await SeatAsync(ct), input, ct);
 
     [HttpPut("images/{imageId}")]
-    public async Task<SceneView> UpdateImage(string imageId, ImageInput input, CancellationToken ct) => await scenes.PlayerUpdateImageAsync(await SeatAsync(ct), imageId, input, ct);
+    public async Task<SceneView> UpdateImage(string imageId, ImageInput input, CancellationToken ct)
+        => await scenes.PlayerUpdateImageAsync(await SeatAsync(ct), imageId, input, ct);
 
     [HttpPost("images/{imageId}/order")]
-    public async Task<SceneView> OrderImage(string imageId, ImageOrderRequest request, CancellationToken ct) => await scenes.PlayerOrderImageAsync(await SeatAsync(ct), imageId, request, ct);
+    public async Task<SceneView> OrderImage(string imageId, ImageOrderRequest request, CancellationToken ct)
+        => await scenes.PlayerOrderImageAsync(await SeatAsync(ct), imageId, request, ct);
 
     [HttpDelete("images/{imageId}")]
     public async Task<SceneView> RemoveImage(string imageId, CancellationToken ct) => await scenes.PlayerRemoveImageAsync(await SeatAsync(ct), imageId, ct);

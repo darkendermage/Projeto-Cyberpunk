@@ -52,7 +52,9 @@ public sealed class DatabaseInitializer(
         var stored = await db.Set<AppMetadata>().FirstOrDefaultAsync(m => m.Key == SeedHashKey, ct);
         if (stored?.Value == hash) return;
 
-        logger.LogInformation(stored is null ? L.ForSystem("Importando o catálogo...", "Importing the catalog...") : L.ForSystem("Catálogo atualizado; reimportando...", "Catalog updated; reimporting..."));
+        logger.LogInformation(stored is null
+            ? L.ForSystem("Importando o catálogo...", "Importing the catalog...")
+            : L.ForSystem("Catálogo atualizado; reimportando...", "Catalog updated; reimporting..."));
         var seeds = contents.Select(c => (c.Name, Rows: JsonSerializer.Deserialize<List<ItemUpsertDto>>(c.Bytes, JsonOptions) ?? [])).ToList();
         List<MovedItem> moved = stored is null ? [] : await DetachRecategorizedAsync(seeds.SelectMany(s => s.Rows), ct);
         var seededSlugs = new HashSet<string>(StringComparer.Ordinal);

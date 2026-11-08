@@ -148,14 +148,16 @@ public sealed partial class ProgressionOperations(CharacterRuleBook rules)
         if (RoleRaise().Match(description) is { Success: true } r)
         {
             var role = rules.Roles.FirstOrDefault(x => x.Ability.Name.Equals(r.Groups["name"].Value, StringComparison.OrdinalIgnoreCase));
-            return role is null ? null : new ProgressionStep(RoleStep, role.Id, int.Parse(r.Groups["from"].Value), int.Parse(r.Groups["to"].Value), int.Parse(r.Groups["cost"].Value));
+            return role is null ? null : new ProgressionStep(RoleStep, role.Id,
+                int.Parse(r.Groups["from"].Value), int.Parse(r.Groups["to"].Value), int.Parse(r.Groups["cost"].Value));
         }
         if (SkillRaise().Match(description) is { Success: true } s)
         {
             var def = rules.Skills.FirstOrDefault(x => x.Name.Equals(s.Groups["name"].Value, StringComparison.OrdinalIgnoreCase));
             var spec = s.Groups["spec"].Success ? s.Groups["spec"].Value : null;
             if (def is null || def.Specialized != (spec is not null)) return null;
-            return new ProgressionStep(SkillStep, SkillKey.Normalize(SkillKey.Make(def.Id, spec)), int.Parse(s.Groups["from"].Value), int.Parse(s.Groups["to"].Value), int.Parse(s.Groups["cost"].Value));
+            return new ProgressionStep(SkillStep, SkillKey.Normalize(SkillKey.Make(def.Id, spec)),
+                int.Parse(s.Groups["from"].Value), int.Parse(s.Groups["to"].Value), int.Parse(s.Groups["cost"].Value));
         }
         return null;
     }

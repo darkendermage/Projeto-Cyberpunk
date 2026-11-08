@@ -58,7 +58,9 @@ public sealed class CharacterService(
         // sort the whole catalog before paging so pages follow the chosen column
         var matches = (sort switch
         {
-            StoreSort.Name => descending ? filtered.OrderByDescending(i => i.Name, StringComparer.OrdinalIgnoreCase) : filtered.OrderBy(i => i.Name, StringComparer.OrdinalIgnoreCase),
+            StoreSort.Name => descending
+                ? filtered.OrderByDescending(i => i.Name, StringComparer.OrdinalIgnoreCase)
+                : filtered.OrderBy(i => i.Name, StringComparer.OrdinalIgnoreCase),
             StoreSort.Price => (descending ? filtered.OrderByDescending(i => i.Price) : filtered.OrderBy(i => i.Price)).ThenBy(i => i.Name, StringComparer.OrdinalIgnoreCase),
             _ => (descending ? filtered.OrderByDescending(i => i.Category) : filtered.OrderBy(i => i.Category)).ThenBy(i => i.Name, StringComparer.OrdinalIgnoreCase),
         }).ToList();

@@ -9,7 +9,12 @@ namespace CyberpunkDb.Api.Controllers;
 // GM side of the table. The players' port never reaches these routes (PlayerSurfaceGuard), except image downloads.
 [ApiController]
 [Route("api/table")]
-public sealed class TableController(SeatService seats, MediaService media, SceneService scenes, TableFightService fights, TableAttackService attacks, TablePartyService party, TableRulesService rules, ChatService chat, TablePresence presence, TunnelService tunnel, TableSessionService sessions, TableSettingsService settings, TableMusicService music) : ControllerBase
+public sealed class TableController(
+    SeatService seats, MediaService media, SceneService scenes,
+    TableFightService fights, TableAttackService attacks,
+    TablePartyService party, TableRulesService rules, ChatService chat, TablePresence presence,
+    TunnelService tunnel, TableSessionService sessions, TableSettingsService settings,
+    TableMusicService music) : ControllerBase
 {
     // internet tunnel
 

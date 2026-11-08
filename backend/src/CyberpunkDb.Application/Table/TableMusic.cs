@@ -93,7 +93,8 @@ public sealed class TableMusicService(TableSettingsService settings, ITableNotif
         return await SaveAsync(new TableMusic(video, list, title, false, 0, DateTime.UtcNow, volume), ct);
     }
 
-    public Task<TableMusicStateDto> PlayAsync(MusicPositionRequest r, CancellationToken ct) => ChangeAsync(m => m with { Playing = true, PositionSeconds = r.PositionSeconds ?? Now(m) }, ct);
+    public Task<TableMusicStateDto> PlayAsync(MusicPositionRequest r, CancellationToken ct)
+        => ChangeAsync(m => m with { Playing = true, PositionSeconds = r.PositionSeconds ?? Now(m) }, ct);
 
     public Task<TableMusicStateDto> PauseAsync(CancellationToken ct) => ChangeAsync(m => m with { Playing = false, PositionSeconds = Now(m) }, ct);
 
