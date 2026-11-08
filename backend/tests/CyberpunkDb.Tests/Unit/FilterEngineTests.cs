@@ -8,10 +8,8 @@ using FluentAssertions;
 
 namespace CyberpunkDb.Tests.Unit;
 
-/// <summary>
-/// The predicates built by the field definitions are plain expression trees, so they can be checked
-/// against in-memory data with LINQ-to-Objects — the same expressions EF Core translates to SQL.
-/// </summary>
+// The predicates built by the field definitions are plain expression trees, so they can be checked
+// against in-memory data with LINQ-to-Objects: the same expressions EF Core translates to SQL.
 public class FilterEngineTests
 {
     private static readonly WeaponCategory Weapons = new();

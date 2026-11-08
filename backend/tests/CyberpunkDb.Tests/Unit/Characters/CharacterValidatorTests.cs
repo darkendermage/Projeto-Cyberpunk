@@ -59,7 +59,7 @@ public class CharacterValidatorTests
     [Fact]
     public void Double_cost_skills_count_twice_against_the_skill_budget()
     {
-        // Tactics 6 → 5 frees 1 point; Autofire (x2) 6 → 7 would be over max anyway, so raise Heavy Weapons (x2) to 1.
+        // Tactics 6 -> 5 frees 1 point; Autofire (x2) 6 -> 7 would be over max anyway, so raise Heavy Weapons (x2) to 1.
         var sheet = WithSkill(WithSkill(CompletePackage(), "tactics", 5), "heavy-weapons", 1);
         var report = Validate(sheet);
 
@@ -82,7 +82,7 @@ public class CharacterValidatorTests
             .Should().Contain("NATIVE_LANGUAGE_REQUIRED");
     }
 
-    // 3. Templates and Role rules
+    // Templates and Role rules
 
     [Fact]
     public void Streetrat_stats_and_skills_must_match_the_template()
@@ -117,7 +117,7 @@ public class CharacterValidatorTests
         Errors(Validate(sheet with { Roles = [] })).Should().Contain("ROLE_REQUIRED");
     }
 
-    // 4. Creation money budgets
+    // Creation money budgets
 
     [Fact]
     public void Fashion_budget_pays_only_for_fashion_and_fashionware()

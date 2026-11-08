@@ -7,7 +7,7 @@ using FluentAssertions;
 
 namespace CyberpunkDb.Tests.Integration;
 
-/// <summary>Images over the map as layers (round 5): the GM's and the players', with locks, hiding and order.</summary>
+// Images over the map as layers: the GM's and the players', with locks, hiding and order
 [Collection(ApiCollection.Name)]
 public class TableImagesApiTests(ApiFactory factory)
 {
@@ -25,7 +25,7 @@ public class TableImagesApiTests(ApiFactory factory)
         return (await response.Content.ReadFromJsonAsync<MediaDto>(TableScenario.Json))!;
     }
 
-    /// <summary>A live scene and a seat (no fight needed).</summary>
+    // A live scene and a seat (no fight needed)
     private async Task<(SceneView Scene, SeatDto Seat, SeatDto Other)> LiveScene(string name)
     {
         var scene = await _t.Send<SceneView>(_t.Gm, HttpMethod.Post, "/api/table/scenes", new CreateSceneRequest($"Imagens {name}"), expected: HttpStatusCode.Created);

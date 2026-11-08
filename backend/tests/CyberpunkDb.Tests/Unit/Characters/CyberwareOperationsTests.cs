@@ -15,13 +15,13 @@ public class CyberwareOperationsTests
         public int Roll(int sides) => Math.Min(value, sides);
     }
 
-    // Every die shows 2: 2d6 → 4, 1d6 → 2, 4d6 → 8, 1d6/2 → 1.
+    // Every die shows 2: 2d6 -> 4, 1d6 -> 2, 4d6 -> 8, 1d6/2 -> 1.
     private static readonly IDiceRoller Twos = new FixedDice(2);
     private static readonly CyberwareInstaller Installer = new(Rules, Twos);
     private static readonly CyberwareOperations Ops = new(Rules, Installer, Calculator, Twos);
     private static readonly InventoryOperations Inventory = new(Rules, Ops);
 
-    /// <summary>A finished Complete Package Solo (EMP 6, Humanity 60) with money and nothing installed.</summary>
+    // A finished Complete Package Solo (EMP 6, Humanity 60) with money and nothing installed
     private static CharacterSheet Chromeless(int balance = 20_000) => CompletePackage() with
     {
         Creation = CompletePackage().Creation with { Finalized = true },
@@ -35,7 +35,7 @@ public class CyberwareOperationsTests
         () => Install(s, item, meatLimb, host, ack);
     private static CharacterReport Calc(CharacterSheet s) => Calculator.Calculate(s, Catalog);
 
-    // ------------------------------------------------------------ 15. money and Humanity
+    // money and Humanity
 
     [Fact]
     public void Installing_charges_the_balance_and_rolls_humanity_loss_after_creation()
@@ -58,7 +58,7 @@ public class CyberwareOperationsTests
         sheet.Cyberware.Single().HumanityLossRolled.Should().BeFalse();
     }
 
-    // ------------------------------------------------------------ 13. dependencies and compatibility
+    // dependencies and compatibility
 
     [Fact]
     public void Options_bring_their_foundation_and_charge_it()
@@ -82,7 +82,7 @@ public class CyberwareOperationsTests
         Trying(sheet, NeuralLink).Should().Throw<RequestValidationException>();
     }
 
-    // ------------------------------------------------------------ 12. slots
+    // slots
 
     [Fact]
     public void A_full_cybereye_refuses_more_options()
@@ -113,7 +113,7 @@ public class CyberwareOperationsTests
         scoped.Cyberware.Single(c => c.ItemId == TargetingScope.Id).ParentInstanceId.Should().Be(right);
     }
 
-    // ------------------------------------------------------------ 14. pairs
+    // pairs
 
     [Fact]
     public void Paired_options_go_in_two_eyes_as_one_operation()
@@ -126,7 +126,7 @@ public class CyberwareOperationsTests
         sheet.Wallet.Balance.Should().Be(20_000 - (2 * 100 + 2 * 500));
     }
 
-    // ------------------------------------------------------------ meat limbs and options of any limb
+    // meat limbs and options of any limb
 
     [Fact]
     public void Meat_limb_pieces_take_one_free_arm_or_leg_each()
@@ -169,7 +169,7 @@ public class CyberwareOperationsTests
         report.Regions.Single(r => r.Key == "internal").SlotsTotal.Should().Be(7);
     }
 
-    // ------------------------------------------------------------ requirements only in text
+    // requirements only in text
 
     [Fact]
     public void Requirements_in_text_must_be_confirmed()
@@ -178,7 +178,7 @@ public class CyberwareOperationsTests
         Install(Chromeless(), HeavyPlating, ack: true).Cyberware.Should().ContainSingle();
     }
 
-    // ------------------------------------------------------------ Full Body Conversion (IR3 p.93)
+    // Full Body Conversion (IR3 p.93)
 
     [Fact]
     public void In_an_fbc_body_listed_foundations_cost_no_humanity_and_slots_double()
@@ -194,7 +194,7 @@ public class CyberwareOperationsTests
         report.Humanity.BorgwareLoweringCap.Should().Be(2, "Biosystem e o corpo; o Cyberarm não conta");
     }
 
-    // ------------------------------------------------------------ 16. removal and therapy
+    // removal and therapy
 
     [Fact]
     public void Removal_keeps_the_humanity_lost_raises_the_cap_and_returns_the_piece()
@@ -233,7 +233,7 @@ public class CyberwareOperationsTests
             .Should().Be(sheet.Wallet.Balance - 100, "o Medtech paga só os materiais");
     }
 
-    // ------------------------------------------------------------ 17. nothing partial
+    // nothing partial
 
     [Fact]
     public void A_refused_installation_changes_nothing()
@@ -291,7 +291,7 @@ public class CyberwareOperationsTests
         Ops.Preview(Install(Chromeless(), Sandevistan), new InstallCyberwareRequest(0, Kerenzikov.Id), Catalog).Error.Should().NotBeNull();
     }
 
-    // ------------------------------------------------------------ purchases (9.3): nothing installed or equipped by itself
+    // purchases (9.3): nothing installed or equipped by itself
 
     [Fact]
     public void After_creation_cyberware_is_bought_into_the_inventory_unless_installing_is_asked()
@@ -332,7 +332,7 @@ public class CyberwareOperationsTests
         bought.Should().Throw<RequestValidationException>();
     }
 
-    // ------------------------------------------------------------ 20. weapon attachments
+    // weapon attachments
 
     private static CharacterSheet Armory() => Chromeless() with
     {

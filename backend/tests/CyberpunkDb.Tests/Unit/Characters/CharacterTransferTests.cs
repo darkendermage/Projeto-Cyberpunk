@@ -8,7 +8,7 @@ namespace CyberpunkDb.Tests.Unit.Characters;
 
 public class CharacterTransferTests
 {
-    /// <summary>The same catalog numbered differently, as in another database.</summary>
+    // The same catalog numbered differently, as in another database
     private static readonly NpcCatalog Elsewhere = new(Catalog.Items.Select(i => i with { Id = i.Id + 1000 }));
 
     private static CharacterSheet Chromed() => CompletePackage() with

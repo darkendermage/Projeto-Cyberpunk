@@ -7,13 +7,13 @@ using FluentAssertions;
 
 namespace CyberpunkDb.Tests.Integration;
 
-/// <summary>A Poor weapon jams on a natural 1 and is unjammed with an Action (CP:R p.344).</summary>
+// A Poor weapon jams on a natural 1 and is unjammed with an Action (CP:R p.344).
 [Collection(ApiCollection.Name)]
 public class TableJamApiTests(ApiFactory factory)
 {
     private readonly TableScenario _t = new(factory);
 
-    /// <summary>The Solo's first gun made Poor and loaded, then fired at the ganger with a natural 1.</summary>
+    // The Solo's first gun made Poor and loaded, then fired at the ganger with a natural 1
     private async Task<(TableScenario.Fight Fight, string Gun)> JammedGun(string name)
     {
         var s = await _t.FightOnTheTable(name);

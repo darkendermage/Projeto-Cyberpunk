@@ -8,7 +8,7 @@ using static CyberpunkDb.Tests.Unit.Characters.CharacterTestData;
 
 namespace CyberpunkDb.Tests.Unit.Characters;
 
-/// <summary>Cyberware options in worn hosts: Smart Glasses, Smart Lens, Battleglove and Smart Gloves.</summary>
+// Cyberware options in worn hosts: Smart Glasses, Smart Lens, Battleglove and Smart Gloves
 public class WearableTests
 {
     private sealed class FixedDice(int value) : IDiceRoller
@@ -29,7 +29,7 @@ public class WearableTests
 
     private static CharacterChange Change(CharacterSheet s) => new(s, Catalog, DateTime.UtcNow);
 
-    /// <summary>Buys a host and puts it on.</summary>
+    // Buys a host and puts it on
     private static (CharacterSheet Sheet, string Host) Wearing(CharacterSheet sheet, CatalogItem host)
     {
         sheet = Inventory.Purchase(sheet, new PurchaseRequest(0, host.Id), Change(sheet));

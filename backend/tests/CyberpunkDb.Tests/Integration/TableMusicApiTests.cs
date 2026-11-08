@@ -6,7 +6,7 @@ using FluentAssertions;
 
 namespace CyberpunkDb.Tests.Integration;
 
-/// <summary>The table's music (G): the GM loads a YouTube link and plays it; every screen follows over the hub.</summary>
+// The table's music (G): the GM loads a YouTube link and plays it; every screen follows over the hub
 [Collection(ApiCollection.Name)]
 public class TableMusicApiTests(ApiFactory factory)
 {

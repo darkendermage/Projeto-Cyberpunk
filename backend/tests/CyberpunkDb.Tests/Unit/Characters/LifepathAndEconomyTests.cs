@@ -23,7 +23,7 @@ public class LifepathAndEconomyTests
         Wallet = new Wallet { Balance = balance },
     };
 
-    // ------------------------------------------------------------ languages (7.1)
+    // languages (7.1)
 
     [Fact]
     public void Streetslang_as_native_language_gives_no_free_levels()
@@ -54,7 +54,7 @@ public class LifepathAndEconomyTests
         Validator.Validate(inRegion, Catalog).Issues.Should().NotContain(i => i.Code == "NATIVE_LANGUAGE_OUTSIDE_REGION");
     }
 
-    // ------------------------------------------------------------ relationships (7.2)
+    // relationships (7.2)
 
     [Fact]
     public void Relationships_get_unique_ids_and_blank_answers_are_dropped()
@@ -75,7 +75,7 @@ public class LifepathAndEconomyTests
         lifepath.Answers.Should().ContainKey("personality").And.NotContainKey("lifeGoal");
     }
 
-    // ------------------------------------------------------------ housing and lifestyle (7.5, 11.2)
+    // housing and lifestyle (7.5, 11.2)
 
     [Fact]
     public void Monthly_cost_is_rent_plus_lifestyle_and_status_follows_the_one_week_grace()
@@ -113,7 +113,7 @@ public class LifepathAndEconomyTests
         act.Should().Throw<RequestValidationException>();
     }
 
-    // ------------------------------------------------------------ selling and discarding (9.4)
+    // selling and discarding (9.4)
 
     private static CharacterSheet WithGear() => Living(Today) with
     {

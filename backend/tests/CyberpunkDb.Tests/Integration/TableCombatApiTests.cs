@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.SignalR.Client;
 
 namespace CyberpunkDb.Tests.Integration;
 
-/// <summary>The fight linked to the active scene, live on the GM's and the players' screens.</summary>
+// The fight linked to the active scene, live on the GM's and the players' screens
 [Collection(ApiCollection.Name)]
 public class TableCombatApiTests(ApiFactory factory)
 {
@@ -30,7 +30,7 @@ public class TableCombatApiTests(ApiFactory factory)
         return (await response.Content.ReadFromJsonAsync<T>(Json))!;
     }
 
-    /// <summary>A finalized Streetrat Solo, as in EncountersApiTests.</summary>
+    // A finalized Streetrat Solo, as in EncountersApiTests
     private async Task<CharacterDetailDto> FinalizedSolo(string name)
     {
         var c = await Send<CharacterDetailDto>(_gm, HttpMethod.Post, "/api/characters",
@@ -46,7 +46,7 @@ public class TableCombatApiTests(ApiFactory factory)
 
     private sealed record Setup(int EncounterId, int SceneId, SeatDto Seat, int CharacterId, string HiddenCombatantId);
 
-    /// <summary>A Solo and two gangers on an active scene; one ganger's token is hidden from the players.</summary>
+    // A Solo and two gangers on an active scene; one ganger's token is hidden from the players
     private async Task<Setup> FightOnTheTable(string name)
     {
         var solo = await FinalizedSolo(name);
@@ -195,7 +195,7 @@ public class TableCombatApiTests(ApiFactory factory)
         await Send<SceneView>(_gm, HttpMethod.Post, $"/api/table/scenes/{scene.Id}/activate");
 
         var party = await Send<List<PartyMemberDto>>(_player, HttpMethod.Get, "/api/table/play/party", seat: seat.Token);
-        // Round 4 (B3): every seat's PC is listed; the ones on the scene are those whose token the seat can see.
+        // Every seat's PC is listed; the ones on the scene are those whose token the seat can see.
         party.Where(p => p.InScene).Select(p => p.CharacterId).Should().BeEquivalentTo([mine.Id, friend.Id]);
         party.Should().NotContain(p => p.CharacterId == hidden.Id);
         party.Should().OnlyContain(p => p.Hp > 0 && p.MaxHp > 0);

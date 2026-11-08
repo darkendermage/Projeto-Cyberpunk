@@ -4,7 +4,7 @@ using FluentAssertions;
 
 namespace CyberpunkDb.Tests.Integration;
 
-/// <summary>Every player of the table on the strip, on the scene or not (B3).</summary>
+// Every player of the table on the strip, on the scene or not
 [Collection(ApiCollection.Name)]
 public class TablePartyApiTests(ApiFactory factory)
 {

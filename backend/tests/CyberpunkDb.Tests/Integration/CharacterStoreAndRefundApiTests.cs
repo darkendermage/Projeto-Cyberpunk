@@ -9,7 +9,7 @@ using FluentAssertions;
 
 namespace CyberpunkDb.Tests.Integration;
 
-/// <summary>The store sorted by column, and the refund of a purchase during and after creation.</summary>
+// The store sorted by column, and the refund of a purchase during and after creation
 [Collection(ApiCollection.Name)]
 public class CharacterStoreAndRefundApiTests(ApiFactory factory)
 {

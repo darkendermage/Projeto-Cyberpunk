@@ -3,7 +3,7 @@ using FluentAssertions;
 
 namespace CyberpunkDb.Tests.Integration;
 
-/// <summary>Messages follow Accept-Language (or ?lang=): Portuguese for "pt*", English for anything else.</summary>
+// Messages follow Accept-Language (or ?lang=): Portuguese for "pt*", English for anything else
 [Collection(ApiCollection.Name)]
 public class LanguageApiTests(ApiFactory factory)
 {

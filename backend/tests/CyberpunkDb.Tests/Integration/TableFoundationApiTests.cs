@@ -9,14 +9,14 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace CyberpunkDb.Tests.Integration;
 
-/// <summary>The virtual table's foundation: the players' port, seat links, uploaded images and the live channel.</summary>
+// The virtual table's foundation: the players' port, seat links, uploaded images and the live channel
 [Collection(ApiCollection.Name)]
 public class TableFoundationApiTests(ApiFactory factory)
 {
     private readonly HttpClient _gm = factory.CreateClient();
     private readonly HttpClient _player = factory.CreatePlayerClient();
 
-    /// <summary>The smallest valid PNG (1x1).</summary>
+    // The smallest valid PNG (1x1)
     internal static readonly byte[] Png = Convert.FromBase64String(
         "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==");
 
@@ -48,7 +48,7 @@ public class TableFoundationApiTests(ApiFactory factory)
             .Build();
     }
 
-    /// <summary>Waits for the server to close a connection it refused after the handshake.</summary>
+    // Waits for the server to close a connection it refused after the handshake
     private static async Task<bool> ClosedWithin(HubConnection hub, TimeSpan timeout)
     {
         var closed = new TaskCompletionSource();

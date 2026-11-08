@@ -8,16 +8,14 @@ using FluentAssertions;
 
 namespace CyberpunkDb.Tests.Integration;
 
-/// <summary>
-/// Attacks that wait on a person (D1): the target with REF 8+ chooses to dodge (CP:R p.172) and the attacker rolls the
-/// Critical Injury (CP:R p.187). The GM attacks with typed dice so the steps are predictable.
-/// </summary>
+// Attacks that wait on a person: the target with REF 8+ chooses to dodge (CP:R p.172) and the attacker rolls the
+// Critical Injury (CP:R p.187). The GM attacks with typed dice so the steps are predictable.
 [Collection(ApiCollection.Name)]
 public class TablePendingAttackApiTests(ApiFactory factory)
 {
     private readonly TableScenario _t = new(factory);
 
-    /// <summary>A ganger shoots the PC with its heavy pistol at 5 m (DV13), interactively.</summary>
+    // A ganger shoots the PC with its heavy pistol at 5 m (DV13), interactively
     private async Task<EncounterDetailDto> GangerShootsPc(TableScenario.Fight s, int roll = 8, int[]? damage = null) =>
         await _t.Send<EncounterDetailDto>(_t.Gm, HttpMethod.Post, $"/api/encounters/{s.EncounterId}/attack", new
         {

@@ -10,7 +10,7 @@ using FluentAssertions;
 
 namespace CyberpunkDb.Tests.Integration;
 
-/// <summary>Barriers from the book (CP:R p.182–183) on the scenery layer, and their link to the fight's cover.</summary>
+// Barriers from the book (CP:R p.182–183) on the scenery layer, and their link to the fight's cover.
 [Collection(ApiCollection.Name)]
 public class TableBarriersApiTests(ApiFactory factory)
 {

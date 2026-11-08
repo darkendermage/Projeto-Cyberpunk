@@ -6,7 +6,7 @@ using FluentAssertions;
 
 namespace CyberpunkDb.Tests.Integration;
 
-/// <summary>The player's own sheet through the tunnel (E1): only the seat's character, never the rest of the API.</summary>
+// The player's own sheet through the tunnel: only the seat's character, never the rest of the API
 [Collection(ApiCollection.Name)]
 public class TableSeatCharacterApiTests(ApiFactory factory)
 {
@@ -46,7 +46,7 @@ public class TableSeatCharacterApiTests(ApiFactory factory)
     [Fact]
     public async Task Item_page_reads_pass_on_player_port()
     {
-        // The Gear tab opens an item's catalog page (round 7): the item, the category list and its schema.
+        // The Gear tab opens an item's catalog page: the item, the category list and its schema.
         var (seat, own, _) = await Seated("PaginaItem");
         var itemId = own.Report.Inventory.First().ItemId;
         var item = await _t.Send<System.Text.Json.Nodes.JsonObject>(_t.Gm, HttpMethod.Get, $"/api/items/{itemId}");

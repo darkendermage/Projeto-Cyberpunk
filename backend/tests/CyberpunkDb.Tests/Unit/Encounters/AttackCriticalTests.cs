@@ -10,7 +10,7 @@ using FluentAssertions;
 
 namespace CyberpunkDb.Tests.Unit.Encounters;
 
-/// <summary>Natural 10 and 1 on the attack's d10 (CP:R p.130), Fumble Recovery (p.146) and Poor weapons jamming (p.344).</summary>
+// Natural 10 and 1 on the attack's d10 (CP:R p.130), Fumble Recovery (p.146) and Poor weapons jamming (p.344).
 public class AttackCriticalTests
 {
     private static readonly CombatRuleBook Rules = CombatRuleBook.LoadEmbedded();

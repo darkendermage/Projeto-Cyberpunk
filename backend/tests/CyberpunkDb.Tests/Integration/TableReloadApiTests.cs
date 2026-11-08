@@ -6,7 +6,7 @@ using FluentAssertions;
 
 namespace CyberpunkDb.Tests.Integration;
 
-/// <summary>The reload button on the table and in the fight (C6).</summary>
+// The reload button on the table and in the fight
 [Collection(ApiCollection.Name)]
 public class TableReloadApiTests(ApiFactory factory)
 {
@@ -17,7 +17,7 @@ public class TableReloadApiTests(ApiFactory factory)
 
     private static bool HasMagazine(JsonNode w) => w["magazine"] is JsonValue;
 
-    /// <summary>A Solo whose first gun is empty: starting weapons come unloaded, with the ammo in the inventory.</summary>
+    // A Solo whose first gun is empty: starting weapons come unloaded, with the ammo in the inventory
     private async Task<(TableScenario.Fight Fight, string Gun, int Magazine)> PcWithEmptyGun(string name)
     {
         var s = await _t.FightOnTheTable(name);
@@ -40,7 +40,7 @@ public class TableReloadApiTests(ApiFactory factory)
         fight["log"]!.AsArray().Last()!["text"]!.GetValue<string>().Should().Contain("recarrega");
     }
 
-    /// <summary>Falco (Edgerunners Mission Kit) carries a Burya with a 4-round magazine; generic enemies have no magazine.</summary>
+    // Falco (Edgerunners Mission Kit) carries a Burya with a 4-round magazine; generic enemies have no magazine
     private async Task<(TableScenario.Fight Fight, string Falco, string Gun, int Magazine)> WithFalco(string name)
     {
         var s = await _t.FightOnTheTable(name);

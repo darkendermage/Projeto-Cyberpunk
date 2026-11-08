@@ -6,7 +6,7 @@ using CyberpunkDb.Domain.Enums;
 
 namespace CyberpunkDb.Tests.Unit.Npcs;
 
-/// <summary>Small hand-built catalog (Core Book prices) so validator and generator tests control every number.</summary>
+// Small hand-built catalog (Core Book prices) so validator and generator tests control every number
 internal static class NpcTestData
 {
     public static readonly NpcRuleBook Rules = NpcRuleBook.LoadEmbedded();
@@ -90,12 +90,10 @@ internal static class NpcTestData
 
     public static readonly NpcCatalog Catalog = new(Items);
 
-    // ------------------------------------------------------------ sheets
+    // sheets
 
-    /// <summary>
-    /// A hand-built Mook that respects every limit: 31/33 STAT points, 30/30 skill points, 220/300eb of gear
-    /// and 500/500eb of cyberware.
-    /// </summary>
+    // A hand-built Mook that respects every limit: 31/33 STAT points, 30/30 skill points, 220/300eb of gear
+    // and 500/500eb of cyberware.
     public static NpcSheet ValidMook() => new()
     {
         Name = "Pitbull",
@@ -130,7 +128,7 @@ internal static class NpcTestData
     public static Dictionary<string, int> Skills(params (string Key, int Value)[] values) =>
         values.ToDictionary(v => v.Key, v => v.Value, StringComparer.OrdinalIgnoreCase);
 
-    // ------------------------------------------------------------ builders
+    // builders
 
     private static CatalogItem Add(CatalogItem item)
     {

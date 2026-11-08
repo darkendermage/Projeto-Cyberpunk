@@ -10,7 +10,7 @@ using FluentAssertions;
 
 namespace CyberpunkDb.Tests.Unit.Encounters;
 
-/// <summary>The Ranger Combat Boomerang (Black Chrome p.100): thrown with Athletics, halves SP, comes back with a Targeting Scope.</summary>
+// The Ranger Combat Boomerang (Black Chrome p.100): thrown with Athletics, halves SP, comes back with a Targeting Scope.
 public class BoomerangTests
 {
     private static readonly CombatRuleBook Rules = CombatRuleBook.LoadEmbedded();

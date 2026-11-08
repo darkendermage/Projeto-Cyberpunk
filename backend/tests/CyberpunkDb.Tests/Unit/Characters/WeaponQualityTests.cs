@@ -10,7 +10,7 @@ using static CyberpunkDb.Tests.Unit.Characters.CharacterTestData;
 
 namespace CyberpunkDb.Tests.Unit.Characters;
 
-/// <summary>Weapon quality per copy (A4): Poor, Standard or Excellent, defaulting to the catalog's.</summary>
+// Weapon quality per copy: Poor, Standard or Excellent, defaulting to the catalog's
 public class WeaponQualityTests
 {
     private static CharacterSheet WithWeapons(params (string Id, CatalogItem Item, WeaponQuality? Quality)[] weapons) =>

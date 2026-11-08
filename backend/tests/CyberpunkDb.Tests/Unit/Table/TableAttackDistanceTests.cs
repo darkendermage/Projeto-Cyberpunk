@@ -3,7 +3,7 @@ using FluentAssertions;
 
 namespace CyberpunkDb.Tests.Unit.Table;
 
-/// <summary>The distance of a quick attack, measured between tokens like the ruler of the map (grid.ts).</summary>
+// The distance of a quick attack, measured between tokens like the ruler of the map (grid.ts).
 public class TableAttackDistanceTests
 {
     private static SceneToken At(double x, double y, double size = 1) => new() { X = x, Y = y, Width = size, Height = size };

@@ -6,7 +6,7 @@ using FluentAssertions;
 
 namespace CyberpunkDb.Tests.Unit.Encounters;
 
-/// <summary>Fights saved before round 4 load without a pending attack (D1).</summary>
+// Fights saved before pending attacks existed still load
 public class PendingAttackStateTests
 {
     private static readonly JsonSerializerOptions Json = new(JsonSerializerDefaults.Web) { Converters = { new JsonStringEnumConverter() } };

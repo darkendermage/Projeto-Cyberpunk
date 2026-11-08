@@ -62,7 +62,7 @@ public class CombatTests
     [InlineData(11, false, "4d6")]
     public void Unarmed_damage_follows_body(int body, bool cyberarm, string dice) => Rules.UnarmedDice(body, cyberarm).Should().Be(dice);
 
-    /// <summary>CP:R p.170: Royal, Assault Rifle at 24 m, DV15; 4 + 8 REF + 6 Shoulder Arms = 18, hits for 25.</summary>
+    // CP:R p.170: Royal, Assault Rifle at 24 m, DV15; 4 + 8 REF + 6 Shoulder Arms = 18, hits for 25.
     [Fact]
     public void Royal_single_shot_from_the_core_book()
     {
@@ -76,7 +76,7 @@ public class CombatTests
         hit.Damage.Should().Be(25);
     }
 
-    /// <summary>CP:R p.173: Autofire at 14 m, DV17; total 21 beats it by 4; 2d6 = 10 × 4 = 40.</summary>
+    // CP:R p.173: Autofire at 14 m, DV17; total 21 beats it by 4; 2d6 = 10 × 4 = 40.
     [Fact]
     public void Royal_autofire_from_the_core_book()
     {
@@ -112,7 +112,7 @@ public class CombatTests
         hit.HalveArmor.Should().BeTrue();
     }
 
-    /// <summary>CP:R p.175: Rico Rico's SP11 counts as SP6 against a machete; 7 damage lets 1 through and ablates to 10.</summary>
+    // CP:R p.175: Rico Rico's SP11 counts as SP6 against a machete; 7 damage lets 1 through and ablates to 10.
     [Fact]
     public void Rico_rico_machete_from_the_core_book()
     {

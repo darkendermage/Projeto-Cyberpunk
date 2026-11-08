@@ -4,7 +4,7 @@ using FluentAssertions;
 
 namespace CyberpunkDb.Tests.Integration;
 
-/// <summary>The player passes their own Turn (C3).</summary>
+// The player passes their own Turn
 [Collection(ApiCollection.Name)]
 public class TableTurnApiTests(ApiFactory factory)
 {

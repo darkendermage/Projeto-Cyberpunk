@@ -8,7 +8,7 @@ using CyberpunkDb.Tests.Unit.Npcs;
 
 namespace CyberpunkDb.Tests.Unit.Characters;
 
-/// <summary>Hand-built catalog (Core Book values) and reference sheets for the three creation methods.</summary>
+// Hand-built catalog (Core Book values) and reference sheets for the three creation methods
 internal static class CharacterTestData
 {
     public static readonly CharacterRuleBook Rules = CharacterRuleBook.LoadEmbedded(NpcTestData.Rules);
@@ -88,7 +88,7 @@ internal static class CharacterTestData
 
     public static readonly NpcCatalog Catalog = new(Items);
 
-    // ------------------------------------------------------------ reference sheets
+    // reference sheets
 
     public static Dictionary<string, int> Stats(params (string Key, int Value)[] values) =>
         values.ToDictionary(v => v.Key, v => v.Value, StringComparer.OrdinalIgnoreCase);
@@ -96,10 +96,8 @@ internal static class CharacterTestData
     public static Dictionary<string, int> StatsFromRow(int[] row) =>
         Rules.StatOrder.Select((k, i) => (k, row[i])).ToDictionary(x => x.k, x => x.Item2, StringComparer.OrdinalIgnoreCase);
 
-    /// <summary>
-    /// Complete Package Solo inside every limit: STATs total 62; skills cost exactly 86 — ten Basic Skills at 2 (20),
-    /// Perception/Evasion/Stealth at 6 (18), Autofire (x2) 6 (12), six more skills at 6 (36) — and English 4 is free.
-    /// </summary>
+    // Complete Package Solo inside every limit: STATs total 62; skills cost exactly 86: ten Basic Skills at 2 (20),
+    // Perception/Evasion/Stealth at 6 (18), Autofire (x2) 6 (12), six more skills at 6 (36), and English 4 is free.
     public static CharacterSheet CompletePackage() => new CharacterSheet
     {
         Identity = new CharacterIdentity { Name = "Jay", NativeLanguage = "English", Home = "Watson" },
@@ -115,7 +113,7 @@ internal static class CharacterTestData
         }),
     }.Normalize();
 
-    /// <summary>Streetrat Solo copied from row 1 of the Solo table (CP:R p.74) and the Solo template (CP:R p.86).</summary>
+    // Streetrat Solo copied from row 1 of the Solo table (CP:R p.74) and the Solo template (CP:R p.86).
     public static CharacterSheet Streetrat(int row = 1) => new CharacterSheet
     {
         Identity = new CharacterIdentity { Name = "Rook", NativeLanguage = "Japanese", Home = "Kabuki" },
@@ -131,10 +129,8 @@ internal static class CharacterTestData
         Wallet = new Wallet { Balance = 500 },
     }.Normalize();
 
-    /// <summary>
-    /// Edgerunner Solo: every STAT rolled 3 (row 3 of the Solo table), the 20 Role skills at 4 except Handgun and
-    /// Evasion at 5: 19 × 4 + Autofire (x2) 4 × 2 + 2 = 86.
-    /// </summary>
+    // Edgerunner Solo: every STAT rolled 3 (row 3 of the Solo table), the 20 Role skills at 4 except Handgun and
+    // Evasion at 5: 19 × 4 + Autofire (x2) 4 × 2 + 2 = 86.
     public static CharacterSheet Edgerunner()
     {
         var skills = Rules.RoleSkillLevels("Solo", "Watson").Keys.ToDictionary(k => k, _ => 4, StringComparer.OrdinalIgnoreCase);
@@ -164,7 +160,7 @@ internal static class CharacterTestData
         return skills;
     }
 
-    // ------------------------------------------------------------ builders
+    // builders
 
     private static CatalogItem Add(CatalogItem item)
     {

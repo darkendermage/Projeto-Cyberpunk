@@ -63,7 +63,7 @@ public class NpcCompendiumApiTests(ApiFactory factory)
         body.Should().Contain("isn't in the compendium");
     }
 
-    // ------------------------------------------------------------------ joining a fight
+    // joining a fight
 
     private async Task<(HttpStatusCode Status, JsonNode Body)> PostJson(string url, object body, string language = "pt-BR")
     {
@@ -218,7 +218,7 @@ public class NpcCompendiumApiTests(ApiFactory factory)
         Fighter(burst, "Adam")["weapons"]!.AsArray().Single(w => w!["name"]!.GetValue<string>().Contains("Chain Gun"))!["rounds"]!.GetValue<int>().Should().Be(70);
     }
 
-    // ------------------------------------------------------------------ printed rules in combat
+    // printed rules in combat
 
     private async Task<JsonNode> FightWith(string compendiumNpcId)
     {

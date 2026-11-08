@@ -37,7 +37,7 @@ public class ProgressionTests
     [Fact]
     public void Skills_cost_twenty_per_next_level_and_forty_when_marked_x2()
     {
-        // Handgun 6 → 7 costs 140; Autofire (x2) 6 → 7 costs 280 (CP:R p.410).
+        // Handgun 6 -> 7 costs 140; Autofire (x2) 6 -> 7 costs 280 (CP:R p.410).
         var raised = Progression.ImproveSkill(Veteran(500), new ImproveSkillRequest(0, "handgun"), Change(Veteran(500)));
         raised.Skills["handgun"].Should().Be(7);
         raised.Progress.Ip.Should().Be(360);
@@ -99,7 +99,7 @@ public class ProgressionTests
         act.Should().Throw<RequestValidationException>();
     }
 
-    // ------------------------------------------------------------ Role modules (11.3)
+    // Role modules (11.3)
 
     private sealed class MediaModule : IRoleModule
     {

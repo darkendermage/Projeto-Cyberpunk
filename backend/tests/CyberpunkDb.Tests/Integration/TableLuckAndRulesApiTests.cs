@@ -10,7 +10,7 @@ using FluentAssertions;
 
 namespace CyberpunkDb.Tests.Integration;
 
-/// <summary>LUCK spent on a Check (+1 a point, CP:R p.130), the table's 1-LUCK reroll, and the rules a player can look up.</summary>
+// LUCK spent on a Check (+1 a point, CP:R p.130), the table's 1-LUCK reroll, and the rules a player can look up.
 [Collection(ApiCollection.Name)]
 public class TableLuckAndRulesApiTests(ApiFactory factory)
 {

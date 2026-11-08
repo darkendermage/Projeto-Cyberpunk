@@ -5,7 +5,7 @@ using FluentAssertions;
 
 namespace CyberpunkDb.Tests.Integration;
 
-/// <summary>The Solo's Combat Awareness in the fight (D3, CP:R p.146). The Streetrat Solo has Rank 4.</summary>
+// The Solo's Combat Awareness in the fight (D3, CP:R p.146). The Streetrat Solo has Rank 4.
 [Collection(ApiCollection.Name)]
 public class CombatAwarenessApiTests(ApiFactory factory)
 {

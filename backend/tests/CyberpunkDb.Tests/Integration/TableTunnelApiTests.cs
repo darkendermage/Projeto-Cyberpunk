@@ -7,7 +7,7 @@ using FluentAssertions;
 
 namespace CyberpunkDb.Tests.Integration;
 
-/// <summary>The tunnel controls on the GM's side; the test host has no cloudflared.</summary>
+// The tunnel controls on the GM's side; the test host has no cloudflared
 [Collection(ApiCollection.Name)]
 public class TableTunnelApiTests(ApiFactory factory)
 {

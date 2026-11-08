@@ -6,13 +6,13 @@ using FluentAssertions;
 
 namespace CyberpunkDb.Tests.Integration;
 
-/// <summary>Images of saved NPCs and of the compendium's named NPCs, which the table's tokens inherit.</summary>
+// Images of saved NPCs and of the compendium's named NPCs, which the table's tokens inherit
 [Collection(ApiCollection.Name)]
 public class NpcPortraitsApiTests(ApiFactory factory)
 {
     private readonly HttpClient _client = factory.CreateClient();
 
-    /// <summary>A saved NPC built by the generator (the same path the generator screen takes).</summary>
+    // A saved NPC built by the generator (the same path the generator screen takes)
     internal static async Task<int> SavedNpc(HttpClient client, string name = "Retratado")
     {
         var generated = (await (await client.PostAsJsonAsync("/api/npcs/generate", new { level = "Mook", seed = 7 })).Content.ReadFromJsonAsync<JsonNode>())!;

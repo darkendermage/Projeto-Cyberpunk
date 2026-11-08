@@ -9,7 +9,7 @@ using CyberpunkDb.Tests.Unit.Npcs;
 
 namespace CyberpunkDb.Tests.Unit.NightMarkets;
 
-/// <summary>The real rule book and the real seed catalog, read straight from the import file (no database).</summary>
+// The real rule book and the real seed catalog, read straight from the import file (no database)
 internal static class MarketTestData
 {
     private static readonly Dictionary<string, string> CategoryKeys = new()
@@ -27,7 +27,7 @@ internal static class MarketTestData
         ["vehicle-upgrades"] = ItemCategory.VehicleUpgrade, ["hq-upgrades"] = ItemCategory.HqUpgrade,
     };
 
-    /// <summary>The attribute that holds each category's own type in the import format.</summary>
+    // The attribute that holds each category's own type in the import format
     private static readonly string[] TypeKeys =
         ["cyberwareType", "weaponClass", "armorType", "gearType", "netType", "classification", "attachmentType", "vehicleType", "kind", "upgradeType"];
 
@@ -72,7 +72,7 @@ internal static class MarketTestData
     }
 }
 
-/// <summary>Dice that return the given results in order, cycling.</summary>
+// Dice that return the given results in order, cycling
 internal sealed class FixedDice(params int[] rolls) : IDiceRoller
 {
     private int _i;

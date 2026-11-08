@@ -16,7 +16,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace CyberpunkDb.Tests.Integration;
 
-/// <summary>Tokens of saved and compendium NPCs show the NPC's image, to the GM and to the players who see the token.</summary>
+// Tokens of saved and compendium NPCs show the NPC's image, to the GM and to the players who see the token
 [Collection(ApiCollection.Name)]
 public class TableTokenImagesApiTests(ApiFactory factory)
 {
@@ -179,7 +179,7 @@ public class TableTokenImagesApiTests(ApiFactory factory)
         view.Tokens.Single().ImageUrl.Should().NotBe(before);
     }
 
-    /// <summary>Records every SQL query a context runs.</summary>
+    // Records every SQL query a context runs
     private sealed class SqlLog : DbCommandInterceptor
     {
         public List<string> Commands { get; } = [];

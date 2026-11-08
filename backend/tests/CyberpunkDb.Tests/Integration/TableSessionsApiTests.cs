@@ -5,10 +5,8 @@ using FluentAssertions;
 
 namespace CyberpunkDb.Tests.Integration;
 
-/// <summary>
-/// Sessions of the table (E2): "New session" archives the chat and the fights under a name; the GM reads old sessions;
-/// players see only the open one. The suite shares one database, so each test reads relative to what it created.
-/// </summary>
+// Sessions of the table: "New session" archives the chat and the fights under a name; the GM reads old sessions;
+// players see only the open one. The suite shares one database, so each test reads relative to what it created.
 [Collection(ApiCollection.Name)]
 public class TableSessionsApiTests(ApiFactory factory)
 {
@@ -28,7 +26,7 @@ public class TableSessionsApiTests(ApiFactory factory)
         var opened = await _t.Send<TableSessionDto>(_t.Gm, HttpMethod.Post, "/api/table/sessions", new NewSessionRequest("Sessão do teste"));
 
         opened.Open.Should().BeTrue();
-        opened.Name.Should().Be("Sessão do teste", "the name typed is the new session's (round 6)");
+        opened.Name.Should().Be("Sessão do teste", "the name typed is the new session's");
         (await _t.Send<List<TableMessageDto>>(_t.Gm, HttpMethod.Get, "/api/table/messages")).Should().BeEmpty();
         var archived = (await Sessions()).Single(s => s.Id == before.Id);
         archived.Open.Should().BeFalse();

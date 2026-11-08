@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.SignalR.Client;
 
 namespace CyberpunkDb.Tests.Integration;
 
-/// <summary>Scenes, tokens and areas of the virtual table, as the GM and the players use them.</summary>
+// Scenes, tokens and areas of the virtual table, as the GM and the players use them
 [Collection(ApiCollection.Name)]
 public class TableScenesApiTests(ApiFactory factory)
 {

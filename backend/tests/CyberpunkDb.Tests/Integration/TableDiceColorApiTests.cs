@@ -4,7 +4,7 @@ using FluentAssertions;
 
 namespace CyberpunkDb.Tests.Integration;
 
-/// <summary>Each person's dice color (E3): stamped on their rolls so every screen throws them in that color.</summary>
+// Each person's dice color: stamped on their rolls so every screen throws them in that color
 [Collection(ApiCollection.Name)]
 public class TableDiceColorApiTests(ApiFactory factory)
 {

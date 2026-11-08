@@ -30,7 +30,7 @@ public class EncountersApiTests(ApiFactory factory)
         return (await response.Content.ReadFromJsonAsync<CharacterDetailDto>(Json))!;
     }
 
-    /// <summary>A finalized Streetrat Solo, as in CharactersApiTests.</summary>
+    // A finalized Streetrat Solo, as in CharactersApiTests
     private async Task<CharacterDetailDto> FinalizedSolo()
     {
         var c = await Character(HttpMethod.Post, "/api/characters",

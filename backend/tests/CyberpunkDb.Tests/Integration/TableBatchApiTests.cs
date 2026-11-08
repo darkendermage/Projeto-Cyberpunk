@@ -7,7 +7,7 @@ using FluentAssertions;
 
 namespace CyberpunkDb.Tests.Integration;
 
-/// <summary>Several tokens and areas moved, cleared or hidden at once (a lasso selection), in one save.</summary>
+// Several tokens and areas moved, cleared or hidden at once (a lasso selection), in one save
 [Collection(ApiCollection.Name)]
 public class TableBatchApiTests(ApiFactory factory)
 {

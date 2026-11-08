@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.SignalR.Client;
 
 namespace CyberpunkDb.Tests.Integration;
 
-/// <summary>Changes made on a character sheet reach the table at once (B1).</summary>
+// Changes made on a character sheet reach the table at once
 [Collection(ApiCollection.Name)]
 public class TableLiveSyncApiTests(ApiFactory factory)
 {

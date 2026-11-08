@@ -7,7 +7,7 @@ using FluentAssertions;
 
 namespace CyberpunkDb.Tests.Integration;
 
-/// <summary>A player brings their own sheet (round 6): the file exported on their PC, linked to their seat.</summary>
+// A player brings their own sheet: the file exported on their PC, linked to their seat
 [Collection(ApiCollection.Name)]
 public class TableCharacterImportApiTests(ApiFactory factory)
 {

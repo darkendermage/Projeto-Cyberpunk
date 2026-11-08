@@ -20,7 +20,7 @@ public class CharactersApiTests(ApiFactory factory)
     private static readonly JsonSerializerOptions Json = new(JsonSerializerDefaults.Web) { Converters = { new JsonStringEnumConverter() } };
     private readonly HttpClient _client = factory.CreateClient();
 
-    // ------------------------------------------------------------ helpers
+    // helpers
 
     private async Task<CharacterDetailDto> Send(HttpMethod method, string url, object? body = null, HttpStatusCode expected = HttpStatusCode.OK)
     {
@@ -61,7 +61,7 @@ public class CharactersApiTests(ApiFactory factory)
         return await Post(c, "creation/finalize", new VersionRequest(c.Version));
     }
 
-    // ------------------------------------------------------------ rules
+    // rules
 
     [Fact]
     public async Task Rules_expose_roles_methods_and_tables_from_the_rule_files()
@@ -120,9 +120,9 @@ public class CharactersApiTests(ApiFactory factory)
         c.Report.Cyberware.Should().NotBeEmpty().And.OnlyContain(l => !string.IsNullOrWhiteSpace(l.Effect));
     }
 
-    // ------------------------------------------------------------ 1. the three methods
+    // the three methods
 
-    // ------------------------------------------------------------ export and import
+    // export and import
 
     [Fact]
     public async Task Export_and_import_bring_the_character_back_as_a_new_one()
@@ -268,7 +268,7 @@ public class CharactersApiTests(ApiFactory factory)
         c.Sheet.Stats["INT"].Should().Be(5);   // row 1, INT column
         c.Sheet.Stats["EMP"].Should().Be(6);   // row 10, EMP column
 
-        // 20 skills at 2 = 40 (x2 Electronics/Security costs 4 → 42); raise to spend exactly 86.
+        // 20 skills at 2 = 40 (x2 Electronics/Security costs 4 -> 42); raise to spend exactly 86.
         var skills = new Dictionary<string, int>(c.Sheet.Skills);
         foreach (var key in new[] { "basic-tech", "conceal-reveal-object", "cryptography", "cybertech", "handgun", "library-search", "education", "evasion", "stealth" })
             skills[key] = 6; // +4 each = 36 → 78
@@ -319,12 +319,12 @@ public class CharactersApiTests(ApiFactory factory)
         c.Sheet.Inventory.Single(i => i.Caliber == Caliber.Rifle).Rounds.Should().Be(30);
         c.Report.Humanity.Lost.Should().Be(14, "HL pré-definida durante a criação");
 
-        // 18. above the budget → refused and nothing changes
+        // above the budget -> refused and nothing changes
         var refused = await Raw(HttpMethod.Post, $"/api/characters/{c.Id}/purchase", new PurchaseRequest(c.Version, ids["assault-rifle-padrao"], 3));
         refused.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         (await _client.GetFromJsonAsync<CharacterDetailDto>($"/api/characters/{c.Id}", Json))!.Version.Should().Be(c.Version);
 
-        // 19. a general item can't come out of the fashion budget
+        // a general item can't come out of the fashion budget
         var misuse = await Raw(HttpMethod.Post, $"/api/characters/{c.Id}/purchase",
             new PurchaseRequest(c.Version, ids["agent"], 1, null, BudgetPool.CreationFashion));
         misuse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -472,7 +472,7 @@ public class CharactersApiTests(ApiFactory factory)
         (await response.Content.ReadAsStringAsync()).Should().Contain("pendência");
     }
 
-    // ------------------------------------------------------------ 24–28. persistence and isolation
+    // 24–28. persistence and isolation
 
     [Fact]
     public async Task Characters_are_isolated_and_survive_a_restart()
@@ -545,7 +545,7 @@ public class CharactersApiTests(ApiFactory factory)
         var c = await FinalizedSolo("Alvo");
         var maxHp = c.Report.Health.MaxHp;
 
-        // 21. 15 on the body against SP 11: 4 through, armor ablated to 10
+        // 15 on the body against SP 11: 4 through, armor ablated to 10
         c = await Post(c, "combat/damage", new DamageRequest(c.Version, 15));
         c.Report.Health.CurrentHp.Should().Be(maxHp - 4);
         c.Report.Armor.Body.Sp.Should().Be(10);
@@ -570,7 +570,7 @@ public class CharactersApiTests(ApiFactory factory)
         c.Report.Health.CurrentHp.Should().Be(1);
         c.Report.Health.DeathSavePenalty.Should().Be(0);
 
-        // 23. Critical Injury with bonus damage and Quick Fix
+        // Critical Injury with bonus damage and Quick Fix
         c = await Post(c, "injuries", new AddInjuryRequest(c.Version, InjuryLocation.Body, "Broken Leg", ApplyBonusDamage: false));
         var injury = c.Sheet.Injuries.Single();
         c.Report.Stats.Single(s => s.Key == "MOVE").Effective.Should().BeLessThan(c.Sheet.Stats["MOVE"]);

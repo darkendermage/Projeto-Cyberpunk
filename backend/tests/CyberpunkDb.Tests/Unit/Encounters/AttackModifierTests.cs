@@ -10,7 +10,7 @@ using static CyberpunkDb.Tests.Unit.Characters.CharacterTestData;
 
 namespace CyberpunkDb.Tests.Unit.Encounters;
 
-/// <summary>What adds to an attack besides the skill (D4): Excellent quality, a Smartgun, a Targeting Scope on aimed shots.</summary>
+// What adds to an attack besides the skill: Excellent quality, a Smartgun, a Targeting Scope on aimed shots
 public class AttackModifierTests
 {
     private static readonly AttackResolver Resolver = new(CombatRuleBook.LoadEmbedded(), Rules);

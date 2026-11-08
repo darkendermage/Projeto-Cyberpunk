@@ -4,7 +4,7 @@ using FluentAssertions;
 
 namespace CyberpunkDb.Tests.Unit.Table;
 
-/// <summary>The links the GM pastes for the table's music (G).</summary>
+// The links the GM pastes for the table's music (G)
 public class YouTubeLinkTests
 {
     [Theory]

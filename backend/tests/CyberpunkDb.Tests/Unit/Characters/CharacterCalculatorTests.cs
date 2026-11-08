@@ -13,7 +13,7 @@ public class CharacterCalculatorTests
     private static CharacterSheet WithStat(CharacterSheet s, string key, int value) =>
         s with { Stats = new Dictionary<string, int>(s.Stats, StringComparer.OrdinalIgnoreCase) { [key] = value } };
 
-    // 6. HP after BODY or WILL changes
+    // HP after BODY or WILL changes
 
     [Fact]
     public void Hp_is_ten_plus_five_times_the_rounded_up_average_of_body_and_will()
@@ -73,7 +73,7 @@ public class CharacterCalculatorTests
         report.Health.StabilizationDv.Should().Be(15);
     }
 
-    // 9. Death Save and Death Save Penalty
+    // Death Save and Death Save Penalty
 
     [Fact]
     public void Death_save_follows_body_and_penalty_adds_injuries_and_accumulated_saves()
@@ -122,7 +122,7 @@ public class CharacterCalculatorTests
         h.MaxHp.Should().Be(10 + 5 * 9); // ceil((12 + 6) / 2)
     }
 
-    // ------------------------------------------------------------ cyberware effects on the sheet
+    // cyberware effects on the sheet
 
     private static CharacterSheet Installed(params CatalogItem[] items) => CompletePackage() with
     {
@@ -186,7 +186,7 @@ public class CharacterCalculatorTests
         }
     }
 
-    // 10. Humanity and effective Empathy
+    // Humanity and effective Empathy
 
     [Fact]
     public void Humanity_max_is_emp_times_ten_and_effective_emp_is_the_tens_place()
@@ -229,7 +229,7 @@ public class CharacterCalculatorTests
         h.Current.Should().Be(32);
     }
 
-    // 11. Modifiers never overwrite base values
+    // Modifiers never overwrite base values
 
     [Fact]
     public void Modifiers_change_effective_values_but_never_the_base()

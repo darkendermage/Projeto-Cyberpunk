@@ -10,10 +10,8 @@ using FluentAssertions;
 
 namespace CyberpunkDb.Tests.Integration;
 
-/// <summary>
-/// The table setups the round-4 tests share: a finalized Solo with a seat, a fight with two gangers linked to a live
-/// scene with every token shown.
-/// </summary>
+// Shared table setup: a finalized Solo with a seat, a fight with two gangers linked to a live
+// scene with every token shown.
 internal sealed class TableScenario(ApiFactory factory)
 {
     public static readonly JsonSerializerOptions Json = new(JsonSerializerDefaults.Web) { Converters = { new JsonStringEnumConverter() } };
@@ -35,7 +33,7 @@ internal sealed class TableScenario(ApiFactory factory)
         return await client.SendAsync(request);
     }
 
-    /// <summary>A finalized Streetrat Solo: template row 6 (REF 7) as in EncountersApiTests, or row 2 (REF 8, can dodge bullets).</summary>
+    // A finalized Streetrat Solo: template row 6 (REF 7) as in EncountersApiTests, or row 2 (REF 8, can dodge bullets)
     public async Task<CharacterDetailDto> FinalizedSolo(string name, int row = 6)
     {
         var c = await Send<CharacterDetailDto>(Gm, HttpMethod.Post, "/api/characters",
@@ -51,7 +49,7 @@ internal sealed class TableScenario(ApiFactory factory)
 
     public sealed record Fight(int EncounterId, int SceneId, SeatDto Seat, int CharacterId, string PcCombatantId, IReadOnlyList<string> GangerIds);
 
-    /// <summary>A Solo and two gangers on the live scene, every token visible to the players.</summary>
+    // A Solo and two gangers on the live scene, every token visible to the players
     public async Task<Fight> FightOnTheTable(string name, int gangers = 2, int row = 6, int gangerRef = 6)
     {
         var solo = await FinalizedSolo(name, row);
@@ -73,11 +71,11 @@ internal sealed class TableScenario(ApiFactory factory)
         return new Fight(id, scene.Id, seat, solo.Id, pc, enemies);
     }
 
-    /// <summary>The fight's current version.</summary>
+    // The fight's current version
     public async Task<int> VersionOf(int encounterId) =>
         (await Send<JsonNode>(Gm, HttpMethod.Get, $"/api/encounters/{encounterId}"))["version"]!.GetValue<int>();
 
-    /// <summary>Rolls Initiative and makes <paramref name="combatantId"/> the active one.</summary>
+    // Rolls Initiative and makes combatantId the active one
     public async Task<JsonNode> MakeActive(int encounterId, string combatantId)
     {
         await Send<JsonNode>(Gm, HttpMethod.Post, $"/api/encounters/{encounterId}/initiative", new { version = await VersionOf(encounterId) });

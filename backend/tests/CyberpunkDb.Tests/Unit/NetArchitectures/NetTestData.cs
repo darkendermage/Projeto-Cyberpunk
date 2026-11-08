@@ -6,7 +6,7 @@ using CyberpunkDb.Domain.Enums;
 
 namespace CyberpunkDb.Tests.Unit.NetArchitectures;
 
-/// <summary>The real NET rule book and the Black ICE of the real seed catalog (no database).</summary>
+// The real NET rule book and the Black ICE of the real seed catalog (no database)
 internal static class NetTestData
 {
     public static readonly NetArchitectureRuleBook Rules = NetArchitectureRuleBook.LoadEmbedded();
@@ -40,7 +40,7 @@ internal static class NetTestData
         }));
     }
 
-    /// <summary>One floor of a hand-built Architecture.</summary>
+    // One floor of a hand-built Architecture
     public static NetFloor Floor(string branch, int depth, params NetContent[] contents) => new()
     {
         Id = $"{branch}{depth}", BranchId = branch, Depth = depth, Table = depth <= 2 && branch == "A" ? "Lobby" : "Standard",

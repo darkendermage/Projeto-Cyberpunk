@@ -18,7 +18,7 @@ public class CombatOperationsTests
 
     private static readonly CombatOperations Combat = new(Rules, Calculator, new FixedDice(5));
 
-    /// <summary>Finalized Complete Package Solo (45 HP, BODY 7) wearing Light Armorjack on body and head.</summary>
+    // Finalized Complete Package Solo (45 HP, BODY 7) wearing Light Armorjack on body and head
     private static CharacterSheet Armored() => CompletePackage() with
     {
         Creation = CompletePackage().Creation with { Finalized = true },

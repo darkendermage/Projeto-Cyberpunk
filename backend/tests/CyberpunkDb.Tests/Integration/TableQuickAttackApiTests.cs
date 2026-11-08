@@ -12,7 +12,7 @@ using FluentAssertions;
 
 namespace CyberpunkDb.Tests.Integration;
 
-/// <summary>Attacks from the cards under the map: the player's own on their Turn, the GM's with anyone, and the undo.</summary>
+// Attacks from the cards under the map: the player's own on their Turn, the GM's with anyone, and the undo
 [Collection(ApiCollection.Name)]
 public class TableQuickAttackApiTests(ApiFactory factory)
 {
@@ -30,10 +30,8 @@ public class TableQuickAttackApiTests(ApiFactory factory)
         return (await response.Content.ReadFromJsonAsync<T>(Json))!;
     }
 
-    /// <summary>
-    /// A quick attack that always resolves: two 6s on the damage pause it for the Critical Injury roll (round 4, D1), which
-    /// the GM rolls here; the attack is then read from the chat as <paramref name="client"/> sees it.
-    /// </summary>
+    // A quick attack that always resolves: two 6s on the damage pause it for the Critical Injury roll, which
+    // the GM rolls here; the attack is then read from the chat as client sees it.
     private async Task<TableAttack> Shoot(HttpClient client, string url, object body, int encounterId, string? seat = null)
     {
         var result = await Send<QuickAttackResult>(client, HttpMethod.Post, url, body, seat);
@@ -62,7 +60,7 @@ public class TableQuickAttackApiTests(ApiFactory factory)
 
     private sealed record Setup(int EncounterId, int SceneId, SeatDto Seat, int CharacterId, string SoloId, string GangerId);
 
-    /// <summary>A Solo and a ganger on the live scene, both tokens visible; Initiative rolled.</summary>
+    // A Solo and a ganger on the live scene, both tokens visible; Initiative rolled
     private async Task<Setup> FightOnTheTable(string name)
     {
         var solo = await FinalizedSolo(name);
@@ -123,7 +121,7 @@ public class TableQuickAttackApiTests(ApiFactory factory)
             attack.AttackerId.Should().Be(s.SoloId);
             attack.Seq.Should().Be(i + 1);
             var target = attack.Targets.Single();
-            // Everyone reads the roll, the DV and the damage dealt (C5); only how much went into an NPC's HP stays hidden.
+            // Everyone reads the roll, the DV and the damage dealt; only how much went into an NPC's HP stays hidden.
             target.Dv.Should().NotBeNull();
             target.Through.Should().BeNull();
             if (target.Hit)

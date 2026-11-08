@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.SignalR.Client;
 
 namespace CyberpunkDb.Tests.Integration;
 
-/// <summary>Chat and dice of the virtual table: the server rolls, and each message reaches only who may read it.</summary>
+// Chat and dice of the virtual table: the server rolls, and each message reaches only who may read it
 [Collection(ApiCollection.Name)]
 public class TableChatApiTests(ApiFactory factory)
 {
@@ -124,7 +124,7 @@ public class TableChatApiTests(ApiFactory factory)
         await Send<object>(_player, HttpMethod.Post, "/api/table/play/messages", new SendMessageRequest("oi"), null, HttpStatusCode.Unauthorized);
 
         await Send<TableMessageDto>(_gm, HttpMethod.Post, "/api/table/rolls", new RollRequest("3d6", RollKind.Damage, "Dano"));
-        // A new session starts an empty chat (round 4: the old one is archived, not deleted).
+        // A new session starts an empty chat (the old one is archived, not deleted).
         await Send<TableSessionDto>(_gm, HttpMethod.Post, "/api/table/sessions", new NewSessionRequest(null));
         (await History(null)).Should().BeEmpty();
     }

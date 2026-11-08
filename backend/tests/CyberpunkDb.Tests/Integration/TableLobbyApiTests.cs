@@ -5,10 +5,8 @@ using FluentAssertions;
 
 namespace CyberpunkDb.Tests.Integration;
 
-/// <summary>
-/// The general link: with the entrance open, a player picks a free seat and gets a fresh key for it. The lobby lives in
-/// memory and is shared by the whole test collection, so every test sets it first and looks only at its own seats.
-/// </summary>
+// The general link: with the entrance open, a player picks a free seat and gets a fresh key for it. The lobby lives in
+// memory and is shared by the whole test collection, so every test sets it first and looks only at its own seats.
 [Collection(ApiCollection.Name)]
 public class TableLobbyApiTests(ApiFactory factory)
 {

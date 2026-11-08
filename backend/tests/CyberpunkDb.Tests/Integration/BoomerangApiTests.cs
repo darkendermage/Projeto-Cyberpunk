@@ -7,7 +7,7 @@ using FluentAssertions;
 
 namespace CyberpunkDb.Tests.Integration;
 
-/// <summary>The Ranger Combat Boomerang in a fight: thrown, out of hand until it comes back or is picked up (D5).</summary>
+// The Ranger Combat Boomerang in a fight: thrown, out of hand until it comes back or is picked up
 [Collection(ApiCollection.Name)]
 public class BoomerangApiTests(ApiFactory factory)
 {

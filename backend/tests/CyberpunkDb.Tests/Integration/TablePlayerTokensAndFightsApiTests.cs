@@ -12,7 +12,7 @@ using FluentAssertions;
 
 namespace CyberpunkDb.Tests.Integration;
 
-/// <summary>A player puts their own token on the live scene; the GM starts a fight from the tokens on the map.</summary>
+// A player puts their own token on the live scene; the GM starts a fight from the tokens on the map
 [Collection(ApiCollection.Name)]
 public class TablePlayerTokensAndFightsApiTests(ApiFactory factory)
 {
@@ -55,7 +55,7 @@ public class TablePlayerTokensAndFightsApiTests(ApiFactory factory)
     private Task<SeatDto> NewSeat(string label, int? characterId = null) =>
         Send<SeatDto>(_gm, HttpMethod.Post, "/api/table/seats", new CreateSeatRequest(label, characterId), expected: HttpStatusCode.Created);
 
-    // ------------------------------------------------------------------ the player's own token
+    // the player's own token
 
     [Fact]
     public async Task Player_places_their_character_token_once()
@@ -113,7 +113,7 @@ public class TablePlayerTokensAndFightsApiTests(ApiFactory factory)
         await Send<JsonNode>(_player, HttpMethod.Post, "/api/table/play/my-token", new PlaceTokenRequest(4, 4), seat.Token, HttpStatusCode.Conflict);
     }
 
-    // ------------------------------------------------------------------ a fight from the map
+    // a fight from the map
 
     [Fact]
     public async Task Gm_starts_a_fight_from_the_tokens_on_the_map()

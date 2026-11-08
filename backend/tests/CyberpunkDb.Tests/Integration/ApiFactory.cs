@@ -7,28 +7,26 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace CyberpunkDb.Tests.Integration;
 
-/// <summary>
-/// Boots the real API against a throw-away SQLite file seeded with the real seed files.
-/// Shared by all integration tests (seeding happens once).
-/// </summary>
+// Boots the real API against a throw-away SQLite file seeded with the real seed files.
+// Shared by all integration tests (seeding happens once).
 public sealed class ApiFactory : WebApplicationFactory<Program>
 {
     private readonly string _dbPath;
 
     public ApiFactory() : this(Path.Combine(Path.GetTempPath(), $"cyberpunkdb-tests-{Guid.NewGuid():N}.db")) { }
 
-    /// <summary>Boots the API on an existing database file, as a restarted application would.</summary>
+    // Boots the API on an existing database file, as a restarted application would
     internal ApiFactory(string dbPath) => _dbPath = dbPath;
 
     public string DbPath => _dbPath;
 
-    /// <summary>The players' port of the virtual table; requests carrying <see cref="PortHeader"/> arrive on it.</summary>
+    // The players' port of the virtual table; requests carrying PortHeader arrive on it
     public const int PlayerPort = 5091;
     public const string PortHeader = "X-Test-Local-Port";
 
     public string MediaRoot { get; } = Path.Combine(Path.GetTempPath(), $"cyberpunkdb-media-{Guid.NewGuid():N}");
 
-    /// <summary>A client whose requests arrive on the players' port, as the tunnel's would.</summary>
+    // A client whose requests arrive on the players' port, as the tunnel's would
     public HttpClient CreatePlayerClient()
     {
         var client = CreateClient();
@@ -36,10 +34,10 @@ public sealed class ApiFactory : WebApplicationFactory<Program>
         return client;
     }
 
-    /// <summary>Keeps the database file when this instance is disposed (used to simulate a restart).</summary>
+    // Keeps the database file when this instance is disposed (used to simulate a restart)
     public bool KeepDatabase { get; init; }
 
-    /// <summary>The tests read the messages in Portuguese, the language the texts were written in.</summary>
+    // The tests read the messages in Portuguese, the language the texts were written in
     protected override void ConfigureClient(HttpClient client)
     {
         base.ConfigureClient(client);
@@ -72,7 +70,7 @@ public sealed class ApiFactory : WebApplicationFactory<Program>
         try { Directory.Delete(MediaRoot, recursive: true); } catch (IOException) { /* best effort */ }
     }
 
-    /// <summary>TestServer has no ports: this sets the local port from a header, before the app's own middleware.</summary>
+    // TestServer has no ports: this sets the local port from a header, before the app's own middleware
     private sealed class TestPortFilter : IStartupFilter
     {
         public Action<IApplicationBuilder> Configure(Action<IApplicationBuilder> next) => app =>

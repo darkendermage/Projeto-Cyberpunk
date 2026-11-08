@@ -7,7 +7,7 @@ namespace CyberpunkDb.Tests.Unit.NetArchitectures;
 
 public class NetArchitecturePricingTests
 {
-    /// <summary>CP:R p.218, "Home Security: An Example": TLB LTD's 4-floor warehouse system costs 13,500eb.</summary>
+    // CP:R p.218, "Home Security: An Example": TLB LTD's 4-floor warehouse system costs 13,500eb.
     private static ArchitectureState TlbLtd() => new()
     {
         Difficulty = NetDifficulty.Standard,

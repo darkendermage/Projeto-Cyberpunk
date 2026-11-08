@@ -8,7 +8,7 @@ using static CyberpunkDb.Tests.Unit.Characters.CharacterTestData;
 
 namespace CyberpunkDb.Tests.Unit.Characters;
 
-/// <summary>Role Abilities that add to Skills (A3): Moto (CP:R p.161), Field Expertise (p.147) and Threat Detection (p.146).</summary>
+// Role Abilities that add to Skills: Moto (CP:R p.161), Field Expertise (p.147) and Threat Detection (p.146).
 public class RoleSkillBonusTests
 {
     private static readonly ProgressionOperations Progression = new(Rules);

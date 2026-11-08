@@ -4,7 +4,7 @@ using FluentAssertions;
 
 namespace CyberpunkDb.Tests.Unit.Characters;
 
-/// <summary>The portrait's framing (A1).</summary>
+// The portrait's framing
 public class PortraitFocusTests
 {
     [Fact]
