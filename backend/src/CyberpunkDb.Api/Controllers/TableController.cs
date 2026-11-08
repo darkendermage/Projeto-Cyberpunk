@@ -75,6 +75,9 @@ public sealed class TableController(SeatService seats, MediaService media, Scene
     [HttpPost("music/volume")]
     public Task<TableMusicStateDto> MusicVolume(MusicVolumeRequest request, CancellationToken ct) => music.VolumeAsync(request, ct);
 
+    [HttpPost("music/recent/forget")]
+    public Task<TableMusicStateDto> ForgetRecentMusic(ForgetRecentMusicRequest request, CancellationToken ct) => music.ForgetRecentAsync(request, ct);
+
     [HttpDelete("music")]
     public Task<TableMusicStateDto> StopMusic(CancellationToken ct) => music.StopAsync(ct);
 

@@ -208,7 +208,6 @@
   background: var(--bg-2);
   border: 1px solid var(--line-strong);
 }
-.seatRevoked { opacity: 0.5; }
 .swatch { width: 12px; height: 12px; border-radius: 3px; flex: none; }
 .link {
   font-family: var(--font-mono);

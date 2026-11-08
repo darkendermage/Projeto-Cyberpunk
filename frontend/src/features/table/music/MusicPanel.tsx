@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { FastForward, Pause, Play, Rewind, SkipForward, Square } from 'lucide-react';
+import { FastForward, Pause, Play, Rewind, SkipForward, Square, X } from 'lucide-react';
 import { problemMessage } from '../../../api/characters';
 import { tableApi } from '../../../api/table';
 import type { TableMusicState } from '../../../api/tableTypes';
@@ -67,14 +67,24 @@ export function MusicPanel() {
         </div>
       )}
       {(state.data?.recent.length ?? 0) > 0 && (
-        <div className={styles.row}>
+        <div className={styles.stack} style={{ gap: 4 }}>
           <span className={styles.label}>{t('Recentes', 'Recent')}</span>
-          {state.data!.recent.map((r) => (
-            <button key={`${r.videoId}|${r.playlistId}`} type="button" className={styles.weaponChip}
-              onClick={() => apply(tableApi.loadMusic({ url: r.playlistId && !r.videoId ? `https://www.youtube.com/playlist?list=${r.playlistId}` : `https://youtu.be/${r.videoId}${r.playlistId ? `?list=${r.playlistId}` : ''}`, title: r.title }))}>
-              {r.title ?? r.videoId ?? r.playlistId}
-            </button>
-          ))}
+          {state.data!.recent.map((r) => {
+            const name = r.title ?? r.videoId ?? r.playlistId;
+            return (
+              <div key={`${r.videoId}|${r.playlistId}`} className={styles.weaponChipGroup}>
+                <button type="button" className={styles.weaponChip} title={name ?? undefined}
+                  onClick={() => apply(tableApi.loadMusic({ url: r.playlistId && !r.videoId ? `https://www.youtube.com/playlist?list=${r.playlistId}` : `https://youtu.be/${r.videoId}${r.playlistId ? `?list=${r.playlistId}` : ''}`, title: r.title }))}>
+                  {name}
+                </button>
+                <button type="button" className={styles.weaponChip} aria-label={t(`Tirar "${name}" dos recentes`, `Remove "${name}" from recent`)}
+                  title={t('Tirar dos recentes', 'Remove from recent')}
+                  onClick={() => apply(tableApi.forgetRecentMusic({ videoId: r.videoId, playlistId: r.playlistId }))}>
+                  <X size={12} />
+                </button>
+              </div>
+            );
+          })}
         </div>
       )}
       <span className={styles.muted}>{t('Os jogadores ouvem no player do canto do mapa, cada um com seu volume. Alguns vídeos não deixam tocar fora do YouTube.', 'Players hear it in the player in the corner of the map, each with their own volume. Some videos can\'t play outside YouTube.')}</span>

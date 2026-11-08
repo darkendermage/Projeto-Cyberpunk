@@ -43,6 +43,19 @@ public class TableMusicApiTests(ApiFactory factory)
     }
 
     [Fact]
+    public async Task Forgetting_a_recent_link_removes_only_it_and_keeps_the_music()
+    {
+        await _t.Send<TableMusicStateDto>(_t.Gm, HttpMethod.Put, "/api/table/music", new LoadMusicRequest("https://youtu.be/forgetme001", "Esquecer"));
+        await _t.Send<TableMusicStateDto>(_t.Gm, HttpMethod.Put, "/api/table/music", new LoadMusicRequest("https://youtu.be/keepme00001", "Manter"));
+
+        var state = await _t.Send<TableMusicStateDto>(_t.Gm, HttpMethod.Post, "/api/table/music/recent/forget", new ForgetRecentMusicRequest("forgetme001", null));
+
+        state.Recent.Should().NotContain(r => r.VideoId == "forgetme001");
+        state.Recent.Should().Contain(r => r.VideoId == "keepme00001");
+        state.Music!.VideoId.Should().Be("keepme00001", "forgetting a link doesn't stop what is playing");
+    }
+
+    [Fact]
     public async Task Bad_link_is_400()
     {
         (await _t.Raw(_t.Gm, HttpMethod.Put, "/api/table/music", new LoadMusicRequest("https://evil.com/x", null))).StatusCode.Should().Be(HttpStatusCode.BadRequest);

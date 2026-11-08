@@ -25,6 +25,9 @@ public sealed record MusicPositionRequest(double? PositionSeconds);
 
 public sealed record MusicVolumeRequest(int Volume);
 
+/// <summary>A recent link to drop from the list, by its video and playlist.</summary>
+public sealed record ForgetRecentMusicRequest(string? VideoId, string? PlaylistId);
+
 /// <summary>Reads a YouTube link: watch, youtu.be, music.youtube.com and playlist forms. Anything else is refused.</summary>
 public static partial class YouTubeLink
 {
@@ -118,6 +121,14 @@ public sealed class TableMusicService(TableSettingsService settings, ITableNotif
         await settings.SetAsync(MusicKey, null, ct);
         await notifier.MusicAsync(null, ct);
         return new TableMusicStateDto(null, await RecentAsync(ct));
+    }
+
+    /// <summary>Drops a link from the recent list; what is playing goes on.</summary>
+    public async Task<TableMusicStateDto> ForgetRecentAsync(ForgetRecentMusicRequest r, CancellationToken ct)
+    {
+        var recent = (await RecentAsync(ct)).Where(x => x.VideoId != r.VideoId || x.PlaylistId != r.PlaylistId).ToList();
+        await settings.SetAsync(RecentKey, JsonSerializer.Serialize(recent, Json), ct);
+        return new TableMusicStateDto(await CurrentAsync(ct), recent);
     }
 
     /// <summary>Where the track is now: the stored position, plus the time since when it is playing.</summary>

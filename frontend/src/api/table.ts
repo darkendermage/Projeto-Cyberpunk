@@ -70,6 +70,7 @@ export const tableApi = {
   seekMusic: (positionSeconds: number) => request<TableMusicState>('/table/music/seek', { method: 'POST', body: json({ positionSeconds }) }),
   nextMusic: () => request<TableMusicState>('/table/music/next', { method: 'POST' }),
   musicVolume: (volume: number) => request<TableMusicState>('/table/music/volume', { method: 'POST', body: json({ volume }) }),
+  forgetRecentMusic: (body: { videoId: string | null; playlistId: string | null }) => request<TableMusicState>('/table/music/recent/forget', { method: 'POST', body: json(body) }),
   stopMusic: () => request<TableMusicState>('/table/music', { method: 'DELETE' }),
   gmDiceColor: () => request<{ color: string | null }>('/table/dice-color'),
   setGmDiceColor: (color: string | null) => request<{ color: string | null }>('/table/dice-color', { method: 'PUT', body: json({ color }) }),

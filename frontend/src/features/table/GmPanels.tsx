@@ -515,8 +515,6 @@ export function InvitesTab({ seats, act }: { seats: Seat[]; act: Act }) {
   const [busy, setBusy] = useState(false);
   const [label, setLabel] = useState('');
   const [characterId, setCharacterId] = useState<number | null>(null);
-  const [showRevoked, setShowRevoked] = useState(false);
-  const revoked = seats.filter((s) => s.revoked).length;
 
   const tunnelAction = async (fn: () => Promise<TunnelStatus>) => {
     setBusy(true);
@@ -580,11 +578,12 @@ export function InvitesTab({ seats, act }: { seats: Seat[]; act: Act }) {
             <Button type="submit" icon={<Plus size={15} />} disabled={!label.trim()}>{t('Convidar', 'Invite')}</Button>
           </div>
         </form>
-        {seats.filter((s) => showRevoked || !s.revoked).map((s) => {
+        {/* Revoked invites leave the list: their links no longer work, so there is nothing left to do with them. */}
+        {seats.filter((s) => !s.revoked).map((s) => {
           const link = base ? `${base}/mesa/j/${s.token}` : null;
           const character = characters.data?.find((c) => c.id === s.characterId);
           return (
-            <div key={s.id} className={`${styles.seat} ${s.revoked ? styles.seatRevoked : ''}`}>
+            <div key={s.id} className={styles.seat}>
               <div className={styles.rowBetween}>
                 <span className={styles.row}>
                   <span className={styles.swatch} style={{ background: s.color }} />
@@ -593,17 +592,16 @@ export function InvitesTab({ seats, act }: { seats: Seat[]; act: Act }) {
                 </span>
                 <span className={styles.status}>
                   <span className={`${styles.dot} ${online.data?.includes(s.id) ? styles.dotOn : s.claimed ? styles.dotWarn : ''}`} />
-                  {s.revoked ? t('revogado', 'revoked') : online.data?.includes(s.id) ? t('conectado', 'connected') : s.claimed ? t('na mesa', 'taken') : t('livre', 'free')}
+                  {online.data?.includes(s.id) ? t('conectado', 'connected') : s.claimed ? t('na mesa', 'taken') : t('livre', 'free')}
                 </span>
               </div>
-              {!s.revoked && link && (
+              {link && (
                 <div className={styles.row}>
                   <span className={`${styles.link} ${styles.grow}`}>{link}</span>
                   <IconButton label={t('Copiar link', 'Copy link')} onClick={() => copy(link)}><Copy size={14} /></IconButton>
                 </div>
               )}
-              {!s.revoked && (
-                <div className={styles.row}>
+              <div className={styles.row}>
                   {s.claimed && (
                     <Button variant="ghost" onClick={() => {
                       if (window.confirm(t(`Liberar o lugar de ${s.label}? Quem está nele sai da mesa, o link antigo para de funcionar e o lugar volta para a entrada.`, `Release ${s.label}'s seat? Whoever holds it leaves the table, the old link stops working and the seat goes back to the entrance.`))) void act(async () => { await tableApi.releaseSeat(s.id); });
@@ -612,15 +610,11 @@ export function InvitesTab({ seats, act }: { seats: Seat[]; act: Act }) {
                   <Button variant="ghost" onClick={() => {
                     if (window.confirm(t(`Revogar o convite de ${s.label}? O link para de funcionar.`, `Revoke ${s.label}'s invite? The link stops working.`))) void act(async () => { await tableApi.revokeSeat(s.id); });
                   }}>{t('Revogar', 'Revoke')}</Button>
-                </div>
-              )}
+              </div>
             </div>
           );
         })}
-        {revoked > 0 && (
-          <Switch checked={showRevoked} onChange={setShowRevoked} label={t(`Mostrar revogados (${revoked})`, `Show revoked (${revoked})`)} />
-        )}
-        {status?.state !== 'Running' && seats.length > 0 && <span className={styles.muted}>{t('Com o túnel fechado, os links só abrem nesta máquina (bom para testar).', 'With the tunnel closed, the links only open on this machine (good for testing).')}</span>}
+        {status?.state !== 'Running' && seats.some((s) => !s.revoked) && <span className={styles.muted}>{t('Com o túnel fechado, os links só abrem nesta máquina (bom para testar).', 'With the tunnel closed, the links only open on this machine (good for testing).')}</span>}
       </div>
     </div>
   );
