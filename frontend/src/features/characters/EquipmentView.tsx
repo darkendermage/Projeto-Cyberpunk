@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Crosshair, Gift, Glasses, History, ShoppingBag, Wallet, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Crosshair, Gift, Glasses, History, ShoppingBag, Wallet, X } from 'lucide-react';
 import { problemMessage, useCharacterCommand, useCharacterEvents } from '../../api/characters';
 import type { CharacterDetail, CharacterRules, InventoryLine, WearableLine } from '../../api/characterTypes';
 import { Button, Modal, NumberInput, Select } from '../../components/ui/ui';
@@ -8,6 +8,7 @@ import { useToast } from '../../state/ToastContext';
 import { formatDate, signed } from './characterLabels';
 import { SheetPanel, StateTag } from './CharacterUi';
 import { EquippedSection, GearStats, InventorySection, ItemPage, type GearActions } from './GearSections';
+import { PAGE_SIZE, paginate } from './gearLayout';
 import { Attachments, type Run } from './CombatPanels';
 import { StorePicker, type PurchaseInput } from './StorePicker';
 import type { SheetEditor } from './useSheetEditor';
@@ -78,12 +79,15 @@ type StoreMode = 'buy' | 'receive';
 /** Financeiro: the balance, the last transaction, buy and receive, and the history (with manual entries) in a window. */
 function FinancePanel({ detail, run, busy, onStore }: { detail: CharacterDetail; run: Run; busy: boolean; onStore: (mode: StoreMode) => void }) {
   const [history, setHistory] = useState(false);
+  const [page, setPage] = useState(0);
   const [amount, setAmount] = useState('');
   const [reason, setReason] = useState('');
   const ledger = useCharacterEvents(detail.id);
   const finalized = detail.sheet.creation.finalized;
   const entries = (ledger.data ?? []).filter((e) => e.kind === 'Ledger');
   const last = entries[0];
+  // The history window shows ten transactions per page (round 7).
+  const shown = paginate(entries, page);
 
   return (
     <section className={`${styles.gearPanel} ${styles.gearFinance}`} aria-label={t('Financeiro', 'Money')}>
@@ -99,7 +103,7 @@ function FinancePanel({ detail, run, busy, onStore }: { detail: CharacterDetail;
           <Button icon={<Gift size={14} />} disabled={!finalized}
             title={finalized ? t('Troca, presente ou saque: entra sem pagar', 'Trade, gift or loot: comes in without paying') : t('Itens sem custo só entram depois da criação', 'Free items only come in after creation')}
             onClick={() => onStore('receive')}>{t('Receber', 'Receive')}</Button>
-          <Button variant="ghost" icon={<History size={14} />} onClick={() => setHistory(true)}>{t('Ver histórico', 'View history')}</Button>
+          <Button variant="ghost" icon={<History size={14} />} onClick={() => { setPage(0); setHistory(true); }}>{t('Ver histórico', 'View history')}</Button>
         </div>
       </div>
 
@@ -122,7 +126,7 @@ function FinancePanel({ detail, run, busy, onStore }: { detail: CharacterDetail;
           )}
           {entries.length === 0 && <span className={`${styles.small} ${styles.muted}`}>{t('Nenhuma movimentação.', 'No transactions.')}</span>}
           <ul className={styles.list}>
-            {entries.slice(0, 100).map((e) => (
+            {shown.rows.map((e) => (
               <li key={e.id} className={styles.listItem}>
                 <span className={`${styles.small} ${styles.grow}`}>{tv(e.description)}{e.isManual && <span className={styles.tag}>manual</span>}
                   <span className={styles.source}> · {formatDate(e.createdAt)}</span></span>
@@ -130,6 +134,21 @@ function FinancePanel({ detail, run, busy, onStore }: { detail: CharacterDetail;
               </li>
             ))}
           </ul>
+          {entries.length > 0 && (
+            <footer className={styles.gearPager}>
+              <span className={styles.muted}>
+                {t(`Exibindo ${shown.page * PAGE_SIZE + 1}–${shown.page * PAGE_SIZE + shown.rows.length} de ${entries.length} movimentações`,
+                  `Showing ${shown.page * PAGE_SIZE + 1}–${shown.page * PAGE_SIZE + shown.rows.length} of ${entries.length} transactions`)}
+              </span>
+              {shown.pages > 1 && (
+                <span className={styles.row} style={{ gap: 4 }}>
+                  <button type="button" className={styles.gearPage} disabled={shown.page === 0} onClick={() => setPage(shown.page - 1)} aria-label={t('Página anterior', 'Previous page')}><ChevronLeft size={14} /></button>
+                  <span className={styles.small}>{shown.page + 1}/{shown.pages}</span>
+                  <button type="button" className={styles.gearPage} disabled={shown.page >= shown.pages - 1} onClick={() => setPage(shown.page + 1)} aria-label={t('Próxima página', 'Next page')}><ChevronRight size={14} /></button>
+                </span>
+              )}
+            </footer>
+          )}
         </div>
       </Modal>
     </section>
