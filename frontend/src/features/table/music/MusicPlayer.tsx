@@ -4,7 +4,7 @@ import type { TableMusic } from '../../../api/tableTypes';
 import { Button, IconButton } from '../../../components/ui/ui';
 import { t } from '../../../i18n';
 import type { TablePrefs } from '../tablePrefs';
-import { expectedPosition, musicAction, needsSeek } from './sync';
+import { expectedPosition, needsSeek } from './sync';
 import { isEmbedBlocked, loadYouTube, type YtPlayer } from './youtube';
 import styles from '../Table.module.css';
 
@@ -35,8 +35,6 @@ export function MusicPlayer({ music, prefs, onPrefs, onBlocked, onEnded }: {
   const [ready, setReady] = useState(false);
   // Browsers play sound only after a click on this page load: not kept across visits.
   const [unlocked, setUnlocked] = useState(false);
-  const unlockedRef = useRef(false);
-  useEffect(() => { unlockedRef.current = unlocked; }, [unlocked]);
   // Callbacks change on every render of the page: the player reads the latest ones and is not rebuilt for them.
   const callbacks = useRef({ onBlocked, onEnded });
   useEffect(() => { live.current = music; callbacks.current = { onBlocked, onEnded }; });
@@ -102,12 +100,7 @@ export function MusicPlayer({ music, prefs, onPrefs, onBlocked, onEnded }: {
     const id = window.setInterval(() => {
       const p = player.current;
       const m = live.current;
-      if (!p || !m) return;
-      // Play or pause again when the player drifted from the table (a pause that arrived while it was loading).
-      const action = musicAction(p.getPlayerState(), m, unlockedRef.current);
-      if (action === 'pause') p.pauseVideo();
-      else if (action === 'play') p.playVideo();
-      if (!m.playing) return;
+      if (!p || !m?.playing) return;
       const at = expectedPosition(m, Date.now());
       // A playlist that moved on by itself waits for the table's next track instead of seeking the new one.
       if (onTrack(p, m) && needsSeek(p.getCurrentTime(), at)) p.seekTo(at, true);

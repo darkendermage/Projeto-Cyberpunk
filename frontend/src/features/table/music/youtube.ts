@@ -10,7 +10,6 @@ export interface YtPlayer {
   unMute(): void;
   loadVideoById(id: string, startSeconds?: number): void;
   cueVideoById(id: string, startSeconds?: number): void;
-  getPlayerState(): number;
   cuePlaylist(args: { list: string; listType: 'playlist'; index?: number; startSeconds?: number }): void;
   loadPlaylist(args: { list: string; listType: 'playlist'; index?: number; startSeconds?: number }): void;
   destroy(): void;
