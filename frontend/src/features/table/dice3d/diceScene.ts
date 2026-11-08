@@ -101,10 +101,8 @@ function d10Geometry(): BufferGeometry {
 
 interface Flying { mesh: Mesh; start: Vector3; end: Vector3; final: Quaternion; axis: Vector3; spin: number; delay: number; rest: number }
 
-/**
- * The dice tray's 3D scene (three.js), drawn on a transparent canvas over the map. A throw tumbles each die in from
- * the side and bounces it to a stop already turned to the value the server rolled; nothing here decides a result.
- */
+// three.js on a transparent canvas over the map. Dice tumble in and stop on the value the server rolled;
+// nothing here decides results.
 export class DiceScene {
   private readonly renderer: WebGLRenderer;
   private readonly scene = new Scene();

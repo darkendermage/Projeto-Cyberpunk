@@ -5,10 +5,8 @@ export type InventoryGroup = 'weapons' | 'armor' | 'misc' | 'clothing';
 
 const WEAPON_CATEGORIES = new Set(['Weapon', 'WeaponAttachment', 'Ammunition']);
 
-/**
- * Sorts the inventory into the Gear tab's panels: clothes and Fashionware first decide (clothing), then weapons with
- * their ammunition and attachments, then anything with SP or shield HP (armor), and the rest (misc).
- */
+// Gear tab panels: clothing (clothes + Fashionware) first, then weapons with ammo and attachments, then anything
+// with SP or shield HP, then misc.
 export function groupInventory(items: readonly InventoryLine[]): Record<InventoryGroup, InventoryLine[]> {
   const groups: Record<InventoryGroup, InventoryLine[]> = { weapons: [], armor: [], misc: [], clothing: [] };
   for (const i of items) {

@@ -10,14 +10,12 @@ import type { Run } from './CombatPanels';
 import styles from './Characters.module.css';
 import { t } from '../../i18n';
 
-/**
- * Improvement Points (CP:R p.408–410): award, raise a skill or a Role Ability, and take up a new Role (CP:R p.142).
- * Costs come from the server report; the server refuses anything the character can't afford.
- */
+// IP (CP:R p.408-410) and multiclassing (p.142). Costs come from the report and the server refuses what
+// the character can't afford.
 export function ProgressionPanel({ detail, rules, run, busy }: { detail: CharacterDetail; rules: CharacterRules; run: Run; busy: boolean }) {
   const [open, setOpen] = useState(false);
   if (!detail.sheet.creation.finalized) return null;
-  // Compact on the sheet (round 7): the IP at a glance; awarding and spending them in a window.
+  // Compact on the sheet: the IP at a glance; awarding and spending them in a window.
   return (
     <SheetPanel title={t('Progressão', 'Progression')} icon={<TrendingUp size={16} />}
       actions={<Button variant="primary" onClick={() => setOpen(true)}>{t('Distribuir IP', 'Spend IP')}</Button>}>

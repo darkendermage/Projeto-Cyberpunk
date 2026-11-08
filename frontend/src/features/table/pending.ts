@@ -3,10 +3,7 @@ import { t } from '../../i18n';
 
 export type PendingAction = 'dodge' | 'noDodge' | 'critical' | 'cancel';
 
-/**
- * What a screen offers for a pending attack: the defending player chooses to dodge or not, the attacker's player rolls
- * the Critical Injury, the GM may take any step and cancel. Everyone else only sees that the fight waits.
- */
+// Defender picks dodge or not, attacker rolls the crit, GM can do any step or cancel. Everyone else just waits.
 export function pendingPrompt(p: PendingView, mine: boolean, gm: boolean): { title: string; actions: PendingAction[] } | null {
   const step: PendingAction[] = p.step === 'Defense' ? ['dodge', 'noDodge'] : ['critical'];
   const title = p.step === 'Defense'

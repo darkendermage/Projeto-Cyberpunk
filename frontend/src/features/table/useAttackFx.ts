@@ -6,10 +6,7 @@ import { effectKind, planEffect } from './board/effects';
 import { playAttack } from './sound';
 import type { TablePrefs } from './tablePrefs';
 
-/**
- * Plays an attack that just came in on the map shown (the fight linked to it): the effect, drawn with motion only when
- * the app's effects allow it, and its sound when this person keeps sound on.
- */
+// Motion only when the app's effects allow it, sound only when this person has it on.
 export function useAttackFx(board: RefObject<BoardHandle | null>, prefs: TablePrefs) {
   const { settings } = useEffectsSettings();
   const current = useRef({ motion: settings.motion, sound: prefs.sound });

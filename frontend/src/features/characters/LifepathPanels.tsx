@@ -12,7 +12,7 @@ import type { SheetEditor } from './useSheetEditor';
 import styles from './Characters.module.css';
 import { lang, t, tv } from '../../i18n';
 
-// ------------------------------------------------------------ a table answer: pick, roll or write
+// a table answer: pick, roll or write
 
 export function TableField({ id, label, options, value, onChange, dice, hint }: {
   id: string; label: string; options: readonly string[]; value: string | null | undefined; onChange: (v: string) => void; dice?: string; hint?: string;
@@ -52,7 +52,7 @@ export function TablesPanel({ rules, editor }: { rules: CharacterRules; editor: 
   );
 }
 
-// ------------------------------------------------------------ relationships
+// relationships
 
 export function RelationsPanel({ rules, editor }: { rules: CharacterRules; editor: SheetEditor }) {
   const toast = useToast();
@@ -136,12 +136,10 @@ function RelationshipCard({ rel, rules, onChange, onRemove }: {
   );
 }
 
-// ------------------------------------------------------------ Role-based Lifepath
+// Role-based Lifepath
 
-/**
- * One Role-based Lifepath per Role the character has, oldest first. The book only runs it at creation (CP:R p.53) and
- * says nothing about it when multiclassing (p.143): the creation one stays, a later Role's is optional (complementary rule).
- */
+// One per Role, oldest first. The book only runs it at creation (CP:R p.53) and says nothing for multiclassing
+// (p.143), so a later Role's one is optional (complementary).
 export function RoleLifepathPanels({ rules, editor, onlyCurrent }: { rules: CharacterRules; editor: SheetEditor; onlyCurrent?: boolean }) {
   const roles = onlyCurrent ? editor.draft.roles.slice(0, 1) : [...editor.draft.roles].reverse();
   const fact = rules.facts.find((f) => f.key === 'roleLifepath');

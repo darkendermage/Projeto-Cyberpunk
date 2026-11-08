@@ -37,7 +37,7 @@
   border-top: 1px solid var(--line);
 }
 
-/* ------------------------------------------------------------ library */
+/* library */
 
 .library { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
 .card {
@@ -54,7 +54,7 @@
 .card:hover { border-color: var(--red-line); }
 .card h3 { font-family: var(--font-display); font-size: 16px; color: var(--text); }
 
-/* ------------------------------------------------------------ header and layout */
+/* header and layout */
 
 .back {
   display: inline-flex;
@@ -88,7 +88,7 @@
   .layout, .columns { grid-template-columns: minmax(0, 1fr); }
 }
 
-/* ------------------------------------------------------------ Initiative Queue */
+/* Initiative Queue */
 
 .queue { display: flex; flex-direction: column; gap: 6px; margin: 0; padding: 0; list-style: none; }
 .queueRow {
@@ -159,7 +159,7 @@
 .hpBar span[data-state='Seriously'] { background: var(--amber); }
 .hpBar span[data-state='Mortally'] { background: var(--red); }
 
-/* ------------------------------------------------------------ combatant panel */
+/* combatant panel */
 
 .stats {
   display: grid;
@@ -172,7 +172,7 @@
 .stats dd { margin: 0; font-family: var(--font-mono); font-size: 16px; color: var(--text); }
 .injuries { margin: 0; padding-left: 18px; font-size: 13px; color: var(--amber); }
 
-/* ------------------------------------------------------------ read-only sheet */
+/* read-only sheet */
 
 .tableView { display: flex; flex-direction: column; gap: 18px; }
 .tableView[hidden] { display: none; }
@@ -232,7 +232,7 @@
 .skillList dt { color: var(--text-2); }
 .skillList dd { margin: 0; font-family: var(--font-mono); color: var(--text); }
 
-/* ------------------------------------------------------------ attack result */
+/* attack result */
 
 .results { display: flex; flex-direction: column; gap: 8px; margin: 0; padding: 0; list-style: none; }
 .results li { display: flex; flex-direction: column; gap: 4px; padding: 8px 10px; background: var(--bg-2); border-left: 3px solid var(--line-strong); }
@@ -240,7 +240,7 @@
 .miss { border-left-color: var(--line-strong); }
 .crit { font-family: var(--font-display); color: var(--red); }
 
-/* ------------------------------------------------------------ cover and log */
+/* cover and log */
 
 .covers { display: flex; flex-direction: column; gap: 10px; margin: 0; padding: 0; list-style: none; }
 .covers li { display: flex; flex-direction: column; gap: 6px; padding-bottom: 10px; border-bottom: 1px solid var(--line); }

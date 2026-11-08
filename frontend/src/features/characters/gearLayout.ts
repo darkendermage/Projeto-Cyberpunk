@@ -8,7 +8,7 @@ export type GearFilter = 'all' | 'weapons' | 'clothing' | 'other';
 /** Items per page of the inventory list. */
 export const PAGE_SIZE = 10;
 
-/** With the character (equipped or carried) for "Equipped", stored for "Inventory" (round 7). */
+/** With the character (equipped or carried) for "Equipped", stored for "Inventory". */
 export function splitGear(items: readonly InventoryLine[]): { onPerson: InventoryLine[]; stored: InventoryLine[] } {
   return { onPerson: items.filter((i) => i.state !== 'Stored'), stored: items.filter((i) => i.state === 'Stored') };
 }

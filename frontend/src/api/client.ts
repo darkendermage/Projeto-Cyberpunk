@@ -8,10 +8,8 @@ import { locale, t, tv } from '../i18n';
 export const API_BASE = import.meta.env.VITE_API_BASE ?? '/api';
 const BASE = API_BASE;
 
-/**
- * The seat key a player's screen sends with every API call (the "Minha ficha" popup reaches the character API through
- * the tunnel with it); null on the GM's app.
- */
+// Seat key sent by a player's screen (Minha ficha reaches the character API through the tunnel with it).
+// null in the GM's app.
 let seatKey: string | null = null;
 export const setSeatContext = (seat: string | null) => { seatKey = seat; };
 export const seatContext = () => seatKey;

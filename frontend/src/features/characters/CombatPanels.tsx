@@ -58,7 +58,7 @@ export function HealthPanel({ detail, run, busy, locked }: Props) {
 
       {locked ? <p className={`${styles.small} ${styles.muted}`}>{t('Conclua a criação para usar o painel de combate.', 'Finish creation to use the combat panel.')}</p> : (
         <>
-          {/* Damage and healing open their own windows (round 7); stabilizing stays one click. */}
+          {/* Damage and healing open their own windows; stabilizing stays one click. */}
           <div className={styles.row}>
             <Button icon={<Swords size={14} />} disabled={busy} onClick={() => setDialog('damage')}>{t('Aplicar dano', 'Apply damage')}</Button>
             <Button icon={<Bandage size={14} />} disabled={busy} onClick={() => setDialog('heal')}>{t('Curar', 'Heal')}</Button>
@@ -227,10 +227,7 @@ export function WeaponsPanel({ detail, run, busy, locked }: Props) {
   );
 }
 
-/**
- * Attachments of one weapon: the installed ones (removable) and the ones in the inventory that can go in. Class,
- * slots and Exotic restrictions are checked by the server (CP:R p.95).
- */
+// Installed attachments plus the ones in the inventory that fit. The server checks class/slots/Exotic (CP:R p.95).
 export function Attachments({ detail, weaponId, slots, run, busy }: { detail: CharacterDetail; weaponId: string; slots: number; run: Run; busy: boolean }) {
   const [pick, setPick] = useState('');
   const entry = detail.sheet.inventory.find((e) => e.instanceId === weaponId);

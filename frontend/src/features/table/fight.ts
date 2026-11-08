@@ -6,10 +6,8 @@ export type FightEntryKind = 'pc' | 'npc' | 'compendium' | 'generic';
 
 export interface FightEntry { tokenId: string; label: string; kind: FightEntryKind; include: boolean; side: CombatSide }
 
-/**
- * The tokens of the map as the start of a fight: characters and NPCs come in, plain tokens (a barrel, a door) stay
- * out unless the GM ticks them (they then fight as generic enemies). PCs and the players' tokens are allies.
- */
+// Characters and NPCs come in; plain tokens (a barrel, a door) only if ticked, as generics. PCs and player
+// tokens are allies.
 export function fightEntries(tokens: TokenView[]): FightEntry[] {
   return tokens.map((tk) => {
     const kind: FightEntryKind = tk.characterId != null ? 'pc' : tk.npcId != null ? 'npc' : tk.compendiumNpcId ? 'compendium' : 'generic';

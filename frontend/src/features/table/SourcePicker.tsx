@@ -5,10 +5,7 @@ import { t } from '../../i18n';
 import { matchSources, SOURCE_LABEL, sourceOf, type TokenSource } from './sources';
 import styles from './Table.module.css';
 
-/**
- * Picks what a token stands for: a search over PCs, saved NPCs and the compendium. Its image (portrait, NPC image)
- * then shows on the token. The chosen one shows as a tag that can be cleared.
- */
+// Search over PCs, saved NPCs and the compendium; the pick's image shows on the token.
 export function SourcePicker({ value, sources, onChange }: {
   value: { characterId?: number | null; npcId?: number | null; compendiumNpcId?: string | null };
   sources: TokenSource[];

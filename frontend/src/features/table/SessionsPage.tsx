@@ -50,11 +50,8 @@ function SessionArchive({ session, onClose }: { session: TableSession; onClose: 
   );
 }
 
-/**
- * The virtual table's door (round 6): the sessions, like the characters page. The open one continues; "New session"
- * names the one that starts, closes the open one and goes to the table; old ones are read, renamed or deleted. Scenes,
- * invites and seats belong to every session; a session keeps one night's chat and fights.
- */
+// The table's entry page. "New session" names the new one, closes the open one and goes to the table. Scenes,
+// invites and seats are shared; a session only keeps one night's chat and fights.
 export function SessionsPage() {
   const client = useQueryClient();
   const toast = useToast();

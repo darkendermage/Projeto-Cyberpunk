@@ -23,7 +23,7 @@ export interface SceneGrid {
 export interface BackgroundView { mediaId: string | null; url: string | null; width: number; height: number }
 
 /** Position (top-left) and size in cells, rotation in degrees. */
-/** An image over the map (round 5), as this screen sees it. */
+/** An image over the map, as this screen sees it. */
 export interface SceneImageView {
   id: string; url: string; name: string; x: number; y: number; width: number; height: number; rotation: number; opacity: number; order: number;
   locked: boolean; lockedByGm: boolean; hidden: boolean; ownerSeatId: number | null;
@@ -99,7 +99,7 @@ export interface SceneView {
   tokens: TokenView[];
   templates: SceneTemplate[];
   updatedAt: string;
-  /** Images over the map, bottom first (round 5). */
+  /** Images over the map, bottom first. */
   images?: SceneImageView[];
 }
 

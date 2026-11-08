@@ -93,10 +93,8 @@ const ICONS: Record<NavIcon, ReactNode> = {
   tables: <Table2 size={19} />, martial: <Swords size={19} />, glossary: <BookOpen size={19} />,
 };
 
-/**
- * The main menu: Items, Characters and the Virtual Table on their own; the collection, the GM tools and the rest are
- * groups that open a panel beside the menu (inline in the phone drawer). The menu scrolls with the page, never alone.
- */
+// Items, Characters and the Table on their own; the rest are groups that open a side panel (inline in the
+// phone drawer). Scrolls with the page.
 function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
   const compare = useCompare();
   const favorites = useFavoriteIds();

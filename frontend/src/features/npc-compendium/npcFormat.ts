@@ -36,10 +36,8 @@ export const RANGE_BANDS = ['0-6', '7-12', '13-25', '26-50', '51-100', '101-200'
 
 export interface NpcSkillLine { name: string; label: string; stat: string | null; base: number; armored: number | null }
 
-/**
- * The printed Skill Bases in the groups of the character sheet. A skill the rule book doesn't have (or any skill while
- * the rules load) goes to a last group of its own, so nothing printed disappears.
- */
+// Grouped like the character sheet. Unknown skills (or all of them while the rules load) go in a last group
+// so nothing printed disappears.
 export function groupNpcSkills(skills: Record<string, number>, armoredSkills: Record<string, number>, rules: SkillRule[]) {
   const lines = Object.entries(skills).map(([name, base]) => {
     const [, plainName, specialization] = /^(.*?)(?: \((.*)\))?$/.exec(name) ?? [];

@@ -12,7 +12,9 @@ export const tableApi = {
   scenes: () => request<SceneSummary[]>('/table/scenes'),
   scene: (id: number, signal?: AbortSignal) => request<SceneView>(`/table/scenes/${id}`, { signal }),
   createScene: (name: string) => request<SceneView>('/table/scenes', { method: 'POST', body: json({ name }) }),
-  updateScene: (id: number, body: { version: number; name: string; grid: SceneGrid; backgroundMediaId: string | null; backgroundWidth: number; backgroundHeight: number; encounterId: number | null }) =>
+  updateScene: (id: number, body: { version: number; name: string; grid: SceneGrid;
+      backgroundMediaId: string | null; backgroundWidth: number; backgroundHeight: number;
+      encounterId: number | null }) =>
     request<SceneView>(`/table/scenes/${id}`, { method: 'PUT', body: json(body) }),
   duplicateScene: (id: number) => request<SceneView>(`/table/scenes/${id}/duplicate`, { method: 'POST' }),
   deleteScene: (id: number) => request<void>(`/table/scenes/${id}`, { method: 'DELETE' }),
@@ -137,8 +139,9 @@ export function playerApi(seat: string) {
     /** The attacker's player rolls the pending Critical Injury. */
     critical: () => request<PlayerEncounter>('/table/play/critical', { method: 'POST', headers }),
     /** Reloads one of the seat's character's weapons (on its Turn when it is in the fight). */
-    reload: (weapon: string) => request<{ encounter: PlayerEncounter | null; character: PlayerCharacter | null }>('/table/play/reload', { method: 'POST', body: json({ weapon }), headers }),
-    /** The player's own sheet, exported on their PC, for a seat without a character (round 6). */
+    reload: (weapon: string) => request<{ encounter: PlayerEncounter | null; character: PlayerCharacter | null }>
+        ('/table/play/reload', { method: 'POST', body: json({ weapon }), headers }),
+    /** The player's own sheet, exported on their PC, for a seat without a character. */
     importCharacter: (file: unknown) => request<PlayerSeat>('/table/play/character/import', { method: 'POST', body: json(file), headers }),
     /** A player's image for the map (up to 2 MB, shrunk by prepareImage). */
     uploadMedia: async (file: File): Promise<MediaInfo> => {

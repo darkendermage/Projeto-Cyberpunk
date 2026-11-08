@@ -7,10 +7,7 @@ import type { QuickPick, Run } from './EncounterView';
 import styles from './Combat.module.css';
 import { t, tv } from '../../i18n';
 
-/**
- * The attack form for the selected combatant: weapon (with STAT + skill already added), mode, targets, range and the
- * optional dice the players rolled at the table. Everything else is resolved by the server.
- */
+// Weapon (STAT + skill already added), mode, targets, range and optional physical dice. The server does the rest.
 export function AttackPanel({ detail, rules, attacker, busy, run, preset }: {
   detail: EncounterDetail; rules: EncounterRules; attacker: FighterView | null; busy: boolean; run: Run;
   /** A weapon (and target) picked on the queue: the form starts with them. */
@@ -51,7 +48,7 @@ export function AttackPanel({ detail, rules, attacker, busy, run, preset }: {
     damageDice: parseDice(damageText),
     thrownDamage: thrown ? thrownDamage || null : null,
     ignoreCover,
-    // Without "dodge" checked, a target with REF 8+ is asked, and two 6s wait for the Critical Injury roll (round 4).
+    // Without "dodge" checked, a target with REF 8+ is asked, and two 6s wait for the Critical Injury roll.
     interactive: !dodge,
   });
 

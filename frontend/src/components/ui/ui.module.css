@@ -1,4 +1,4 @@
-/* ------------------------------------------------------------ buttons */
+/* buttons */
 
 .button {
   display: inline-flex;
@@ -78,7 +78,7 @@
   border-color: var(--red-line);
 }
 
-/* ------------------------------------------------------------ checkbox */
+/* checkbox */
 
 .checkbox {
   display: flex;
@@ -140,7 +140,7 @@
   cursor: not-allowed;
 }
 
-/* ------------------------------------------------------------ switch */
+/* switch */
 
 .switch {
   display: flex;
@@ -188,7 +188,7 @@
   outline-offset: 2px;
 }
 
-/* ------------------------------------------------------------ segmented */
+/* segmented */
 
 .segmented {
   display: inline-flex;
@@ -225,7 +225,7 @@
   font-size: 12px;
 }
 
-/* ------------------------------------------------------------ select & inputs */
+/* select & inputs */
 
 .select {
   position: relative;
@@ -348,7 +348,7 @@
   font-size: 12.5px;
 }
 
-/* ------------------------------------------------------------ feedback */
+/* feedback */
 
 .spinner {
   display: inline-grid;
@@ -465,7 +465,7 @@
   color: #fff;
 }
 
-/* ------------------------------------------------------------ tooltip */
+/* tooltip */
 .tooltipAnchor {
   display: contents;
 }
@@ -497,7 +497,7 @@
   .tooltip { animation: none; }
 }
 
-/* ------------------------------------------------------------ modal */
+/* modal */
 
 .overlay {
   position: fixed;
@@ -587,7 +587,7 @@
   }
 }
 
-/* ---------------------------------------------------------------- collapsible section */
+/* collapsible section */
 
 .collapsible {
   border-top: 1px solid var(--line);

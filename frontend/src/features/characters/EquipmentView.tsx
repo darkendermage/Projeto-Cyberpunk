@@ -18,10 +18,8 @@ import { t, tv } from '../../i18n';
 
 interface Props { detail: CharacterDetail; rules: CharacterRules; editor: SheetEditor }
 
-/**
- * Everything the character owns: money and purchases, the inventory with what is worn, weapon attachments and the
- * worn items with cyberware Option Slots. Firing, reloading and armor ablation stay on the Personagem tab.
- */
+// Money, purchases, inventory, attachments and worn items with Option Slots. Firing/reloading/ablation stay
+// on the Personagem tab.
 export function EquipmentView({ detail, editor }: Props) {
   const toast = useToast();
   const command = useCharacterCommand(detail.id);
@@ -44,7 +42,7 @@ export function EquipmentView({ detail, editor }: Props) {
   const [opened, setOpened] = useState<InventoryLine | null>(null);
   const actions: GearActions = { run, busy, finalized, onOpen: setOpened, onRemove: setRemoving };
 
-  // Round 7: the money on top, then the totals; what the character has on them on the left, and on the right what
+  // the money on top, then the totals; what the character has on them on the left, and on the right what
   // is stored (paged) with the weapon and wearable upgrades under it.
   return (
     <div className={styles.gear}>
@@ -73,7 +71,7 @@ export function EquipmentView({ detail, editor }: Props) {
   );
 }
 
-// ------------------------------------------------------------ money: balance, store, ledger
+// money: balance, store, ledger
 
 type StoreMode = 'buy' | 'receive';
 
@@ -87,7 +85,7 @@ function FinancePanel({ detail, run, busy, onStore }: { detail: CharacterDetail;
   const finalized = detail.sheet.creation.finalized;
   const entries = (ledger.data ?? []).filter((e) => e.kind === 'Ledger');
   const last = entries[0];
-  // The history window shows ten transactions per page (round 7).
+  // The history window shows ten transactions per page.
   const shown = paginate(entries, page);
 
   return (
@@ -163,7 +161,7 @@ function StoreModal({ detail, mode, busy, run, onClose }: { detail: CharacterDet
   );
 }
 
-// ------------------------------------------------------------ inventory: sell or discard
+// inventory: sell or discard
 
 function RemoveItemDialog({ item, onClose, run, busy }: { item: InventoryLine; onClose: () => void; run: Run; busy: boolean }) {
   const held = item.rounds ?? item.quantity;
@@ -200,7 +198,7 @@ function RemoveItemDialog({ item, onClose, run, busy }: { item: InventoryLine; o
   );
 }
 
-// ------------------------------------------------------------ weapon attachments
+// weapon attachments
 
 /** Attachments of each weapon (CP:R p.95); firing and reloading stay on the Personagem tab. */
 function AttachmentsPanel({ detail, run, busy }: { detail: CharacterDetail; run: Run; busy: boolean }) {
@@ -226,12 +224,10 @@ function AttachmentsPanel({ detail, run, busy }: { detail: CharacterDetail; run:
   );
 }
 
-// ------------------------------------------------------------ wearable hosts
+// wearable hosts
 
-/**
- * Worn items with Option Slots: Smart Glasses, Smart Lens, Battleglove, Smart Gloves, Smart Ears. Options go in from
- * the Cyberware clinic ("Onde instalar"); they cost no Humanity and work only while the item is worn.
- */
+// Smart Glasses, Smart Lens, Battleglove, Smart Gloves, Smart Ears. Options are installed from the clinic
+// ("Onde instalar"), cost no Humanity and only work while worn.
 function WearablesPanel({ detail, run, busy }: { detail: CharacterDetail; run: Run; busy: boolean }) {
   const wearables = detail.report.wearables;
   return (

@@ -2,10 +2,7 @@ import { useEffect, useRef } from 'react';
 import { t } from '../../i18n';
 import styles from './Table.module.css';
 
-/**
- * The color of one's own dice (E3): everyone sees the dice of whoever rolled in that person's color. The choice is
- * saved when the picker closes (the native "change" event), not on every drag of the color wheel.
- */
+// Saved on the native "change" event (picker closed), not on every drag.
 export function DiceColorPicker({ value, onChange }: { value: string | null; onChange: (color: string | null) => void }) {
   const input = useRef<HTMLInputElement>(null);
   const latest = useRef({ value, onChange });

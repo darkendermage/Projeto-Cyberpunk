@@ -42,7 +42,9 @@ const VISIBILITY_LABEL: Record<TokenVisibility, string> = {
 
 
 /** The scene's settings as the update request wants them, with some fields replaced. */
-function sceneUpdate(scene: SceneView, change: Partial<{ name: string; grid: SceneGrid; backgroundMediaId: string | null; backgroundWidth: number; backgroundHeight: number; encounterId: number | null }>) {
+function sceneUpdate(scene: SceneView,
+  change: Partial<{ name: string; grid: SceneGrid; backgroundMediaId: string | null;
+    backgroundWidth: number; backgroundHeight: number; encounterId: number | null }>) {
   return {
     version: scene.version, name: scene.name, grid: scene.grid, backgroundMediaId: scene.background.mediaId,
     backgroundWidth: scene.background.width, backgroundHeight: scene.background.height, encounterId: scene.encounterId, ...change,
@@ -69,7 +71,7 @@ async function pickAndUpload(file: File | undefined) {
   return { ...media, width: prepared.width, height: prepared.height };
 }
 
-// ------------------------------------------------------------------ scenes
+// scenes
 
 export function ScenesColumn({ scenes, currentId, onSelect, act, className }: {
   scenes: SceneSummary[]; currentId: number | null; onSelect: (id: number) => void; act: Act; className?: string;
@@ -120,7 +122,7 @@ export function ScenesColumn({ scenes, currentId, onSelect, act, className }: {
   );
 }
 
-// ------------------------------------------------------------------ scene settings
+// scene settings
 
 /** Mounted per scene version (key), so a saved change starts a fresh form. */
 export function SceneTab({ scene, act, onGridDraft }: { scene: SceneView; act: Act; onGridDraft: (grid: SceneGrid | null) => void }) {
@@ -218,7 +220,11 @@ export function SceneTab({ scene, act, onGridDraft }: { scene: SceneView; act: A
       <form className={styles.section} onSubmit={(e) => {
         e.preventDefault();
         const c = center();
-        const input: TokenInput = { label: token.label.trim(), x: c.x, y: c.y, width: token.size, height: token.size, color: token.color, ...sourceFields(token.source), visibility: token.hidden ? 'Gm' : 'All' };
+        const input: TokenInput = {
+          label: token.label.trim(), x: c.x, y: c.y,
+          width: token.size, height: token.size, color: token.color,
+          ...sourceFields(token.source), visibility: token.hidden ? 'Gm' : 'All'
+        };
         void act(async () => { const v = await tableApi.addToken(scene.id, input); setToken((tk) => ({ ...tk, label: '' })); return v; });
       }}>
         <span className={styles.label}>{t('Novo token', 'New token')}</span>
@@ -244,12 +250,12 @@ export function SceneTab({ scene, act, onGridDraft }: { scene: SceneView; act: A
   );
 }
 
-// ------------------------------------------------------------------ token and template inspector
+// token and template inspector
 
 /** Mounted per token (key). */
 export function TokenInspector({ scene, token, seats, encounter, act, onDone, onAim }: {
   scene: SceneView; token: TokenView; seats: Seat[]; encounter: EncounterDetail | undefined; act: Act; onDone: () => void;
-  /** Aims an attack with this fighter's weapon, like the scene cards (round 6). */
+  /** Aims an attack with this fighter's weapon, like the scene cards. */
   onAim?: (fighter: EncounterDetail['queue'][number], weapon: WeaponView) => void;
 }) {
   const toast = useToast();
@@ -335,10 +341,7 @@ export function TokenInspector({ scene, token, seats, encounter, act, onDone, on
   );
 }
 
-/**
- * The fighter behind a token, for the GM: armor of head and body with +/− (a PC's lands on their sheet), and the
- * weapons with Attack and Damage rolled in the chat.
- */
+// Head/body armor with +/- (a PC's goes to the sheet) and the weapons, rolled in the chat.
 function FighterQuick({ fighter, encounterId, onAim }: { fighter: EncounterDetail['queue'][number]; encounterId: number; onAim?: (weapon: WeaponView) => void }) {
   const toast = useToast();
   const command = useEncounterCommand(encounterId);
@@ -413,7 +416,7 @@ export function TemplateInspector({ template, onSave, onRemove, editable }: {
   );
 }
 
-// ------------------------------------------------------------------ combat
+// combat
 
 export function CombatTab({ scene, encounter, act, onSelectToken }: { scene: SceneView; encounter: EncounterDetail | undefined; act: Act; onSelectToken: (id: string) => void }) {
   const toast = useToast();
@@ -494,7 +497,7 @@ function InitiativeField({ value, label, onSave }: { value: number | null; label
   );
 }
 
-// ------------------------------------------------------------------ invites and tunnel
+// invites and tunnel
 
 const TUNNEL_TEXT: Record<TunnelStatus['state'], string> = {
   Missing: t('O cloudflared não está instalado.', 'cloudflared is not installed.'),
@@ -508,7 +511,9 @@ const TUNNEL_TEXT: Record<TunnelStatus['state'], string> = {
 export function InvitesTab({ seats, act }: { seats: Seat[]; act: Act }) {
   const toast = useToast();
   const characters = useCharacters();
-  const tunnel = useQuery({ queryKey: tableKeys.tunnel, queryFn: tableApi.tunnel, refetchInterval: (q) => (q.state.data?.state === 'Starting' || q.state.data?.state === 'Downloading' ? 1500 : 10000) });
+  const tunnel = useQuery({ queryKey: tableKeys.tunnel,
+    queryFn: tableApi.tunnel,
+    refetchInterval: (q) => (q.state.data?.state === 'Starting' || q.state.data?.state === 'Downloading' ? 1500 : 10000) });
   const online = useQuery({ queryKey: tableKeys.online, queryFn: tableApi.onlineSeats, refetchInterval: 5000 });
   const lobby = useQuery({ queryKey: tableKeys.lobbyStatus, queryFn: tableApi.lobby });
   const client = useQueryClient();

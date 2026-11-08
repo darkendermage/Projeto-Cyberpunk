@@ -73,10 +73,8 @@ export const useCharacter = (id: number) =>
 export const useCharacterEvents = (id: number, enabled = true) =>
   useQuery({ queryKey: characterKeys.events(id), queryFn: () => characterApi.events(id), enabled });
 
-/**
- * Message of an API failure. Rule refusals come back as field errors (400); the title alone only says
- * "invalid fields", so the first field message is what the player needs to read.
- */
+// Rule refusals come back as 400 field errors and the title just says "invalid fields", so show the first
+// field message instead.
 export function problemMessage(error: unknown, fallback = t('Algo deu errado.', 'Something went wrong.')): string {
   if (error instanceof ApiError) {
     const first = Object.values(error.fieldErrors).flat()[0];
@@ -85,10 +83,7 @@ export function problemMessage(error: unknown, fallback = t('Algo deu errado.', 
   return error instanceof Error && error.message ? error.message : fallback;
 }
 
-/**
- * Writes a fresh server answer into the cache so every tab of the same character updates at once, and refreshes the
- * list and the history.
- */
+// Puts a fresh server answer in the cache so every tab of the character updates, then refreshes list + history.
 export function useStoreCharacter() {
   const client = useQueryClient();
   return (detail: CharacterDetail) => {

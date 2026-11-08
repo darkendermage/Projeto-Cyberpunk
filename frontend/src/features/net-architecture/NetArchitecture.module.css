@@ -35,7 +35,7 @@
   width: 80px;
 }
 
-/* ------------------------------------------------------------ panels */
+/* panels */
 
 .panel {
   display: flex;
@@ -61,7 +61,7 @@
   gap: 12px;
 }
 
-/* ------------------------------------------------------------ library */
+/* library */
 
 .library {
   display: grid;
@@ -90,7 +90,7 @@
   color: var(--text);
 }
 
-/* ------------------------------------------------------------ detail header and layout */
+/* detail header and layout */
 
 .back {
   display: inline-flex;
@@ -155,7 +155,7 @@
   color: var(--text-2);
 }
 
-/* ------------------------------------------------------------ diagram */
+/* diagram */
 
 .diagramWrap {
   overflow: auto;
@@ -199,7 +199,7 @@
   color: var(--text);
 }
 
-/* ------------------------------------------------------------ floor table */
+/* floor table */
 
 .selectedRow td {
   background: rgba(61, 224, 255, 0.06);
@@ -267,7 +267,7 @@
   white-space: nowrap;
 }
 
-/* ------------------------------------------------------------ cost, demons, watchers */
+/* cost, demons, watchers */
 
 .total {
   font-family: var(--font-mono);
@@ -353,7 +353,7 @@
   display: block;
 }
 
-/* ------------------------------------------------------------ dialogs */
+/* dialogs */
 
 .dialog {
   display: flex;
@@ -417,7 +417,7 @@
   color: var(--cyan);
 }
 
-/* ------------------------------------------------------------ sources */
+/* sources */
 
 .facts {
   display: flex;

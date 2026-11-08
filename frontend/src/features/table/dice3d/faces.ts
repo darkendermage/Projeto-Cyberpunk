@@ -1,9 +1,7 @@
 import { Quaternion, Vector3 } from 'three';
 
-/**
- * The geometry of the table's dice and which way each value faces, so a die can be turned to show exactly what the
- * server rolled. The camera looks down: the face shown is the one whose normal points up (+Y).
- */
+// Which way each value faces, so a die can be turned to show what the server rolled. Camera looks down, so
+// the face shown is the one whose normal points +Y.
 export const UP = new Vector3(0, 1, 0);
 
 /** The value on each face of a box, in three.js' material order (+X, −X, +Y, −Y, +Z, −Z); opposite faces add to 7. */
@@ -16,10 +14,8 @@ export function d6Normal(value: number): Vector3 {
   return D6_NORMALS[face].clone();
 }
 
-/**
- * A pentagonal trapezohedron: two apexes and a zigzag ring of ten vertices. The ring height that keeps each kite flat
- * is h·(1 − cos 36°)/(1 + cos 36°).
- */
+// Pentagonal trapezohedron: two apexes and a zigzag ring of ten vertices. Ring height for flat kites is
+// h·(1 − cos 36°)/(1 + cos 36°).
 export interface D10Shape { vertices: Vector3[]; faces: [number, number, number, number][]; values: number[] }
 
 export function d10Shape(height = 1): D10Shape {
@@ -70,10 +66,7 @@ export function d10TextureUp(shape: D10Shape, value: number): Vector3 {
   return new Vector3().subVectors(apex, far).normalize();
 }
 
-/**
- * The turn that brings the face up and stands its number upright on screen (the texture's up pointing to the top of
- * the picture), give or take <paramref name="tilt"/> radians so the dice don't look lined up by a ruler.
- */
+// Brings the face up with its number upright, give or take `tilt` radians so the dice don't look ruler-aligned.
 export function faceUpright(normal: Vector3, textureUp: Vector3, tilt = 0): Quaternion {
   const toUp = faceUp(normal);
   const up = textureUp.clone().applyQuaternion(toUp);
@@ -83,7 +76,7 @@ export function faceUpright(normal: Vector3, textureUp: Vector3, tilt = 0): Quat
   return new Quaternion().setFromAxisAngle(UP, -angle + tilt).multiply(toUp);
 }
 
-/** The turn that brings this face normal up, then spins the die by <paramref name="yaw"/> about the vertical. */
+/** The turn that brings this face normal up, then spins the die by `yaw` about the vertical. */
 export function faceUp(normal: Vector3, yaw = 0): Quaternion {
   const toUp = new Quaternion().setFromUnitVectors(normal.clone().normalize(), UP);
   return new Quaternion().setFromAxisAngle(UP, yaw).multiply(toUp);

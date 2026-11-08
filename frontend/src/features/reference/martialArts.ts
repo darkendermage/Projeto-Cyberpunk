@@ -26,7 +26,7 @@ export const SHARED_MOVES: SpecialMove[] = [
 ];
 
 export const MARTIAL_ARTS: MartialArtForm[] = [
-  // ---------------------------------------------------------------- Core Rulebook
+  // Core Rulebook
   {
     name: 'Aikido', source: 'Core Rulebook', page: 179,
     description: t('Estilo suave de varreduras e travas para desarmar o oponente e voltar a força dele contra ele mesmo.', 'Soft form of sweeps and locks to disarm the opponent and turn their force against them.'),
@@ -60,7 +60,7 @@ export const MARTIAL_ARTS: MartialArtForm[] = [
     ],
   },
 
-  // ---------------------------------------------------------------- Interface RED 4 (Cyberfists of Fury)
+  // Interface RED 4 (Cyberfists of Fury)
   {
     name: 'Arasaka-te', source: 'Interface RED 4', page: 76,
     description: t('Criada pela Arasaka antes da 4ª Guerra Corporativa. Fácil de ensinar, virou franquia de dojôs em centros comerciais.', 'Created by Arasaka before the 4th Corporate War. Easy to teach, it became a franchise of dojos in shopping malls.'),
@@ -246,7 +246,7 @@ export const MARTIAL_ARTS: MartialArtForm[] = [
     ],
   },
 
-  // ---------------------------------------------------------------- Interface RED 5
+  // Interface RED 5
   {
     name: 'Cyberbear', source: 'Interface RED 5', page: 78, innate: true,
     description: t('O jeito de lutar inato dos Cyberbears, efeito colateral da criação deles. Impossível de aprender ou imitar; funciona como uma arte marcial.', 'The Cyberbears\' innate way of fighting, a side effect of how they were made. Impossible to learn or imitate; it works as a martial art.'),

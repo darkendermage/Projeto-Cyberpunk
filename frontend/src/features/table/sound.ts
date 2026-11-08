@@ -1,9 +1,7 @@
 import type { EffectKind } from './board/effects';
 
-/**
- * The table's sounds, made on the spot with Web Audio (no sound files to license or download): filtered noise bursts
- * for shots, a low rumble for explosions, a hiss for blades, and a click for dice.
- */
+// Generated with Web Audio, no sound files: noise bursts for shots, a rumble for explosions, a hiss for blades,
+// a click for dice.
 let context: AudioContext | null = null;
 
 function audio(): AudioContext | null {

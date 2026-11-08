@@ -74,7 +74,7 @@ export function floorName(floor: NetFloor, state: ArchitectureState): string {
   return state.branches.length > 1 && floor.branchId !== state.branches[0].id ? t(`Andar ${floor.depth} (ramo ${floor.branchId})`, `Floor ${floor.depth} (branch ${floor.branchId})`) : t(`Andar ${floor.depth}`, `Floor ${floor.depth}`);
 }
 
-// ---------------------------------------------------------------- diagram
+// diagram
 
 export const DIAGRAM = { colWidth: 210, rowHeight: 74, nodeWidth: 180, nodeHeight: 52, padding: 16 } as const;
 
@@ -97,10 +97,8 @@ export interface DiagramLayout {
   links: DiagramLink[];
 }
 
-/**
- * The elevator as a tree: the main branch is the left column, read top-down from the Lobby to the bottom; each side
- * branch gets its own column and hangs from the main floor it splits after.
- */
+// Main branch is the left column, Lobby at the top; each side branch gets its own column under the floor it
+// splits from.
 export function layoutDiagram(branches: NetBranch[]): DiagramLayout {
   const { colWidth, rowHeight, nodeWidth, nodeHeight, padding } = DIAGRAM;
   const pos = (column: number, depth: number) => ({ x: padding + column * colWidth, y: padding + (depth - 1) * rowHeight });

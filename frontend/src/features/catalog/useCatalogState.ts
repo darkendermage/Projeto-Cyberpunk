@@ -33,10 +33,7 @@ function defaultView(): ViewMode {
   return typeof window !== 'undefined' && window.matchMedia('(max-width: 720px)').matches ? 'grid' : 'table';
 }
 
-/**
- * Catalog state lives in the URL (?q=&f=&sort=&dir=&view=&page=&per=&item=) so filtered views can be
- * bookmarked, shared and navigated with the browser history.
- */
+// State lives in the URL (?q=&f=&sort=&dir=&view=&page=&per=&item=) so filtered views can be bookmarked and shared.
 export function useCatalogState() {
   const [params, setParams] = useSearchParams();
   const raw = params.toString();

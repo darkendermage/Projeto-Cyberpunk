@@ -4,10 +4,7 @@ import { t } from '../../i18n';
 import { clampPanel, type PanelLimits } from './panels';
 import styles from './Table.module.css';
 
-/**
- * The grip between a side panel and the map: drag it to resize the panel, double-click to restore the default
- * size, arrow keys for small steps, and the button to hide or show the panel.
- */
+// Drag to resize, double-click to reset, arrow keys for small steps, button to hide/show.
 export function PanelHandle({ panel, width, limits, open, onResize, onToggle, className }: {
   panel: 'left' | 'right';
   width: number;

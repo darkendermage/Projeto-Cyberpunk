@@ -15,10 +15,7 @@ interface Props {
 
 const MODE_LABELS: Partial<Record<FilterOp, string>> = { in: t('Qualquer', 'Any'), all: t('Todos', 'All'), nin: t('Excluir', 'Exclude') };
 
-/**
- * Multi-select with live counts. Only values present in the current result set are listed
- * (plus anything already selected), so users never pick an option that yields nothing.
- */
+// Only lists values present in the current results (plus whatever is selected), so nothing leads to zero items.
 export function EnumFilter({ field, facets, criteria, onChange, columns = 1, limit = 8 }: Props) {
   const [expanded, setExpanded] = useState(false);
   const criterion = getCriterion(criteria, field.key);

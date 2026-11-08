@@ -52,7 +52,7 @@
   }
 }
 
-/* ------------------------------------------------------------ preset cards */
+/* preset cards */
 
 .presets {
   display: grid;
@@ -140,7 +140,7 @@
   padding-top: 2px;
 }
 
-/* ------------------------------------------------------------ library */
+/* library */
 
 .library {
   display: grid;
@@ -169,7 +169,7 @@
   color: var(--text);
 }
 
-/* ------------------------------------------------------------ CBK app */
+/* CBK app */
 
 .cbk {
   display: flex;
@@ -429,7 +429,7 @@
   justify-content: flex-end;
 }
 
-/* ------------------------------------------------------------ side panels */
+/* side panels */
 
 .layout {
   display: grid;
@@ -505,7 +505,7 @@
   color: var(--text-2);
 }
 
-/* ------------------------------------------------------------ door prize wheel */
+/* door prize wheel */
 
 .wheelWrap {
   position: relative;
@@ -544,7 +544,7 @@ html[data-motion='off'] .wheel {
   color: var(--amber);
 }
 
-/* ------------------------------------------------------------ dialogs and tables */
+/* dialogs and tables */
 
 .dialog {
   display: flex;

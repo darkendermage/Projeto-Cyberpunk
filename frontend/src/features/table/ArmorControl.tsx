@@ -6,10 +6,7 @@ import styles from './Table.module.css';
 
 export interface ArmorValues { spHead: number | null; maxSpHead: number | null; spBody: number | null; maxSpBody: number | null }
 
-/**
- * SP of the head and the body as two icons with numbers; with <paramref name="onAdjust"/>, − ablates and + repairs one
- * point (never past the armor's full SP: the server holds the limit).
- */
+// Head and body SP; with onAdjust, - ablates and + repairs one point (the server enforces full SP).
 export function ArmorControl({ armor, onAdjust, busy, compact }: {
   armor: ArmorValues;
   onAdjust?: (location: ArmorLocation, delta: number) => void;

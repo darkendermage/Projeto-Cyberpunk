@@ -20,10 +20,7 @@ function stored(): Lang {
   return pickLang(value, typeof window === 'undefined' ? undefined : navigator.language);
 }
 
-/**
- * The interface language, read once at startup. Changing it saves the choice and reloads the page, so every text —
- * module-level constants included — is built again in the new language.
- */
+// Read once at startup. Changing it saves and reloads, so module-level constants get rebuilt too.
 export const lang: Lang = stored();
 
 /** BCP 47 tag for Intl formatting and the Accept-Language header. */
@@ -44,10 +41,8 @@ export function setLang(next: Lang) {
 /** Interface text: the Portuguese and the English version side by side. */
 export const t = (pt: string, en: string): string => (lang === 'pt' ? pt : en);
 
-/**
- * Text that comes from the server data (rule files, catalog effects, field labels). The server keeps it in Portuguese,
- * the canonical form saved in sheets, and the English version comes from the data dictionary.
- */
+// Server data (rule files, catalog effects, labels) is stored in Portuguese; the English comes from the
+// data dictionary.
 export function tv<T>(text: T): T {
   if (lang === 'pt' || typeof text !== 'string') return text;
   return (DATA_EN[text] ?? text) as T;

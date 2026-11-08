@@ -45,7 +45,7 @@ function norm(s) {
 
 const tokens = (s) => norm(s).split(' ').filter(Boolean);
 
-// ------------------------------------------------------------------ Black Chrome booths
+// Black Chrome booths
 
 const BOOTH = /Booth\s+([A-F]\d(?:\s*\/\s*[A-F]\d)*)/;
 const BC_PAGE_OFFSET = 1; // PDF page = printed page + 1
@@ -133,7 +133,7 @@ function extractBooths() {
   return result;
 }
 
-// ------------------------------------------------------------------ Night Market Index
+// Night Market Index
 
 const TABS = new Set(['Weapons,', 'Ammo &', 'Attachments', 'Armor', 'Gear', 'Cyberware', 'Fashion', 'Vehicles', 'NET Stuff',
   'Lifestyle &', 'Housing', 'Entertainment &', 'Services', 'Elflines', 'Online']);
@@ -217,7 +217,7 @@ function extractIndex() {
   return entries;
 }
 
-// ------------------------------------------------------------------ index -> catalog
+// index -> catalog
 
 const BOOK = {
   'CP:R': 'Core Book', BC: 'Black Chrome', 'DL:BC+': 'Black Chrome+', CEMK: 'Edgerunners Mission Kit', DGD: 'Danger Gal Dossier',
@@ -263,7 +263,7 @@ function matchCatalog(entries) {
   return entries;
 }
 
-// ------------------------------------------------------------------ run
+// run
 
 const booths = extractBooths();
 writeFileSync(OUT_BOOTHS, `${JSON.stringify(booths, null, 1)}\n`);

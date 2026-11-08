@@ -13,7 +13,7 @@ import { cyberRuleState, cyberwareTree, type DraftAction } from './npcDraft';
 import styles from './EnemyGenerator.module.css';
 import { t, tv } from '../../i18n';
 
-// ---------------------------------------------------------------- catalog picker
+// catalog picker
 
 interface PickerSource {
   key: string;
@@ -71,7 +71,7 @@ export function ItemPicker({ sources, onPick, onClose }: { sources: PickerSource
   );
 }
 
-// ---------------------------------------------------------------- gear
+// gear
 
 const QUALITIES: { value: WeaponQuality; label: string }[] = [
   { value: 'Poor', label: 'Poor Quality' },
@@ -149,7 +149,7 @@ export function GearEditor({
   );
 }
 
-// ---------------------------------------------------------------- cyberware
+// cyberware
 
 export function CyberwareEditor({
   sheet, report, dispatch, semi,
@@ -232,7 +232,7 @@ export function CyberwareEditor({
   );
 }
 
-// ---------------------------------------------------------------- required / forbidden
+// required / forbidden
 
 export function CyberwareRulesEditor({ sheet, dispatch }: { sheet: NpcSheet; dispatch: Dispatch<DraftAction> }) {
   const [picking, setPicking] = useState(false);

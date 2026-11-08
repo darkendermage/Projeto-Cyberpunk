@@ -106,7 +106,7 @@ export function CyberwareView({ detail, rules, editor }: Props) {
   );
 }
 
-// ------------------------------------------------------------ status bar
+// status bar
 
 function StatusBar({ detail }: { detail: CharacterDetail }) {
   const h = detail.report.humanity;
@@ -138,7 +138,7 @@ function StatusBar({ detail }: { detail: CharacterDetail }) {
   );
 }
 
-// ------------------------------------------------------------ region panel
+// region panel
 
 function RegionPanel({ region, lines, active, selection, onRegion, onPiece }: {
   region: CyberRegionReport; lines: Map<string, CyberLine>; active: boolean; selection: Selection;
@@ -184,7 +184,7 @@ function RegionPanel({ region, lines, active, selection, onRegion, onPiece }: {
   );
 }
 
-// ------------------------------------------------------------ clinic catalog
+// clinic catalog
 
 type ClinicOrder = 'name' | 'priceAsc' | 'priceDesc' | 'type';
 const CLINIC_ORDER: Record<ClinicOrder, { label: string; sort: { key: 'name' | 'price' | 'type'; dir: 'asc' | 'desc' } }> = {
@@ -274,7 +274,7 @@ function Clinic({ detail, region, onClearRegion, selection, onPick }: {
   );
 }
 
-// ------------------------------------------------------------ details, preview and actions
+// details, preview and actions
 
 function DetailsPanel({ detail, rules, selection, run, busy, creating, side, onDone }: {
   detail: CharacterDetail; rules: CharacterRules; selection: Selection; run: Run; busy: boolean; creating: boolean;
@@ -533,7 +533,7 @@ function InstalledDetails({ detail, line, run, busy, creating, onDone, replacing
   );
 }
 
-// ------------------------------------------------------------ therapy
+// therapy
 
 function TherapyPanel({ detail, rules, run, busy }: { detail: CharacterDetail; rules: CharacterRules; run: Run; busy: boolean }) {
   const therapies = rules.cyberware.therapies;

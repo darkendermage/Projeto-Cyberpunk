@@ -10,10 +10,8 @@ export type ShapeGeometry =
 const CONE_HALF_ANGLE = Math.atan(0.5);
 const CONE_STEPS = 10;
 
-/**
- * An area in image pixels. A circle's size is its radius; a square's is its side (centered on the origin); a cone's
- * and a line's is their length from the origin, pointing at the angle. A line is one cell wide.
- */
+// Image pixels. Size is the radius (circle), side (square, centered) or length (cone/line, along the angle).
+// Lines are one cell wide.
 export function templateShape(g: SceneGrid, tpl: Pick<SceneTemplate, 'shape' | 'x' | 'y' | 'sizeMeters' | 'angle'>): ShapeGeometry {
   const o = cellToPx(g, tpl.x, tpl.y);
   const length = (tpl.sizeMeters / g.metersPerCell) * g.sizePx;

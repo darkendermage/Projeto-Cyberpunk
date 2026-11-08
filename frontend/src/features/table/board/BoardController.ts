@@ -28,7 +28,7 @@ export interface BoardData {
   canMoveTemplate: (t: SceneTemplate) => boolean;
   /** The GM sees hidden tokens dimmed. */
   gm: boolean;
-  /** The image selected in the layers list or on the map (round 5). */
+  /** The image selected in the layers list or on the map. */
   selectedImage?: string | null;
   lang: 'pt' | 'en';
 }
@@ -87,11 +87,8 @@ interface Override { x: number; y: number; until: number }
 /** What a press landed on. */
 interface Target { tokenId?: string; template?: SceneTemplate }
 
-/**
- * The virtual table's board, drawn with PixiJS (WebGL). It owns pan and zoom, token and template drags, the ruler, the
- * template tool and pings; everything that lasts goes out through the callbacks and comes back as data.
- * World units are the map image's pixels.
- */
+// The PixiJS board. Owns pan/zoom, drags, ruler, templates and pings; anything that lasts goes out through
+// the callbacks and comes back as data. World units are map image pixels.
 export class BoardController {
   private readonly app = new Application();
   private readonly world = new Container();
@@ -101,7 +98,7 @@ export class BoardController {
   private readonly templateLayer = new Container();
   private readonly tokenLayer = new Container();
   private readonly overlay = new Container();
-  /** Images over the map, below the grid and everything else (round 5). */
+  /** Images over the map, below the grid and everything else. */
   private readonly imageLayer = new Container();
   private readonly imageHandles = new Container();
   private images = new Map<string, { node: Container; sprite: Sprite | null; url: string }>();
@@ -125,10 +122,8 @@ export class BoardController {
   private destroyed = false;
   private fitted = false;
 
-  /**
-   * What the pointer is doing between down and up. A press waits to see what it becomes: a click (select), a drag
-   * (move the selection, or a lasso on empty ground; a finger pans instead), or a hold (ping).
-   */
+  // A press waits to see what it turns into: click (select), drag (move, or lasso on empty ground; a finger pans),
+  // or hold (ping).
   private gesture:
     | { kind: 'pan'; start: Point; origin: Point }
     | { kind: 'press'; target: Target | null; screen: Point; cell: Point; additive: boolean; touch: boolean; timer: number; image?: string }
@@ -236,11 +231,8 @@ export class BoardController {
     this.pings.push({ node, born: performance.now() });
   }
 
-  /**
-   * An attack on the map: a muzzle flash and a tracer to each target (several for a burst), a blade's arc, or an
-   * explosion; then sparks on a hit and the floating label (the HP lost, a hit or a miss). Without motion (the app's
-   * effects switch or the system's reduced motion), only a flash and the label.
-   */
+  // Muzzle flash + tracer per target (several for a burst), a blade arc or an explosion, then sparks and the label.
+  // Without motion just the flash and the label.
   showAttack(effect: AttackEffect, motion: boolean) {
     if (!this.ready || !this.data) return;
     const g = this.data.scene.grid;
@@ -342,7 +334,7 @@ export class BoardController {
     this.zoomAt({ x: view.width / 2, y: view.height / 2 }, factor);
   }
 
-  // ------------------------------------------------------------------ drawing
+  // drawing
 
   private extent() {
     const { scene } = this.data!;
@@ -379,7 +371,7 @@ export class BoardController {
     }).catch(() => { /* broken image: the dark floor stays */ });
   }
 
-  // ------------------------------------------------------------------ images over the map (round 5)
+  // images over the map
 
   /** The image's rectangle now: the data, or a live drag (this screen's or someone else's) not yet saved. */
   private imageRect(img: SceneImageView): ImgRect {
@@ -684,10 +676,7 @@ export class BoardController {
     node.alpha = data.gm && token.visibility !== 'All' ? 0.55 : 1;
   }
 
-  /**
-   * Critical Injuries as small icons in an arc over the token (the eighth slot shows "+N" when there are more);
-   * hovering one names it.
-   */
+  // Small icons in an arc over the token, the 8th slot shows "+N"; hover names it.
   private drawInjuries(node: Container, injuries: readonly string[], w: number, h: number) {
     if (injuries.length === 0) return;
     const r = Math.max(7, Math.min(11, Math.min(w, h) * 0.14));
@@ -817,7 +806,7 @@ export class BoardController {
     });
   }
 
-  // ------------------------------------------------------------------ pointer
+  // pointer
 
   private worldPoint(e: FederatedPointerEvent): Point {
     const p = this.world.toLocal(e.global);
@@ -1088,7 +1077,7 @@ export class BoardController {
     this.drawImageHandles();
   }
 
-  // ------------------------------------------------------------------ tools
+  // tools
 
   private snapHalf(p: Point): Point {
     const g = this.data!.scene.grid;
@@ -1105,7 +1094,9 @@ export class BoardController {
     const g = this.data!.scene.grid;
     const origin = this.gesture?.kind === 'place' ? this.gesture.origin : this.snapHalf(cell);
     this.preview.clear();
-    this.drawShape(this.preview, g, { shape: this.draft.shape, x: origin.x, y: origin.y, sizeMeters: this.draft.sizeMeters, angle: this.angleOf(origin, cell) }, hex(this.draft.color), false);
+    this.drawShape(this.preview, g,
+      { shape: this.draft.shape, x: origin.x, y: origin.y, sizeMeters: this.draft.sizeMeters, angle: this.angleOf(origin, cell) },
+      hex(this.draft.color), false);
   }
 
   private drawRuler(from: Point, to: Point) {

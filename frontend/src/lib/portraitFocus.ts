@@ -13,10 +13,8 @@ export function focusStyle(f: PortraitFocus | null | undefined): Pick<CSSPropert
   return { objectPosition: `${x}% ${y}%`, transform: zoomed ? `scale(${f.zoom})` : undefined, transformOrigin: zoomed ? `${x}% ${y}%` : undefined };
 }
 
-/**
- * A texture covering a box (the token's shape), framed on the focus: the scale, and the sprite's center relative to the
- * box's center (anchor 0.5). The sprite always covers the box: the focus moves toward the center only as far as that allows.
- */
+// Scale and sprite center relative to the box (anchor 0.5). The sprite always covers the box, so the focus
+// only moves toward the center as far as that allows.
 export function spriteFit(texW: number, texH: number, boxW: number, boxH: number, f: PortraitFocus | null | undefined): { scale: number; x: number; y: number } {
   const scale = Math.max(boxW / texW, boxH / texH) * (f?.zoom ?? 1);
   const w = texW * scale;

@@ -19,7 +19,7 @@ export function LockButton({ locked, onToggle, label }: { locked: boolean; onTog
 const hasIssue = (report: NpcValidationReport | undefined, field: string) =>
   report?.issues.some((i) => i.severity === 'Error' && !i.overridden && i.field === field) ?? false;
 
-// ---------------------------------------------------------------- identity
+// identity
 
 export function IdentityEditor({
   rules, sheet, dispatch, semi,
@@ -72,7 +72,7 @@ export function IdentityEditor({
   );
 }
 
-// ---------------------------------------------------------------- STATs
+// STATs
 
 export function StatsEditor({
   sheet, report, dispatch, semi,
@@ -130,7 +130,7 @@ function Derived({ label, value, title }: { label: string; value: number | strin
   );
 }
 
-// ---------------------------------------------------------------- skills
+// skills
 
 type SkillFilter = 'used' | 'all';
 

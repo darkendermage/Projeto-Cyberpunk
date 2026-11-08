@@ -21,11 +21,8 @@ export interface Distance {
   straightMeters: number;
 }
 
-/**
- * The ruler: on a square grid it counts the squares between the cells the two points are in, a diagonal step counting
- * as one square (a table convention: the Core gives movement in squares of 2 m, p.168, but no diagonal rule), and
- * shows the straight line too.
- */
+// Counts squares with diagonals as one (house convention, the Core gives 2 m squares on p.168 but no diagonal
+// rule) and shows the straight line too.
 export function gridDistance(g: SceneGrid, a: Point, b: Point): Distance {
   const straightMeters = Math.hypot(b.x - a.x, b.y - a.y) * g.metersPerCell;
   if (g.type === 'None') return { squares: null, meters: straightMeters, straightMeters };

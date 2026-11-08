@@ -11,10 +11,7 @@ interface Props {
   onChange: (criteria: Criterion[]) => void;
 }
 
-/**
- * Price range with a log-scaled dual slider (prices go from 10 to 60.000+, a linear track would be useless)
- * plus exact numeric inputs. The criterion is committed on release / blur, not while dragging.
- */
+// Log-scaled slider (prices go from 10 to 60.000+) plus exact inputs. Commits on release/blur, not while dragging.
 export function PriceFilter({ field, criteria, onChange }: Props) {
   const min = field.min ?? 0;
   const max = field.max ?? 0;

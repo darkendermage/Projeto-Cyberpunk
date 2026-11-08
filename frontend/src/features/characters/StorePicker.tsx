@@ -31,11 +31,8 @@ export interface PurchaseInput {
 type Received = 'Trade' | 'Gift' | 'Loot';
 const RECEIVED_LABEL: Record<Received, string> = { Gift: t('Presente', 'Gift'), Trade: t('Troca', 'Trade'), Loot: t('Saque', 'Loot') };
 
-/**
- * Catalog search with a confirmation step per item: price, quantity, budget now and after, and the explicit choice
- * to install or equip. With `receiving` (after creation only) items come in without paying: trade, gift or loot.
- * The server still decides whether it is allowed (price, budget, installation).
- */
+// Search + a confirm step per item (price, quantity, budget before/after, install or equip). With receiving
+// (after creation) items come in for free: trade, gift or loot. The server still has the last word.
 export function StorePicker({ onBuy, busy, creationBudgets, available, creating, receiving = false }: {
   onBuy: (input: PurchaseInput, item: StoreItem) => Promise<unknown> | void;
   busy: boolean;

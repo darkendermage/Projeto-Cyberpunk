@@ -24,10 +24,8 @@ export function skillCost(rule: Pick<SkillRule, 'doubleCost'>, nextLevel: number
   return nextLevel * (rule.doubleCost ? 40 : 20);
 }
 
-/**
- * Every skill the character can raise, by category in the sheet's order: the ones it has (any level, below the top),
- * each specialization it has, and for specialized skills (Language, Martial Arts…) a line to learn a new one.
- */
+// In sheet order: skills it has (below the top), each specialization, and a "learn a new one" line for
+// Language, Martial Arts...
 export function improvementGroups(rules: SkillRule[], report: Line[]): ImproveGroup[] {
   const byCategory = new Map<string, { sort: string; options: ImproveOption[] }[]>();
   for (const rule of rules) {
@@ -61,11 +59,11 @@ export function improvementGroups(rules: SkillRule[], report: Line[]): ImproveGr
 const SCIENCES = ['Biology', 'Chemistry', 'Cybernetics', 'Genetics', 'Mathematics', 'Medicine', 'Neuroscience', 'Physics', 'Robotics'];
 const INSTRUMENTS = ['Bass', 'Drums', 'Guitar', 'Keyboard', 'Saxophone', 'Synthesizer', 'Turntables', 'Violin', 'Vocals'];
 
-/**
- * What a new specialization of a skill can be. Martial Arts take only the book's forms; languages, places,
- * sciences and instruments offer a list but take any other name too. Specializations already learned are left out.
- */
-export function specializationChoices(skillId: string, learnedKeys: string[], sources: { languages: string[]; homes: string[]; martialArts: string[] }): { options: string[]; free: boolean } {
+// Martial Arts only take the book's forms; languages, places, sciences and instruments suggest a list but accept
+// anything. Already learned ones are left out.
+export function specializationChoices(skillId: string, learnedKeys: string[],
+  sources: { languages: string[]; homes: string[]; martialArts: string[] }
+): { options: string[]; free: boolean } {
   const learned = new Set(learnedKeys.filter((k) => k.startsWith(`${skillId}:`)).map((k) => k.slice(skillId.length + 1).toLowerCase()));
   const pick = (list: string[]) => [...new Set(list)].filter((o) => !learned.has(o.toLowerCase())).sort((a, b) => a.localeCompare(b));
   switch (skillId) {

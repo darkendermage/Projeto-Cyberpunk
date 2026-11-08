@@ -15,7 +15,9 @@ export function sortRows<T, K extends string>(rows: readonly T[], sort: SortStat
     .sort((a, b) => {
       const empty = (a.v == null || a.v === '' ? 1 : 0) - (b.v == null || b.v === '' ? 1 : 0);
       if (empty !== 0) return empty;
-      const diff = typeof a.v === 'number' && typeof b.v === 'number' ? a.v - b.v : String(a.v ?? '').localeCompare(String(b.v ?? ''), undefined, { sensitivity: 'base', numeric: true });
+      const diff = typeof a.v === 'number' && typeof b.v === 'number'
+        ? a.v - b.v
+        : String(a.v ?? '').localeCompare(String(b.v ?? ''), undefined, { sensitivity: 'base', numeric: true });
       return diff !== 0 ? diff * sign : a.index - b.index;
     })
     .map((x) => x.row);

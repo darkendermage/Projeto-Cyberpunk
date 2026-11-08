@@ -7,10 +7,8 @@ import { t } from '../../i18n';
 import { IconButton } from './ui';
 import styles from './PortraitField.module.css';
 
-/**
- * An image stored with something (an NPC): shows it, uploads a new one (large images are shrunk first) and removes it.
- * The caller refreshes whatever lists the image after onUpload / onRemove. Without a size it fills its column.
- */
+// Show / upload (shrinks big images first) / remove. The caller refreshes whatever lists it on onUpload and
+// onRemove. No size = fills its column.
 export function PortraitField({ url, alt, onUpload, onRemove, size }: {
   url: string | null;
   alt: string;

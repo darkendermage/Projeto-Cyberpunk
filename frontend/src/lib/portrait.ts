@@ -32,10 +32,8 @@ export class PortraitError extends Error {}
 
 const QUALITIES = [0.85, 0.75, 0.6, 0.45];
 
-/**
- * Returns a file the server will accept: the original when it is already small, otherwise the picture resized to at
- * most 1024 px and re-encoded as WebP (JPEG where the browser can't write WebP), lowering the quality until it fits.
- */
+// Small files go as they are; otherwise resize to 1024 px max and re-encode as WebP (JPEG if the browser
+// can't write WebP), lowering quality until it fits.
 export async function preparePortrait(file: File): Promise<File> {
   return (await prepareImage(file, PORTRAIT_LIMITS)).file;
 }

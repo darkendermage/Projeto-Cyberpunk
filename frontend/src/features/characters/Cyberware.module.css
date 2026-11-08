@@ -49,7 +49,7 @@
   gap: 10px;
 }
 
-/* ------------------------------------------------------------ region panel */
+/* region panel */
 
 .region {
   display: flex;
@@ -128,7 +128,7 @@
 }
 .emptySlot:hover { color: var(--red-bright); border-color: var(--red); }
 
-/* ------------------------------------------------------------ figure */
+/* figure */
 
 .figureWrap {
   position: relative;
@@ -173,7 +173,7 @@
 .hotDotOn { fill: var(--cyan); }
 .hotCount { fill: var(--cyan); font-family: var(--font-mono); font-size: 13px; }
 
-/* ------------------------------------------------------------ clinic */
+/* clinic */
 
 /* Search above, category below, both full width: a long "Todas de ..." label never pushes the layout around. */
 .clinicToolbar {
@@ -211,7 +211,7 @@
 .catalogMeta { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px; font-size: 12.5px; color: var(--text-2); }
 .price { font-family: var(--font-mono); color: var(--cyan); text-align: right; }
 
-/* ------------------------------------------------------------ details */
+/* details */
 
 .details {
   display: grid;

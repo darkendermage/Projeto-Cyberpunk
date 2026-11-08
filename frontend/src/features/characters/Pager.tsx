@@ -3,10 +3,7 @@ import { t } from '../../i18n';
 import { PAGE_SIZE } from './gearLayout';
 import styles from './Characters.module.css';
 
-/**
- * "Exibindo 11–20 de 34 …" with the arrows, under a paged list (the inventory, the money history, the character
- * history). <paramref name="noun"/> names what is counted, already translated.
- */
+// "Exibindo 11–20 de 34" plus the arrows. noun comes already translated.
 export function Pager({ page, pages, rows, total, noun, onPage, size = PAGE_SIZE }: {
   page: number; pages: number; rows: number; total: number; noun: string; onPage: (page: number) => void; size?: number;
 }) {

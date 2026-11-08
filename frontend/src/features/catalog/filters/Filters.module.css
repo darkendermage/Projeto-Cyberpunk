@@ -164,7 +164,7 @@
   color: var(--text-muted);
 }
 
-/* ------------------------------------------------------------ price slider */
+/* price slider */
 
 .price {
   display: flex;
@@ -236,7 +236,7 @@
   height: 36px;
 }
 
-/* ------------------------------------------------------------ blocks & rows (table layout style) */
+/* blocks & rows (table layout style) */
 
 .block {
   padding: 12px 0 8px;

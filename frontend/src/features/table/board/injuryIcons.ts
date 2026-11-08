@@ -20,12 +20,12 @@ export function injuryIcon(name: string): InjuryIcon {
   return 'generic';
 }
 
-/** Up to 8 slots on a circle of <paramref name="radius"/>: the first on top, then alternating left and right downward. */
+/** Up to 8 slots on a circle of `radius`: the first on top, then alternating left and right downward. */
 export function arcPositions(count: number, radius: number): { x: number; y: number }[] {
   const step = Math.PI / 5; // 36° between neighbours
   const out: { x: number; y: number }[] = [];
   for (let i = 0; i < Math.min(count, 8); i++) {
-    // 0 → top; 1 → left; 2 → right; 3 → further left…
+    // 0 -> top; 1 -> left; 2 -> right; 3 -> further left…
     const k = Math.ceil(i / 2);
     const angle = -Math.PI / 2 + (i === 0 ? 0 : (i % 2 === 1 ? -1 : 1) * k * step);
     out.push({ x: Math.cos(angle) * radius, y: Math.sin(angle) * radius });
@@ -35,7 +35,7 @@ export function arcPositions(count: number, radius: number): { x: number; y: num
 
 const WHITE = 0xffffff;
 
-/** Draws one pictogram in white on <paramref name="g"/>, centered on (0, 0), fitting a circle of radius <paramref name="r"/>. */
+/** Draws one pictogram in white on `g`, centered on (0, 0), fitting a circle of radius `r`. */
 export function drawInjuryIcon(g: Graphics, icon: InjuryIcon, r: number): void {
   const s = r * 0.62;
   const line = { width: Math.max(1.5, r * 0.18), color: WHITE, cap: 'round' as const, join: 'round' as const };

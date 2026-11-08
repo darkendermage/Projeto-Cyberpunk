@@ -27,7 +27,7 @@
   max-width: 520px;
 }
 
-/* ------------------------------------------------------------ level cards */
+/* level cards */
 
 .levels {
   display: grid;
@@ -91,7 +91,7 @@
   color: var(--text-muted);
 }
 
-/* ------------------------------------------------------------ layout */
+/* layout */
 
 .layout {
   display: grid;
@@ -174,7 +174,7 @@
   border-color: var(--amber-dim) !important;
 }
 
-/* ------------------------------------------------------------ budgets */
+/* budgets */
 
 .budgets {
   display: flex;
@@ -224,7 +224,7 @@
   color: var(--text-muted);
 }
 
-/* ------------------------------------------------------------ validation */
+/* validation */
 
 .status {
   display: flex;
@@ -349,7 +349,7 @@
   font-size: 14px;
 }
 
-/* ------------------------------------------------------------ STATs */
+/* STATs */
 
 .stats {
   display: grid;
@@ -432,7 +432,7 @@
   color: var(--text);
 }
 
-/* ------------------------------------------------------------ tables (skills, gear, cyberware) */
+/* tables (skills, gear, cyberware) */
 
 .tableWrap {
   overflow-x: auto;
@@ -514,7 +514,7 @@
   width: 180px;
 }
 
-/* ------------------------------------------------------------ item picker */
+/* item picker */
 
 .picker {
   display: flex;
@@ -580,7 +580,7 @@
   border-color: var(--red-line);
 }
 
-/* ------------------------------------------------------------ sheet preview (DGD stat block style) */
+/* sheet preview (DGD stat block style) */
 
 .sheet {
   position: relative;
@@ -662,7 +662,7 @@
   color: var(--red);
 }
 
-/* ------------------------------------------------------------ library */
+/* library */
 
 .library {
   display: flex;
@@ -701,7 +701,7 @@
   color: var(--text-muted);
 }
 
-/* ------------------------------------------------------------ gangs */
+/* gangs */
 
 .gangPanel {
   display: flex;

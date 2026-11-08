@@ -3,7 +3,7 @@ import { focusStyle, moveFocus, spriteFit } from './portraitFocus';
 
 describe('spriteFit', () => {
   it('covers the box and moves toward the focus', () => {
-    // 200×100 into 50×50: scaled by 0.5 to 100×50; focus on the left edge → the sprite's left edge on the box's.
+    // 200×100 into 50×50: scaled by 0.5 to 100×50; focus on the left edge -> the sprite's left edge on the box's.
     const fit = spriteFit(200, 100, 50, 50, { x: 0, y: 50, zoom: 1 });
     expect(fit.scale).toBe(0.5);
     expect(fit.x).toBe(25);

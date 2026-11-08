@@ -177,7 +177,7 @@ export const TEMPERATURE_RULES: Record<Band, { text: string; protection?: string
   },
 };
 
-// ------------------------------------------------------------------ rolls
+// rolls
 
 export interface StrangeRoll {
   /** 1d10 on the Strange Weather table, for the condition. */
@@ -237,7 +237,7 @@ export function pickStrange(weather: WeatherRoll, row: number, rng: Rng = Math.r
   return { ...weather, condition: 6, strange: { ...strange, condition: row, durationRow: row } };
 }
 
-// ------------------------------------------------------------------ reading a roll
+// reading a roll
 
 export const seasonOf = (id: SeasonId) => SEASONS.find((s) => s.id === id) ?? SEASONS[0];
 

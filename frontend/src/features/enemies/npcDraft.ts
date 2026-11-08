@@ -53,7 +53,8 @@ export const skillKey = (id: string, specialization?: string | null) =>
 
 export type DraftAction =
   | { type: 'load'; sheet: NpcSheet }
-  | { type: 'set'; patch: Partial<Pick<NpcSheet, 'name' | 'concept' | 'level' | 'hardened' | 'role' | 'roleRank' | 'nativeLanguage' | 'home' | 'luck' | 'notes' | 'profileId' | 'gangId'>> }
+  | { type: 'set'; patch: Partial<Pick<NpcSheet, 'name' | 'concept' | 'level' | 'hardened' | 'role' |
+      'roleRank' | 'nativeLanguage' | 'home' | 'luck' | 'notes' | 'profileId' | 'gangId'>> }
   | { type: 'stat'; key: string; value: number }
   | { type: 'skill'; key: string; value: number | null }
   | { type: 'toggleKeySkill'; key: string }
@@ -150,10 +151,8 @@ export interface GeneratorSettings {
   applyEmpGuideline: boolean;
 }
 
-/**
- * Automatic mode sends only the level and constraints; semi-automatic mode sends the sheet so the server
- * keeps the name, concept and every locked value. Manual mode never calls the generator.
- */
+// Automatic sends only level + constraints; semi-automatic sends the sheet so locked values stay. Manual never
+// calls the generator.
 export function buildGenerationRequest(mode: CreationMode, sheet: NpcSheet, settings: GeneratorSettings): NpcGenerationRequest {
   const seed = settings.seed.trim() === '' ? null : Number.parseInt(settings.seed, 10);
   return {

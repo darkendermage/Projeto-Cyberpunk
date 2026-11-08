@@ -105,10 +105,8 @@ export function wheelSlices(entries: Pick<PrizeEntry, 'label' | 'weight'>[]): Wh
   });
 }
 
-/**
- * Rotation that leaves the pointer (top) on the middle of the slice the roll landed in. `roll` is 1-based over the
- * total weight, as the server rolls it. `turns` full spins come first so the wheel visibly spins.
- */
+// Lands the pointer on the middle of the slice. roll is 1-based over the total weight (same as the server);
+// `turns` full spins first so it visibly spins.
 export function wheelRotation(entries: Pick<PrizeEntry, 'weight'>[], roll: number, turns = 4): number {
   let acc = 0;
   let index = entries.length - 1;
@@ -121,7 +119,7 @@ export function wheelRotation(entries: Pick<PrizeEntry, 'weight'>[], roll: numbe
   return turns * 360 + (360 - middle);
 }
 
-// ------------------------------------------------------------------ Haggle form
+// Haggle form
 
 export interface HaggleState {
   buyer: { trading: number; rank: number };

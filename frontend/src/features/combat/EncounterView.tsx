@@ -289,7 +289,9 @@ function QueueRow({ f, active, selected, targeted, cover, onSelect, onOpen }: {
   return (
     <>
       <button type="button" onClick={onSelect} onDoubleClick={onOpen}
-        className={clsx(styles.queueRow, active && styles.queueActive, selected && styles.queueSelected, targeted && styles.queueTarget, f.side === 'Enemy' ? styles.enemy : styles.ally, f.dead && styles.dead)}>
+        className={clsx(styles.queueRow, active && styles.queueActive, selected && styles.queueSelected,
+          targeted && styles.queueTarget, f.side === 'Enemy' ? styles.enemy : styles.ally,
+          f.dead && styles.dead)}>
         <span className={styles.init}>{f.initiative ?? '—'}</span>
         <span className={styles.queueMain}>
           <span className={styles.queueName}>{f.dead && <Skull size={13} />} {tv(f.name)}</span>
@@ -307,10 +309,8 @@ function QueueRow({ f, active, selected, targeted, cover, onSelect, onOpen }: {
   );
 }
 
-/**
- * One sheet tab: a PC opens its full sheet (edits save as on the sheet page); NPCs and generic enemies show what they
- * joined the fight with. A PC sheet that moves ahead of the table (an edit made here) reloads the table.
- */
+// PCs open their full sheet (edits save like on the sheet page); NPCs show what they joined with.
+// A PC sheet that gets ahead of the table reloads the table.
 function SheetTabView({ f, encounterId, tab, onTab }: { f: FighterView; encounterId: number; tab: CharacterTab; onTab: (tab: CharacterTab) => void }) {
   const client = useQueryClient();
   const known = f.characterVersion;

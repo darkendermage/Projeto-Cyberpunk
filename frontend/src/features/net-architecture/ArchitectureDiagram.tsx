@@ -12,11 +12,8 @@ const KIND_COLOR: Record<string, string> = {
   ControlNode: '#3dff9a',
 };
 
-/**
- * The elevator as a tree (SVG): each floor is a "door"; the stripe on its left shows what is behind it (red Black ICE,
- * amber Password, cyan File, green Control Node). The Lobby, the bottom and Boss Floors are marked, and the Demons and
- * Watchers sit on their floors. Self-contained styles, so the exported .svg looks the same.
- */
+// Elevator tree in SVG. The stripe left of each floor shows what's behind the door (red Black ICE, amber
+// Password, cyan File, green Control Node). Styles are inline so the exported .svg looks the same.
 export function ArchitectureDiagram({ detail, lookups, selected, onSelect, ref }: {
   detail: NetArchitectureDetail;
   lookups: Lookups;

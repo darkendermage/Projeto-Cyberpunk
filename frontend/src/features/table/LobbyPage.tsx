@@ -11,10 +11,8 @@ import { LangSwitch } from './LangSwitch';
 import { initials } from './tokens';
 import styles from './Table.module.css';
 
-/**
- * The general link (/mesa/j/): the tunnel address leads here. A device that already holds a seat goes straight back to
- * it; otherwise, while the GM keeps the entrance open, the player picks one of the free seats and gets its key.
- */
+// /mesa/j/ - the tunnel address lands here. A device that already has a seat goes back to it; otherwise the
+// player picks a free seat while the GM keeps the lobby open.
 export function LobbyPage() {
   const navigate = useNavigate();
   const toast = useToast();

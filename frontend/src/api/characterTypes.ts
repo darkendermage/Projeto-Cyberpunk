@@ -18,7 +18,7 @@ export type RelationshipKind = 'Friend' | 'Enemy' | 'Ally' | 'Lover' | 'Contact'
 export type PaymentStatus = 'Paid' | 'Pending' | 'Overdue' | 'NotApplicable';
 export type Caliber = string;
 
-// ---------------------------------------------------------------- sheet (stored source data)
+// sheet (stored source data)
 
 export interface CharacterIdentity {
   name: string;
@@ -198,7 +198,7 @@ export interface CharacterSheet {
   notes?: string | null;
 }
 
-// ---------------------------------------------------------------- report (derived on the server)
+// report (derived on the server)
 
 export interface ValuePart { label: string; value: number }
 export interface StatLine { key: string; base: number; effective: number; parts: ValuePart[] }
@@ -553,9 +553,13 @@ export interface CharacterEvent {
   undone: boolean;
 }
 
-// ---------------------------------------------------------------- rules
+// rules
 
-export interface StartingItem { slug: string; itemId: number | null; name: string; qty: number; caliber: Caliber | null; rounds: number | null; worn: ArmorSlot | null; meatArm: boolean }
+export interface StartingItem {
+  slug: string; itemId: number | null; name: string; qty: number;
+  caliber: Caliber | null; rounds: number | null; worn: ArmorSlot | null;
+  meatArm: boolean
+}
 export interface StartingOption { index: number; label: string; items: StartingItem[] }
 export interface StartingGroup { index: number; options: StartingOption[] }
 export interface StartingSection { key: string; label: string; source: string; humanityLoss: number | null; groups: StartingGroup[] }

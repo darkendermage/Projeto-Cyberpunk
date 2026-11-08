@@ -18,10 +18,7 @@ export function inkFor(hex: string): '#0b0d10' | '#f4f6f8' {
 /** The tray stays readable: past this the rest still counts in the total. */
 export const MAX_DICE = 12;
 
-/**
- * The dice of a roll or an attack line, as this reader sees it; null when there is nothing to throw (a concealed
- * secret roll, a formula without d6 or d10, an attack whose numbers the reader may not see).
- */
+// null when there's nothing to throw (concealed secret roll, no d6/d10, hidden attack numbers).
 export function throwOf(m: TableMessage): DiceThrow | null {
   const dice: DieRoll[] = [];
   const add = (sides: number, value: number) => { if ((sides === 6 || sides === 10) && dice.length < MAX_DICE) dice.push({ sides, value }); };

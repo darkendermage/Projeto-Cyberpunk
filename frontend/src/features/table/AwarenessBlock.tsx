@@ -10,11 +10,8 @@ import styles from './Table.module.css';
 
 const isSolo = (role: string) => role.toLowerCase() === 'solo';
 
-/**
- * The Solo's Combat Awareness at the table (round 6): the points and what they do now, the once-a-Round ones marked
- * used, and "Redistribute" (the sheet's dialog). In a running fight the server notes it as an Action. Nothing shows for
- * a character who isn't a Solo.
- */
+// Solo only. Shows the points, what they do, which once-a-Round ones are used, and "Redistribute". In a running
+// fight the server logs it as an Action.
 export function AwarenessBlock({ characterId, roundFlags }: { characterId: number; roundFlags?: readonly string[] | null }) {
   const toast = useToast();
   const detail = useCharacter(characterId);

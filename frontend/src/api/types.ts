@@ -186,7 +186,7 @@ export interface GearListDetail {
   unpricedEntries: number;
 }
 
-/** GET /api/app/update — newer GitHub release for the desktop executable. */
+/** GET /api/app/update: newer GitHub release for the desktop executable. */
 export interface UpdateInfo {
   current: string;
   latest: string | null;
@@ -208,7 +208,7 @@ export interface ProblemDetails {
   errors?: Record<string, string[]>;
 }
 
-// ---------------------------------------------------------------- enemy generator (Application/Npcs)
+// enemy generator (Application/Npcs)
 
 export type NpcLevel = 'Mook' | 'Lieutenant' | 'MiniBoss' | 'Boss';
 export type NpcStatus = 'Draft' | 'Valid' | 'ValidWithExceptions';

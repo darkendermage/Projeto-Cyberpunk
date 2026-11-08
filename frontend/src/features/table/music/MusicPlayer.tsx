@@ -13,12 +13,9 @@ const CHECK_MS = 3000;
 /** Whether the player is on the table's track (a playlist may have moved on by itself at the end of a track). */
 const onTrack = (p: YtPlayer, m: TableMusic) => !m.playlistId || p.getPlaylistIndex() === m.index;
 
-/**
- * The table's music on one screen (G): a small YouTube player in a corner of the board (visible, as YouTube requires),
- * kept on the GM's track and position. The browser plays sound only after a click: "Enable sound" unlocks it. Volume
- * and mute are each person's own. "Minimize" (round 6) folds it into a bar and keeps playing: the video goes on off
- * screen, since YouTube has no audio-only stream.
- */
+// Small YouTube player in a corner (it has to be visible, YouTube's rules), kept on the GM's track and position.
+// Browsers only play sound after a click, hence "Enable sound". Volume/mute are per person. Minimize keeps the
+// video playing off screen since YouTube has no audio-only stream.
 export function MusicPlayer({ music, prefs, onPrefs, onBlocked, onEnded }: {
   music: TableMusic | null;
   prefs: TablePrefs;

@@ -7,10 +7,7 @@ export const splitTotal = (rule: RoleSplitRule, rank: number) => (rule.max === '
 /** One Combat Awareness effect as the table shows it; <c>used</c> is set for the once-a-Round ones. */
 export interface AwarenessEffect { key: string; label: string; value: string; detail: string; used?: boolean }
 
-/**
- * What the Solo's Combat Awareness points do right now (CP:R p.146), in a fixed order; parts with no effect are left
- * out. <paramref name="flags"/> are the once-a-Round effects already spent this Round.
- */
+// CP:R p.146, fixed order, parts with no effect left out. flags = once-a-Round effects already used.
 export function awarenessEffects(split: Record<string, number>, flags: readonly string[]): AwarenessEffect[] {
   const p = (k: string) => split[k] ?? 0;
   const out: AwarenessEffect[] = [];

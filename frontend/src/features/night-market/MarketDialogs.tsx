@@ -13,12 +13,9 @@ import { CONDITION_LABEL, type HaggleState, initialHaggle, qualityLabel, toHaggl
 import styles from './NightMarket.module.css';
 import { t, tv } from '../../i18n';
 
-// ------------------------------------------------------------------ Haggle
+// Haggle
 
-/**
- * The Haggle opposed check of CP:R p.159: COOL + Trading + Operator Rank + 1d10 on each side. The result lists the
- * deals of the buyer's Rank or lower; `onDeal` receives the chosen one with the dice that were rolled.
- */
+// CP:R p.159: COOL + Trading + Operator Rank + 1d10 each side. onDeal gets the chosen deal and the dice rolled.
 export function HagglePanel({ rules, state, onChange, result, onResult, deal, onDeal, buyerLabel = t('Quem pechincha', 'Who haggles'), sellerLabel = t('Outro lado', 'Other side') }: {
   rules: NightMarketRules;
   state: HaggleState;
@@ -90,7 +87,7 @@ export function HagglePanel({ rules, state, onChange, result, onResult, deal, on
   );
 }
 
-// ------------------------------------------------------------------ Buy Now!!!
+// Buy Now!!!
 
 export function BuyDialog({ market, listing, rules, onClose }: {
   market: NightMarketDetail; listing: Listing; rules: NightMarketRules; onClose: () => void;
@@ -157,7 +154,7 @@ export function BuyDialog({ market, listing, rules, onClose }: {
   );
 }
 
-// ------------------------------------------------------------------ GM: edit a listing
+// GM: edit a listing
 
 const CONDITIONS: ItemCondition[] = ['Normal', 'Damaged', 'Destroyed', 'BeyondRepair'];
 
@@ -230,7 +227,7 @@ export function EditListingDialog({ market, listing, rules, onClose }: {
   );
 }
 
-// ------------------------------------------------------------------ GM: add a listing
+// GM: add a listing
 
 export function AddListingDialog({ market, onClose }: { market: NightMarketDetail; onClose: () => void }) {
   const toast = useToast();
@@ -299,7 +296,7 @@ export function AddListingDialog({ market, onClose }: { market: NightMarketDetai
   );
 }
 
-// ------------------------------------------------------------------ GM: fill a "GM's choice" slot
+// GM: fill a "GM's choice" slot
 
 export function FillSlotDialog({ market, slot, onClose }: { market: NightMarketDetail; slot: OpenSlot; onClose: () => void }) {
   const toast = useToast();

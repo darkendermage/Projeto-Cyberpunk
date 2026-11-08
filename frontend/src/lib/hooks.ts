@@ -54,7 +54,7 @@ export function writeStorage(key: string, value: unknown) {
   try {
     localStorage.setItem(key, JSON.stringify(value));
   } catch {
-    /* storage unavailable (private mode) — settings just won't persist */
+    /* storage unavailable (private mode): settings just won't persist */
   }
 }
 

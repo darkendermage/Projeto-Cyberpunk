@@ -54,7 +54,7 @@ export const isArea = (mode: AttackMode) => mode === 'Explosive' || mode === 'Sh
 export const needsRange = (weapon: WeaponView | null, mode: AttackMode, thrown: boolean) =>
   thrown || (!!weapon && !weapon.melee && mode !== 'ShotgunShell' && mode !== 'Suppressive');
 
-/** "4d6" → 4 */
+/** "4d6" -> 4 */
 export function diceCount(expression: string): number {
   const match = /^(\d+)d\d+$/i.exec(expression.trim());
   return match ? Number(match[1]) : 0;

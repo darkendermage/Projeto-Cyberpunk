@@ -127,7 +127,7 @@ export function CreationView({ detail, rules, editor }: Props) {
 
 type Run = (path: string, body?: Record<string, unknown>, success?: string) => Promise<CharacterDetail | null>;
 
-// ------------------------------------------------------------ 1. identity
+// 1. identity
 
 function IdentityStep({ sheet, rules, editor, onReset }: {
   sheet: CharacterSheet; rules: CharacterRules; editor: SheetEditor; onReset: (m: CreationMethod, role: string) => void;
@@ -192,12 +192,9 @@ function IdentityStep({ sheet, rules, editor, onReset }: {
   );
 }
 
-// ------------------------------------------------------------ 2. Lifepath
+// 2. Lifepath
 
-/**
- * The Lifepath step (CP:R p.43): general tables, style, friends/enemies/lovers and the Role's flowchart. Optional: the
- * book says "roll or choose" and nothing here blocks finishing creation. The same answers show on the Caminho de Vida tab.
- */
+// Lifepath (CP:R p.43). Optional, the book says "roll or choose", so nothing here blocks finishing.
 function LifepathStep({ rules, editor }: { rules: CharacterRules; editor: SheetEditor }) {
   return (
     <>
@@ -222,7 +219,7 @@ function LifepathStep({ rules, editor }: { rules: CharacterRules; editor: SheetE
   );
 }
 
-// ------------------------------------------------------------ 3. STATs
+// 3. STATs
 
 function StatsStep({ sheet, rules, role, method, editor, run, detail }: {
   sheet: CharacterSheet; rules: CharacterRules; role: RoleRules; method: CreationMethod; editor: SheetEditor; run: Run; detail: CharacterDetail;
@@ -305,7 +302,7 @@ function StatsStep({ sheet, rules, role, method, editor, run, detail }: {
   );
 }
 
-// ------------------------------------------------------------ 4. skills
+// 4. skills
 
 function SkillsStep({ sheet, rules, role, method, editor, run }: {
   sheet: CharacterSheet; rules: CharacterRules; role: RoleRules; method: CreationMethod; editor: SheetEditor; run: Run;
@@ -437,7 +434,7 @@ function AddSpecialization({ skill, onAdd }: { skill: SkillRule; onAdd: (spec: s
   );
 }
 
-// ------------------------------------------------------------ 5. equipment
+// 5. equipment
 
 type PurchaseSort = 'name' | 'category' | 'qty' | 'pool' | 'paid';
 
@@ -448,7 +445,8 @@ function creationPurchases(detail: CharacterDetail) {
       id: i.instanceId, name: i.name, category: i.category, paid: i.pricePaid, pool: i.paidFrom, qty: i.rounds ?? i.quantity,
     })),
     ...detail.sheet.cyberware.filter((c) => c.origin === 'Purchase').map((c) => ({
-      id: c.instanceId, name: detail.report.cyberware.find((l) => l.instanceId === c.instanceId)?.name ?? '?', category: 'Cyberware', paid: c.pricePaid ?? null, pool: c.paidFrom, qty: 1,
+      id: c.instanceId, name: detail.report.cyberware.find((l) => l.instanceId === c.instanceId)?.name ?? '?', category: 'Cyberware',
+        paid: c.pricePaid ?? null, pool: c.paidFrom, qty: 1,
     })),
   ];
 }

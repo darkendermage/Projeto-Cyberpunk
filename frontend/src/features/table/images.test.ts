@@ -58,7 +58,7 @@ describe('stack', () => {
   it('lists the top first', () => expect(orderedImages(images).map((i) => i.id)).toEqual(['b', 'c', 'a']));
 
   it('tells where a move up or down goes', () => {
-    // bottom → top: a, c, b
+    // bottom -> top: a, c, b
     expect(aboveForMove(images, 'a', 'up')).toBe('b'); // a goes under b, over c
     expect(aboveForMove(images, 'c', 'up')).toBeNull(); // c to the top
     expect(aboveForMove(images, 'b', 'up')).toBeUndefined(); // already on top

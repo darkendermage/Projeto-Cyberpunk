@@ -4,10 +4,7 @@ import type { Item } from '../../api/types';
 import styles from './ItemArt.module.css';
 import { tv } from '../../i18n';
 
-/**
- * Procedural silhouettes for items without an image. Each class/subtype maps to a small
- * vector drawing on a 240x120 canvas, filled with a metallic gradient and red accents.
- */
+// Placeholder drawings for items without a picture: one small vector per class/subtype on a 240x120 canvas.
 
 const M = 'url(#art-metal)';
 const D = 'url(#art-dark)';
@@ -25,7 +22,7 @@ const vents = (x: number, y: number, n: number, gap = 8) =>
 const serrations = (x: number, y: number, n: number) =>
   Array.from({ length: n }, (_, i) => <line key={i} x1={x + i * 3.5} y1={y} x2={x + i * 3.5} y2={y + 12} stroke="#07080a" strokeWidth={1.2} />);
 
-// ---------------------------------------------------------------- weapons
+// weapons
 
 const pistol = (scale = 1, heavy = false): Draw => () => (
   <g transform={`translate(${120 - 120 * scale} ${60 - 62 * scale}) scale(${scale})`}>
@@ -236,7 +233,7 @@ const katana: Draw = () => (
   </g>
 );
 
-// ---------------------------------------------------------------- ammo & explosives
+// ammo & explosives
 
 const rounds: Draw = () => (
   <g>
@@ -289,7 +286,7 @@ const detonator: Draw = () => (
   </g>
 );
 
-// ---------------------------------------------------------------- gear
+// gear
 
 const phone: Draw = () => (
   <g>
@@ -384,7 +381,7 @@ const wheel: Draw = () => (
   </g>
 );
 
-// ---------------------------------------------------------------- armor
+// armor
 
 const vest: Draw = () => (
   <g>
@@ -439,7 +436,7 @@ const mech: Draw = () => (
   </g>
 );
 
-// ---------------------------------------------------------------- cyberware & fashion
+// cyberware & fashion
 
 const chip: Draw = () => (
   <g>
@@ -566,7 +563,7 @@ const wristDisplay: Draw = () => (
   </g>
 );
 
-// ---------------------------------------------------------------- drugs
+// drugs
 
 const injector: Draw = () => (
   <g>
@@ -597,7 +594,7 @@ const vial: Draw = () => (
   </g>
 );
 
-// ---------------------------------------------------------------- vehicles & HQ
+// vehicles & HQ
 
 const car = (tactical = false): Draw => () => (
   <g>
@@ -755,7 +752,7 @@ const cog: Draw = () => (
   </g>
 );
 
-// ---------------------------------------------------------------- mapping
+// mapping
 
 const WEAPON_ART: Record<string, Draw> = {
   MediumPistol: pistol(1), HeavyPistol: pistol(1.08, true), VeryHeavyPistol: revolver,

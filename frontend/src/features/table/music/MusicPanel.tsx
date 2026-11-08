@@ -12,10 +12,8 @@ import styles from '../Table.module.css';
 
 const clock = (s: number) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
 
-/**
- * The GM's music controls (G): paste a YouTube video or playlist link, play, pause, jump, next track, stop, and the
- * recent links. Every change goes to the players over the hub.
- */
+// Paste a YouTube video/playlist link, play, pause, seek, next, stop, recents. Everything goes to the players
+// over the hub.
 export function MusicPanel() {
   const client = useQueryClient();
   const toast = useToast();
@@ -74,7 +72,9 @@ export function MusicPanel() {
             return (
               <div key={`${r.videoId}|${r.playlistId}`} className={styles.weaponChipGroup}>
                 <button type="button" className={styles.weaponChip} title={name ?? undefined}
-                  onClick={() => apply(tableApi.loadMusic({ url: r.playlistId && !r.videoId ? `https://www.youtube.com/playlist?list=${r.playlistId}` : `https://youtu.be/${r.videoId}${r.playlistId ? `?list=${r.playlistId}` : ''}`, title: r.title }))}>
+                  onClick={() => apply(tableApi.loadMusic({
+                    url: r.playlistId && !r.videoId ? `https://www.youtube.com/playlist?list=${r.playlistId}` : `https://youtu.be/${r.videoId}${r.playlistId ? `?list=${r.playlistId}` : ''}`,
+                    title: r.title }))}>
                   {name}
                 </button>
                 <button type="button" className={styles.weaponChip} aria-label={t(`Tirar "${name}" dos recentes`, `Remove "${name}" from recent`)}

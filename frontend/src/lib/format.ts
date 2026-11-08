@@ -51,10 +51,8 @@ const WEAPON_GROUPS: { label: string; classes: string[] }[] = [
 ];
 const RANGED_CLASSES = WEAPON_GROUPS.filter((g) => g.label !== t('Corpo a corpo', 'Melee')).flatMap((g) => g.classes);
 
-/**
- * Compact labels for a set of weapon classes ("Pistolas", "Todas de longo alcance"...). A group is named when
- * every class of it is present; leftover classes keep their own label.
- */
+// e.g. "Pistolas", "Todas de longo alcance". A group is named when all its classes are there; the rest keep
+// their own label.
 export function weaponClassGroups(values: string[], field?: FieldDescriptor): string[] {
   const set = new Set(values);
   const has = (classes: string[]) => classes.every((c) => set.has(c));

@@ -151,10 +151,7 @@ export function StateTag({ tone, children, title }: { tone: 'ok' | 'warn' | 'bad
   return <span className={styles.state} data-tone={tone} title={title}>{icon}{children}</span>;
 }
 
-/**
- * Portrait with upload and removal; the image is stored with the character. With <paramref name="onFocus"/>, "Frame"
- * lets the picture be dragged and zoomed inside the frame; the framing is saved on the sheet (and used by the token).
- */
+// With onFocus, "Frame" lets you drag/zoom the picture; the framing is saved on the sheet and the token uses it.
 export function Portrait({ detail, compact, onFocus }: { detail: CharacterDetail; compact?: boolean; onFocus?: (focus: PortraitFocus | null) => void }) {
   const input = useRef<HTMLInputElement>(null);
   const frame = useRef<HTMLDivElement>(null);
@@ -256,10 +253,7 @@ export function SortButton<K extends string>({ label, column, sort, onSort }: {
   );
 }
 
-/**
- * Undoes a purchase and gives the money back (and, for cyberware, the Humanity). After creation it asks first, like
- * undoing IP; the server refuses what is no longer as bought (damaged armor, used ammunition).
- */
+// Asks first after creation. The server refuses what's no longer as bought (damaged armor, used ammo).
 export function RefundButton({ name, amount, confirm, disabled, compact, onRefund }: {
   name: string; amount: number | null | undefined; confirm: boolean; disabled?: boolean; compact?: boolean; onRefund: () => void;
 }) {

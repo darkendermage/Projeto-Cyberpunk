@@ -70,7 +70,7 @@ function pdftotext(file) {
 
 const bookOf = (file) => BOOKS.find(([rx]) => rx.test(file))?.[1] ?? file.replace(/\.pdf$/i, '').replace(/^RTG-C\w+-(?:DLC-)?/, '');
 
-// ------------------------------------------------------------------ STAT rows
+// STAT rows
 
 const VALUE = /-?\d+\s*\(\d+\)|-?\d+|[—–]/g;
 const tokens = (text) => [...text.matchAll(VALUE)].map((m) => m[0]);
@@ -138,7 +138,7 @@ function readStatRow(lines, kind, row) {
   return { ...into, start: row, end, twoRows: rows.length > 1 };
 }
 
-// ------------------------------------------------------------------ anchors
+// anchors
 
 const hasAll = (line, words) => words.every((w) => new RegExp(`\\b${w}\\b`).test(line));
 const ROLL_TABLE = /\bRoll\b.*\bINT\b.*\bREF\b/;
@@ -155,7 +155,7 @@ function anchorKind(line) {
   return null;
 }
 
-// ------------------------------------------------------------------ header
+// header
 
 const HEADER_START = /^\s*(?:[A-Za-z]\s+)?(?:name|level|roles?)\b/i;
 /** A sheet header: a NAME / LEVEL line with the "Seriously ... HP" box on it or within the next three lines (its tokens may sit on different lines). */
@@ -261,7 +261,7 @@ function rowName(lines, from, to) {
   return null;
 }
 
-// ------------------------------------------------------------------ page numbers
+// page numbers
 
 /** Lone numbers in the first and last lines of the page: candidates for the printed page. */
 function footerNumbers(page) {
@@ -280,7 +280,7 @@ function pageOffsets(pages, fallback) {
   });
 }
 
-// ------------------------------------------------------------------ scan
+// scan
 
 function scan(file) {
   const book = bookOf(file);
@@ -394,7 +394,7 @@ function scan(file) {
   return { book, blocks, excluded, warnings, pages: pages.length };
 }
 
-// ------------------------------------------------------------------ run
+// run
 
 const files = readdirSync(PDFS).filter((f) => /\.pdf$/i.test(f)).sort();
 const results = files.map((f) => ({ file: f, ...scan(f) }));

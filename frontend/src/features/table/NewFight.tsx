@@ -15,10 +15,7 @@ const KIND_LABEL: Record<FightEntryKind, string> = {
   generic: t('genérico', 'generic'),
 };
 
-/**
- * A fight started from the map: the scene's tokens, each ticked or not and on a side. The new fight is linked to the
- * scene and every ticked token to its fighter. Mounted per scene (key), so the list starts from the current tokens.
- */
+// Ticked tokens join on a side and get linked to their fighters. Keyed per scene so the list starts fresh.
 export function NewFight({ scene, act }: { scene: SceneView; act: Act }) {
   const [name, setName] = useState('');
   const [entries, setEntries] = useState<FightEntry[]>(() => fightEntries(scene.tokens));

@@ -14,7 +14,7 @@ interface Props {
   onClear: () => void;
 }
 
-/** Removable chips for every applied criterion — the "AND" of the query, made visible. */
+/** Removable chips for every applied criterion: the "AND" of the query, made visible. */
 export function ActiveFilters({ schema, facets, criteria, q, onCriteria, onQuery, onClear }: Props) {
   if (criteria.length === 0 && !q) return null;
   const fields = new Map(schema.fields.map((f) => [f.key, f]));

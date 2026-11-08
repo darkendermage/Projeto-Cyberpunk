@@ -25,10 +25,7 @@ const KIND_LABEL: Record<RollKind, string> = {
 
 const QUICK = ['1d10', '1d6', '2d6', '3d6', '4d6', '5d6', '1d100'];
 
-/**
- * The table chat with its dice. The GM may whisper to a seat and apply a damage roll to a combatant; players choose
- * between public, private (with the GM) and secret rolls.
- */
+// GM can whisper and apply damage rolls; players pick public, private (with the GM) or secret.
 export function ChatPanel({ messages, gm, targets, onSend, onRoll, renderActions, luckAvailable, mySeatId, onReroll }: {
   messages: TableMessage[];
   gm: boolean;

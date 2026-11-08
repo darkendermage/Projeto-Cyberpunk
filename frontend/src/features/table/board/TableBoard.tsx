@@ -20,10 +20,7 @@ export interface BoardHandle {
   zoomBy: (factor: number) => void;
 }
 
-/**
- * The PixiJS board inside React. The controller lives as long as the component; data, tool and draft flow in as
- * props, live effects (drags of others, pings) through the handle.
- */
+// Data, tool and draft come in as props; live stuff (other people's drags, pings) through the handle.
 export function TableBoard({ data, tool, draft, callbacks, ref }: {
   data: BoardData | null;
   tool: BoardTool;

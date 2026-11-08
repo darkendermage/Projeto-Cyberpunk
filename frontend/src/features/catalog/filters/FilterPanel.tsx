@@ -28,10 +28,7 @@ interface Props {
 const SOURCE_FIELDS = ['source', 'ruleSystem', 'dataOrigin', 'priceCategory'];
 const signature = (criteria: Criterion[]) => criteria.map(encodeCriterion).sort().join('&');
 
-/**
- * Filters are generated from the category schema. Changes are staged in a draft and sent with
- * "Aplicar Filtros", so several criteria can be adjusted before a single search runs.
- */
+// Built from the category schema. Changes are staged and only sent on "Aplicar Filtros".
 export function FilterPanel({ schema, facets, criteria, q, onCriteria, onQuery, onClear, onApplied }: Props) {
   const [draft, setDraft] = useState(criteria);
   const [advanced, setAdvanced] = useState(false);

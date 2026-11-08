@@ -56,10 +56,8 @@ const TABS: { id: Tab; label: string }[] = [
 ];
 
 
-/**
- * The GM's side of the virtual table (/mesa): prepare scenes, edit the one selected (live or not), run the linked
- * fight, invite players and talk to them. The scene on the players' screens is the one marked live.
- */
+// /mesa: prepare scenes, edit the selected one, run the linked fight, invite players, chat. The one marked live
+// is what players see.
 export function GmTablePage() {
   const navigate = useNavigate();
   const client = useQueryClient();
@@ -223,7 +221,7 @@ export function GmTablePage() {
 
   /** Clears the selection (tokens after a confirmation: there is no undo). */
   const removeSelection = () => {
-    // The selected image goes with Delete too (round 5).
+    // The selected image goes with Delete too.
     const image = view?.images?.find((i) => i.id === selectedImage);
     if (view && image) {
       if (window.confirm(t(`Apagar "${image.name}"?`, `Delete "${image.name}"?`))) void act(async () => { const v = await tableApi.removeImage(view.id, image.id); setSelectedImage(null); return v; });
@@ -312,8 +310,10 @@ export function GmTablePage() {
         </div>
         {view && encounter.data?.pending && (
           <PendingCard pending={encounter.data.pending} mine={false} gm busy={command.isPending}
-            onDodge={(dodge) => command.mutate({ path: 'pending/defense', body: { targetId: encounter.data!.pending!.targetId, dodge } }, { onError: (e) => toast.notify(problemMessage(e), 'error') })}
-            onCritical={() => command.mutate({ path: 'pending/critical', body: { targetId: encounter.data!.pending!.targetId } }, { onError: (e) => toast.notify(problemMessage(e), 'error') })}
+            onDodge={(dodge) => command.mutate({ path: 'pending/defense', body: { targetId: encounter.data!.pending!.targetId, dodge } },
+              { onError: (e) => toast.notify(problemMessage(e), 'error') })}
+            onCritical={() => command.mutate({ path: 'pending/critical', body: { targetId: encounter.data!.pending!.targetId } },
+              { onError: (e) => toast.notify(problemMessage(e), 'error') })}
             onCancel={() => command.mutate({ path: 'pending/cancel' }, { onSuccess: () => toast.notify(t('Ataque cancelado.', 'Attack cancelled.')), onError: (e) => toast.notify(problemMessage(e), 'error') })} />
         )}
         {view && quick.aim && (
@@ -379,7 +379,9 @@ export function GmTablePage() {
                 const prepared = await prepareImage(file, MAP_LIMITS);
                 const media = await tableApi.upload(prepared.file);
                 const centre = board.current?.centerCell() ?? { x: 5, y: 5 };
-                return tableApi.addImage(view.id, { mediaId: media.id, name: file.name.replace(/\.[^.]+$/, ''), x: snapHalf(centre.x), y: snapHalf(centre.y), ...fitInitial(prepared.width, prepared.height) });
+                return tableApi.addImage(view.id, { mediaId: media.id, name: file.name.replace(/\.[^.]+$/, ''),
+                  x: snapHalf(centre.x), y: snapHalf(centre.y),
+                  ...fitInitial(prepared.width, prepared.height) });
               }).finally(() => setImageBusy(false));
             }}
             onChange={(img, input) => void act(() => tableApi.updateImage(view.id, img.id, input))}

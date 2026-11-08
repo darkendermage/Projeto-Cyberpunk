@@ -4,10 +4,7 @@ import type {
 } from '../../api/characterTypes';
 import { locale, skillName, t } from '../../i18n';
 
-/**
- * Native-language suggestions: the languages of the chosen Cultural Origin (CP:R p.45) or, before one is chosen,
- * every language the table lists. The field still takes any language typed by hand.
- */
+// Languages of the chosen Cultural Origin (CP:R p.45), or all of them before one is picked. Any typed value works.
 export function languagesFor(rules: Pick<CharacterRules, 'culturalOrigins'>, region: string | null | undefined): string[] {
   const origin = region ? rules.culturalOrigins.find((o) => o.region === region) : undefined;
   if (origin) return [...origin.languages];

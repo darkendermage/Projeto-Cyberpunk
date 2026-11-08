@@ -7,10 +7,7 @@ import { splitTotal } from './roleSplit';
 import styles from './Characters.module.css';
 
 
-/**
- * Divides a Role Ability's Rank among its parts: the Tech's specialties (two per Rank, CP:R p.147) or the Solo's
- * Combat Awareness points (CP:R p.146). The server checks the limits again.
- */
+// Tech specialties (two per Rank, CP:R p.147) or Solo Combat Awareness (p.146). The server checks the limits again.
 export function RoleSplitDialog({ open, onClose, role, rank, rule, split, busy, onSave }: {
   open: boolean;
   onClose: () => void;

@@ -60,7 +60,7 @@ export function SheetView({ detail, rules, editor }: Props) {
   );
 }
 
-// ------------------------------------------------------------ identity, Role, Humanity, LUCK
+// identity, Role, Humanity, LUCK
 
 function IdentityColumn({ detail, rules, editor, run, busy }: { detail: CharacterDetail; rules: CharacterRules; editor: SheetEditor; run: Run; busy: boolean }) {
   const id = editor.draft.identity;
@@ -167,7 +167,7 @@ function WalletBlock({ detail }: { detail: CharacterDetail }) {
   );
 }
 
-// ------------------------------------------------------------ STATs
+// STATs
 
 function StatColumn({ detail, run, busy }: { detail: CharacterDetail; run: Run; busy: boolean }) {
   const r = detail.report;
@@ -196,7 +196,7 @@ function StatColumn({ detail, run, busy }: { detail: CharacterDetail; run: Run; 
   );
 }
 
-// ------------------------------------------------------------ skills
+// skills
 
 function SkillsPanel({ detail }: { detail: CharacterDetail }) {
   const [query, setQuery] = useState('');
@@ -259,7 +259,7 @@ function SkillsPanel({ detail }: { detail: CharacterDetail }) {
   );
 }
 
-// ------------------------------------------------------------ temporary modifiers
+// temporary modifiers
 
 /** Temporary modifiers, compact: the active ones at a glance, the list and the form in a window. */
 function ModifiersPanel({ detail, editor }: { detail: CharacterDetail; editor: SheetEditor }) {
@@ -350,7 +350,7 @@ function ModifiersEditor({ detail, editor }: { detail: CharacterDetail; editor: 
   );
 }
 
-// ------------------------------------------------------------ history
+// history
 
 const KIND_LABEL: Record<string, string> = { Ledger: t('Dinheiro', 'Money'), Humanity: t('Humanidade', 'Humanity'), Combat: t('Combate', 'Combat'), Injury: t('Lesão', 'Injury'), Progression: t('Progressão', 'Progression'), Edit: t('Edição', 'Edit') };
 

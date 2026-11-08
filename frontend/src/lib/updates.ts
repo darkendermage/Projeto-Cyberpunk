@@ -11,10 +11,7 @@ interface WaitOptions {
   sleep?: (ms: number) => Promise<void>;
 }
 
-/**
- * After POST /app/update the old process stops and the new one starts on the same port.
- * Polls /health until it answers with another version; false when it never comes back.
- */
+// The old process stops and the new one starts on the same port. Polls /health until another version answers.
 export async function waitForNewVersion(
   previous: string,
   health: () => Promise<HealthInfo>,

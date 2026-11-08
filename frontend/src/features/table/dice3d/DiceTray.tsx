@@ -10,10 +10,7 @@ export interface DiceTrayHandle { roll: (dice: DiceThrow) => void }
 /** How long the total stays up after the dice stop. */
 const HOLD_MS = 1600;
 
-/**
- * The 3D dice over the map. Throws queue up and play one after another; the scene (three.js) loads the first time
- * dice are thrown, so the table doesn't pay for it until then. Without WebGL the tray just stays out of the way.
- */
+// Throws queue up. three.js only loads on the first throw, and without WebGL the tray just stays out of the way.
 export function DiceTray({ ref, sound }: { ref?: Ref<DiceTrayHandle>; sound: boolean }) {
   const host = useRef<HTMLDivElement>(null);
   const canvas = useRef<HTMLCanvasElement>(null);

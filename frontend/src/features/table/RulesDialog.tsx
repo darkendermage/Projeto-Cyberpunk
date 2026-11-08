@@ -12,10 +12,7 @@ import styles from './Table.module.css';
 
 type Tab = 'range' | 'injuries' | 'cover' | 'rules';
 
-/**
- * The book's tables at hand during play: range DVs, Critical Injuries, cover and the area rules. The range tables
- * live in the app; the rest comes from the server's rule files (the players' port has its own route).
- */
+// Range DVs live in the app; crits, cover and area rules come from the server (players' port has its own route).
 export function RulesDialog({ open, onClose, load }: { open: boolean; onClose: () => void; load: () => Promise<TableRules> }) {
   const [tab, setTab] = useState<Tab>('range');
   const [unit, setUnit] = useRangeUnit();

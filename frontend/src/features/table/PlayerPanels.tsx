@@ -16,10 +16,8 @@ type Roll = (formula: string, kind: RollKind, label: string, visibility: TableVi
 
 const signed = (n: number) => (n >= 0 ? `+${n}` : `${n}`);
 
-/**
- * The player's quick panel: their character's numbers, weapons and skills, each a click away from a server roll,
- * and their token's facing. In a fight the numbers come from the combat table; otherwise from the sheet.
- */
+// Numbers, weapons and skills (each one click from a server roll) and token facing. In a fight the numbers
+// come from the combat table, otherwise from the sheet.
 export function CharacterPanel({ character, encounter, token, onRoll, onTurn, onArmor, onAim, onReload, onUnjam, onPickUp, onImport, busy }: {
   character: PlayerCharacter | null;
   encounter: PlayerEncounter | null;
@@ -32,7 +30,7 @@ export function CharacterPanel({ character, encounter, token, onRoll, onTurn, on
   onAim?: (weapon: WeaponView, mode: AttackMode) => void;
   /** Reloads a weapon by its key (an Action on the player's Turn in a fight). */
   onReload?: (weaponKey: string) => void;
-  /** Imports the player's own sheet when the seat has none (round 6). */
+  /** Imports the player's own sheet when the seat has none. */
   onImport?: (file: File) => void;
   /** Clears a jammed weapon (an Action on the player's Turn). */
   onUnjam?: (weaponKey: string) => void;
@@ -82,7 +80,10 @@ export function CharacterPanel({ character, encounter, token, onRoll, onTurn, on
         {fighter && <Badge tone={WOUND_TONE[fighter.woundState]}>{fighter.dead ? t('Morto', 'Dead') : WOUND_LABEL[fighter.woundState]}</Badge>}
       </div>
       <div className={styles.stack} style={{ gap: 4 }}>
-        <span className={styles.rowBetween}><span className={styles.label}>HP</span><span><span className={styles.statBig}>{hp}</span><span className={styles.stat}> / {maxHp}</span></span></span>
+        <span className={styles.rowBetween}>
+          <span className={styles.label}>HP</span>
+          <span><span className={styles.statBig}>{hp}</span><span className={styles.stat}> / {maxHp}</span></span>
+        </span>
         <div className={styles.meter}><div className={styles.meterFill} style={{ width: `${maxHp > 0 ? Math.max(0, Math.min(100, (hp / maxHp) * 100)) : 0}%` }} /></div>
       </div>
       {character && <AwarenessBlock characterId={character.id} roundFlags={fighter?.roundFlags} />}

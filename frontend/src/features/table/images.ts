@@ -12,7 +12,7 @@ export const MAX_SIZE = 200;
 const clampSize = (n: number) => Math.min(MAX_SIZE, Math.max(MIN_SIZE, n));
 const round = (n: number) => Math.round(n * 1000) / 1000;
 
-/** A new image's size: the picture's proportion, fitting a square of <paramref name="maxCells"/> cells. */
+/** A new image's size: the picture's proportion, fitting a square of `maxCells` cells. */
 export function fitInitial(texW: number, texH: number, maxCells = 4): { width: number; height: number } {
   const scale = maxCells / Math.max(texW, texH);
   return { width: round(clampSize(texW * scale)), height: round(clampSize(texH * scale)) };
@@ -25,10 +25,7 @@ const rotate = (p: Point, deg: number): Point => {
 
 const SIGN: Record<Corner, Point> = { nw: { x: -1, y: -1 }, ne: { x: 1, y: -1 }, se: { x: 1, y: 1 }, sw: { x: -1, y: 1 } };
 
-/**
- * Resizing by dragging one corner to <paramref name="point"/> (cells) while the opposite corner stays put, also on a
- * rotated image; <paramref name="keepRatio"/> keeps the width:height proportion.
- */
+// Drag a corner while the opposite one stays put (rotation included). keepRatio keeps width:height.
 export function resizeFromCorner(r: ImgRect, corner: Corner, point: Point, keepRatio: boolean): ImgRect {
   const s = SIGN[corner];
   // Work in the image's own axes: the pointer relative to the centre, unrotated.
@@ -48,7 +45,7 @@ export function resizeFromCorner(r: ImgRect, corner: Corner, point: Point, keepR
   return { ...r, x: round(r.x + centre.x), y: round(r.y + centre.y), width: round(width), height: round(height) };
 }
 
-/** The rotation that points the handle above the image at <paramref name="point"/>: 15° steps, free with Shift. */
+/** The rotation that points the handle above the image at `point`: 15° steps, free with Shift. */
 export function rotationFor(centre: Point, point: Point, free: boolean): number {
   const deg = (Math.atan2(point.x - centre.x, centre.y - point.y) * 180) / Math.PI;
   const angle = free ? deg : Math.round(deg / 15) * 15;
@@ -63,10 +60,7 @@ export function orderedImages<T extends { order: number }>(images: readonly T[])
   return [...images].sort((a, b) => b.order - a.order);
 }
 
-/**
- * The `above` to send to move an image one step up or down the stack: the image it will sit right under, null for the
- * top; undefined when it can't move that way.
- */
+// The image it'll sit right under; null = top, undefined = can't move that way.
 export function aboveForMove(images: readonly { id: string; order: number }[], id: string, dir: 'up' | 'down'): string | null | undefined {
   const stack = [...images].sort((a, b) => a.order - b.order).map((i) => i.id); // bottom → top
   const at = stack.indexOf(id);
@@ -75,7 +69,7 @@ export function aboveForMove(images: readonly { id: string; order: number }[], i
   return at === 0 ? undefined : stack[at - 1];
 }
 
-/** The whole image as the API takes it, with <paramref name="change"/> applied. */
+/** The whole image as the API takes it, with `change` applied. */
 export const inputOf = (i: SceneImageView, change: Partial<ImageInput> = {}): ImageInput => ({
   name: i.name, x: i.x, y: i.y, width: i.width, height: i.height, rotation: i.rotation, opacity: i.opacity, locked: i.locked, hidden: i.hidden, ...change,
 });

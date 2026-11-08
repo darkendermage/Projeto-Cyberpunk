@@ -40,10 +40,7 @@ export interface StripEntry {
 /** A fighter of the queue, to put the cards in Initiative order. */
 export interface QueueSlot { id: string; characterId: number | null }
 
-/**
- * The cards under the map: every character on the scene (from its sheet) and every fighter of the linked fight
- * (from the fight), one card per character; props without either stay out.
- */
+// Every character on the scene and every fighter of the linked fight, one card per character. Props stay out.
 export function buildStrip(tokens: TokenView[], party: PartyMember[], fighters: ReadonlyMap<string, StripFighter>,
   order?: readonly QueueSlot[]): StripEntry[] {
   const out: StripEntry[] = [];
@@ -55,7 +52,9 @@ export function buildStrip(tokens: TokenView[], party: PartyMember[], fighters: 
       if (seen.has(pc.characterId)) continue;
       seen.add(pc.characterId);
       const f = tk.combatantId ? fighters.get(tk.combatantId) : undefined;
-      out.push({ ...base, name: pc.name, woundState: pc.woundState, dead: f?.dead ?? false, hp: pc.hp, maxHp: pc.maxHp, spHead: pc.spHead, maxSpHead: pc.maxSpHead, spBody: pc.spBody, maxSpBody: pc.maxSpBody, online: pc.online });
+      out.push({ ...base, name: pc.name, woundState: pc.woundState, dead: f?.dead ?? false,
+        hp: pc.hp, maxHp: pc.maxHp, spHead: pc.spHead, maxSpHead: pc.maxSpHead,
+        spBody: pc.spBody, maxSpBody: pc.maxSpBody, online: pc.online });
       continue;
     }
     const f = tk.combatantId ? fighters.get(tk.combatantId) : undefined;

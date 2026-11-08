@@ -20,11 +20,8 @@ export function rollRelationshipCount(rng: Rng = Math.random): number {
   return Math.max(0, d10 - 7);
 }
 
-/**
- * Questions of the Role flowchart that apply to the answers given so far (branches such as "group or solo").
- * A branch only opens when the question it depends on is itself visible, so a stale answer left in a closed branch
- * (e.g. "why did you leave?" after switching from solo to group) never reopens it.
- */
+// A branch only opens when the question it hangs from is visible, so a stale answer in a closed branch (e.g.
+// "why did you leave?" after switching from solo to group) doesn't bring it back.
 export function visibleQuestions(questions: LifepathQuestion[], answers: Record<string, string>): LifepathQuestion[] {
   const visible = new Set<string>();
   const byId = new Map(questions.map((q) => [q.id, q]));
@@ -76,12 +73,8 @@ export function rollRelationship(kind: RelationshipKind, r: CharacterRules['rela
 export const RELATIONSHIP_ROLL_KEY = (kind: RelationshipKind) => `rolled:${kind}`;
 const ROLLED_KINDS: RelationshipKind[] = ['Friend', 'Lover', 'Enemy'];
 
-/**
- * Fills every empty Lifepath answer by rolling on its table, without touching what the player already chose:
- * Cultural Origin, the general tables, the style tables, friends/lovers/enemies (only when none of that kind exist
- * and they were never rolled) and the Role's flowchart, following its branches. "Choose" questions are left to the
- * player, and so are the branches that depend on them. Returns the new sheet and how many answers were rolled.
- */
+// Rolls every empty answer and leaves the player's picks alone. Friends/lovers/enemies only roll when there are
+// none of that kind and they were never rolled; "choose" questions (and branches under them) are left to the player.
 export function rollMissing(
   sheet: CharacterSheet, rules: CharacterRules, roleId: string | null, rng: Rng = Math.random, newId: () => string = tempId,
 ): { sheet: CharacterSheet; filled: number } {

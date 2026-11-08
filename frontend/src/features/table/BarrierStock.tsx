@@ -12,10 +12,8 @@ import styles from './Table.module.css';
 
 type Mode = 'example' | 'material';
 
-/**
- * The book's barriers to put on the map (CP:R p.182–183): an example of the book or a material and its thickness.
- * They sit on the scenery layer, under the characters; on a scene with a fight they are the fight's cover.
- */
+// Book barriers (CP:R p.182-183), an example or material + thickness. They go on the scenery layer and become
+// the fight's cover when there is one.
 export function BarrierStock({ scene, act, at }: { scene: SceneView; act: Act; at: () => { x: number; y: number } }) {
   const rules = useQuery({ queryKey: tableKeys.rules, queryFn: tableApi.rules, staleTime: Infinity });
   const [mode, setMode] = useState<Mode>('example');

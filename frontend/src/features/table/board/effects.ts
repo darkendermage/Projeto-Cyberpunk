@@ -28,10 +28,7 @@ export function effectKind(a: Pick<TableAttack, 'melee' | 'mode'>): EffectKind {
   return 'shot';
 }
 
-/**
- * The words over each target: a miss, or the HP it lost when the reader may see it (players read NPCs as a hit only,
- * the same as the chat card).
- */
+// Miss, or HP lost when the reader can see it (players only get hit/miss for NPCs, same as the chat card).
 export function shotLabel(target: TableAttack['targets'][number]): string {
   if (!target.hit) return t('ERROU', 'MISS');
   if (target.damage == null) return t('ACERTO', 'HIT');
@@ -39,10 +36,7 @@ export function shotLabel(target: TableAttack['targets'][number]): string {
   return hp > 0 ? `−${hp}` : t('ARMADURA SEGUROU', 'ARMOR HELD');
 }
 
-/**
- * What to draw for an attack on this screen, or null when the shooter isn't on the map (a hidden NPC, a token not
- * placed yet). Targets without a token here are left out.
- */
+// null when the shooter isn't on the map (hidden NPC, no token yet). Targets without a token are skipped.
 export function planEffect(a: TableAttack, tokens: readonly TokenView[], queue: readonly { id: string; characterId: number | null }[]): AttackEffect | null {
   const shooter = tokenOfFighter(a.attackerId, tokens, queue);
   if (!shooter) return null;

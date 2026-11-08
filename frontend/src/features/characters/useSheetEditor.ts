@@ -9,11 +9,8 @@ export type SaveStatus = 'saved' | 'pending' | 'saving' | 'error';
 
 const AUTOSAVE_DELAY = 700;
 
-/**
- * Local copy of the editable sheet with queued autosave. Edits show at once; saves go out one at a time, each with
- * the version returned by the previous one, so consecutive edits never conflict with themselves. When the server
- * answers (a save or any rule command) and nothing is waiting to be saved, the local copy adopts the server sheet.
- */
+// Local copy with queued autosave. Saves go out one at a time with the version from the previous answer, so
+// back-to-back edits never conflict with each other. When nothing is pending, the local copy takes the server's.
 export function useSheetEditor(detail: CharacterDetail) {
   const toast = useToast();
   const client = useQueryClient();

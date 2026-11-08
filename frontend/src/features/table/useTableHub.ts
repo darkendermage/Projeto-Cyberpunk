@@ -30,7 +30,7 @@ export interface HubHandlers {
   music?: (music: TableMusic | null) => void;
   /** A new session started: the chat starts over. */
   chatReset?: () => void;
-  /** Someone is moving, resizing or turning an image (round 5). */
+  /** Someone is moving, resizing or turning an image. */
   imageDrag?: (drag: { sceneId: number; imageId: string; x: number; y: number; width: number; height: number; rotation: number }) => void;
   /** After a reconnection: whatever was missed must be fetched again. */
   resync?: () => void;
@@ -39,11 +39,8 @@ export interface HubHandlers {
 /** Drag previews go out at most this often; the drop itself goes through the API. */
 const DRAG_INTERVAL_MS = 50;
 
-/**
- * The live channel of the virtual table. Without a seat it connects as the GM (only the GM's port accepts that);
- * with one, as that player. Nothing connects while `enabled` is false (a player's link not checked yet). Handlers
- * may change on every render: the connection keeps the latest ones.
- */
+// No seat = GM (only the GM's port accepts that). Nothing connects while enabled is false (player link not
+// checked yet). Handlers can change every render, the connection always uses the latest.
 export function useTableHub(seat: string | null, handlers: HubHandlers, enabled = true) {
   const [status, setStatus] = useState<HubStatus>('connecting');
   const [attempt, setAttempt] = useState(0);

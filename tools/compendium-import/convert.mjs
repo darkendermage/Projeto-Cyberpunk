@@ -19,7 +19,7 @@ const BOOK_TEXT = resolve(root, 'data/source/book-descriptions.json');
 
 const md = readFileSync(SOURCE, 'utf8').replace(/\r\n/g, '\n');
 
-// ------------------------------------------------------------------ markdown helpers
+// markdown helpers
 
 /** Splits the document into sections keyed by their numeric heading ("1.1", "2.5"...). */
 function sections() {
@@ -71,7 +71,7 @@ function bullets(lines) {
     });
 }
 
-// ------------------------------------------------------------------ value helpers
+// value helpers
 
 function parsePrice(raw) {
   const text = clean(raw);
@@ -142,7 +142,7 @@ function manufacturerOf(name) {
 
 const has = (text, re) => re.test(text);
 
-// ------------------------------------------------------------------ weapons
+// weapons
 
 const CLASS_DEFAULTS = {
   MediumPistol: { calibers: ['MediumPistol'], range: 200, skill: 'Handgun', magazine: 12 },
@@ -301,7 +301,7 @@ function convertWeapons(secs) {
   return items;
 }
 
-// ------------------------------------------------------------------ ammunition & explosives
+// ammunition & explosives
 
 function ammoEffect(name, text) {
   const t = `${name} ${text}`;
@@ -388,7 +388,7 @@ function convertAmmunition(secs) {
   return items;
 }
 
-// ------------------------------------------------------------------ cyberware
+// cyberware
 
 const FOUNDATION_SLOTS = {
   'Neural Link': 5, Cybereye: 3, 'Sponsored Cybereye': 3, 'Cyberaudio Suite': 3, 'Discount Cyberaudio Suite': 1,
@@ -530,7 +530,7 @@ function convertCyberware(secs) {
   return items;
 }
 
-// ------------------------------------------------------------------ armor (incl. Linear Frames and ACPA)
+// armor (incl. Linear Frames and ACPA)
 
 function convertArmor(secs) {
   const items = [];
@@ -599,7 +599,7 @@ function convertArmor(secs) {
   return items;
 }
 
-// ------------------------------------------------------------------ gear, programs, vehicle upgrades
+// gear, programs, vehicle upgrades
 
 const GEAR_TYPES = {
   Agent: 'Electronics', Airhypo: 'Medical', 'Anti-Smog Breathing Mask': 'Survival', 'Auto Ear Protectors': 'Survival',
@@ -662,7 +662,7 @@ function pricePair(meta) {
   return { price, priceNote: note, priceCategory: priceCategoryFromPrice(price) };
 }
 
-// ------------------------------------------------------------------ vehicles, drugs, HQ
+// vehicles, drugs, HQ
 
 function convertVehicles(secs) {
   return tableRows(secs['3.3']).map((row) => {
@@ -735,7 +735,7 @@ function convertHq(secs) {
   });
 }
 
-// ------------------------------------------------------------------ assembly
+// assembly
 
 function base(name, category, fields) {
   const { attributes = {}, manufacturer, ...rest } = fields;

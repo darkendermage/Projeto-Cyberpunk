@@ -9,7 +9,7 @@ import { parseWholeNumber } from '../../lib/numbers';
 import styles from './ui.module.css';
 import { t, tv } from '../../i18n';
 
-// ---------------------------------------------------------------- buttons
+// buttons
 
 type ButtonVariant = 'primary' | 'ghost' | 'outline' | 'danger';
 
@@ -35,7 +35,7 @@ export function IconButton({
   );
 }
 
-// ---------------------------------------------------------------- form controls
+// form controls
 
 export function Checkbox({
   checked, onChange, label, count, disabled, muted,
@@ -84,10 +84,8 @@ export function Select({ className, children, highlighted, ...props }: SelectHTM
   );
 }
 
-/**
- * A text field that looks like {@link Select}: it opens its own list of suggestions but still takes free text
- * (a language or a neighborhood the list doesn't have). The list is portaled so modals and panels don't clip it.
- */
+// Looks like Select but still takes free text (a language or neighborhood the list doesn't have).
+// The list is portaled so modals don't clip it.
 export function ComboBox({ id, value, onChange, options, placeholder, className, 'aria-label': ariaLabel, disabled }: {
   id?: string;
   value: string;
@@ -168,11 +166,9 @@ export function ComboBox({ id, value, onChange, options, placeholder, className,
   );
 }
 
-/**
- * Whole-number field that can be cleared and retyped: while focused it shows exactly what is typed, and only a
- * valid number (kept within min–max) reaches onChange. Left empty, it gives `null` on blur when `allowEmpty`, and
- * otherwise goes back to the current value. Without this, clearing "3" to type "5" snapped to the minimum at once.
- */
+// Number field you can clear and retype: shows exactly what's typed while focused and only sends valid numbers
+// (clamped). Empty on blur gives null with allowEmpty, otherwise goes back to the current value. Without this,
+// clearing "3" to type "5" snapped straight to the minimum.
 export function NumberInput({ value, onChange, min, max, allowEmpty = false, onFocus, onBlur, ...props }:
   Omit<InputHTMLAttributes<HTMLInputElement>, 'value' | 'onChange' | 'min' | 'max' | 'type'> & {
     value: number | null | undefined;
@@ -209,7 +205,7 @@ export function Field({ label, error, hint, children, htmlFor }: { label: ReactN
   );
 }
 
-// ---------------------------------------------------------------- feedback
+// feedback
 
 export function Spinner({ label = t('Carregando', 'Loading') }: { label?: string }) {
   return (
@@ -283,12 +279,10 @@ export function Collapsible({
   );
 }
 
-// ---------------------------------------------------------------- overlays
+// overlays
 
-/**
- * A short hint on hover or keyboard focus. The bubble is portaled so scrolling lists don't clip it, and the wrapper uses
- * display: contents, so the child keeps its place in grids and flex rows. Without content it renders only the child.
- */
+// Portaled so scrolling lists don't clip it; the wrapper is display: contents so the child keeps its place
+// in grids and flex rows.
 export function Tooltip({ content, children }: { content?: ReactNode; children: ReactElement<{ 'aria-describedby'?: string }> }) {
   const id = useId();
   const wrap = useRef<HTMLSpanElement>(null);

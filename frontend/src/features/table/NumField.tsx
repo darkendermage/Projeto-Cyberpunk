@@ -2,10 +2,8 @@ import { useState } from 'react';
 import { parseDecimal } from '../../lib/numbers';
 import styles from './Table.module.css';
 
-/**
- * A number field that keeps decimals and lets the person type freely: while typing, the text is theirs (it may be
- * empty or half a number); every valid value goes out at once, and leaving the field puts back the value in force.
- */
+// Keeps decimals and lets you type freely (empty or half a number is fine); valid values go out right away
+// and blur puts back the current value.
 export function NumField({ value, onChange, min, max, step = 1, label, className }: {
   value: number; onChange: (n: number) => void; min: number; max: number; step?: number; label: string; className?: string;
 }) {

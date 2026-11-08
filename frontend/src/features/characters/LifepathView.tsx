@@ -58,7 +58,7 @@ export function LifepathView({ detail, rules, editor }: Props) {
   );
 }
 
-// ------------------------------------------------------------ identity and origins
+// identity and origins
 
 function OriginsPanel({ detail, rules, editor }: Props) {
   const s = editor.draft;
@@ -97,7 +97,7 @@ function OriginsPanel({ detail, rules, editor }: Props) {
   );
 }
 
-// ------------------------------------------------------------ style and fashion
+// style and fashion
 
 function StylePanel({ detail, rules, editor }: Props) {
   const style = editor.draft.style;
@@ -133,7 +133,7 @@ function StylePanel({ detail, rules, editor }: Props) {
   );
 }
 
-// ------------------------------------------------------------ housing and lifestyle
+// housing and lifestyle
 
 function HousingPanel({ detail, rules, editor, run, busy }: Props & { run: Run; busy: boolean }) {
   const h = editor.draft.housing;

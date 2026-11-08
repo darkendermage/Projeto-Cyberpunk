@@ -5,10 +5,7 @@ import { t, tv } from '../../i18n';
 import { pendingPrompt } from './pending';
 import styles from './Table.module.css';
 
-/**
- * The decision a pending attack waits on: the target's dodge (CP:R p.172) or the Critical Injury roll (CP:R p.187).
- * Whoever must answer gets the buttons; everyone else sees that the fight waits.
- */
+// Dodge (CP:R p.172) or crit roll (p.187). Whoever has to answer gets the buttons; everyone else just sees it waiting.
 export function PendingCard({ pending, mine, gm, busy, onDodge, onCritical, onCancel }: {
   pending: PendingView;
   mine: boolean;

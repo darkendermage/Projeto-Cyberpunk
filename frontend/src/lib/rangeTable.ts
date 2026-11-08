@@ -68,10 +68,8 @@ export const RANGE_ROW_BY_CLASS: Record<string, RangeRowKey> = {
   RocketLauncher: 'rocketLauncher',
 };
 
-/**
- * Band limits in tiles. Each band ends at floor(max / 2) and starts right after the previous band, so every
- * tile count falls in exactly one band (12 tiles = 24 m is still the 13–25 m band; 13 tiles = 26 m is the next).
- */
+// Each band ends at floor(max / 2) tiles and starts right after the previous one (12 tiles = 24 m is still
+// 13-25 m; 13 tiles = 26 m is the next band).
 export function bandInTiles(index: number, bands: RangeBand[] = RANGE_BANDS): RangeBand {
   const max = Math.floor(bands[index].max / METERS_PER_TILE);
   const min = index === 0 ? 0 : Math.floor(bands[index - 1].max / METERS_PER_TILE) + 1;

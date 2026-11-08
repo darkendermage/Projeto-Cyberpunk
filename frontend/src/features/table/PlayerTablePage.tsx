@@ -46,10 +46,8 @@ import styles from './Table.module.css';
 
 type Tab = 'character' | 'sheet' | 'initiative' | 'images' | 'chat';
 
-/**
- * A player's screen (/mesa/j/:token), reached through the GM's tunnel. It lives outside the app shell: the players'
- * port only answers the table, so nothing here may call the catalog or the sheets' API.
- */
+// /mesa/j/:token, through the GM's tunnel. Lives outside the app shell: the players' port only answers the
+// table, so nothing here can call the catalog or the sheets API.
 export function PlayerTablePage() {
   const { token = '' } = useParams();
   const api = useMemo(() => playerApi(token), [token]);
@@ -119,7 +117,8 @@ export function PlayerTablePage() {
     },
     message: (m) => {
       const known = client.getQueryData<TableMessage[]>(tableKeys.playerMessages(token))?.some((x) => x.id === m.id) ?? false;
-      client.setQueryData<TableMessage[]>(tableKeys.playerMessages(token), (old = []) => (old.some((x) => x.id === m.id) ? old.map((x) => (x.id === m.id ? m : x)) : [...old, m].slice(-300)));
+      client.setQueryData<TableMessage[]>(tableKeys.playerMessages(token),
+        (old = []) => (old.some((x) => x.id === m.id) ? old.map((x) => (x.id === m.id ? m : x)) : [...old, m].slice(-300)));
       if (known) return;
       if (m.kind === 'Attack' && m.attack) playAttack(m.attack, live.current.scene, live.current.queue);
       const thrown = prefs.dice3d ? throwOf(m) : null;
@@ -399,7 +398,9 @@ export function PlayerTablePage() {
                   const prepared = await prepareImage(file, PORTRAIT_LIMITS);
                   const media = await api.uploadMedia(prepared.file);
                   const centre = board.current?.centerCell() ?? { x: 5, y: 5 };
-                  return api.addImage({ mediaId: media.id, name: file.name.replace(/\.[^.]+$/, ''), x: snapHalf(centre.x), y: snapHalf(centre.y), ...fitInitial(prepared.width, prepared.height) });
+                  return api.addImage({ mediaId: media.id, name: file.name.replace(/\.[^.]+$/, ''),
+                    x: snapHalf(centre.x), y: snapHalf(centre.y),
+                    ...fitInitial(prepared.width, prepared.height) });
                 }).finally(() => setImageBusy(false));
               }}
               onChange={(img, input) => void run(() => api.updateImage(img.id, input))}

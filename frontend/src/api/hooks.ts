@@ -85,7 +85,7 @@ export const useGlobalSearch = (q: string) =>
     staleTime: 30_000,
   });
 
-// ---------------------------------------------------------------- favorites
+// favorites
 
 export const useFavoriteIds = () =>
   useQuery({ queryKey: queryKeys.favoriteIds, queryFn: api.favoriteIds, staleTime: 60_000 });
@@ -110,7 +110,7 @@ export function useToggleFavorite() {
   });
 }
 
-// ---------------------------------------------------------------- lists
+// lists
 
 export const useLists = () => useQuery({ queryKey: queryKeys.lists, queryFn: api.lists });
 
@@ -150,7 +150,7 @@ export function useListMutations() {
   };
 }
 
-// ---------------------------------------------------------------- enemy generator
+// enemy generator
 
 export const useNpcRules = () =>
   useQuery({ queryKey: queryKeys.npcRules, queryFn: ({ signal }) => api.npcRules(signal), staleTime: Infinity });

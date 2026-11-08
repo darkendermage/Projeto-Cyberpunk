@@ -72,10 +72,7 @@ export function asRange(criterion: Criterion | undefined): [string, string] | nu
   }
 }
 
-/**
- * "Qualquer ▾  Qualquer ▾" — minimum and maximum. Small domains (ROF, dice, range bands) list their
- * real values; larger ones (magazine, weight) use number inputs.
- */
+// Min/max. Small domains (ROF, dice, range bands) list real values, bigger ones (magazine, weight) get inputs.
 export function RangeFilter({ field, criteria, onChange }: Props) {
   const criterion = getCriterion(criteria, field.key);
   const range = asRange(criterion) ?? ['', ''];

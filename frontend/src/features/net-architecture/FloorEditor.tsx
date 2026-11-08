@@ -7,10 +7,8 @@ import { t, tv } from '../../i18n';
 
 type Run = (path: string, body?: Record<string, unknown>, method?: 'POST' | 'PUT', done?: string) => void;
 
-/**
- * Edits one floor: pick a row of its table (or of the next Difficulty Rating up, as a Boss Floor), swap a Black ICE for
- * another of the same cost, and set what each Control Node runs. The server checks every rule.
- */
+// Pick a table row (or one rating up = Boss Floor), swap Black ICE for one of the same cost, set what nodes run.
+// The server checks all of it.
 export function FloorEditor({ floor, detail, rules, lookups, busy, run, onClose }: {
   floor: NetFloor | null; detail: NetArchitectureDetail; rules: NetArchitectureRules; lookups: Lookups; busy: boolean; run: Run; onClose: () => void;
 }) {

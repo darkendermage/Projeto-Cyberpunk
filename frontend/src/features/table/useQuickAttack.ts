@@ -2,10 +2,7 @@ import { useState } from 'react';
 import type { QuickAttackResult } from '../../api/tableTypes';
 import { aimAt, type Aim } from './aim';
 
-/**
- * The quick attack of the cards under the map: the aim being built and the shot. <paramref name="fire"/> sends it (the
- * player's or the GM's route); the result and the errors go back to the page.
- */
+// fire sends it (player or GM route); results and errors go back to the page.
 export function useQuickAttack(fire: (aim: Aim, targetId: string) => Promise<QuickAttackResult>, onDone: (result: QuickAttackResult) => void, onError: (error: unknown) => void) {
   const [aim, setAim] = useState<Aim | null>(null);
   const [busy, setBusy] = useState(false);

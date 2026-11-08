@@ -6,10 +6,7 @@ import { t } from '../../i18n';
 import { aboveForMove, inputOf, orderedImages } from './images';
 import styles from './Table.module.css';
 
-/**
- * The "Imagens" tab (round 5): the scene's images like Photoshop layers, top first. Each row: picture, name, eye (GM),
- * lock, opacity, order, delete. A player edits only their own images; the GM, all of them.
- */
+// Layers, top first: picture, name, eye (GM), lock, opacity, order, delete. Players only edit their own.
 export function ImagesTab({ images, selected, gm, mySeatId, ownerName, limit, busy, onAdd, onSelect, onChange, onOrder, onRemove }: {
   images: SceneImageView[];
   selected: string | null;

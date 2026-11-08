@@ -1,9 +1,6 @@
 import type { CategorySchema, FieldDescriptor, FilterCriterionDto, FilterOp } from '../api/types';
 import { t } from '../i18n';
-/**
- * UI-side filter model: one criterion per field, values kept as strings (as they live in the URL).
- * Criteria are AND-ed by the API; multiple values inside "in" are OR-ed.
- */
+// One criterion per field, values as strings (like in the URL). The API ANDs criteria and ORs values in "in".
 export interface Criterion {
   field: string;
   op: FilterOp;
@@ -28,7 +25,7 @@ export const OP_LABELS: Record<FilterOp, string> = {
 
 const VALUELESS: FilterOp[] = ['isnull', 'notnull'];
 
-// ---------------------------------------------------------------- URL encoding: f=field.op:v1|v2
+// URL encoding: f=field.op:v1|v2
 
 const enc = (v: string) => encodeURIComponent(v).replace(/\./g, '%2E');
 
@@ -50,7 +47,7 @@ export function decodeCriterion(raw: string): Criterion | null {
   return { field, op: op as FilterOp, values };
 }
 
-// ---------------------------------------------------------------- state transitions (pure)
+// state transitions (pure)
 
 export function getCriterion(criteria: Criterion[], field: string): Criterion | undefined {
   return criteria.find((c) => c.field === field);
@@ -86,7 +83,7 @@ export function isComplete(c: Criterion): boolean {
   return c.values.length > 0 && c.values.every((v) => v !== '');
 }
 
-// ---------------------------------------------------------------- conversion to API payload
+// conversion to API payload
 
 export function toApiCriteria(criteria: Criterion[], schema: CategorySchema | undefined): FilterCriterionDto[] {
   if (!schema) return [];
@@ -124,7 +121,7 @@ function toNumber(value: string | undefined): number | null {
   return Number.isFinite(n) ? n : null;
 }
 
-// ---------------------------------------------------------------- presentation helpers
+// presentation helpers
 
 /** Fields whose filters make sense for the subtypes currently selected (e.g. hide SP when only "Roupa" is selected). */
 export function isFieldApplicable(field: FieldDescriptor, criteria: Criterion[], schema: CategorySchema): boolean {

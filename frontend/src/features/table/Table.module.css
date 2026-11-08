@@ -17,7 +17,7 @@
 .grow { flex: 1; min-width: 0; }
 .error { color: var(--red-bright); font-size: 13px; }
 
-/* ------------------------------------------------------------ layout */
+/* layout */
 
 .workspace {
   display: grid;
@@ -111,7 +111,7 @@
   border-top: 1px solid var(--line);
 }
 
-/* ------------------------------------------------------------ board */
+/* board */
 
 .stage {
   position: relative;
@@ -159,7 +159,7 @@
 .dotWarn { background: var(--amber); }
 .dotOff { background: var(--red); }
 
-/* ------------------------------------------------------------ lists */
+/* lists */
 
 .sceneList { display: flex; flex-direction: column; gap: 6px; }
 .sceneItem {
@@ -237,7 +237,7 @@
 
 .weapon { display: flex; flex-direction: column; gap: 6px; padding: 8px; background: var(--bg-2); border: 1px solid var(--line); }
 
-/* ------------------------------------------------------------ chat */
+/* chat */
 
 .chat { display: flex; flex-direction: column; gap: 8px; min-height: 0; flex: 1; }
 .messages {
@@ -281,7 +281,7 @@
 .composer textarea { min-height: 54px; resize: vertical; }
 .quickDice { display: flex; flex-wrap: wrap; gap: 4px; }
 
-/* ------------------------------------------------------------ player header and gate */
+/* player header and gate */
 
 .playerHeader {
   display: flex;
@@ -303,7 +303,7 @@
 }
 .gateCard { max-width: 460px; display: flex; flex-direction: column; gap: 12px; padding: 22px; background: var(--panel); border: 1px solid var(--red-line); }
 
-/* ------------------------------------------------------------ token source (PC, NPC, compendium) */
+/* token source (PC, NPC, compendium) */
 
 .sourcePicker { position: relative; display: flex; flex-direction: column; gap: 4px; }
 .sourceList {
@@ -331,7 +331,7 @@
 .sourceList small, .sourceTag small { font-family: var(--font-mono); font-size: 10.5px; color: var(--text-faint); text-transform: uppercase; }
 .sourceTag { display: inline-flex; align-items: baseline; gap: 6px; padding: 3px 8px; border: 1px solid var(--line); background: var(--bg-2); }
 
-/* ------------------------------------------------------------ general link entrance */
+/* general link entrance */
 
 .lobbyGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; }
 .lobbySeat {
@@ -351,12 +351,12 @@
 .lobbySeat img, .lobbyInitials { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; }
 .lobbyInitials { display: grid; place-items: center; font-family: var(--font-display); font-size: 22px; color: var(--bg-0); }
 
-/* ------------------------------------------------------------ new fight from the map */
+/* new fight from the map */
 
 .fightList { display: flex; flex-direction: column; gap: 4px; max-height: 320px; overflow-y: auto; }
 .fightRow { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 4px 0; border-bottom: 1px solid var(--line); }
 
-/* ------------------------------------------------------------ color and slider fields, in the app's style */
+/* color and slider fields, in the app's style */
 
 .workspace input[type='color'], .playerScreen input[type='color'] {
   width: 40px;
@@ -372,12 +372,12 @@
 .workspace input[type='range'], .playerScreen input[type='range'] { accent-color: var(--red); }
 .mono { font-family: var(--font-mono); }
 
-/* ------------------------------------------------------------ armor (head and body SP) */
+/* armor (head and body SP) */
 
 .armor { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; }
 .armorSlot { display: inline-flex; align-items: center; gap: 4px; color: var(--text-2); }
 
-/* ------------------------------------------------------------ "on the scene" strip under the map */
+/* "on the scene" strip under the map */
 
 .strip { display: flex; gap: 8px; padding: 8px; overflow-x: auto; border-top: 1px solid var(--line); background: var(--bg-1); flex-shrink: 0; }
 .stripCard {
@@ -426,7 +426,7 @@
 .boardArea { position: relative; flex: 1; min-height: 0; display: flex; flex-direction: column; }
 .messageReplaced { opacity: 0.45; }
 
-/* ------------------------------------------------------------ 3D dice over the map */
+/* 3D dice over the map */
 
 .diceTray { position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity 0.2s; z-index: 2; }
 .diceTrayOn { opacity: 1; }
@@ -468,7 +468,7 @@
 }
 .pendingMine { border-color: var(--red); border-left-color: var(--red); box-shadow: 0 0 14px rgba(255, 42, 61, 0.35); }
 
-/* Sessions (E2). */
+/* Sessions. */
 .sessionList { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
 .sessionList li { padding: 6px 8px; background: var(--bg-2); border: 1px solid var(--line); }
 .archive { list-style: none; margin: 0; padding: 0; max-height: 60vh; overflow: auto; display: flex; flex-direction: column; gap: 3px; }
@@ -481,7 +481,7 @@
 .sessionCard { display: flex; flex-direction: column; gap: 6px; padding: 10px 12px; background: var(--bg-2); border: 1px solid var(--line); }
 .archivedLine { font-size: 13px; line-height: 1.35; }
 
-/* The dice color picker next to the 3D dice toggle (E3). */
+/* The dice color picker next to the 3D dice toggle. */
 .dicePicker { display: inline-flex; align-items: center; }
 .dicePicker input[type='color'] { width: 30px; height: 30px; padding: 0; border: 1px solid var(--line); background: transparent; cursor: pointer; }
 
@@ -496,7 +496,7 @@
 .musicFrame { width: 240px; height: 200px; }
 .musicFrame iframe { width: 100%; height: 100%; display: block; border: 0; }
 .musicUnlock { position: absolute; inset: 28px 0 0 0; display: grid; place-items: center; background: rgba(0, 0, 0, 0.55); }
-/* Minimized (round 6): only the bar shows; the player keeps playing off screen at YouTube's minimum size. */
+/* Minimized: only the bar shows; the player keeps playing off screen at YouTube's minimum size. */
 .musicBoxMin {
   position: absolute; right: 10px; bottom: 10px; z-index: 6; width: 300px; max-width: calc(100% - 20px);
   background: var(--bg-1); border: 1px solid var(--line); box-shadow: 0 4px 18px rgba(0, 0, 0, 0.5);
@@ -504,7 +504,7 @@
 .musicFrameOff { position: fixed; left: -10000px; top: 0; width: 200px; height: 200px; pointer-events: none; }
 .musicFrameOff iframe { width: 100%; height: 100%; border: 0; }
 
-/* The "Imagens" tab: layers like Photoshop (round 5). */
+/* The "Imagens" tab: layers like Photoshop. */
 .layerList { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
 .layerRow { display: grid; grid-template-columns: 48px minmax(0, 1fr) auto; gap: 6px; align-items: center; padding: 4px; background: var(--bg-2); border: 1px solid var(--line); }
 .layerRowOn { border-color: var(--cyan); box-shadow: 0 0 0 1px var(--cyan) inset; }

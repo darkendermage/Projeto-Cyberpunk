@@ -29,10 +29,7 @@ export const useEncounters = () => useQuery({ queryKey: encounterKeys.list, quer
 export const useEncounter = (id: number) =>
   useQuery({ queryKey: encounterKeys.detail(id), queryFn: ({ signal }) => encounterApi.get(id, signal), enabled: id > 0 });
 
-/**
- * Sends an action with the version currently cached; a 409 reloads the encounter. Player characters live on their
- * sheets, so any action may have changed one: their cached sheets are refreshed too.
- */
+// Sends the cached version; a 409 reloads. Any action may touch a PC sheet, so those get refreshed too.
 export function useEncounterCommand(id: number) {
   const client = useQueryClient();
   return useMutation({

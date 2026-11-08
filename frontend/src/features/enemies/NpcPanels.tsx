@@ -12,7 +12,7 @@ import { t, tv } from '../../i18n';
 
 const LEVELS: NpcLevel[] = ['Mook', 'Lieutenant', 'MiniBoss', 'Boss'];
 
-// ---------------------------------------------------------------- category
+// category
 
 export function LevelPicker({
   rules, level, hardened, onChange,
@@ -47,7 +47,7 @@ export function LevelPicker({
   );
 }
 
-// ---------------------------------------------------------------- budgets
+// budgets
 
 function Budget({ name, line, unit }: { name: string; line: BudgetLine; unit?: string }) {
   const total = line.total;
@@ -79,7 +79,7 @@ export function BudgetBars({ report }: { report: NpcValidationReport }) {
   );
 }
 
-// ---------------------------------------------------------------- validation
+// validation
 
 const SEVERITY_LABEL = { Error: t('Erros impeditivos', 'Blocking errors'), Warning: t('Avisos', 'Warnings'), Info: t('Informações', 'Info') } as const;
 
@@ -188,7 +188,7 @@ export function ConflictsPanel({ conflicts }: { conflicts: GenerationConflict[] 
   );
 }
 
-// ---------------------------------------------------------------- gangs
+// gangs
 
 /** Who the gang is, how it looks and what the books say it carries. */
 export function GangPanel({ gang, rules }: { gang: GangInfo; rules: NpcRules }) {
@@ -217,7 +217,7 @@ export function GangPanel({ gang, rules }: { gang: GangInfo; rules: NpcRules }) 
   );
 }
 
-// ---------------------------------------------------------------- sources
+// sources
 
 function FactsTable({ facts }: { facts: RuleFact[] }) {
   return (

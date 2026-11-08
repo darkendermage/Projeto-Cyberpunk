@@ -5,10 +5,8 @@ import { t } from '../../../i18n';
 export interface DieChip { value: number; sides: number; extra?: boolean }
 export interface DiceGroup { label: string; dice: DieChip[] }
 
-/**
- * Every die of an attack, in the order the fight rolled them: the attack d10 (and its extra), each target's defense
- * roll, the damage dice of the targets hit, and the Critical Injury's 2d6. Hidden numbers are simply absent.
- */
+// In the order the fight rolled them: attack d10 (+ extra), defenses, damage of the hits, crit 2d6.
+// Hidden numbers just aren't there.
 export function attackDice(a: TableAttack): DiceGroup[] {
   const groups: DiceGroup[] = [];
   if (a.attackRoll != null) {

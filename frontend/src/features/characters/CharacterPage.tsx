@@ -43,10 +43,8 @@ export function CharacterPage() {
   return <CharacterWorkspace key={id} detail={character.data} rules={rules.data} tab={tab as CharacterTab} />;
 }
 
-/**
- * The full character sheet inside another page (a tab of the combat table). The section tabs switch through onTab
- * instead of the URL, so the host page stays where it is. onVersion reports each new sheet version to the host.
- */
+// The sheet embedded in another page (combat table tab). Tabs go through onTab instead of the URL;
+// onVersion reports each new sheet version.
 export function EmbeddedCharacter({ id, tab, onTab, onVersion, player }: {
   id: number; tab: CharacterTab; onTab: (tab: CharacterTab) => void; onVersion?: (version: number) => void;
   /** On a player's screen (the table's "Minha ficha"): no link to the app's sheet page, no export. */

@@ -214,7 +214,9 @@ export interface CombatRulesDocument {
   coverRules: Ruled<string>;
   shields: Ruled<string>;
   environment: Ruled<{ id: string; label: string; damage: string; bypassArmor: boolean; note: string }[]>;
-  generic: Ruled<{ ref: number; dex: number; body: number; hp: number; spBody: number; spHead: number; attackBase: number; evasionBase: number; damage: string; weaponClass: string }>;
+  generic: Ruled<{ ref: number; dex: number; body: number; hp: number;
+    spBody: number; spHead: number; attackBase: number;
+    evasionBase: number; damage: string; weaponClass: string }>;
 }
 
 export interface EncounterRules {

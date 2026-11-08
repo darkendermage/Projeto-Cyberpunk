@@ -13,7 +13,7 @@ interface Props {
 
 const NUMBER_OPS: FilterOp[] = ['eq', 'neq', 'gt', 'gte', 'lt', 'lte', 'between', 'isnull', 'notnull'];
 
-/** "ROF [≥] [2]" — operator + value(s). Typing is debounced so each keystroke does not hit the API. */
+/** "ROF [≥] [2]": operator + value(s). Typing is debounced so each keystroke does not hit the API. */
 export function NumberFilter({ field, criteria, onChange }: Props) {
   const criterion = getCriterion(criteria, field.key);
   const [op, setOp] = useState<FilterOp | ''>(criterion?.op ?? '');

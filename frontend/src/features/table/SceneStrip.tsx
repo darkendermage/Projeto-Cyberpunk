@@ -12,11 +12,8 @@ import styles from './Table.module.css';
 /** The weapons a card offers to whoever looks at it, and why they can't fire now (not their Turn). */
 export interface CardWeapons { weapons: WeaponView[]; blocked: string | null }
 
-/**
- * "On the scene": a card per character and fighter under the map — picture, name, HP and the SP of head and body
- * (NPCs show only their Wound State to the players). A click selects the token, or picks the target while aiming. The
- * cards of whoever may shoot (the player's own character, any fighter for the GM) list their weapons: a click aims.
- */
+// One card per character/fighter under the map (NPCs only show the Wound State to players). Click selects the
+// token, or picks the target while aiming. Cards of whoever can shoot list their weapons.
 export function SceneStrip({ entries, selected, onPick, weaponsOf, aim, onWeapon, onReload, onUnjam, onPickUp, sheetOf }: {
   entries: StripEntry[];
   selected: readonly string[];
