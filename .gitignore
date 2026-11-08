@@ -24,3 +24,7 @@ artifacts/
 
 # Saída da ferramenta de extração de NPCs
 tools/npc-compendium/out/
+
+# Planos e specs de trabalho (ficam só na máquina)
+docs/superpowers/
+.superpowers/
