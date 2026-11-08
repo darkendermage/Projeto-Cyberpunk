@@ -42,26 +42,28 @@ export function EquipmentView({ detail, editor }: Props) {
   const [opened, setOpened] = useState<InventoryLine | null>(null);
   const actions: GearActions = { run, busy, finalized, onOpen: setOpened, onRemove: setRemoving };
 
-  // Round 7: totals, what the character has on them beside what is stored (paged), then weapon and wearable
-  // upgrades, then the money.
+  // Round 7: the money on top, then the totals; what the character has on them on the left, and on the right what
+  // is stored (paged) with the weapon and wearable upgrades under it.
   return (
     <div className={styles.gear}>
+      <FinancePanel detail={detail} run={run} busy={busy} onStore={setStore} />
       <GearStats detail={detail} />
       <div className={styles.gearColumns}>
         <EquippedSection detail={detail} actions={actions} />
-        <InventorySection detail={detail} actions={actions} onAdd={finalized ? () => setStore('buy') : undefined} />
-      </div>
-      <section className={styles.gearPanel} aria-label={t('Modificações', 'Upgrades')}>
-        <header className={styles.gearHead}>
-          <h3 className={styles.gearTitle}><span>03 /</span> {t('Modificações', 'Upgrades')}</h3>
-          <span className={styles.muted}>{t('upgrades das armas e vestíveis', 'weapon and wearable upgrades')}</span>
-        </header>
-        <div className={styles.gearMods}>
-          <AttachmentsPanel detail={detail} run={run} busy={busy} />
-          <WearablesPanel detail={detail} run={run} busy={busy} />
+        <div className={styles.gearStack}>
+          <InventorySection detail={detail} actions={actions} onAdd={finalized ? () => setStore('buy') : undefined} />
+          <section className={styles.gearPanel} aria-label={t('Modificações', 'Upgrades')}>
+            <header className={styles.gearHead}>
+              <h3 className={styles.gearTitle}><span>03 /</span> {t('Modificações', 'Upgrades')}</h3>
+              <span className={styles.muted}>{t('upgrades das armas e vestíveis', 'weapon and wearable upgrades')}</span>
+            </header>
+            <div className={styles.gearMods}>
+              <AttachmentsPanel detail={detail} run={run} busy={busy} />
+              <WearablesPanel detail={detail} run={run} busy={busy} />
+            </div>
+          </section>
         </div>
-      </section>
-      <FinancePanel detail={detail} run={run} busy={busy} onStore={setStore} />
+      </div>
       <StoreModal detail={detail} mode={store} busy={busy} run={run} onClose={() => setStore(null)} />
       {removing && <RemoveItemDialog item={removing} onClose={() => setRemoving(null)} run={run} busy={busy} />}
       <ItemPage item={opened} onClose={() => setOpened(null)} />
