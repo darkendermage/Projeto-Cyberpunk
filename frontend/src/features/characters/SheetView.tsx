@@ -1,8 +1,8 @@
 import { useMemo, useState } from 'react';
-import { Brain, Clover, History, Plus, Search, SlidersHorizontal, X } from 'lucide-react';
+import { Brain, Clover, Eye, History, Minus, Plus, RotateCcw, Search, SlidersHorizontal, X } from 'lucide-react';
 import { problemMessage, useCharacterCommand, useCharacterEvents } from '../../api/characters';
 import type { CharacterDetail, CharacterRules, ModifierTarget, StatModifier } from '../../api/characterTypes';
-import { Button, IconButton, Segmented, Select } from '../../components/ui/ui';
+import { Button, IconButton, Modal, Segmented, Select } from '../../components/ui/ui';
 import { formatEb } from '../../lib/format';
 import { useToast } from '../../state/ToastContext';
 import {
@@ -13,6 +13,8 @@ import { ArmorPanel, HealthPanel, InjuriesPanel, type Run, WeaponsPanel } from '
 import { RoleSplitDialog } from './RoleSplitDialog';
 import { splitTotal } from './roleSplit';
 import { ProgressionPanel } from './ProgressionPanel';
+import { paginate } from './gearLayout';
+import { Pager } from './Pager';
 import type { SheetEditor } from './useSheetEditor';
 import styles from './Characters.module.css';
 import { t, tv } from '../../i18n';
@@ -41,17 +43,17 @@ export function SheetView({ detail, rules, editor }: Props) {
   return (
     <div className={styles.sheet}>
       <IdentityColumn detail={detail} rules={rules} editor={editor} run={run} busy={command.isPending} />
-      <StatColumn detail={detail} />
+      <StatColumn detail={detail} run={run} busy={command.isPending} />
       <div className={styles.column}>
         <SkillsPanel detail={detail} />
-        <ProgressionPanel detail={detail} rules={rules} run={run} busy={command.isPending} />
-        <ModifiersPanel detail={detail} editor={editor} />
       </div>
       <div className={styles.sheetRight}>
         <HealthPanel {...props} />
+        <ModifiersPanel detail={detail} editor={editor} />
         <ArmorPanel {...props} />
         <WeaponsPanel {...props} />
         <InjuriesPanel {...props} />
+        <ProgressionPanel detail={detail} rules={rules} run={run} busy={command.isPending} />
         <HistoryPanel id={detail.id} run={run} busy={command.isPending} />
       </div>
     </div>
@@ -120,14 +122,6 @@ function IdentityColumn({ detail, rules, editor, run, busy }: { detail: Characte
 
       <CyberEffectsPanel detail={detail} />
 
-      <SheetPanel title="LUCK" icon={<Clover size={16} />}>
-        <div className={styles.row}>
-          <span className={styles.bigNumbers}><strong>{r.luckAvailable}</strong><span className={styles.muted}>/ {r.luck}</span></span>
-          <span className={styles.grow} />
-          <Button disabled={busy || r.luckAvailable === 0} onClick={() => run('luck', { spent: detail.sheet.combat.luckSpent + 1 })}>{t('Gastar 1', 'Spend 1')}</Button>
-          <Button variant="ghost" disabled={busy || detail.sheet.combat.luckSpent === 0} onClick={() => run('luck', { spent: 0 })}>{t('Restaurar', 'Restore')}</Button>
-        </div>
-      </SheetPanel>
     </div>
   );
 }
@@ -175,7 +169,8 @@ function WalletBlock({ detail }: { detail: CharacterDetail }) {
 
 // ------------------------------------------------------------ STATs
 
-function StatColumn({ detail }: { detail: CharacterDetail }) {
+function StatColumn({ detail, run, busy }: { detail: CharacterDetail; run: Run; busy: boolean }) {
+  const r = detail.report;
   return (
     <div className={`${styles.column} ${styles.statColumn}`} role="list" aria-label={t('Atributos', 'STATs')}>
       {detail.report.stats.map((s) => {
@@ -188,6 +183,15 @@ function StatColumn({ detail }: { detail: CharacterDetail }) {
           </div>
         );
       })}
+      {/* LUCK to spend this session (CP:R p.130), compact under the STATs. */}
+      <div className={`${styles.stat} ${styles.luckTile}`} role="listitem" title={t('LUCK disponível nesta sessão; gasta-se em Checks (CP:R p.130).', 'LUCK left this session; spent on Checks (CP:R p.130).')}>
+        <span className={styles.statKey}><Clover size={11} aria-hidden /> {t('Sorte', 'Luck')}</span>
+        <span className={styles.luckValue}><strong>{r.luckAvailable}</strong><span className={styles.muted}>/{r.luck}</span></span>
+        <span className={styles.luckButtons}>
+          <IconButton label={t('Gastar 1 de LUCK', 'Spend 1 LUCK')} disabled={busy || r.luckAvailable === 0} onClick={() => run('luck', { spent: detail.sheet.combat.luckSpent + 1 })}><Minus size={13} /></IconButton>
+          <IconButton label={t('Restaurar a LUCK', 'Restore LUCK')} disabled={busy || detail.sheet.combat.luckSpent === 0} onClick={() => run('luck', { spent: 0 })}><RotateCcw size={13} /></IconButton>
+        </span>
+      </div>
     </div>
   );
 }
@@ -257,7 +261,35 @@ function SkillsPanel({ detail }: { detail: CharacterDetail }) {
 
 // ------------------------------------------------------------ temporary modifiers
 
+/** Temporary modifiers, compact: the active ones at a glance, the list and the form in a window. */
 function ModifiersPanel({ detail, editor }: { detail: CharacterDetail; editor: SheetEditor }) {
+  const [open, setOpen] = useState(false);
+  const mods = editor.draft.modifiers;
+  const active = mods.filter((m) => m.active);
+  return (
+    <SheetPanel title={t('Modificadores temporários', 'Temporary modifiers')} icon={<SlidersHorizontal size={16} />}
+      actions={<Button variant="ghost" onClick={() => setOpen(true)}>{t('Gerenciar', 'Manage')}</Button>}>
+      {active.length === 0
+        ? <span className={`${styles.small} ${styles.muted}`}>{mods.length === 0 ? t('Nenhum modificador.', 'No modifiers.') : t(`${mods.length} desativado(s).`, `${mods.length} turned off.`)}</span>
+        : (
+          <div className={styles.row} style={{ gap: 6 }}>
+            {active.map((m) => (
+              <span key={m.id} className={styles.tag} title={m.source}>
+                <strong className={styles.mono}>{signed(m.value)}</strong> {m.target === 'AllActions' ? t('todas as Ações', 'all Actions') : m.key}
+              </span>
+            ))}
+          </div>
+        )}
+      <Modal open={open} onClose={() => setOpen(false)} title={t('Modificadores temporários', 'Temporary modifiers')} wide>
+        <div className={styles.panel} style={{ clipPath: 'none', border: 'none' }}>
+          <ModifiersEditor detail={detail} editor={editor} />
+        </div>
+      </Modal>
+    </SheetPanel>
+  );
+}
+
+function ModifiersEditor({ detail, editor }: { detail: CharacterDetail; editor: SheetEditor }) {
   const [target, setTarget] = useState<ModifierTarget>('Stat');
   const [key, setKey] = useState('REF');
   const [value, setValue] = useState('1');
@@ -278,7 +310,7 @@ function ModifiersPanel({ detail, editor }: { detail: CharacterDetail; editor: S
   }));
 
   return (
-    <SheetPanel title={t('Modificadores temporários', 'Temporary modifiers')} icon={<SlidersHorizontal size={16} />}>
+    <>
       <p className={styles.small}>{t('Drogas, equipamento e decisões do Mestre. Mudam o valor efetivo; o valor-base fica intacto.', 'Drugs, gear and GM rulings. They change the effective value; the base value stays untouched.')}</p>
       {mods.length > 0 && (
         <ul className={styles.list}>
@@ -314,7 +346,7 @@ function ModifiersPanel({ detail, editor }: { detail: CharacterDetail; editor: S
         <input className={styles.input} style={{ maxWidth: 200 }} value={source} placeholder={t('Origem (ex.: Synthcoke)', 'Source (e.g. Synthcoke)')} onChange={(e) => setSource(e.target.value)} />
         <IconButton label={t('Adicionar modificador', 'Add modifier')} disabled={!Number(value) || !source.trim()} onClick={add}><Plus size={14} /></IconButton>
       </div>
-    </SheetPanel>
+    </>
   );
 }
 
@@ -325,13 +357,19 @@ const KIND_LABEL: Record<string, string> = { Ledger: t('Dinheiro', 'Money'), Hum
 /** The character's history; IP spends on skills and Role Ranks can be undone, latest step first. */
 function HistoryPanel({ id, run, busy }: { id: number; run: Run; busy: boolean }) {
   const [open, setOpen] = useState(false);
+  const [page, setPage] = useState(0);
   const events = useCharacterEvents(id, open);
+  const shown = paginate(events.data ?? [], page);
   return (
     <SheetPanel title={t('Histórico', 'History')} icon={<History size={16} />}
-      actions={<Button variant="ghost" onClick={() => setOpen(!open)}>{open ? t('Ocultar', 'Hide') : t('Mostrar', 'Show')}</Button>}>
-      {open && (events.data?.length ? (
+      actions={<Button variant="ghost" icon={<Eye size={14} />} onClick={() => { setPage(0); setOpen(true); }}>{t('Visualizar', 'View')}</Button>}>
+      <span className={`${styles.small} ${styles.muted}`}>{t('Dinheiro, IP, combate, lesões e edições da ficha. Gastos de IP podem ser desfeitos.', 'Money, IP, combat, injuries and sheet edits. IP spends can be undone.')}</span>
+      <Modal open={open} onClose={() => setOpen(false)} title={t('Histórico', 'History')} wide>
+      <div className={styles.panel} style={{ clipPath: 'none', border: 'none' }}>
+      {events.data?.length ? (
+        <>
         <ul className={styles.list}>
-          {events.data.slice(0, 60).map((e) => (
+          {shown.rows.map((e) => (
             <li key={e.id} className={styles.listItem}>
               <div className={styles.grow}>
                 <div className={styles.small}>{tv(e.description)}</div>
@@ -353,7 +391,11 @@ function HistoryPanel({ id, run, busy }: { id: number; run: Run; busy: boolean }
             </li>
           ))}
         </ul>
-      ) : <p className={styles.muted}>{events.isLoading ? t('Carregando…', 'Loading…') : t('Sem registros.', 'No entries.')}</p>)}
+        <Pager page={shown.page} pages={shown.pages} rows={shown.rows.length} total={events.data.length} noun={t('registros', 'entries')} onPage={setPage} />
+        </>
+      ) : <p className={styles.muted}>{events.isLoading ? t('Carregando…', 'Loading…') : t('Sem registros.', 'No entries.')}</p>}
+      </div>
+      </Modal>
     </SheetPanel>
   );
 }

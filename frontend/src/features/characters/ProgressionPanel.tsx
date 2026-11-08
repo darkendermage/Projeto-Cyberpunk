@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { TrendingUp } from 'lucide-react';
 import type { CharacterDetail, CharacterRules } from '../../api/characterTypes';
-import { Button, ComboBox, Select } from '../../components/ui/ui';
+import { Button, ComboBox, Modal, Select } from '../../components/ui/ui';
 import { MARTIAL_ARTS } from '../reference/martialArts';
 import { languagesFor } from './characterLabels';
 import { improvementGroups, specializationChoices } from './skillImprovement';
@@ -15,6 +15,25 @@ import { t } from '../../i18n';
  * Costs come from the server report; the server refuses anything the character can't afford.
  */
 export function ProgressionPanel({ detail, rules, run, busy }: { detail: CharacterDetail; rules: CharacterRules; run: Run; busy: boolean }) {
+  const [open, setOpen] = useState(false);
+  if (!detail.sheet.creation.finalized) return null;
+  // Compact on the sheet (round 7): the IP at a glance; awarding and spending them in a window.
+  return (
+    <SheetPanel title={t('Progressão', 'Progression')} icon={<TrendingUp size={16} />}
+      actions={<Button variant="primary" onClick={() => setOpen(true)}>{t('Distribuir IP', 'Spend IP')}</Button>}>
+      <div className={styles.bigNumbers}>
+        <strong>{detail.sheet.progress.ip}</strong><span className={styles.muted}>{t('IP disponíveis · ', 'IP available · ')}{detail.sheet.progress.ipEarned} {t('ganhos', 'earned')}</span>
+      </div>
+      <Modal open={open} onClose={() => setOpen(false)} title={t('Progressão', 'Progression')} wide>
+        <div className={styles.panel} style={{ clipPath: 'none', border: 'none' }}>
+          <ProgressionForm detail={detail} rules={rules} run={run} busy={busy} />
+        </div>
+      </Modal>
+    </SheetPanel>
+  );
+}
+
+function ProgressionForm({ detail, rules, run, busy }: { detail: CharacterDetail; rules: CharacterRules; run: Run; busy: boolean }) {
   const [amount, setAmount] = useState('');
   const [reason, setReason] = useState('');
   const [skill, setSkill] = useState('');
@@ -34,10 +53,9 @@ export function ProgressionPanel({ detail, rules, run, busy }: { detail: Charact
   const others = rules.roles.filter((r) => !report.roles.some((x) => x.role === r.id));
   const canMulticlass = (current?.rank ?? 0) >= 4;
 
-  if (!detail.sheet.creation.finalized) return null;
-
   return (
-    <SheetPanel title={t('Progressão', 'Progression')} icon={<TrendingUp size={16} />} actions={<span className={styles.source}>CP:R p.408–410, p.142</span>}>
+    <>
+      <span className={styles.source}>CP:R p.408–410, p.142</span>
       <div className={styles.bigNumbers}>
         <strong>{ip}</strong><span className={styles.muted}>{t('IP disponíveis · ', 'IP available · ')}{detail.sheet.progress.ipEarned} {t('ganhos', 'earned')}</span>
       </div>
@@ -103,6 +121,6 @@ export function ProgressionPanel({ detail, rules, run, busy }: { detail: Charact
           {t('Assumir (Rank 1)', 'Take it (Rank 1)')}
         </Button>
       </div>
-    </SheetPanel>
+    </>
   );
 }

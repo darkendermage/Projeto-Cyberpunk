@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import {
-  Anchor, AudioLines, Binoculars, Box, ChevronLeft, ChevronRight, Cpu, Crosshair, Ear, EllipsisVertical, Flashlight, Glasses, Hand,
+  Anchor, AudioLines, Binoculars, Box, Cpu, Crosshair, Ear, EllipsisVertical, Flashlight, Glasses, Hand,
   Laptop, Package, Pill, Plus, Radio, RadioTower, Search, Shield, Shirt, Smartphone, Syringe, Video, Wrench,
 } from 'lucide-react';
 import type { CharacterDetail, InventoryLine } from '../../api/characterTypes';
@@ -11,6 +11,7 @@ import { CATEGORY_LABEL, QUALITY_LABEL } from './characterLabels';
 import type { Run } from './CombatPanels';
 import { bodySlots, filterStored, gearTag, paginate, splitGear, type BodySlot, type GearFilter } from './gearLayout';
 import { groupInventory } from './inventoryGroups';
+import { Pager } from './Pager';
 import styles from './Characters.module.css';
 
 const RECEIVED_LABEL: Partial<Record<InventoryLine['origin'], string>> = { Trade: 'troca', Gift: 'presente', Loot: 'saque' };
@@ -209,7 +210,6 @@ export function InventorySection({ detail, actions, onAdd }: { detail: Character
   const [page, setPage] = useState(0);
   const shown = filterStored(stored, filter, query);
   const p = paginate(shown, page);
-  const first = shown.length === 0 ? 0 : p.page * 10 + 1;
   return (
     <section className={styles.gearPanel} aria-label={t('Inventário', 'Inventory')}>
       <SectionHead index="02" title={t('Inventário', 'Inventory')} count={stored.length} />
@@ -231,16 +231,7 @@ export function InventorySection({ detail, actions, onAdd }: { detail: Character
       {shown.length === 0
         ? <p className={`${styles.small} ${styles.muted}`}>{stored.length === 0 ? t('Nada guardado.', 'Nothing stored.') : t('Nenhum item com esse filtro.', 'No items match.')}</p>
         : <ul className={styles.gearList}>{p.rows.map((i) => <GearRow key={i.instanceId} item={i} actions={actions} />)}</ul>}
-      <footer className={styles.gearPager}>
-        <span className={styles.muted}>{t(`Exibindo ${first}–${first + p.rows.length - (shown.length ? 1 : 0)} de ${shown.length} itens`, `Showing ${first}–${first + p.rows.length - (shown.length ? 1 : 0)} of ${shown.length} items`)}</span>
-        {p.pages > 1 && (
-          <span className={styles.row} style={{ gap: 4 }}>
-            <button type="button" className={styles.gearPage} disabled={p.page === 0} onClick={() => setPage(p.page - 1)} aria-label={t('Página anterior', 'Previous page')}><ChevronLeft size={14} /></button>
-            <span className={styles.small}>{p.page + 1}/{p.pages}</span>
-            <button type="button" className={styles.gearPage} disabled={p.page >= p.pages - 1} onClick={() => setPage(p.page + 1)} aria-label={t('Próxima página', 'Next page')}><ChevronRight size={14} /></button>
-          </span>
-        )}
-      </footer>
+      <Pager page={p.page} pages={p.pages} rows={p.rows.length} total={shown.length} noun={t('itens', 'items')} onPage={setPage} />
     </section>
   );
 }

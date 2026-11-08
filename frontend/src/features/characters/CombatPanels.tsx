@@ -3,7 +3,7 @@ import {
   Activity, Bandage, BedDouble, Crosshair, Dices, HeartPulse, RotateCcw, Shield, ShieldMinus, Skull, Swords, Wrench, X,
 } from 'lucide-react';
 import type { CharacterDetail, CharacterRules, InjuryLocation, InjuryStatus } from '../../api/characterTypes';
-import { Button, IconButton, NumberInput, Select, Switch } from '../../components/ui/ui';
+import { Button, IconButton, Modal, NumberInput, Select, Switch } from '../../components/ui/ui';
 import { INJURY_STATUS_LABEL, signed, WOUND_LABEL, QUALITY_LABEL } from './characterLabels';
 import { SheetPanel, StateTag } from './CharacterUi';
 import { healing } from './healing';
@@ -24,8 +24,9 @@ export function HealthPanel({ detail, run, busy, locked }: Props) {
   const [location, setLocation] = useState<InjuryLocation>('Body');
   const [bypass, setBypass] = useState(false);
   const [roll, setRoll] = useState('');
+  const [dialog, setDialog] = useState<'damage' | 'heal' | null>(null);
   const care = healing(h, detail.sheet.combat.stabilized);
-  const healBy = async (amount: number, description?: string) => { if (await run('combat/heal', { amount, description })) setHeal(null); };
+  const healBy = async (amount: number, description?: string) => { if (await run('combat/heal', { amount, description })) { setHeal(null); setDialog(null); } };
   const pct = Math.max(0, Math.min(100, (h.currentHp / h.maxHp) * 100));
   const mark = (h.seriouslyWoundedThreshold / h.maxHp) * 100;
   const conditions = detail.sheet.combat.conditions;
@@ -57,45 +58,60 @@ export function HealthPanel({ detail, run, busy, locked }: Props) {
 
       {locked ? <p className={`${styles.small} ${styles.muted}`}>{t('Conclua a criação para usar o painel de combate.', 'Finish creation to use the combat panel.')}</p> : (
         <>
-          <span className={styles.subhead}>{t('Dano', 'Damage')}</span>
+          {/* Damage and healing open their own windows (round 7); stabilizing stays one click. */}
           <div className={styles.row}>
-            <NumberInput className={`${styles.input} ${styles.inputSmall}`} min={0} max={999} allowEmpty value={damage} placeholder={t('dano', 'damage')}
-              aria-label={t('Dano a aplicar', 'Damage to apply')} onChange={setDamage} />
-            <Select value={location} onChange={(e) => setLocation(e.target.value as InjuryLocation)} aria-label={t('Local', 'Location')}>
-              <option value="Body">{t('Corpo', 'Body')}</option>
-              <option value="Head">{t('Cabeça (Aimed Shot)', 'Head (Aimed Shot)')}</option>
-            </Select>
-            <Switch checked={bypass} onChange={setBypass} label={t('Ignora armadura', 'Ignores armor')} />
-            <Button icon={<Swords size={14} />} disabled={busy || !(damage != null && damage > 0)}
-              title={t('Dano menos SP do local; o que passar vai ao HP e abla a armadura (CP:R p.186)', 'Damage minus the location\'s SP; what gets through goes to HP and ablates the armor (CP:R p.186)')}
-              onClick={async () => { if (await run('combat/damage', { amount: damage, location, bypassArmor: bypass })) setDamage(null); }}>
-              {t('Aplicar dano', 'Apply damage')}
-            </Button>
-          </div>
-          <span className={styles.subhead}>{t('Cura', 'Healing')}</span>
-          <div className={styles.row}>
-            <NumberInput className={`${styles.input} ${styles.inputSmall}`} min={0} max={999} allowEmpty value={heal} placeholder={t('HP', 'HP')}
-              aria-label={t('HP a recuperar', 'HP to recover')} onChange={setHeal} />
-            <Button icon={<Bandage size={14} />} disabled={busy || !care.canHeal || !(heal != null && heal > 0)} onClick={() => healBy(heal!)}>{t('Curar', 'Heal')}</Button>
-            {care.quick.map((n) => (
-              <Button key={n} variant="ghost" disabled={busy} onClick={() => healBy(n)}>+{n}</Button>
-            ))}
-            <Button variant="ghost" disabled={busy || !care.canHeal} onClick={() => healBy(care.missing, t('Cura completa', 'Full heal'))}>
-              {t('Curar tudo', 'Heal all')}
-            </Button>
-          </div>
-          <div className={styles.row}>
-            <Button icon={<BedDouble size={14} />} disabled={busy || !care.canRest}
-              title={care.canRest
-                ? t('Estabilizado: cada dia inteiro de descanso recupera HP igual ao BODY (CP:R p.222)', 'Stabilized: each full day of rest heals HP equal to BODY (CP:R p.222)')
-                : t('Só depois de estabilizar e com HP faltando (CP:R p.222)', 'Only once stabilized and missing HP (CP:R p.222)')}
-              onClick={() => healBy(care.rest, t('Descanso de 1 dia (CP:R p.222)', '1 day of rest (CP:R p.222)'))}>
-              {t(`Descanso (1 dia): +${care.rest}`, `Rest (1 day): +${care.rest}`)}
-            </Button>
-            <Button icon={<Activity size={14} />} disabled={busy || h.woundState === 'Unhurt'} onClick={() => run('combat/stabilize', {}, t('Estabilizado.', 'Stabilized.'))}>
+            <Button icon={<Swords size={14} />} disabled={busy} onClick={() => setDialog('damage')}>{t('Aplicar dano', 'Apply damage')}</Button>
+            <Button icon={<Bandage size={14} />} disabled={busy} onClick={() => setDialog('heal')}>{t('Curar', 'Heal')}</Button>
+            <Button variant="ghost" icon={<Activity size={14} />} disabled={busy || h.woundState === 'Unhurt'} onClick={() => run('combat/stabilize', {}, t('Estabilizado.', 'Stabilized.'))}>
               {t('Estabilizar', 'Stabilize')}
             </Button>
           </div>
+          <Modal open={dialog === 'damage'} onClose={() => setDialog(null)} title={t('Aplicar dano', 'Apply damage')}>
+            <div className={styles.panel} style={{ clipPath: 'none', border: 'none' }}>
+              <p className={styles.small}>{t('Dano menos o SP do local; o que passar vai ao HP e abla a armadura (CP:R p.186).', "Damage minus the location's SP; what gets through goes to HP and ablates the armor (CP:R p.186).")}</p>
+              <div className={styles.row}>
+                <NumberInput className={`${styles.input} ${styles.inputSmall}`} min={0} max={999} allowEmpty value={damage} placeholder={t('dano', 'damage')} data-autofocus
+                  aria-label={t('Dano a aplicar', 'Damage to apply')} onChange={setDamage} />
+                <Select value={location} onChange={(e) => setLocation(e.target.value as InjuryLocation)} aria-label={t('Local', 'Location')}>
+                  <option value="Body">{t('Corpo', 'Body')}</option>
+                  <option value="Head">{t('Cabeça (Aimed Shot)', 'Head (Aimed Shot)')}</option>
+                </Select>
+                <Switch checked={bypass} onChange={setBypass} label={t('Ignora armadura', 'Ignores armor')} />
+              </div>
+              <div className={styles.row}>
+                <Button variant="primary" icon={<Swords size={14} />} disabled={busy || !(damage != null && damage > 0)}
+                  onClick={async () => { if (await run('combat/damage', { amount: damage, location, bypassArmor: bypass })) { setDamage(null); setDialog(null); } }}>
+                  {t('Aplicar dano', 'Apply damage')}
+                </Button>
+                <Button variant="ghost" onClick={() => setDialog(null)}>{t('Cancelar', 'Cancel')}</Button>
+              </div>
+            </div>
+          </Modal>
+          <Modal open={dialog === 'heal'} onClose={() => setDialog(null)} title={t('Curar', 'Heal')}>
+            <div className={styles.panel} style={{ clipPath: 'none', border: 'none' }}>
+              <p className={styles.small}>{t(`HP: ${h.currentHp}/${h.maxHp}.`, `HP: ${h.currentHp}/${h.maxHp}.`)}</p>
+              <div className={styles.row}>
+                <NumberInput className={`${styles.input} ${styles.inputSmall}`} min={0} max={999} allowEmpty value={heal} placeholder={t('HP', 'HP')} data-autofocus
+                  aria-label={t('HP a recuperar', 'HP to recover')} onChange={setHeal} />
+                <Button variant="primary" icon={<Bandage size={14} />} disabled={busy || !care.canHeal || !(heal != null && heal > 0)} onClick={() => healBy(heal!)}>{t('Curar', 'Heal')}</Button>
+                {care.quick.map((n) => (
+                  <Button key={n} variant="ghost" disabled={busy} onClick={() => healBy(n)}>+{n}</Button>
+                ))}
+                <Button variant="ghost" disabled={busy || !care.canHeal} onClick={() => healBy(care.missing, t('Cura completa', 'Full heal'))}>
+                  {t('Curar tudo', 'Heal all')}
+                </Button>
+              </div>
+              <div className={styles.row}>
+                <Button icon={<BedDouble size={14} />} disabled={busy || !care.canRest}
+                  title={care.canRest
+                    ? t('Estabilizado: cada dia inteiro de descanso recupera HP igual ao BODY (CP:R p.222)', 'Stabilized: each full day of rest heals HP equal to BODY (CP:R p.222)')
+                    : t('Só depois de estabilizar e com HP faltando (CP:R p.222)', 'Only once stabilized and missing HP (CP:R p.222)')}
+                  onClick={() => healBy(care.rest, t('Descanso de 1 dia (CP:R p.222)', '1 day of rest (CP:R p.222)'))}>
+                  {t(`Descanso (1 dia): +${care.rest}`, `Rest (1 day): +${care.rest}`)}
+                </Button>
+              </div>
+            </div>
+          </Modal>
           {h.mustRollDeathSave && (
             <div className={styles.row}>
               <Skull size={16} className={styles.red} aria-hidden />

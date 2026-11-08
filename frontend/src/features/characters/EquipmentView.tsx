@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ChevronLeft, ChevronRight, Crosshair, Gift, Glasses, History, ShoppingBag, Wallet, X } from 'lucide-react';
+import { Crosshair, Gift, Glasses, History, ShoppingBag, Wallet, X } from 'lucide-react';
 import { problemMessage, useCharacterCommand, useCharacterEvents } from '../../api/characters';
 import type { CharacterDetail, CharacterRules, InventoryLine, WearableLine } from '../../api/characterTypes';
 import { Button, Modal, NumberInput, Select } from '../../components/ui/ui';
@@ -8,7 +8,8 @@ import { useToast } from '../../state/ToastContext';
 import { formatDate, signed } from './characterLabels';
 import { SheetPanel, StateTag } from './CharacterUi';
 import { EquippedSection, GearStats, InventorySection, ItemPage, type GearActions } from './GearSections';
-import { PAGE_SIZE, paginate } from './gearLayout';
+import { paginate } from './gearLayout';
+import { Pager } from './Pager';
 import { Attachments, type Run } from './CombatPanels';
 import { StorePicker, type PurchaseInput } from './StorePicker';
 import type { SheetEditor } from './useSheetEditor';
@@ -135,19 +136,7 @@ function FinancePanel({ detail, run, busy, onStore }: { detail: CharacterDetail;
             ))}
           </ul>
           {entries.length > 0 && (
-            <footer className={styles.gearPager}>
-              <span className={styles.muted}>
-                {t(`Exibindo ${shown.page * PAGE_SIZE + 1}–${shown.page * PAGE_SIZE + shown.rows.length} de ${entries.length} movimentações`,
-                  `Showing ${shown.page * PAGE_SIZE + 1}–${shown.page * PAGE_SIZE + shown.rows.length} of ${entries.length} transactions`)}
-              </span>
-              {shown.pages > 1 && (
-                <span className={styles.row} style={{ gap: 4 }}>
-                  <button type="button" className={styles.gearPage} disabled={shown.page === 0} onClick={() => setPage(shown.page - 1)} aria-label={t('Página anterior', 'Previous page')}><ChevronLeft size={14} /></button>
-                  <span className={styles.small}>{shown.page + 1}/{shown.pages}</span>
-                  <button type="button" className={styles.gearPage} disabled={shown.page >= shown.pages - 1} onClick={() => setPage(shown.page + 1)} aria-label={t('Próxima página', 'Next page')}><ChevronRight size={14} /></button>
-                </span>
-              )}
-            </footer>
+            <Pager page={shown.page} pages={shown.pages} rows={shown.rows.length} total={entries.length} noun={t('movimentações', 'transactions')} onPage={setPage} />
           )}
         </div>
       </Modal>
