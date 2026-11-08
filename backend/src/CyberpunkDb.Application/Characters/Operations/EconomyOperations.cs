@@ -5,13 +5,10 @@ using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.Characters.Operations;
 
-/// <summary>Recurring expenses and leaving items behind. Charges happen only when the player records them.</summary>
+// only charged when the player records it
 public sealed class EconomyOperations(CharacterCalculator calculator)
 {
-    /// <summary>
-    /// Pays housing and lifestyle for one or more months from the balance (CP:R p.377): the paid-until date moves
-    /// forward from where it was, so paying an overdue month doesn't skip the debt.
-    /// </summary>
+    // CP:R p.377. Paid-until moves forward from where it was, so paying an overdue month doesn't skip the debt.
     public CharacterSheet PayMonths(CharacterSheet sheet, PayMonthsRequest request, CharacterChange change)
     {
         if (!sheet.Creation.Finalized) throw CharacterChange.Refuse("creation", L.T("Conclua a criação antes de registrar pagamentos.", "Finish creation before recording payments."));
@@ -38,10 +35,8 @@ public sealed class EconomyOperations(CharacterCalculator calculator)
         };
     }
 
-    /// <summary>
-    /// Removes items after creation: discarded, lost or sold. The Core sets no resale price ("everything is worth what
-    /// its purchaser will pay for it", CP:R p.385), so the amount is decided at the table and logged as manual.
-    /// </summary>
+    // The Core has no resale price ("worth what its purchaser will pay", CP:R p.385), so the amount is decided at
+    // the table and logged as manual.
     public static CharacterSheet RemoveItem(CharacterSheet sheet, RemoveItemRequest request, CharacterChange change)
     {
         if (!sheet.Creation.Finalized)

@@ -4,25 +4,22 @@ using CyberpunkDb.Domain.Enums;
 
 namespace CyberpunkDb.Application.NightMarkets;
 
-/// <summary>
-/// Builds a market. Empty fields fall back to the preset: its organizer, its kinds of goods (rolled, suggested or
-/// none) and every book of the catalog (the generic Core market uses only the Core Rulebook).
-/// </summary>
+// Empty fields fall back to the preset (the generic Core market only uses the Core Rulebook).
 public sealed record GenerateMarketRequest
 {
     public string? Name { get; init; }
     public string? PresetId { get; init; }
     public int? Seed { get; init; }
     public List<string>? Books { get; init; }
-    /// <summary>Kinds of goods chosen by the GM. Wins over <see cref="RollGoods"/> and the preset suggestion.</summary>
+    // beats RollGoods and the preset suggestion
     public List<string>? Goods { get; init; }
-    /// <summary>Roll the kinds of goods with the Core d6 even when the preset suggests some.</summary>
+    // roll the Core d6 even if the preset suggests goods
     public bool RollGoods { get; init; }
-    /// <summary>Lines per kind of goods typed by the GM (physical dice); missing ones are rolled with 1d10.</summary>
+    // typed lines (physical dice), the rest roll 1d10
     public Dictionary<string, int>? Lines { get; init; }
     public MarketOrganizer? Organizer { get; init; }
     public MarketOptions? Options { get; init; }
-    /// <summary>Add a Midnight Market (Fixer of Rank 9 or more; CP:R p.161).</summary>
+    // Fixer Rank 9+ (CP:R p.161)
     public bool Midnight { get; init; }
 }
 
@@ -42,10 +39,10 @@ public sealed record SetPriceRequest(int Version, int Price);
 
 public sealed record FillSlotRequest(int Version, int? ItemId, bool Draw);
 
-/// <summary>One side of a Haggle: COOL + Trading (the skill base) and the Operator Rank (0 when not a Fixer).</summary>
+// Rank 0 when not a Fixer
 public sealed record HaggleSide(int Trading, int Rank);
 
-/// <summary>Rolls may be typed (physical dice): the d10, then the extra d10 of a natural 10 or 1. Missing dice are rolled.</summary>
+// typed d10s, then the extra d10 on a natural 10/1. Missing ones get rolled.
 public sealed record HaggleRequest(HaggleSide Buyer, HaggleSide Seller, int[]? BuyerRolls = null, int[]? SellerRolls = null);
 
 public sealed record DealOption(string Id, string Label, string Text, int MinRank, bool Applies, string? Reason);
@@ -65,14 +62,11 @@ public sealed record MysteryBoxRollRequest(int? BoxRoll = null, int? ContentRoll
 
 public sealed record VisitorsRequest(int Version, int Count);
 
-/// <summary>How the seller deals with the condition: tells, keeps quiet, or disguises the damage (Forgery).</summary>
+// tells, keeps quiet, or hides the damage (Forgery)
 [JsonConverter(typeof(JsonStringEnumConverter))]
 public enum ConditionDisclosure { Disclosed, Silent, Disguised }
 
-/// <summary>
-/// Price a Fixer pays for an item the Edgerunners sell (IR5 p.5; Haggle of CP:R p.160–161). In <see cref="Haggle"/>,
-/// the Buyer side is whoever haggles (the selling Edgerunner) and the Seller side is the Fixer buying.
-/// </summary>
+// What a Fixer pays for loot (IR5 p.5; Haggle CP:R p.160-161). Buyer = the selling Edgerunner, Seller = the Fixer.
 public sealed record SellQuoteRequest(
     int? ItemId = null, int? Price = null, ItemCondition Condition = ItemCondition.Normal,
     ConditionDisclosure Disclosure = ConditionDisclosure.Disclosed, int? FixerRank = null, HaggleRequest? Haggle = null,
@@ -129,5 +123,4 @@ public sealed record IndexRowDto(
 
 public sealed record IndexPageDto(int Total, int Page, int PageSize, IReadOnlyList<IndexRowDto> Rows);
 
-/// <summary>A market event answered with the updated market and what came out of it.</summary>
 public sealed record MarketEventResult<T>(NightMarketDetailDto Market, T Result);

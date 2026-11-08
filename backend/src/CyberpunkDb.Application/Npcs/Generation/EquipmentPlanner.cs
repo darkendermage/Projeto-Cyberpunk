@@ -4,11 +4,8 @@ using CyberpunkDb.Domain.Enums;
 
 namespace CyberpunkDb.Application.Npcs.Generation;
 
-/// <summary>
-/// Buys the NPC's gear within the template budget: signature gear, armor aimed at the suggested SP range,
-/// the profile's primary weapon (in the quality the template asks for), ammunition, a backup weapon and
-/// extras. Every purchase is checked against the remaining budget before it is added.
-/// </summary>
+// Signature gear, armor near the suggested SP, the primary weapon (in the template's quality), ammo, a backup
+// and extras. Each purchase checks the remaining budget first.
 public sealed class EquipmentPlanner(NpcMechanics mechanics, NpcCatalog catalog, NpcTemplate template, Random rng)
 {
     private readonly NpcRuleBook _rules = mechanics.Rules;
@@ -41,7 +38,7 @@ public sealed class EquipmentPlanner(NpcMechanics mechanics, NpcCatalog catalog,
         BuyExtras(profile);
     }
 
-    // ------------------------------------------------------------ purchases
+    // purchases
 
     private void BuySignatureGear(NpcProfile profile)
     {
@@ -76,7 +73,7 @@ public sealed class EquipmentPlanner(NpcMechanics mechanics, NpcCatalog catalog,
             .ToList();
         if (options.Count == 0) return;
 
-        // Closest SP to the target, inside the suggested range when possible; Core Book items first.
+        // closest SP to the target, inside the range if possible, Core Book first
         var best = options
             .OrderBy(i => range.Contains(i.Armor!.Sp!.Value) ? 0 : 1)
             .ThenBy(i => Math.Abs(i.Armor!.Sp!.Value - target))
@@ -104,7 +101,7 @@ public sealed class EquipmentPlanner(NpcMechanics mechanics, NpcCatalog catalog,
             var w = classIndex < 0 ? 0.5 : Math.Max(1, 3 - classIndex);
             if (IsCore(o.Item)) w *= g.CoreBookWeight.Value;
             if (o.Item.Weapon.Exotic) w *= g.ExoticWeaponWeight.Value;
-            // Higher tiers favor better (pricier) weapons within the budget.
+            // bosses lean toward pricier weapons
             var priceWeight = template.Level is NpcLevel.MiniBoss or NpcLevel.Boss ? 3.0 : 1.0;
             return w * (1 + priceWeight * o.Price / Math.Max(1, cap));
         }, rng);
@@ -112,7 +109,6 @@ public sealed class EquipmentPlanner(NpcMechanics mechanics, NpcCatalog catalog,
         return pick.Item;
     }
 
-    /// <summary>Weapons the template allows, each offered in the quality its rules ask for, with the right price.</summary>
     private IEnumerable<(CatalogItem Item, WeaponQuality Quality, int Price)> WeaponOffers(WeaponPreference pref, int strengthBody)
     {
         var weapons = catalog.Items.Where(i => i.Weapon is { } w && pref.Skills.Contains(w.Skill) && i.Price is not null
@@ -137,7 +133,7 @@ public sealed class EquipmentPlanner(NpcMechanics mechanics, NpcCatalog catalog,
                 if (error is null && price is { } p) offers.Add((item, q, p));
             }
         }
-        // If no Poor version exists for a Mook, fall back to Standard (the validator flags it as a guideline warning).
+        // no Poor version for a Mook: fall back to Standard (the validator warns)
         if (offers.Count == 0 && rule == WeaponQualityRule.PoorOnly)
             offers.AddRange(weapons.Where(i => i.Weapon!.Quality == WeaponQuality.Standard).Select(i => (i, WeaponQuality.Standard, i.Price!.Value)));
         return offers;
@@ -174,7 +170,7 @@ public sealed class EquipmentPlanner(NpcMechanics mechanics, NpcCatalog catalog,
         }
     }
 
-    // ------------------------------------------------------------ helpers
+    // helpers
 
     private void Add(NpcGearEntry entry)
     {

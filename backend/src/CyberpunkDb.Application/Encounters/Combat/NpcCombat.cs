@@ -9,15 +9,12 @@ namespace CyberpunkDb.Application.Encounters.Combat;
 
 public sealed record DamageOutcome(Combatant Combatant, int Sp, int Through, WoundState Before, WoundState After, IReadOnlyList<string> Notes);
 
-/// <summary>
-/// Damage, Critical Injuries, Death Saves and healing for NPCs and generic enemies, which live in the encounter. The
-/// arithmetic (<see cref="DamageMath"/>) and the tables are the same the character sheet uses (CP:R p.186-188).
-/// </summary>
+// NPC side of damage/crits/Death Saves/healing. Same math (DamageMath) and tables as the sheet (CP:R p.186-188).
 public sealed class NpcCombat(CharacterRuleBook rules, CharacterCalculator calculator)
 {
     public WoundState Wound(Combatant c) => calculator.WoundStateFor(c.Hp, c.Snapshot!.MaxHp);
 
-    /// <summary>Subtracts SP, doubles head damage, lowers HP and ablates the location (CP:R p.186).</summary>
+    // CP:R p.186
     public DamageOutcome Damage(Combatant c, int amount, InjuryLocation location, bool halveArmor, bool bypassArmor, bool fromAttack)
     {
         var notes = new List<string>();
@@ -43,9 +40,7 @@ public sealed class NpcCombat(CharacterRuleBook rules, CharacterCalculator calcu
         return new DamageOutcome(next, sp, through, before, after, notes);
     }
 
-    /// <summary>
-    /// Rolls 2d6 on the body or head table until the result is an injury the target doesn't already have (CP:R p.187).
-    /// </summary>
+    // Rerolls until it's an injury the target doesn't have yet (CP:R p.187).
     public CriticalInjuryDefinition RollCritical(InjuryLocation location, IEnumerable<string> active, int? typed, IDiceRoller dice)
     {
         var table = location == InjuryLocation.Head ? rules.Document.Combat.CriticalInjuries.Head : rules.Document.Combat.CriticalInjuries.Body;
@@ -65,7 +60,7 @@ public sealed class NpcCombat(CharacterRuleBook rules, CharacterCalculator calcu
         return table.First(i => !taken.Contains(i.Name));
     }
 
-    /// <summary>The injury and its 5 Bonus Damage straight to HP, regardless of SP (CP:R p.187).</summary>
+    // 5 bonus damage straight to HP, ignores SP (CP:R p.187)
     public Combatant AddCritical(Combatant c, CriticalInjuryDefinition injury, InjuryLocation location)
     {
         var bonus = rules.Document.Combat.CriticalInjury.Value.BonusDamage;
@@ -73,7 +68,7 @@ public sealed class NpcCombat(CharacterRuleBook rules, CharacterCalculator calcu
         return c with { Injuries = [.. c.Injuries, record], Hp = Math.Max(0, c.Hp - bonus) };
     }
 
-    /// <summary>d10 + penalty under BODY; a natural 10 fails; each save adds +1 (CP:R p.188).</summary>
+    // d10 + penalty under BODY, natural 10 fails, +1 each time (CP:R p.188)
     public (Combatant Combatant, bool Survived, string Text) DeathSave(Combatant c, int roll)
     {
         if (Wound(c) != WoundState.Mortally) throw RequestValidationException.For("roll", L.T("Death Save só para quem está Mortally Wounded (CP:R p.188).", "Death Saves only for someone Mortally Wounded (CP:R p.188)."));
@@ -87,7 +82,7 @@ public sealed class NpcCombat(CharacterRuleBook rules, CharacterCalculator calcu
         return (next, survived, text);
     }
 
-    /// <summary>A Mortally Wounded target goes to 1 HP, unconscious, and the Death Save Penalty resets (CP:R p.188, p.222).</summary>
+    // CP:R p.188, p.222
     public Combatant Stabilize(Combatant c)
     {
         if (c.Dead) throw RequestValidationException.For("target", L.T($"{c.Name} já morreu.", $"{c.Name} is already dead."));

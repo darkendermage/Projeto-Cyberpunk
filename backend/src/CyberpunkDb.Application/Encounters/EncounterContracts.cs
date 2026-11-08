@@ -9,41 +9,35 @@ public sealed record CreateEncounterRequest(string? Name);
 public sealed record EncounterVersionRequest(int Version);
 public sealed record UpdateEncounterRequest(int Version, string Name, string? Notes);
 
-/// <summary>A quick enemy without a sheet; anything left empty takes the defaults of combat-rules.json.</summary>
+// empty fields take the combat-rules.json defaults
 public sealed record GenericRequest(
     string Name, int? Ref = null, int? Dex = null, int? Body = null, int? Will = null, int? Move = null, int? Hp = null,
     int? SpBody = null, int? SpHead = null, int? EvasionBase = null, int? AttackBase = null, string? WeaponName = null,
     WeaponClass? WeaponClass = null, string? Damage = null, int? Rof = null);
 
-/// <summary>
-/// Adds combatants: a saved character (<see cref="CharacterId"/>), a saved NPC (<see cref="NpcId"/>), freshly generated
-/// enemies (<see cref="Generate"/>), a named NPC of the books (<see cref="CompendiumNpcId"/>) or quick generic ones (<see cref="Generic"/>). <see cref="Count"/> copies NPCs.
-/// </summary>
+// One of CharacterId, NpcId, Generate, CompendiumNpcId or Generic. Count copies NPCs.
 public sealed record AddCombatantsRequest(
     int Version, CombatSide Side, int? CharacterId = null, int? NpcId = null, Npcs.Generation.NpcGenerationRequest? Generate = null,
     GenericRequest? Generic = null, int Count = 1, string? Name = null, string? CompendiumNpcId = null);
 
-/// <summary>Initiative for everyone (or the listed combatants); typed d10s win over rolled ones.</summary>
+// typed d10s win over rolled ones
 public sealed record InitiativeRequest(int Version, Dictionary<string, int>? Rolls = null, List<string>? Only = null);
 public sealed record SetInitiativeRequest(int Version, int Initiative);
-/// <summary>Drag in the Initiative Queue: the combatant goes right before <see cref="BeforeId"/> (null: to the bottom).</summary>
+// null BeforeId = bottom
 public sealed record MoveInQueueRequest(int Version, string? BeforeId = null);
 
-/// <summary>
-/// One attack (CP:R p.170-178). <see cref="Weapon"/> is a weapon key of the attacker, "brawling", a Martial Arts key or
-/// "thrown". Any die left empty is rolled by the server.
-/// </summary>
+// CP:R p.170-178. Weapon is a weapon key, "brawling", a Martial Arts key or "thrown". Empty dice get rolled.
 public sealed record AttackRequest(
     int Version, string AttackerId, List<string> TargetIds, string Weapon, AttackMode Mode = AttackMode.Single, int? Range = null,
     bool Dodge = false, int Modifier = 0, int? AttackRoll = null, Dictionary<string, int>? DefenseRolls = null,
     List<int>? DamageDice = null, string? ThrownDamage = null, bool IgnoreCover = false, int? CritRoll = null,
-    // The extra d10 of a natural 10 or 1 (CP:R p.130), typed like the other dice; rolled when missing.
+    // extra d10 on a natural 10 or 1 (CP:R p.130)
     int? AttackExtra = null,
-    // Targets that chose to dodge (REF 8+): their Evasion roll is the DV (CP:R p.172).
+    // REF 8+: their Evasion roll is the DV (CP:R p.172)
     List<string>? DodgeTargets = null,
-    // The Critical Injury's 2d6, when rolled step by step (CritRoll is their sum).
+    // the crit 2d6 when rolled step by step (CritRoll is the sum)
     List<int>? CritDice = null,
-    // Stop for the target's dodge and the attacker's Critical Injury roll instead of rolling them at once.
+    // wait for dodge / crit roll instead of rolling them right away
     bool Interactive = false);
 
 public sealed record ManualDamageRequest(
@@ -51,11 +45,11 @@ public sealed record ManualDamageRequest(
     bool Critical = false, string? Description = null);
 public sealed record EnvironmentDamageRequest(int Version, string EnvironmentId, List<int>? Dice = null);
 public sealed record HealCombatantRequest(int Version, int Amount);
-/// <summary>Clears a jammed weapon (an Action, CP:R p.344).</summary>
+// an Action (CP:R p.344)
 public sealed record UnjamRequest(int Version, string Weapon);
-/// <summary>Reloads one of the fighter's weapons (an Action, CP:R p.171).</summary>
+// an Action (CP:R p.171)
 public sealed record ReloadCombatantRequest(int Version, string Weapon);
-/// <summary>SP of one location up or down (ablation or repair), within the armor's full SP.</summary>
+// ablate or repair, within full SP
 public sealed record CombatantArmorRequest(int Version, Npcs.ArmorSlot Location, int Delta);
 public sealed record DeathSaveCombatantRequest(int Version, int? Roll = null);
 public sealed record ConditionRequest(int Version, string Condition, bool On);
@@ -63,13 +57,12 @@ public sealed record CoverRequest(int Version, string Label, string Material, bo
 public sealed record TakeCoverRequest(int Version, string? CoverId);
 public sealed record CoverDamageRequest(int Version, int Amount);
 
-/// <summary>What one attack did to one target, step by step, for the log and the result panel.</summary>
+// for the log and the result panel
 public sealed record TargetResult(
     string TargetId, string TargetName, bool Hit, int Attack, int? Dv, int? DefenseRoll, string Defense,
     IReadOnlyList<int> DamageDice, int Damage, string Location, int? CoverAbsorbed, bool CoverDestroyed,
     int? SpBefore, int? Through, bool Critical, string? CriticalInjury, string? WoundState, IReadOnlyList<string> Notes);
 
-/// <summary>An attack's outcome; <see cref="Seq"/> numbers the fight's attacks, <see cref="Melee"/> tells a blade from a gun.</summary>
 public sealed record AttackResult(string Attacker, string Weapon, AttackMode Mode, int? AttackRoll, int AttackTotal, IReadOnlyList<TargetResult> Targets, IReadOnlyList<string> Notes,
     string AttackerId = "", int Seq = 0, bool Melee = false, int? AttackExtra = null, IReadOnlyList<int>? CritDice = null);
 
@@ -84,8 +77,7 @@ public sealed record EncounterSummaryDto(int Id, string Name, EncounterStatus St
 
 public sealed record EncounterRulesDto(CombatRulesDocument Rules, object CharacterCombat);
 
-/// <summary>The target's choice on a pending attack: dodge (roll Evasion as the DV) or take the range DV.</summary>
+// dodge (Evasion roll as DV) or take the range DV
 public sealed record PendingDefenseRequest(int Version, string TargetId, bool Dodge);
 
-/// <summary>The attacker's Critical Injury roll on a pending attack.</summary>
 public sealed record PendingCriticalRequest(int Version, string TargetId);

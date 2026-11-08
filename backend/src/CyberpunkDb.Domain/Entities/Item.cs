@@ -2,10 +2,7 @@ using CyberpunkDb.Domain.Enums;
 
 namespace CyberpunkDb.Domain.Entities;
 
-/// <summary>
-/// Shared data for every catalog entry. Each category derives from this type and is mapped
-/// table-per-type, so category attributes live in their own strongly-typed table.
-/// </summary>
+// Base for every catalog entry. Table-per-type, so each category's attributes get their own table.
 public abstract class Item
 {
     protected Item(ItemCategory category) => Category = category;
@@ -17,9 +14,9 @@ public abstract class Item
     public string? Description { get; set; }
     public string? Notes { get; set; }
 
-    /// <summary>Price in eurodollars. Null when the source gives no fixed price.</summary>
+    // null when the book has no fixed price
     public int? PriceEb { get; set; }
-    /// <summary>Free text for prices that do not fit a single number ("20eb/50eb", "por 10 un.").</summary>
+    // prices that aren't one number ("20eb/50eb", "por 10 un.")
     public string? PriceNote { get; set; }
     public PriceCategory? PriceCategory { get; set; }
 
@@ -35,10 +32,10 @@ public abstract class Item
 
     public List<ItemTag> Tags { get; set; } = [];
 
-    /// <summary>Optional JSON object for rare attributes that do not justify a column.</summary>
+    // rare attributes that don't deserve a column
     public string? ExtraAttributesJson { get; set; }
 
-    /// <summary>Normalized (lowercase, unaccented) text used for full-catalog search. Maintained on save.</summary>
+    // lowercase, no accents, kept up to date on save
     public string SearchText { get; set; } = string.Empty;
 
     public DateTime CreatedAt { get; set; }

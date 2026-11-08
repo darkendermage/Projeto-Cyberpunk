@@ -5,12 +5,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CyberpunkDb.Application.NetArchitectures;
 
-/// <summary>A Black ICE from the catalog with the stats a GM needs at the table (CP:R p.204-205).</summary>
+// CP:R p.204-205
 public sealed record IceInfo(
     int Id, string Slug, string Name, int? Price, PriceCategory? PriceCategory, ProgramClass? Class,
     int? Per, int? Spd, int? Atk, int? Def, int? Rez, string? Effect, string? Book, int? Page);
 
-/// <summary>Snapshot of the catalog's Black ICE, keyed by slug.</summary>
+// by slug
 public sealed class NetIceCatalog(IEnumerable<IceInfo> ice)
 {
     private readonly Dictionary<string, IceInfo> _bySlug = ice.ToDictionary(i => i.Slug, StringComparer.OrdinalIgnoreCase);

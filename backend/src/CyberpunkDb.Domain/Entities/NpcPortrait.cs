@@ -1,6 +1,6 @@
 namespace CyberpunkDb.Domain.Entities;
 
-/// <summary>Image of a saved NPC, kept in the database like a character's portrait. Deleted with the NPC.</summary>
+// deleted with the NPC
 public class NpcPortrait
 {
     public int NpcId { get; set; }
@@ -9,10 +9,7 @@ public class NpcPortrait
     public DateTime UpdatedAt { get; set; }
 }
 
-/// <summary>
-/// Image the GM gave a named NPC of the books. The compendium itself is embedded in the app, so the image is keyed
-/// by the compendium id.
-/// </summary>
+// Keyed by compendium id since the compendium itself ships embedded in the app.
 public class CompendiumPortrait
 {
     public string CompendiumId { get; set; } = string.Empty;

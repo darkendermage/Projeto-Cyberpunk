@@ -10,10 +10,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CyberpunkDb.Application.Catalog.Categories;
 
-/// <summary>
-/// Base for every category. A subclass only declares its fields (and optionally includes, relations
-/// and cross-field rules); searching, faceting, sorting, mapping and validation are shared.
-/// </summary>
+// Subclasses only declare fields (plus includes, relations, cross-field rules). Search, facets, sort, mapping
+// and validation live here.
 public abstract class CategoryDefinition<T> : ICategoryDefinition where T : Item, new()
 {
     public const int MaxPageSize = 100;
@@ -29,11 +27,11 @@ public abstract class CategoryDefinition<T> : ICategoryDefinition where T : Item
     public abstract string Icon { get; }
     public Type EntityType => typeof(T);
 
-    /// <summary>Key of the enum field that classifies items inside the category (weapon class, armor type...).</summary>
+    // weapon class, armor type...
     protected abstract string SubtypeField { get; }
-    /// <summary>Fields shown on cards, in priority order; the UI keeps the first ones that apply.</summary>
+    // priority order, the UI keeps the first ones that apply
     protected abstract string[] CardFields { get; }
-    /// <summary>Attribute columns of the table view, between "Fabricante" and "Custo".</summary>
+    // between "Fabricante" and "Custo"
     protected virtual string[] TableFields => CardFields;
     protected virtual string DefaultSort => "name";
     protected abstract IEnumerable<FieldDefinition<T>> DefineFields();
@@ -52,7 +50,7 @@ public abstract class CategoryDefinition<T> : ICategoryDefinition where T : Item
 
     private FieldDefinition<T> Subtype => FindField(SubtypeField)!;
 
-    // ---------------------------------------------------------------- field helpers
+    // field helpers
 
     protected static FieldDefinition<T> Number<TP>(string key, string label, Expression<Func<T, TP>> selector) =>
         new ScalarField<T, TP>(key, label, FieldKind.Number, selector);
@@ -76,7 +74,7 @@ public abstract class CategoryDefinition<T> : ICategoryDefinition where T : Item
         Expression<Func<T, IEnumerable<TElem>>> collection, Expression<Func<TElem, TValue>> value, Action<T, List<TValue>> setter) =>
         new SetField<T, TElem, TValue>(key, label, collection, value, setter);
 
-    /// <summary>Updates a child collection in place so EF Core tracks removals/additions instead of key conflicts.</summary>
+    // in place, so EF tracks adds/removes instead of hitting key conflicts
     public static void Sync<TElem, TValue>(List<TElem> list, List<TValue> values, Func<TElem, TValue> key, Func<TValue, TElem> create)
     {
         list.RemoveAll(e => !values.Contains(key(e)));
@@ -99,7 +97,7 @@ public abstract class CategoryDefinition<T> : ICategoryDefinition where T : Item
         yield return Choice("dataOrigin", "Origem dos dados", i => i.DataOrigin).InGroup("Fonte").AsBase();
     }
 
-    // ---------------------------------------------------------------- queries
+    // queries
 
     private static IQueryable<T> WithBaseIncludes(IQueryable<T> query) =>
         query.Include(i => i.Manufacturer).Include(i => i.SourceBook).Include(i => i.Tags);
@@ -120,8 +118,7 @@ public abstract class CategoryDefinition<T> : ICategoryDefinition where T : Item
         var facets = new Dictionary<string, IReadOnlyList<FacetValue>>();
         if (request.IncludeFacets)
         {
-            // Each facet is counted with every criterion except its own, so users see how many items
-            // they would get by changing that one filter (standard faceted-search behaviour).
+            // Each facet is counted ignoring its own filter, so the counts show what changing that filter would give.
             foreach (var field in Fields.Where(f => f.IsFacet && f.IsFilterable))
                 facets[field.Key] = await field.FacetAsync(ApplyCriteria(searched, criteria, field.Key), ct);
         }
@@ -133,7 +130,6 @@ public abstract class CategoryDefinition<T> : ICategoryDefinition where T : Item
             facets);
     }
 
-    /// <summary>Validates every criterion up front and turns it into a predicate.</summary>
     public IReadOnlyList<(string Field, Expression<Func<T, bool>> Predicate)> CompileCriteria(IEnumerable<FilterCriterion>? filters)
     {
         var list = filters?.ToList() ?? [];
@@ -182,7 +178,7 @@ public abstract class CategoryDefinition<T> : ICategoryDefinition where T : Item
         if (!field.IsSortable)
             throw RequestValidationException.For("sort", $"O campo '{field.Label}' não pode ser usado para ordenar.");
 
-        // Name and id as tie-breakers keep paging stable.
+        // name and id as tie-breakers so paging is stable
         return field.Key == "name"
             ? (descending ? query.OrderByDescending(i => i.Name) : query.OrderBy(i => i.Name)).ThenBy(i => i.Id)
             : field.ApplySort(query, descending).ThenBy(i => i.Name).ThenBy(i => i.Id);
@@ -257,7 +253,7 @@ public abstract class CategoryDefinition<T> : ICategoryDefinition where T : Item
         return groups;
     }
 
-    // ---------------------------------------------------------------- mapping
+    // mapping
 
     public ItemDto ToDto(Item item)
     {
@@ -308,7 +304,7 @@ public abstract class CategoryDefinition<T> : ICategoryDefinition where T : Item
     }
 
 
-    // ---------------------------------------------------------------- writes
+    // writes
 
     public Item CreateEntity() => new T();
 
@@ -344,8 +340,8 @@ public abstract class CategoryDefinition<T> : ICategoryDefinition where T : Item
 
         if (errors.Count == 0)
         {
-            // Generic rule: attributes restricted to some subtypes must stay empty for the others,
-            // e.g. clothing cannot carry Stopping Power and a shotgun cannot have a humanity cost.
+            // Fields restricted to some subtypes must stay empty for the others (no SP on clothing, no Humanity on a
+            // shotgun).
             var subtype = Subtype.GetValue(entity) as string;
             foreach (var field in Fields.Where(f => !f.AppliesToSubtype(subtype)))
             {

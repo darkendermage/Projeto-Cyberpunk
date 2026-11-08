@@ -4,21 +4,21 @@ namespace CyberpunkDb.Application.Table;
 
 public sealed record PlayerStatDto(string Key, int Value);
 
-/// <summary>A skill ready to roll: <see cref="Total"/> is STAT + level + modifiers + penalties (add 1d10).</summary>
+// Total = STAT + level + modifiers + penalties, add 1d10
 public sealed record PlayerSkillDto(string Key, string SkillId, string Name, string? NamePt, string? Specialization, string Category, int Total);
 
-/// <summary>An equipped weapon, ready to roll: <see cref="AttackTotal"/> is the skill total (add 1d10).</summary>
+// add 1d10
 public sealed record PlayerWeaponDto(string Key, string Name, int AttackTotal, string? Damage, int? Magazine, int Rounds, int? AutofireTotal);
 
-/// <summary>SP worn on the head and the body, and their full values (null: nothing to repair there).</summary>
+// max null = nothing to repair
 public sealed record PlayerArmorDto(int SpHead, int? MaxSpHead, int SpBody, int? MaxSpBody);
 
-/// <summary>What the token's quick panel needs from the seat's own sheet, in or out of a fight.</summary>
+// for the token's quick panel
 public sealed record PlayerCharacterDto(
     int Id, string Name, string? Handle, int Hp, int MaxHp, int Luck, int LuckAvailable, int Humanity,
     IReadOnlyList<PlayerStatDto> Stats, IReadOnlyList<PlayerSkillDto> Skills, IReadOnlyList<PlayerWeaponDto> Weapons, PlayerArmorDto Armor);
 
-/// <summary>The seat's own sheet to read at the table: who they are, their numbers, gear, chrome and trained skills.</summary>
+// read-only sheet at the table
 public sealed record PlayerSheetDto(
     string Name, string? Handle, IReadOnlyList<string> Roles, int Hp, int MaxHp, int Humanity, int MaxHumanity,
     IReadOnlyList<PlayerStatDto> Stats, PlayerArmorDto Armor, string? HeadArmor, string? BodyArmor,

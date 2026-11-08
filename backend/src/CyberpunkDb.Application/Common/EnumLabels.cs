@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace CyberpunkDb.Application.Common;
 
-/// <summary>Reads the pt-BR labels declared with [Display] on domain enums.</summary>
+// pt-BR labels from [Display]
 public static class EnumLabels
 {
     private static readonly ConcurrentDictionary<Type, IReadOnlyList<(string Value, string Label)>> Cache = new();

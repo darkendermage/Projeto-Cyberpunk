@@ -2,45 +2,35 @@ using CyberpunkDb.Application.Encounters;
 
 namespace CyberpunkDb.Application.Table;
 
-/// <summary>
-/// Pushes table changes to the connected screens (SignalR in the API). The application decides what each seat may
-/// see; the notifier only delivers.
-/// </summary>
+// SignalR in the API. The application decides what each seat sees, this just delivers.
 public interface ITableNotifier
 {
-    /// <summary>
-    /// A scene changed. The GM gets the full view; <paramref name="seats"/> holds each open seat's view of the active
-    /// scene (null value: no active scene), or is null when the players' screens don't change.
-    /// </summary>
+    // seats: each open seat's view of the active scene (null value = no active scene), or null when players'
+    // screens don't change.
     Task SceneAsync(SceneView gm, IReadOnlyDictionary<int, SceneView?>? seats, CancellationToken ct);
 
     Task SceneRemovedAsync(int id, IReadOnlyDictionary<int, SceneView?>? seats, CancellationToken ct);
 
-    /// <summary>A fight changed: the GM gets the full detail; <paramref name="seats"/> as in <see cref="SceneAsync"/>.</summary>
+    // seats works like in SceneAsync
     Task EncounterAsync(EncounterDetailDto gm, IReadOnlyDictionary<int, PlayerEncounterDto?>? seats, CancellationToken ct);
 
     Task EncounterRemovedAsync(int id, IReadOnlyDictionary<int, PlayerEncounterDto?>? seats, CancellationToken ct);
 
-    /// <summary>A chat line or roll: the GM's view, and the view of each seat allowed to read it.</summary>
     Task MessageAsync(TableMessageDto gm, IReadOnlyDictionary<int, TableMessageDto> seats, CancellationToken ct);
 
-    /// <summary>Seats changed hands (picked at the entrance, entered, released): the GM's invites refresh.</summary>
+    // lobby claim/release, GM invites refresh
     Task SeatsAsync(CancellationToken ct);
 
-    /// <summary>
-    /// A character's sheet changed, or a player came or went (<paramref name="characterId"/> null): every screen
-    /// refreshes the party strip, and the owner their own sheet.
-    /// </summary>
+    // characterId null = a player came or went. Refreshes the party strip and the owner's sheet.
     Task PartyAsync(int? characterId, CancellationToken ct);
 
-    /// <summary>The table's music changed (null: stopped): every screen follows.</summary>
+    // null = stopped
     Task MusicAsync(TableMusic? music, CancellationToken ct);
 
-    /// <summary>A new session started: every screen's chat starts over.</summary>
     Task ChatResetAsync(CancellationToken ct);
 }
 
-/// <summary>For hosts without live screens (and tests that don't care).</summary>
+// for hosts without live screens, and tests
 public sealed class NullTableNotifier : ITableNotifier
 {
     public Task SceneAsync(SceneView gm, IReadOnlyDictionary<int, SceneView?>? seats, CancellationToken ct) => Task.CompletedTask;

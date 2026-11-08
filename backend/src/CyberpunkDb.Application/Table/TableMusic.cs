@@ -5,30 +5,25 @@ using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.Table;
 
-/// <summary>
-/// What the table is playing (G): a YouTube video and/or playlist, playing or paused at <see cref="PositionSeconds"/>
-/// as of <see cref="UpdatedAt"/>. Each screen works out where the track should be now and keeps its player there.
-/// </summary>
+// YouTube video and/or playlist, playing or paused at PositionSeconds as of UpdatedAt. Each screen works out
+// where the track should be now.
 public sealed record TableMusic(string? VideoId, string? PlaylistId, string? Title, bool Playing, double PositionSeconds, DateTime UpdatedAt, int Volume,
     int Index = 0);
 
-/// <summary>A link the GM played recently, to switch back quickly.</summary>
 public sealed record RecentMusic(string? VideoId, string? PlaylistId, string? Title);
 
-/// <summary>The GM's view: the music now and the recent links.</summary>
 public sealed record TableMusicStateDto(TableMusic? Music, IReadOnlyList<RecentMusic> Recent);
 
 public sealed record LoadMusicRequest(string Url, string? Title);
 
-/// <summary>Play (from a position) or seek; null keeps where the track is.</summary>
+// null keeps the current position
 public sealed record MusicPositionRequest(double? PositionSeconds);
 
 public sealed record MusicVolumeRequest(int Volume);
 
-/// <summary>A recent link to drop from the list, by its video and playlist.</summary>
 public sealed record ForgetRecentMusicRequest(string? VideoId, string? PlaylistId);
 
-/// <summary>Reads a YouTube link: watch, youtu.be, music.youtube.com and playlist forms. Anything else is refused.</summary>
+// watch, youtu.be, music.youtube.com and playlist links. Anything else is refused.
 public static partial class YouTubeLink
 {
     public static (string? VideoId, string? PlaylistId) Parse(string? url)
@@ -74,10 +69,7 @@ public static partial class YouTubeLink
     private static partial Regex ListId();
 }
 
-/// <summary>
-/// The table's music (G), kept in the table settings and pushed to every screen. Only the GM changes it; players get it
-/// with their state and over the hub.
-/// </summary>
+// Stored in the table settings. GM only; players get it with their state and over the hub.
 public sealed class TableMusicService(TableSettingsService settings, ITableNotifier notifier)
 {
     private const string MusicKey = "music";
@@ -90,7 +82,7 @@ public sealed class TableMusicService(TableSettingsService settings, ITableNotif
 
     public async Task<TableMusicStateDto> StateAsync(CancellationToken ct) => new(await CurrentAsync(ct), await RecentAsync(ct));
 
-    /// <summary>Loads a link, paused at the start, and puts it first among the recent ones.</summary>
+    // starts paused and goes to the top of the recents
     public async Task<TableMusicStateDto> LoadAsync(LoadMusicRequest r, CancellationToken ct)
     {
         var (video, list) = YouTubeLink.Parse(r.Url);
@@ -108,14 +100,12 @@ public sealed class TableMusicService(TableSettingsService settings, ITableNotif
     public Task<TableMusicStateDto> SeekAsync(MusicPositionRequest r, CancellationToken ct) =>
         ChangeAsync(m => m with { PositionSeconds = Math.Max(0, r.PositionSeconds ?? 0) }, ct);
 
-    /// <summary>The next track of the playlist, from its start.</summary>
     public Task<TableMusicStateDto> NextAsync(CancellationToken ct) =>
         ChangeAsync(m => m.PlaylistId is null ? m with { PositionSeconds = 0 } : m with { Index = m.Index + 1, PositionSeconds = 0, Playing = true }, ct);
 
     public Task<TableMusicStateDto> VolumeAsync(MusicVolumeRequest r, CancellationToken ct) =>
         ChangeAsync(m => m with { Volume = Math.Clamp(r.Volume, 0, 100) }, ct);
 
-    /// <summary>Stops the music on every screen.</summary>
     public async Task<TableMusicStateDto> StopAsync(CancellationToken ct)
     {
         await settings.SetAsync(MusicKey, null, ct);
@@ -123,7 +113,7 @@ public sealed class TableMusicService(TableSettingsService settings, ITableNotif
         return new TableMusicStateDto(null, await RecentAsync(ct));
     }
 
-    /// <summary>Drops a link from the recent list; what is playing goes on.</summary>
+    // doesn't stop what's playing
     public async Task<TableMusicStateDto> ForgetRecentAsync(ForgetRecentMusicRequest r, CancellationToken ct)
     {
         var recent = (await RecentAsync(ct)).Where(x => x.VideoId != r.VideoId || x.PlaylistId != r.PlaylistId).ToList();
@@ -131,7 +121,7 @@ public sealed class TableMusicService(TableSettingsService settings, ITableNotif
         return new TableMusicStateDto(await CurrentAsync(ct), recent);
     }
 
-    /// <summary>Where the track is now: the stored position, plus the time since when it is playing.</summary>
+    // stored position + time since it started playing
     private static double Now(TableMusic m) => m.Playing ? m.PositionSeconds + (DateTime.UtcNow - m.UpdatedAt).TotalSeconds : m.PositionSeconds;
 
     private async Task<TableMusicStateDto> ChangeAsync(Func<TableMusic, TableMusic> change, CancellationToken ct)

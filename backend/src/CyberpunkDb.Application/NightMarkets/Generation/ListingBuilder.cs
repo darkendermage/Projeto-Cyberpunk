@@ -4,11 +4,8 @@ using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.NightMarkets.Generation;
 
-/// <summary>
-/// Adds stalls, listings and open slots to a market, shared by the generator and the later GM commands. Applies the
-/// two placement rules of CP:R p.338: every Quality Rating of a rolled item is present, and an Option brings the
-/// Foundational piece it needs.
-/// </summary>
+// Shared by the generator and the GM commands. CP:R p.338: a rolled item comes in every Quality, and an Option
+// brings its Foundational piece.
 internal sealed class ListingBuilder(NightMarketRuleBook rules, MarketCatalog catalog, string letter, List<MarketStall> stalls,
     List<MarketListing> listings, List<OpenSlot> slots, int nextId)
 {
@@ -29,18 +26,15 @@ internal sealed class ListingBuilder(NightMarketRuleBook rules, MarketCatalog ca
 
     public MarketStall NewStall(string label) => Stall(stalls.Count == 0 ? 1 : stalls.Max(s => s.Number) + 1, label);
 
-    /// <summary>The stall with this label, or a new one after the last.</summary>
+    // reuses the stall with this label
     public MarketStall NewStallFor(string label) =>
         stalls.FirstOrDefault(s => string.Equals(s.Label, label, StringComparison.OrdinalIgnoreCase)) ?? NewStall(label);
 
-    /// <summary>Already listed: in that quality, or in any quality when <paramref name="quality"/> is null.</summary>
+    // quality null = any
     public bool Has(int itemId, WeaponQuality? quality) =>
         listings.Any(l => l.ItemId == itemId && (quality is null || (l.Quality ?? WeaponQuality.Standard) == quality));
 
-    /// <summary>
-    /// Lists a catalog item. <paramref name="rolled"/> marks items that came from the generator tables, which bring
-    /// every quality and their Foundational piece.
-    /// </summary>
+    // rolled = came from the tables, so it brings every quality and its Foundational piece
     public IReadOnlyList<MarketListing> Item(MarketItem item, MarketStall stall, ListingOrigin origin, string? group, string? goodsId,
         bool rolled, bool forSale = true, WeaponQuality? quality = null, string? note = null)
     {
@@ -88,7 +82,7 @@ internal sealed class ListingBuilder(NightMarketRuleBook rules, MarketCatalog ca
         return withId;
     }
 
-    /// <summary>A standard, non-exotic weapon whose price has Poor and Excellent versions (CP:R p.342).</summary>
+    // CP:R p.342
     private bool HasQualities(MarketItem item) =>
         item.CategoryKey == "weapons" && item is { Exotic: false, Quality: WeaponQuality.Standard, Price: { } p }
         && rules.QualityPrice(p, WeaponQuality.Poor) is not null;

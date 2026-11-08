@@ -7,10 +7,7 @@ using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.Characters.Operations;
 
-/// <summary>
-/// Improvement Points (CP:R p.408–410): earning them, raising skills and Role Abilities, and taking up a new Role
-/// (multiclassing, CP:R p.142). Every spend is checked against the cost table and logged as progression.
-/// </summary>
+// Improvement Points (CP:R p.408-410) and multiclassing (p.142). Every spend is logged.
 public sealed partial class ProgressionOperations(CharacterRuleBook rules)
 {
     public const string SpendAction = "spend-ip";
@@ -32,7 +29,7 @@ public sealed partial class ProgressionOperations(CharacterRuleBook rules)
         };
     }
 
-    /// <summary>Raises a skill one level: 20 IP × the next level, 40 × for skills marked (x2) (CP:R p.410).</summary>
+    // 20 IP x next level, 40 x for (x2) skills (CP:R p.410)
     public CharacterSheet ImproveSkill(CharacterSheet sheet, ImproveSkillRequest request, CharacterChange change)
     {
         RequireFinalized(sheet);
@@ -49,7 +46,7 @@ public sealed partial class ProgressionOperations(CharacterRuleBook rules)
         return sheet with { Skills = new Dictionary<string, int>(sheet.Skills, StringComparer.OrdinalIgnoreCase) { [key] = level + 1 } };
     }
 
-    /// <summary>Raises a Role Ability one Rank: 60 IP × the next Rank (CP:R p.410).</summary>
+    // 60 IP x next Rank (CP:R p.410)
     public CharacterSheet ImproveRole(CharacterSheet sheet, ImproveRoleRequest request, CharacterChange change)
     {
         RequireFinalized(sheet);
@@ -65,10 +62,8 @@ public sealed partial class ProgressionOperations(CharacterRuleBook rules)
         return sheet with { Roles = roles };
     }
 
-    /// <summary>
-    /// Divides a Role Ability's Rank among its parts: the Tech puts each Rank into two different specialties, at most the
-    /// Rank in each (CP:R p.147); the Solo spreads points equal to the Rank, Fumble Recovery taking 0 or 4 (CP:R p.146).
-    /// </summary>
+    // Tech: each Rank into two different specialties, max Rank in each (CP:R p.147).
+    // Solo: points = Rank, Fumble Recovery is 0 or 4 (p.146).
     public CharacterSheet SetRoleSplit(CharacterSheet sheet, RoleSplitRequest request, CharacterChange change)
     {
         var index = sheet.Roles.FindIndex(r => r.Role.Equals(request.Role, StringComparison.OrdinalIgnoreCase));
@@ -101,10 +96,7 @@ public sealed partial class ProgressionOperations(CharacterRuleBook rules)
     private static string Describe(Dictionary<string, int> split) =>
         split.Count == 0 ? "—" : string.Join(", ", split.Select(kv => $"{kv.Key} {kv.Value}"));
 
-    /// <summary>
-    /// Takes up a new Role at Rank 1, bought with IP, once the current Role has at least 4 Ranks (CP:R p.142). The new
-    /// Role becomes the current one; earlier Roles keep their Ranks and features.
-    /// </summary>
+    // Needs 4+ Ranks in the current Role (CP:R p.142). The new one becomes current; old ones keep their Ranks.
     public CharacterSheet AddRole(CharacterSheet sheet, AddRoleRequest request, CharacterChange change)
     {
         RequireFinalized(sheet);
@@ -136,15 +128,12 @@ public sealed partial class ProgressionOperations(CharacterRuleBook rules)
         return sheet with { Progress = sheet.Progress with { Ip = sheet.Progress.Ip - cost } };
     }
 
-    // ------------------------------------------------------------ undo
+    // undo
 
     private const string SkillStep = "skill";
     private const string RoleStep = "role";
 
-    /// <summary>
-    /// What an IP spend changed: a skill (key) or a Role (id) going from one level to the next, and its cost. Read from
-    /// the entry's payload, or, for entries written before payloads existed, from its description.
-    /// </summary>
+    // Read from the payload, or from the description for old entries written before payloads existed.
     public ProgressionStep? StepOf(string action, string? payload, string description)
     {
         if (action != SpendAction) return null;
@@ -171,7 +160,7 @@ public sealed partial class ProgressionOperations(CharacterRuleBook rules)
         return null;
     }
 
-    /// <summary>A step can be undone while it is still the latest one: the skill or Rank is at the level it reached.</summary>
+    // only while it's still the latest step
     public bool CanUndo(CharacterSheet sheet, ProgressionStep step) => step.Kind switch
     {
         SkillStep => sheet.Skills.GetValueOrDefault(step.Key) == step.To,
@@ -179,7 +168,7 @@ public sealed partial class ProgressionOperations(CharacterRuleBook rules)
         _ => false,
     };
 
-    /// <summary>Puts the skill or Rank back one step and returns its IP; the refund points at the spend it reverses.</summary>
+    // the refund points at the spend it reverses
     public CharacterSheet Undo(CharacterSheet sheet, ProgressionStep step, long eventId, string description, CharacterChange change)
     {
         RequireFinalized(sheet);
@@ -204,7 +193,6 @@ public sealed partial class ProgressionOperations(CharacterRuleBook rules)
         return sheet with { Progress = sheet.Progress with { Ip = sheet.Progress.Ip + step.Cost } };
     }
 
-    /// <summary>The spend a refund entry reverses.</summary>
     public static long? UndoneId(string payload)
     {
         try { return JsonSerializer.Deserialize<UndoMark>(payload, Json)?.Undoes; }
@@ -227,5 +215,4 @@ public sealed partial class ProgressionOperations(CharacterRuleBook rules)
     }
 }
 
-/// <summary>What one IP spend changed: a skill (key) or a Role (id) from one level to the next, and what it cost.</summary>
 public sealed record ProgressionStep(string Kind, string Key, int From, int To, int Cost);

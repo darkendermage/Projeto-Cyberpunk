@@ -6,10 +6,8 @@ using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.NetArchitectures;
 
-/// <summary>
-/// The Architecture as the GM writes it down: one table per branch in the Core's layout
-/// (<c>Floor | On the Other Side of the "Door" | DV</c>, CP:R p.218), then Demons, Watchers and the cost.
-/// </summary>
+// One table per branch in the Core layout (Floor | On the Other Side of the "Door" | DV, CP:R p.218), then
+// Demons, Watchers and the cost.
 public sealed class NetArchitectureExport(NetArchitectureRuleBook rules)
 {
     private static readonly CultureInfo PtBr = CultureInfo.GetCultureInfo("pt-BR");
@@ -69,7 +67,7 @@ public sealed class NetArchitectureExport(NetArchitectureRuleBook rules)
         return sb.ToString();
     }
 
-    /// <summary>Every Watcher of the Architecture: its Demons and the enemy Netrunners jacked in (Going Quiet p.4).</summary>
+    // Demons + enemy Netrunners (Going Quiet p.4)
     public IReadOnlyList<WatcherDto> Watchers(ArchitectureState state) =>
         state.Demons.Select(d =>
             {
@@ -106,7 +104,7 @@ public sealed class NetArchitectureExport(NetArchitectureRuleBook rules)
         return f.Label ?? L.T("sem função", "no function");
     }
 
-    /// <summary>"N/A" for Black ICE; the Interface Ability and DV otherwise, as in CP:R p.218 ("Backdoor DV8").</summary>
+    // "N/A" for Black ICE, else e.g. "Backdoor DV8" (CP:R p.218)
     private static string Dv(NetFloor floor)
     {
         var dvs = floor.Contents.Where(c => c.Dv is not null).Select(c => c.Kind switch

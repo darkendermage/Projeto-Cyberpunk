@@ -2,10 +2,7 @@ using CyberpunkDb.Domain.Enums;
 
 namespace CyberpunkDb.Domain.Entities;
 
-/// <summary>
-/// A saved enemy/NPC sheet. The full sheet (STATs, skills, gear, cyberware, exceptions) lives in
-/// <see cref="SheetJson"/>; the columns below are denormalized for listing and filtering.
-/// </summary>
+// Full sheet in SheetJson; the columns are for listing and filtering.
 public class Npc
 {
     public int Id { get; set; }

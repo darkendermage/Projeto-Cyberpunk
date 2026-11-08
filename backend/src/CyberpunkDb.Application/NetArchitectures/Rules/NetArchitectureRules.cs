@@ -5,11 +5,8 @@ using CyberpunkDb.Domain.Enums;
 
 namespace CyberpunkDb.Application.NetArchitectures.Rules;
 
-/// <summary>
-/// The parameters of <c>net-architecture-rules.json</c>: the Core's NET Architecture generation (CP:R p.210-211),
-/// Demons and Defenses (p.212-216), prices (p.217-218) and the Going Quiet stealth rules. Every value is a
-/// <see cref="Ruled{T}"/> with its page or the <c>complementary</c> flag.
-/// </summary>
+// net-architecture-rules.json: generation (CP:R p.210-211), Demons and Defenses (p.212-216), prices (p.217-218)
+// and the Going Quiet stealth rules.
 public sealed record NetArchitectureRulesDocument
 {
     public string About { get; init; } = "";
@@ -56,7 +53,7 @@ public sealed record ShapeRules
     public Ruled<string> Split { get; init; } = new();
 }
 
-/// <summary>What a table row puts behind the "door": a Black ICE, a Password, a File or a Control Node.</summary>
+// Black ICE, Password, File or Control Node
 public sealed record TableContent(NetContentKind Kind, string? Slug = null, int? Dv = null);
 
 public sealed record TableRow(int Roll, TableContent[] Contents);
@@ -73,7 +70,7 @@ public sealed record DefenseRule(
     string Id, string Name, string Label, DefenseGroup Group, int Page, int CounterDv, string CounterTime, string Trigger,
     string Data, string Description, string[] LoadoutOptions, int LoadoutPicks)
 {
-    /// <summary>Active Defenses need a Demon (or a Netrunner) on their Control Node to work (CP:R p.213).</summary>
+    // CP:R p.213
     public bool RequiresDemon => Group == DefenseGroup.Active;
 }
 

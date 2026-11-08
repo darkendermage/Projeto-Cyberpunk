@@ -10,10 +10,7 @@ using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.NetArchitectures;
 
-/// <summary>
-/// Saved NET Architectures: generation, the GM's edits and the export. The cost and the Watchers are recalculated on
-/// every read; every write carries the Architecture version (409 on a stale one).
-/// </summary>
+// Cost and Watchers are recomputed on every read. Writes carry the version (409 when stale).
 public sealed class NetArchitectureService(
     IAppDbContext db,
     NetArchitectureRuleBook rules,
@@ -64,10 +61,8 @@ public sealed class NetArchitectureService(
         return Detail(entity, state, await catalogs.GetAsync(ct));
     }
 
-    /// <summary>
-    /// With <c>KeepShape</c>, rolls every unlocked floor again on the same floors and branches; otherwise builds a whole
-    /// new Architecture with the same difficulty, location and options (and a new seed).
-    /// </summary>
+    // KeepShape re-rolls unlocked floors on the same layout; otherwise a whole new one with the same settings and a
+    // new seed.
     public Task<NetArchitectureDetailDto> RegenerateAsync(int id, RegenerateArchitectureRequest r, CancellationToken ct) =>
         MutateAsync(id, r.Version, (state, _) =>
         {
@@ -147,7 +142,7 @@ public sealed class NetArchitectureService(
         return ($"{(file.Length > 0 ? file : "arquitetura")}.{(markdown ? "md" : "txt")}", text);
     }
 
-    // ------------------------------------------------------------------ plumbing
+    // plumbing
 
     private async Task<NetArchitectureDetailDto> MutateAsync(int id, int version,
         Func<ArchitectureState, NetArchitecture, ArchitectureState> operation, CancellationToken ct)

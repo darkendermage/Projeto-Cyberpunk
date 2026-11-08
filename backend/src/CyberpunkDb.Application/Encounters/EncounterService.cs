@@ -17,11 +17,8 @@ using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.Encounters;
 
-/// <summary>
-/// The combat table (Friday Night Firefight). NPCs and generic enemies live in the encounter; player characters live on
-/// their sheets, so every hit on a PC goes through the sheet's own combat operations. Each write carries the
-/// encounter version (409 on a stale one).
-/// </summary>
+// Friday Night Firefight. NPCs live in the encounter, PCs on their sheets, so hits on a PC go through the sheet's
+// own combat operations. Every write carries the encounter version (409 when stale).
 public sealed partial class EncounterService(
     IAppDbContext db,
     CombatRuleBook combat,
@@ -46,7 +43,7 @@ public sealed partial class EncounterService(
     public EncounterRulesDto GetRules() =>
         new(combat.Document, new { characterRules.Document.Combat, characterRules.Document.Derived });
 
-    // ------------------------------------------------------------------ library
+    // library
 
     public async Task<IReadOnlyList<EncounterSummaryDto>> ListAsync(CancellationToken ct)
     {
@@ -100,13 +97,13 @@ public sealed partial class EncounterService(
     public async Task DeleteAsync(int id, CancellationToken ct)
     {
         db.Encounters.Remove(await FindAsync(id, ct));
-        // Scenes linked to it keep their tokens and lose the link (there is no foreign key to do it).
+        // no FK here, so unlink the scenes by hand
         foreach (var scene in await db.Scenes.Where(s => s.EncounterId == id).ToListAsync(ct)) scene.EncounterId = null;
         await db.SaveChangesAsync(ct);
         await observer.RemovedAsync(id, ct);
     }
 
-    // ------------------------------------------------------------------ combatants
+    // combatants
 
     public Task<EncounterDetailDto> AddCombatantsAsync(int id, AddCombatantsRequest r, CancellationToken ct) =>
         MutateAsync(id, r.Version, async (s, _, notices) =>
@@ -173,9 +170,9 @@ public sealed partial class EncounterService(
             return Task.FromResult(Log(next, null, "leave", L.T($"{c.Name} saiu do combate.", $"{c.Name} left the fight.")));
         }, ct);
 
-    // ------------------------------------------------------------------ initiative and turns
+    // initiative and turns
 
-    /// <summary>REF + 1d10 for everyone (or the listed ones); ties are broken by rolling again (CP:R p.168).</summary>
+    // REF + 1d10, ties roll again (CP:R p.168)
     public Task<EncounterDetailDto> RollInitiativeAsync(int id, InitiativeRequest r, CancellationToken ct) =>
         MutateAsync(id, r.Version, async (s, _, notices) =>
         {
@@ -187,7 +184,7 @@ public sealed partial class EncounterService(
                 if (!who.Contains(c.Id)) return c;
                 var roll = r.Rolls?.GetValueOrDefault(c.Id) is int typed and >= 1 and <= 10 ? typed : dice.Roll(10);
                 var reflex = fighters[c.Id].Ref;
-                // CP:R p.146: Initiative Reaction, +1 per point of the Solo's Combat Awareness.
+                // Initiative Reaction, +1 per Combat Awareness point (CP:R p.146)
                 var reaction = fighters[c.Id].Awareness("initiativeReaction");
                 lines.Add($"{c.Name}: REF {reflex} + {roll}{(reaction > 0 ? $" + Initiative Reaction {reaction}" : "")} = {reflex + roll + reaction}");
                 return c with { Initiative = reflex + roll + reaction, TieBreak = 0 };
@@ -208,10 +205,8 @@ public sealed partial class EncounterService(
             return Task.FromResult(Log(next, c.Id, "initiative", L.T($"{c.Name}: Iniciativa {r.Initiative} (ajuste manual).", $"{c.Name}: Initiative {r.Initiative} (manual adjustment).")));
         }, ct);
 
-    /// <summary>
-    /// Manual reorder: the moved combatant takes the Initiative of its new neighbor below (above when at the bottom) and the
-    /// tie with that Initiative is settled in the order the GM chose, so the queue stays sorted by Initiative.
-    /// </summary>
+    // The moved combatant takes the Initiative of its new neighbor below (above if it's last) and the tie is settled
+    // in the GM's order, so the queue stays sorted.
     public Task<EncounterDetailDto> MoveInQueueAsync(int id, string combatantId, MoveInQueueRequest r, CancellationToken ct) =>
         MutateAsync(id, r.Version, (s, _, _) =>
         {
@@ -236,10 +231,7 @@ public sealed partial class EncounterService(
     public Task<EncounterDetailDto> SetActiveAsync(int id, string combatantId, EncounterVersionRequest r, CancellationToken ct) =>
         MutateAsync(id, r.Version, (s, _, _) => Task.FromResult(s with { ActiveId = Require(s, combatantId).Id }), ct);
 
-    /// <summary>
-    /// Ends the current Turn (fire burns at the end of it, CP:R p.180) and passes it to the next one in the Initiative
-    /// Queue, skipping the dead; past the bottom a new Round starts (CP:R p.168).
-    /// </summary>
+    // Fire burns at the end of the Turn (CP:R p.180). Skips the dead; past the bottom a new Round starts (p.168).
     public Task<EncounterDetailDto> NextTurnAsync(int id, EncounterVersionRequest r, CancellationToken ct) =>
         MutateAsync(id, r.Version, async (s, entity, notices) =>
         {
@@ -262,12 +254,12 @@ public sealed partial class EncounterService(
             var next = s with { ActiveId = actor.Id, Round = round };
             if (round != s.Round)
             {
-                // Once-a-Round effects (Spot Weakness, Damage Deflection) come back with the new Round.
+                // Spot Weakness / Damage Deflection reset every Round
                 next = next with { Combatants = next.Combatants.Select(c => c.RoundFlags.Count == 0 ? c : c with { RoundFlags = [] }).ToList() };
                 next = Log(next, null, "round", $"Rodada {round}.");
             }
             var view = fighters[actor.Id];
-            // At the start of the thrower's Turn, a Ranger boomerang comes back to a Targeting Scope (Black Chrome p.100).
+            // Ranger boomerang comes back to a Targeting Scope (Black Chrome p.100)
             if (next.Find(actor.Id) is { Thrown.Count: > 0 } thrower)
             {
                 var back = thrower.Thrown.Where(k => view.Weapon(k)?.ReturnsWith is { } scope && view.HasCyberware(scope)).ToList();
@@ -283,20 +275,18 @@ public sealed partial class EncounterService(
             return Log(next, actor.Id, "turn", L.T($"Turno de {actor.Name}.", $"{actor.Name}'s turn."));
         }, ct);
 
-    // ------------------------------------------------------------------ attacks
+    // attacks
 
     public Task<EncounterDetailDto> AttackAsync(int id, AttackRequest r, CancellationToken ct) =>
         MutateAsync(id, r.Version, async (s, e, notices) =>
         {
             var fighters = await ViewsAsync(s, ct);
-            // From the table (and the combat page without typed dice) the attack stops for the target's dodge and the
-            // attacker's Critical Injury roll; otherwise it resolves at once.
+            // From the table the attack waits for the target's dodge and the attacker's Critical Injury roll.
             return r.Interactive
                 ? await ContinueAttackAsync(s, e, notices, fighters, r, [], ct)
                 : await ApplyAttackAsync(s, e, notices, fighters, r, ct);
         }, ct);
 
-    /// <summary>Resolves and applies an attack whose dice are all typed or left to roll: ammo, hits, the undo and the log.</summary>
     private async Task<EncounterState> ApplyAttackAsync(EncounterState s, Encounter e, List<string> notices, Dictionary<string, FighterView> fighters,
         AttackRequest r, CancellationToken ct)
     {
@@ -304,7 +294,7 @@ public sealed partial class EncounterService(
         var (attacker, targets) = Participants(fighters, r);
         var plan = resolver.Resolve(r, attacker, targets, dice);
 
-        // What the undo puts back: the fight as it is now and the sheets of the PCs involved (ammo, damage, injuries).
+        // snapshot for the undo: the fight plus the sheets of the PCs involved
         var before = JsonSerializer.Serialize(s, StateJson);
         var pcs = targets.Prepend(attacker).Select(f => f.CharacterId).OfType<int>().Distinct().ToList();
         var sheets = new List<SheetSnapshot>();
@@ -314,11 +304,11 @@ public sealed partial class EncounterService(
             sheets.Add(new SheetSnapshot(pc, 0, json));
         }
 
-        // Ammunition first: if the magazine can't pay, nothing happens.
+        // ammo first: if the magazine can't pay, nothing happens
         s = await SpendAmmoAsync(s, attacker, plan, r.Mode, ct);
-        // A Poor Quality weapon that rolled a natural 1 jams after the shot (CP:R p.344).
+        // CP:R p.344
         if (plan.Jammed) s = await SetJammedAsync(s, attacker, plan.WeaponKey, true, ct);
-        // A thrown-only weapon leaves the hand (Black Chrome p.100).
+        // thrown-only weapons leave the hand (Black Chrome p.100)
         if (attacker.Weapon(plan.WeaponKey)?.ThrownOnly == true && s.Find(attacker.Id) is { } thrower)
             s = Replace(s, thrower with { Thrown = [.. thrower.Thrown.Where(k => k != plan.WeaponKey), plan.WeaponKey] });
 
@@ -346,11 +336,8 @@ public sealed partial class EncounterService(
             L.T($"{attacker.Name} ataca com {plan.WeaponName} ({ModeLabel(plan.Mode)}): d10 {plan.AttackRoll} → {plan.AttackTotal}. {summary}.", $"{attacker.Name} attacks with {plan.WeaponName} ({ModeLabel(plan.Mode)}): d10 {plan.AttackRoll} → {plan.AttackTotal}. {summary}."));
     }
 
-    /// <summary>
-    /// The Solo's once-a-Round Combat Awareness on a hit (CP:R p.146): Spot Weakness adds its points to the damage of the
-    /// attacker's first hit of the Round; Damage Deflection takes 1 per 2 points (up to 5) off the first damage the target
-    /// takes in the Round. Both before armor.
-    /// </summary>
+    // Combat Awareness, once a Round (CP:R p.146). Spot Weakness adds to the attacker's first hit; Damage Deflection
+    // takes 1 per 2 points (max 5) off the first damage the target takes. Both before armor.
     private (EncounterState, PlannedHit) AwarenessOnHit(EncounterState s, FighterView attacker, FighterView target, PlannedHit hit)
     {
         if (!hit.Hit || hit.Damage <= 0) return (s, hit);
@@ -372,7 +359,6 @@ public sealed partial class EncounterService(
     private const string SpotWeakness = "spotWeakness";
     private const string DamageDeflection = "damageDeflection";
 
-    /// <summary>The attacker (alive) and the targets of an attack, from the fight's fighters.</summary>
     private static (FighterView Attacker, List<FighterView> Targets) Participants(Dictionary<string, FighterView> fighters, AttackRequest r)
     {
         var attacker = fighters.GetValueOrDefault(r.AttackerId) ?? throw new NotFoundException(L.T("Atacante não está no combate.", "The attacker isn't in the fight."));
@@ -383,7 +369,7 @@ public sealed partial class EncounterService(
 
     private AttackResult? _lastAttack;
 
-    /// <summary>A thrown weapon picked up from the ground (the GM decides where it landed).</summary>
+    // the GM decides where it landed
     public Task<EncounterDetailDto> PickUpAsync(int id, string combatantId, UnjamRequest r, CancellationToken ct) =>
         MutateAsync(id, r.Version, async (s, _, _) =>
         {
@@ -394,7 +380,7 @@ public sealed partial class EncounterService(
                 L.T($"{c.Name} pega {name} do chão.", $"{c.Name} picks {name} up."));
         }, ct);
 
-    /// <summary>A jammed weapon cleared with an Action (CP:R p.344).</summary>
+    // costs an Action (CP:R p.344)
     public Task<EncounterDetailDto> UnjamAsync(int id, string combatantId, UnjamRequest r, CancellationToken ct) =>
         MutateAsync(id, r.Version, async (s, _, _) =>
         {
@@ -406,7 +392,6 @@ public sealed partial class EncounterService(
             return Log(s, c.Id, "unjam", L.T($"{c.Name} destrava {weapon.Name} (Ação).", $"{c.Name} unjams {weapon.Name} (Action)."));
         }, ct);
 
-    /// <summary>Jams or clears a weapon: on the PC's sheet, or on the NPC's running state.</summary>
     private async Task<EncounterState> SetJammedAsync(EncounterState s, FighterView fighter, string weaponKey, bool jammed, CancellationToken ct)
     {
         if (fighter.Kind == CombatantKind.Pc && fighter.CharacterId is { } characterId)
@@ -420,10 +405,7 @@ public sealed partial class EncounterService(
         return Replace(s, c with { Jammed = list });
     }
 
-    /// <summary>
-    /// Puts the fight and the sheets of the PCs involved back as they were before the last attack. Only right after it:
-    /// anything else done in the fight, or on one of those sheets, closes the undo.
-    /// </summary>
+    // Only right after the attack: anything else done in the fight, or on one of those sheets, closes the undo.
     public async Task<EncounterDetailDto> UndoAttackAsync(int id, EncounterVersionRequest r, CancellationToken ct)
     {
         var entity = await FindAsync(id, ct);
@@ -501,7 +483,7 @@ public sealed partial class EncounterService(
             $"{ModeLabel(hit.Mode)}", fromAttack: true, notes, notices, ct);
         s = next;
 
-        // CP:R p.170: aimed shots at a hand or a leg.
+        // aimed shots at a hand or a leg (CP:R p.170)
         if (hit.Mode == AttackMode.AimedLeg && through > 0)
             (s, crit) = await AddNamedCriticalAsync(s, target, "Broken Leg", notes, ct, crit);
         if (hit.Mode == AttackMode.AimedHand && through > 0) notes.Add(L.T("O alvo derruba um item da mão, à escolha do atacante (CP:R p.170).", "The target drops a held item, of the attacker's choice (CP:R p.170)."));
@@ -510,7 +492,7 @@ public sealed partial class EncounterService(
             sp, through, crit is not null, crit, after.ToString(), notes));
     }
 
-    // ------------------------------------------------------------------ damage, healing, Death Saves
+    // damage, healing, Death Saves
 
     public Task<EncounterDetailDto> DamageCombatantAsync(int id, string combatantId, ManualDamageRequest r, CancellationToken ct) =>
         MutateAsync(id, r.Version, async (s, _, notices) =>
@@ -525,7 +507,7 @@ public sealed partial class EncounterService(
                 + (crit is not null ? $", {crit}" : "") + $". {Translate(after)}.");
         }, ct);
 
-    /// <summary>Fire, electrocution, poison, falls (CP:R p.180-181). Environmental damage never causes Critical Injuries.</summary>
+    // CP:R p.180-181. Never causes Critical Injuries.
     public Task<EncounterDetailDto> EnvironmentAsync(int id, string combatantId, EnvironmentDamageRequest r, CancellationToken ct) =>
         MutateAsync(id, r.Version, (s, _, notices) => EnvironmentOnAsync(s, combatantId, r.EnvironmentId, r.Dice, notices, ct), ct);
 
@@ -542,7 +524,6 @@ public sealed partial class EncounterService(
         return Log(next, target.Id, "environment", L.T($"{target.Name}: {env.Label}, {rolled.Sum()} de dano, {through} no HP. {Translate(after)}.", $"{target.Name}: {L.D(env.Label)}, {rolled.Sum()} damage, {through} to HP. {Translate(after)}."));
     }
 
-    /// <summary>Applies damage to a PC (through its sheet) or to an NPC (in the encounter), with the Critical Injury if any.</summary>
     private async Task<(EncounterState State, int? Sp, int Through, WoundState After, string? Critical)> DamageAsync(
         EncounterState s, FighterView target, int amount, InjuryLocation location, bool halve, bool bypass, bool critical, int? critRoll,
         string description, bool fromAttack, List<string> notes, List<string> notices, CancellationToken ct)
@@ -605,10 +586,7 @@ public sealed partial class EncounterService(
         return (s, already is null ? name : $"{already}, {name}");
     }
 
-    /// <summary>
-    /// Reloads a weapon, an Action (CP:R p.171): a PC takes the rounds from the sheet's ammunition (the loaded kind
-    /// first), an NPC or generic enemy gets a full magazine (their ammo isn't tracked beyond the magazine).
-    /// </summary>
+    // Costs an Action (CP:R p.171). PCs take the rounds from the sheet (loaded kind first); NPCs just get a full mag.
     public Task<EncounterDetailDto> ReloadAsync(int id, string combatantId, ReloadCombatantRequest r, CancellationToken ct) =>
         MutateAsync(id, r.Version, async (s, _, notices) =>
         {
@@ -641,7 +619,7 @@ public sealed partial class EncounterService(
             return Log(Replace(s, npcCombat.Heal(c, r.Amount)), c.Id, "heal", $"{c.Name} recuperou {r.Amount} HP.");
         }, ct);
 
-    /// <summary>A fighter's armor up or down on one location: a PC's on their sheet, an NPC's on the fight, never past full SP.</summary>
+    // never past full SP
     public Task<EncounterDetailDto> AdjustArmorAsync(int id, string combatantId, CombatantArmorRequest r, CancellationToken ct) =>
         MutateAsync(id, r.Version, async (s, _, notices) =>
         {
@@ -701,7 +679,7 @@ public sealed partial class EncounterService(
             return Task.FromResult(Log(Replace(s, c with { Conditions = list }), c.Id, "condition", $"{c.Name}: {(r.On ? "+" : "−")} {condition}."));
         }, ct);
 
-    // ------------------------------------------------------------------ cover
+    // cover
 
     public Task<EncounterDetailDto> AddCoverAsync(int id, CoverRequest r, CancellationToken ct) =>
         MutateAsync(id, r.Version, (s, _, _) =>
@@ -745,10 +723,7 @@ public sealed partial class EncounterService(
                 label is null ? L.T($"{c.Name} saiu da cobertura.", $"{c.Name} left cover.") : L.T($"{c.Name} está atrás de {label}.", $"{c.Name} is behind {L.D(label)}.")));
         }, ct);
 
-    /// <summary>
-    /// A Solo redistributed Combat Awareness: a running fight they are in notes it as an Action (CP:R p.146). Nothing is
-    /// blocked; the GM judges the Turn.
-    /// </summary>
+    // Moving Combat Awareness points costs an Action (CP:R p.146). Just logged, the GM judges the Turn.
     public async Task LogAwarenessAsync(int characterId, CancellationToken ct)
     {
         var running = await db.Encounters.Where(e => e.Status == EncounterStatus.Active).ToListAsync(ct);
@@ -763,12 +738,12 @@ public sealed partial class EncounterService(
             }
             catch (ConflictException)
             {
-                // The fight changed at that very moment: the split is saved all the same; only the log line is lost.
+                // the fight changed meanwhile: the split is saved anyway, we just lose the log line
             }
         }
     }
 
-    // ------------------------------------------------------------------ plumbing
+    // plumbing
 
     private async Task<EncounterDetailDto> MutateAsync(int id, int version,
         Func<EncounterState, Encounter, List<string>, Task<EncounterState>> operation, CancellationToken ct, bool allowPending = false)
@@ -776,16 +751,16 @@ public sealed partial class EncounterService(
         var entity = await FindAsync(id, ct);
         if (entity.Version != version)
             throw new ConflictException(L.T("Este combate foi alterado em outra janela. Recarregue para ver a versão atual.", "This fight was changed in another window. Reload to see the current version."));
-        // An attack waiting on a dodge or a Critical Injury roll holds the fight: only its steps (and the GM's cancel) go on.
+        // a pending attack (dodge / crit roll) blocks everything except its own steps and the GM's cancel
         if (!allowPending && Deserialize(entity.StateJson).Pending is not null)
             throw new ConflictException(L.T("Há um ataque esperando decisão (esquiva ou Critical Injury). Resolva ou cancele antes.", "An attack is waiting for a decision (dodge or Critical Injury). Resolve or cancel it first."));
         var notices = new List<string>();
         _lastAttack = null;
-        // Sheets changed by this fight change (ammo, damage) don't broadcast on their own: the fight sends the result below.
+        // sheets touched here don't broadcast themselves, the fight sends the result below
         EncounterState state;
         using (Table.CharacterBroadcast.Quiet())
         {
-            // The undo of the last attack lasts only until the next change; an attack sets a new one.
+            // the undo only lasts until the next change
             state = await operation(Deserialize(entity.StateJson) with { Undo = null }, entity, notices);
             Apply(entity, state, DateTime.UtcNow);
             try
@@ -810,7 +785,7 @@ public sealed partial class EncounterService(
             Pending: PendingViewOf(s.Pending, fighters));
     }
 
-    /// <summary>Every combatant as the table sees it; a PC whose sheet was deleted shows up as a placeholder.</summary>
+    // a PC whose sheet was deleted shows up as a placeholder
     private async Task<Dictionary<string, FighterView>> ViewsAsync(EncounterState s, CancellationToken ct)
     {
         var result = new Dictionary<string, FighterView>();
@@ -837,10 +812,8 @@ public sealed partial class EncounterService(
         Ammo = snapshot.Weapons.Where(w => w.Magazine is not null).ToDictionary(w => w.Key, w => w.Magazine!.Value),
     };
 
-    /// <summary>
-    /// Tied Initiatives roll again until the higher number wins (CP:R p.168). A tie already settled (every tie-break set
-    /// and distinct, by an earlier roll or a manual move) is kept, so changing someone else does not reshuffle it.
-    /// </summary>
+    // Ties roll again until someone wins (CP:R p.168). Ties already settled are kept, so changing someone else
+    // doesn't reshuffle them.
     private List<Combatant> BreakTies(List<Combatant> list) =>
         list.Select(c => c.Initiative is null || list.Count(o => o.Initiative == c.Initiative) == 1 ? c with { TieBreak = 0 } : c)
             .GroupBy(c => c.Initiative).SelectMany(g =>

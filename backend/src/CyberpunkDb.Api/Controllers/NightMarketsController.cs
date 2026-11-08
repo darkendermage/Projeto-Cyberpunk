@@ -3,10 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CyberpunkDb.Api.Controllers;
 
-/// <summary>
-/// Night Markets: the Core generator, the Black Chrome and Interface RED markets, the CBK listings, Haggle and the
-/// market events. Every change is a command validated on the server and answered with the updated market.
-/// </summary>
+// Commands answer with the updated market.
 [ApiController]
 [Route("api/night-markets")]
 public sealed class NightMarketsController(NightMarketService markets) : ControllerBase
@@ -14,18 +11,18 @@ public sealed class NightMarketsController(NightMarketService markets) : Control
     [HttpGet("rules")]
     public Task<NightMarketRulesDto> GetRules(CancellationToken ct) => markets.GetRulesAsync(ct);
 
-    /// <summary>The Night Market Index (v1.1), each row linked to the catalog when the item is there.</summary>
+    // v1.1, rows linked to the catalog when the item exists
     [HttpGet("index")]
     public Task<IndexPageDto> Index([FromQuery] IndexQuery query, CancellationToken ct) => markets.GetIndexAsync(query, ct);
 
-    /// <summary>A Haggle opposed check without a market (preview before a purchase or a sale).</summary>
+    // no market needed (preview before buying/selling)
     [HttpPost("haggle")]
     public HaggleResult Haggle(HaggleRequest request) => markets.Haggle(request);
 
     [HttpPost("sell-quote")]
     public Task<SellQuote> SellQuote(SellQuoteRequest request, CancellationToken ct) => markets.SellQuoteAsync(request, ct);
 
-    /// <summary>Opens a Mystery Box redeemed with an Achievement, outside any market (IR4 p.24).</summary>
+    // redeemed with an Achievement (IR4 p.24)
     [HttpPost("mystery-box")]
     public Task<MysteryBoxResult> MysteryBox(MysteryBoxRollRequest request, CancellationToken ct) => markets.RollMysteryBoxAsync(request, ct);
 

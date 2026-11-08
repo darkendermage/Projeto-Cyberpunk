@@ -4,15 +4,14 @@ using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.Table;
 
-/// <summary>A rule to look up at the table: what it says and where the book says it.</summary>
 public sealed record RuleNoteDto(string Title, string Text, string Source);
 
-/// <summary>The book's tables a player looks up during play (the range DVs live in the app itself).</summary>
+// range DVs live in the frontend
 public sealed record TableRulesDto(
     IReadOnlyList<CriticalInjuryDto> CriticalInjuries, IReadOnlyList<CoverMaterial> CoverMaterials, string CoverMaterialsSource,
     IReadOnlyList<CoverExample> CoverExamples, string CoverExamplesSource, IReadOnlyList<RuleNoteDto> Notes);
 
-/// <summary>The quick tables of the virtual table, for the GM and the players alike (rules of the book, nothing private).</summary>
+// same for GM and players, nothing private here
 public sealed class TableRulesService(CharacterService characters, CombatRuleBook combat)
 {
     public async Task<TableRulesDto> GetAsync(CancellationToken ct)

@@ -6,7 +6,6 @@ using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.Characters.Calculation;
 
-/// <summary>A wearable host as shown on the sheet: its slots, the options in it and what it covers.</summary>
 public sealed record WearableLine(
     string InstanceId, int ItemId, string Name, WearableAccepts Accepts, int Slots, int SlotsUsed, int Cyberfingers, int CyberfingersUsed,
     bool Worn, BodySide? Side, bool CoversArm, IReadOnlyList<WearableOptionLine> Options, IReadOnlyList<string> BuiltIn,
@@ -14,11 +13,8 @@ public sealed record WearableLine(
 
 public sealed record WearableOptionLine(string InstanceId, int ItemId, string Name, int Slots, bool Finger);
 
-/// <summary>
-/// Cyberware options held by worn items (Smart Glasses, Smart Lens, Battleglove, Smart Gloves, Smart Ears, the
-/// MechaMan helmet). They live in the inventory, cost no Humanity (<c>wearableHumanityLoss</c>) and only work while
-/// the host is equipped; a glove worn over an arm switches off the options of that arm.
-/// </summary>
+// Options in worn items (Smart Glasses/Lens, Battleglove, Smart Gloves/Ears, MechaMan helmet). No Humanity, only
+// work while equipped, and a glove over an arm switches off that arm's options.
 public static class WearableCyberware
 {
     public static WearableHost? Host(CharacterRuleBook rules, NpcCatalog catalog, InventoryEntry entry) =>
@@ -27,7 +23,7 @@ public static class WearableCyberware
     public static bool IsFinger(CharacterRuleBook rules, CatalogItem item) =>
         item.Cyber?.Type == CyberwareType.Cyberfinger || rules.Document.Cyberware.FingerOptions.Value.Contains(item.Slug, StringComparer.OrdinalIgnoreCase);
 
-    /// <summary>Why an option can't go in this host, or null. Slots and duplicates are checked by the caller.</summary>
+    // null = fine. Slots and duplicates are the caller's job.
     public static string? Incompatible(CharacterRuleBook rules, WearableHost host, string hostName, CatalogItem option, NpcCatalog catalog)
     {
         if (option.Cyber is not { } c) return L.T($"{option.Name} não é cyberware.", $"{option.Name} isn't cyberware.");
@@ -53,7 +49,7 @@ public static class WearableCyberware
         return null;
     }
 
-    /// <summary>Option Slots taken in the host: options and, when they use them, the built-in ones. Cyberfingers apart.</summary>
+    // cyberfingers counted apart
     public static (int Slots, int Fingers) Used(CharacterRuleBook rules, NpcCatalog catalog, WearableHost host, IEnumerable<CatalogItem> options)
     {
         var mechanics = new NpcMechanics(rules.Shared);
@@ -71,7 +67,7 @@ public static class WearableCyberware
             .Select(e => e is null ? null : catalog.Find(e.ItemId))
             .OfType<CatalogItem>();
 
-    /// <summary>Implanted pieces switched off by a glove worn over their arm, with the glove that covers them.</summary>
+    // implant -> glove covering it
     public static Dictionary<string, string> Covered(CharacterRuleBook rules, CharacterSheet sheet, NpcCatalog catalog)
     {
         var covered = new Dictionary<string, string>(StringComparer.Ordinal);
@@ -94,7 +90,7 @@ public static class WearableCyberware
         return covered;
     }
 
-    /// <summary>Everything that works right now: implants not covered by a glove, plus the options of worn hosts.</summary>
+    // uncovered implants + options of worn hosts
     public static List<CatalogItem> Working(CharacterRuleBook rules, CharacterSheet sheet, NpcCatalog catalog)
     {
         var covered = Covered(rules, sheet, catalog);

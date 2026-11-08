@@ -2,10 +2,7 @@ using CyberpunkDb.Domain.Enums;
 
 namespace CyberpunkDb.Domain.Entities;
 
-/// <summary>
-/// A saved NET Architecture. Branches, floors, Demons and Watchers live in <see cref="StateJson"/>; the columns below
-/// are denormalized for listing. The cost is recalculated on every read.
-/// </summary>
+// Everything lives in StateJson; columns are for the list. Cost is recomputed on read.
 public class NetArchitecture
 {
     public int Id { get; set; }
@@ -13,7 +10,7 @@ public class NetArchitecture
     public NetDifficulty Difficulty { get; set; }
     public int Floors { get; set; }
     public string LocationId { get; set; } = string.Empty;
-    /// <summary>Optimistic concurrency: incremented on every save; a stale write is rejected.</summary>
+    // optimistic concurrency, bumped on every save
     public int Version { get; set; }
     public string StateJson { get; set; } = "{}";
     public DateTime CreatedAt { get; set; }

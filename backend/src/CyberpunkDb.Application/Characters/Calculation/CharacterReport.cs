@@ -5,49 +5,48 @@ using CyberpunkDb.Domain.Enums;
 
 namespace CyberpunkDb.Application.Characters.Calculation;
 
-// Everything here is derived from the sheet on every read; none of it is persisted.
+// computed on every read, never saved
 
 [JsonConverter(typeof(JsonStringEnumConverter))]
 public enum WoundState { Unhurt, Lightly, Seriously, Mortally }
 
-/// <summary>One part of an effective value, so the sheet can explain where a number comes from.</summary>
+// so the sheet can explain where a number comes from
 public sealed record ValuePart(string Label, int Value);
 
-/// <summary>A STAT: base value as bought or rolled, and the effective value after modifiers and penalties.</summary>
 public sealed record StatLine(string Key, int Base, int Effective, IReadOnlyList<ValuePart> Parts);
 
 public sealed record HealthReport(
     int MaxHp,
     int CurrentHp,
-    // Half of the max HP, rounded up (CP:R p.79).
+    // CP:R p.79
     int SeriouslyWoundedThreshold,
     WoundState WoundState,
     int WoundActionPenalty,
     int WoundMovePenalty,
     int? StabilizationDv,
-    // BODY used for HP and Death Save (an Implanted Linear Frame replaces it, CP:R p.367).
+    // Implanted Linear Frame replaces it (CP:R p.367)
     int BodyForDerived,
     string? BodySource,
-    // Death Save target: roll under this on 1d10, plus the penalty (CP:R p.188).
+    // roll under this on 1d10 + penalty (CP:R p.188)
     int DeathSave,
-    // Base Death Save Penalty from active Critical Injuries.
+    // from active Critical Injuries
     int BaseDeathSavePenalty,
-    // Penalty applied to the next Death Save: base plus what accumulated since Stabilization.
+    // base + what piled up since Stabilization
     int DeathSavePenalty,
     bool MustRollDeathSave);
 
 public sealed record HumanityReport(
     int EmpBase,
-    // EMP × 10 (CP:R p.80).
+    // EMP x 10
     int Max,
     int Current,
     int Lost,
     int Recovered,
-    // Highest Humanity therapy can restore while the current cyberware stays installed (CP:R p.230).
+    // CP:R p.230
     int TherapyCap,
     int PiecesLoweringCap,
     int BorgwareLoweringCap,
-    // The tens place of the current Humanity (CP:R p.80).
+    // tens of current Humanity
     int EmpEffective,
     bool Cyberpsychosis);
 
@@ -62,7 +61,7 @@ public sealed record ArmorLocationReport(
 public sealed record ArmorReport(
     ArmorLocationReport Head,
     ArmorLocationReport Body,
-    // Highest penalty among worn armor, applied once (CP:R p.184).
+    // CP:R p.184
     ArmorPenalty Penalty,
     string? PenaltySource);
 
@@ -76,11 +75,10 @@ public sealed record CharacterSkillLine(
     string Category,
     int Level,
     int StatValue,
-    // Skill-targeted modifiers.
     int Modifier,
-    // STAT + level + modifier.
+    // STAT + level + modifier
     int Base,
-    // Penalty to all Actions (wound state, injuries, general modifiers).
+    // wounds, injuries, general modifiers
     int ActionPenalty,
     int Total,
     bool DoubleCost,
@@ -88,11 +86,10 @@ public sealed record CharacterSkillLine(
     bool Basic,
     bool RoleSkill,
     int Page,
-    // Improvement Points to raise it one level (CP:R p.410); null at the maximum.
+    // CP:R p.410, null at max
     int? IpToRaise,
-    // What makes up Modifier (temporary modifiers and cyberware bonuses).
     IReadOnlyList<ValuePart> ModifierParts,
-    // Cyberware bonuses that only apply in a situation ("+2 for Checks which include sight"); not in Base.
+    // "+2 for Checks which include sight" etc, not in Base
     IReadOnlyList<string> Situational);
 
 public sealed record RoleLine(string Role, int Rank, string Ability, int AbilityPage, bool Current, int IpInvested, int? IpToRaise);
@@ -120,7 +117,7 @@ public sealed record InventoryLine(
     BudgetPool PaidFrom,
     bool Fashion,
     string? Notes,
-    // Weapons only: the copy's quality (its own, else the catalog's).
+    // weapons only
     WeaponQuality? Quality = null);
 
 public sealed record WeaponLine(
@@ -130,7 +127,7 @@ public sealed record WeaponLine(
     WeaponClass Class,
     string? SkillId,
     string? SkillName,
-    // Skill Base of the weapon skill, wound and injury penalties included.
+    // wound/injury penalties included
     int SkillTotal,
     string? Damage,
     int? Rof,
@@ -145,16 +142,15 @@ public sealed record WeaponLine(
     int AttachmentSlots,
     IReadOnlyList<string> Attachments,
     bool Equipped,
-    // Poor, Standard or Excellent: the copy's own, else the catalog's (A4).
+    // copy's own, else the catalog's
     WeaponQuality Quality = WeaponQuality.Standard,
-    // Jammed by a natural 1 (Poor Quality, CP:R p.344).
+    // CP:R p.344
     bool Jammed = false,
-    // What adds to attacks with this weapon besides the skill: Excellent quality, a working Smartgun (D4).
+    // Excellent quality, working Smartgun...
     IReadOnlyList<ValuePart>? AttackBonuses = null,
-    // The catalog item, for weapons with their own combat rules (combat-rules.json specialWeapons).
+    // for weapons with their own rules (combat-rules.json specialWeapons)
     string? Slug = null)
 {
-    /// <summary>Skill total plus the weapon's own bonuses: what the attack check adds to 1d10.</summary>
     public int AttackTotal => SkillTotal + (AttackBonuses?.Sum(p => p.Value) ?? 0);
 }
 
@@ -177,9 +173,9 @@ public sealed record CyberLine(
     string Region,
     int Price,
     string? Requirements,
-    // A glove worn over this arm makes the option inaccessible (CP:R p.347; BC p.37; IR4 p.67; IR5 p.99).
+    // glove over the arm (CP:R p.347; BC p.37; IR4 p.67; IR5 p.99)
     string? CoveredBy = null,
-    /// <summary>Short effect text from the catalog, shown on hover.</summary>
+    // tooltip
     string? Effect = null);
 
 public sealed record HousingReport(
@@ -187,14 +183,14 @@ public sealed record HousingReport(
     string? Housing,
     string? LifestyleId,
     string? Lifestyle,
-    // Monthly rent: the table value (CP:R p.378) or the amount agreed in play.
+    // table value (CP:R p.378) or the deal made in play
     int Rent,
     bool RentFromTable,
     int LifestyleCost,
     int MonthlyTotal,
     DateOnly? PaidUntil,
     int DaysOverdue,
-    // Paid until today; Pending inside the one-week grace; Overdue after it (CP:R p.377).
+    // Pending during the week of grace, Overdue after (CP:R p.377)
     PaymentStatus Status,
     string Source);
 
@@ -215,9 +211,8 @@ public sealed record CharacterReport(
     IReadOnlyList<CyberLine> Cyberware,
     HousingReport Housing,
     IReadOnlyList<CyberRegionReport> Regions,
-    // Inhabiting a Full Body Conversion body (Interface RED 3 p.93).
+    // Interface RED 3 p.93
     bool FullBodyConversion,
-    // What the installed cyberware does to the sheet (STAT and skill bonuses, game effects).
     IReadOnlyList<CyberEffectLine> CyberwareEffects,
-    // Worn items with Option Slots (Smart Glasses, Battleglove, Smart Ears...).
+    // Smart Glasses, Battleglove, Smart Ears...
     IReadOnlyList<WearableLine> Wearables);

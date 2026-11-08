@@ -12,20 +12,19 @@ using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.Encounters.Combat;
 
-/// <summary>An attack option with everything but the d10 already added (STAT + skill + penalties).</summary>
+// everything but the d10 already added
 public sealed record WeaponView(
     string Key, string Name, WeaponClass? Class, string Skill, int AttackTotal, int? AutofireTotal, string Damage, int Rof,
     int? Rounds, int? Magazine, int? AutofireMultiplier, bool Melee, bool HalvesArmor, int?[]? RangeDv = null, bool? AutofireOnly = null,
-    // CP:R p.344: Excellent +1 to attacks; a Poor one jams on a natural 1 and can't fire until unjammed (an Action).
+    // CP:R p.344
     WeaponQuality Quality = WeaponQuality.Standard, bool Jammed = false,
-    // How AttackTotal is made: the skill, then each bonus ("Handgun 12", "Precision Attack +1", "Excellent +1").
+    // e.g. "Handgun 12", "Precision Attack +1", "Excellent +1"
     IReadOnlyList<ValuePart>? AttackParts = null,
-    // Attacks only by throwing (the Ranger boomerang), whether it is out of hand now, and the cyberware that brings it back.
+    // Ranger boomerang
     bool ThrownOnly = false, bool Thrown = false, string? ReturnsWith = null);
 
 public sealed record InjuryView(string Name, InjuryLocation Location, string? Effect, bool DeathSave);
 
-/// <summary>A combatant as the combat table sees it, whatever its source (character sheet, NPC sheet or generic).</summary>
 public sealed record FighterView(
     string Id, CombatantKind Kind, string Name, CombatSide Side, int? Initiative,
     int Hp, int MaxHp, WoundState WoundState, int ActionPenalty, int? StabilizationDv,
@@ -36,18 +35,17 @@ public sealed record FighterView(
     IReadOnlyList<InjuryView> Injuries, IReadOnlyList<string> Conditions,
     int DeathSavePenalty, int DeathSaveTarget, bool MustDeathSave, bool Dead, bool Stabilized,
     string? CoverId, int? CharacterId, int? CharacterVersion, string? Source,
-    // NPCs and generic enemies: the STATs and Skills of the snapshot, for the read-only sheet. PCs read their own sheet.
+    // NPCs only, for the read-only sheet
     IReadOnlyList<NamedValueDto>? Stats = null, IReadOnlyList<NamedValueDto>? Skills = null,
-    // A Solo's Combat Awareness points by part (CP:R p.146), from the sheet; empty for everyone else.
+    // Solo only (CP:R p.146)
     IReadOnlyDictionary<string, int>? CombatAwareness = null,
-    // Installed cyberware by slug (PCs): Targeting Scope on aimed shots, the Ranger boomerang's return.
+    // PCs: Targeting Scope, boomerang return...
     IReadOnlyList<string>? Cyberware = null,
-    // Once-a-Round effects already used this Round ("spotWeakness", "damageDeflection"), for the Combat Awareness block.
+    // used this Round
     IReadOnlyList<string>? RoundFlags = null)
 {
     public bool HasCyberware(string slug) => Cyberware?.Contains(slug, StringComparer.OrdinalIgnoreCase) ?? false;
 
-    /// <summary>Points the Solo put in one part of Combat Awareness (0 when none).</summary>
     public int Awareness(string key) => CombatAwareness?.GetValueOrDefault(key) ?? 0;
 
     public bool CanDodge(int dodgeRef) => Ref >= dodgeRef;
@@ -55,18 +53,14 @@ public sealed record FighterView(
     public WeaponView? Weapon(string key) => Weapons.FirstOrDefault(w => w.Key == key);
 }
 
-/// <summary>Builds <see cref="FighterView"/>s and NPC snapshots. Wound States, penalties and Death Saves use the character rules.</summary>
 public sealed class FighterViews(CharacterRuleBook characterRules, CharacterCalculator calculator, NpcRuleBook npcRules, CombatRuleBook combatRules)
 {
     public const string Brawling = "brawling";
     public const string MartialArtsPrefix = "martial-arts";
 
-    // ------------------------------------------------------------------ player characters
+    // player characters
 
-    /// <summary>
-    /// A weapon with its own rules (combat-rules.json specialWeapons): the Ranger boomerang is thrown, never swung, still
-    /// halves SP, and is out of hand once thrown.
-    /// </summary>
+    // combat-rules.json specialWeapons. The boomerang is thrown, never swung, still halves SP.
     private WeaponView Special(WeaponView v, string? slug, Combatant c)
     {
         if (slug is null || combatRules.Document.SpecialWeapons.Value?.GetValueOrDefault(slug) is not { } rule) return v;
@@ -100,8 +94,7 @@ public sealed class FighterViews(CharacterRuleBook characterRules, CharacterCalc
         }).Select(v => Special(v, r.Weapons.First(x => x.InstanceId == v.Key).Slug, c)).ToList();
         var unarmed = Unarmed(body, cyberarm, Skill(Brawling, "DEX"),
             r.Skills.Where(s => s.SkillId == MartialArtsPrefix && s.Level > 0).Select(s => (s.Key, s.Specialization ?? "", s.Total)));
-        // CP:R p.146: Precision Attack. The sheet's weapons already carry it (CharacterCalculator); the unarmed attacks,
-        // which aren't on the sheet, get it here.
+        // Precision Attack (CP:R p.146): sheet weapons already have it, unarmed attacks get it here.
         var awareness = detail.Sheet.Roles.FirstOrDefault(x => x.Role.Equals("Solo", StringComparison.OrdinalIgnoreCase))?.Split;
         var precision = Characters.Calculation.CharacterCalculator.PrecisionAttack(detail.Sheet);
         weapons.AddRange(precision == 0 ? unarmed : unarmed.Select(w => w with
@@ -123,7 +116,7 @@ public sealed class FighterViews(CharacterRuleBook characterRules, CharacterCalc
             CombatAwareness: awareness, Cyberware: r.Cyberware.Select(x => x.Slug).ToList());
     }
 
-    // ------------------------------------------------------------------ NPCs and generic enemies
+    // NPCs and generic enemies
 
     public FighterView ForNpc(Combatant c)
     {
@@ -182,7 +175,7 @@ public sealed class FighterViews(CharacterRuleBook characterRules, CharacterCalc
         return parts.Length == 2 ? $"{name} ({parts[1]})" : name;
     }
 
-    /// <summary>Brawling and each Martial Arts form the combatant knows, with damage by BODY (CP:R p.176, p.178).</summary>
+    // damage by BODY (CP:R p.176, p.178)
     private IEnumerable<WeaponView> Unarmed(int body, bool cyberarm, int brawling, IEnumerable<(string Key, string Form, int Total)> martialArts)
     {
         var doc = combatRules.Document;
@@ -193,7 +186,6 @@ public sealed class FighterViews(CharacterRuleBook characterRules, CharacterCalc
                 null, null, null, true, doc.MartialArtsHalvesArmor.Value);
     }
 
-    /// <summary>The combat side of an NPC sheet: effective STATs, Skill Bases, worn SP, weapons and Death Save BODY.</summary>
     public CombatSnapshot Snapshot(NpcSheet sheet, NpcValidationReport report, NpcCatalog catalog, int? npcId, string source)
     {
         var weapons = new List<CombatWeapon>();
@@ -223,10 +215,7 @@ public sealed class FighterViews(CharacterRuleBook characterRules, CharacterCalc
         };
     }
 
-    /// <summary>
-    /// The combat side of a printed stat block. Stats the book leaves blank stay out, and the armored values win over the plain ones.
-    /// Weapons carry the printed attack total; skills keep their printed Skill Base, armored when the book prints one.
-    /// </summary>
+    // Printed stat block. Blank stats are skipped, armored values win, weapons keep the printed attack total.
     public CombatSnapshot Compendium(CompendiumNpc npc)
     {
         var sheet = npc.Sheet ?? throw new InvalidOperationException($"{npc.Name} não tem ficha oficial.");
@@ -242,7 +231,7 @@ public sealed class FighterViews(CharacterRuleBook characterRules, CharacterCalc
 
         IEnumerable<CompendiumArmor> Worn(string location) => sheet.Armor.Where(a => a.Location.Equals(location, StringComparison.OrdinalIgnoreCase));
         int Sp(string location) => Worn(location).Select(a => a.Sp).DefaultIfEmpty(0).Max();
-        // A printed melee SP is the usual half unless the sheet says otherwise.
+        // printed melee SP is the usual half unless the sheet says otherwise
         bool? FullSpVsMelee(string location) => Worn(location).Any(a => a.SpVsMelee is { } melee && melee != DamageMath.EffectiveSp(a.Sp, true, false)) ? true : null;
         var source = npc.Sources.FirstOrDefault();
         return new CombatSnapshot
@@ -266,14 +255,14 @@ public sealed class FighterViews(CharacterRuleBook characterRules, CharacterCalc
                     Key = $"w{i}", Name = w.Name, Class = w.Class, Skill = skill,
                     Damage = w.Damage, Rof = w.Rof, Magazine = w.Magazine, AutofireMultiplier = w.AutofireMultiplier, AutofireOnly = w.AutofireOnly, Melee = w.Melee, RangeDv = w.RangeDv,
                     AttackBase = w.AttackBase,
-                    // CP:R p.176: Brawling keeps the armor whole, unless the sheet prints "Halves SP" (Adam Smasher's Fists).
+                    // Brawling doesn't halve armor unless the sheet says "Halves SP" (Adam Smasher) - CP:R p.176
                     HalvesArmor = skill == Brawling ? w.Notes?.Contains("Halves SP", StringComparison.OrdinalIgnoreCase) == true : null,
                 };
             }).ToList(),
         };
     }
 
-    /// <summary>A quick enemy without a sheet: every value typed by the GM (defaults in combat-rules.json, complementary).</summary>
+    // all typed by the GM, defaults in combat-rules.json
     public CombatSnapshot Generic(GenericRequest r)
     {
         var g = combatRules.Document.Generic.Value;

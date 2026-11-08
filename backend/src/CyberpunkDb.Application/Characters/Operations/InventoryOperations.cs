@@ -7,26 +7,19 @@ using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.Characters.Operations;
 
-/// <summary>
-/// Buying, equipping, firing and reloading. A purchase checks the price, the paying budget and (for cyberware) the
-/// installation before anything changes, then updates money, inventory and history together.
-/// </summary>
 public sealed class InventoryOperations(CharacterRuleBook rules, CyberwareOperations cyberware)
 {
-    // ------------------------------------------------------------ purchases
+    // purchases
 
-    /// <summary>
-    /// Buys an item with the balance or, during a Complete Package, the creation budgets. Nothing is equipped or
-    /// installed unless the player asks for it: cyberware is installed on purchase only during creation (the default
-    /// there) or when <see cref="PurchaseRequest.Install"/> is set, and gear is equipped only with <see cref="PurchaseRequest.Equip"/>.
-    /// </summary>
+    // Nothing gets equipped/installed unless asked. Cyberware installs on purchase during creation (default there)
+    // or with Install.
     public CharacterSheet Purchase(CharacterSheet sheet, PurchaseRequest request, CharacterChange change)
     {
         var item = change.Item(request.ItemId);
         var received = request.Received;
         if (received is { } how)
         {
-            // Swapped between players, a gift or loot: no money moves. Creation budgets can't be bypassed this way.
+            // trade/gift/loot: no money. Creation budgets can't be dodged this way.
             if (how is not (ItemOrigin.Trade or ItemOrigin.Gift or ItemOrigin.Loot))
                 throw CharacterChange.Refuse("received", L.T("Sem custo, o item vem de troca, presente ou saque.", "At no cost, the item comes from a trade, gift or loot."));
             if (!sheet.Creation.Finalized)
@@ -97,8 +90,7 @@ public sealed class InventoryOperations(CharacterRuleBook rules, CyberwareOperat
                 PricePaid = cost,
                 Notes = received is not null && request.Note?.Trim() is { Length: > 0 } note ? note : null,
             });
-            // Received cyberware goes through the inventory: the piece itself is free, its Humanity Loss and any
-            // foundational piece it needs are not.
+            // the piece itself is free, but not its Humanity Loss or the foundation it needs
             if (install)
                 return cyberware.Install(sheet with { Inventory = inventory }, new InstallCyberwareRequest(request.Version, null, instanceId,
                     request.MeatLimb, request.HostInstanceId, request.Acknowledge, request.Pool), change);
@@ -115,12 +107,9 @@ public sealed class InventoryOperations(CharacterRuleBook rules, CyberwareOperat
         _ => "Recebido",
     };
 
-    // ------------------------------------------------------------ weapon attachments
+    // weapon attachments
 
-    /// <summary>
-    /// Puts an attachment on a weapon: the weapon class must be listed by the attachment, Exotic weapons only take the
-    /// ones that allow them, and non-Exotic ranged weapons have three Attachment Slots (CP:R p.95).
-    /// </summary>
+    // Exotic weapons only take attachments that allow them; other ranged weapons have 3 slots (CP:R p.95).
     public CharacterSheet Attach(CharacterSheet sheet, AttachRequest request, CharacterChange change)
     {
         var weaponEntry = Find(sheet, request.WeaponInstanceId);
@@ -148,7 +137,7 @@ public sealed class InventoryOperations(CharacterRuleBook rules, CyberwareOperat
             throw CharacterChange.Refuse("attachmentInstanceId",
                 L.T($"{weapon.Name} tem {capacity} Attachment Slots, {used} em uso; {item.Name} ocupa {a.SlotsRequired} ({CharacterRuleBook.Page(rules.Document.Combat.AttachmentSlots.Reference)}).", $"{weapon.Name} has {capacity} Attachment Slots, {used} in use; {item.Name} takes {a.SlotsRequired} ({CharacterRuleBook.Page(rules.Document.Combat.AttachmentSlots.Reference)})."));
 
-        // One unit of a stack is split off, so the rest stays available.
+        // split one off the stack
         if (entry.Quantity > 1)
         {
             sheet = Replace(sheet, entry with { Quantity = entry.Quantity - 1 });
@@ -175,11 +164,8 @@ public sealed class InventoryOperations(CharacterRuleBook rules, CyberwareOperat
         return Replace(sheet, Find(sheet, weaponEntry.InstanceId) with { Weapon = state with { Attachments = state.Attachments.Where(a => a != entry.InstanceId).ToList() } });
     }
 
-    /// <summary>
-    /// Undoes a purchase and refunds it in full; for cyberware, the Humanity it cost comes back too. During creation any
-    /// purchase can be undone. Afterwards only what was paid from the balance, and only while the item is as bought:
-    /// armor without ablation, a weapon unloaded, every round of the ammunition. Anything else is sold or discarded.
-    /// </summary>
+    // Full refund (Humanity too for cyberware). During creation anything goes; afterwards only balance purchases
+    // still as bought (no ablation, unloaded, all rounds). Otherwise sell or discard it.
     public CharacterSheet UndoPurchase(CharacterSheet sheet, string instanceId, CharacterChange change)
     {
         var creating = !sheet.Creation.Finalized;
@@ -242,7 +228,7 @@ public sealed class InventoryOperations(CharacterRuleBook rules, CyberwareOperat
     private static IEnumerable<CharacterCyberware> Descendants(CharacterSheet sheet, string id) =>
         sheet.Cyberware.Where(c => c.ParentInstanceId == id).SelectMany(c => Descendants(sheet, c.InstanceId).Prepend(c));
 
-    // ------------------------------------------------------------ equipment
+    // equipment
 
     public CharacterSheet Equip(CharacterSheet sheet, EquipRequest request, CharacterChange change)
     {
@@ -259,11 +245,9 @@ public sealed class InventoryOperations(CharacterRuleBook rules, CyberwareOperat
         return Replace(sheet, entry with { State = request.State, Worn = worn });
     }
 
-    // ------------------------------------------------------------ weapons
+    // weapons
 
-    /// <summary>
-    /// Spends ammunition. Autofire and Suppressive Fire cost 10 bullets and need a weapon with Autofire (CP:R p.173–174).
-    /// </summary>
+    // Autofire / Suppressive Fire cost 10 bullets (CP:R p.173-174)
     public CharacterSheet Fire(CharacterSheet sheet, FireRequest request, CharacterChange change)
     {
         var entry = Find(sheet, request.InstanceId);
@@ -291,11 +275,7 @@ public sealed class InventoryOperations(CharacterRuleBook rules, CyberwareOperat
         return Replace(sheet, entry with { Weapon = state with { LoadedRounds = state.LoadedRounds - rounds } });
     }
 
-    /// <summary>
-    /// Fills the magazine from a compatible ammunition entry. Switching ammunition type first returns the loaded rounds
-    /// to the inventory, so no bullet is created or lost.
-    /// </summary>
-    /// <summary>A weapon copy's quality (CP:R p.344): Excellent adds +1 to attacks, a Poor one jams on a natural 1.</summary>
+    // Excellent: +1 to attacks. Poor: jams on a natural 1 (CP:R p.344)
     public static CharacterSheet SetQuality(CharacterSheet sheet, WeaponQualityRequest request, CharacterChange change)
     {
         var entry = Find(sheet, request.InstanceId);
@@ -308,7 +288,6 @@ public sealed class InventoryOperations(CharacterRuleBook rules, CyberwareOperat
         return Replace(sheet, entry with { Quality = request.Quality });
     }
 
-    /// <summary>A weapon copy jammed (natural 1 with Poor Quality) or cleared (an Action), CP:R p.344.</summary>
     public static CharacterSheet SetJammed(CharacterSheet sheet, string instanceId, bool jammed, CharacterChange change)
     {
         var entry = Find(sheet, instanceId);
@@ -370,7 +349,7 @@ public sealed class InventoryOperations(CharacterRuleBook rules, CyberwareOperat
         };
     }
 
-    // ------------------------------------------------------------ money and luck
+    // money and luck
 
     public static CharacterSheet AdjustBalance(CharacterSheet sheet, AdjustBalanceRequest request, CharacterChange change)
     {
@@ -391,7 +370,7 @@ public sealed class InventoryOperations(CharacterRuleBook rules, CyberwareOperat
         return sheet with { Combat = sheet.Combat with { LuckSpent = spent } };
     }
 
-    // ------------------------------------------------------------ helpers
+    // helpers
 
     private static InventoryEntry Find(CharacterSheet sheet, string instanceId) =>
         sheet.Inventory.FirstOrDefault(e => e.InstanceId == instanceId)

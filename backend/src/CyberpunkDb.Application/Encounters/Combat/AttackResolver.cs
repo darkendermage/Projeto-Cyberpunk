@@ -8,7 +8,6 @@ using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.Encounters.Combat;
 
-/// <summary>What the attack does to one target before it is applied to a sheet or to the encounter.</summary>
 public sealed record PlannedHit(
     string TargetId, bool Hit, int? Dv, int? DefenseRoll, string Defense, IReadOnlyList<int> Dice, int Damage,
     InjuryLocation Location, bool HalveArmor, bool Critical, AttackMode Mode, bool Explosive, IReadOnlyList<string> Notes);
@@ -17,11 +16,8 @@ public sealed record PlannedAttack(
     string WeaponName, string WeaponKey, AttackMode Mode, int? AttackRoll, int AttackTotal, int Rounds, IReadOnlyList<PlannedHit> Hits,
     IReadOnlyList<string> Notes, int? AttackExtra = null, bool Jammed = false);
 
-/// <summary>
-/// Resolves an attack the way the Core does (CP:R p.170-178): the attacker's STAT + skill + 1d10 against the range DV
-/// or the defender's DEX + Evasion + 1d10 (defender wins ties); then the damage dice, with Autofire multiplying 2d6 by
-/// the margin, and a Critical Injury when two or more damage dice come up 6. Typed dice always win over rolled ones.
-/// </summary>
+// CP:R p.170-178. STAT + skill + 1d10 vs range DV or DEX + Evasion + 1d10 (defender wins ties). Autofire
+// multiplies 2d6 by the margin; two or more 6s on damage = crit. Typed dice always win.
 public sealed class AttackResolver(CombatRuleBook combat, CharacterRuleBook characterRules)
 {
     public const string Thrown = "thrown";
@@ -49,7 +45,6 @@ public sealed class AttackResolver(CombatRuleBook combat, CharacterRuleBook char
         if (aimed && weapon.Rof > doc.AimedShot.Value.MaxRof)
             notes.Add(L.T($"Tiro mirado usa a Action inteira com no máximo ROF {doc.AimedShot.Value.MaxRof} ({doc.AimedShot.Source}).", $"An aimed shot takes the whole Action with at most ROF {doc.AimedShot.Value.MaxRof} ({doc.AimedShot.Source})."));
 
-        // ---------------------------------------------------------------- the attack check
         var autofire = r.Mode is AttackMode.Autofire or AttackMode.Suppressive;
         var rounds = 1;
         int baseTotal;
@@ -62,7 +57,7 @@ public sealed class AttackResolver(CombatRuleBook combat, CharacterRuleBook char
         }
         else baseTotal = weapon.AttackTotal;
         if (aimed) baseTotal += doc.AimedShot.Value.Penalty;
-        // targeting-scope (Cybereye option): +1 to the Check of an Aimed Shot.
+        // +1 on Aimed Shots
         if (aimed && attacker.HasCyberware("targeting-scope"))
         {
             baseTotal += 1;
@@ -73,7 +68,7 @@ public sealed class AttackResolver(CombatRuleBook combat, CharacterRuleBook char
             throw RequestValidationException.For("weapon", L.T($"{weapon.Name} tem {loaded} bala(s) no pente; {(autofire ? "Autofire e Suppressive Fire precisam de " + rounds : "recarregue")}.", $"{weapon.Name} has {loaded} round(s) in the magazine; {(autofire ? "Autofire and Suppressive Fire need " + rounds : "reload")}."));
 
         var attackRoll = CheckD10(r.AttackRoll, dice, "attackRoll");
-        // CP:R p.130: a natural 10 rolls one more d10 and adds it; a natural 1 rolls one more and subtracts it.
+        // natural 10 adds another d10, natural 1 subtracts one (CP:R p.130)
         int? extra = null;
         if (attackRoll == 10)
         {
@@ -82,7 +77,7 @@ public sealed class AttackResolver(CombatRuleBook combat, CharacterRuleBook char
         }
         else if (attackRoll == 1)
         {
-            // CP:R p.146: a Solo with 4 points in Fumble Recovery ignores critical failures when attacking.
+            // Fumble Recovery 4 ignores fumbles (CP:R p.146)
             if (attacker.Awareness("fumbleRecovery") >= 4) notes.Add(L.T("1 natural ignorado por Fumble Recovery (CP:R p.146).", "Natural 1 ignored by Fumble Recovery (CP:R p.146)."));
             else
             {
@@ -91,11 +86,11 @@ public sealed class AttackResolver(CombatRuleBook combat, CharacterRuleBook char
             }
         }
         var attackTotal = baseTotal + attackRoll + (extra ?? 0);
-        // CP:R p.344: a Poor Quality weapon jams on a natural 1 (the die still shows 1, whatever Fumble Recovery does).
+        // Poor Quality jams on a natural 1 regardless of Fumble Recovery (CP:R p.344)
         var jammed = attackRoll == 1 && weapon.Quality == WeaponQuality.Poor && !thrown;
         if (jammed) notes.Add(L.T($"{weapon.Name} travou (Poor Quality, CP:R p.344): uma Ação para destravar.", $"{weapon.Name} jammed (Poor Quality, CP:R p.344): an Action to unjam."));
 
-        // ---------------------------------------------------------------- Suppressive Fire: no damage, only the WILL check
+        // no damage, just the WILL check
         if (r.Mode == AttackMode.Suppressive)
         {
             var range = doc.Suppressive.Value.RangeMeters;
@@ -112,7 +107,7 @@ public sealed class AttackResolver(CombatRuleBook combat, CharacterRuleBook char
             return new PlannedAttack(weapon.Name, weapon.Key, r.Mode, attackRoll, attackTotal, rounds, hits, notes, extra, jammed);
         }
 
-        // ---------------------------------------------------------------- damage (rolled once for area attacks)
+        // rolled once for area attacks
         var damageExpression = r.Mode switch
         {
             AttackMode.Autofire => characterRules.Document.Combat.Autofire.Value.Damage,
@@ -132,7 +127,7 @@ public sealed class AttackResolver(CombatRuleBook combat, CharacterRuleBook char
             bool hit;
             if (weapon.Melee)
             {
-                // CP:R p.176: melee is always opposed by DEX + Evasion + 1d10.
+                // melee is always opposed (CP:R p.176)
                 defenseRoll = CheckD10(TypedDefense(r, t.Id), dice, "defenseRolls");
                 dv = t.Evasion + defenseRoll;
                 defense = $"Evasion {t.Evasion} + d10 {defenseRoll} = {dv}";
@@ -149,11 +144,11 @@ public sealed class AttackResolver(CombatRuleBook combat, CharacterRuleBook char
                 dv = RangeDv(weapon, r, thrown);
                 defense = L.T($"DV{dv} pelo alcance", $"DV{dv} from range");
             }
-            hit = attackTotal > dv; // CP:R p.172/p.176: the defender wins ties
+            hit = attackTotal > dv; // defender wins ties (CP:R p.172/176)
 
             if (r.Mode == AttackMode.Explosive && hit && r.Dodge && t.CanDodge(doc.DodgeRef.Value))
             {
-                // CP:R p.174: REF 8+ dodges a blast by rolling higher than the attack.
+                // REF 8+ dodges a blast by beating the attack (CP:R p.174)
                 defenseRoll = CheckD10(TypedDefense(r, t.Id), dice, "defenseRolls");
                 var dodge = t.Evasion + defenseRoll.Value;
                 if (dodge > attackTotal) { hit = false; targetNotes.Add(L.T($"Saiu da área da explosão (Evasion {dodge} contra {attackTotal}).", $"Got out of the blast area (Evasion {dodge} against {attackTotal}).")); }
@@ -175,7 +170,7 @@ public sealed class AttackResolver(CombatRuleBook combat, CharacterRuleBook char
         return new PlannedAttack(weapon.Name, weapon.Key, r.Mode, attackRoll, attackTotal, rounds, planned, notes, extra, jammed);
     }
 
-    /// <summary>The range DV a ranged shot faces (what a target weighs before dodging); null when it can't be told.</summary>
+    // null when it can't be worked out
     public int? RangeDvFor(AttackRequest r, FighterView attacker)
     {
         var thrown = r.Weapon == Thrown;
@@ -202,11 +197,11 @@ public sealed class AttackResolver(CombatRuleBook combat, CharacterRuleBook char
             return doc.ShotgunShell.Value.Dv;
         }
         var range = r.Range ?? throw RequestValidationException.For("range", L.T("Informe a distância até o alvo em metros.", "Enter the distance to the target in meters."));
-        // A thrown-only weapon (the Ranger boomerang) is thrown like any object (CP:R p.177).
+        // thrown like any object (CP:R p.177)
         thrown = thrown || weapon.ThrownOnly;
         if (thrown && range > doc.Thrown.Value.MaxMeters)
             throw RequestValidationException.For("range", L.T($"Arremesso vai até {doc.Thrown.Value.MaxMeters} m ({doc.Thrown.Source}).", $"Throws reach up to {doc.Thrown.Value.MaxMeters} m ({doc.Thrown.Source})."));
-        // A sheet that prints its own range table uses it for every shot, Autofire included.
+        // printed range table wins, Autofire included
         if (weapon.RangeDv is { } printed) return combat.PrintedDv(weapon.Name, printed, range);
         if (r.Mode == AttackMode.Autofire)
         {
@@ -224,13 +219,13 @@ public sealed class AttackResolver(CombatRuleBook combat, CharacterRuleBook char
         return combat.SingleShotDv(rangeRow, range);
     }
 
-    /// <summary>Rolls (or takes) the dice of an expression like "3d6"; the typed dice must match the count and faces.</summary>
+    // typed dice must match count and faces
     public static List<int> RollDice(string expression, IReadOnlyList<int>? typed, IDiceRoller dice)
     {
         var parts = expression.ToLowerInvariant().Split('d');
         if (parts.Length != 2 || !int.TryParse(parts[0], out var count) || !int.TryParse(parts[1], out var sides))
         {
-            // A flat amount ("2", "6") deals that damage, as fire does (CP:R p.180).
+            // flat damage like fire (CP:R p.180)
             return int.TryParse(expression, out var flat) ? [flat] : throw RequestValidationException.For("damage", L.T($"Dano '{expression}' não é uma expressão de dados.", $"Damage '{expression}' isn't a dice expression."));
         }
         if (typed is { Count: > 0 })
@@ -242,7 +237,7 @@ public sealed class AttackResolver(CombatRuleBook combat, CharacterRuleBook char
         return Enumerable.Range(0, count).Select(_ => dice.Roll(sides)).ToList();
     }
 
-    /// <summary>A target's typed defense d10, or null when none was typed (a missing key is not a 0).</summary>
+    // a missing key isn't a 0
     private static int? TypedDefense(AttackRequest r, string targetId) =>
         r.DefenseRolls is { } rolls && rolls.TryGetValue(targetId, out var roll) ? roll : null;
 

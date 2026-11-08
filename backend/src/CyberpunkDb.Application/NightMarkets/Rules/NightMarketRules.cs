@@ -5,10 +5,7 @@ using CyberpunkDb.Domain.Enums;
 
 namespace CyberpunkDb.Application.NightMarkets.Rules;
 
-/// <summary>
-/// The parameters of <c>night-market-rules.json</c>. Every value is a <see cref="Ruled{T}"/> with the page it came
-/// from or the <c>complementary</c> flag, as in the NPC and character rules.
-/// </summary>
+// night-market-rules.json. Same Ruled<T> convention as the NPC and character rules.
 public sealed record NightMarketRulesDocument
 {
     public Ruled<PriceTier[]> PriceLadder { get; init; } = new();
@@ -46,39 +43,39 @@ public sealed record GeneratorRules
     public Ruled<bool> RelatedBooks { get; init; } = new();
 }
 
-/// <summary>One of the six kinds of goods of CP:R p.338, with its d100 column.</summary>
+// CP:R p.338
 public sealed record GoodsType
 {
     public string Id { get; init; } = "";
     public int Roll { get; init; }
     public string Name { get; init; } = "";
     public string Description { get; init; } = "";
-    /// <summary>Catalog slices that belong to this kind of goods, used for items of other books.</summary>
+    // used for items from other books
     public ItemQuery[] Related { get; init; } = [];
     public TableEntry[] Table { get; init; } = [];
 }
 
-/// <summary>A d100 row: explicit catalog items, an item the catalog lacks, or a description of a slice of the catalog.</summary>
+// catalog items, a missing item, or a catalog slice
 public sealed record TableEntry
 {
     public string Label { get; init; } = "";
     public string[]? Slugs { get; init; }
     public LocalItem? Local { get; init; }
     public ItemQuery? Query { get; init; }
-    /// <summary>"Of GM's choice": an open slot the GM fills from <see cref="Query"/>.</summary>
+    // "GM's choice"
     public bool GmChoice { get; init; }
     public string? Note { get; init; }
 }
 
-/// <summary>An item named by a table but absent from the catalog (food, alcohol...).</summary>
+// food, alcohol...
 public sealed record LocalItem(string Name, int Price, string? Category = null);
 
-/// <summary>A slice of the catalog. Empty fields don't filter.</summary>
+// empty fields don't filter
 public sealed record ItemQuery
 {
     public string? Category { get; init; }
     public string[]? ExceptCategories { get; init; }
-    /// <summary>The category's own type: cyberware type, weapon class, armor type, gear type, NET item type...</summary>
+    // cyberware type, weapon class, armor type...
     public string[]? Types { get; init; }
     public string[]? ExceptTypes { get; init; }
     public string[]? Styles { get; init; }
@@ -112,7 +109,7 @@ public sealed record ReachTier(int MinRank, int MaxRank, PriceCategory Category)
 [JsonConverter(typeof(JsonStringEnumConverter))]
 public enum DealKind { Discount, ExtraItem, SplitPayment, JobPay }
 
-/// <summary>A Haggle deal of CP:R p.160–161. A successful Fixer makes one deal of their Rank or lower.</summary>
+// CP:R p.160-161. A Fixer gets one deal of their Rank or lower.
 public sealed record HaggleDeal
 {
     public string Id { get; init; } = "";
@@ -154,13 +151,13 @@ public sealed record MysteryBoxRules
 
 public sealed record MysteryBox(int Roll, string Name, PrizeEntry[] Contents);
 
-/// <summary>Something handed out: a Mystery Box content, a Door Prize slice or bonus.</summary>
+// Mystery Box content, Door Prize slice or bonus
 public sealed record PrizeEntry
 {
     public int? Roll { get; init; }
     public string Label { get; init; } = "";
     public string? Slug { get; init; }
-    /// <summary>A second item that comes along (the Road Flare with the Flare Gun, the drug in the Airhypo).</summary>
+    // e.g. Road Flare with the Flare Gun
     public string? ExtraSlug { get; init; }
     public int Quantity { get; init; } = 1;
     public bool Loaded { get; init; }
@@ -186,20 +183,20 @@ public sealed record BlackChromeRules
 [JsonConverter(typeof(JsonStringEnumConverter))]
 public enum MarketKind { NightMarket, MidnightMarket, Shop, Armory }
 
-/// <summary>How a preset decides its kinds of goods: rolled (Core), suggested by the book, picked by the GM, or none.</summary>
+// rolled (Core), suggested by the book, GM picks, or none
 [JsonConverter(typeof(JsonStringEnumConverter))]
 public enum GoodsMode { Roll, Suggested, Pick, None }
 
 [JsonConverter(typeof(JsonStringEnumConverter))]
 public enum MarketFeature { DoorPrize, SecondHand, Midnight, MysteryBoxes }
 
-/// <summary>A ready-made market: the generic Core one, the six of Black Chrome or a vendor from the Interface RED volumes.</summary>
+// Core, the six Black Chrome ones, or an Interface RED vendor
 public sealed record MarketPreset
 {
     public string Id { get; init; } = "";
     public string Name { get; init; } = "";
     public MarketKind Kind { get; init; }
-    /// <summary>Booth letter (BC p.7). A–F are the Black Chrome markets.</summary>
+    // BC p.7, A-F are Black Chrome
     public string Letter { get; init; } = "N";
     public PresetOrganizer Organizer { get; init; } = new("Fixer", "Fixer");
     public string? Summary { get; init; }
@@ -214,7 +211,7 @@ public sealed record MarketPreset
     public PresetPool[] Pools { get; init; } = [];
     public MarketFeature[] Features { get; init; } = [];
     public Admission? Admission { get; init; }
-    /// <summary>False when the goods are lent, not sold (Toggle's Temple).</summary>
+    // false = lent, not sold (Toggle's Temple)
     public bool ForSale { get; init; } = true;
     public string Source { get; init; } = "";
 
@@ -223,10 +220,8 @@ public sealed record MarketPreset
 
 public sealed record PresetOrganizer(string Name, string Role, int? OperatorRank = null, int? Trading = null);
 
-/// <summary>A numbered spot of the market map and the kinds of goods it takes.</summary>
 public sealed record PresetStall(int Number, string Label, string[] Goods);
 
-/// <summary>Catalog items a preset always brings, placed at one stall.</summary>
 public sealed record PresetPool(string Label, int Stall, ItemQuery Query, string Source, bool ForSale = true);
 
 public sealed record Admission(string Label, int Price, string Source);

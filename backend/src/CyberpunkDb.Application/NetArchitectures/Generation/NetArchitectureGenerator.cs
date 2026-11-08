@@ -5,11 +5,7 @@ using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.NetArchitectures.Generation;
 
-/// <summary>
-/// Builds a NET Architecture following CP:R p.210-211: Difficulty Rating (Step 0), floors and branches (Step 1),
-/// Lobby and Body tables (Step 2), then Control Node functions, File contents and Demons for the location (Step 3),
-/// plus the Going Quiet Watchers. The same seed and options always give the same Architecture.
-/// </summary>
+// CP:R p.210-211, steps 0 to 3, plus the Going Quiet Watchers. Same seed + options = same Architecture.
 public sealed class NetArchitectureGenerator(NetArchitectureRuleBook rules)
 {
     private const int MaxRerolls = 500;
@@ -52,16 +48,16 @@ public sealed class NetArchitectureGenerator(NetArchitectureRuleBook rules)
         return state;
     }
 
-    /// <summary>Rolls every unlocked floor again on the same shape, then gives new Control Nodes and Files their purpose.</summary>
+    // keeps the shape, rolls unlocked floors again
     public void Refill(ArchitectureState state, Random rng)
     {
         Fill(state, rng);
         Furnish(state, rng);
     }
 
-    // ------------------------------------------------------------------ Step 1: shape
+    // Step 1: shape
 
-    /// <summary>d10 until a roll under 7: each success is a branch (CP:R p.210).</summary>
+    // each roll under 7 is a branch (CP:R p.210)
     private int RollBranches(Random rng)
     {
         var shape = rules.Document.Shape;
@@ -70,10 +66,7 @@ public sealed class NetArchitectureGenerator(NetArchitectureRuleBook rules)
         return count;
     }
 
-    /// <summary>
-    /// Splits the floors between the main branch and the side branches: the Lobby stays on the main branch, no branch
-    /// starts before the third floor and the main branch is strictly the longest, so the bottom is well defined.
-    /// </summary>
+    // Lobby on the main branch, no branch before the 3rd floor, main branch strictly longest (so the bottom is clear).
     public List<NetBranch> Shape(int total, int branches, Random rng)
     {
         var shape = rules.Document.Shape;
@@ -88,7 +81,7 @@ public sealed class NetArchitectureGenerator(NetArchitectureRuleBook rules)
             if (branches == 0 || rng.NextDouble() < 0.5) main++;
             else lengths[rng.Next(branches)]++;
         }
-        // A branch must end above the main branch's bottom: give its excess floors back to the main branch.
+        // branches have to end above the bottom, extra floors go back to main
         for (var i = 0; i < lengths.Count; i++)
             while (lengths[i] > main - firstFloor) { lengths[i]--; main++; }
 
@@ -108,9 +101,9 @@ public sealed class NetArchitectureGenerator(NetArchitectureRuleBook rules)
         Floors = Enumerable.Range(startDepth + 1, length).Select(depth => new NetFloor { Id = $"{id}{depth}", BranchId = id, Depth = depth }).ToList(),
     };
 
-    // ------------------------------------------------------------------ Step 2: fill
+    // Step 2: fill
 
-    /// <summary>The table a floor rolls on: the Lobby for the first floors of the main branch, the difficulty's otherwise.</summary>
+    // Lobby for the first main floors, the difficulty table otherwise
     public string TableFor(ArchitectureState state, NetFloor floor) =>
         floor.BranchId == state.Main.Id && floor.Depth <= rules.Document.Shape.LobbyFloors.Value
             ? NetArchitectureRuleBook.LobbyTable
@@ -118,7 +111,7 @@ public sealed class NetArchitectureGenerator(NetArchitectureRuleBook rules)
 
     private void Fill(ArchitectureState state, Random rng)
     {
-        // Unlocked floors are rolled from scratch: their old rows must not block the re-roll rules.
+        // clear unlocked floors first so their old rows don't block the re-roll rules
         foreach (var branch in state.Branches)
             for (var i = 0; i < branch.Floors.Count; i++)
                 if (!branch.Floors[i].Locked) branch.Floors[i] = branch.Floors[i] with { Roll = null, Contents = [] };
@@ -134,10 +127,7 @@ public sealed class NetArchitectureGenerator(NetArchitectureRuleBook rules)
             }
     }
 
-    /// <summary>
-    /// Rolls a row, re-rolling Black ICE and Password rows already in the Architecture (CP:R p.210) and, when asked,
-    /// Control Nodes past the purchase limit (CP:R p.217).
-    /// </summary>
+    // Re-rolls repeated Black ICE / Password (CP:R p.210) and Control Nodes past the limit (p.217).
     public TableRow RollRow(ArchitectureState state, string table, string floorId, Random rng)
     {
         var rows = rules.Table(table);
@@ -154,7 +144,7 @@ public sealed class NetArchitectureGenerator(NetArchitectureRuleBook rules)
             if (nodeLimit is { } max && nodes + row.Contents.Count(c => c.Kind == NetContentKind.ControlNode) > max) continue;
             return row;
         }
-        // Every row is taken (only possible with a GM-built Architecture): fall back to a File, which may repeat.
+        // only happens with a GM-built Architecture: fall back to a File (can repeat)
         return rows.First(r => r.Contents.All(c => c.Kind == NetContentKind.File));
     }
 
@@ -165,12 +155,10 @@ public sealed class NetArchitectureGenerator(NetArchitectureRuleBook rules)
         Contents = row.Contents.Select((c, i) => new NetContent { Id = $"{floor.Id}-{i + 1}", Kind = c.Kind, Slug = c.Slug, Dv = c.Dv }).ToList(),
     };
 
-    // ------------------------------------------------------------------ Step 3: fit to the world
+    // Step 3: fit to the world
 
-    /// <summary>
-    /// Gives every File a content and every Control Node a function that fits the location, then makes sure Demons are
-    /// there to run Active Defenses (CP:R p.211) without going past one per six floors (CP:R p.218).
-    /// </summary>
+    // Contents and Control Node functions that fit the location, plus Demons for the Active Defenses (CP:R p.211),
+    // max one per six floors (p.218).
     public void Furnish(ArchitectureState state, Random rng)
     {
         var location = rules.Location(state.LocationId);
@@ -202,7 +190,7 @@ public sealed class NetArchitectureGenerator(NetArchitectureRuleBook rules)
         AssignDemons(state);
     }
 
-    /// <summary>Hands every unassigned Control Node to a Demon (round robin) and seats each Demon by its first node.</summary>
+    // round robin
     public static void AssignDemons(ArchitectureState state)
     {
         if (state.Demons.Count == 0) return;

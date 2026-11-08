@@ -16,11 +16,8 @@ using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.Characters;
 
-/// <summary>
-/// Persistence and commands of player characters. Every change goes through here: the sheet is loaded, the
-/// client's version checked, the operation applied by the rules services, and the sheet saved together with its
-/// history entries. Each character is a separate row, so changing one never touches another.
-/// </summary>
+// Every character change goes through here: load the sheet, check the client's version, run the operation,
+// save the sheet together with its history entries.
 public sealed class CharacterService(
     IAppDbContext db,
     CharacterRuleBook rules,
@@ -44,15 +41,12 @@ public sealed class CharacterService(
     public const int PortraitMaxBytes = 2 * 1024 * 1024;
     private static readonly string[] PortraitTypes = ["image/png", "image/jpeg", "image/webp", "image/gif"];
 
-    // ------------------------------------------------------------ queries
+    // queries
 
     public async Task<CharacterRulesDto> GetRulesAsync(CancellationToken ct) =>
         CharacterRulesMapper.Map(rules, await catalogs.GetAsync(ct));
 
-    /// <summary>
-    /// One page of priced catalog items matching a name (accents and case ignored), optionally from one category.
-    /// Descriptions are read only for the items on the page.
-    /// </summary>
+    // Accents and case are ignored. Descriptions are only loaded for the items on the page.
     public async Task<StorePageDto> StoreAsync(string? query, ItemCategory? category, int page, int pageSize, CancellationToken ct,
         StoreSort sort = StoreSort.Category, bool descending = false)
     {
@@ -61,7 +55,7 @@ public sealed class CharacterService(
         var filtered = catalog.Items
             .Where(i => i.Price is not null && (category is null || i.Category == category))
             .Where(i => q.Length == 0 || TextNormalizer.Normalize(i.Name).Contains(q) || i.Slug.Contains(q, StringComparison.OrdinalIgnoreCase));
-        // The whole catalog is sorted before paging, so every page follows the chosen column.
+        // sort the whole catalog before paging so pages follow the chosen column
         var matches = (sort switch
         {
             StoreSort.Name => descending ? filtered.OrderByDescending(i => i.Name, StringComparer.OrdinalIgnoreCase) : filtered.OrderBy(i => i.Name, StringComparer.OrdinalIgnoreCase),
@@ -121,8 +115,7 @@ public sealed class CharacterService(
         return Detail(entity, Deserialize(entity.SheetJson), await catalogs.GetAsync(ct), hasPortrait, []);
     }
 
-    /// <summary>The stored sheet and its version, as the combat table keeps it to undo an attack.</summary>
-    /// <summary>The portrait framing stored in a sheet's JSON (the table's tokens use it without loading the whole report).</summary>
+    // tokens use this so they don't need the whole report
     internal static PortraitFocus? PortraitFocusOf(string sheetJson)
     {
         try
@@ -142,10 +135,7 @@ public sealed class CharacterService(
         return (row.Version, row.SheetJson);
     }
 
-    /// <summary>
-    /// Puts back a sheet taken before a combat action (the undo of the last attack), as long as nothing changed the sheet
-    /// since: it must still be at <paramref name="version"/>.
-    /// </summary>
+    // Undo of the last attack. Only works if nothing touched the sheet since (still at `version`).
     internal async Task RestoreAsync(int id, int version, string sheetJson, string description, CancellationToken ct)
     {
         var entity = await db.Characters.FirstOrDefaultAsync(c => c.Id == id, ct) ?? throw NotFound(id);
@@ -157,7 +147,7 @@ public sealed class CharacterService(
         await db.SaveChangesAsync(ct);    await observer.ChangedAsync(id, ct);
     }
 
-    /// <summary>The history, newest first. IP spends on skills and Role Ranks say whether they can still be undone.</summary>
+    // newest first
     public async Task<IReadOnlyList<CharacterEventDto>> EventsAsync(int id, CharacterEventKind? kind, CancellationToken ct)
     {
         var sheetJson = await db.Characters.AsNoTracking().Where(c => c.Id == id).Select(c => c.SheetJson).FirstOrDefaultAsync(ct) ?? throw NotFound(id);
@@ -175,7 +165,7 @@ public sealed class CharacterService(
         }).ToList();
     }
 
-    /// <summary>Undoes one IP spend of the history (a skill level or a Role Rank): the level goes back and the IP return.</summary>
+    // the level goes back and the IP is refunded
     public async Task<CharacterDetailDto> UndoProgressionAsync(int id, UndoProgressionRequest r, CancellationToken ct)
     {
         var e = await db.CharacterEvents.AsNoTracking().FirstOrDefaultAsync(x => x.CharacterId == id && x.Id == r.EventId, ct)
@@ -187,13 +177,13 @@ public sealed class CharacterService(
         return await MutateAsync(id, r.Version, c => progression.Undo(c.Sheet, step, e.Id, e.Description, c), ct);
     }
 
-    /// <summary>Ids of the IP spends already undone (each refund points at the spend it reverses).</summary>
+    // each refund points at the spend it reverses
     private async Task<HashSet<long>> UndoneAsync(int id, CancellationToken ct) =>
         (await db.CharacterEvents.AsNoTracking().Where(e => e.CharacterId == id && e.Action == ProgressionOperations.RefundAction && e.PayloadJson != null)
             .Select(e => e.PayloadJson!).ToListAsync(ct))
         .Select(ProgressionOperations.UndoneId).OfType<long>().ToHashSet();
 
-    // ------------------------------------------------------------ create, duplicate, delete
+    // create, duplicate, delete
 
     public async Task<CharacterDetailDto> CreateAsync(CreateCharacterRequest request, CancellationToken ct)
     {
@@ -229,12 +219,11 @@ public sealed class CharacterService(
         return Detail(copy, sheet, catalog, copy.Portrait is not null, []);
     }
 
-    // ------------------------------------------------------------ export and import
+    // export and import
 
-    /// <summary>Largest import accepted: the sheet and history plus a 2 MB portrait in base64.</summary>
+    // sheet + history + a 2 MB portrait in base64
     public const int ImportMaxBytes = 12 * 1024 * 1024;
 
-    /// <summary>One character as a file: sheet, catalog references by slug, history and portrait.</summary>
     public async Task<(byte[] Content, string FileName)> ExportAsync(int id, CancellationToken ct)
     {
         var entity = await db.Characters.AsNoTracking().Include(c => c.Portrait).FirstOrDefaultAsync(c => c.Id == id, ct) ?? throw NotFound(id);
@@ -258,11 +247,8 @@ public sealed class CharacterService(
 
     private static readonly JsonSerializerOptions ExportJson = new(SheetJson) { WriteIndented = true };
 
-    /// <summary>
-    /// Creates a new character from an exported file; an existing one is never overwritten. Catalog items are found
-    /// again by slug, and the ones this catalog lacks are left out and reported. The sheet goes through the same
-    /// validation as any other, so a hand-edited file comes in with its problems listed rather than refused.
-    /// </summary>
+    // Always creates a new character. Items are matched by slug and the missing ones are reported. A hand-edited
+    // file goes through normal validation, so it comes in with its problems listed instead of being refused.
     public async Task<CharacterDetailDto> ImportAsync(CharacterExportFile file, CancellationToken ct)
     {
         if (file.Format != CharacterExportFile.FormatName)
@@ -279,7 +265,7 @@ public sealed class CharacterService(
         if (sheet.Roles.FirstOrDefault(r => rules.FindRole(r.Role) is null) is { } unknown)
             throw RequestValidationException.For("sheet", L.T($"Role desconhecida na ficha: {unknown.Role}.", $"Unknown Role on the sheet: {unknown.Role}."));
 
-        // Same name as a character already here: "(importado)", then "(importado 2)"... so they stay apart in lists.
+        // "(importado)", "(importado 2)"... so duplicates can be told apart
         var name = string.IsNullOrWhiteSpace(sheet.Identity.Name) ? L.T("Sem nome", "Unnamed") : sheet.Identity.Name;
         var taken = (await db.Characters.Where(c => c.Name.StartsWith(name)).Select(c => c.Name).ToListAsync(ct)).ToHashSet(StringComparer.OrdinalIgnoreCase);
         if (taken.Contains(name))
@@ -325,13 +311,10 @@ public sealed class CharacterService(
         await db.SaveChangesAsync(ct);
     }
 
-    // ------------------------------------------------------------ editing the sheet
+    // editing the sheet
 
-    /// <summary>
-    /// Saves the editable sections. Inventory, cyberware, money, Humanity, combat, injuries and progress are kept from
-    /// the stored sheet: they only change through commands. After creation, STATs, skills and Roles are kept too,
-    /// unless a manual reason is given (a GM-approved adjustment, logged with what changed).
-    /// </summary>
+    // Inventory, cyberware, money, Humanity, combat, injuries and progress only change through commands, so they're
+    // kept from the stored sheet. After creation STATs/skills/Roles too, unless a GM reason is given (logged).
     public Task<CharacterDetailDto> SaveSheetAsync(int id, SaveSheetRequest request, CancellationToken ct) =>
         MutateAsync(id, request.Version, change =>
         {
@@ -394,7 +377,7 @@ public sealed class CharacterService(
             x.Count == y.Count && x.All(kv => y.TryGetValue(kv.Key, out var v) && v == kv.Value);
     }
 
-    // ------------------------------------------------------------ commands
+    // commands
 
     public Task<CharacterDetailDto> ResetCreationAsync(int id, ResetCreationRequest r, CancellationToken ct) =>
         MutateAsync(id, r.Version, c => creation.Reset(c.Sheet, r.Method, r.Role, c), ct);
@@ -426,7 +409,7 @@ public sealed class CharacterService(
     public Task<CharacterDetailDto> ReloadAsync(int id, ReloadRequest r, CancellationToken ct) =>
         MutateAsync(id, r.Version, c => inventory.Reload(c.Sheet, r, c), ct);
 
-    /// <summary>Jams or clears a weapon copy (Poor Quality on a natural 1, CP:R p.344); the combat table calls it.</summary>
+    // called by the combat table (CP:R p.344)
     internal async Task<CharacterDetailDto> SetJammedAsync(int id, string instanceId, bool jammed, CancellationToken ct)
     {
         var version = (await SnapshotAsync(id, ct)).Version;
@@ -496,7 +479,7 @@ public sealed class CharacterService(
     public Task<CharacterDetailDto> LuckAsync(int id, LuckRequest r, CancellationToken ct) =>
         MutateAsync(id, r.Version, c => InventoryOperations.SetLuckSpent(c.Sheet, r.Spent, c), ct);
 
-    /// <summary>Takes <paramref name="points"/> from this session's LUCK Pool (CP:R p.130); refuses what the pool doesn't hold.</summary>
+    // CP:R p.130
     public async Task<CharacterDetailDto> SpendLuckAsync(int id, int points, CancellationToken ct)
     {
         var detail = await GetAsync(id, ct);
@@ -523,10 +506,7 @@ public sealed class CharacterService(
     public Task<CharacterDetailDto> RepairArmorAsync(int id, RepairArmorRequest r, CancellationToken ct) =>
         MutateAsync(id, r.Version, c => combat.RepairArmor(c.Sheet, r, c), ct);
 
-    /// <summary>
-    /// SP of the armor on one location up or down by <paramref name="delta"/> (the virtual table's +/−): down ablates,
-    /// up repairs, never past the armor's full SP.
-    /// </summary>
+    // The table's +/- buttons: down ablates, up repairs (never past full SP).
     public async Task<CharacterDetailDto> AdjustArmorAsync(int id, ArmorSlot location, int delta, string description, CancellationToken ct)
     {
         var detail = await GetAsync(id, ct);
@@ -553,7 +533,7 @@ public sealed class CharacterService(
     private static CharacterSheet RequireFinalized(CharacterSheet sheet) =>
         sheet.Creation.Finalized ? sheet : throw CharacterChange.Refuse("creation", L.T("Conclua a criação antes de usar o painel de combate.", "Finish creation before using the combat panel."));
 
-    // ------------------------------------------------------------ portrait
+    // portrait
 
     public async Task<(byte[] Data, string ContentType, DateTime UpdatedAt)> GetPortraitAsync(int id, CancellationToken ct)
     {
@@ -581,7 +561,7 @@ public sealed class CharacterService(
         await observer.ChangedAsync(id, ct);
     }
 
-    /// <summary>The image rules shared by every stored portrait (characters, saved NPCs, compendium NPCs).</summary>
+    // shared by characters, saved NPCs and compendium NPCs
     internal static void RequirePortraitFile(string contentType, long length)
     {
         if (!PortraitTypes.Contains(contentType, StringComparer.OrdinalIgnoreCase))
@@ -599,7 +579,7 @@ public sealed class CharacterService(
         await observer.ChangedAsync(id, ct);
     }
 
-    // ------------------------------------------------------------ plumbing
+    // plumbing
 
     private async Task<CharacterDetailDto> MutateAsync(int id, int version, Func<CharacterChange, CharacterSheet> operation, CancellationToken ct)
     {

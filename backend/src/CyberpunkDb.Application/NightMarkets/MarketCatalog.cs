@@ -7,10 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CyberpunkDb.Application.NightMarkets;
 
-/// <summary>
-/// What the market needs to know of a catalog item. <see cref="Type"/> is the category's own type (cyberware type,
-/// weapon class, armor type, gear type, NET item type, drug classification...), as named by the enum.
-/// </summary>
+// Type is the category's own type (cyberware type, weapon class, armor type...).
 public sealed record MarketItem(
     int Id, string Slug, string Name, ItemCategory Category, string CategoryKey, int? Price, PriceCategory? PriceCategory,
     string? PriceNote, string? Book, int? Page, string? Manufacturer, string? Description, string? Type = null,
@@ -33,7 +30,7 @@ public sealed class MarketCatalog
     public MarketItem? Find(string? slug) => slug is null ? null : BySlug.GetValueOrDefault(slug);
     public MarketItem? Find(int? id) => id is { } v ? ById.GetValueOrDefault(v) : null;
 
-    /// <summary>Items matching a query, restricted to the enabled books unless the query names its own books or slugs.</summary>
+    // limited to the enabled books unless the query names its own books/slugs
     public IEnumerable<MarketItem> Query(ItemQuery query, IReadOnlySet<string>? books = null)
     {
         if (query.Slugs is { Length: > 0 } slugs)
@@ -65,7 +62,7 @@ public sealed class MarketCatalog
     }
 }
 
-/// <summary>Loads the market view of the catalog, cached until the catalog changes (item count or latest UpdatedAt).</summary>
+// cached until the catalog changes (item count or latest UpdatedAt)
 public sealed class MarketCatalogProvider(IAppDbContext db, CategoryRegistry registry, MarketCatalogCache cache)
 {
     public async Task<MarketCatalog> GetAsync(CancellationToken ct)

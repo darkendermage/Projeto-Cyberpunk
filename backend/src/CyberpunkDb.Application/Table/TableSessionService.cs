@@ -7,27 +7,23 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CyberpunkDb.Application.Table;
 
-/// <summary>A fight that took place in a session, with a link to the combat page.</summary>
 public sealed record SessionFightDto(int Id, string Name, EncounterStatus Status);
 
-/// <summary>A session of the table as the GM lists it.</summary>
 public sealed record TableSessionDto(int Id, string Name, DateTime StartedAt, DateTime? EndedAt, bool Open, int Messages, IReadOnlyList<SessionFightDto> Fights);
 
-/// <summary>"New session": the open session closes with this name (dated when empty).</summary>
+// empty name = dated
 public sealed record NewSessionRequest(string? Name);
 
 public sealed record RenameSessionRequest(string Name);
 
-/// <summary>
-/// The sessions of the virtual table (E2). One is always open: chat lines go to it and fights started or linked on the
-/// table are stamped with it. Lines written before sessions existed are adopted by the first session.
-/// </summary>
+// There's always one open session: chat lines go there and fights used on the table get stamped with it.
+// Lines from before sessions existed get adopted by the first one.
 public sealed class TableSessionService(IAppDbContext db, ITableNotifier notifier)
 {
-    // One app process serves the table: this keeps two first requests from each opening a "Session 1".
+    // stops two first requests from both opening a "Session 1"
     private static readonly SemaphoreSlim Opening = new(1, 1);
 
-    /// <summary>The open session's id, opening "Session 1" (with the older lines) when there is none.</summary>
+    // opens "Session 1" (adopting older lines) if there's none
     public async Task<int> CurrentIdAsync(CancellationToken ct)
     {
         if (await OpenIdAsync(ct) is { } open) return open;
@@ -55,17 +51,14 @@ public sealed class TableSessionService(IAppDbContext db, ITableNotifier notifie
         return session.Id;
     }
 
-    /// <summary>
-    /// Closes the open session (it keeps its name) and opens the next one under <paramref name="r"/>'s name, or
-    /// "Session N" with a number no session has used (round 6: the sessions page names the session that starts).
-    /// </summary>
+    // Closes the open session and starts the next one, named by the GM or "Session N".
     public async Task<TableSessionDto> StartNewAsync(NewSessionRequest r, CancellationToken ct)
     {
         var currentId = await CurrentIdAsync(ct);
         var current = await db.TableSessions.FirstAsync(s => s.Id == currentId, ct);
         var now = DateTime.UtcNow;
         current.EndedAt = now;
-        // Any other session left open (a race before this fix) closes too.
+        // close any stray open session too (old race)
         foreach (var stray in await db.TableSessions.Where(s => s.EndedAt == null && s.Id != currentId).ToListAsync(ct)) stray.EndedAt = now;
         if (current.Name.Length == 0) current.Name = L.T($"Sessão de {current.StartedAt:dd/MM/yyyy}", $"Session of {current.StartedAt:yyyy-MM-dd}");
         var next = new TableSession { Name = Clean(r.Name) ?? await NextNumberedNameAsync(ct), StartedAt = now };
@@ -75,7 +68,7 @@ public sealed class TableSessionService(IAppDbContext db, ITableNotifier notifie
         return await DtoAsync(next, ct);
     }
 
-    /// <summary>"Session N" past every number in use (and past the count), so a deleted session's number isn't reused.</summary>
+    // past every number in use so a deleted session's number isn't reused
     private async Task<string> NextNumberedNameAsync(CancellationToken ct)
     {
         var names = await db.TableSessions.Select(s => s.Name).ToListAsync(ct);
@@ -102,7 +95,7 @@ public sealed class TableSessionService(IAppDbContext db, ITableNotifier notifie
         return await DtoAsync(session, ct);
     }
 
-    /// <summary>Deletes an old session and its chat lines (the fights stay on the combat page). The open one can't go.</summary>
+    // fights stay on the combat page; the open session can't be deleted
     public async Task DeleteAsync(int id, CancellationToken ct)
     {
         var session = await FindAsync(id, ct);
@@ -113,7 +106,7 @@ public sealed class TableSessionService(IAppDbContext db, ITableNotifier notifie
         await db.SaveChangesAsync(ct);
     }
 
-    /// <summary>Marks a fight as part of the open session, the first time it is used on the table.</summary>
+    // the first time it's used on the table
     public async Task StampFightAsync(int encounterId, CancellationToken ct)
     {
         var current = await CurrentIdAsync(ct);

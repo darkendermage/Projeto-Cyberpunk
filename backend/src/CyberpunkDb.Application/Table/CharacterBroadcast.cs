@@ -6,16 +6,13 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace CyberpunkDb.Application.Table;
 
-/// <summary>
-/// A sheet saved anywhere (the characters page, the combat table, the player's popup) reaches the table: the fight on
-/// the live scene is sent again when the PC is in it, and every screen refreshes the party strip. Inside a change of
-/// the fight itself (<see cref="Quiet"/>) nothing is sent, because the fight sends its own result once it is saved.
-/// </summary>
+// A sheet saved anywhere reaches the table: the live fight is resent if the PC is in it, and the party strip
+// refreshes. Inside Quiet() nothing is sent, the fight sends its own result once saved.
 public sealed class CharacterBroadcast(IServiceProvider services, ITableNotifier notifier) : ICharacterObserver
 {
     private static readonly AsyncLocal<int> QuietDepth = new();
 
-    /// <summary>Silences sheet broadcasts in this async flow until disposed (the fight broadcasts its own change).</summary>
+    // until disposed
     public static IDisposable Quiet()
     {
         QuietDepth.Value++;
@@ -25,7 +22,7 @@ public sealed class CharacterBroadcast(IServiceProvider services, ITableNotifier
     public async Task ChangedAsync(int characterId, CancellationToken ct)
     {
         if (QuietDepth.Value > 0) return;
-        // Resolved here, not in the constructor: EncounterService needs CharacterService, which needs this observer.
+        // resolved here because EncounterService -> CharacterService -> this would be a cycle
         var scenes = services.GetRequiredService<SceneService>();
         var (encounterId, _) = await scenes.ActiveAsync(ct);
         if (encounterId is { } id)

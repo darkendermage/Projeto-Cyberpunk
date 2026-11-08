@@ -6,11 +6,8 @@ using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.Characters.Validation;
 
-/// <summary>
-/// Single validator for player characters. While the character is being created it enforces the rules of its
-/// creation method (CP:R p.73–117); afterwards only structural rules apply, because Improvement Points legitimately
-/// take skills past the creation limits. The status is always recalculated here, never trusted from the client.
-/// </summary>
+// During creation it enforces the method's rules (CP:R p.73-117); afterwards only structural ones, since IP
+// legitimately goes past creation limits. Status is always recomputed here.
 public sealed class CharacterValidator(CharacterRuleBook rules, Roles.RoleModuleRegistry? roleModules = null)
 {
     private const int TechnicalStatMax = 20;
@@ -56,7 +53,7 @@ public sealed class CharacterValidator(CharacterRuleBook rules, Roles.RoleModule
         return new CharacterValidationReport(status, !sheet.Creation.Finalized && !errors, stats, skills, gear, fashion, c.Issues);
     }
 
-    // ------------------------------------------------------------ identity and roles
+    // identity and roles
 
     private void ValidateIdentity(Context c)
     {
@@ -113,11 +110,10 @@ public sealed class CharacterValidator(CharacterRuleBook rules, Roles.RoleModule
             return;
         }
 
-        // After creation, new Roles only come in through the multiclass command, which checks the Rank 4 rule
-        // (CP:R p.142); manual GM adjustments are logged instead.
+        // After creation new Roles only come from the multiclass command (Rank 4 rule, CP:R p.142).
     }
 
-    // ------------------------------------------------------------ STATs
+    // STATs
 
     private void ValidateStatsShape(Context c)
     {
@@ -196,7 +192,7 @@ public sealed class CharacterValidator(CharacterRuleBook rules, Roles.RoleModule
     private StatTable? Table(Context c) =>
         c.Sheet.PrimaryRole is { } r ? rules.FindRole(r.Role)?.StatTable : null;
 
-    // ------------------------------------------------------------ skills
+    // skills
 
     private void ValidateSkillsShape(Context c)
     {
@@ -220,7 +216,7 @@ public sealed class CharacterValidator(CharacterRuleBook rules, Roles.RoleModule
         }
     }
 
-    /// <summary>Streetrat: every level comes from the Role template (CP:R p.86–87) plus the native language.</summary>
+    // template levels (CP:R p.86-87) + native language
     private void ValidateTemplateSkills(Context c)
     {
         if (c.Sheet.PrimaryRole is not { } role || rules.FindRole(role.Role) is null) return;
@@ -237,7 +233,7 @@ public sealed class CharacterValidator(CharacterRuleBook rules, Roles.RoleModule
             c.Error("SKILL_NOT_IN_TEMPLATE", L.T($"{key} não faz parte do template da Role.", $"{key} isn't part of the Role template."), null, source, $"skills.{key}");
     }
 
-    /// <summary>Edgerunner (CP:R p.88) and Complete Package (CP:R p.90) skill points.</summary>
+    // Edgerunner (CP:R p.88) and Complete Package (p.90)
     private CreationBudget? ValidatePointBuySkills(Context c)
     {
         var l = c.Limits;
@@ -265,7 +261,7 @@ public sealed class CharacterValidator(CharacterRuleBook rules, Roles.RoleModule
                 c.Error("SKILL_ABOVE_MAX", L.T($"{key} no nível {level}; o máximo na criação é {l.SkillMax.Value}.", $"{key} at level {level}; the maximum at creation is {l.SkillMax.Value}."), null, l.SkillMax.Source, $"skills.{key}");
         }
 
-        // Every Role skill must be at least the method minimum (Edgerunner), and the Basic Skills at least 2 (both).
+        // method minimum on Role skills (Edgerunner), Basic Skills at least 2 (both)
         if (allowed is not null && l.SkillMin is not null)
             foreach (var key in allowed.Where(k => c.Sheet.Skills.GetValueOrDefault(k) < l.SkillMin.Value))
                 c.Error("SKILL_BELOW_MIN", L.T($"{key} precisa estar no nível {l.SkillMin.Value} ou mais.", $"{key} must be at level {l.SkillMin.Value} or more."), null, l.SkillMin.Source, $"skills.{key}");
@@ -283,9 +279,9 @@ public sealed class CharacterValidator(CharacterRuleBook rules, Roles.RoleModule
         return budget;
     }
 
-    // ------------------------------------------------------------ starting package and money
+    // starting package and money
 
-    /// <summary>Streetrat and Edgerunner: one option picked for every "X or Y" group (CP:R p.98, 103, 117).</summary>
+    // one pick per "X or Y" group (CP:R p.98, 103, 117)
     private void ValidateStartingChoices(Context c)
     {
         if (c.Sheet.PrimaryRole is not { } role || rules.FindRole(role.Role) is not { } rr) return;
@@ -303,7 +299,7 @@ public sealed class CharacterValidator(CharacterRuleBook rules, Roles.RoleModule
     private static string Describe(StartingItem[][] options, NpcCatalog catalog) =>
         string.Join(L.T(" ou ", " or "), options.Select(o => string.Join(" + ", o.Select(i => catalog.Find(i.Slug)?.Name ?? i.Slug))));
 
-    /// <summary>Complete Package: 2,550eb for anything and 800eb only for Fashion and Fashionware (CP:R p.104–105).</summary>
+    // 2,550eb for anything + 800eb only for Fashion/Fashionware (CP:R p.104-105)
     private (CreationBudget? Gear, CreationBudget? Fashion) ValidateCreationBudgets(Context c)
     {
         var l = c.Limits;
@@ -332,7 +328,7 @@ public sealed class CharacterValidator(CharacterRuleBook rules, Roles.RoleModule
         return (gear, fashion);
     }
 
-    /// <summary>Clothing (Fashion, CP:R p.102) or Fashionware (CP:R p.111).</summary>
+    // Fashion (CP:R p.102) or Fashionware (p.111)
     public static bool IsFashion(CatalogItem item) =>
         item.Armor?.Type == ArmorType.Clothing || item.Cyber?.IsFashionware == true;
 

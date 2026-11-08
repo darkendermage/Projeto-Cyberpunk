@@ -8,10 +8,7 @@ namespace CyberpunkDb.Application.Catalog.Schema;
 
 public enum FieldKind { Number, Enum, Boolean, Text, LongText, Dice, Set }
 
-/// <summary>
-/// Describes one attribute of a category: how to read it, write it, filter on it, sort by it and facet it.
-/// The same definition drives the API schema, the query builder and the editor, so they cannot drift apart.
-/// </summary>
+// One attribute of a category. The same definition drives the API schema, the query builder and the editor.
 public abstract class FieldDefinition<T> where T : Item
 {
     protected FieldDefinition(string key, string label, FieldKind kind)
@@ -44,7 +41,7 @@ public abstract class FieldDefinition<T> where T : Item
     public abstract IReadOnlyList<string> Operators { get; }
     public virtual IReadOnlyList<OptionDto>? Options => null;
 
-    // ---- fluent configuration ----
+    // fluent configuration
     public FieldDefinition<T> WithUnit(string unit) { Unit = unit; return this; }
     public FieldDefinition<T> InGroup(string group) { Group = group; return this; }
     public FieldDefinition<T> Describe(string description) { Description = description; return this; }
@@ -57,17 +54,17 @@ public abstract class FieldDefinition<T> where T : Item
     public FieldDefinition<T> Range(double min, double max) { MinValue = min; MaxValue = max; return this; }
     internal FieldDefinition<T> AsBase() { IsBase = true; return this; }
 
-    /// <summary>Restricts the field to items whose subtype is one of the given values (e.g. SP only for armor, not clothing).</summary>
+    // e.g. SP only for armor, not clothing
     public FieldDefinition<T> AppliesTo(params Enum[] subtypes)
     {
         AppliesToValues = subtypes.Select(s => s.ToString()).ToList();
         return this;
     }
 
-    // ---- behaviour ----
-    /// <summary>JSON-friendly value (enums as their member name).</summary>
+    // behaviour
+    // enums as their member name
     public abstract object? GetValue(T entity);
-    /// <summary>Human-readable value (enums as their pt-BR label).</summary>
+    // enums as their pt-BR label
     public abstract string? GetDisplayText(T entity);
     public abstract void SetValue(T entity, JsonElement? value);
     public abstract Expression<Func<T, bool>> BuildPredicate(FilterCriterion criterion);
@@ -81,7 +78,7 @@ public abstract class FieldDefinition<T> where T : Item
     public virtual Task<(double? Min, double? Max)> RangeAsync(IQueryable<T> query, CancellationToken ct) =>
         Task.FromResult<(double?, double?)>((null, null));
 
-    /// <summary>Sorted distinct values of a numeric field, or null when there are more than <paramref name="limit"/>.</summary>
+    // null when there are more than limit
     public virtual Task<IReadOnlyList<double>?> DistinctValuesAsync(IQueryable<T> query, int limit, CancellationToken ct) =>
         Task.FromResult<IReadOnlyList<double>?>(null);
 
@@ -120,7 +117,7 @@ public abstract class FieldDefinition<T> where T : Item
     }
 }
 
-/// <summary>Wraps a filter value so EF Core sends it as a SQL parameter instead of inlining a literal.</summary>
+// so EF sends it as a parameter instead of inlining a literal
 internal sealed class ValueHolder<TValue>(TValue value)
 {
     public TValue Value { get; } = value;

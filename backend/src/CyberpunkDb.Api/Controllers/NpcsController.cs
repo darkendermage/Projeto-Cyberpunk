@@ -25,7 +25,6 @@ public sealed class NpcsController(NpcService npcs, NpcPortraitService portraits
     [HttpGet]
     public Task<IReadOnlyList<NpcSummaryDto>> List(CancellationToken ct) => npcs.ListAsync(ct);
 
-    /// <summary>When each saved NPC's image last changed, for those that have one.</summary>
     [HttpGet("portraits")]
     public Task<IReadOnlyDictionary<int, DateTime>> Portraits(CancellationToken ct) => portraits.SavedStampsAsync(ct);
 

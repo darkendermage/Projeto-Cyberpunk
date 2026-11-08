@@ -6,11 +6,8 @@ using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.NetArchitectures;
 
-/// <summary>
-/// The GM's edits to a saved Architecture. Each one is checked against the rules here, so the page never needs to
-/// know them: Boss Floors come from one Difficulty Rating up, swapped Programs keep the same cost (CP:R p.211), Active
-/// Defenses keep a Demon and Demons stay within one per six floors (CP:R p.213, p.218).
-/// </summary>
+// GM edits, checked here so the page doesn't need to know the rules: Boss Floors are one rating up, swapped
+// Programs keep the cost (CP:R p.211), Active Defenses keep a Demon, max one Demon per six floors (p.213, p.218).
 public sealed class NetArchitectureOperations(NetArchitectureRuleBook rules, NetArchitectureGenerator generator)
 {
     public void RerollFloor(ArchitectureState state, string floorId, Random rng)
@@ -103,7 +100,7 @@ public sealed class NetArchitectureOperations(NetArchitectureRuleBook rules, Net
         state.Demons[index] = state.Demons[index] with { Type = rule.Id, FloorId = floor?.Id ?? state.Demons[index].FloorId };
     }
 
-    /// <summary>Removes a Demon; its nodes go to the other Demons, unless an Active Defense would be left without one.</summary>
+    // its nodes go to the other Demons, unless an Active Defense would end up without one
     public void RemoveDemon(ArchitectureState state, string demonId)
     {
         var demon = state.Demons.FirstOrDefault(d => d.Id == demonId) ?? throw new NotFoundException(L.T($"Demon {demonId} não encontrado.", $"Demon {demonId} not found."));
@@ -143,7 +140,7 @@ public sealed class NetArchitectureOperations(NetArchitectureRuleBook rules, Net
         branch.Floors[index] = floor with { Locked = locked };
     }
 
-    // ------------------------------------------------------------------ helpers
+    // helpers
 
     private NetWatcher Netrunner(ArchitectureState state, string id, NetrunnerRequest r)
     {

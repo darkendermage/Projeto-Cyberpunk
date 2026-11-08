@@ -4,18 +4,15 @@ using CyberpunkDb.Domain.Enums;
 
 namespace CyberpunkDb.Application.Characters;
 
-/// <summary>
-/// The stored state of a player character: only source data, never derived values. STATs are the base values;
-/// temporary effects live in <see cref="Modifiers"/>. Skills are keyed like NPC skills ("handgun",
-/// "language:Streetslang") and hold the total level, including the free Cultural Origin language levels.
-/// </summary>
+// What gets saved for a PC. Only source data: derived values are computed by CharacterCalculator.
+// Skill keys follow the NPC ones ("handgun", "language:Streetslang").
 public sealed record CharacterSheet
 {
     public CharacterIdentity Identity { get; init; } = new();
-    /// <summary>The Roles the character has; the first one is the current Role (CP:R p.142).</summary>
+    // First one is the current Role (CP:R p.142)
     public List<CharacterRole> Roles { get; init; } = [];
     public CreationState Creation { get; init; } = new();
-    /// <summary>Base value of the ten STATs, LUCK included. Never overwritten by modifiers.</summary>
+    // Base values, LUCK included. Modifiers never touch these.
     public Dictionary<string, int> Stats { get; init; } = new(StringComparer.OrdinalIgnoreCase);
     public List<StatModifier> Modifiers { get; init; } = [];
     public Dictionary<string, int> Skills { get; init; } = new(StringComparer.OrdinalIgnoreCase);
@@ -25,16 +22,12 @@ public sealed record CharacterSheet
     public List<CriticalInjuryRecord> Injuries { get; init; } = [];
     public HumanityState Humanity { get; init; } = new();
     public LifepathState Lifepath { get; init; } = new();
-    /// <summary>Answers of each Role-based Lifepath, by Role then question id.</summary>
     public Dictionary<string, Dictionary<string, string>> RoleLifepath { get; init; } = new(StringComparer.OrdinalIgnoreCase);
     public StyleState Style { get; init; } = new();
     public HousingState Housing { get; init; } = new();
     public Wallet Wallet { get; init; } = new();
     public ProgressState Progress { get; init; } = new();
-    /// <summary>
-    /// Data of the Role-specific modules (see <c>Roles/RoleModules.cs</c>), by Role. Kept as raw JSON so modules can be
-    /// added later without changing the stored sheets.
-    /// </summary>
+    // Per-Role module data, kept as raw JSON so new modules don't break saved sheets.
     public Dictionary<string, System.Text.Json.JsonElement> RoleData { get; init; } = new(StringComparer.OrdinalIgnoreCase);
     public string? Notes { get; init; }
 
@@ -43,7 +36,6 @@ public sealed record CharacterSheet
 
     public int Stat(string key) => Stats.TryGetValue(key, out var v) ? v : 0;
 
-    /// <summary>Rebuilds dictionaries with case-insensitive keys and fills nulls left by deserialization.</summary>
     public CharacterSheet Normalize() => this with
     {
         Identity = (Identity ?? new()).Normalize(),
@@ -77,7 +69,7 @@ public sealed record CharacterSheet
     };
 }
 
-// ------------------------------------------------------------ identity and roles
+// identity and roles
 
 public sealed record CharacterIdentity
 {
@@ -86,12 +78,12 @@ public sealed record CharacterIdentity
     public string? Pronouns { get; init; }
     public int? Age { get; init; }
     public string? Concept { get; init; }
-    /// <summary>Cultural Origin language: Language skill at 4 for free (CP:R p.45).</summary>
+    // Free Language at 4 from the Cultural Origin (CP:R p.45)
     public string? NativeLanguage { get; init; }
-    /// <summary>Where the character lives: the specialization of Local Expert (Your Home).</summary>
+    // Local Expert (Your Home) specialization
     public string Home { get; init; } = "Watson";
     public int Reputation { get; init; }
-    /// <summary>How the uploaded portrait is framed (sheet, list and token); null is centered at full size.</summary>
+    // null = centered, no zoom
     public PortraitFocus? PortraitFocus { get; init; }
 
     public CharacterIdentity Normalize() => this with
@@ -108,7 +100,7 @@ public sealed record CharacterIdentity
     internal static string? Blank(string? s) => string.IsNullOrWhiteSpace(s) ? null : s.Trim();
 }
 
-/// <summary>The portrait's focal point in % of the picture (0–100) and its zoom (1–3).</summary>
+// X/Y in % of the picture, zoom 1-3
 public sealed record PortraitFocus(double X = 50, double Y = 50, double Zoom = 1)
 {
     public PortraitFocus Clamp() => new(
@@ -117,49 +109,38 @@ public sealed record PortraitFocus(double X = 50, double Y = 50, double Zoom = 1
         double.IsFinite(Zoom) ? Math.Clamp(Zoom, 1, 3) : 1);
 }
 
-/// <summary>
-/// One Role and its Role Ability. Multiclassing adds entries through an explicit action after creation (CP:R p.142);
-/// the ability name comes from the rules, never from the sheet.
-/// </summary>
+// Multiclassing adds roles after creation (CP:R p.142). Ability names come from the rules, not from here.
 public sealed record CharacterRole
 {
     public string Role { get; init; } = "";
     public int Rank { get; init; }
-    /// <summary>Improvement Points spent on this Role's ranks after creation.</summary>
     public int IpInvested { get; init; }
-    /// <summary>
-    /// How the Role Ability's Rank is divided where the Role does that: the Tech's Maker specialties (CP:R p.147) and the
-    /// Solo's Combat Awareness points (CP:R p.146), by the keys of character-rules.json (<c>ability.split</c>).
-    /// </summary>
+    // Tech Maker specialties (p.147) / Solo Combat Awareness (p.146), keys from character-rules.json
     public Dictionary<string, int> Split { get; init; } = new(StringComparer.OrdinalIgnoreCase);
     public DateTime? AcquiredAt { get; init; }
     public string? Notes { get; init; }
 }
 
-// ------------------------------------------------------------ creation
+// creation
 
-/// <summary>How the character was generated and the choices made, so the method rules can be re-checked.</summary>
+// Kept so the creation method can be re-checked later
 public sealed record CreationState
 {
     public CreationMethod Method { get; init; }
     public bool Finalized { get; init; }
     public DateTime? FinalizedAt { get; init; }
-    /// <summary>Streetrat: the 1d10 row of the Role table (1–10).</summary>
+    // Streetrat 1d10 row
     public int? TemplateRow { get; init; }
-    /// <summary>Edgerunner: the 1d10 rolled for each STAT, by STAT key.</summary>
+    // Edgerunner rolls per STAT
     public Dictionary<string, int> StatRolls { get; init; } = new(StringComparer.OrdinalIgnoreCase);
-    /// <summary>Starting package alternatives picked, keyed "section:group" (e.g. "weapons:2") → option index.</summary>
+    // "section:group" (e.g. "weapons:2") -> option index
     public Dictionary<string, int> StartingChoices { get; init; } = new(StringComparer.OrdinalIgnoreCase);
-    /// <summary>Specializations chosen for the Role template's "choose 1" skills, by skill id.</summary>
     public Dictionary<string, string> SkillChoices { get; init; } = new(StringComparer.OrdinalIgnoreCase);
-    /// <summary>Campaign variant of the creation limits; null fields use character-rules.json.</summary>
+    // null fields fall back to character-rules.json
     public CampaignOverrides Overrides { get; init; } = new();
 }
 
-/// <summary>
-/// GM-approved variants of the creation parameters (e.g. the "Major Hero" STAT pool of CP:R p.78). Shown on the
-/// sheet as a campaign variant, never applied silently.
-/// </summary>
+// GM-approved tweaks, e.g. the "Major Hero" pool (CP:R p.78). Shown on the sheet, never applied silently.
 public sealed record CampaignOverrides
 {
     public int? StatPoints { get; init; }
@@ -176,36 +157,33 @@ public sealed record CampaignOverrides
                        || SkillMax is not null || GearBudget is not null || FashionBudget is not null;
 }
 
-// ------------------------------------------------------------ modifiers
+// modifiers
 
 [JsonConverter(typeof(JsonStringEnumConverter))]
 public enum ModifierTarget { Stat, Skill, AllActions }
 
-/// <summary>
-/// A temporary or situational effect (drug, cyberware bonus entered by hand, GM ruling). Applied on top of the
-/// base values when computing the effective ones; the base is never changed.
-/// </summary>
+// Drugs, hand-entered cyberware bonuses, GM rulings... applied on top of the base values.
 public sealed record StatModifier
 {
     public string Id { get; init; } = "";
     public ModifierTarget Target { get; init; }
-    /// <summary>STAT key or skill key; empty for <see cref="ModifierTarget.AllActions"/>.</summary>
+    // empty for AllActions
     public string Key { get; init; } = "";
     public int Value { get; init; }
     public string Source { get; init; } = "";
     public bool Active { get; init; } = true;
 }
 
-// ------------------------------------------------------------ inventory
+// inventory
 
 [JsonConverter(typeof(JsonStringEnumConverter))]
 public enum ItemState { Carried, Equipped, Stored }
 
-/// <summary>Where an item came from. Trade, Gift and Loot are received without paying (players swap gear between themselves).</summary>
+// Trade/Gift/Loot don't cost money (players swapping gear)
 [JsonConverter(typeof(JsonStringEnumConverter))]
 public enum ItemOrigin { Starting, Purchase, Manual, Loot, Trade, Gift }
 
-/// <summary>Which creation budget paid for an item (Complete Package keeps them apart, CP:R p.104–105).</summary>
+// Complete Package keeps two budgets apart (CP:R p.104-105)
 [JsonConverter(typeof(JsonStringEnumConverter))]
 public enum BudgetPool { Balance, CreationGear, CreationFashion }
 
@@ -215,18 +193,16 @@ public sealed record InventoryEntry
     public int ItemId { get; init; }
     public int Quantity { get; init; } = 1;
     public ItemState State { get; init; } = ItemState.Carried;
-    /// <summary>Armor worn on this location. Only meaningful when equipped.</summary>
     public ArmorSlot? Worn { get; init; }
-    /// <summary>Current SP after ablation; null means as cataloged (undamaged).</summary>
+    // null = undamaged
     public int? CurrentSp { get; init; }
-    /// <summary>Current HP of a shield; null means full.</summary>
+    // null = full
     public int? CurrentHp { get; init; }
-    /// <summary>Generic ammunition: caliber and loose rounds owned.</summary>
     public Caliber? Caliber { get; init; }
     public int? Rounds { get; init; }
     public WeaponQuality? Quality { get; init; }
     public WeaponState? Weapon { get; init; }
-    /// <summary>Cyberware options held by a worn host (Smart Glasses, Battleglove, Smart Ears...); see <c>cyberware.wearables</c>.</summary>
+    // Smart Glasses, Battleglove, Smart Ears... see cyberware.wearables
     public WearableState? Wearable { get; init; }
     public ItemOrigin Origin { get; init; } = ItemOrigin.Manual;
     public BudgetPool PaidFrom { get; init; } = BudgetPool.Balance;
@@ -234,30 +210,25 @@ public sealed record InventoryEntry
     public string? Notes { get; init; }
 }
 
-/// <summary>Magazine and attachments of a weapon instance.</summary>
 public sealed record WeaponState
 {
     public int LoadedRounds { get; init; }
-    /// <summary>Ammunition item currently loaded (basic, AP, incendiary...).</summary>
     public int? LoadedAmmoItemId { get; init; }
-    /// <summary>Inventory instances of the attachments installed in the weapon's slots (CP:R p.95).</summary>
+    // CP:R p.95
     public List<string> Attachments { get; init; } = [];
-    /// <summary>A Poor Quality weapon jammed by a natural 1 (CP:R p.344): it can't fire until an Action unjams it.</summary>
+    // Poor Quality weapon jammed on a natural 1 (CP:R p.344)
     public bool Jammed { get; init; }
 }
 
-/// <summary>
-/// Options in a wearable host. They are inventory instances, like weapon attachments: worn, not implanted, so they cost
-/// no Humanity, and they only work while the host is equipped.
-/// </summary>
+// Worn, not implanted: no Humanity cost, and they only work while the host is equipped.
 public sealed record WearableState
 {
     public List<string> Options { get; init; } = [];
-    /// <summary>Hand a glove is worn on: the options of the arm under it stop working while it is worn.</summary>
+    // A glove disables the options of the arm under it
     public BodySide? Side { get; init; }
 }
 
-// ------------------------------------------------------------ cyberware
+// cyberware
 
 [JsonConverter(typeof(JsonStringEnumConverter))]
 public enum BodySide { Left, Right }
@@ -266,16 +237,14 @@ public sealed record CharacterCyberware
 {
     public string InstanceId { get; init; } = "";
     public int ItemId { get; init; }
-    /// <summary>Foundational piece this option sits in; null for standalone and foundational cyberware.</summary>
     public string? ParentInstanceId { get; init; }
-    /// <summary>Eye, ear, arm or leg side, when the piece has one.</summary>
     public BodySide? Side { get; init; }
-    /// <summary>Installed as the only piece of cyberware in a meat arm or leg (CP:R p.115–116).</summary>
+    // only cyberware in a meat limb (CP:R p.115-116)
     public bool MeatLimb { get; init; }
-    /// <summary>Humanity actually lost on installation: preset at creation, rolled afterwards (CP:R p.110).</summary>
+    // preset at creation, rolled afterwards (CP:R p.110)
     public int HumanityLossApplied { get; init; }
     public bool HumanityLossRolled { get; init; }
-    /// <summary>Armor implants (Subdermal Armor, Skin Weave) ablate like worn armor; null means undamaged.</summary>
+    // Subdermal Armor / Skin Weave ablate like worn armor. null = undamaged
     public int? CurrentSp { get; init; }
     public ItemOrigin Origin { get; init; } = ItemOrigin.Manual;
     public BudgetPool PaidFrom { get; init; } = BudgetPool.Balance;
@@ -283,16 +252,13 @@ public sealed record CharacterCyberware
     public DateTime? InstalledAt { get; init; }
 }
 
-// ------------------------------------------------------------ combat and injuries
+// combat and injuries
 
 public sealed record CombatState
 {
-    /// <summary>Current Hit Points; null means at maximum (so a higher BODY or WILL raises it too).</summary>
+    // null = max, so raising BODY/WILL raises it too
     public int? CurrentHp { get; init; }
-    /// <summary>
-    /// Death Save Penalty accumulated since the last Stabilization (CP:R p.188), on top of the base penalty from
-    /// Critical Injuries. Only advanced by an explicit action, never by time passing.
-    /// </summary>
+    // Since the last Stabilization (CP:R p.188). Only an explicit action moves it.
     public int DeathSavePenalty { get; init; }
     public bool Stabilized { get; init; } = true;
     public int LuckSpent { get; init; }
@@ -305,54 +271,43 @@ public enum InjuryLocation { Body, Head }
 [JsonConverter(typeof(JsonStringEnumConverter))]
 public enum InjuryStatus
 {
-    /// <summary>Full effect.</summary>
     Active,
-    /// <summary>Quick Fix applied: the effect is suspended, but the injury still needs Treatment unless the rules say otherwise.</summary>
+    // still needs Treatment unless the rules say otherwise
     QuickFixed,
-    /// <summary>Treated: the injury is gone.</summary>
     Healed,
 }
 
 public sealed record CriticalInjuryRecord
 {
     public string Id { get; init; } = "";
-    /// <summary>Name as in the Critical Injury tables (CP:R p.187–188), or a custom one.</summary>
+    // as in the Critical Injury tables (CP:R p.187-188), or custom
     public string Name { get; init; } = "";
     public InjuryLocation Location { get; init; }
     public InjuryStatus Status { get; init; } = InjuryStatus.Active;
-    /// <summary>Side or detail (left arm, right eye).</summary>
     public string? Detail { get; init; }
     public DateTime ReceivedAt { get; init; }
-    /// <summary>Combat event that caused it, when recorded through the combat panel.</summary>
     public long? CombatEventId { get; init; }
-    /// <summary>
-    /// When the Quick Fix was applied. It suspends the effect for the rest of that day (CP:R p.222); the sheet
-    /// shows it and the player returns the injury to Active by hand — time passing never changes it.
-    /// </summary>
+    // Quick Fix suspends the effect for the rest of the day (CP:R p.222). The player sets it back to Active by hand.
     public DateTime? QuickFixedAt { get; init; }
     public string? QuickFixNote { get; init; }
     public string? TreatmentNote { get; init; }
     public DateTime? ResolvedAt { get; init; }
 }
 
-// ------------------------------------------------------------ humanity
+// humanity
 
-/// <summary>
-/// Running totals of Humanity changes; the history lives in the character events. Current Humanity =
-/// EMP × 10 − <see cref="Lost"/> + <see cref="Recovered"/>, capped by therapy limits on recovery.
-/// </summary>
+// Current = EMP x 10 - Lost + Recovered (therapy caps recovery). History is in the character events.
 public sealed record HumanityState
 {
     public int Lost { get; init; }
     public int Recovered { get; init; }
 }
 
-// ------------------------------------------------------------ lifepath and style
+// lifepath and style
 
 public sealed record LifepathState
 {
     public string? CulturalRegion { get; init; }
-    /// <summary>Answers to the general Lifepath tables, by table id (personality, valueMost, lifeGoal...).</summary>
     public Dictionary<string, string> Answers { get; init; } = new(StringComparer.OrdinalIgnoreCase);
     public List<Relationship> Relationships { get; init; } = [];
     public string? Background { get; init; }
@@ -391,19 +346,15 @@ public sealed record Relationship
     public string Id { get; init; } = "";
     public RelationshipKind Kind { get; init; }
     public string Name { get; init; } = "";
-    /// <summary>Who they are to you (Lifepath "relationship" or "who" column).</summary>
     public string? Relation { get; init; }
     public string? Description { get; init; }
     public string? History { get; init; }
-    /// <summary>Why the relationship exists; for enemies, what caused it (CP:R p.51).</summary>
+    // for enemies: what caused it (CP:R p.51)
     public string? Cause { get; init; }
-    /// <summary>Enemies: who was wronged.</summary>
     public string? Wronged { get; init; }
-    /// <summary>What they can throw at you / their resources and influence.</summary>
     public string? Resources { get; init; }
-    /// <summary>Goals or intentions; for enemies, what they will do about it (Sweet Revenge, CP:R p.52).</summary>
+    // Sweet Revenge for enemies (CP:R p.52)
     public string? Intent { get; init; }
-    /// <summary>Tragic love affairs: how it ended (CP:R p.52).</summary>
     public string? Outcome { get; init; }
     public string? Notes { get; init; }
 }
@@ -415,11 +366,10 @@ public sealed record StyleState
     public string? Affectation { get; init; }
     public string? Appearance { get; init; }
     public string? Notes { get; init; }
-    /// <summary>Inventory instances shown as the outfit (optional link between narrative and items).</summary>
     public List<string> OutfitItems { get; init; } = [];
 }
 
-// ------------------------------------------------------------ housing, money, progression
+// housing, money, progression
 
 [JsonConverter(typeof(JsonStringEnumConverter))]
 public enum PaymentStatus { Paid, Pending, Overdue, NotApplicable }
@@ -429,18 +379,15 @@ public sealed record HousingState
     public string? HousingId { get; init; }
     public string? Location { get; init; }
     public string? LifestyleId { get; init; }
-    /// <summary>Rent agreed in play when it differs from the table (shared rent, a deal with a Fixer).</summary>
+    // when it differs from the table (shared rent, deal with a Fixer)
     public int? RentOverride { get; init; }
-    /// <summary>Last day covered by the payments made. The payment status is derived from it, never stored.</summary>
+    // payment status is derived from this
     public DateOnly? PaidUntil { get; init; }
     public string? Notes { get; init; }
 }
 
-/// <summary>
-/// Money. After creation everything is paid from <see cref="Balance"/>. During a Complete Package creation the
-/// purchases are paid from the two creation budgets (CP:R p.104–105): what was spent is always recomputed from the
-/// items' <see cref="BudgetPool"/> and price, and the remainder is settled when the character is finalized.
-/// </summary>
+// After creation everything comes out of Balance. During a Complete Package creation the two budgets are
+// recomputed from each item's BudgetPool (CP:R p.104-105) and settled on finalize.
 public sealed record Wallet
 {
     public int Balance { get; init; }
@@ -448,7 +395,6 @@ public sealed record Wallet
 
 public sealed record ProgressState
 {
-    /// <summary>Unspent Improvement Points.</summary>
     public int Ip { get; init; }
     public int IpEarned { get; init; }
 }

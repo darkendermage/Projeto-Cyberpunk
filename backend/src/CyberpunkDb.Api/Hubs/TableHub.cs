@@ -7,11 +7,8 @@ using Microsoft.Extensions.Options;
 
 namespace CyberpunkDb.Api.Hubs;
 
-/// <summary>
-/// The virtual table's live channel. A connection carrying a seat link is that player; one without it is the GM, which
-/// only the GM's own port allows. The server pushes scene, combat and chat changes through the groups below; clients
-/// send only fleeting things here (drag previews, pings) — every lasting change goes through the HTTP API.
-/// </summary>
+// Live channel. A connection with a seat link is that player, one without is the GM (only allowed on the GM's
+// port). Clients only send throwaway stuff here (drag previews, pings); real changes go through the HTTP API.
 public sealed class TableHub(SeatService seats, SceneService scenes, TablePresence presence, IOptions<TableOptions> options) : Hub
 {
     public const string Gm = "gm";
@@ -57,7 +54,7 @@ public sealed class TableHub(SeatService seats, SceneService scenes, TablePresen
         if (seat is not null)
         {
             await Clients.Group(Gm).SendAsync("seats");
-            // The party strip shows who is connected, to the GM and to the players.
+            // so the party strip can show who's online
             await Clients.Groups(Gm, Players).SendAsync("party", new { characterId = (int?)null });
         }
         await base.OnConnectedAsync();
@@ -74,7 +71,7 @@ public sealed class TableHub(SeatService seats, SceneService scenes, TablePresen
         await base.OnDisconnectedAsync(exception);
     }
 
-    /// <summary>An image being moved, resized or turned (the drop goes through the API); a hidden one previews to the GM only.</summary>
+    // the drop itself goes through the API; hidden images only preview to the GM
     public async Task DragImage(int sceneId, string imageId, double x, double y, double width, double height, double rotation)
     {
         if (!double.IsFinite(x) || !double.IsFinite(y) || !double.IsFinite(width) || !double.IsFinite(height) || !double.IsFinite(rotation) || imageId.Length > 20) return;
@@ -85,10 +82,7 @@ public sealed class TableHub(SeatService seats, SceneService scenes, TablePresen
         else await Clients.GroupExcept(Gm, Context.ConnectionId).SendAsync("imageDrag", preview);
     }
 
-    /// <summary>
-    /// Where a token is while someone drags it (the drop goes through the API). Others see it slide; a token hidden
-    /// from some players only previews to the GM.
-    /// </summary>
+    // Drag preview, the drop goes through the API. Tokens hidden from some players only preview to the GM.
     public async Task DragToken(int sceneId, string tokenId, double x, double y)
     {
         if (!double.IsFinite(x) || !double.IsFinite(y) || tokenId.Length > 20) return;
@@ -99,7 +93,7 @@ public sealed class TableHub(SeatService seats, SceneService scenes, TablePresen
         else await Clients.GroupExcept(Gm, Context.ConnectionId).SendAsync("tokenDrag", preview);
     }
 
-    /// <summary>A pulse on the scene the players see, for everyone, for a moment; nothing is saved.</summary>
+    // not saved
     public async Task Ping(int sceneId, double x, double y)
     {
         if (!double.IsFinite(x) || !double.IsFinite(y) || !await scenes.IsActiveAsync(sceneId, Context.ConnectionAborted)) return;
@@ -107,6 +101,6 @@ public sealed class TableHub(SeatService seats, SceneService scenes, TablePresen
         await Clients.All.SendAsync("ping", new { sceneId, x, y, color = seat?.Color ?? GmPingColor, label = seat?.Label ?? "GM" });
     }
 
-    /// <summary>The seat of this connection; null for the GM.</summary>
+    // null = GM
     private TableSeat? CurrentSeat => Context.Items.TryGetValue(SeatKey, out var value) ? value as TableSeat : null;
 }

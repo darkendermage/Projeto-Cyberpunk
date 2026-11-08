@@ -7,15 +7,12 @@ using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.Characters.Creation;
 
-/// <summary>
-/// The three official creation methods (CP:R p.40): builds the draft, applies template rows and STAT rolls, resolves
-/// skill specializations and, on finalize, hands over the Role's starting package or settles the Complete Package
-/// budgets. Every value comes from <see cref="CharacterRuleBook"/>; nothing fixed by a template is changed silently.
-/// </summary>
+// The three creation methods (CP:R p.40). Values come from CharacterRuleBook; nothing a template fixed changes
+// silently.
 public sealed class CharacterCreationService(
     CharacterRuleBook rules, CharacterValidator validator, CyberwareInstaller installer, IDiceRoller dice)
 {
-    // ------------------------------------------------------------ draft
+    // draft
 
     public CharacterSheet NewDraft(CreateCharacterRequest request, CharacterChange change)
     {
@@ -42,10 +39,7 @@ public sealed class CharacterCreationService(
         return Seed(sheet, request.Method, request.Role, change);
     }
 
-    /// <summary>
-    /// Restarts generation with another method or Role: purchases are refunded and STATs, skills and choices rebuilt.
-    /// Identity, Lifepath, style and notes are kept.
-    /// </summary>
+    // Purchases are refunded and STATs/skills/choices rebuilt. Identity, Lifepath, style and notes stay.
     public CharacterSheet Reset(CharacterSheet sheet, CreationMethod method, string role, CharacterChange change)
     {
         RequireCreating(sheet);
@@ -75,17 +69,17 @@ public sealed class CharacterCreationService(
         switch (method)
         {
             case CreationMethod.Streetrat:
-                // Template skills are fixed (CP:R p.86); "choose 1" specializations stay open until the player picks.
+                // template skills are fixed (CP:R p.86), "choose 1" waits for the player
                 foreach (var (k, v) in rules.RoleSkillLevels(role, home)) skills[k] = v;
                 cash = m.Streetrat.StartingCash.Value;
                 break;
             case CreationMethod.Edgerunner:
-                // Every Role skill starts at the method minimum (CP:R p.88); the player spreads the rest of the 86.
+                // method minimum on every Role skill, player spreads the rest of the 86 (CP:R p.88)
                 foreach (var k in rules.RoleSkillLevels(role, home).Keys) skills[k] = m.Edgerunner.SkillMin.Value;
                 cash = m.Edgerunner.StartingCash.Value;
                 break;
             default:
-                // Book suggestion: 6 in every STAT with a couple of points left over (CP:R p.78).
+                // book suggestion: 6 everywhere, a couple of points left (CP:R p.78)
                 foreach (var k in rules.StatOrder) stats[k] = 6;
                 foreach (var k in rules.BasicSkillKeys(home)) skills[k] = rules.Document.Creation.BasicSkillMin.Value;
                 break;
@@ -106,9 +100,9 @@ public sealed class CharacterCreationService(
         };
     }
 
-    // ------------------------------------------------------------ STATs
+    // STATs
 
-    /// <summary>Streetrat: copies one row of the Role table, rolled on 1d10 when no row is given (CP:R p.73).</summary>
+    // no row -> roll 1d10 (CP:R p.73)
     public CharacterSheet ApplyTemplateRow(CharacterSheet sheet, int? row, CharacterChange change)
     {
         RequireCreating(sheet);
@@ -127,7 +121,7 @@ public sealed class CharacterCreationService(
         };
     }
 
-    /// <summary>Edgerunner: one 1d10 per STAT, each read in its own column of the Role table (CP:R p.77).</summary>
+    // each roll read in its own column (CP:R p.77)
     public CharacterSheet ApplyStatRolls(CharacterSheet sheet, IReadOnlyDictionary<string, int>? given, CharacterChange change)
     {
         RequireCreating(sheet);
@@ -150,9 +144,9 @@ public sealed class CharacterCreationService(
         return sheet with { Stats = stats, Creation = sheet.Creation with { StatRolls = rolls } };
     }
 
-    // ------------------------------------------------------------ skills
+    // skills
 
-    /// <summary>Picks the specialization of a template "choose 1" skill (Play Instrument, Science), keeping its level.</summary>
+    // Play Instrument, Science... keeps the level
     public CharacterSheet ChooseSpecialization(CharacterSheet sheet, string skillId, string specialization, CharacterChange change)
     {
         RequireCreating(sheet);
@@ -171,10 +165,7 @@ public sealed class CharacterCreationService(
         return sheet with { Skills = skills, Creation = sheet.Creation with { SkillChoices = choices } };
     }
 
-    /// <summary>
-    /// Keeps the free Cultural Origin language and Local Expert (Your Home) attached to the right specialization when
-    /// the player edits the native language or home during creation.
-    /// </summary>
+    // Keeps the free native language and Local Expert (Your Home) on the right specialization when those change.
     public CharacterSheet RekeyIdentitySkills(CharacterSheet before, CharacterSheet after)
     {
         var skills = new Dictionary<string, int>(after.Skills, StringComparer.OrdinalIgnoreCase);
@@ -195,14 +186,11 @@ public sealed class CharacterCreationService(
         }
     }
 
-    // ------------------------------------------------------------ finalize
+    // finalize
 
-    /// <summary>
-    /// Ends Character Generation. Refused while the validator reports blocking errors. Streetrats and Edgerunners
-    /// receive the Role's weapons, armor, outfit and cyberware with the preset Humanity Loss (CP:R p.98–117);
-    /// Complete Packages keep the unspent general budget and lose the unspent fashion budget (CP:R p.104–105).
-    /// Everyone starts in the Role's housing with the first month paid (CP:R p.105).
-    /// </summary>
+    // Blocked while the validator has errors. Streetrat/Edgerunner get the Role package with preset Humanity Loss
+    // (CP:R p.98-117). Complete Package keeps the general budget, loses the fashion one (p.104-105). Everyone starts
+    // with the Role's housing and the first month paid (p.105).
     public CharacterSheet Finalize(CharacterSheet sheet, CharacterChange change)
     {
         RequireCreating(sheet);
@@ -265,8 +253,7 @@ public sealed class CharacterCreationService(
         }
         sheet = sheet with { Inventory = inventory };
 
-        // Foundational pieces go in first, so options listed before them (Interface Plugs before the Neural Link in the
-        // Netrunner package) use the package's own foundation instead of making the planner add a second one.
+        // Foundations first, so e.g. Interface Plugs use the package's Neural Link instead of the planner adding another.
         var cyber = Picked(sheet, "cyberware", role.Starting.Cyberware)
             .Select(i => (Item: i, Catalog: change.Catalog.Find(i.Slug)
                                             ?? throw CharacterChange.Refuse("creation", L.T($"Implante inicial {i.Slug} não está no catálogo.", $"Starting implant {i.Slug} isn't in the catalog."))))
@@ -302,7 +289,7 @@ public sealed class CharacterCreationService(
             change.Log(CharacterEventKind.Ledger, "fashion-budget-lost",
                 L.T($"{CharacterValidator.Eb(fashion.Remaining)} do orçamento de moda não gastos foram perdidos ({CharacterRuleBook.Page(fashion.Source)}).", $"{CharacterValidator.Eb(fashion.Remaining)} of unspent fashion budget were lost ({CharacterRuleBook.Page(fashion.Source)})."), 0);
 
-        // Purchases stay marked with the creation budget that paid them; from now on everything uses the balance.
+        // from here on everything comes out of the balance
         return sheet with { Wallet = sheet.Wallet with { Balance = balance } };
     }
 
@@ -319,7 +306,7 @@ public sealed class CharacterCreationService(
         }
     }
 
-    // ------------------------------------------------------------ helpers
+    // helpers
 
     private RoleRules RoleRules(CharacterSheet sheet) =>
         sheet.PrimaryRole is { } r && rules.FindRole(r.Role) is { } role

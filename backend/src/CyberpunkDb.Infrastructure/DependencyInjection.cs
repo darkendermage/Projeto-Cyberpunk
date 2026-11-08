@@ -12,10 +12,10 @@ namespace CyberpunkDb.Infrastructure;
 
 public static class DependencyInjection
 {
-    /// <summary>SQLite has its own migration set (column types differ from PostgreSQL).</summary>
+    // column types differ from Postgres, so SQLite has its own migrations
     public const string SqliteMigrationsAssembly = "CyberpunkDb.Migrations.Sqlite";
 
-    /// <summary>Expands %LOCALAPPDATA% style variables and creates the database folder.</summary>
+    // expands %LOCALAPPDATA% and creates the folder
     public static string SqliteConnectionString(string? configured)
     {
         var builder = new SqliteConnectionStringBuilder(configured ?? "Data Source=cyberpunk.db");
@@ -25,12 +25,10 @@ public static class DependencyInjection
         return builder.ToString();
     }
 
-    /// <summary>
-    /// Database:Provider = "Postgres" (recommended, uses migrations) or "Sqlite" (zero-setup local mode).
-    /// </summary>
+    // Database:Provider = "Postgres" (migrations) or "Sqlite" (zero-setup local mode)
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
-        // Configuration is read when the context is built, so hosts and tests can override it late.
+        // read when the context is built so hosts and tests can override it late
         services.AddDbContext<AppDbContext>((sp, options) =>
         {
             var config = sp.GetRequiredService<IConfiguration>();

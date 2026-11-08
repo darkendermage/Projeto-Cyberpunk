@@ -6,13 +6,11 @@ using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.Characters.Operations;
 
-/// <summary>Charging purchases to the balance or, during a Complete Package creation, to the creation budgets.</summary>
+// balance, or the creation budgets during a Complete Package
 public static class Payments
 {
-    /// <summary>
-    /// The budget a purchase uses: after creation always the balance; during a Complete Package the fashion budget for
-    /// Fashion/Fashionware and the general one otherwise, unless the player picked one (CP:R p.104–105).
-    /// </summary>
+    // After creation always the balance. Complete Package: fashion budget for Fashion/Fashionware, general otherwise,
+    // unless the player picked one (CP:R p.104-105).
     public static BudgetPool PoolFor(CharacterRuleBook rules, CharacterSheet sheet, bool fashion, BudgetPool? requested)
     {
         var completePackage = !sheet.Creation.Finalized && sheet.Creation.Method == CreationMethod.CompletePackage;
@@ -29,7 +27,7 @@ public static class Payments
         return pool;
     }
 
-    /// <summary>What is left in a budget before this purchase.</summary>
+    // before this purchase
     public static int Available(CharacterRuleBook rules, CharacterSheet sheet, BudgetPool pool)
     {
         if (pool == BudgetPool.Balance) return sheet.Wallet.Balance;
@@ -40,7 +38,7 @@ public static class Payments
         return limit.Value - spent;
     }
 
-    /// <summary>Charges a cost or refuses the whole operation; nothing is changed when the money isn't there.</summary>
+    // refuses the whole operation if the money isn't there
     public static CharacterSheet Charge(CharacterRuleBook rules, CharacterSheet sheet, BudgetPool pool, int cost, string what, CharacterChange change)
     {
         var available = Available(rules, sheet, pool);

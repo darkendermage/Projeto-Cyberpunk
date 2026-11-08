@@ -5,23 +5,17 @@ using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.Npcs.Validation;
 
-/// <summary>Mechanical helpers shared by the validator and the generator, so both read the rules the same way.</summary>
+// shared by the validator and the generator so both read the rules the same way
 public sealed partial class NpcMechanics(NpcRuleBook rules, int slotMultiplier = 1)
 {
     public NpcRuleBook Rules { get; } = rules;
 
-    /// <summary>
-    /// Multiplies the Option Slots of foundational pieces and of the Internal/External pools. 1 for everyone except a
-    /// character in a Full Body Conversion body, whose slots are doubled (Interface RED 3 p.93).
-    /// </summary>
+    // 2 in a Full Body Conversion body (Interface RED 3 p.93), 1 otherwise
     public int SlotMultiplier { get; } = slotMultiplier;
 
-    // ------------------------------------------------------------ prices
+    // prices
 
-    /// <summary>
-    /// Unit price of a gear entry. Weapons bought in another quality use the CP:R p.342 table; returns
-    /// <c>null</c> price with an error message when no official price exists for that quality.
-    /// </summary>
+    // Other weapon qualities use the CP:R p.342 table; null price + error when the book has none.
     public (int? Price, WeaponQuality? Quality, string? Error) GearUnitPrice(CatalogItem item, WeaponQuality? requested)
     {
         if (item.Weapon is not { } w || requested is null || requested == w.Quality) return (item.Price, item.Weapon?.Quality, null);
@@ -42,9 +36,9 @@ public sealed partial class NpcMechanics(NpcRuleBook rules, int slotMultiplier =
         _ => "Standard",
     };
 
-    // ------------------------------------------------------------ cyberware structure
+    // cyberware structure
 
-    /// <summary>Slots taken in the parent or pool. Missing data defaults to 1 (CP:R p.111).</summary>
+    // defaults to 1 when missing (CP:R p.111)
     public (int Slots, bool Assumed) SlotsRequired(CatalogItem item)
     {
         if (Rules.FindOverride(item.Slug)?.SlotsRequired is { } o) return (o, false);
@@ -55,21 +49,18 @@ public sealed partial class NpcMechanics(NpcRuleBook rules, int slotMultiplier =
     public int? SlotsProvided(CatalogItem item) =>
         (Rules.FindOverride(item.Slug)?.SlotsProvided ?? item.Cyber?.SlotsProvided) * SlotMultiplier;
 
-    /// <summary>Slots of a standalone pool; only Internal and External Body grow with the FBC multiplier (IR3 p.93).</summary>
+    // only Internal/External Body grow with FBC (IR3 p.93)
     public int PoolSlots(SlotPool pool) =>
         pool.Slots * (pool.Key is "internal" or "external" ? SlotMultiplier : 1);
 
-    /// <summary>
-    /// True when <paramref name="parent"/> can host an option that requires <paramref name="required"/>:
-    /// the same item or an equivalent foundational piece (same type, body location and own prerequisite,
-    /// e.g. a Sponsored Cybereye for a Cybereye, but never a Chipware Socket for a Neural Link).
-    /// </summary>
+    // Same item or an equivalent foundation (e.g. Sponsored Cybereye for a Cybereye, never a Chipware Socket for
+    // a Neural Link).
     public static bool ParentCompatible(CatalogItem parent, CatalogItem required) =>
         parent.Id == required.Id
         || (parent.Cyber is { Foundational: true } p && required.Cyber is { Foundational: true } r
             && p.Type == r.Type && p.Location == r.Location && p.RequiresItemId == r.RequiresItemId);
 
-    /// <summary>True when the item counts against a body capacity rule (two eyes, one Cyberaudio Suite...).</summary>
+    // two eyes, one Cyberaudio Suite...
     public static bool MatchesCapacity(CapacityRule rule, CatalogItem item)
     {
         if (rule.Slugs.Length > 0) return rule.Slugs.Contains(item.Slug, StringComparer.OrdinalIgnoreCase);
@@ -79,7 +70,7 @@ public sealed partial class NpcMechanics(NpcRuleBook rules, int slotMultiplier =
         return rule.CyberwareTypes.Length == 0 || (cy.Type is { } t && rule.CyberwareTypes.Contains(t));
     }
 
-    /// <summary>Slot pool used by standalone cyberware (Internal, External, Fashionware: 7 slots each, CP:R p.111).</summary>
+    // Internal, External, Fashionware: 7 slots each (CP:R p.111)
     public SlotPool? PoolFor(CatalogItem item)
     {
         if (item.Cyber is null || item.Cyber.Foundational) return null;
@@ -87,10 +78,7 @@ public sealed partial class NpcMechanics(NpcRuleBook rules, int slotMultiplier =
             item.Category == ItemCategory.Cyberware && item.Cyber.Type is { } t && p.CyberwareTypes.Contains(t));
     }
 
-    /// <summary>
-    /// Prerequisites that exist only as free text (anything beyond install location, pairing and the
-    /// structured parent piece). The system cannot verify them, so they are surfaced as warnings.
-    /// </summary>
+    // Requirements we can only show as warnings (anything beyond location, pairing and parent piece).
     public string? FreeTextRequirement(CatalogItem item, NpcCatalog catalog)
     {
         var text = item.Cyber?.Requirements ?? item.Armor?.Requirements;
@@ -107,9 +95,9 @@ public sealed partial class NpcMechanics(NpcRuleBook rules, int slotMultiplier =
     [GeneratedRegex(@"\b(Mall|Clinic|Clínica|Hospital|N/A)\b|\((Requer Par|par)\)", RegexOptions.IgnoreCase)]
     private static partial Regex InstallNoise();
 
-    // ------------------------------------------------------------ derived values
+    // derived values
 
-    /// <summary>HP = 10 + 5 × ceil((BODY + WILL) / 2) (CP:R p.79).</summary>
+    // 10 + 5 * ceil((BODY + WILL) / 2), CP:R p.79
     public int HitPoints(int body, int will) =>
         Rules.Document.Derived.HpBase.Value + Rules.Document.Derived.HpPerAverage.Value * (int)Math.Ceiling((body + will) / 2.0);
 

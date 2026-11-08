@@ -6,7 +6,7 @@ using CyberpunkDb.Application.Npcs.Rules;
 
 namespace CyberpunkDb.Application.Npcs.Compendium;
 
-/// <summary>The loaded <c>npc-compendium.json</c>: named NPCs of the books, indexed by id. Singleton.</summary>
+// npc-compendium.json, indexed by id. Singleton.
 public sealed class NpcCompendium
 {
     private const string ResourceName = "CyberpunkDb.Application.Npcs.npc-compendium.json";
@@ -32,7 +32,6 @@ public sealed class NpcCompendium
     public CompendiumNpc Require(string id) => Find(id)
         ?? throw new NotFoundException(L.T($"NPC '{id}' não está no compêndio.", $"NPC '{id}' isn't in the compendium."));
 
-    /// <summary>List entries ordered by name, texts in the request language.</summary>
     public IReadOnlyList<CompendiumNpcSummary> ListSummaries() => All
         .OrderBy(n => n.Name, StringComparer.OrdinalIgnoreCase)
         .Select(n => new CompendiumNpcSummary(n.Id, n.Name, n.Aliases, n.Kind, n.Role, n.RoleRank, n.Rep, n.Affiliation,
@@ -50,10 +49,7 @@ public sealed class NpcCompendium
             n.Summary.Current, n.SheetNote?.Current, sheet);
     }
 
-    /// <summary>
-    /// The rule-book key of a printed skill: "Handgun" gives "handgun", "Language (English)" gives "language:English".
-    /// Null when the rule book has no such skill.
-    /// </summary>
+    // "Handgun" -> "handgun", "Language (English)" -> "language:English". Null if the rule book doesn't have it.
     public static string? SkillKey(string name, NpcRuleBook rules)
     {
         name = name.Trim();

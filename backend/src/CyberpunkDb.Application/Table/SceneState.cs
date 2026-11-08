@@ -11,14 +11,11 @@ public enum TokenVisibility { All, Gm, Seats }
 [JsonConverter(typeof(JsonStringEnumConverter))]
 public enum TemplateShape { Circle, Square, Cone, Line }
 
-/// <summary>Scenery sits over the map and under the characters (barriers, cars, crates); tokens are on top.</summary>
+// scenery: over the map, under the tokens
 [JsonConverter(typeof(JsonStringEnumConverter))]
 public enum TokenLayer { Token, Scenery }
 
-/// <summary>
-/// A barrier from the book's cover table (CP:R p.182–183): material, thickness and HP. On a scene with a fight it is
-/// one of the fight's covers (<see cref="CoverId"/>), and the fight keeps its HP.
-/// </summary>
+// Cover table barrier (CP:R p.182-183). With a fight it's one of its covers and the fight keeps the HP.
 public sealed record SceneBarrier
 {
     public string Material { get; init; } = "";
@@ -28,25 +25,19 @@ public sealed record SceneBarrier
     public string? CoverId { get; init; }
 }
 
-/// <summary>
-/// Everything on a scene, stored as JSON. Positions are in cells: a cell is <see cref="SceneGrid.SizePx"/> pixels of the
-/// background image, starting at the grid offset. A scene without a visible grid still measures in cells.
-/// </summary>
+// Stored as JSON. Positions are in cells (SceneGrid.SizePx image pixels each, from the grid offset), grid shown or not.
 public sealed record SceneState
 {
     public SceneGrid Grid { get; init; } = new();
     public SceneBackground Background { get; init; } = new();
     public List<SceneToken> Tokens { get; init; } = [];
     public List<SceneTemplate> Templates { get; init; } = [];
-    /// <summary>Images over the map, below every token (round 5), drawn by <see cref="SceneImage.Order"/>.</summary>
+    // below every token, drawn by Order
     public List<SceneImage> Images { get; init; } = [];
 }
 
-/// <summary>
-/// An image laid over the map like a layer: centre and size in cells (free fractions), rotation, opacity and its place
-/// in the stack (<see cref="Order"/>, higher on top). <see cref="OwnerSeatId"/> is the player who placed it (null: the GM).
-/// A lock stops moving and resizing; <see cref="LockedByGm"/> means only the GM takes it off.
-/// </summary>
+// Center/size in cells (fractions allowed). Higher Order is on top. OwnerSeatId null = GM.
+// Locked stops move/resize; LockedByGm means only the GM can unlock.
 public sealed record SceneImage
 {
     public string Id { get; init; } = "";
@@ -65,7 +56,7 @@ public sealed record SceneImage
     public int? OwnerSeatId { get; init; }
 }
 
-/// <summary>The grid: cell size and offset in image pixels, and how many meters a cell is (2 m in Cyberpunk RED).</summary>
+// offsets in image pixels; 2 m per cell in RED
 public sealed record SceneGrid
 {
     public GridType Type { get; init; } = GridType.Square;
@@ -75,11 +66,10 @@ public sealed record SceneGrid
     public double MetersPerCell { get; init; } = 2;
     public string Color { get; init; } = "#00f0ff";
     public double Opacity { get; init; } = 0.35;
-    /// <summary>Dropped tokens land on whole cells.</summary>
+    // snap drops to whole cells
     public bool Snap { get; init; } = true;
 }
 
-/// <summary>The map image and its size in pixels (the board's extent).</summary>
 public sealed record SceneBackground
 {
     public Guid? MediaId { get; init; }
@@ -87,10 +77,7 @@ public sealed record SceneBackground
     public int Height { get; init; }
 }
 
-/// <summary>
-/// A token: its top-left corner in cells, its size in cells and its rotation in degrees. It stands for a character
-/// (<see cref="CharacterId"/>) or an encounter combatant (<see cref="CombatantId"/>), or is just a marker.
-/// </summary>
+// Top-left corner and size in cells, rotation in degrees. Points to a character, a combatant, or nothing.
 public sealed record SceneToken
 {
     public string Id { get; init; } = "";
@@ -103,27 +90,24 @@ public sealed record SceneToken
     public bool Locked { get; init; }
     public Guid? ImageMediaId { get; init; }
     public string Color { get; init; } = "#00f0ff";
-    /// <summary>The seat that moves it; a token of the seat's own character needs none.</summary>
+    // tokens of the seat's own character don't need it
     public int? OwnerSeatId { get; init; }
     public TokenVisibility Visibility { get; init; } = TokenVisibility.All;
-    /// <summary>With <see cref="TokenVisibility.Seats"/>: who sees it besides the GM and its owner.</summary>
+    // only for TokenVisibility.Seats
     public List<int> VisibleSeatIds { get; init; } = [];
     public int? CharacterId { get; init; }
-    /// <summary>A saved NPC of the generator the token stands for; its image shows on the token.</summary>
+    // saved generator NPC
     public int? NpcId { get; init; }
-    /// <summary>A named NPC of the books (compendium id) the token stands for; its image shows on the token.</summary>
+    // compendium id
     public string? CompendiumNpcId { get; init; }
     public string? CombatantId { get; init; }
-    /// <summary>A ring drawn around the token, in meters (a weapon's range, a grenade's reach).</summary>
+    // weapon range, grenade reach...
     public double? RangeRingMeters { get; init; }
     public TokenLayer Layer { get; init; } = TokenLayer.Token;
     public SceneBarrier? Barrier { get; init; }
 }
 
-/// <summary>
-/// An area of effect, measured in meters from its origin (cells): a circle's radius, a square's side, a cone's or a
-/// line's length; cones and lines point at <see cref="Angle"/> degrees (0 = right, clockwise).
-/// </summary>
+// Meters from the origin: circle radius, square side, cone/line length. Angle 0 = right, clockwise.
 public sealed record SceneTemplate
 {
     public string Id { get; init; } = "";
@@ -135,6 +119,6 @@ public sealed record SceneTemplate
     public string Color { get; init; } = "#ff2a6d";
     public string? Label { get; init; }
     public bool Locked { get; init; }
-    /// <summary>The seat that placed it (players move and delete only their own); null for the GM.</summary>
+    // null = GM
     public int? OwnerSeatId { get; init; }
 }

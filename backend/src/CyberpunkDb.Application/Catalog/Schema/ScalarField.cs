@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CyberpunkDb.Application.Catalog.Schema;
 
-/// <summary>A single-valued attribute backed by an expression such as <c>w =&gt; w.Rof</c>.</summary>
+// backed by an expression like w => w.Rof
 public sealed class ScalarField<T, TProp> : FieldDefinition<T> where T : Item
 {
     private static readonly Type Underlying = Nullable.GetUnderlyingType(typeof(TProp)) ?? typeof(TProp);

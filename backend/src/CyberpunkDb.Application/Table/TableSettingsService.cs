@@ -7,10 +7,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CyberpunkDb.Application.Table;
 
-/// <summary>A dice color (#rrggbb); null clears it (the seat's color, or the default dice for the GM).</summary>
+// null clears it
 public sealed record DiceColorRequest(string? Color);
 
-/// <summary>Settings of the virtual table kept across restarts, by key (the GM's dice color, the music).</summary>
+// survive restarts (GM dice color, music)
 public sealed partial class TableSettingsService(IAppDbContext db)
 {
     public const string GmDiceColor = "gmDiceColor";
@@ -18,7 +18,7 @@ public sealed partial class TableSettingsService(IAppDbContext db)
     public async Task<string?> GetAsync(string key, CancellationToken ct) =>
         await db.TableSettings.AsNoTracking().Where(s => s.Key == key).Select(s => s.Value).FirstOrDefaultAsync(ct);
 
-    /// <summary>Stores <paramref name="value"/> under <paramref name="key"/>; null removes it.</summary>
+    // null removes it
     public async Task SetAsync(string key, string? value, CancellationToken ct)
     {
         var row = await db.TableSettings.FirstOrDefaultAsync(s => s.Key == key, ct);
@@ -31,7 +31,7 @@ public sealed partial class TableSettingsService(IAppDbContext db)
         await db.SaveChangesAsync(ct);
     }
 
-    /// <summary>A dice color as stored: #rrggbb in lower case, or null; anything else is refused.</summary>
+    // lower-case #rrggbb or null, anything else is refused
     public static string? CleanColor(string? color)
     {
         if (string.IsNullOrWhiteSpace(color)) return null;

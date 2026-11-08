@@ -16,14 +16,12 @@ namespace CyberpunkDb.Infrastructure.Persistence;
 public sealed class SeedOptions
 {
     public bool Enabled { get; set; } = true;
-    /// <summary>Folder with *.json files in the import format. Relative paths resolve from the app folder.</summary>
+    // *.json in the import format, relative to the app folder
     public string Path { get; set; } = "Seed";
 }
 
-/// <summary>
-/// Applies migrations (backing up a SQLite file first) and imports the seed catalog whenever its
-/// content changes. Imports upsert by slug, so favorites and lists are kept across catalog updates.
-/// </summary>
+// Runs migrations (backing up SQLite first) and re-imports the seed when it changes. Upsert by slug, so
+// favorites and lists survive catalog updates.
 public sealed class DatabaseInitializer(
     AppDbContext db,
     ItemWriteService writer,
@@ -83,17 +81,14 @@ public sealed class DatabaseInitializer(
 
     private sealed record MovedItem(string Slug, DateTime? FavoritedAt, List<GearListEntry> Entries);
 
-    /// <summary>
-    /// A seed item whose category changed (weapon attachments that left "Itens Avulsos", for instance) lives in
-    /// another table, so it cannot be updated in place. It is deleted here and recreated by the import; its
-    /// favorite and list entries are kept aside and re-attached by slug afterwards.
-    /// </summary>
+    // An item that changed category lives in another table and can't be updated in place. Delete it here, let the
+    // import recreate it, and re-attach its favorites/list entries by slug.
     private async Task<List<MovedItem>> DetachRecategorizedAsync(IEnumerable<ItemUpsertDto> rows, CancellationToken ct)
     {
         var seeded = new Dictionary<string, ItemCategory>(StringComparer.Ordinal);
         foreach (var row in rows.Where(r => r.Slug is not null))
         {
-            // Rows with an unknown category are reported by the import itself.
+            // the import reports unknown categories itself
             try { seeded[row.Slug!] = registry.Get(row.Category).Category; }
             catch (NotFoundException) { }
         }
@@ -140,17 +135,15 @@ public sealed class DatabaseInitializer(
         db.ChangeTracker.Clear();
     }
 
-    /// <summary>
-    /// Deletes catalog items that an earlier seed created but the current one no longer ships (a duplicate
-    /// merged away, demo data replaced by book data). Items registered by the user (Custom) are never touched.
-    /// </summary>
+    // Items an older seed shipped and the current one doesn't (merged duplicates, demo data). Custom items are
+    // never touched.
     private async Task RemoveRetiredItemsAsync(HashSet<string> seededSlugs, CancellationToken ct)
     {
         var retired = (await db.Items.Where(i => i.DataOrigin != DataOrigin.Custom).Select(i => new { i.Id, i.Slug }).ToListAsync(ct))
             .Where(i => !seededSlugs.Contains(i.Slug)).Select(i => i.Id).ToList();
         if (retired.Count == 0) return;
 
-        // "Requer peça base" is a restricting reference; detach it before the base item goes away.
+        // "Requer peça base" points at the base item, detach it first
         await db.Set<CyberwareItem>().Where(c => c.RequiresItemId != null && retired.Contains(c.RequiresItemId.Value))
             .ExecuteUpdateAsync(s => s.SetProperty(c => c.RequiresItemId, (int?)null), ct);
         foreach (var id in retired)
@@ -171,7 +164,7 @@ public sealed class DatabaseInitializer(
         return memory.ToArray();
     }
 
-    /// <summary>Copies the SQLite file before pending migrations change it (keeps the newest three copies).</summary>
+    // keeps the newest three copies
     private void BackupSqliteBeforeMigration()
     {
         var path = new SqliteConnectionStringBuilder(db.Database.GetConnectionString()).DataSource;

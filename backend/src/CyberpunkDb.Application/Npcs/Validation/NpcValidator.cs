@@ -4,10 +4,7 @@ using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.Npcs.Validation;
 
-/// <summary>
-/// The single validation layer for every NPC, whatever the creation mode. Pure: takes the sheet and a catalog
-/// snapshot, computes budgets and derived values, and lists every violation with its source and a suggestion.
-/// </summary>
+// The one validation path for every NPC. Lists each violation with its source and a suggestion.
 public sealed class NpcValidator(NpcRuleBook rules)
 {
     private readonly NpcMechanics _m = new(rules);
@@ -47,7 +44,7 @@ public sealed class NpcValidator(NpcRuleBook rules)
             role.Rank, rules.Document.RolePresence.GetValueOrDefault(role.Presence)?.Label ?? role.Presence.ToString());
     }
 
-    // ------------------------------------------------------------ identity and STATs
+    // identity and STATs
 
     private void ValidateIdentity(Context c)
     {
@@ -108,7 +105,7 @@ public sealed class NpcValidator(NpcRuleBook rules)
         return new BudgetLine(used, budget, c.T.StatPoints.Reference);
     }
 
-    // ------------------------------------------------------------ gear
+    // gear
 
     private (List<GearLine>, BudgetLine) ValidateGear(Context c)
     {
@@ -176,7 +173,7 @@ public sealed class NpcValidator(NpcRuleBook rules)
         _ => null,
     };
 
-    // ------------------------------------------------------------ cyberware
+    // cyberware
 
     private (List<CyberLine>, BudgetLine) ValidateCyberware(Context c)
     {
@@ -207,7 +204,7 @@ public sealed class NpcValidator(NpcRuleBook rules)
             byInstance[e.InstanceId] = (e, item);
         }
 
-        // Slots used inside each parent and in each standalone pool.
+        // slots used per parent and per standalone pool
         var usedInParent = new Dictionary<string, int>(StringComparer.Ordinal);
         var usedInPool = new Dictionary<string, int>(StringComparer.Ordinal);
         var assumedReported = new HashSet<int>();
@@ -260,7 +257,6 @@ public sealed class NpcValidator(NpcRuleBook rules)
                 item.Cyber.RequiresItemId, item.Cyber.RequiresPair, freeText, e.Locked));
         }
 
-        // Option Slots of each foundational piece.
         for (var i = 0; i < lines.Count; i++)
         {
             var line = lines[i];
@@ -284,7 +280,7 @@ public sealed class NpcValidator(NpcRuleBook rules)
                     L.T($"{pool.Label} comporta {pool.Slots} slots; a ficha usa {used}.", $"{pool.Label} holds {pool.Slots} slots; the sheet uses {used}."), L.T("Remova implantes dessa categoria.", "Remove implants from that category."), pool.Source, "cyberware");
         }
 
-        // Body capacity (two eyes, one Cyberaudio Suite...).
+        // two eyes, one Cyberaudio Suite...
         foreach (var rule in rules.Document.Cyberware.Capacity)
         {
             var matching = byInstance.Values.Where(x => NpcMechanics.MatchesCapacity(rule, x.Item)).ToList();
@@ -303,7 +299,7 @@ public sealed class NpcValidator(NpcRuleBook rules)
                     L.T($"Mantenha apenas um {group.Label}.", $"Keep only one {group.Label}."), group.Source, "cyberware");
         }
 
-        // Paired options: one in each of two different foundational pieces.
+        // paired options go in two different foundations
         foreach (var group in byInstance.Values.Where(x => x.Item.Cyber!.RequiresPair).GroupBy(x => x.Item.Id))
         {
             var item = group.First().Item;
@@ -320,14 +316,14 @@ public sealed class NpcValidator(NpcRuleBook rules)
                     L.T("Instale uma unidade em cada uma de duas peças base (ex.: dois Cybereyes).", "Install one unit in each of two foundational pieces (e.g. two Cybereyes)."), "CP:R p.360 (must be paired)", "cyberware");
         }
 
-        // Same option twice in the same parent, or the same standalone piece twice: benefits don't stack.
+        // duplicates don't stack
         foreach (var dup in byInstance.Values.Where(x => !x.Item.Cyber!.Foundational && !x.Item.Cyber.RequiresPair)
                      .GroupBy(x => (x.Item.Id, x.Entry.ParentInstanceId)).Where(g => g.Count() > 1))
             c.Warn("CYBER_DUPLICATE", $"CYBER_DUPLICATE:{dup.Key.Id}:{dup.Key.ParentInstanceId}",
                 L.T($"{dup.First().Item.Name} aparece {dup.Count()} vezes no mesmo local; os benefícios não se somam.", $"{dup.First().Item.Name} appears {dup.Count()} times in the same location; the benefits don't stack."), null,
                 rules.Document.Cyberware.StackingNote.Source, "cyberware");
 
-        // Required / forbidden choices made in the generator are part of the sheet.
+        // generator required/forbidden choices are part of the sheet
         foreach (var dup in c.Sheet.CyberwareRules.GroupBy(r => r.ItemId).Where(g => g.Count() > 1))
             c.Hard("CYBER_RULE_DUPLICATE", $"CYBER_RULE_DUPLICATE:{dup.Key}", L.T($"O implante {dup.Key} tem mais de uma regra (obrigatório/proibido).", $"Implant {dup.Key} has more than one rule (required/forbidden)."), null, null, "cyberwareRules");
         foreach (var rule in c.Sheet.CyberwareRules)
@@ -349,7 +345,7 @@ public sealed class NpcValidator(NpcRuleBook rules)
         return (lines, new BudgetLine(total, budget.Value, budget.Reference));
     }
 
-    // ------------------------------------------------------------ derived values
+    // derived values
 
     private NpcDerived ComputeDerived(Context c, List<CyberLine> cyberLines)
     {
@@ -413,7 +409,7 @@ public sealed class NpcValidator(NpcRuleBook rules)
             c.Info("CYBERPSYCHO", "CYBERPSYCHO", L.T("Mais de 30 peças de cyberware: provavelmente um ciberpsicopata com EMP 0.", "More than 30 cyberware pieces: probably a cyberpsycho with EMP 0."), null, c.T.CyberwareBudget.Source, "cyberware");
     }
 
-    // ------------------------------------------------------------ skills
+    // skills
 
     private (List<SkillLine>, BudgetLine) ValidateSkills(Context c, NpcDerived d)
     {
@@ -495,7 +491,7 @@ public sealed class NpcValidator(NpcRuleBook rules)
     private static string Display(SkillDefinition def, string? spec) => spec is null ? def.Name : $"{def.Name} ({spec})";
     private static string Display(SkillLine l) => l.Specialization is null ? l.Name : $"{l.Name} ({l.Specialization})";
 
-    // ------------------------------------------------------------ weapon guidelines
+    // weapon guidelines
 
     private void ValidateWeapons(Context c, NpcDerived d)
     {
@@ -528,7 +524,7 @@ public sealed class NpcValidator(NpcRuleBook rules)
         }
     }
 
-    // ------------------------------------------------------------ Role
+    // Role
 
     private void ValidateRole(Context c)
     {
@@ -541,7 +537,7 @@ public sealed class NpcValidator(NpcRuleBook rules)
                 L.T($"{c.T.Label} normalmente tem Role Ability Rank {c.T.RoleRank.Value.Rank}.", $"{c.T.Label} usually has Role Ability Rank {c.T.RoleRank.Value.Rank}."), "Defina Role e Rank.", c.T.RoleRank.Reference, "roleRank");
     }
 
-    // ------------------------------------------------------------ exceptions
+    // exceptions
 
     private static List<NpcIssue> ApplyExceptions(Context c)
     {
@@ -568,11 +564,11 @@ public sealed class NpcValidator(NpcRuleBook rules)
         public NpcCatalog Catalog { get; } = catalog;
         public List<NpcIssue> Issues { get; } = [];
 
-        /// <summary>Guideline violation: blocks "Valid" but the GM can accept it with a justified exception.</summary>
+        // blocks "Valid", but the GM can accept it with a reason
         public void Error(string code, string key, string message, string? suggestion, string? source, string? field) =>
             Issues.Add(new NpcIssue(code, key, NpcIssueSeverity.Error, message, suggestion, source, true, field));
 
-        /// <summary>Structural or mechanical impossibility: never accepted as an exception.</summary>
+        // never accepted as an exception
         public void Hard(string code, string key, string message, string? suggestion, string? source, string? field) =>
             Issues.Add(new NpcIssue(code, key, NpcIssueSeverity.Error, message, suggestion, source, false, field));
 

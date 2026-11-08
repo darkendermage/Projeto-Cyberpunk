@@ -5,22 +5,18 @@ using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.Characters.Operations;
 
-/// <summary>An event produced by an operation, written in the same transaction as the sheet.</summary>
+// saved in the same transaction as the sheet
 public sealed record PendingEvent(
     CharacterEventKind Kind, string Action, string Description, int? Amount, string? Before, string? After, bool IsManual, string? Payload = null);
 
-/// <summary>
-/// One operation on a character: the sheet being changed, the catalog snapshot it is checked against, and the
-/// history entries it produces. Operations either finish (sheet and events saved together) or throw before
-/// anything is persisted, so a failed validation never leaves a partial change.
-/// </summary>
+// Either finishes (sheet and events saved together) or throws before saving anything.
 public sealed class CharacterChange(CharacterSheet sheet, NpcCatalog catalog, DateTime now)
 {
     public CharacterSheet Sheet { get; set; } = sheet;
     public NpcCatalog Catalog { get; } = catalog;
     public DateTime Now { get; } = now;
     public List<PendingEvent> Events { get; } = [];
-    /// <summary>Messages for the player about what the rules now require (e.g. "roll a Critical Injury").</summary>
+    // e.g. "roll a Critical Injury"
     public List<string> Notices { get; } = [];
 
     public void Log(CharacterEventKind kind, string action, string description,
@@ -30,7 +26,7 @@ public sealed class CharacterChange(CharacterSheet sheet, NpcCatalog catalog, Da
     public CatalogItem Item(int id) =>
         Catalog.Find(id) ?? throw new NotFoundException(L.T($"Item {id} não encontrado no catálogo.", $"Item {id} not found in the catalog."));
 
-    /// <summary>Refuses the operation with a field error (HTTP 400); nothing is saved.</summary>
+    // 400, nothing saved
     public static RequestValidationException Refuse(string field, string message) => RequestValidationException.For(field, message);
 
     public string NewId(string prefix)

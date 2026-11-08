@@ -2,10 +2,8 @@ using System.Collections.Concurrent;
 
 namespace CyberpunkDb.Application.Table;
 
-/// <summary>
-/// Scene writes run one at a time per scene, so several players dragging at once never lose each other's moves (each
-/// move reads the latest state). The app runs as a single process, so an in-memory lock is enough.
-/// </summary>
+// One write at a time per scene so simultaneous drags don't eat each other's moves. Single process, so an
+// in-memory lock is enough.
 public sealed class SceneLocks
 {
     private readonly ConcurrentDictionary<int, SemaphoreSlim> _locks = new();

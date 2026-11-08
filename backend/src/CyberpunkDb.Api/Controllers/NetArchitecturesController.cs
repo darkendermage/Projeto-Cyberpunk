@@ -4,10 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CyberpunkDb.Api.Controllers;
 
-/// <summary>
-/// NET Architectures (CP:R p.210-218, Going Quiet): generation, the GM's edits floor by floor, Demons, Watchers and the
-/// export. Every change is a command validated on the server and answered with the updated Architecture.
-/// </summary>
+// NET Architectures (CP:R p.210-218, Going Quiet). Commands answer with the updated Architecture.
 [ApiController]
 [Route("api/net-architectures")]
 public sealed class NetArchitecturesController(NetArchitectureService architectures) : ControllerBase
@@ -87,7 +84,7 @@ public sealed class NetArchitecturesController(NetArchitectureService architectu
     public Task<NetArchitectureDetailDto> RemoveNetrunner(int id, string netrunnerId, VersionRequest request, CancellationToken ct) =>
         architectures.RemoveNetrunnerAsync(id, netrunnerId, request, ct);
 
-    /// <summary>The floor tables as text (<c>format=text</c>) or Markdown (<c>format=markdown</c>), ready to paste.</summary>
+    // format=text or format=markdown
     [HttpGet("{id:int}/export")]
     public async Task<IActionResult> Export(int id, [FromQuery] string format = "text", CancellationToken ct = default)
     {

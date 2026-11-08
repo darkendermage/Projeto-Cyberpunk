@@ -3,7 +3,7 @@ using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Api.Desktop;
 
-/// <summary>Desktop executable behaviour: opens the browser and avoids two instances on the same port.</summary>
+// opens the browser and avoids two instances on the same port
 public static class DesktopLauncher
 {
     public const string Title = "Night City Item Database";
@@ -12,7 +12,7 @@ public static class DesktopLauncher
         (configuration["Urls"] ?? "http://localhost:5090").Split(';')[0]
             .Replace("0.0.0.0", "localhost").Replace("*", "localhost").TrimEnd('/');
 
-    /// <summary>If an instance is already answering, opens the browser on it and returns true.</summary>
+    // if something already answers, open the browser there and return true
     public static async Task<bool> TryReuseRunningInstanceAsync(IConfiguration configuration)
     {
         var url = AppUrl(configuration);
@@ -32,7 +32,7 @@ public static class DesktopLauncher
         return true;
     }
 
-    /// <summary>The Windows console uses another code page by default; without this accents break.</summary>
+    // the Windows console uses another code page and breaks accents otherwise
     public static void ConfigureConsole()
     {
         try
@@ -57,7 +57,7 @@ public static class DesktopLauncher
             Console.WriteLine(L.ForSystem($"  {Title} rodando em {url}", $"  {Title} running at {url}"));
             Console.WriteLine(L.ForSystem("  Feche esta janela para encerrar.", "  Close this window to quit."));
             Console.WriteLine();
-            // After an update the tab that asked for it reloads by itself.
+            // after an update the tab that asked for it reloads by itself
             if (!afterUpdate && app.Configuration.GetValue("Desktop:OpenBrowser", true)) Open(url);
         });
     }
@@ -65,10 +65,8 @@ public static class DesktopLauncher
     private const string AfterUpdateKey = "Desktop:AfterUpdate";
     private const string WaitPidKey = "Desktop:WaitPid";
 
-    /// <summary>
-    /// A restart after an update starts while the old process is still shutting down: wait for it to free
-    /// the port, otherwise <see cref="TryReuseRunningInstanceAsync"/> would find it and exit.
-    /// </summary>
+    // After an update the old process may still be shutting down. Wait for the port, otherwise
+    // TryReuseRunningInstanceAsync would find it and exit.
     public static void WaitForPreviousInstance(IConfiguration configuration)
     {
         if (configuration.GetValue<int?>(WaitPidKey) is not { } pid) return;
@@ -83,7 +81,7 @@ public static class DesktopLauncher
         }
     }
 
-    /// <summary>Starts the (already replaced) executable in a new console and stops this instance.</summary>
+    // the exe was already replaced
     public static void RestartAfterUpdate(WebApplication app, string exePath)
     {
         try
@@ -103,7 +101,7 @@ public static class DesktopLauncher
         app.Lifetime.StopApplication();
     }
 
-    /// <summary>Startup failures would otherwise close the console before the user can read them.</summary>
+    // otherwise the console closes before anyone can read the error
     public static void ReportFatal(Exception exception, IConfiguration configuration)
     {
         Console.WriteLine();

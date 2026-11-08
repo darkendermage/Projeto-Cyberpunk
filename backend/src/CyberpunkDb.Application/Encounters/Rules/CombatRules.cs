@@ -7,10 +7,8 @@ using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.Encounters.Rules;
 
-/// <summary>
-/// The parameters of <c>combat-rules.json</c> (Friday Night Firefight, CP:R p.168-188). Autofire, Critical Injuries,
-/// Wound States and Death Saves are not repeated here: they come from the character rules, the same the sheet uses.
-/// </summary>
+// combat-rules.json (CP:R p.168-188). Autofire, crits, Wound States and Death Saves come from the character
+// rules instead, same as the sheet.
 public sealed record CombatRulesDocument
 {
     public string About { get; init; } = "";
@@ -32,7 +30,7 @@ public sealed record CombatRulesDocument
     public Ruled<bool> MartialArtsHalvesArmor { get; init; } = new();
     public Ruled<string> Grapple { get; init; } = new();
     public Ruled<ThrownRule> Thrown { get; init; } = new();
-    /// <summary>Weapons with their own rules, by catalog slug (the Ranger Combat Boomerang).</summary>
+    // by catalog slug (Ranger Combat Boomerang)
     public Ruled<Dictionary<string, SpecialWeaponRule>> SpecialWeapons { get; init; } = new();
     public Ruled<ShotgunShellRule> ShotgunShell { get; init; } = new();
     public Ruled<string> Explosives { get; init; } = new();
@@ -69,11 +67,10 @@ public sealed record EnvironmentDamage(string Id, string Label, string Damage, b
 public sealed record GenericCombatant(
     int Ref, int Dex, int Body, int Will, int Move, int Hp, int SpBody, int SpHead, int AttackBase, int EvasionBase, string Damage, WeaponClass WeaponClass);
 
-/// <summary>How an attack is made (CP:R p.170-178).</summary>
+// CP:R p.170-178
 [JsonConverter(typeof(JsonStringEnumConverter))]
 public enum AttackMode { Single, Autofire, AimedHead, AimedHand, AimedLeg, ShotgunShell, Explosive, Suppressive }
 
-/// <summary>The loaded combat rules. Singleton.</summary>
 public sealed class CombatRuleBook
 {
     private const string Resource = "CyberpunkDb.Application.Encounters.Rules.combat-rules.json";
@@ -98,16 +95,16 @@ public sealed class CombatRuleBook
     public RangeRow? RowFor(WeaponClass weaponClass) => _rows.GetValueOrDefault(weaponClass);
     public RangeRow Row(string key) => Document.SingleShot.Value.First(r => r.Key == key);
 
-    /// <summary>Index of the range band (CP:R p.173) for a distance in m/yds; null beyond 800.</summary>
+    // CP:R p.173, null past 800
     public int? Band(int meters) => Document.RangeBands.Value.Select((b, i) => (b, i)).Where(x => meters >= x.b.Min && meters <= x.b.Max)
         .Select(x => (int?)x.i).FirstOrDefault();
 
-    /// <summary>The DV of a single shot at this range, or an explanation of why the shot can't be made.</summary>
+    // throws when the shot can't be made
     public int SingleShotDv(RangeRow row, int meters) =>
         row.Dv[TableBand(meters)] ?? throw RequestValidationException.For("range",
             L.T($"{row.Label} não alcança {meters} m (N/A na tabela, {Document.SingleShot.Source}).", $"{L.D(row.Label)} doesn't reach {meters} m (N/A on the table, {Document.SingleShot.Source})."));
 
-    /// <summary>The DV on a table the weapon's own sheet prints; a dash on it means out of the weapon's range.</summary>
+    // a dash on the printed table = out of range
     public int PrintedDv(string weapon, int?[] dv, int meters) =>
         dv[TableBand(meters)] ?? throw RequestValidationException.For("range",
             L.T($"{weapon} não alcança {meters} m: fora do alcance na tabela da própria ficha.", $"{weapon} doesn't reach {meters} m: out of range on its own sheet's table."));
@@ -115,7 +112,7 @@ public sealed class CombatRuleBook
     private int TableBand(int meters) =>
         Band(meters) ?? throw RequestValidationException.For("range", L.T($"{meters} m está além da tabela de alcance ({Document.SingleShot.Source}).", $"{meters} m is beyond the range table ({Document.SingleShot.Source})."));
 
-    /// <summary>Brawling and Martial Arts damage by BODY (CP:R p.176, p.178); a Cyberarm makes Brawling at least 2d6.</summary>
+    // by BODY (CP:R p.176, p.178). A Cyberarm makes Brawling at least 2d6.
     public string UnarmedDice(int body, bool cyberarm)
     {
         var dice = Document.UnarmedDamage.Value.First(d => d.MaxBody is null || body <= d.MaxBody).Dice;
@@ -132,11 +129,8 @@ public sealed class CombatRuleBook
     private static int DiceCount(string dice) => int.TryParse(dice.Split('d')[0], out var n) ? n : 0;
 }
 
-/// <summary>
-/// A weapon that breaks the usual rules: <see cref="ThrownOnly"/> attacks only by throwing (DEX + Athletics, the thrown
-/// row of the range table), <see cref="HalvesArmor"/> even when thrown, and comes back to hand at the start of the
-/// thrower's next Turn when they have the <see cref="ReturnsWith"/> cyberware.
-/// </summary>
+// ThrownOnly: DEX + Athletics, thrown row of the range table. Still halves armor when thrown, and comes back
+// at the start of the thrower's next Turn if they have the ReturnsWith cyberware.
 public sealed record SpecialWeaponRule
 {
     public bool ThrownOnly { get; init; }

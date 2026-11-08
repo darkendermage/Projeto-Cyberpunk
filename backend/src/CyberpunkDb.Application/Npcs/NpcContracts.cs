@@ -6,11 +6,10 @@ namespace CyberpunkDb.Application.Npcs;
 public sealed record NpcSaveRequest
 {
     public NpcSheet Sheet { get; init; } = new();
-    /// <summary>Saves even with blocking errors, as a draft pending validation.</summary>
     public bool SaveAsDraft { get; init; }
 }
 
-/// <summary>Manual editor: install an implant (and any foundational piece it needs) into the sheet.</summary>
+// also adds the foundation it needs
 public sealed record NpcInstallCyberwareRequest(NpcSheet Sheet, int ItemId);
 
 public sealed record NpcSummaryDto(
@@ -20,7 +19,7 @@ public sealed record NpcSummaryDto(
 public sealed record NpcDetailDto(
     int Id, NpcStatus Status, DateTime CreatedAt, DateTime UpdatedAt, NpcSheet Sheet, NpcValidationReport Report);
 
-/// <summary>One documented parameter: the value as shown to the user and where it comes from.</summary>
+// value as shown + where it comes from
 public sealed record RuleFactDto(string Key, string Label, string Value, string? Source, bool Complementary, string? Note);
 
 public sealed record NpcTemplateDto(
@@ -34,7 +33,6 @@ public sealed record FreeSkillDto(string Skill, string? Specialization, int Leve
 public sealed record ProfileDto(
     string Id, string Label, string Description, string? Role, IReadOnlyList<string> KeyCombatSkills, IReadOnlyList<string> KeyNonCombatSkills);
 
-/// <summary>A gang as the generator shows it: who they are, how they look, where they roll and what they carry.</summary>
 public sealed record GangDto(
     string Id, string Label, string Era, string Kind, string Description, string Aesthetic,
     IReadOnlyList<string> Territory, IReadOnlyList<string> Languages, IReadOnlyList<string> PreferredProfiles,

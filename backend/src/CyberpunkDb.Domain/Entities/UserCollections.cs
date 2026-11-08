@@ -7,7 +7,7 @@ public class Favorite
     public DateTime CreatedAt { get; set; }
 }
 
-/// <summary>A named equipment list (loadout, shopping list, character inventory...).</summary>
+// loadout, shopping list...
 public class GearList
 {
     public int Id { get; set; }

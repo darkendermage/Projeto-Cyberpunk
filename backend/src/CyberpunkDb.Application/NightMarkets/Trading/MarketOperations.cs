@@ -7,7 +7,6 @@ using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.NightMarkets.Trading;
 
-/// <summary>A market being changed by one command: its state, the catalog, the clock and what to tell the user.</summary>
 public sealed class MarketChange(MarketState state, MarketCatalog catalog, DateTime now)
 {
     public MarketState State { get; set; } = state;
@@ -23,13 +22,10 @@ public sealed class MarketChange(MarketState state, MarketCatalog catalog, DateT
     public void Log(string kind, string title, string? detail = null) => State.Events.Add(new MarketEvent(Now, kind, title, detail));
 }
 
-/// <summary>
-/// The GM and player commands of a saved market. Purchases are standalone: they go to the market's own ledger and
-/// never touch a character sheet.
-/// </summary>
+// Purchases go to the market's own ledger and never touch a character sheet.
 public sealed class MarketOperations(NightMarketRuleBook rules, MarketPricing pricing, IDiceRoller dice)
 {
-    // ------------------------------------------------------------------ purchases
+    // purchases
 
     public void Purchase(MarketChange change, PurchaseRequest request)
     {
@@ -48,13 +44,13 @@ public sealed class MarketOperations(NightMarketRuleBook rules, MarketPricing pr
         if (request.Haggle is { } h)
         {
             haggle = pricing.Haggle(h, dice, category, request.Quantity);
-            // Fixers of Operator 4+ see through an undisguised damage before closing the deal (IR5 p.5).
+            // Operator 4+ sees through undisguised damage (IR5 p.5)
             if (listing.ConditionHidden && listing.Condition != ItemCondition.Normal && h.Buyer.Rank >= rules.Document.Condition.DetectRank.Value)
                 change.Notices.Add(L.T($"Com Operator {h.Buyer.Rank}, o comprador percebe que o item está {listing.Condition} ({rules.Document.Condition.DetectRank.Source}), a não ser que o dano tenha sido disfarçado.", $"With Operator {h.Buyer.Rank}, the buyer notices the item is {listing.Condition} ({rules.Document.Condition.DetectRank.Source}), unless the damage was disguised."));
         }
         var outcome = pricing.Apply(haggle, request.DealId, unit, category, request.Quantity);
         var delivered = outcome.Delivered;
-        if (listing.Stock is { } s2 && delivered > s2) delivered = s2; // the free unit only if there is one left
+        if (listing.Stock is { } s2 && delivered > s2) delivered = s2; // free unit only if there's one left
 
         Replace(state, listing with { Stock = listing.Stock is { } s3 ? s3 - delivered : null });
         var buyer = string.IsNullOrWhiteSpace(request.Buyer) ? null : request.Buyer.Trim();
@@ -83,7 +79,7 @@ public sealed class MarketOperations(NightMarketRuleBook rules, MarketPricing pr
         change.Log("undo", L.T($"Venda desfeita: {sale.Delivered}× {sale.Name}", $"Sale undone: {sale.Delivered}× {sale.Name}"));
     }
 
-    // ------------------------------------------------------------------ listings
+    // listings
 
     public void AddListing(MarketChange change, AddListingRequest request)
     {
@@ -157,7 +153,7 @@ public sealed class MarketOperations(NightMarketRuleBook rules, MarketPricing pr
         change.Log("listing", L.T($"Listagem removida: {listing.Name}", $"Listing removed: {listing.Name}"));
     }
 
-    /// <summary>Fills a "GM's choice" row or a Midnight Market slot with a catalog item, picked or drawn.</summary>
+    // picked or drawn
     public void FillSlot(MarketChange change, int slotId, FillSlotRequest request)
     {
         var state = change.State;
@@ -215,7 +211,7 @@ public sealed class MarketOperations(NightMarketRuleBook rules, MarketPricing pr
         change.Log("midnight", L.T($"Midnight Market: {count} itens raros", $"Midnight Market: {count} rare items"), $"{rules.Document.MidnightMarket.Items.Value} ({rules.Document.MidnightMarket.Items.Source}).");
     }
 
-    // ------------------------------------------------------------------ events
+    // events
 
     public DoorPrizeResult DoorPrize(MarketChange change, DoorPrizeRequest request)
     {
@@ -264,7 +260,7 @@ public sealed class MarketOperations(NightMarketRuleBook rules, MarketPricing pr
         return result;
     }
 
-    /// <summary>Counts arrivals; with a Door Prize, every 50th visitor wins (complementary reading of BC+ p.2).</summary>
+    // with a Door Prize every 50th visitor wins (our reading of BC+ p.2)
     public void Visitors(MarketChange change, int count)
     {
         if (count is < 1 or > 10000) throw RequestValidationException.For("count", L.T("Informe de 1 a 10.000 visitantes.", "Enter 1 to 10,000 visitors."));
@@ -277,7 +273,7 @@ public sealed class MarketOperations(NightMarketRuleBook rules, MarketPricing pr
             change.Notices.Add(L.T($"Visitante nº {n}: hora de girar a roleta do Door Prize.", $"Visitor no. {n}: time to spin the Door Prize wheel."));
     }
 
-    // ------------------------------------------------------------------ helpers
+    // helpers
 
     private static PrizeResult Prize(MarketCatalog catalog, PrizeEntry entry)
     {

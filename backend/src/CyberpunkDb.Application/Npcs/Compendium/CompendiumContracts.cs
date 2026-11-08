@@ -1,6 +1,6 @@
 namespace CyberpunkDb.Application.Npcs.Compendium;
 
-/// <summary>List entry: identity, role and the bio, without the stat block.</summary>
+// no stat block
 public sealed record CompendiumNpcSummary(
     string Id,
     string Name,

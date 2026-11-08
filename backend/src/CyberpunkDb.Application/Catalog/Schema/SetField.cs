@@ -9,10 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CyberpunkDb.Application.Catalog.Schema;
 
-/// <summary>
-/// A multi-valued attribute backed by a child collection, e.g. weapon calibers or item tags.
-/// Supports "all" (item has every value), "in" (item has any value) and "nin" (item has none).
-/// </summary>
+// Multi-valued attribute backed by a child collection (calibers, tags). Supports all / in / nin.
 public sealed class SetField<T, TElem, TValue> : FieldDefinition<T> where T : Item
 {
     private static readonly MethodInfo AnyWithPredicate = typeof(Enumerable).GetMethods()
@@ -95,7 +92,7 @@ public sealed class SetField<T, TElem, TValue> : FieldDefinition<T> where T : It
         return ScalarField<T, TValue>.ToFacets(rows.Where(r => r.Key is not null).Select(r => (r.Key, r.Count)));
     }
 
-    /// <summary>x =&gt; x.Collection.Any(e =&gt; values.Contains(e.Value))</summary>
+    // x => x.Collection.Any(e => values.Contains(e.Value))
     private Expression AnyOf(List<TValue> values)
     {
         var contains = Expression.Call(ContainsMethod, ValueHolder<List<TValue>>.Expr(values), _value.Body);

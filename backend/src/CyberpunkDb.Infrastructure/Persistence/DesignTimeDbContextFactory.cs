@@ -3,10 +3,7 @@ using Microsoft.EntityFrameworkCore.Design;
 
 namespace CyberpunkDb.Infrastructure.Persistence;
 
-/// <summary>
-/// Used by "dotnet ef". PostgreSQL by default; pass "-- --provider Sqlite" to work on the SQLite
-/// migration set (project CyberpunkDb.Migrations.Sqlite). No connection is opened.
-/// </summary>
+// For "dotnet ef". Postgres by default; pass "-- --provider Sqlite" for the SQLite migrations. Never connects.
 public sealed class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
 {
     public AppDbContext CreateDbContext(string[] args)

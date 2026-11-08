@@ -4,22 +4,18 @@ using Microsoft.AspNetCore.Http.Features;
 
 namespace CyberpunkDb.Api.Table;
 
-/// <summary>
-/// The player's own sheet through the tunnel ("Minha ficha" on the table): with a valid seat key (X-Seat, or ?seat= on
-/// images), the players' port reaches the character API for the seat's character only, plus the reads the sheet
-/// screens need (rules, store, item details). Deleting, duplicating, exporting, importing, creating and listing
-/// characters stay out; so does every other character.
-/// </summary>
+// "Minha ficha" through the tunnel: with a valid seat key the players' port reaches the character API for that
+// seat's character only, plus the reads the sheet screens need. No delete/duplicate/export/import/create/list.
 public static class SeatCharacterAccess
 {
-    /// <summary>A path this access may open on the players' port; anything else is decided by the guard as before.</summary>
+    // anything else is left to the guard
     public static bool IsCandidate(PathString path) =>
         path.StartsWithSegments("/api/characters") || path.StartsWithSegments("/api/items");
 
     public static async Task<bool> AllowedAsync(HttpContext context)
     {
         var request = context.Request;
-        // Encoded dots or separators never reach a sheet: the path must be what routing sees, plainly.
+        // encoded dots or separators never reach a sheet: the path must be exactly what routing sees
         var raw = context.Features.Get<IHttpRequestFeature>()?.RawTarget ?? request.Path.Value ?? "";
         if (raw.Contains("%2e", StringComparison.OrdinalIgnoreCase) || raw.Contains("%2f", StringComparison.OrdinalIgnoreCase)
             || raw.Contains("%5c", StringComparison.OrdinalIgnoreCase)) return false;
@@ -48,7 +44,7 @@ public static class SeatCharacterAccess
         if (segments.Length == 3 && (segments[2].Equals("rules", StringComparison.OrdinalIgnoreCase) || segments[2].Equals("store", StringComparison.OrdinalIgnoreCase)))
             return get;
 
-        // /api/characters/{own}/…: the seat's character only.
+        // /api/characters/{own}/...: only the seat's character
         if (segments.Length < 3 || !int.TryParse(segments[2], out var id) || id != own) return false;
         if (segments.Length == 3) return get || HttpMethods.IsPut(request.Method);
         var action = segments[3];

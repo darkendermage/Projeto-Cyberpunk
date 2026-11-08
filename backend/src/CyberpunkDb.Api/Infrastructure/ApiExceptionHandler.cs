@@ -5,7 +5,7 @@ using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Api.Infrastructure;
 
-/// <summary>Maps application exceptions to RFC 7807 problem responses with pt-BR messages.</summary>
+// application exceptions -> RFC 7807 problem responses
 public sealed class ApiExceptionHandler(IProblemDetailsService problemDetails, ILogger<ApiExceptionHandler> logger) : IExceptionHandler
 {
     public async ValueTask<bool> TryHandleAsync(HttpContext context, Exception exception, CancellationToken ct)

@@ -5,21 +5,18 @@ using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.Npcs.Generation;
 
-/// <summary>
-/// Input of the generator. In automatic mode only <see cref="Level"/> is needed. In semi-automatic mode
-/// <see cref="Base"/> carries the user's values; everything locked there (and the name/concept) is kept.
-/// </summary>
+// Automatic mode only needs Level. Semi-automatic sends Base with the user's values; locked fields are kept.
 public sealed record NpcGenerationRequest
 {
     public NpcLevel Level { get; init; }
     public bool Hardened { get; init; }
     public string? ProfileId { get; init; }
-    /// <summary>Gang laid over the profile (<see cref="GangOverlay"/>): turf, language, handles and favored gear.</summary>
+    // see GangOverlay
     public string? GangId { get; init; }
     public int? Seed { get; init; }
     public NpcSheet? Base { get; init; }
     public List<NpcCyberwareRule> CyberwareRules { get; init; } = [];
-    /// <summary>Lowers EMP by 1 per 5 pieces of cyberware (DGD p.152, optional guideline).</summary>
+    // -1 EMP per 5 pieces of cyberware (DGD p.152, optional)
     public bool ApplyEmpGuideline { get; init; }
 }
 
@@ -75,10 +72,7 @@ public sealed class NpcGenerator(NpcRuleBook rules, NpcValidator validator)
         return Fail(seed, maxAttempts, profile.Id, reasons);
     }
 
-    /// <summary>
-    /// One generation attempt, before validation. Public so tests can check that no intermediate attempt
-    /// breaks a budget or a limit.
-    /// </summary>
+    // Public so tests can check no intermediate attempt breaks a budget.
     public NpcSheet BuildAttempt(NpcGenerationRequest request, NpcProfile profile, NpcCatalog catalog, int seed)
     {
         var rng = new Random(seed);
@@ -98,14 +92,14 @@ public sealed class NpcGenerator(NpcRuleBook rules, NpcValidator validator)
         var home = locks.Identity ? b.Home : turf[rng.Next(turf.Length)];
         var stats = DistributeStats(t, profile, b, rng);
 
-        // Cyberware first (it may provide SP), then gear (armor penalties), then skills (bases depend on both).
+        // cyberware first (may give SP), then gear (armor penalties), then skills (depend on both)
         var cyber = new CyberwarePlanner(_m, catalog)
             .WithForbidden(request.CyberwareRules.Where(r => r.State == CyberwareRuleState.Forbidden).Select(r => r.ItemId));
         cyber.AddLocked(b.Cyberware.Where(e => e.Locked));
         foreach (var rule in request.CyberwareRules.Where(r => r.State == CyberwareRuleState.Required))
             if (!cyber.Contains(rule.ItemId) && catalog.Find(rule.ItemId) is { Cyber: not null } item)
                 cyber.TryInstall(item, t.CyberwareBudget.Value);
-        // The gang's taboos only limit what the generator picks on its own; required implants are already in.
+        // gang taboos only limit what we pick, required implants are already in
         cyber.WithForbidden(bias.ForbiddenCyberware.Select(slug => catalog.Find(slug)?.Id).OfType<int>());
         var cyberLimit = t.CyberwareBudget.Value ?? g.UnlimitedCyberwareReference.Value;
         var spend = bias.CyberwareSpendRange ?? g.CyberwareSpendRange.Value;
@@ -157,15 +151,15 @@ public sealed class NpcGenerator(NpcRuleBook rules, NpcValidator validator)
         }.Normalize();
     }
 
-    // ------------------------------------------------------------ feasibility
+    // feasibility
 
-    /// <summary>Checks the user's fixed choices against the template before generating anything.</summary>
+    // check the user's fixed choices before generating anything
     public List<GenerationConflict> Precheck(NpcTemplate t, NpcSheet b, List<NpcCyberwareRule> cyberRules, NpcCatalog catalog)
     {
         var conflicts = new List<GenerationConflict>();
         var s = rules.Document.Stats;
 
-        // STATs: locked values plus the minimum of every other STAT must fit the budget.
+        // locked STATs + the minimum of the others must fit
         var locked = b.Locks.Stats.Where(k => b.Stats.ContainsKey(k)).Select(k => k.ToUpperInvariant()).Distinct().ToList();
         foreach (var k in locked.Where(k => b.Stats[k] > t.MaxStat.Value))
             conflicts.Add(new("STAT_ABOVE_MAX", L.T($"{k} travado em {b.Stats[k]} ultrapassa o máximo de {t.MaxStat.Value} para {t.DisplayName}.", $"{k} locked at {b.Stats[k]} goes over the maximum of {t.MaxStat.Value} for {t.DisplayName}."),
@@ -177,7 +171,6 @@ public sealed class NpcGenerator(NpcRuleBook rules, NpcValidator validator)
                 L.T($"Os STATs travados somam {locked.Sum(k => b.Stats[k])}; com o mínimo nos demais, o total chega a {minimum}, acima do orçamento de {t.StatPoints.Value} em {minimum - t.StatPoints.Value}.", $"The locked STATs add up to {locked.Sum(k => b.Stats[k])}; with the minimum on the others, the total reaches {minimum}, {minimum - t.StatPoints.Value} over the budget of {t.StatPoints.Value}."),
                 L.T("Reduza algum STAT travado ou destrave campos.", "Lower a locked STAT or unlock fields."), t.StatPoints.Reference));
 
-        // Skills.
         var free = rules.FreeSkillLevels(b.NativeLanguage, b.Home);
         var skillCost = 0;
         foreach (var key in b.Locks.Skills.Select(SkillKey.Normalize).Where(k => b.Skills.ContainsKey(k)).Distinct(StringComparer.OrdinalIgnoreCase))
@@ -198,7 +191,6 @@ public sealed class NpcGenerator(NpcRuleBook rules, NpcValidator validator)
             conflicts.Add(new("SKILL_BUDGET_EXCEEDED", L.T($"As perícias travadas custam {skillCost} pontos, acima do orçamento de {t.SkillPoints.Value} em {skillCost - t.SkillPoints.Value}.", $"The locked skills cost {skillCost} points, {skillCost - t.SkillPoints.Value} over the budget of {t.SkillPoints.Value}."),
                 L.T("Reduza perícias travadas.", "Lower locked skills."), t.SkillPoints.Reference));
 
-        // Gear.
         var gearCost = 0;
         foreach (var e in b.Gear.Where(e => e.Locked))
         {
@@ -216,7 +208,7 @@ public sealed class NpcGenerator(NpcRuleBook rules, NpcValidator validator)
                 L.T($"O equipamento fixo custa {NpcValidator.Eb(gearCost)} e ultrapassa o orçamento de {NpcValidator.Eb(t.GearBudget.Value)} em {NpcValidator.Eb(gearCost - t.GearBudget.Value)}.", $"The fixed gear costs {NpcValidator.Eb(gearCost)} and goes {NpcValidator.Eb(gearCost - t.GearBudget.Value)} over the budget of {NpcValidator.Eb(t.GearBudget.Value)}."),
                 L.T("Remova itens fixos ou troque por versões mais baratas.", "Remove fixed items or swap them for cheaper versions."), t.GearBudget.Reference));
 
-        // Cyberware: required items must be installable with their dependencies, within budget, never forbidden.
+        // required cyberware must fit with its dependencies, within budget, and not be forbidden
         var forbidden = cyberRules.Where(r => r.State == CyberwareRuleState.Forbidden).Select(r => r.ItemId).ToHashSet();
         foreach (var e in b.Cyberware.Where(e => e.Locked && forbidden.Contains(e.ItemId)))
             conflicts.Add(new("CYBER_FORBIDDEN", L.T($"{catalog.Find(e.ItemId)?.Name ?? e.ItemId.ToString()} está fixo na ficha e também proibido.", $"{catalog.Find(e.ItemId)?.Name ?? e.ItemId.ToString()} is fixed on the sheet and also forbidden."), L.T("Escolha um dos dois.", "Pick one of the two."), null));
@@ -243,7 +235,7 @@ public sealed class NpcGenerator(NpcRuleBook rules, NpcValidator validator)
         return conflicts;
     }
 
-    // ------------------------------------------------------------ STATs
+    // STATs
 
     private Dictionary<string, int> DistributeStats(NpcTemplate t, NpcProfile profile, NpcSheet b, Random rng)
     {
@@ -251,7 +243,7 @@ public sealed class NpcGenerator(NpcRuleBook rules, NpcValidator validator)
         var lockedKeys = b.Locks.Stats.Select(k => k.ToUpperInvariant()).Where(b.Stats.ContainsKey).ToHashSet();
         var stats = rules.StatKeys.ToDictionary(k => k, k => lockedKeys.Contains(k) ? b.Stats[k] : s.Min.Value, StringComparer.OrdinalIgnoreCase);
 
-        // Tight budgets: lower EMP toward its own minimum before anything else.
+        // tight budget: drop EMP toward its minimum first
         var remaining = t.StatPoints.Value - stats.Values.Sum();
         if (remaining < 0 && !lockedKeys.Contains("EMP"))
         {
@@ -260,7 +252,7 @@ public sealed class NpcGenerator(NpcRuleBook rules, NpcValidator validator)
             remaining += cut;
         }
 
-        // Aim BODY + WILL at the suggested HP range (DGD p.151, Step Four): HP = 10 + 5 × ceil((BODY + WILL) / 2).
+        // aim BODY + WILL at the suggested HP range (DGD p.151, Step Four)
         var d = rules.Document.Derived;
         var minSum = 2 * (int)Math.Ceiling((t.SuggestedHp.Value.Min - d.HpBase.Value) / (double)d.HpPerAverage.Value) - 1;
         var maxSum = 2 * ((t.SuggestedHp.Value.Max - d.HpBase.Value) / d.HpPerAverage.Value);
@@ -272,8 +264,7 @@ public sealed class NpcGenerator(NpcRuleBook rules, NpcValidator validator)
             remaining--;
         }
 
-        // Each point goes to a STAT drawn by the profile's weights, never past the template maximum
-        // (nor past the suggested HP range, while other STATs can still take it).
+        // Profile-weighted points, never past the template max (or the HP range while other STATs can take it).
         while (remaining > 0)
         {
             var open = rules.StatKeys.Where(CanRaise).ToList();
@@ -289,7 +280,7 @@ public sealed class NpcGenerator(NpcRuleBook rules, NpcValidator validator)
 
     private static double Jitter(Random rng) => 0.75 + rng.NextDouble() * 0.5;
 
-    // ------------------------------------------------------------ skills
+    // skills
 
     private (Dictionary<string, int> Skills, List<string> KeySkills) DistributeSkills(
         NpcTemplate t, NpcProfile profile, NpcSheet b, Dictionary<string, int> stats, ArmorPenalty penalty,
@@ -310,7 +301,7 @@ public sealed class NpcGenerator(NpcRuleBook rules, NpcValidator validator)
         }
         var budget = t.SkillPoints.Value - skills.Sum(kv => Cost(kv.Key, kv.Value));
 
-        // Important combat skills follow the weapons actually carried.
+        // important combat skills follow the weapons actually carried
         var weaponSkillIds = rules.Document.WeaponSkillMap.Values.ToHashSet(StringComparer.OrdinalIgnoreCase);
         var primaryId = primarySkill is { } ps ? rules.SkillIdFor(ps) : null;
         var keyCombat = profile.KeyCombatSkills.Where(k => !weaponSkillIds.Contains(k) || primaryId is null || k == primaryId).ToList();
@@ -330,7 +321,7 @@ public sealed class NpcGenerator(NpcRuleBook rules, NpcValidator validator)
         foreach (var k in keyCombat) RaiseTo(k, Weighted.Between(rng, t.CombatSkillBase.Value.Min, t.CombatSkillBase.Value.Max));
         foreach (var k in keyNonCombat) RaiseTo(k, Weighted.Between(rng, t.NonCombatSkillBase.Value.Min, t.NonCombatSkillBase.Value.Max));
 
-        // Secondary skills: the profile's list, the skills of every carried weapon, and a couple of random flavor picks.
+        // profile list + carried weapons' skills + a couple of random ones for flavor
         var weights = new Dictionary<string, double>(profile.SecondarySkills, StringComparer.OrdinalIgnoreCase);
         foreach (var w in gear.Select(e => catalog.Find(e.ItemId)?.Weapon).Where(w => w is not null))
             if (rules.SkillIdFor(w!.Skill) is { } id) weights[id] = Math.Max(weights.GetValueOrDefault(id), 3);
@@ -345,8 +336,8 @@ public sealed class NpcGenerator(NpcRuleBook rules, NpcValidator validator)
             return Math.Min(t.MaxSkill.Value, Math.Max(skills.GetValueOrDefault(key), range.Max - EffStat(key)));
         }
 
-        // Spend the rest one level at a time: secondaries up to the suggested range, then important skills
-        // (never above their suggested base), and finally secondaries up to the template maximum.
+        // Rest goes one level at a time: secondaries to the suggested range, then important skills (up to their
+        // suggested base), then secondaries up to the template max.
         var started = weights.Keys.ToList();
         var passes = new (List<string> Pool, Func<string, int> Cap)[]
         {
@@ -373,9 +364,9 @@ public sealed class NpcGenerator(NpcRuleBook rules, NpcValidator validator)
         return (skills, keySkills);
     }
 
-    // ------------------------------------------------------------ helpers
+    // helpers
 
-    /// <summary>A gang draws among the profiles that suit it; without one, any profile is equally likely.</summary>
+    // no gang = any profile
     private NpcProfile RandomProfile(NpcGang? gang, Random rng)
     {
         var suited = (gang?.Bias.Value?.Profiles ?? [])

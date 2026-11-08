@@ -4,11 +4,8 @@ using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.NetArchitectures;
 
-/// <summary>
-/// The "Home Security 2045" price of an Architecture (CP:R p.217-218): floors by band, Passwords/Files/Control Nodes by
-/// DV, Black ICE at catalog price doubled or tripled when they share a floor, Demons, and Defenses by the DV to counter
-/// them. Civilian devices on a Control Node cost nothing extra.
-/// </summary>
+// "Home Security 2045" price (CP:R p.217-218): floors by band, Passwords/Files/Nodes by DV, Black ICE at
+// catalog price (x2/x3 when sharing a floor), Demons, Defenses by DV. Civilian devices are free.
 public sealed class NetArchitecturePricing(NetArchitectureRuleBook rules)
 {
     public ArchitectureQuote Quote(ArchitectureState state, NetIceCatalog ice)

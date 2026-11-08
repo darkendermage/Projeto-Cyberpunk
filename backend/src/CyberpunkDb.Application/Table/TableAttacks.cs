@@ -5,30 +5,27 @@ using CyberpunkDb.Domain.Entities;
 
 namespace CyberpunkDb.Application.Table;
 
-/// <summary>One target of an attack as the chat shows it; the numbers are null where the reader may not see them.</summary>
+// numbers are null where the reader can't see them
 public sealed record TableAttackTarget(
     string Id, string Name, bool Pc, bool Hit, int? Damage, int? Through, string Location, int? Dv, int? DefenseRoll,
     IReadOnlyList<int> DamageDice, string? CriticalInjury, IReadOnlyList<string>? Notes = null);
 
-/// <summary>
-/// An attack of the fight linked to the live scene, as a chat line: it drives the attack card, the effect on the map and
-/// the dice. <see cref="Seq"/> is the fight's attack number; <see cref="Undone"/> is set when the GM takes it back.
-/// </summary>
+// Drives the attack card, the map effect and the dice. Undone is set when the GM takes it back.
 public sealed record TableAttack(
     int EncounterId, int Seq, string AttackerId, string AttackerName, bool AttackerPc, string Weapon, AttackMode Mode, bool Melee,
     int? AttackRoll, int AttackTotal, IReadOnlyList<TableAttackTarget> Targets, bool Undone = false, int? AttackExtra = null,
     IReadOnlyList<int>? CritDice = null, string? DiceColor = null, IReadOnlyList<string>? Notes = null);
 
-/// <summary>A quick attack's answer: the resolved attack, or the step it waits on (the target's dodge, the Critical Injury roll).</summary>
+// either the resolved attack or the step it waits on
 public sealed record QuickAttackResult(TableAttack? Attack, PendingView? Pending);
 
 public static class TableAttacks
 {
-    /// <summary>The attack the fight just resolved, with every number (the GM's view).</summary>
+    // GM view, every number
     public static TableAttack From(EncounterDetailDto detail, AttackResult a)
     {
         bool IsPc(string id) => detail.Queue.FirstOrDefault(f => f.Id == id)?.Kind == CombatantKind.Pc;
-        // The Solo's Precision Attack shows on the card (it is inside the attack total already).
+        // Precision Attack goes on the card (already inside the total)
         var attacker = detail.Queue.FirstOrDefault(f => f.Id == a.AttackerId);
         var precision = Math.Min(3, (attacker?.Awareness("precisionAttack") ?? 0) / 3);
         IReadOnlyList<string> notes = precision > 0 ? [$"Precision Attack +{precision} (CP:R p.146)"] : [];
@@ -37,23 +34,17 @@ public static class TableAttacks
                 t.DefenseRoll, t.DamageDice, t.CriticalInjury, AwarenessNotes(t.Notes))).ToList(), AttackExtra: a.AttackExtra, CritDice: a.CritDice, Notes: notes);
     }
 
-    /// <summary>The Combat Awareness lines of a target's notes (Spot Weakness, Damage Deflection): what changed the damage.</summary>
+    // Spot Weakness, Damage Deflection
     private static IReadOnlyList<string> AwarenessNotes(IReadOnlyList<string> notes) =>
         notes.Where(n => n.StartsWith("Spot Weakness", StringComparison.Ordinal) || n.StartsWith("Damage Deflection", StringComparison.Ordinal)).ToList();
 
-    /// <summary>
-    /// What a player reads: the attack roll, the DV or defense, the damage dice and the damage dealt on every target, so
-    /// the whole table follows the shot; only how much went into an NPC's HP stays hidden (their Wound State tells the rest).
-    /// </summary>
+    // Players see the rolls and damage, so the whole table can follow. Only how much an NPC lost stays hidden.
     public static TableAttack ForSeat(TableAttack a) => a with
     {
         Targets = a.Targets.Select(t => t.Pc ? t : t with { Through = null }).ToList(),
     };
 
-    /// <summary>
-    /// Meters between two tokens, center to center, the way the ruler counts them: squares between their cells with a
-    /// diagonal as one, or the straight line on a scene without a grid.
-    /// </summary>
+    // Center to center like the ruler: diagonals count as one square, straight line when there's no grid.
     public static double Meters(SceneGrid grid, SceneToken a, SceneToken b)
     {
         var (ax, ay) = (a.X + a.Width / 2, a.Y + a.Height / 2);

@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CyberpunkDb.Application.Catalog;
 
-/// <summary>Read side of the catalog: schemas, faceted search, global search and item details.</summary>
 public sealed class CatalogService(IAppDbContext db, CategoryRegistry registry)
 {
     public async Task<IReadOnlyList<CategorySummaryDto>> GetCategoriesAsync(CancellationToken ct)
@@ -26,7 +25,6 @@ public sealed class CatalogService(IAppDbContext db, CategoryRegistry registry)
     public Task<SearchResult> SearchAsync(string categoryKey, SearchRequest request, CancellationToken ct) =>
         registry.Get(categoryKey).SearchAsync(db, request, ct);
 
-    /// <summary>Searches every category and returns the best matches grouped by category.</summary>
     public async Task<IReadOnlyList<GlobalSearchGroup>> GlobalSearchAsync(string? query, int perCategory, CancellationToken ct)
     {
         var tokens = TextNormalizer.Tokenize(query);
@@ -69,7 +67,7 @@ public sealed class CatalogService(IAppDbContext db, CategoryRegistry registry)
         return await GetItemAsync(id, ct);
     }
 
-    /// <summary>Loads items of any category, preserving the order of <paramref name="ids"/>.</summary>
+    // keeps the order of ids
     public async Task<IReadOnlyList<ItemDto>> GetItemsAsync(IReadOnlyCollection<int> ids, CancellationToken ct)
     {
         if (ids.Count == 0) return [];

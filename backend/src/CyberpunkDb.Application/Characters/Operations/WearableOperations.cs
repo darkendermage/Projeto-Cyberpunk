@@ -5,17 +5,11 @@ using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.Characters.Operations;
 
-/// <summary>
-/// Options in worn hosts (Smart Glasses, Smart Lens, Battleglove, Smart Gloves, Smart Ears). Like weapon attachments,
-/// the option is an inventory instance linked to the host: nothing is implanted, so no Humanity is lost
-/// (<c>wearableHumanityLoss</c>), and the host needs no Cybereye or Cyberarm.
-/// </summary>
+// Smart Glasses, Smart Lens, Battleglove, Smart Gloves, Smart Ears. The option is an inventory instance linked to
+// the host, like an attachment: nothing implanted, no Humanity lost, no Cybereye/Cyberarm needed.
 public sealed class WearableOperations(CharacterRuleBook rules, InventoryOperations inventory)
 {
-    /// <summary>
-    /// Puts an option in a host: one bought now (<see cref="WearableInstallRequest.ItemId"/>) or one already in the
-    /// inventory. It costs what installing it once in a Cybereye or Cyberarm costs (CP:R p.347, 354).
-    /// </summary>
+    // Costs the same as installing it once in a Cybereye or Cyberarm (CP:R p.347, 354).
     public CharacterSheet Install(CharacterSheet sheet, WearableInstallRequest request, CharacterChange change)
     {
         var hostEntry = Find(sheet, request.WearableInstanceId);
@@ -41,7 +35,7 @@ public sealed class WearableOperations(CharacterRuleBook rules, InventoryOperati
         InventoryEntry entry;
         if (request.ItemId is not null)
         {
-            // Bought into the inventory first, so money, budget and history follow the normal purchase.
+            // buy into the inventory first so money/budget/history work like a normal purchase
             var before = sheet.Inventory.Select(e => e.InstanceId).ToHashSet();
             sheet = inventory.Purchase(sheet, new PurchaseRequest(request.Version, option.Id, 1, Install: false, Pool: request.Pool), change);
             change.Sheet = sheet;
@@ -52,7 +46,7 @@ public sealed class WearableOperations(CharacterRuleBook rules, InventoryOperati
         if (Holder(sheet, entry.InstanceId) is { } other && entry.Quantity <= 1)
             throw CharacterChange.Refuse("optionInstanceId", L.T($"{option.Name} já está em {change.Item(other.ItemId).Name}.", $"{option.Name} is already in {change.Item(other.ItemId).Name}."));
 
-        // One unit of a stack is split off, so the rest stays available.
+        // split one off the stack
         if (entry.Quantity > 1)
         {
             sheet = Replace(sheet, entry with { Quantity = entry.Quantity - 1 });
@@ -69,7 +63,7 @@ public sealed class WearableOperations(CharacterRuleBook rules, InventoryOperati
         return Replace(sheet, hostEntry with { Wearable = state with { Options = [.. state.Options, entry.InstanceId] } });
     }
 
-    /// <summary>Takes an option out of its host; it stays in the inventory.</summary>
+    // stays in the inventory
     public CharacterSheet Remove(CharacterSheet sheet, WearableOptionRequest request, CharacterChange change)
     {
         var hostEntry = Find(sheet, request.WearableInstanceId);
@@ -85,7 +79,7 @@ public sealed class WearableOperations(CharacterRuleBook rules, InventoryOperati
         });
     }
 
-    /// <summary>The hand a glove is worn on: the options of the arm under it stop working while it is worn.</summary>
+    // options on the arm under the glove stop working
     public CharacterSheet SetSide(CharacterSheet sheet, WearableSideRequest request, CharacterChange change)
     {
         var hostEntry = Find(sheet, request.WearableInstanceId);
@@ -95,10 +89,7 @@ public sealed class WearableOperations(CharacterRuleBook rules, InventoryOperati
         return Replace(sheet, hostEntry with { Wearable = (hostEntry.Wearable ?? new WearableState()) with { Side = request.Side } });
     }
 
-    /// <summary>
-    /// Drops the links of an inventory instance that leaves the sheet: from its host when it is an option, and the
-    /// options of a host go back to being carried.
-    /// </summary>
+    // An item leaving the sheet: unlink it from its host, and a host's options go back to being carried.
     public static List<InventoryEntry> Unlink(List<InventoryEntry> items, string instanceId)
     {
         var options = items.FirstOrDefault(e => e.InstanceId == instanceId)?.Wearable?.Options ?? [];

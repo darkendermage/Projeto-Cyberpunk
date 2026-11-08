@@ -3,10 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CyberpunkDb.Infrastructure.Persistence;
 
-/// <summary>
-/// Table-per-type mapping: "Items" holds the shared columns and every category has its own table
-/// with typed columns, joined by primary key. Indexes cover the most common filters and sorts.
-/// </summary>
+// Table-per-type: "Items" has the shared columns, each category its own table joined by PK.
 internal static class CatalogModelConfiguration
 {
     public static void Apply(ModelBuilder b, bool isPostgres)
@@ -125,7 +122,7 @@ internal static class CatalogModelConfiguration
             e.Property(x => x.Effect).HasMaxLength(1000);
             e.HasIndex(x => x.CyberwareType);
             e.HasIndex(x => x.HumanityLoss);
-            // Self reference: an option (e.g. Low Light/IR/UV) requires a foundational piece (Cybereye).
+            // an option (e.g. Low Light/IR/UV) requires a foundation (Cybereye)
             e.HasOne(x => x.RequiresItem).WithMany().HasForeignKey(x => x.RequiresItemId).OnDelete(DeleteBehavior.Restrict);
         });
 

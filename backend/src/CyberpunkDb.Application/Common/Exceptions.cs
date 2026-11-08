@@ -1,7 +1,7 @@
 using CyberpunkDb.Application.Localization;
 namespace CyberpunkDb.Application.Common;
 
-/// <summary>Request is well-formed JSON but semantically invalid. Mapped to HTTP 400 with per-field errors.</summary>
+// valid JSON but semantically wrong -> 400 with per-field errors
 public sealed class RequestValidationException(IDictionary<string, string[]> errors)
     : Exception(L.T("Um ou mais campos são inválidos.", "One or more fields are invalid."))
 {
@@ -15,11 +15,11 @@ public sealed class NotFoundException(string message) : Exception(message);
 
 public sealed class ConflictException(string message) : Exception(message);
 
-/// <summary>The caller is known but may not do this (a player editing another seat's image). Mapped to HTTP 403.</summary>
+// -> 403
 public sealed class ForbiddenException(string message) : Exception(message);
 
-/// <summary>The caller did this too often (a seat's image uploads per hour). Mapped to HTTP 429.</summary>
+// -> 429
 public sealed class TooManyRequestsException(string message) : Exception(message);
 
-/// <summary>The request has no valid credential (a virtual table seat link that is wrong or revoked). Mapped to HTTP 401.</summary>
+// bad or revoked seat link -> 401
 public sealed class UnauthorizedException(string message) : Exception(message);

@@ -5,11 +5,8 @@ using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.NightMarkets.Generation;
 
-/// <summary>
-/// Builds a market from a preset: the Night Market Generator of CP:R p.338–339 (kinds of goods, 1d10 lines, d100 rows),
-/// the Black Chrome listings with the market's booth letter (BC p.7), the preset's own stock, the second-hand
-/// condition and the Midnight Market slots. Same seed, same market.
-/// </summary>
+// CP:R p.338-339 generator + Black Chrome listings (BC p.7) + preset stock + condition + Midnight slots.
+// Same seed, same market.
 public sealed class NightMarketGenerator(NightMarketRuleBook rules)
 {
     private const string CoreBook = "Core Book";
@@ -32,7 +29,7 @@ public sealed class NightMarketGenerator(NightMarketRuleBook rules)
         var build = new ListingBuilder(rules, catalog, preset.Letter, stalls, listings, slots, 1);
         foreach (var s in preset.Stalls) build.Stall(s.Number, s.Label);
 
-        // The book's own listings first, so they keep their booth when a d100 row also brings them.
+        // book listings first so they keep their booth if a d100 row also brings them
         if ((preset.IsBlackChrome ? preset.Letter : options.BlackChromeLetter) is { } bcLetter)
             AddBlackChrome(bcLetter, build, catalog);
 
@@ -71,7 +68,7 @@ public sealed class NightMarketGenerator(NightMarketRuleBook rules)
         };
     }
 
-    // ------------------------------------------------------------------ setup
+    // setup
 
     private MarketOrganizer Organizer(MarketPreset preset, MarketOrganizer? requested) => new()
     {
@@ -100,7 +97,7 @@ public sealed class NightMarketGenerator(NightMarketRuleBook rules)
             throw RequestValidationException.For("lines", L.T("O número de linhas é um 1d10: de 1 a 10.", "The number of lines is a 1d10: from 1 to 10."));
     }
 
-    /// <summary>The generic Core market uses only the Core Rulebook unless the GM enables more books.</summary>
+    // Core market = Core Rulebook only, unless the GM enables more
     private static List<string> Books(MarketPreset preset, List<string>? requested, MarketCatalog catalog)
     {
         var all = catalog.Items.Select(i => i.Book).OfType<string>().Distinct(StringComparer.OrdinalIgnoreCase).ToList();
@@ -126,7 +123,7 @@ public sealed class NightMarketGenerator(NightMarketRuleBook rules)
         };
     }
 
-    /// <summary>1d6 per kind of goods; a repeated result is rolled again (CP:R p.338).</summary>
+    // repeats get rolled again (CP:R p.338)
     private List<(GoodsType, int?)> RollGoods(Random rng)
     {
         var chosen = new List<(GoodsType, int?)>();
@@ -139,7 +136,7 @@ public sealed class NightMarketGenerator(NightMarketRuleBook rules)
         return chosen;
     }
 
-    // ------------------------------------------------------------------ d100 rows
+    // d100 rows
 
     private RolledGoods Fill(GoodsType good, int? goodsRoll, int? typedLines, MarketPreset preset, ListingBuilder build,
         MarketCatalog catalog, IReadOnlySet<string> books, Random rng)
@@ -152,7 +149,7 @@ public sealed class NightMarketGenerator(NightMarketRuleBook rules)
         {
             var roll = rng.Next(1, 101);
             var index = (roll - 1) / band;
-            if (rolls.Any(r => r.Band == index)) continue; // same result: roll again (CP:R p.338)
+            if (rolls.Any(r => r.Band == index)) continue; // repeat: roll again (CP:R p.338)
             var entry = good.Table[index];
             rolls.Add(new TableRoll(roll, index, entry.Label));
             Resolve(entry, good, stall, build, catalog, books);
@@ -183,7 +180,7 @@ public sealed class NightMarketGenerator(NightMarketRuleBook rules)
             : entry.Query is { } q ? catalog.Query(q, books).OrderBy(i => i.Price).ThenBy(i => i.Name, StringComparer.OrdinalIgnoreCase).ToList() : [];
         if (items.Count == 0)
         {
-            // Nothing of this row in the enabled books: leave it for the GM to pick from the whole catalog.
+            // nothing in the enabled books, leave it for the GM to pick
             build.Slot(stall, entry.Label, entry.Query ?? new ItemQuery(), ListingOrigin.CoreTable, good.Id);
             return;
         }
@@ -191,9 +188,9 @@ public sealed class NightMarketGenerator(NightMarketRuleBook rules)
             build.Item(item, stall, ListingOrigin.CoreTable, entry.Label, good.Id, rolled: true, note: entry.Note);
     }
 
-    // ------------------------------------------------------------------ other sources
+    // other sources
 
-    /// <summary>Every Black Chrome listing with a booth of this letter, at its numbered spot (BC p.7).</summary>
+    // BC p.7
     private void AddBlackChrome(string bcLetter, ListingBuilder build, MarketCatalog catalog)
     {
         var legend = rules.Presets.FirstOrDefault(p => p.IsBlackChrome && p.Letter == bcLetter)?.Stalls ?? [];
@@ -206,7 +203,7 @@ public sealed class NightMarketGenerator(NightMarketRuleBook rules)
         }
     }
 
-    /// <summary>For each rolled kind of goods, as many items of the other enabled books as it rolled lines (complementary).</summary>
+    // complementary
     private void AddRelated(List<RolledGoods> goods, ListingBuilder build, MarketCatalog catalog, IReadOnlySet<string> books, Random rng)
     {
         var others = books.Where(b => !string.Equals(b, CoreBook, StringComparison.OrdinalIgnoreCase)).ToHashSet(StringComparer.OrdinalIgnoreCase);
@@ -226,7 +223,7 @@ public sealed class NightMarketGenerator(NightMarketRuleBook rules)
         }
     }
 
-    /// <summary>1d10 + 5 rare items of the GM's choice (CP:R p.339), each an open slot.</summary>
+    // 1d10 + 5 rare items of GM's choice (CP:R p.339)
     private void AddMidnight(ListingBuilder build, Random rng)
     {
         var count = rng.Next(1, 11) + 5;

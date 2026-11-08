@@ -4,20 +4,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CyberpunkDb.Application.Table;
 
-/// <summary>
-/// Sends every fight change to the GM's screens, and to the players when the fight is the one linked to the scene on
-/// their screens, each seat with its own view.
-/// </summary>
+// GM always; players too when it's the fight linked to the scene on their screens (each seat gets its own view).
 public sealed class EncounterBroadcast(IAppDbContext db, ITableNotifier notifier, SceneService scenes, ChatService chat) : IEncounterObserver
 {
     public async Task ChangedAsync(EncounterDetailDto detail, CancellationToken ct)
     {
         var seats = await SeatViewsAsync(detail.Id, detail, ct);
         await notifier.EncounterAsync(detail, seats, ct);
-        // Cover damaged on the combat table shows on the barriers of the map.
+        // covers damaged on the combat table show on the map barriers
         await scenes.RepublishCoversOfAsync(detail.Id, ct);
-        // An attack of the fight on the live scene goes to the table chat (the card, the effect on the map and the dice),
-        // wherever it was made; an undone one is crossed out there.
+        // Attacks in the live fight go to the table chat wherever they were made; undone ones get crossed out.
         if (seats is null) return;
         if (detail.LastAttack is { } attack)
             await chat.PostAttackAsync(TableAttacks.From(detail, attack), detail.Queue.FirstOrDefault(f => f.Id == attack.AttackerId)?.CharacterId, ct);
@@ -27,7 +23,7 @@ public sealed class EncounterBroadcast(IAppDbContext db, ITableNotifier notifier
     public async Task RemovedAsync(int id, CancellationToken ct) =>
         await notifier.EncounterRemovedAsync(id, await SeatViewsAsync(id, null, ct), ct);
 
-    /// <summary>Null when no player watches this fight; otherwise each open seat's view (null values on removal).</summary>
+    // null when no player watches it; null values on removal
     private async Task<Dictionary<int, PlayerEncounterDto?>?> SeatViewsAsync(int encounterId, EncounterDetailDto? detail, CancellationToken ct)
     {
         var scene = await db.Scenes.AsNoTracking().FirstOrDefaultAsync(s => s.Active && s.EncounterId == encounterId, ct);

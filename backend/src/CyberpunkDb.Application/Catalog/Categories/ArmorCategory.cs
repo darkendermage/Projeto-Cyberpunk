@@ -4,10 +4,7 @@ using CyberpunkDb.Domain.Enums;
 
 namespace CyberpunkDb.Application.Catalog.Categories;
 
-/// <summary>
-/// Armor, shields, clothing, Linear Frames and ACPA share one table but not the same attributes:
-/// each field declares which subtypes it applies to, and the base class rejects values set on the others.
-/// </summary>
+// Armor, shields, clothing, Linear Frames and ACPA share a table, so each field says which subtypes it applies to.
 public sealed class ArmorCategory : CategoryDefinition<ArmorItem>
 {
     private static readonly Enum[] Protective = [ArmorType.BodyArmor, ArmorType.PoweredArmor];

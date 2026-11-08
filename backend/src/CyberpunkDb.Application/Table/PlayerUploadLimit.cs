@@ -3,17 +3,15 @@ using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.Table;
 
-/// <summary>
-/// How many images one seat may upload per hour: the player link reaches the GM's disk through the tunnel, and the
-/// per-scene cap counts placed images, not uploads. Kept in memory (a restart resets it).
-/// </summary>
+// Uploads per seat per hour. Player links reach the GM's disk through the tunnel and the per-scene cap only
+// counts placed images. In memory, a restart resets it.
 public sealed class PlayerUploadLimit(TimeProvider clock)
 {
     public const int PerHour = 30;
 
     private readonly Dictionary<int, Queue<DateTimeOffset>> _uploads = [];
 
-    /// <summary>Counts one upload for the seat, or throws 429 when the seat used up its hour.</summary>
+    // 429 when the hour is used up
     public void Take(int seatId)
     {
         var now = clock.GetUtcNow();

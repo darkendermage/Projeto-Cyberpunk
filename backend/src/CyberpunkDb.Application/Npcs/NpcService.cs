@@ -13,7 +13,6 @@ using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.Npcs;
 
-/// <summary>Rules, validation, generation and persistence of NPC sheets.</summary>
 public sealed class NpcService(
     IAppDbContext db,
     NpcRuleBook rules,
@@ -35,11 +34,7 @@ public sealed class NpcService(
     public async Task<NpcGenerationResult> GenerateAsync(NpcGenerationRequest request, CancellationToken ct) =>
         generator.Generate(request, await catalogs.GetAsync(ct));
 
-    /// <summary>
-    /// Installs an implant in the manual editor using the same planner as the generator: missing foundational
-    /// pieces are added, Option Slots and pairs are allocated and forbidden items are refused. Budgets are not
-    /// enforced here; the validator reports them.
-    /// </summary>
+    // Manual editor install, same planner as the generator. Budgets aren't enforced here, the validator reports them.
     public async Task<NpcSheet> InstallCyberwareAsync(NpcInstallCyberwareRequest request, CancellationToken ct)
     {
         var catalog = await catalogs.GetAsync(ct);
@@ -55,7 +50,7 @@ public sealed class NpcService(
         return sheet with { Cyberware = planner.Entries.ToList() };
     }
 
-    // ------------------------------------------------------------ persistence
+    // persistence
 
     public async Task<IReadOnlyList<NpcSummaryDto>> ListAsync(CancellationToken ct) =>
         await db.Npcs.AsNoTracking()
@@ -98,7 +93,7 @@ public sealed class NpcService(
         sheet = sheet with { Name = copyName.Length > 80 ? copyName[..80] : copyName };
         var now = DateTime.UtcNow;
         var npc = new Npc { CreatedAt = now };
-        // The copy keeps the original's status: same mechanics, recomputed on the next save.
+        // same mechanics, so same status (recomputed on the next save)
         Apply(npc, sheet, source.Status, now);
         db.Npcs.Add(npc);
         await db.SaveChangesAsync(ct);
@@ -116,10 +111,7 @@ public sealed class NpcService(
         await db.SaveChangesAsync(ct);
     }
 
-    /// <summary>
-    /// The status is never taken from the client: it comes from the shared validator. A sheet with blocking
-    /// errors is only saved when the user explicitly asks for a draft.
-    /// </summary>
+    // Status always comes from the validator, never the client. Sheets with errors only save as an explicit draft.
     private async Task<(NpcSheet Sheet, NpcStatus Status)> PrepareAsync(NpcSaveRequest request, CancellationToken ct)
     {
         var shape = await saveValidator.ValidateAsync(request, ct);
@@ -159,7 +151,7 @@ public sealed class NpcService(
         await db.Npcs.FirstOrDefaultAsync(n => n.Id == id, ct) ?? throw new NotFoundException(L.T($"NPC {id} não encontrado.", $"NPC {id} not found."));
 }
 
-/// <summary>Turns the rule book into the documented view the editor shows (values plus sources).</summary>
+// rule book -> what the editor shows (values + sources)
 internal static class NpcRulesMapper
 {
     public static NpcRulesDto Map(NpcRuleBook rules, NpcValidator validator)

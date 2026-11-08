@@ -1,9 +1,6 @@
 namespace CyberpunkDb.Domain.Entities;
 
-/// <summary>
-/// A game session of the virtual table: its chat history and the fights started or linked while it was open. Exactly
-/// one session is open (<see cref="EndedAt"/> null); "New session" closes it with a name and opens the next one.
-/// </summary>
+// Exactly one session is open (EndedAt null). "New session" closes it and opens the next.
 public class TableSession
 {
     public int Id { get; set; }
@@ -12,7 +9,7 @@ public class TableSession
     public DateTime? EndedAt { get; set; }
 }
 
-/// <summary>A setting of the virtual table kept across restarts (the GM's dice color, the music), by key.</summary>
+// GM dice color, music... by key
 public class TableSetting
 {
     public string Key { get; set; } = string.Empty;

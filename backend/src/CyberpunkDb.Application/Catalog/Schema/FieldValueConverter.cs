@@ -4,14 +4,13 @@ using CyberpunkDb.Application.Common;
 
 namespace CyberpunkDb.Application.Catalog.Schema;
 
-/// <summary>Converts JSON values coming from filters, forms and imports into CLR values of a field.</summary>
 public static class FieldValueConverter
 {
     public static bool IsEmpty(JsonElement? element) =>
         element is null || element.Value.ValueKind is JsonValueKind.Null or JsonValueKind.Undefined ||
         (element.Value.ValueKind == JsonValueKind.String && string.IsNullOrWhiteSpace(element.Value.GetString()));
 
-    /// <summary>Returns null for empty input. Throws <see cref="RequestValidationException"/> on invalid input.</summary>
+    // null for empty input, throws RequestValidationException when invalid
     public static object? Convert(JsonElement? element, Type targetType, string fieldKey)
     {
         if (IsEmpty(element)) return null;
@@ -68,7 +67,7 @@ public static class FieldValueConverter
     {
         if (el.ValueKind != JsonValueKind.String) return null;
         var raw = el.GetString()!.Trim();
-        // Only accept declared names or labels; Enum.TryParse would also accept arbitrary integers.
+        // Enum.TryParse would also take random integers
         foreach (var (value, label) in EnumLabels.For(enumType))
         {
             if (string.Equals(value, raw, StringComparison.OrdinalIgnoreCase) ||

@@ -6,18 +6,14 @@ using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.NightMarkets.Trading;
 
-/// <summary>What a purchase costs after the Haggle deal.</summary>
 public sealed record DealOutcome(int Total, int Delivered, int PaidNow, int DueLater, string? DealId, string Description);
 
-/// <summary>
-/// Prices of a market: the condition of an item (IR5 p.5), the Haggle opposed check and its deals (CP:R p.129–130,
-/// p.159–161). No state: everything comes from the rule book and the listing.
-/// </summary>
+// Item condition (IR5 p.5) and the Haggle with its deals (CP:R p.129-130, p.159-161). Stateless.
 public sealed class MarketPricing(NightMarketRuleBook rules)
 {
     private ConditionRules Condition => rules.Document.Condition;
 
-    /// <summary>What the item is worth in its condition: Damaged one category lower, Destroyed two, Beyond Repair nothing.</summary>
+    // Damaged: one category lower, Destroyed: two, Beyond Repair: nothing
     public (int Price, PriceCategory Category) Value(int basePrice, PriceCategory baseCategory, ItemCondition condition) => condition switch
     {
         ItemCondition.Damaged => Down(baseCategory, Condition.DamagedSteps.Value),
@@ -28,7 +24,7 @@ public sealed class MarketPricing(NightMarketRuleBook rules)
 
     public (int Price, PriceCategory Category) Value(MarketListing l) => Value(l.BasePrice, l.BaseCategory, l.Condition);
 
-    /// <summary>The asking price: a hidden condition (a scam) is sold at the full price.</summary>
+    // a hidden condition (scam) sells at full price
     public (int Price, PriceCategory Category) Asked(MarketListing l) =>
         l.ConditionHidden ? (l.BasePrice, l.BaseCategory) : Value(l);
 
@@ -52,12 +48,10 @@ public sealed class MarketPricing(NightMarketRuleBook rules)
         return (rules.PriceOf(lower), lower);
     }
 
-    // ------------------------------------------------------------------ Haggle
+    // Haggle
 
-    /// <summary>
-    /// COOL + Trading + Operator Rank + 1d10 on each side; the buyer must beat the seller (ties go to the Defender).
-    /// A natural 10 adds another d10, a natural 1 subtracts one (CP:R p.130).
-    /// </summary>
+    // COOL + Trading + Operator Rank + 1d10 each; buyer has to beat the seller (Defender wins ties).
+    // Natural 10/1 adds/subtracts a d10 (CP:R p.130).
     public HaggleResult Haggle(HaggleRequest request, IDiceRoller dice, PriceCategory? itemCategory = null, int quantity = 1)
     {
         var (buyerRolls, buyerDice) = Roll(request.BuyerRolls, dice, "buyerRolls");
@@ -106,7 +100,6 @@ public sealed class MarketPricing(NightMarketRuleBook rules)
         return ([first, second], first == 10 ? first + second : first - second);
     }
 
-    /// <summary>Applies the chosen deal to a purchase of <paramref name="quantity"/> units at <paramref name="unitPrice"/>.</summary>
     public DealOutcome Apply(HaggleResult? haggle, string? dealId, int unitPrice, PriceCategory category, int quantity)
     {
         var total = unitPrice * quantity;
@@ -127,17 +120,17 @@ public sealed class MarketPricing(NightMarketRuleBook rules)
         };
     }
 
-    /// <summary>Percent of an amount, rounded down to whole eb (complementary).</summary>
+    // rounded down (complementary)
     public static int Percent(int amount, int percent) => amount * percent / 100;
 
-    // ------------------------------------------------------------------ selling to a Fixer
+    // selling to a Fixer
 
     public SellQuote SellQuote(string? name, int basePrice, PriceCategory baseCategory, SellQuoteRequest request, IDiceRoller dice)
     {
         var notes = new List<string>();
         var damaged = request.Condition != ItemCondition.Normal;
         var notices = damaged && request.Disclosure == ConditionDisclosure.Silent && request.FixerRank >= Condition.DetectRank.Value;
-        // A damage the Fixer doesn't know about (kept quiet or disguised) is paid as if the item were whole.
+        // damage the Fixer doesn't know about is paid as if whole
         var known = !damaged || request.Disclosure == ConditionDisclosure.Disclosed || notices;
         var (offer, offerCategory) = known ? Value(basePrice, baseCategory, request.Condition) : (basePrice, baseCategory);
 

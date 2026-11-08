@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CyberpunkDb.Api.Controllers;
 
-/// <summary>Read-only compendium of the named NPCs of the books (stat blocks and profiles), plus the GM's images of them.</summary>
+// read-only, plus the GM's images of them
 [ApiController]
 [Route("api/npc-compendium")]
 public sealed class NpcCompendiumController(NpcCompendium compendium, NpcPortraitService portraits) : ControllerBase
@@ -13,7 +13,6 @@ public sealed class NpcCompendiumController(NpcCompendium compendium, NpcPortrai
     [HttpGet]
     public IReadOnlyList<CompendiumNpcSummary> List() => compendium.ListSummaries();
 
-    /// <summary>When each compendium NPC's image last changed, for those that have one.</summary>
     [HttpGet("portraits")]
     public Task<IReadOnlyDictionary<string, DateTime>> Portraits(CancellationToken ct) => portraits.CompendiumStampsAsync(ct);
 

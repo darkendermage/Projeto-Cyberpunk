@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CyberpunkDb.Domain.Enums;
 
-/// <summary>The three official ways to generate a Character (CP:R p.40).</summary>
+// CP:R p.40
 public enum CreationMethod
 {
     [Display(Name = "Streetrat (Templates)")] Streetrat,
@@ -12,15 +12,13 @@ public enum CreationMethod
 
 public enum CharacterStatus
 {
-    /// <summary>Character generation not finalized yet; creation budgets still apply.</summary>
+    // creation budgets still apply
     [Display(Name = "Em criação")] Creating,
-    /// <summary>Finalized with no blocking issue.</summary>
     [Display(Name = "Concluído")] Complete,
-    /// <summary>Finalized, but a later edit left a blocking issue.</summary>
+    // a later edit broke something
     [Display(Name = "Pendências")] NeedsAttention,
 }
 
-/// <summary>Kind of entry in a character's append-only history.</summary>
 public enum CharacterEventKind
 {
     [Display(Name = "Financeiro")] Ledger,

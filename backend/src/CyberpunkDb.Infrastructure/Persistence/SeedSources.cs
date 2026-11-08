@@ -4,7 +4,7 @@ namespace CyberpunkDb.Infrastructure.Persistence;
 
 public sealed record SeedFile(string Name, Func<Stream> Open);
 
-/// <summary>Where the seed catalog comes from: a folder on disk or resources embedded in the desktop executable.</summary>
+// a folder on disk or the resources embedded in the exe
 public interface ISeedSource
 {
     IReadOnlyList<SeedFile> GetFiles();
@@ -23,7 +23,7 @@ public sealed class FolderSeedSource(IOptions<SeedOptions> options) : ISeedSourc
     }
 }
 
-/// <summary>Key/value rows used by the application itself (e.g. hash of the last imported seed).</summary>
+// e.g. hash of the last imported seed
 public class AppMetadata
 {
     public string Key { get; set; } = string.Empty;

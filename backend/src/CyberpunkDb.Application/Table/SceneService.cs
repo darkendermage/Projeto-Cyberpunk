@@ -10,12 +10,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CyberpunkDb.Application.Table;
 
-/// <summary>
-/// Scenes of the virtual table: prepared ahead, reused, one active at a time. The GM edits everything; a player moves
-/// only their own tokens and their own area templates on the active scene. Every write goes out to the open screens.
-/// Settings edits (map, grid, linked fight) carry the scene version; token and template changes are last-write-wins,
-/// serialized per scene.
-/// </summary>
+// Scenes of the virtual table. GM edits anything; players only move their own tokens/templates on the active scene.
+// Settings edits carry the scene version, tokens and templates are last-write-wins (serialized per scene).
 public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotifier notifier, NpcCompendium compendium, TableSessionService sessions)
 {
     internal static readonly JsonSerializerOptions Json = new(JsonSerializerDefaults.Web) { Converters = { new JsonStringEnumConverter() } };
@@ -26,7 +22,7 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
     public const int MaxImagesPerSeat = 10;
     private const double MinCell = -100, MaxCell = 2000;
 
-    // ------------------------------------------------------------------ library
+    // library
 
     public async Task<IReadOnlyList<SceneSummaryDto>> ListAsync(CancellationToken ct)
     {
@@ -46,7 +42,6 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
         return SceneViews.ForGm(scene, state, await ImagesAsync(state, ct), await CoversAsync(scene, state, ct));
     }
 
-    /// <summary>A new, empty scene at the end of the list. The very first scene starts active.</summary>
     public async Task<SceneView> CreateAsync(CreateSceneRequest r, CancellationToken ct)
     {
         var now = DateTime.UtcNow;
@@ -70,7 +65,7 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
             if (r.EncounterId is { } encounterId && encounterId != scene.EncounterId && !await db.Encounters.AnyAsync(e => e.Id == encounterId, ct))
                 throw RequestValidationException.For("encounterId", L.T("Combate não encontrado.", "Fight not found."));
             scene.EncounterId = r.EncounterId;
-            // A fight linked on the table belongs to the open session (E2).
+            // fights linked from the table belong to the open session
             if (r.EncounterId is { } linked) await sessions.StampFightAsync(linked, ct);
             if (r.BackgroundMediaId is { } media) await RequireMediaAsync(media, "backgroundMediaId", ct);
             if (r.BackgroundWidth is < 0 or > 20000 || r.BackgroundHeight is < 0 or > 20000)
@@ -82,7 +77,7 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
             };
         }, bumpVersion: true, ct);
 
-    /// <summary>A copy to prepare a variant (the same bar before and after the shootout); it starts inactive.</summary>
+    // e.g. the same bar before and after the shootout. Starts inactive.
     public async Task<SceneView> DuplicateAsync(int id, CancellationToken ct)
     {
         var source = await db.Scenes.AsNoTracking().FirstOrDefaultAsync(s => s.Id == id, ct) ?? throw NotFound();
@@ -107,7 +102,6 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
         await notifier.SceneRemovedAsync(id, scene.Active ? await NoSceneAsync(ct) : null, ct);
     }
 
-    /// <summary>Shows this scene to the players: every screen switches at once.</summary>
     public async Task<SceneView> ActivateAsync(int id, CancellationToken ct)
     {
         var all = await db.Scenes.ToListAsync(ct);
@@ -130,7 +124,7 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
         return await ListAsync(ct);
     }
 
-    // ------------------------------------------------------------------ tokens and templates (GM)
+    // tokens and templates (GM)
 
     public Task<SceneView> AddTokenAsync(int id, TokenInput input, CancellationToken ct) =>
         MutateAsync(id, null, async (_, state) =>
@@ -148,7 +142,6 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
             return state with { Tokens = state.Tokens.Select(t => t.Id == tokenId ? token : t).ToList() };
         }, bumpVersion: false, ct);
 
-    /// <summary>The GM moves any token, locked or not.</summary>
     public Task<SceneView> MoveTokenAsync(int id, string tokenId, TokenMoveRequest move, CancellationToken ct) =>
         MutateAsync(id, null, (_, state) => Task.FromResult(Move(state, RequireToken(state, tokenId), move)), bumpVersion: false, ct);
 
@@ -159,11 +152,8 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
             return Task.FromResult(state with { Tokens = state.Tokens.Where(t => t.Id != tokenId).ToList() });
         }, bumpVersion: false, ct);
 
-    /// <summary>
-    /// One token per combatant of the linked fight that has none yet: allies on the first row, enemies two rows below.
-    /// The GM then drags them to their starting positions, and the scene keeps them for the session. On a live scene the
-    /// enemies' tokens start hidden.
-    /// </summary>
+    // One token per combatant that doesn't have one yet: allies on the first row, enemies two rows below.
+    // Enemy tokens start hidden on a live scene.
     public Task<SceneView> AddEncounterTokensAsync(int id, CancellationToken ct) =>
         MutateAsync(id, null, async (scene, state) =>
         {
@@ -183,14 +173,14 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
                     Id = NextId("T", tokens.Select(t => t.Id)), Label = Truncate(c.Name, 40), CombatantId = c.Id,
                     CharacterId = c.CharacterId, NpcId = c.Snapshot?.NpcId, CompendiumNpcId = c.Snapshot?.CompendiumId, X = 1 + column, Y = c.Side == CombatSide.Ally ? 1 : 3,
                     Color = c.Side == CombatSide.Ally ? "#00f0ff" : "#ff2a6d",
-                    // On the scene the players already see, an enemy appears only when the GM shows it.
+                    // enemies stay hidden on the live scene until the GM shows them
                     Visibility = c.Side == CombatSide.Enemy && scene.Active ? TokenVisibility.Gm : TokenVisibility.All,
                 });
             }
             return state with { Tokens = tokens };
         }, bumpVersion: false, ct);
 
-    /// <summary>Links the scene to a fight and its tokens to the fight's combatants (token id → combatant id).</summary>
+    // token id -> combatant id
     public Task<SceneView> LinkFightAsync(int id, int encounterId, IReadOnlyDictionary<string, string> combatants, CancellationToken ct) =>
         MutateAsync(id, null, async (scene, state) =>
         {
@@ -216,9 +206,9 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
             return Task.FromResult(state with { Templates = state.Templates.Where(t => t.Id != templateId).ToList() });
         }, bumpVersion: false, ct);
 
-    // ------------------------------------------------------------------ players
+    // players
 
-    /// <summary>The active scene as this seat sees it; null when the GM shows none.</summary>
+    // null when the GM isn't showing any scene
     public async Task<SceneView?> PlayerSceneAsync(TableSeat seat, CancellationToken ct)
     {
         var scene = await db.Scenes.AsNoTracking().FirstOrDefaultAsync(s => s.Active, ct);
@@ -227,11 +217,10 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
         return SceneViews.ForSeat(scene, state, seat, await ImagesAsync(state, ct), await CoversAsync(scene, state, ct));
     }
 
-    /// <summary>The GM's selection, changed at once.</summary>
     public Task<SceneView> BatchAsync(int id, SceneBatchRequest r, CancellationToken ct) =>
         MutateAsync(id, null, (_, state) => Task.FromResult(ApplyBatch(state, r, null)), bumpVersion: false, ct);
 
-    /// <summary>A player's selection on the live scene: their tokens and players' areas; all of it or nothing.</summary>
+    // all or nothing
     public Task<SceneView> PlayerBatchAsync(TableSeat seat, SceneBatchRequest r, CancellationToken ct)
     {
         if ((r.RemoveTokens?.Count ?? 0) + (r.HideTokens?.Count ?? 0) + (r.ShowTokens?.Count ?? 0) > 0)
@@ -248,10 +237,7 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
             return Move(state, token, move);
         }, ct);
 
-    /// <summary>
-    /// The seat's own token on the live scene: its character's (portrait and name) or, for a seat without one, the
-    /// seat's name. One per seat and scene; in the scene's fight it stands for the character's combatant.
-    /// </summary>
+    // The seat's own token (character portrait, or just the seat name). One per seat and scene.
     public async Task<SceneView> PlayerPlaceOwnTokenAsync(TableSeat seat, PlaceTokenRequest r, CancellationToken ct)
     {
         var name = seat.CharacterId is { } characterId
@@ -283,7 +269,7 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
     public Task<SceneView> PlayerUpdateTemplateAsync(TableSeat seat, string templateId, TemplateInput input, CancellationToken ct) =>
         PlayerMutateAsync(seat, (_, state) =>
         {
-            // The area keeps the player who placed it, whoever moves it.
+            // the area keeps whoever placed it, no matter who moves it
             var owner = RequirePlayerTemplate(state, templateId).OwnerSeatId;
             return ReplaceTemplate(state, Template(templateId, input with { Locked = false }, owner));
         }, ct);
@@ -295,7 +281,7 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
             return state with { Templates = state.Templates.Where(t => t.Id != templateId).ToList() };
         }, ct);
 
-    // ------------------------------------------------------------------ images over the map (round 5)
+    // images over the map
 
     public Task<SceneView> AddImageAsync(int id, ImageInput input, CancellationToken ct) =>
         MutateAsync(id, null, async (_, state) => AddImage(state, input, null, await RequireImageMediaAsync(input, ct)), bumpVersion: false, ct);
@@ -304,8 +290,7 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
         MutateAsync(id, null, (_, state) =>
         {
             var current = RequireImage(state, imageId, null);
-            // The GM's lock is the GM's: only the GM puts it on or takes it off. A lock that stays on keeps its owner
-            // (the GM hiding a player's locked image doesn't make the lock the GM's).
+            // Only the GM toggles the GM lock. Hiding a player's locked image doesn't make the lock the GM's.
             return Task.FromResult(ReplaceImage(state, Changed(current, input) with
             {
                 Locked = input.Locked, LockedByGm = input.Locked && (!current.Locked || current.LockedByGm), Hidden = input.Hidden,
@@ -334,7 +319,7 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
         {
             var current = RequireOwnImage(state, imageId, seat);
             if (current.LockedByGm) throw new ForbiddenException(L.T("O mestre travou esta imagem.", "The GM locked this image."));
-            // Locked by the player: only the lock itself can change (taking it off), nothing else.
+            // locked by the player: the only allowed change is unlocking
             if (current.Locked && !input.Locked)
                 return ReplaceImage(state, current with { Locked = false });
             if (current.Locked) throw new ForbiddenException(L.T("Destrave a imagem antes de mexer nela.", "Unlock the image before changing it."));
@@ -375,7 +360,7 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
         return state with { Images = [.. state.Images, image] };
     }
 
-    /// <summary>The image with what the input changes, checked: size 0.25–200 cells, opacity 0.1–1, name up to 60.</summary>
+    // size 0.25-200 cells, opacity 0.1-1, name up to 60
     private static SceneImage Changed(SceneImage current, ImageInput i)
     {
         var width = i.Width ?? current.Width;
@@ -399,7 +384,7 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
         state.Images.FirstOrDefault(i => i.Id == imageId && (seat is null || !i.Hidden))
         ?? throw new NotFoundException(L.T("Imagem não encontrada.", "Image not found."));
 
-    /// <summary>An image a player may change: theirs (a hidden one doesn't exist for them).</summary>
+    // hidden images don't exist for players
     private static SceneImage RequireOwnImage(SceneState state, string imageId, TableSeat seat)
     {
         var image = RequireImage(state, imageId, seat);
@@ -412,7 +397,7 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
     private static SceneState WithoutImage(SceneState state, string imageId) =>
         Renumber(state with { Images = state.Images.Where(i => i.Id != imageId).ToList() }, state.Images.Where(i => i.Id != imageId).OrderBy(i => i.Order).Select(i => i.Id).ToList());
 
-    /// <summary>Moves an image right under <paramref name="above"/> in the stack (null: to the top), renumbering 0..n−1.</summary>
+    // above == null moves it to the top
     private static SceneState Reorder(SceneState state, string imageId, string? above)
     {
         var stack = state.Images.OrderBy(i => i.Order).Select(i => i.Id).Where(id => id != imageId).ToList();
@@ -422,11 +407,9 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
         return Renumber(state, stack);
     }
 
-    /// <summary>Order = position in <paramref name="bottomToTop"/>.</summary>
     private static SceneState Renumber(SceneState state, List<string> bottomToTop) =>
         state with { Images = state.Images.Select(i => i with { Order = bottomToTop.IndexOf(i.Id) }).ToList() };
 
-    /// <summary>Sends again every scene with a token that <paramref name="shows"/> an image that just changed.</summary>
     public async Task RepublishTokensOfAsync(Func<SceneToken, bool> shows, CancellationToken ct)
     {
         foreach (var scene in await db.Scenes.AsNoTracking().ToListAsync(ct))
@@ -438,14 +421,12 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
 
     public Task<bool> IsActiveAsync(int sceneId, CancellationToken ct) => db.Scenes.AnyAsync(s => s.Id == sceneId && s.Active, ct);
 
-    /// <summary>The fight linked to the active scene and the scene's state (for the players' view of it).</summary>
     public async Task<(int? EncounterId, SceneState? State)> ActiveAsync(CancellationToken ct)
     {
         var scene = await db.Scenes.AsNoTracking().FirstOrDefaultAsync(s => s.Active, ct);
         return scene is null ? (null, null) : (scene.EncounterId, Deserialize(scene.StateJson));
     }
 
-    /// <summary>The stored image (character, saved NPC or compendium NPC) a visible token of the active scene shows.</summary>
     public async Task<TokenImageSource> PlayerTokenImageAsync(TableSeat seat, string tokenId, CancellationToken ct)
     {
         var scene = await db.Scenes.AsNoTracking().FirstOrDefaultAsync(s => s.Active, ct) ?? throw TokenNotFound();
@@ -454,23 +435,17 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
         return SceneViews.ImageSource(token, await ImagesAsync(state with { Tokens = [token] }, ct)) ?? throw TokenNotFound();
     }
 
-    /// <summary>
-    /// Whether a live drag preview may be shown: a token of the active scene the seat controls (null seat = the GM, any
-    /// token). Null when it may not; otherwise whether every player may see the preview (only public tokens).
-    /// </summary>
+    // null = not allowed. Otherwise: can every player see the preview? (public tokens only)
     public async Task<bool?> DragTargetAsync(TableSeat? seat, int sceneId, string tokenId, CancellationToken ct)
     {
-        // Token ids repeat across scenes: a preview counts only for the scene on the players' screens.
+        // token ids repeat across scenes
         var scene = await db.Scenes.AsNoTracking().FirstOrDefaultAsync(s => s.Active && s.Id == sceneId, ct);
         var token = scene is null ? null : Deserialize(scene.StateJson).Tokens.FirstOrDefault(t => t.Id == tokenId);
         if (token is null || (seat is not null && !SceneViews.CanControl(token, seat))) return null;
         return token.Visibility == TokenVisibility.All;
     }
 
-    /// <summary>
-    /// Who sees an image being dragged on the live scene: null when the dragger may not move it; false when only the GM
-    /// may see it (hidden); true for everyone.
-    /// </summary>
+    // null = can't move it, false = GM only (hidden), true = everyone
     public async Task<bool?> ImageDragTargetAsync(TableSeat? seat, int sceneId, string imageId, CancellationToken ct)
     {
         var scene = await db.Scenes.AsNoTracking().FirstOrDefaultAsync(s => s.Active && s.Id == sceneId, ct);
@@ -479,7 +454,7 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
         return !image.Hidden;
     }
 
-    // ------------------------------------------------------------------ plumbing
+    // plumbing
 
     private async Task<SceneView> MutateAsync(int id, int? version, Func<Scene, SceneState, Task<SceneState>> operation, bool bumpVersion, CancellationToken ct)
     {
@@ -502,7 +477,6 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
         return await PublishAsync(scene, state, ct);
     }
 
-    /// <summary>A player's change, always on the active scene; answered with the seat's own view.</summary>
     private async Task<SceneView> PlayerMutateAsync(TableSeat seat, Func<Scene, SceneState, SceneState> operation, CancellationToken ct)
     {
         var id = await db.Scenes.Where(s => s.Active).Select(s => (int?)s.Id).FirstOrDefaultAsync(ct)
@@ -515,7 +489,7 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
         return await PlayerSceneAsync(seat, ct) ?? throw NotFound();
     }
 
-    /// <summary>Sends the GM view, and each open seat's view when the scene is the one on the players' screens.</summary>
+    // GM view, plus each seat's view if this is the scene on the players' screens
     private async Task<SceneView> PublishAsync(Scene scene, SceneState state, CancellationToken ct)
     {
         var images = await ImagesAsync(state, ct);
@@ -528,7 +502,7 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
         return gm;
     }
 
-    /// <summary>The HP of the linked fight's covers, read only when a barrier on the scene is one of them.</summary>
+    // only read when one of the barriers is a cover
     private async Task<IReadOnlyDictionary<string, int>?> CoversAsync(Scene scene, SceneState state, CancellationToken ct)
     {
         if (scene.EncounterId is not { } encounterId || !state.Tokens.Any(t => t.Barrier?.CoverId is not null)) return null;
@@ -536,7 +510,6 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
         return json is null ? null : EncounterService.Deserialize(json).Covers.ToDictionary(c => c.Id, c => c.Hp);
     }
 
-    /// <summary>A fight's covers changed: the scenes showing them as barriers go out again.</summary>
     public async Task RepublishCoversOfAsync(int encounterId, CancellationToken ct)
     {
         foreach (var scene in await db.Scenes.AsNoTracking().Where(s => s.EncounterId == encounterId).ToListAsync(ct))
@@ -546,7 +519,7 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
         }
     }
 
-    // ------------------------------------------------------------------ barriers
+    // barriers
 
     public Task<SceneView> AddBarrierAsync(int id, BarrierRequest r, int hp, string? coverId, CancellationToken ct) =>
         MutateAsync(id, null, (_, state) =>
@@ -564,7 +537,7 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
             return Task.FromResult(state with { Tokens = [.. state.Tokens, token] });
         }, bumpVersion: false, ct);
 
-    /// <summary>The HP of a barrier that is no fight's cover, between 0 and its max.</summary>
+    // only for barriers that aren't covers of a fight
     public Task<SceneView> SetBarrierHpAsync(int id, string tokenId, int delta, CancellationToken ct) =>
         MutateAsync(id, null, (_, state) =>
         {
@@ -574,7 +547,7 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
             return Task.FromResult(state with { Tokens = state.Tokens.Select(t => t.Id == tokenId ? next : t).ToList() });
         }, bumpVersion: false, ct);
 
-    /// <summary>Barriers that became a fight's covers when the fight started (token id → cover id).</summary>
+    // token id -> cover id, done when the fight starts
     public Task<SceneView> LinkBarriersAsync(int id, IReadOnlyDictionary<string, string> covers, CancellationToken ct) =>
         MutateAsync(id, null, (_, state) => Task.FromResult(state with
         {
@@ -597,10 +570,7 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
     private Task<List<TableSeat>> OpenSeatsAsync(CancellationToken ct) =>
         db.TableSeats.AsNoTracking().Where(s => s.RevokedAt == null).ToListAsync(ct);
 
-    /// <summary>
-    /// When the stored images the scene's tokens may show last changed (tokens with their own image need none). Only the
-    /// dates are read: this runs on every scene change, and the images themselves weigh up to 2 MB each.
-    /// </summary>
+    // Just the dates. This runs on every scene change and the images can be 2 MB each.
     private async Task<TokenImages> ImagesAsync(SceneState state, CancellationToken ct)
     {
         var tokens = state.Tokens.Where(t => t.ImageMediaId is null).ToList();
@@ -625,7 +595,7 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
             focus);
     }
 
-    /// <summary>Applies a selection's changes; <paramref name="seat"/> null is the GM. Anything not allowed refuses the whole batch.</summary>
+    // seat == null is the GM. Anything not allowed rejects the whole batch.
     private static SceneState ApplyBatch(SceneState state, SceneBatchRequest r, TableSeat? seat)
     {
         var count = (r.MoveTokens?.Count ?? 0) + (r.MoveTemplates?.Count ?? 0) + (r.RemoveTokens?.Count ?? 0) + (r.RemoveTemplates?.Count ?? 0)
@@ -682,10 +652,7 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
         return state with { Tokens = state.Tokens.Select(t => t.Id == token.Id ? moved : t).ToList() };
     }
 
-    /// <summary>
-    /// A token from the GM's input. A token stands for at most one character or NPC; NPC links are checked only when
-    /// they change, so a token whose NPC was deleted can still be edited.
-    /// </summary>
+    // NPC links are only checked when they change, so a token whose NPC got deleted can still be edited.
     private async Task<SceneToken> TokenAsync(string id, TokenInput i, SceneToken? existing, CancellationToken ct)
     {
         var compendiumNpcId = string.IsNullOrWhiteSpace(i.CompendiumNpcId) ? null : i.CompendiumNpcId;
@@ -769,7 +736,7 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
     private static SceneTemplate RequireTemplate(SceneState state, string id) =>
         state.Templates.FirstOrDefault(t => t.Id == id) ?? throw new NotFoundException(L.T("Área não encontrada.", "Area not found."));
 
-    /// <summary>Players move and clear any player's area (a grenade that went off); the GM's areas are the GM's alone.</summary>
+    // anyone can clear a player's area (the grenade went off); GM areas are GM-only
     private static SceneTemplate RequirePlayerTemplate(SceneState state, string id)
     {
         var template = RequireTemplate(state, id);

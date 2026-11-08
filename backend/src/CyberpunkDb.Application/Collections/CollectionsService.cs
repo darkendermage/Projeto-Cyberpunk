@@ -9,7 +9,7 @@ using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.Collections;
 
-/// <summary>Favorites and named equipment lists. Single local profile; ready to be scoped by user later.</summary>
+// single local profile for now
 public sealed class CollectionsService(
     IAppDbContext db,
     CatalogService catalog,
@@ -17,7 +17,7 @@ public sealed class CollectionsService(
     IValidator<GearListEntryRequest> entryValidator,
     IValidator<GearListEntryUpdateRequest> entryUpdateValidator)
 {
-    // ------------------------------------------------------------ favorites
+    // favorites
 
     public async Task<IReadOnlyList<int>> GetFavoriteIdsAsync(CancellationToken ct) =>
         await db.Favorites.AsNoTracking().OrderByDescending(f => f.CreatedAt).Select(f => f.ItemId).ToListAsync(ct);
@@ -36,7 +36,7 @@ public sealed class CollectionsService(
     public async Task RemoveFavoriteAsync(int itemId, CancellationToken ct) =>
         await db.Favorites.Where(f => f.ItemId == itemId).ExecuteDeleteAsync(ct);
 
-    // ------------------------------------------------------------ lists
+    // lists
 
     public async Task<IReadOnlyList<GearListSummaryDto>> GetListsAsync(CancellationToken ct) =>
         await db.GearLists.AsNoTracking()
@@ -95,7 +95,7 @@ public sealed class CollectionsService(
         await db.SaveChangesAsync(ct);
     }
 
-    /// <summary>Adds an item; if it is already in the list the quantities are summed.</summary>
+    // sums the quantity if it's already there
     public async Task<GearListDetailDto> AddEntryAsync(int listId, GearListEntryRequest request, CancellationToken ct)
     {
         await ValidateAsync(entryValidator, request, ct);
@@ -144,7 +144,7 @@ public sealed class CollectionsService(
         return await GetListAsync(listId, ct);
     }
 
-    // ------------------------------------------------------------ helpers
+    // helpers
 
     private async Task<GearList> FindListAsync(int id, CancellationToken ct) =>
         await db.GearLists.FirstOrDefaultAsync(l => l.Id == id, ct) ?? throw new NotFoundException(L.T($"Lista {id} não encontrada.", $"List {id} not found."));

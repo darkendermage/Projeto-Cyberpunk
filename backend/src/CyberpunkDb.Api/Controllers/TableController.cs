@@ -6,15 +6,12 @@ using Microsoft.Net.Http.Headers;
 
 namespace CyberpunkDb.Api.Controllers;
 
-/// <summary>
-/// The GM's side of the virtual table: player seats (invite links) and uploaded images. The players' port never
-/// reaches these routes (PlayerSurfaceGuard), except the image download.
-/// </summary>
+// GM side of the table. The players' port never reaches these routes (PlayerSurfaceGuard), except image downloads.
 [ApiController]
 [Route("api/table")]
 public sealed class TableController(SeatService seats, MediaService media, SceneService scenes, TableFightService fights, TableAttackService attacks, TablePartyService party, TableRulesService rules, ChatService chat, TablePresence presence, TunnelService tunnel, TableSessionService sessions, TableSettingsService settings, TableMusicService music) : ControllerBase
 {
-    // ------------------------------------------------------------------ internet tunnel
+    // internet tunnel
 
     [HttpGet("tunnel")]
     public TunnelStatus Tunnel() => tunnel.Status();
@@ -28,7 +25,7 @@ public sealed class TableController(SeatService seats, MediaService media, Scene
     [HttpPost("tunnel/download")]
     public Task<TunnelStatus> DownloadTunnel(CancellationToken ct) => tunnel.DownloadAsync(ct);
 
-    // ------------------------------------------------------------------ chat and dice
+    // chat and dice
 
     [HttpGet("messages")]
     public Task<IReadOnlyList<TableMessageDto>> Messages(CancellationToken ct) => chat.HistoryAsync(null, ct);
@@ -39,7 +36,7 @@ public sealed class TableController(SeatService seats, MediaService media, Scene
     [HttpPost("rolls")]
     public Task<TableMessageDto> Roll(RollRequest request, CancellationToken ct) => chat.RollAsync(null, request, ct);
 
-    /// <summary>The GM's dice color (null: the default dice).</summary>
+    // null = default dice
     [HttpGet("dice-color")]
     public async Task<DiceColorRequest> GmDiceColor(CancellationToken ct) => new(await settings.GetAsync(TableSettingsService.GmDiceColor, ct));
 
@@ -51,12 +48,12 @@ public sealed class TableController(SeatService seats, MediaService media, Scene
         return new DiceColorRequest(color);
     }
 
-    // ------------------------------------------------------------------ music (YouTube)
+    // music (YouTube)
 
     [HttpGet("music")]
     public Task<TableMusicStateDto> Music(CancellationToken ct) => music.StateAsync(ct);
 
-    /// <summary>Loads a YouTube video or playlist link, paused at the start.</summary>
+    // starts paused
     [HttpPut("music")]
     public Task<TableMusicStateDto> LoadMusic(LoadMusicRequest request, CancellationToken ct) => music.LoadAsync(request, ct);
 
@@ -81,12 +78,12 @@ public sealed class TableController(SeatService seats, MediaService media, Scene
     [HttpDelete("music")]
     public Task<TableMusicStateDto> StopMusic(CancellationToken ct) => music.StopAsync(ct);
 
-    // ------------------------------------------------------------------ sessions
+    // sessions
 
     [HttpGet("sessions")]
     public Task<IReadOnlyList<TableSessionDto>> Sessions(CancellationToken ct) => sessions.ListAsync(ct);
 
-    /// <summary>"New session": the open one closes with the name given and an empty chat starts.</summary>
+    // closes the open one with this name and starts an empty chat
     [HttpPost("sessions")]
     public Task<TableSessionDto> NewSession(NewSessionRequest request, CancellationToken ct) => sessions.StartNewAsync(request, ct);
 
@@ -103,7 +100,7 @@ public sealed class TableController(SeatService seats, MediaService media, Scene
         return NoContent();
     }
 
-    // ------------------------------------------------------------------ scenes
+    // scenes
 
     [HttpGet("scenes")]
     public Task<IReadOnlyList<SceneSummaryDto>> Scenes(CancellationToken ct) => scenes.ListAsync(ct);
@@ -138,30 +135,27 @@ public sealed class TableController(SeatService seats, MediaService media, Scene
     [HttpPost("scenes/{id:int}/tokens")]
     public Task<SceneView> AddToken(int id, TokenInput input, CancellationToken ct) => scenes.AddTokenAsync(id, input, ct);
 
-    /// <summary>The book's tables to look up during play.</summary>
     [HttpGet("rules")]
     public Task<TableRulesDto> Rules(CancellationToken ct) => rules.GetAsync(ct);
 
-    /// <summary>The PCs with a token on the scene, with their HP and armor.</summary>
     [HttpGet("scenes/{id:int}/party")]
     public Task<IReadOnlyList<PartyMemberDto>> Party(int id, CancellationToken ct) => party.ForSceneAsync(id, ct);
 
-    /// <summary>A new fight from the chosen tokens of the map, linked to the scene.</summary>
     [HttpPost("scenes/{id:int}/fight")]
     public Task<SceneView> StartFight(int id, CreateFightRequest request, CancellationToken ct) => fights.StartAsync(id, request, ct);
 
-    /// <summary>The GM's quick attack from the map with any fighter of the scene's fight; the distance comes from the tokens.</summary>
+    // distance comes from the tokens
     [HttpPost("scenes/{id:int}/attack")]
     public Task<QuickAttackResult> Attack(int id, GmQuickAttackRequest request, CancellationToken ct) => attacks.GmAttackAsync(id, request, ct);
 
-    /// <summary>A selection of tokens and areas moved, cleared, hidden or shown in one save.</summary>
+    // one save for the whole selection
     [HttpPost("scenes/{id:int}/batch")]
     public Task<SceneView> Batch(int id, SceneBatchRequest request, CancellationToken ct) => scenes.BatchAsync(id, request, ct);
 
     [HttpPost("scenes/{id:int}/encounter-tokens")]
     public Task<SceneView> AddEncounterTokens(int id, CancellationToken ct) => scenes.AddEncounterTokensAsync(id, ct);
 
-    /// <summary>A barrier of the cover table on the scenery layer (and the fight's cover, when the scene has a fight).</summary>
+    // also becomes the fight's cover when the scene has one
     [HttpPost("scenes/{id:int}/barriers")]
     public Task<SceneView> AddBarrier(int id, BarrierRequest request, CancellationToken ct) => fights.AddBarrierAsync(id, request, ct);
 
@@ -187,7 +181,7 @@ public sealed class TableController(SeatService seats, MediaService media, Scene
     [HttpDelete("scenes/{id:int}/templates/{templateId}")]
     public Task<SceneView> RemoveTemplate(int id, string templateId, CancellationToken ct) => scenes.RemoveTemplateAsync(id, templateId, ct);
 
-    // ------------------------------------------------------------------ seats
+    // seats
 
     [HttpGet("seats")]
     public Task<IReadOnlyList<SeatDto>> Seats(CancellationToken ct) => seats.ListAsync(ct);
@@ -202,7 +196,7 @@ public sealed class TableController(SeatService seats, MediaService media, Scene
     [HttpPut("seats/{id:int}")]
     public Task<SeatDto> UpdateSeat(int id, UpdateSeatRequest request, CancellationToken ct) => seats.UpdateAsync(id, request, ct);
 
-    /// <summary>Gives the seat back to the entrance with a new key; whoever held it is thrown out.</summary>
+    // new key, whoever held it gets kicked
     [HttpPost("seats/{id:int}/release")]
     public async Task<SeatDto> ReleaseSeat(int id, CancellationToken ct)
     {
@@ -211,7 +205,7 @@ public sealed class TableController(SeatService seats, MediaService media, Scene
         return seat;
     }
 
-    // ------------------------------------------------------------------ general link
+    // general link
 
     [HttpGet("lobby")]
     public LobbyStatusDto Lobby() => seats.LobbyStatus();
@@ -227,9 +221,9 @@ public sealed class TableController(SeatService seats, MediaService media, Scene
         return seat;
     }
 
-    // ------------------------------------------------------------------ images
+    // images
 
-    // ------------------------------------------------------------------ images over the map (round 5)
+    // images over the map
 
     [HttpPost("scenes/{id:int}/images")]
     public Task<SceneView> AddImage(int id, ImageInput input, CancellationToken ct) => scenes.AddImageAsync(id, input, ct);
@@ -252,7 +246,7 @@ public sealed class TableController(SeatService seats, MediaService media, Scene
         return StatusCode(StatusCodes.Status201Created, await media.UploadAsync(stream, file.Length, ct));
     }
 
-    /// <summary>Images never change under the same id, so browsers keep them for good.</summary>
+    // ids are immutable, so cache forever
     [HttpGet("media/{id:guid}")]
     public async Task<IActionResult> Media(Guid id, CancellationToken ct)
     {

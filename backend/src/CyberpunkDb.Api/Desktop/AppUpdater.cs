@@ -8,17 +8,17 @@ using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Api.Desktop;
 
-/// <summary>Version of the running build (MSBuild property Version, passed by publicar.ps1 / the release workflow).</summary>
+// from the MSBuild Version property (publicar.ps1 / release workflow)
 public static class AppVersion
 {
     public static string Current { get; } =
         typeof(AppVersion).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion.Split('+')[0] ?? "0.0.0";
 
-    /// <summary>Repository embedded by the build (MSBuild property UpdatesRepository); null in local builds.</summary>
+    // MSBuild UpdatesRepository; null in local builds
     public static string? Repository { get; } = typeof(AppVersion).Assembly.GetCustomAttributes<AssemblyMetadataAttribute>()
         .FirstOrDefault(a => a.Key == "UpdatesRepository")?.Value;
 
-    /// <summary>"v1.3.0", "1.3.0" and "1.3.0-dev" all become 1.3.0; anything else is null.</summary>
+    // "v1.3.0", "1.3.0", "1.3.0-dev" -> 1.3.0
     public static Version? Parse(string? value)
     {
         if (string.IsNullOrWhiteSpace(value)) return null;
@@ -32,7 +32,7 @@ public sealed record AppUpdaterOptions(bool Enabled, string? Repository, string 
     public const string ExeAsset = "NightCityItemDB.exe";
     public const string HashAsset = ExeAsset + ".sha256";
 
-    /// <summary>Self-update needs the desktop executable and a GitHub repository ("owner/name") to read releases from.</summary>
+    // needs the desktop exe and an "owner/name" repo
     public bool CanApply => Enabled && !string.IsNullOrWhiteSpace(Repository) && ExePath is not null;
 
     public static AppUpdaterOptions FromConfiguration(IConfiguration configuration) => new(
@@ -46,11 +46,8 @@ public sealed record UpdateInfo(string Current, string? Latest, bool Available, 
 
 public sealed record ApplyUpdateRequest(string Version);
 
-/// <summary>
-/// Checks the latest GitHub release and replaces the running executable with it.
-/// Windows lets a running .exe be renamed (not overwritten), so the swap is: download to .new,
-/// verify SHA-256, rename the current file to .old, rename .new into place, restart.
-/// </summary>
+// Windows lets a running exe be renamed but not overwritten, so: download to .new, check the SHA-256,
+// rename current to .old, move .new into place, restart.
 public sealed class AppUpdater : IDisposable
 {
     private static readonly TimeSpan CacheFor = TimeSpan.FromHours(1);
@@ -87,7 +84,7 @@ public sealed class AppUpdater : IDisposable
             _options.CanApply);
     }
 
-    /// <summary>Downloads and installs <paramref name="version"/>; the caller restarts the application afterwards.</summary>
+    // caller restarts the app
     public async Task ApplyAsync(string version, CancellationToken ct)
     {
         if (!_options.CanApply)
@@ -119,7 +116,7 @@ public sealed class AppUpdater : IDisposable
         }
     }
 
-    /// <summary>Removes the files a previous update left next to the executable.</summary>
+    // leftovers from the previous update
     public static void CleanupOldBinaries(string? exePath)
     {
         if (exePath is null) return;
@@ -127,7 +124,7 @@ public sealed class AppUpdater : IDisposable
         TryDelete(exePath + ".new");
     }
 
-    /// <summary>Puts <paramref name="downloaded"/> in place of <paramref name="exe"/>, restoring the original on failure.</summary>
+    // puts the original back if it fails
     public static void Swap(string exe, string downloaded)
     {
         var old = exe + ".old";
@@ -178,7 +175,7 @@ public sealed class AppUpdater : IDisposable
             }
             catch (Exception ex) when (ex is HttpRequestException or JsonException or OperationCanceledException && !ct.IsCancellationRequested)
             {
-                _lastCheckFailed = true; // offline or GitHub unavailable: the app just keeps the current version
+                _lastCheckFailed = true; // offline or GitHub down, keep the current version
             }
 
             _checkedAt = DateTime.UtcNow;
@@ -194,7 +191,7 @@ public sealed class AppUpdater : IDisposable
     {
         try
         {
-            // sha256sum format ("<hash>  NightCityItemDB.exe") or just the hash.
+            // sha256sum format ("<hash>  NightCityItemDB.exe") or just the hash
             var text = await _http.GetStringAsync(url, ct);
             return text.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries).FirstOrDefault() ?? "";
         }
@@ -204,7 +201,6 @@ public sealed class AppUpdater : IDisposable
         }
     }
 
-    /// <summary>Streams the file to disk and returns its SHA-256.</summary>
     private async Task<string> DownloadAsync(string url, string path, CancellationToken ct)
     {
         try

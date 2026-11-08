@@ -3,7 +3,7 @@ namespace CyberpunkDb.Application.Npcs.Generation;
 
 internal static class Weighted
 {
-    /// <summary>Picks one element with probability proportional to its weight (non-positive weights never win unless all are).</summary>
+    // weighted random pick (non-positive weights only win if all are)
     public static T Pick<T>(IReadOnlyList<T> items, Func<T, double> weight, Random rng)
     {
         if (items.Count == 0) throw new InvalidOperationException(L.T("Nada para escolher.", "Nothing to pick."));

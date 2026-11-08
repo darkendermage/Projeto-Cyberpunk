@@ -5,7 +5,6 @@ using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.NetArchitectures.Rules;
 
-/// <summary>The loaded NET Architecture rules. Singleton.</summary>
 public sealed class NetArchitectureRuleBook
 {
     private const string Resource = "CyberpunkDb.Application.NetArchitectures.Rules.net-architecture-rules.json";
@@ -46,10 +45,10 @@ public sealed class NetArchitectureRuleBook
 
     public DifficultyRule Difficulty(NetDifficulty id) => _difficulties[id];
 
-    /// <summary>The Difficulty Rating one step up, for a "Boss Floor" (CP:R p.211); null above Advanced.</summary>
+    // Boss Floor (CP:R p.211); null above Advanced
     public static NetDifficulty? Harder(NetDifficulty id) => id == NetDifficulty.Advanced ? null : id + 1;
 
-    /// <summary>"Lobby" or the name of a difficulty.</summary>
+    // "Lobby" or a difficulty name
     public IReadOnlyList<TableRow> Table(string table) =>
         table == LobbyTable ? Document.LobbyTable.Value
         : Enum.TryParse<NetDifficulty>(table, out var d) && _bodies.TryGetValue(d, out var body) ? body.Rows
@@ -69,17 +68,17 @@ public sealed class NetArchitectureRuleBook
         ? l
         : throw RequestValidationException.For("locationId", L.T($"Tipo de local '{id}' não existe.", $"Location type '{id}' doesn't exist."));
 
-    /// <summary>The purchase band for a floor count (CP:R p.217): portability, Control Node limit, price per floor.</summary>
+    // CP:R p.217: portability, Control Node limit, price per floor
     public FloorBand Band(int floors) =>
         Document.Pricing.Floors.Value.FirstOrDefault(b => floors >= b.Min && floors <= b.Max)
         ?? Document.Pricing.Floors.Value.OrderBy(b => Math.Abs(b.Min - floors)).First();
 
-    /// <summary>One Demon per six floors, rounded up (CP:R p.218, as read by the application).</summary>
+    // CP:R p.218, as we read it
     public int MaxDemons(int floors) => (int)Math.Ceiling(floors / (double)Document.FloorsPerDemon.Value);
 
     public int? FeatureCost(int dv) => Document.Pricing.Features.Value.FirstOrDefault(c => c.Dv == dv)?.Cost;
     public int? DefenseCost(int counterDv) => Document.Pricing.Defenses.Value.FirstOrDefault(c => c.Dv == counterDv)?.Cost;
 
-    /// <summary>Whether a table row can only come up once per Architecture (Black ICE and Password rows, CP:R p.210).</summary>
+    // Black ICE and Password rows (CP:R p.210)
     public bool Unique(TableRow row) => row.Contents.Any(c => Document.NoRepeat.Value.Contains(c.Kind));
 }

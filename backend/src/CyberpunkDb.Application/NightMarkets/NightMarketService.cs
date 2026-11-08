@@ -13,10 +13,8 @@ using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.NightMarkets;
 
-/// <summary>
-/// Saved Night Markets: generation, the CBK listings with prices recalculated on every read, purchases to the
-/// market's own ledger and the GM events. Every write carries the market version (409 on a stale one).
-/// </summary>
+// Listings are re-priced on every read; purchases go to the market's own ledger. Writes carry the version
+// (409 when stale).
 public sealed class NightMarketService(
     IAppDbContext db,
     NightMarketRuleBook rules,
@@ -38,7 +36,7 @@ public sealed class NightMarketService(
         ["entertainment"] = "Entertainment & Services", ["elflines"] = "Elflines Online",
     };
 
-    // ------------------------------------------------------------------ reference
+    // reference
 
     public async Task<NightMarketRulesDto> GetRulesAsync(CancellationToken ct)
     {
@@ -86,7 +84,7 @@ public sealed class NightMarketService(
     public async Task<MysteryBoxResult> RollMysteryBoxAsync(MysteryBoxRollRequest request, CancellationToken ct) =>
         operations.MysteryBox(request, await catalogs.GetAsync(ct));
 
-    // ------------------------------------------------------------------ markets
+    // markets
 
     public async Task<IReadOnlyList<NightMarketSummaryDto>> ListAsync(CancellationToken ct)
     {
@@ -121,7 +119,7 @@ public sealed class NightMarketService(
         return Detail(entity, state, catalog, []);
     }
 
-    /// <summary>Rolls the market again with the same options and a new seed; the ledger and events are kept.</summary>
+    // new seed, same options; ledger and events are kept
     public Task<NightMarketDetailDto> RegenerateAsync(int id, MarketVersionRequest request, CancellationToken ct) =>
         MutateAsync(id, request.Version, change =>
         {
@@ -206,7 +204,7 @@ public sealed class NightMarketService(
         return (market, result!);
     }
 
-    // ------------------------------------------------------------------ plumbing
+    // plumbing
 
     private async Task<NightMarketDetailDto> MutateAsync(int id, int version, Action<MarketChange> operation, CancellationToken ct,
         Action<NightMarket>? columns = null)

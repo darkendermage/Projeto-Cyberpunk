@@ -6,10 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CyberpunkDb.Api.Controllers;
 
-/// <summary>
-/// Player characters. Reads return the sheet with every derived value and the validation report; every change is a
-/// command validated on the server and answered with the updated character.
-/// </summary>
+// Reads return the sheet with derived values and the validation report. Changes are commands that answer
+// with the updated character.
 [ApiController]
 [Route("api/characters")]
 public sealed class CharactersController(CharacterService characters, EncounterService encounters) : ControllerBase
@@ -46,7 +44,7 @@ public sealed class CharactersController(CharacterService characters, EncounterS
         return CreatedAtAction(nameof(Get), new { id = copy.Id }, copy);
     }
 
-    /// <summary>Downloads one character as a file (sheet, history and portrait) to import elsewhere.</summary>
+    // sheet, history and portrait
     [HttpGet("{id:int}/export")]
     public async Task<IActionResult> Export(int id, CancellationToken ct)
     {
@@ -54,7 +52,7 @@ public sealed class CharactersController(CharacterService characters, EncounterS
         return File(content, "application/json", fileName);
     }
 
-    /// <summary>Creates a new character from an exported file; nothing existing is overwritten.</summary>
+    // never overwrites anything
     [HttpPost("import")]
     [RequestSizeLimit(CharacterService.ImportMaxBytes)]
     public async Task<ActionResult<CharacterDetailDto>> Import(CharacterExportFile file, CancellationToken ct)
@@ -73,7 +71,7 @@ public sealed class CharactersController(CharacterService characters, EncounterS
     [HttpPut("{id:int}")]
     public Task<CharacterDetailDto> Save(int id, SaveSheetRequest request, CancellationToken ct) => characters.SaveSheetAsync(id, request, ct);
 
-    // ------------------------------------------------------------ creation
+    // creation
 
     [HttpPost("{id:int}/creation/reset")]
     public Task<CharacterDetailDto> Reset(int id, ResetCreationRequest r, CancellationToken ct) => characters.ResetCreationAsync(id, r, ct);
@@ -90,7 +88,7 @@ public sealed class CharactersController(CharacterService characters, EncounterS
     [HttpPost("{id:int}/creation/finalize")]
     public Task<CharacterDetailDto> Finalize(int id, VersionRequest r, CancellationToken ct) => characters.FinalizeAsync(id, r, ct);
 
-    // ------------------------------------------------------------ inventory and money
+    // inventory and money
 
     [HttpPost("{id:int}/purchase")]
     public Task<CharacterDetailDto> Purchase(int id, PurchaseRequest r, CancellationToken ct) => characters.PurchaseAsync(id, r, ct);
@@ -110,7 +108,7 @@ public sealed class CharactersController(CharacterService characters, EncounterS
     [HttpPost("{id:int}/balance")]
     public Task<CharacterDetailDto> AdjustBalance(int id, AdjustBalanceRequest r, CancellationToken ct) => characters.AdjustBalanceAsync(id, r, ct);
 
-    // ------------------------------------------------------------ cyberware
+    // cyberware
 
     [HttpPost("{id:int}/cyberware/preview")]
     public Task<InstallPreviewDto> PreviewInstall(int id, InstallCyberwareRequest r, CancellationToken ct) => characters.PreviewInstallAsync(id, r, ct);
@@ -133,7 +131,7 @@ public sealed class CharactersController(CharacterService characters, EncounterS
     [HttpPost("{id:int}/weapons/detach")]
     public Task<CharacterDetailDto> Detach(int id, AttachRequest r, CancellationToken ct) => characters.DetachAsync(id, r, ct);
 
-    /// <summary>Cyberware option in a worn host (Smart Glasses, Battleglove, Smart Ears...): no Cybereye or Cyberarm needed.</summary>
+    // Smart Glasses, Battleglove, Smart Ears... no Cybereye/Cyberarm needed
     [HttpPost("{id:int}/wearables/install")]
     public Task<CharacterDetailDto> WearableInstall(int id, WearableInstallRequest r, CancellationToken ct) => characters.WearableInstallAsync(id, r, ct);
 
@@ -143,7 +141,7 @@ public sealed class CharactersController(CharacterService characters, EncounterS
     [HttpPost("{id:int}/wearables/side")]
     public Task<CharacterDetailDto> WearableSide(int id, WearableSideRequest r, CancellationToken ct) => characters.WearableSideAsync(id, r, ct);
 
-    // ------------------------------------------------------------ progression
+    // progression
 
     [HttpPost("{id:int}/progression/ip")]
     public Task<CharacterDetailDto> AwardIp(int id, AwardIpRequest r, CancellationToken ct) => characters.AwardIpAsync(id, r, ct);
@@ -154,8 +152,6 @@ public sealed class CharactersController(CharacterService characters, EncounterS
     [HttpPost("{id:int}/progression/role")]
     public Task<CharacterDetailDto> ImproveRole(int id, ImproveRoleRequest r, CancellationToken ct) => characters.ImproveRoleAsync(id, r, ct);
 
-    /// <summary>Divides a Role Ability's Rank (Tech specialties, Solo Combat Awareness).</summary>
-    /// <summary>A weapon copy's quality (Poor, Standard, Excellent).</summary>
     [HttpPost("{id:int}/weapon-quality")]
     public Task<CharacterDetailDto> SetWeaponQuality(int id, WeaponQualityRequest r, CancellationToken ct) => characters.SetWeaponQualityAsync(id, r, ct);
 
@@ -163,12 +159,11 @@ public sealed class CharactersController(CharacterService characters, EncounterS
     public async Task<CharacterDetailDto> RoleSplit(int id, RoleSplitRequest r, CancellationToken ct)
     {
         var detail = await characters.SetRoleSplitAsync(id, r, ct);
-        // Redistributing Combat Awareness in a fight costs an Action (CP:R p.146): the fight's log notes it.
+        // moving Combat Awareness mid-fight costs an Action (CP:R p.146), so the fight logs it
         if (r.Role.Equals("Solo", StringComparison.OrdinalIgnoreCase)) await encounters.LogAwarenessAsync(id, ct);
         return detail;
     }
 
-    /// <summary>Undoes one IP spend of the history (a skill level or a Role Rank) and returns its IP.</summary>
     [HttpPost("{id:int}/progression/undo")]
     public Task<CharacterDetailDto> UndoProgression(int id, UndoProgressionRequest r, CancellationToken ct) => characters.UndoProgressionAsync(id, r, ct);
 
@@ -184,7 +179,7 @@ public sealed class CharactersController(CharacterService characters, EncounterS
     [HttpPost("{id:int}/luck")]
     public Task<CharacterDetailDto> Luck(int id, LuckRequest r, CancellationToken ct) => characters.LuckAsync(id, r, ct);
 
-    // ------------------------------------------------------------ combat
+    // combat
 
     [HttpPost("{id:int}/combat/damage")]
     public Task<CharacterDetailDto> Damage(int id, DamageRequest r, CancellationToken ct) => characters.DamageAsync(id, r, ct);
@@ -218,7 +213,7 @@ public sealed class CharactersController(CharacterService characters, EncounterS
     public Task<CharacterDetailDto> RemoveInjury(int id, string injuryId, VersionRequest r, CancellationToken ct) =>
         characters.RemoveInjuryAsync(id, injuryId, r, ct);
 
-    // ------------------------------------------------------------ portrait
+    // portrait
 
     [HttpGet("{id:int}/portrait")]
     public async Task<IActionResult> Portrait(int id, CancellationToken ct)

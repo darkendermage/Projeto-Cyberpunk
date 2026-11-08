@@ -2,17 +2,12 @@ using Microsoft.Extensions.Options;
 
 namespace CyberpunkDb.Api.Table;
 
-/// <summary>
-/// The players reach the app through a public tunnel, so their port answers only what the virtual table needs: the
-/// player API (which also checks the seat link), the table hub, uploaded images, the catalog's category list and schemas
-/// (the item page of the Gear tab) and the frontend files. Everything else — catalog searches, lists, sheets, the
-/// updater — answers 404 there. The tunnel arrives from 127.0.0.1, so the port, not
-/// the address, tells the two apart.
-///
-/// On the GM's port, the table routes refuse cross-site requests: a WebSocket skips CORS, and a page on another site
-/// must not drive the table as the GM. They also demand a loopback Host, so a site whose own name was re-pointed to
-/// 127.0.0.1 (DNS rebinding: its Origin then matches the Host) is refused too.
-/// </summary>
+// Players come in through a public tunnel, so their port only serves what the table needs: the player API, the
+// hub, uploaded images, category list/schemas (Gear tab item page) and the frontend. Everything else is a 404.
+// The tunnel arrives from 127.0.0.1, so we tell the two apart by port, not address.
+//
+// On the GM port the table routes refuse cross-site requests (WebSockets skip CORS) and require a loopback Host,
+// which also blocks DNS rebinding.
 public sealed class PlayerSurfaceGuard(RequestDelegate next, IOptions<TableOptions> options, IConfiguration configuration)
 {
     private readonly string[] _origins = configuration.GetSection("Cors:Origins").Get<string[]>() ?? [];
@@ -22,7 +17,7 @@ public sealed class PlayerSurfaceGuard(RequestDelegate next, IOptions<TableOptio
         var request = context.Request;
         if (options.Value.IsPlayerSurface(context))
         {
-            // The player's own sheet ("Minha ficha"): only with the seat's key, only that character (SeatCharacterAccess).
+            // "Minha ficha": only with the seat key, only that character
             if (SeatCharacterAccess.IsCandidate(request.Path))
             {
                 if (!await SeatCharacterAccess.AllowedAsync(context))
@@ -61,14 +56,10 @@ public sealed class PlayerSurfaceGuard(RequestDelegate next, IOptions<TableOptio
                    || CatalogPageRead(request);
         if (path.StartsWithSegments("/hubs")) return path.StartsWithSegments("/hubs/table");
         if (path.StartsWithSegments("/swagger")) return false;
-        // The frontend bundle and its index.html: read-only files.
         return HttpMethods.IsGet(request.Method) || HttpMethods.IsHead(request.Method);
     }
 
-    /// <summary>
-    /// What the item page the Gear tab opens needs besides the item (which SeatCharacterAccess serves with the seat key):
-    /// the category list and a category's schema, read only (round 7). Searches, lists and favorites stay closed.
-    /// </summary>
+    // The Gear tab item page also needs the category list and schema. Searches, lists and favorites stay closed.
     private static bool CatalogPageRead(HttpRequest request)
     {
         if (!HttpMethods.IsGet(request.Method)) return false;
@@ -83,11 +74,8 @@ public sealed class PlayerSurfaceGuard(RequestDelegate next, IOptions<TableOptio
 
     private const string SeatPage = "/mesa/j/";
 
-    /// <summary>
-    /// A page of the app other than a seat link (the bare tunnel address, the catalog…). Served there, the whole app
-    /// would load and fail on every call the port refuses; the player's page explains the link instead. Files (with an
-    /// extension) are the frontend bundle and pass.
-    /// </summary>
+    // Any other app page (bare tunnel address, catalog...) would load and fail on every refused call, so the player
+    // page explains the link instead. Files with an extension are the bundle and pass.
     private static bool IsOtherPage(PathString path) =>
         !path.StartsWithSegments("/api") && !path.StartsWithSegments("/hubs") && !path.StartsWithSegments("/mesa/j")
         && !Path.HasExtension(path.Value ?? "");
@@ -97,7 +85,7 @@ public sealed class PlayerSurfaceGuard(RequestDelegate next, IOptions<TableOptio
 
     private static bool IsTableRoute(PathString path) => path.StartsWithSegments("/hubs") || path.StartsWithSegments("/api/table");
 
-    /// <summary>No Origin (same-origin GET, tools, tests), this host itself, or the configured dev origins.</summary>
+    // no Origin (same-origin GET, tools, tests), this host, or the dev origins
     private bool SameSite(HttpRequest request)
     {
         var origin = request.Headers.Origin.ToString();

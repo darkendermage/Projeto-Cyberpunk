@@ -6,19 +6,13 @@ using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.Characters.Operations;
 
-/// <summary>
-/// Combat actions in the order of the Core rules (CP:R p.186–188). Nothing here advances on its own: the Death Save
-/// Penalty only grows when a Death Save is recorded or a Mortally Wounded character takes damage, never because
-/// time passed or the page was opened.
-/// </summary>
+// Combat actions (CP:R p.186-188). Nothing moves on its own: the Death Save Penalty only grows when a save is
+// recorded or a Mortally Wounded PC takes damage.
 public sealed class CombatOperations(CharacterRuleBook rules, CharacterCalculator calculator, IDiceRoller dice)
 {
     private const string Cracked = "Cracked Skull";
 
-    /// <summary>
-    /// Takes an attack's damage: armor SP of the location is subtracted (unless the damage bypasses armor); what gets
-    /// through is doubled on the head (tripled with Cracked Skull), lowers HP and ablates every armor on that location.
-    /// </summary>
+    // Location SP is subtracted unless the damage ignores armor. Head doubles (triples with Cracked Skull).
     public CharacterSheet Damage(CharacterSheet sheet, DamageRequest request, CharacterChange change)
     {
         if (request.Amount < 0) throw CharacterChange.Refuse("amount", L.T("Dano não pode ser negativo.", "Damage can't be negative."));
@@ -36,11 +30,11 @@ public sealed class CombatOperations(CharacterRuleBook rules, CharacterCalculato
             L.T($"{request.Amount} de dano no {where}, SP {sp}{(request.BypassArmor ? " ignorado" : request.HalveArmor ? " (metade, corpo a corpo)" : "")}; {through} passaram.", $"{request.Amount} damage to the {where}, SP {sp}{(request.BypassArmor ? " ignored" : request.HalveArmor ? " (half, melee)" : "")}; {through} got through."),
             -through, hp.ToString(), after.ToString());
 
-        // Any wound needs stabilizing before natural healing starts (CP:R p.222).
+        // natural healing only starts after stabilizing (CP:R p.222)
         var combat = sheet.Combat with { CurrentHp = after, Stabilized = through == 0 && sheet.Combat.Stabilized };
         if (before.Health.WoundState == WoundState.Mortally && through > 0)
         {
-            // CP:R p.187: a Mortally Wounded character damaged by an Attack suffers a Critical Injury and +1 Death Save Penalty.
+            // Mortally Wounded + hit = crit and +1 Death Save Penalty (CP:R p.187)
             var penalty = rules.Document.Derived.DeathSave.Value.PenaltyPerDamageWhileMortal;
             combat = combat with { DeathSavePenalty = combat.DeathSavePenalty + penalty };
             change.Log(CharacterEventKind.Combat, "death-save-penalty", L.T($"Dano enquanto Mortally Wounded: penalidade de Death Save +{penalty}.", $"Damage while Mortally Wounded: Death Save penalty +{penalty}."), penalty);
@@ -63,9 +57,7 @@ public sealed class CombatOperations(CharacterRuleBook rules, CharacterCalculato
         return sheet;
     }
 
-    /// <summary>
-    /// Recovers HP (first aid, natural healing, Speedheal). A Mortally Wounded character must be stabilized first.
-    /// </summary>
+    // Mortally Wounded has to be stabilized first.
     public CharacterSheet Heal(CharacterSheet sheet, HealRequest request, CharacterChange change)
     {
         if (request.Amount <= 0) throw CharacterChange.Refuse("amount", L.T("Informe quanto HP recuperar.", "Enter how much HP to recover."));
@@ -79,10 +71,7 @@ public sealed class CombatOperations(CharacterRuleBook rules, CharacterCalculato
         return sheet with { Combat = sheet.Combat with { CurrentHp = after == report.Health.MaxHp ? null : after } };
     }
 
-    /// <summary>
-    /// Successful stabilization. A Mortally Wounded target goes to 1 HP, unconscious for a minute, and the Death Save
-    /// Penalty returns to the base set by Critical Injuries (CP:R p.188, p.222).
-    /// </summary>
+    // Mortally Wounded goes to 1 HP, out for a minute, penalty back to the injury base (CP:R p.188, p.222).
     public CharacterSheet Stabilize(CharacterSheet sheet, CharacterChange change)
     {
         var report = calculator.Calculate(sheet, change.Catalog);
@@ -104,10 +93,7 @@ public sealed class CombatOperations(CharacterRuleBook rules, CharacterCalculato
         return sheet with { Combat = combat };
     }
 
-    /// <summary>
-    /// Death Save: 1d10 plus the current penalty must be under BODY, and a natural 10 always fails. Every Death Save
-    /// raises the penalty by 1 (CP:R p.188). The roll can be entered from physical dice.
-    /// </summary>
+    // 1d10 + penalty under BODY, natural 10 always fails, each save adds +1 (CP:R p.188).
     public CharacterSheet DeathSave(CharacterSheet sheet, DeathSaveRequest request, CharacterChange change)
     {
         var report = calculator.Calculate(sheet, change.Catalog);
@@ -132,7 +118,7 @@ public sealed class CombatOperations(CharacterRuleBook rules, CharacterCalculato
         return sheet with { Combat = combat };
     }
 
-    // ------------------------------------------------------------ armor
+    // armor
 
     public CharacterSheet AblateManual(CharacterSheet sheet, AblateRequest request, CharacterChange change)
     {
@@ -140,7 +126,7 @@ public sealed class CombatOperations(CharacterRuleBook rules, CharacterCalculato
         return Ablate(sheet, request.Location, request.Amount, request.Description ?? L.T("ablação manual", "manual ablation"), change);
     }
 
-    /// <summary>All armor on the location is ablated together (CP:R p.184), worn pieces and armor implants alike.</summary>
+    // everything on the location ablates together, implants included (CP:R p.184)
     private CharacterSheet Ablate(CharacterSheet sheet, ArmorSlot slot, int amount, string reason, CharacterChange change)
     {
         var inventory = sheet.Inventory.Select(e =>
@@ -188,12 +174,9 @@ public sealed class CombatOperations(CharacterRuleBook rules, CharacterCalculato
         static int Bounded(int? sp, int max) => sp is { } v ? Math.Clamp(v, 0, max) : max;
     }
 
-    // ------------------------------------------------------------ critical injuries
+    // critical injuries
 
-    /// <summary>
-    /// Records a Critical Injury from the official tables. The target can't suffer the same injury twice at once
-    /// (CP:R p.187); the 5 Bonus Damage goes straight to HP, without ablating armor.
-    /// </summary>
+    // Same injury can't stack (CP:R p.187). The 5 bonus damage goes straight to HP, no ablation.
     public CharacterSheet AddInjury(CharacterSheet sheet, AddInjuryRequest request, CharacterChange change)
     {
         var def = rules.FindCriticalInjury(request.Location, request.Name)
@@ -221,10 +204,8 @@ public sealed class CombatOperations(CharacterRuleBook rules, CharacterCalculato
         return sheet;
     }
 
-    /// <summary>
-    /// Quick Fix suspends the effect for the rest of the day, or removes it for good when the table says so; Treatment
-    /// removes it permanently (CP:R p.222). An injury without Quick Fix ("N/A") can only be treated.
-    /// </summary>
+    // Quick Fix suspends it for the day (or heals it if the table says so), Treatment heals it (CP:R p.222).
+    // "N/A" Quick Fix means treat only.
     public CharacterSheet UpdateInjury(CharacterSheet sheet, string id, UpdateInjuryRequest request, CharacterChange change)
     {
         var record = sheet.Injuries.FirstOrDefault(i => i.Id == id) ?? throw CharacterChange.Refuse("id", L.T("Lesão não encontrada.", "Injury not found."));
@@ -251,7 +232,7 @@ public sealed class CombatOperations(CharacterRuleBook rules, CharacterCalculato
         return sheet with { Injuries = sheet.Injuries.Select(i => i.Id == id ? updated : i).ToList() };
     }
 
-    /// <summary>Removes an injury entered by mistake (logged as a manual change).</summary>
+    // entered by mistake, logged as manual
     public static CharacterSheet RemoveInjury(CharacterSheet sheet, string id, CharacterChange change)
     {
         var record = sheet.Injuries.FirstOrDefault(i => i.Id == id) ?? throw CharacterChange.Refuse("id", L.T("Lesão não encontrada.", "Injury not found."));

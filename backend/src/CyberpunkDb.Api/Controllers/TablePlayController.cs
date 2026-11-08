@@ -9,19 +9,17 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CyberpunkDb.Api.Controllers;
 
-/// <summary>
-/// The players' side of the virtual table, the only API their port reaches. Every call carries the seat link token in
-/// the X-Seat header (or ?seat= on images, which load without headers); a wrong or revoked one answers 401.
-/// </summary>
+// Player side of the table, the only API their port can reach. Every call sends the seat token in X-Seat
+// (or ?seat= on images, since <img> can't send headers). Wrong or revoked token -> 401.
 [ApiController]
 [Route("api/table/play")]
 public sealed class TablePlayController(SeatService seats, SceneService scenes, EncounterService encounters, CharacterService characters, NpcPortraitService npcImages, ChatService chat, TablePresence presence, TablePartyService party, TableRulesService rules, TableAttackService attacks, TableTurnService turns, TableMusicService music, MediaService media, PlayerUploadLimit uploads) : ControllerBase
 {
     public const string SeatHeader = "X-Seat";
 
-    // ------------------------------------------------------------------ general link (no seat key yet)
+    // general link (no seat key yet)
 
-    /// <summary>The entrance of the general link: the free seats while the GM keeps it open.</summary>
+    // free seats, while the GM keeps the general link open
     [HttpGet("lobby")]
     public Task<LobbyDto> Lobby(CancellationToken ct) => seats.LobbyAsync(ct);
 
@@ -33,7 +31,7 @@ public sealed class TablePlayController(SeatService seats, SceneService scenes, 
         return File(data, type);
     }
 
-    /// <summary>Takes a free seat; answers its new key. Connections still holding the old one are dropped.</summary>
+    // returns the new key; connections with the old one get dropped
     [HttpPost("lobby/{seatId:int}/claim")]
     public async Task<ClaimResultDto> Claim(int seatId, CancellationToken ct)
     {
@@ -42,12 +40,12 @@ public sealed class TablePlayController(SeatService seats, SceneService scenes, 
         return result;
     }
 
-    // ------------------------------------------------------------------ the seat's own screen
+    // the seat's own screen
 
     [HttpGet("me")]
     public async Task<PlayerSeatDto> Me(CancellationToken ct) => SeatService.ToPlayer(await SeatAsync(ct));
 
-    /// <summary>Everything a player's screen needs on load; the hub keeps it current afterwards.</summary>
+    // initial load, the hub keeps it updated after
     [HttpGet("state")]
     public async Task<PlayerStateDto> State(CancellationToken ct)
     {
@@ -55,7 +53,7 @@ public sealed class TablePlayController(SeatService seats, SceneService scenes, 
         return new PlayerStateDto(SeatService.ToPlayer(seat), await scenes.PlayerSceneAsync(seat, ct), await music.CurrentAsync(ct));
     }
 
-    /// <summary>The fight linked to the active scene, as this seat sees it (204 when there is none).</summary>
+    // 204 when there's no fight
     [HttpGet("encounter")]
     public async Task<PlayerEncounterDto?> Encounter(CancellationToken ct)
     {
@@ -72,7 +70,7 @@ public sealed class TablePlayController(SeatService seats, SceneService scenes, 
         }
     }
 
-    /// <summary>The seat's own character, for skill checks from the token (204 when the seat plays none).</summary>
+    // 204 when the seat has no character
     [HttpGet("character")]
     public async Task<PlayerCharacterDto?> Character(CancellationToken ct)
     {
@@ -115,7 +113,7 @@ public sealed class TablePlayController(SeatService seats, SceneService scenes, 
         return File(data, type, lastModified: updated, entityTag: new Microsoft.Net.Http.Headers.EntityTagHeaderValue($"\"{updated.Ticks}\""));
     }
 
-    /// <summary>A party member's portrait (the strip's cards of PCs with no token on the scene).</summary>
+    // for party cards of PCs without a token on the scene
     [HttpGet("party/{characterId:int}/portrait")]
     public async Task<IActionResult> PartyPortrait(int characterId, CancellationToken ct)
     {
@@ -125,7 +123,7 @@ public sealed class TablePlayController(SeatService seats, SceneService scenes, 
         return File(data, type, lastModified: updated, entityTag: new Microsoft.Net.Http.Headers.EntityTagHeaderValue($"\"{updated.Ticks}\""));
     }
 
-    /// <summary>The seat's own sheet to read (204 when the seat plays no character).</summary>
+    // 204 when the seat has no character
     [HttpGet("sheet")]
     public async Task<PlayerSheetDto?> Sheet(CancellationToken ct)
     {
@@ -141,11 +139,10 @@ public sealed class TablePlayController(SeatService seats, SceneService scenes, 
         }
     }
 
-    /// <summary>Rolls one of the player's own Checks again for 1 LUCK (the table's reroll).</summary>
+    // costs 1 LUCK
     [HttpPost("rolls/{messageId:long}/reroll")]
     public async Task<TableMessageDto> Reroll(long messageId, CancellationToken ct) => await chat.RerollAsync(await SeatAsync(ct), messageId, ct);
 
-    /// <summary>The book's tables to look up during play.</summary>
     [HttpGet("rules")]
     public async Task<TableRulesDto> Rules(CancellationToken ct)
     {
@@ -153,48 +150,39 @@ public sealed class TablePlayController(SeatService seats, SceneService scenes, 
         return await rules.GetAsync(ct);
     }
 
-    /// <summary>The PCs on the live scene the seat can see, with their HP and armor.</summary>
     [HttpGet("party")]
     public async Task<IReadOnlyList<PartyMemberDto>> Party(CancellationToken ct) => await party.ForSeatAsync(await SeatAsync(ct), ct);
 
-    /// <summary>The seat's own armor up (repair) or down (ablation) on one location.</summary>
     [HttpPost("armor")]
     public async Task<PlayerCharacterDto> Armor(ArmorAdjustRequest request, CancellationToken ct) =>
         await party.AdjustOwnArmorAsync(await SeatAsync(ct), request, ct);
 
-    /// <summary>An attack with the seat's own character, on its Turn, at fighters it sees; the fight resolves it.</summary>
+    // only on its Turn, only at fighters it can see
     [HttpPost("attack")]
     public async Task<QuickAttackResult> Attack(QuickAttackRequest request, CancellationToken ct) =>
         await attacks.PlayerAttackAsync(await SeatAsync(ct), request, ct);
 
-    /// <summary>Reloads one of the seat's character's weapons (on its Turn when it is in the fight).</summary>
     [HttpPost("reload")]
     public async Task<PlayerReloadResult> Reload(PlayerWeaponRequest request, CancellationToken ct) => await turns.ReloadAsync(await SeatAsync(ct), request, ct);
 
-    /// <summary>Clears a jammed weapon of the seat's character (an Action on its Turn).</summary>
+    // costs an Action
     [HttpPost("unjam")]
     public async Task<PlayerEncounterDto> Unjam(PlayerWeaponRequest request, CancellationToken ct) => await turns.UnjamAsync(await SeatAsync(ct), request, ct);
 
-    /// <summary>The target's player answers a pending shot: dodge or not.</summary>
     [HttpPost("defense")]
     public async Task<PlayerEncounterDto> Defense(PlayerDefenseRequest request, CancellationToken ct) => await turns.DefenseAsync(await SeatAsync(ct), request, ct);
 
-    /// <summary>The attacker's player rolls the pending Critical Injury.</summary>
     [HttpPost("critical")]
     public async Task<PlayerEncounterDto> Critical(CancellationToken ct) => await turns.CriticalAsync(await SeatAsync(ct), ct);
 
-    /// <summary>Picks a thrown weapon of the seat's character up (on its Turn).</summary>
     [HttpPost("pick-up")]
     public async Task<PlayerEncounterDto> PickUp(PlayerWeaponRequest request, CancellationToken ct) => await turns.PickUpAsync(await SeatAsync(ct), request, ct);
 
-    /// <summary>The player's own dice color (#rrggbb; null for the seat's color).</summary>
+    // #rrggbb, null = seat color
     [HttpPut("dice-color")]
     public async Task<PlayerSeatDto> DiceColor(DiceColorRequest request, CancellationToken ct) => await seats.SetDiceColorAsync(await SeatAsync(ct), request, ct);
 
-    /// <summary>
-    /// The player brings their own sheet (round 6): a file exported from the characters page of their copy of the app.
-    /// Only a seat without a character takes one; the new sheet is linked to it.
-    /// </summary>
+    // Player imports their own sheet (exported from their copy of the app). Only for seats without a character.
     [HttpPost("character/import")]
     [RequestSizeLimit(CharacterService.ImportMaxBytes)]
     public async Task<ActionResult<PlayerSeatDto>> ImportCharacter(CyberpunkDb.Application.Characters.Transfer.CharacterExportFile file, CancellationToken ct)
@@ -205,7 +193,7 @@ public sealed class TablePlayController(SeatService seats, SceneService scenes, 
         return StatusCode(StatusCodes.Status201Created, await seats.LinkImportedAsync(seat, created.Id, ct));
     }
 
-    /// <summary>A player's image for the map (up to 2 MB; the browser shrinks it first).</summary>
+    // 2 MB max, the browser shrinks it first
     [HttpPost("media")]
     [RequestSizeLimit(MediaService.PlayerMaxBytes + 64 * 1024)]
     [RequestFormLimits(MultipartBodyLengthLimit = MediaService.PlayerMaxBytes + 64 * 1024)]
@@ -228,16 +216,14 @@ public sealed class TablePlayController(SeatService seats, SceneService scenes, 
     [HttpDelete("images/{imageId}")]
     public async Task<SceneView> RemoveImage(string imageId, CancellationToken ct) => await scenes.PlayerRemoveImageAsync(await SeatAsync(ct), imageId, ct);
 
-    /// <summary>The player ends their own Turn.</summary>
     [HttpPost("end-turn")]
     public async Task<PlayerEncounterDto> EndTurn(CancellationToken ct) => await turns.EndTurnAsync(await SeatAsync(ct), ct);
 
-    /// <summary>The player's selection moved or cleared at once (their tokens, players' areas).</summary>
     [HttpPost("batch")]
     public async Task<SceneView> Batch(SceneBatchRequest request, CancellationToken ct) =>
         await scenes.PlayerBatchAsync(await SeatAsync(ct), request, ct);
 
-    /// <summary>The player's own token on the live scene (one per seat).</summary>
+    // one per seat
     [HttpPost("my-token")]
     public async Task<SceneView> PlaceOwnToken(PlaceTokenRequest request, CancellationToken ct) =>
         await scenes.PlayerPlaceOwnTokenAsync(await SeatAsync(ct), request, ct);

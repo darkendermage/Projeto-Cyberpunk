@@ -6,7 +6,7 @@ using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.Characters;
 
-/// <summary>Turns the rule books into the shape the character screens use. No rule is decided here.</summary>
+// rule books -> what the character screens use. No rules decided here.
 internal static class CharacterRulesMapper
 {
     public static CharacterRulesDto Map(CharacterRuleBook rules, NpcCatalog catalog)

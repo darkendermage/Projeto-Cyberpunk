@@ -6,16 +6,15 @@ using CyberpunkDb.Domain.Enums;
 
 namespace CyberpunkDb.Application.Characters.Rules;
 
-// Records mirroring character-rules.json. Every value that the rules engine reads is a Ruled<T> with a
-// book page or the complementary mark; plain tables carry their page in a Source string.
+// Records for character-rules.json. Values the engine reads are Ruled<T> (with the book page); plain tables keep
+// their page in Source.
 
-/// <summary>Root of <c>character-rules.json</c>.</summary>
 public sealed record CharacterRulesDocument
 {
     public string About { get; init; } = "";
     public int Version { get; init; }
     public Dictionary<string, string> Books { get; init; } = [];
-    /// <summary>The ten STATs in Character Sheet order (CP:R p.73); stat-table rows use this order.</summary>
+    // sheet order (CP:R p.73)
     public string[] StatOrder { get; init; } = [];
     public CreationRules Creation { get; init; } = new();
     public RoleRules[] Roles { get; init; } = [];
@@ -35,14 +34,14 @@ public sealed record CharacterRulesDocument
     };
 }
 
-// ------------------------------------------------------------ creation
+// creation
 
 public sealed record CreationRules
 {
     public Ruled<int> RoleAbilityStartRank { get; init; } = new();
     public Ruled<int> OriginLanguageLevel { get; init; } = new();
     public Ruled<bool> OriginLanguageFree { get; init; } = new();
-    /// <summary>Skill keys; <c>@home</c> resolves to the character's home.</summary>
+    // @home = the character's home
     public Ruled<string[]> BasicSkills { get; init; } = new();
     public Ruled<int> BasicSkillMin { get; init; } = new();
     public Ruled<bool> MulticlassAtCreation { get; init; } = new();
@@ -114,11 +113,10 @@ public sealed record StartingHousing
     public string Source { get; init; } = "";
 }
 
-// ------------------------------------------------------------ roles
+// roles
 
 public sealed record RoleRules
 {
-    /// <summary>Role name as used everywhere else ("Media", "Solo"...).</summary>
     public string Id { get; init; } = "";
     public RoleAbilityInfo Ability { get; init; } = new();
     public StatTable StatTable { get; init; } = new();
@@ -131,21 +129,16 @@ public sealed record RoleAbilityInfo
 {
     public string Name { get; init; } = "";
     public int Page { get; init; }
-    /// <summary>Pages summarized below (the ability can span several).</summary>
     public string Source { get; init; } = "";
-    /// <summary>What the ability does, summarized in Portuguese from the pages in <see cref="Source"/>.</summary>
+    // PT summary of the pages in Source
     public string Summary { get; init; } = "";
     public string[] Points { get; init; } = [];
-    /// <summary>How the Rank is divided among the ability's parts (Tech specialties, Solo Combat Awareness); null when it isn't.</summary>
+    // null when the rank isn't split
     public RoleSplitRule? Split { get; init; }
-    /// <summary>Skills the ability adds to, from the Rank or from one part of the split.</summary>
     public RoleSkillBonus[] SkillBonuses { get; init; } = [];
 }
 
-/// <summary>
-/// A Role Ability whose Rank is divided: <see cref="Max"/> is "rank" or "2xrank" (the total), <see cref="PerKeyMax"/>
-/// "rank" or null, and <see cref="Allowed"/> lists the only values some keys take (Fumble Recovery: 0 or 4).
-/// </summary>
+// Max is "rank" or "2xrank", PerKeyMax "rank" or null. Allowed limits some keys (Fumble Recovery: 0 or 4).
 public sealed record RoleSplitRule
 {
     public string Source { get; init; } = "";
@@ -159,7 +152,7 @@ public sealed record RoleSplitRule
 
 public sealed record RoleSplitKey(string Id, string Label, string? LabelPt);
 
-/// <summary>Adds to <see cref="Skills"/>: the Rank (<c>from: "rank"</c>) or one part of the split (<c>"split:field"</c>).</summary>
+// from: "rank" or "split:field"
 public sealed record RoleSkillBonus
 {
     public string[] Skills { get; init; } = [];
@@ -168,17 +161,14 @@ public sealed record RoleSkillBonus
     public string Source { get; init; } = "";
 }
 
-/// <summary>1d10 template table (CP:R p.74–77); each row lists the ten STATs in <c>statOrder</c>.</summary>
+// CP:R p.74-77, STATs in statOrder
 public sealed record StatTable
 {
     public string Source { get; init; } = "";
     public int[][] Rows { get; init; } = [];
 }
 
-/// <summary>
-/// The Role's 20 skills: the Streetrat levels (CP:R p.86–87) and, by their keys, the Edgerunner list (p.88–89).
-/// <c>@home</c> is the character's home; <c>@choose</c> is a specialization the player picks (instrument, science).
-/// </summary>
+// Streetrat levels (CP:R p.86-87) and the Edgerunner list (p.88-89). @choose = player picks (instrument, science).
 public sealed record RoleSkills
 {
     public string Source { get; init; } = "";
@@ -192,14 +182,11 @@ public sealed record StartingPackage
     public StartingSection Cyberware { get; init; } = new();
 }
 
-/// <summary>
-/// Groups of starting items. Each group lists alternatives ("Shotgun or Assault Rifle"); the player picks exactly
-/// one option per group, and an option may bundle several items.
-/// </summary>
+// Each group lists alternatives ("Shotgun or Assault Rifle"); pick one option per group.
 public sealed record StartingSection
 {
     public string Source { get; init; } = "";
-    /// <summary>Preset Humanity Loss of the whole Role package (CP:R p.117); null outside the cyberware section.</summary>
+    // CP:R p.117, cyberware section only
     public int? HumanityLoss { get; init; }
     public StartingItem[][][] Groups { get; init; } = [];
 }
@@ -208,13 +195,11 @@ public sealed record StartingItem
 {
     public string Slug { get; init; } = "";
     public int Qty { get; init; } = 1;
-    /// <summary>Generic ammunition: which caliber the rounds are.</summary>
     public Caliber? Caliber { get; init; }
-    /// <summary>Generic ammunition: number of rounds (the catalog prices packs of 10).</summary>
+    // catalog prices packs of 10
     public int? Rounds { get; init; }
-    /// <summary>Armor that starts worn on this location.</summary>
     public ArmorSlot? Worn { get; init; }
-    /// <summary>Arm option installed as the only piece in a meat arm (CP:R p.115).</summary>
+    // CP:R p.115
     public bool MeatArm { get; init; }
 }
 
@@ -229,16 +214,16 @@ public sealed record LifepathQuestion
     public string Id { get; init; } = "";
     public string Label { get; init; } = "";
     public string LabelPt { get; init; } = "";
-    /// <summary>"1d6", "1d10" or "choose" (no roll).</summary>
+    // "1d6", "1d10" or "choose"
     public string Dice { get; init; } = "";
     public string[] Options { get; init; } = [];
-    /// <summary>Branch of the Role flowchart: only asked when another answer has this value.</summary>
+    // only asked when another answer has this value
     public LifepathCondition? ShowIf { get; init; }
 }
 
 public sealed record LifepathCondition(string Question, string Value);
 
-// ------------------------------------------------------------ lifepath
+// lifepath
 
 public sealed record LifepathRules
 {
@@ -290,7 +275,7 @@ public sealed record LoveAffairRules
     public string[] Outcome { get; init; } = [];
 }
 
-// ------------------------------------------------------------ derived values
+// derived values
 
 [JsonConverter(typeof(JsonStringEnumConverter))]
 public enum ThresholdComparison { LessThan, LessThanOrEqual }
@@ -336,11 +321,11 @@ public sealed record DeathSaveRule
     public bool ResetsOnStabilization { get; init; }
 }
 
-// ------------------------------------------------------------ therapy
+// therapy
 
 public sealed record TherapyRules
 {
-    /// <summary>How a therapy is paid: at a clinic (full price), by a Medtech (materials only) or free (GM ruling).</summary>
+    // clinic (full price), Medtech (materials only) or free (GM)
     public Ruled<string[]> Payment { get; init; } = new();
     public Ruled<int> MaxHumanityPerPiece { get; init; } = new();
     public Ruled<int> MaxHumanityPerBorgware { get; init; } = new();
@@ -362,7 +347,7 @@ public sealed record TherapyKind
     public string Source { get; init; } = "";
 }
 
-// ------------------------------------------------------------ combat
+// combat
 
 public sealed record CombatRules
 {
@@ -426,56 +411,50 @@ public sealed record CriticalInjuryDefinition
     public string Effect { get; init; } = "";
     public string? QuickFix { get; init; }
     public string Treatment { get; init; } = "";
-    /// <summary>Raises the Base Death Save Penalty by 1 while active.</summary>
     public bool DeathSave { get; init; }
     public int? MovePenalty { get; init; }
     public int? ActionPenalty { get; init; }
-    /// <summary>The Quick Fix removes the injury for good.</summary>
     public bool QuickFixHeals { get; init; }
 }
 
-// ------------------------------------------------------------ cyberware, progression, economy
+// cyberware, progression, economy
 
 public sealed record CharacterCyberwareRules
 {
     public Ruled<string[]> MeatArmOptions { get; init; } = new();
     public Ruled<string[]> MeatLegOptions { get; init; } = new();
     public Ruled<MeatLimbs> MeatLimbs { get; init; } = new();
-    /// <summary>Limb options that go on a Cyberarm or a Cyberleg (CP:R p.116): coverings and Hardened Shielding.</summary>
+    // coverings and Hardened Shielding (CP:R p.116)
     public Ruled<AnyLimbOption[]> AnyLimbOptions { get; init; } = new();
     public Ruled<bool> OneCoveringPerLimb { get; init; } = new();
     public Ruled<FbcRule> Fbc { get; init; } = new();
     public Ruled<bool> RemovalRestoresHumanity { get; init; } = new();
     public Ruled<bool> RemovedPiecesKept { get; init; } = new();
-    /// <summary>Gear and clothing with Option Slots for cyberware options (Smart Glasses, Battleglove, Smart Ears...).</summary>
+    // Smart Glasses, Battleglove, Smart Ears...
     public Ruled<WearableHost[]> Wearables { get; init; } = new();
     public Ruled<int> WearableHumanityLoss { get; init; } = new();
-    /// <summary>Finger-based options that keep working under a glove that allows it (IR5 p.99).</summary>
+    // IR5 p.99
     public Ruled<string[]> FingerOptions { get; init; } = new();
 }
 
 public sealed record AnyLimbOption(string Slug, bool Covering);
 
-/// <summary>Kind of option a wearable host takes.</summary>
 [JsonConverter(typeof(JsonStringEnumConverter))]
 public enum WearableAccepts { Cybereye, Cyberarm, Cyberaudio }
 
-/// <summary>A worn item with Option Slots, from its own rules text.</summary>
 public sealed record WearableHost
 {
     public string Slug { get; init; } = "";
     public WearableAccepts Accepts { get; init; }
     public int Slots { get; init; }
-    /// <summary>Options that require a pair take one slot and one purchase (Smart Glasses).</summary>
+    // e.g. Smart Glasses
     public bool PairedAsOne { get; init; }
-    /// <summary>Options that require a pair can't go in (Smart Lens).</summary>
+    // e.g. Smart Lens
     public bool NoPaired { get; init; }
-    /// <summary>Cyberfingers it holds as a Modular Finger Cyberhand, apart from its slots (Dynalar Xtra-Dex).</summary>
+    // Dynalar Xtra-Dex
     public int Cyberfingers { get; init; }
-    /// <summary>Options that come installed and can't be removed.</summary>
     public string[] BuiltIn { get; init; } = [];
     public bool BuiltInUsesSlots { get; init; }
-    /// <summary>Worn over a hand or arm: the options there are inaccessible while it is worn.</summary>
     public bool CoversArm { get; init; }
     public bool FingersStillWork { get; init; }
     public int? MaxWorn { get; init; }
@@ -483,10 +462,9 @@ public sealed record WearableHost
     public string Source { get; init; } = "";
 }
 
-/// <summary>Full Body Conversion exceptions (Interface RED 3 p.93).</summary>
+// Interface RED 3 p.93
 public sealed record FbcRule
 {
-    /// <summary>An FBC body is Borgware whose requirement names this piece.</summary>
     public string BodyRequirement { get; init; } = "";
     public string[] ExemptSlugs { get; init; } = [];
     public int SlotMultiplier { get; init; } = 1;
@@ -532,11 +510,11 @@ public sealed record HousingOption
     public string Label { get; init; } = "";
     public int? Rent { get; init; }
     public int? Buy { get; init; }
-    /// <summary>Only given by a Corporation (Exec Teamwork); cannot be rented.</summary>
+    // Exec Teamwork, can't be rented
     public bool Corporate { get; init; }
 }
 
-// ------------------------------------------------------------ cyberware effects on the sheet
+// cyberware effects on the sheet
 
 public sealed record CyberwareEffectsRules
 {
@@ -544,24 +522,18 @@ public sealed record CyberwareEffectsRules
     public CyberwareEffect[] Effects { get; init; } = [];
 }
 
-/// <summary>
-/// What an installed piece does to the sheet: a STAT bonus (<see cref="Stat"/>), a skill bonus (<see cref="Skills"/>,
-/// only shown as a note when <see cref="Condition"/> limits it to a situation) or a game effect shown as text.
-/// </summary>
+// STAT bonus, skill bonus (only a note when Condition limits it) or a text-only effect.
 public sealed record CyberwareEffect
 {
-    /// <summary>Catalog slugs; any one of them installed triggers the effect.</summary>
     public string[] Items { get; init; } = [];
-    /// <summary>Catalog slugs that must all be installed (e.g. Chemskin and Techhair).</summary>
+    // e.g. Chemskin + Techhair
     public string[] AllOf { get; init; } = [];
-    /// <summary>Installations needed (three Light Tattoos).</summary>
+    // three Light Tattoos
     public int MinCount { get; init; } = 1;
     public string? Stat { get; init; }
     public string[] Skills { get; init; } = [];
     public int Add { get; init; }
-    /// <summary>Each installation adds again; otherwise more installations give no extra benefit.</summary>
     public bool Stacks { get; init; }
-    /// <summary>The STAT can't be raised above this.</summary>
     public int? Max { get; init; }
     public string? Condition { get; init; }
     public string? Note { get; init; }

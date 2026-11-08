@@ -42,7 +42,7 @@ public enum WeaponQuality
     [Display(Name = "Qualidade Excelente")] Excellent,
 }
 
-/// <summary>Ammunition families shared by weapons and ammo; compatibility = shared caliber.</summary>
+// compatible = same caliber
 public enum Caliber
 {
     [Display(Name = "Pistola Média")] MediumPistol,

@@ -10,29 +10,27 @@ public enum CombatantKind { Pc, Npc, Generic }
 [JsonConverter(typeof(JsonStringEnumConverter))]
 public enum CombatSide { Ally, Enemy }
 
-/// <summary>Everything about a saved encounter, stored as JSON.</summary>
+// stored as JSON
 public sealed record EncounterState
 {
     public List<Combatant> Combatants { get; init; } = [];
     public int Round { get; init; } = 1;
-    /// <summary>Id of the combatant whose Turn it is; null before Initiative is rolled.</summary>
+    // null until Initiative is rolled
     public string? ActiveId { get; init; }
     public List<CoverPiece> Covers { get; init; } = [];
     public List<CombatLogEntry> Log { get; init; } = [];
     public string? Notes { get; init; }
-    /// <summary>Number of the last attack; the table uses it to tell a new attack from one it already showed.</summary>
+    // lets the table tell a new attack from one it already showed
     public int AttackSeq { get; init; }
-    /// <summary>What the last attack changed, kept until anything else happens in the fight.</summary>
+    // cleared as soon as anything else happens
     public AttackUndo? Undo { get; init; }
-    /// <summary>
-    /// An attack stopped on a step someone must take: the target's dodge (REF 8+) or the attacker's Critical Injury roll.
-    /// While it waits, the fight takes no other action but those steps and the GM's cancel.
-    /// </summary>
+    // Attack waiting on the target's dodge (REF 8+) or the attacker's crit roll. Blocks the fight until resolved or
+    // cancelled by the GM.
     public PendingAttack? Pending { get; init; }
 
     public Combatant? Find(string? id) => Combatants.FirstOrDefault(c => c.Id == id);
 
-    /// <summary>The Initiative Queue: highest Initiative first, ties broken by the re-roll (CP:R p.168).</summary>
+    // highest first, ties by the re-roll (CP:R p.168)
     [JsonIgnore]
     public IEnumerable<Combatant> Queue => Combatants
         .OrderByDescending(c => c.Initiative ?? int.MinValue)
@@ -40,10 +38,8 @@ public sealed record EncounterState
         .ThenBy(c => c.Id, StringComparer.Ordinal);
 }
 
-/// <summary>
-/// One participant. A PC is only a link to the character sheet, which holds its HP, armor, injuries and ammo. NPCs and
-/// generic enemies carry a snapshot of their sheet plus their own running state.
-/// </summary>
+// A PC is just a link to the sheet (HP, armor, injuries and ammo live there). NPCs carry a snapshot plus their own
+// running state.
 public sealed record Combatant
 {
     public string Id { get; init; } = "";
@@ -51,7 +47,7 @@ public sealed record Combatant
     public string Name { get; init; } = "";
     public CombatSide Side { get; init; }
     public int? Initiative { get; init; }
-    /// <summary>Re-roll used only to order tied Initiatives.</summary>
+    // only used to order ties
     public int TieBreak { get; init; }
     public int? CharacterId { get; init; }
     public CombatSnapshot? Snapshot { get; init; }
@@ -62,37 +58,36 @@ public sealed record Combatant
     public int DeathSavePenalty { get; init; }
     public bool Dead { get; init; }
     public bool Stabilized { get; init; }
-    /// <summary>Prone, Grappled, Unconscious, "OnFire:fire-strong"…</summary>
+    // Prone, Grappled, Unconscious, "OnFire:fire-strong"...
     public List<string> Conditions { get; init; } = [];
     public string? CoverId { get; init; }
-    /// <summary>Rounds left in each weapon's magazine (NPCs and generic enemies).</summary>
+    // NPCs only, PCs use the sheet
     public Dictionary<string, int> Ammo { get; init; } = [];
-    /// <summary>Weapons jammed by a natural 1 (Poor Quality, CP:R p.344), NPCs and generic enemies; PCs keep it on the sheet.</summary>
+    // Poor Quality natural 1 (CP:R p.344). PCs keep this on the sheet.
     public List<string> Jammed { get; init; } = [];
-    /// <summary>Thrown-only weapons out of hand (the Ranger boomerang), until they come back or are picked up.</summary>
+    // Ranger boomerang etc, until it comes back or gets picked up
     public List<string> Thrown { get; init; } = [];
-    /// <summary>Once-a-Round effects already used this Round ("spotWeakness", "damageDeflection"); cleared when the Round turns.</summary>
+    // "spotWeakness", "damageDeflection"; cleared each Round
     public List<string> RoundFlags { get; init; } = [];
 }
 
-/// <summary>What the combat table needs from an NPC sheet, taken when it joins the encounter.</summary>
+// taken when the NPC joins
 public sealed record CombatSnapshot
 {
     public int? NpcId { get; init; }
-    /// <summary>The compendium entry a named NPC of the books came from (its image shows on the table).</summary>
+    // named NPC from the books (for the token image)
     public string? CompendiumId { get; init; }
     public string Source { get; init; } = "";
     public int MaxHp { get; init; }
-    /// <summary>BODY used for the Death Save and unarmed damage.</summary>
+    // Death Save and unarmed damage
     public int Body { get; init; }
     public Dictionary<string, int> Stats { get; init; } = new(StringComparer.OrdinalIgnoreCase);
-    /// <summary>Skill Base (STAT + level, armor penalty included) by skill key ("handgun", "evasion", "martial-arts:Karate").</summary>
+    // STAT + level, armor penalty included
     public Dictionary<string, int> Skills { get; init; } = new(StringComparer.OrdinalIgnoreCase);
     public int MaxSpBody { get; init; }
     public int MaxSpHead { get; init; }
-    /// <summary>The sheet prints this location's SP undivided against melee: halving attacks don't halve it, however much it ablates.</summary>
+    // sheet prints full SP vs melee: halving attacks don't halve it
     public bool? FullSpVsMeleeBody { get; init; }
-    /// <inheritdoc cref="FullSpVsMeleeBody"/>
     public bool? FullSpVsMeleeHead { get; init; }
     public bool Cyberarm { get; init; }
     public List<CombatWeapon> Weapons { get; init; } = [];
@@ -103,20 +98,19 @@ public sealed record CombatWeapon
     public string Key { get; init; } = "";
     public string Name { get; init; } = "";
     public WeaponClass? Class { get; init; }
-    /// <summary>Skill id used to attack ("handgun", "melee-weapon").</summary>
     public string Skill { get; init; } = "";
     public string Damage { get; init; } = "";
     public int Rof { get; init; } = 1;
     public int? Magazine { get; init; }
     public int? AutofireMultiplier { get; init; }
-    /// <summary>The sheet prints "Autofire only": no normal or aimed shots.</summary>
+    // "Autofire only" on the sheet
     public bool? AutofireOnly { get; init; }
-    /// <summary>Printed DV by range band; replaces the general range tables when set.</summary>
+    // printed DV per range band, overrides the general tables
     public int?[]? RangeDv { get; init; }
     public bool Melee { get; init; }
-    /// <summary>Whether the weapon halves SP; null follows <see cref="Melee"/>.</summary>
+    // null -> same as Melee
     public bool? HalvesArmor { get; init; }
-    /// <summary>Generic enemies: attack total without the d10 (STAT + skill).</summary>
+    // generic enemies: STAT + skill, without the d10
     public int? AttackBase { get; init; }
 }
 
@@ -132,13 +126,9 @@ public sealed record CoverPiece
     public int Hp { get; init; }
 }
 
-/// <summary>
-/// The fight before the last attack (<see cref="State"/>) and the sheets of the PCs it touched, valid while the fight
-/// is still at <see cref="EncounterVersion"/> and each sheet at the version the attack left it.
-/// </summary>
+// Valid while the fight is still at EncounterVersion and each sheet at the version the attack left it.
 public sealed record AttackUndo(int Seq, int EncounterVersion, string State, List<SheetSnapshot> Sheets);
 
-/// <summary>A character sheet before an attack; <see cref="Version"/> is the one the attack left it at.</summary>
 public sealed record SheetSnapshot(int CharacterId, int Version, string SheetJson);
 
 public sealed record CombatLogEntry(int Round, string? ActorId, string Kind, string Text, DateTime At);

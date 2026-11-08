@@ -9,7 +9,7 @@ namespace CyberpunkDb.Application.Catalog.Categories;
 
 public sealed class CyberwareCategory : CategoryDefinition<CyberwareItem>
 {
-    /// <summary>Attribute key used by imports/forms to reference the foundational piece by slug or name.</summary>
+    // imports/forms reference the foundation by slug or name
     public const string RequiresKey = "requiresItem";
 
     public override ItemCategory Category => ItemCategory.Cyberware;

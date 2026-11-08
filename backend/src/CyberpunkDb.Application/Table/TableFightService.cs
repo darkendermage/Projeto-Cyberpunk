@@ -8,20 +8,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CyberpunkDb.Application.Table;
 
-/// <summary>
-/// A fight started from the table: one combatant per chosen token, standing for what the token stands for (the PC,
-/// the saved NPC, the compendium NPC with a sheet; anything else a generic enemy named after the token). The scene is
-/// then linked to the fight and each token to its combatant.
-/// </summary>
+// One combatant per chosen token (PC, saved NPC, compendium NPC with a sheet, or a generic named after the
+// token). Then the scene and tokens get linked to the fight.
 public sealed class TableFightService(IAppDbContext db, SceneService scenes, EncounterService encounters, NpcCompendium compendium, CombatRuleBook rules)
 {
-    /// <summary>
-    /// A barrier from the cover table on the scenery layer. On a scene with a fight it is also the fight's cover, so an
-    /// attack through it on the combat table wears it down.
-    /// </summary>
+    // On a scene with a fight it's also a cover there, so attacks through it wear it down.
     public async Task<SceneView> AddBarrierAsync(int sceneId, BarrierRequest r, CancellationToken ct)
     {
-        var table = rules.CoverHp(r.Material, r.Thick); // the material must exist either way
+        var table = rules.CoverHp(r.Material, r.Thick); // throws if the material doesn't exist
         var hp = r.Hp ?? table;
         if (hp is <= 0 or > 999)
             throw RequestValidationException.For("material", L.T($"Isso não para bala: não é cobertura ({rules.Document.CoverRules.Source}).", $"That doesn't stop bullets: it isn't cover ({rules.Document.CoverRules.Source})."));
@@ -32,7 +26,7 @@ public sealed class TableFightService(IAppDbContext db, SceneService scenes, Enc
         return await scenes.AddBarrierAsync(sceneId, r, hp, coverId, ct);
     }
 
-    /// <summary>Damage (or, off a fight, repair) to a barrier; a fight's cover takes it on the fight.</summary>
+    // repair only outside a fight; covers take it on the fight
     public async Task<SceneView> DamageBarrierAsync(int sceneId, string tokenId, BarrierDamageRequest r, CancellationToken ct)
     {
         var scene = await scenes.GetAsync(sceneId, ct);
@@ -82,14 +76,13 @@ public sealed class TableFightService(IAppDbContext db, SceneService scenes, Enc
             var characters = new HashSet<int>();
             foreach (var (side, token) in chosen)
             {
-                // Two tokens of one character: the character fights once, through the first.
+                // same character twice: fights once, through the first token
                 if (token.CharacterId is { } c && !characters.Add(c)) continue;
                 var before = fight.Queue.Select(f => f.Id).ToHashSet();
                 fight = await encounters.AddCombatantsAsync(fight.Id, Combatant(fight.Version, side, token, existing), ct);
                 links[token.Id] = fight.Queue.First(f => !before.Contains(f.Id)).Id;
             }
             await scenes.LinkFightAsync(sceneId, fight.Id, links, ct);
-            // The scene's barriers become the fight's cover.
             var covers = new Dictionary<string, string>();
             foreach (var t in scene.Tokens.Where(t => t.Barrier is { Hp: > 0 }))
                 covers[t.Id] = await AddCoverAsync(fight.Id, t.Label, t.Barrier!.Material, t.Barrier.Thick, t.Barrier.Hp, ct);
@@ -97,7 +90,7 @@ public sealed class TableFightService(IAppDbContext db, SceneService scenes, Enc
         }
         catch
         {
-            // All or nothing: a half-built fight is not left behind.
+            // don't leave a half-built fight behind
             await encounters.DeleteAsync(fight.Id, CancellationToken.None);
             throw;
         }

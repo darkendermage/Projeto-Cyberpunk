@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.SignalR;
 
 namespace CyberpunkDb.Api.Table;
 
-/// <summary>Delivers table changes over the hub: the GM's group gets the full views, each seat its own.</summary>
+// GM group gets the full views, each seat its own
 public sealed class HubTableNotifier(IHubContext<TableHub> hub) : ITableNotifier
 {
     public async Task SceneAsync(SceneView gm, IReadOnlyDictionary<int, SceneView?>? seats, CancellationToken ct)

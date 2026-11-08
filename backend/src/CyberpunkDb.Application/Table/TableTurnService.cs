@@ -9,22 +9,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CyberpunkDb.Application.Table;
 
-/// <summary>A reload from the table: the fight as the seat sees it when there is one, else the character's numbers.</summary>
+// the seat's view of the fight if there is one, else the character's numbers
 public sealed record PlayerReloadResult(PlayerEncounterDto? Encounter, PlayerCharacterDto? Character);
 
-/// <summary>A player's answer to a shot at their character: dodge or not.</summary>
 public sealed record PlayerDefenseRequest(bool Dodge);
 
-/// <summary>A weapon of the seat's own character, by its key (the inventory copy for PCs).</summary>
+// inventory copy for PCs
 public sealed record PlayerWeaponRequest(string Weapon);
 
-/// <summary>
-/// What a player does with their own character in the fight of the live scene, other than attacking: pass the Turn,
-/// reload, unjam, pick a thrown weapon up. Each answers the seat's view of the fight.
-/// </summary>
+// Everything a player does in the live fight besides attacking: end turn, reload, unjam, pick up.
 public sealed class TableTurnService(IAppDbContext db, EncounterService encounters, Characters.CharacterService characters)
 {
-    /// <summary>The seat's character's fighter in the live scene's fight; <paramref name="ownTurn"/> demands it is its Turn.</summary>
+    // ownTurn: must be its Turn
     internal async Task<(EncounterDetailDto Detail, FighterView Own, SceneState State)> OwnFighterAsync(TableSeat seat, bool ownTurn, CancellationToken ct)
     {
         var scene = await db.Scenes.AsNoTracking().FirstOrDefaultAsync(s => s.Active, ct)
@@ -39,10 +35,7 @@ public sealed class TableTurnService(IAppDbContext db, EncounterService encounte
         return (detail, own, SceneService.Deserialize(scene.StateJson));
     }
 
-    /// <summary>
-    /// Reloads one of the seat's character's weapons. In the live scene's fight it is an Action on the character's own
-    /// Turn (CP:R p.171); out of a fight it can be done any time.
-    /// </summary>
+    // In the live fight it's an Action on its own Turn (CP:R p.171); outside a fight, any time.
     public async Task<PlayerReloadResult> ReloadAsync(TableSeat seat, PlayerWeaponRequest r, CancellationToken ct)
     {
         if (seat.CharacterId is not { } characterId)
@@ -58,7 +51,7 @@ public sealed class TableTurnService(IAppDbContext db, EncounterService encounte
         return new PlayerReloadResult(null, PlayerCharacters.From(reloaded));
     }
 
-    /// <summary>Clears a jammed weapon of the seat's character: an Action on its own Turn (CP:R p.344).</summary>
+    // Action on its own Turn (CP:R p.344)
     public async Task<PlayerEncounterDto> UnjamAsync(TableSeat seat, PlayerWeaponRequest r, CancellationToken ct)
     {
         var (detail, own, state) = await OwnFighterAsync(seat, ownTurn: true, ct);
@@ -66,7 +59,7 @@ public sealed class TableTurnService(IAppDbContext db, EncounterService encounte
         return PlayerEncounters.For(after, seat, state);
     }
 
-    /// <summary>The target's player answers a pending shot at their character: dodge (Evasion roll) or not (CP:R p.172).</summary>
+    // CP:R p.172
     public async Task<PlayerEncounterDto> DefenseAsync(TableSeat seat, PlayerDefenseRequest r, CancellationToken ct)
     {
         var (detail, own, state) = await OwnFighterAsync(seat, ownTurn: false, ct);
@@ -76,7 +69,7 @@ public sealed class TableTurnService(IAppDbContext db, EncounterService encounte
         return PlayerEncounters.For(after, seat, state);
     }
 
-    /// <summary>The attacker's player rolls the Critical Injury of their pending attack (CP:R p.187).</summary>
+    // CP:R p.187
     public async Task<PlayerEncounterDto> CriticalAsync(TableSeat seat, CancellationToken ct)
     {
         var (detail, own, state) = await OwnFighterAsync(seat, ownTurn: false, ct);
@@ -86,7 +79,7 @@ public sealed class TableTurnService(IAppDbContext db, EncounterService encounte
         return PlayerEncounters.For(after, seat, state);
     }
 
-    /// <summary>Picks a thrown weapon of the seat's character up, on its own Turn.</summary>
+    // on its own Turn
     public async Task<PlayerEncounterDto> PickUpAsync(TableSeat seat, PlayerWeaponRequest r, CancellationToken ct)
     {
         var (detail, own, state) = await OwnFighterAsync(seat, ownTurn: true, ct);
@@ -94,7 +87,6 @@ public sealed class TableTurnService(IAppDbContext db, EncounterService encounte
         return PlayerEncounters.For(after, seat, state);
     }
 
-    /// <summary>Whether the character fights in the active fight of the live scene.</summary>
     private async Task<bool> InFightAsync(int characterId, CancellationToken ct)
     {
         var scene = await db.Scenes.AsNoTracking().FirstOrDefaultAsync(s => s.Active, ct);
@@ -110,7 +102,7 @@ public sealed class TableTurnService(IAppDbContext db, EncounterService encounte
         }
     }
 
-    /// <summary>The player ends their own Turn (CP:R p.168); the GM's "Next turn" still forces it.</summary>
+    // CP:R p.168. The GM's "Next turn" still forces it.
     public async Task<PlayerEncounterDto> EndTurnAsync(TableSeat seat, CancellationToken ct)
     {
         var (detail, _, state) = await OwnFighterAsync(seat, ownTurn: true, ct);

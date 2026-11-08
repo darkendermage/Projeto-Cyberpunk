@@ -6,17 +6,14 @@ using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.NightMarkets.Rules;
 
-/// <summary>A row of the Night Market Index (v1.1). <see cref="Slug"/> is set when the item is in the catalog.</summary>
+// Night Market Index v1.1. Slug is set when the item is in the catalog.
 public sealed record IndexEntry(
     string Section, string? Group, string Name, string Cost, int? PriceEb, PriceCategory? PriceCategory,
     IndexSource[] Sources, string? Slug);
 
 public sealed record IndexSource(string Book, int? Page);
 
-/// <summary>
-/// The loaded Night Market rules, the Night Market Index and the Black Chrome booth codes. Singleton. Weapon quality
-/// prices come from the shared NPC rules (CP:R p.342).
-/// </summary>
+// Rules, the Index and the Black Chrome booth codes. Singleton. Quality prices come from the NPC rules (p.342).
 public sealed class NightMarketRuleBook
 {
     private const string RulesResource = "CyberpunkDb.Application.NightMarkets.Rules.night-market-rules.json";
@@ -42,7 +39,7 @@ public sealed class NightMarketRuleBook
 
     public NightMarketRulesDocument Document { get; }
     public IReadOnlyList<IndexEntry> Index { get; }
-    /// <summary>Catalog slug → booth codes ("C3") of the Black Chrome listings.</summary>
+    // slug -> booth codes ("C3")
     public IReadOnlyDictionary<string, string[]> Booths { get; }
     public NpcRuleBook Shared { get; }
     public IReadOnlyList<PriceTier> Ladder { get; }
@@ -81,11 +78,11 @@ public sealed class NightMarketRuleBook
 
     public int PriceOf(PriceCategory category) => Ladder.First(t => t.Category == category).Price;
 
-    /// <summary>The category of a price that has none in the catalog: the highest tier whose market price it reaches.</summary>
+    // highest tier whose market price it reaches
     public PriceCategory CategoryOf(int price) =>
         Ladder.LastOrDefault(t => price >= t.Price)?.Category ?? PriceCategory.Cheap;
 
-    /// <summary>Moves a category down by <paramref name="steps"/>, never below the floor (IR5 p.5; floor complementary).</summary>
+    // never below the floor (IR5 p.5; floor complementary)
     public PriceCategory Lower(PriceCategory category, int steps)
     {
         var floor = Document.Condition.Floor.Value;
@@ -93,12 +90,12 @@ public sealed class NightMarketRuleBook
         return target < (int)floor ? floor : (PriceCategory)target;
     }
 
-    /// <summary>The highest category a Fixer of this Rank always sources (CP:R p.160–161). Null without a Rank.</summary>
+    // CP:R p.160-161, null without a Rank
     public PriceCategory? Reach(int? rank) => rank is { } r and > 0
         ? Document.Operator.Reach.Value.FirstOrDefault(t => r >= t.MinRank && r <= t.MaxRank)?.Category ?? PriceCategory.SuperLuxury
         : null;
 
-    /// <summary>Weapon price for a quality (CP:R p.342). Null when the standard price has no Poor/Excellent row.</summary>
+    // CP:R p.342; null when there's no Poor/Excellent row
     public int? QualityPrice(int standardPrice, WeaponQuality quality)
     {
         var row = Shared.Document.WeaponQualityPricing.Rows.FirstOrDefault(r => r.Standard == standardPrice);

@@ -4,22 +4,18 @@ using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.Characters.Calculation;
 
-/// <summary>An effect from <c>cyberwareEffects</c> that the installed pieces trigger, with the pieces' names.</summary>
+// an entry of cyberwareEffects triggered by the installed pieces
 public sealed record ActiveCyberwareEffect(CyberwareEffect Effect, string Label, int Count)
 {
-    /// <summary>Bonus before any STAT cap: per installation when the effect stacks, once otherwise.</summary>
+    // before STAT caps; per install when it stacks
     public int Bonus => Effect.Stacks ? Effect.Add * Count : Effect.Add;
 }
 
-/// <summary>A cyberware effect as shown on the sheet.</summary>
 public sealed record CyberEffectLine(string Item, string Description, string Source);
 
 public static class CyberwareEffects
 {
-    /// <summary>
-    /// Effects of the pieces that work right now: installed implants not covered by a glove, and the options of worn
-    /// hosts such as Smart Glasses (other inventory items don't count).
-    /// </summary>
+    // Uncovered implants plus options in worn hosts (other inventory items don't count).
     public static List<ActiveCyberwareEffect> Active(CharacterRuleBook rules, CharacterSheet sheet, NpcCatalog catalog)
     {
         var installed = WearableCyberware.Working(rules, sheet, catalog)

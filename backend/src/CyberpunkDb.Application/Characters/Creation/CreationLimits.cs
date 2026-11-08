@@ -6,7 +6,7 @@ using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.Characters.Creation;
 
-/// <summary>A limit in force for one character: the rule value or the campaign variant that replaced it.</summary>
+// rule value or the campaign variant that replaced it
 public sealed record EffectiveLimit(int Value, string Source, bool CampaignVariant)
 {
     public static EffectiveLimit From(Ruled<int> rule, int? overrideValue) =>
@@ -15,10 +15,7 @@ public sealed record EffectiveLimit(int Value, string Source, bool CampaignVaria
             : new EffectiveLimit(rule.Value, rule.Reference, false);
 }
 
-/// <summary>
-/// The creation parameters that apply to one character, with campaign overrides resolved. Null members do not
-/// apply to the character's method (e.g. Streetrats have no skill budget).
-/// </summary>
+// Campaign overrides already applied. Null = doesn't apply to this method (Streetrats have no skill budget).
 public sealed record CreationLimits(
     CreationMethod Method,
     EffectiveLimit? StatPoints,
@@ -65,13 +62,10 @@ public sealed record CreationLimits(
     }
 }
 
-/// <summary>Point costs of character generation.</summary>
 public static class CreationCosts
 {
-    /// <summary>
-    /// Skill points spent: every level from 0 times the (x2) multiplier (CP:R p.89–90 examples), minus the free
-    /// Cultural Origin levels of the native language (CP:R p.45).
-    /// </summary>
+    // Every level from 0 times the (x2) multiplier (CP:R p.89-90 examples), minus the free native language levels
+    // (p.45).
     public static int SkillPoints(CharacterRuleBook rules, CharacterSheet sheet)
     {
         var native = NativeLanguageKey(sheet);
@@ -87,15 +81,12 @@ public static class CreationCosts
         return total;
     }
 
-    /// <summary>STAT points spent: the sum of the ten STATs, LUCK included (CP:R p.78).</summary>
+    // sum of the ten, LUCK included (CP:R p.78)
     public static int StatPoints(CharacterRuleBook rules, CharacterSheet sheet) =>
         rules.StatOrder.Sum(sheet.Stat);
 
-    /// <summary>
-    /// Skill key of the Cultural Origin language, or null when there is none. Streetslang never counts: everyone
-    /// speaks it as a Basic Skill and the free levels go to "another primary tongue" (CP:R p.45), so choosing it
-    /// can't turn the Basic Skill levels into free ones.
-    /// </summary>
+    // Streetslang never counts: everyone has it as a Basic Skill and the free levels go to "another primary tongue"
+    // (CP:R p.45).
     public static string? NativeLanguageKey(CharacterSheet sheet) =>
         sheet.Identity.NativeLanguage is { } lang && !lang.Equals(StreetslangName, StringComparison.OrdinalIgnoreCase)
             ? SkillKey.Make("language", lang)

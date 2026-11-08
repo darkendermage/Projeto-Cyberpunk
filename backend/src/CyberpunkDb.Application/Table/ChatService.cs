@@ -13,22 +13,17 @@ namespace CyberpunkDb.Application.Table;
 
 public sealed record SendMessageRequest(string Text, TableVisibility Visibility = TableVisibility.Public, int? TargetSeatId = null);
 
-/// <summary>A roll; <see cref="Luck"/>: LUCK points a player spends on their own Check before rolling (+1 each, CP:R p.130).</summary>
+// Luck: points spent on the player's own Check before rolling, +1 each (CP:R p.130)
 public sealed record RollRequest(string Formula, RollKind Kind = RollKind.Plain, string? Label = null, TableVisibility Visibility = TableVisibility.Public, int? TargetSeatId = null, int Luck = 0);
 
-/// <summary>
-/// A chat line as one reader sees it. <see cref="Concealed"/>: the author of a secret roll sees that they rolled, not
-/// what came up.
-/// </summary>
+// Concealed: the author of a secret roll sees that they rolled, not the result.
 public sealed record TableMessageDto(
     long Id, DateTime At, int? AuthorSeatId, string AuthorName, string? AuthorColor, TableMessageKind Kind,
     TableVisibility Visibility, int? TargetSeatId, string Text, RollResult? Roll, bool Concealed, TableAttack? Attack = null);
 
-/// <summary>
-/// The table chat and its dice. The server rolls; who reads each line is decided here, per seat, both for the history
-/// and for the live push: Public reaches everyone, Private the author and the GM, Secret only the GM (its author sees a
-/// concealed line), Whisper the author, its target and the GM.
-/// </summary>
+// Table chat. The server rolls the dice, and visibility is decided here per seat (history and live push):
+// Public = everyone, Private = author + GM, Secret = GM only (author sees a concealed line), Whisper = author,
+// target + GM.
 public sealed class ChatService(IAppDbContext db, ITableNotifier notifier, IDiceRoller dice, CharacterService characters, TableSessionService sessions, TableSettingsService settings)
 {
     public const int HistorySize = 300;
@@ -36,14 +31,14 @@ public sealed class ChatService(IAppDbContext db, ITableNotifier notifier, IDice
 
     public async Task<IReadOnlyList<TableMessageDto>> HistoryAsync(TableSeat? viewer, CancellationToken ct)
     {
-        // The open session's lines only; older sessions are read from the GM's session list.
+        // only the open session; older ones come from the GM's session list
         var session = await sessions.CurrentIdAsync(ct);
         var rows = await db.TableMessages.AsNoTracking().Where(m => m.SessionId == session).OrderByDescending(m => m.Id).Take(HistorySize).ToListAsync(ct);
         var colors = await ColorsAsync(ct);
         return rows.AsEnumerable().Reverse().Select(m => View(m, viewer, colors)).OfType<TableMessageDto>().ToList();
     }
 
-    /// <summary>An archived session's lines, as the GM sees them (every roll and attack, whispers included).</summary>
+    // GM view, whispers included
     public async Task<IReadOnlyList<TableMessageDto>> SessionHistoryAsync(int sessionId, CancellationToken ct)
     {
         var rows = await db.TableMessages.AsNoTracking().Where(m => m.SessionId == sessionId).OrderBy(m => m.Id).ToListAsync(ct);
@@ -71,15 +66,12 @@ public sealed class ChatService(IAppDbContext db, ITableNotifier notifier, IDice
         }
         var label = r.Label?.Trim();
         var text = string.IsNullOrEmpty(label) ? roll.Formula : label.Length <= 80 ? label : label[..80];
-        // Everyone throws these dice in the roller's color (E3).
+        // everyone sees these dice in the roller's color
         roll = roll with { DiceColor = await DiceColorAsync(author, ct) };
         return await PostAsync(author, TableMessageKind.Roll, text, roll, r.Visibility, r.TargetSeatId, ct);
     }
 
-    /// <summary>
-    /// The table's reroll (a house rule): 1 LUCK rolls a player's own Check again, keeping its modifiers and the LUCK
-    /// already spent; the new line points at the one it replaces, and a line is rerolled only once.
-    /// </summary>
+    // House rule: 1 LUCK rerolls a player's own Check, keeping modifiers and LUCK spent. Only once per line.
     public async Task<TableMessageDto> RerollAsync(TableSeat author, long messageId, CancellationToken ct)
     {
         var m = await db.TableMessages.AsNoTracking().FirstOrDefaultAsync(x => x.Id == messageId, ct);
@@ -96,10 +88,7 @@ public sealed class ChatService(IAppDbContext db, ITableNotifier notifier, IDice
         return await PostAsync(author, TableMessageKind.Roll, text.Length <= 100 ? text : text[..100], again, m.Visibility, m.TargetSeatId, ct);
     }
 
-    /// <summary>
-    /// The line of an attack of the fight on the live scene, written by the attacker's seat when a player's character
-    /// made it (the GM otherwise). Everyone reads it; players see NPC numbers only as a hit or a miss.
-    /// </summary>
+    // Posted by the attacker's seat when a PC attacked (GM otherwise). Players only see hit/miss for NPCs.
     public async Task PostAttackAsync(TableAttack attack, int? characterId, CancellationToken ct)
     {
         var seat = characterId is { } id ? await db.TableSeats.AsNoTracking().FirstOrDefaultAsync(s => s.CharacterId == id && s.RevokedAt == null, ct) : null;
@@ -109,7 +98,7 @@ public sealed class ChatService(IAppDbContext db, ITableNotifier notifier, IDice
             JsonSerializer.Serialize(attack, SceneService.Json), TableVisibility.Public, null, ct);
     }
 
-    /// <summary>Marks the line of an attack the GM undid, and sends it again so every screen crosses it out.</summary>
+    // so every screen crosses it out
     public async Task MarkAttackUndoneAsync(int encounterId, int seq, CancellationToken ct)
     {
         var recent = await db.TableMessages.Where(m => m.Kind == TableMessageKind.Attack).OrderByDescending(m => m.Id).Take(50).ToListAsync(ct);
@@ -150,7 +139,6 @@ public sealed class ChatService(IAppDbContext db, ITableNotifier notifier, IDice
         return authorId is { } id ? views.GetValueOrDefault(id) ?? gm : gm;
     }
 
-    /// <summary>Sends a line to every screen allowed to read it, each with its own view.</summary>
     private async Task<(TableMessageDto Gm, Dictionary<int, TableMessageDto> Seats)> PublishAsync(TableMessage message, CancellationToken ct)
     {
         var colors = await ColorsAsync(ct);
@@ -162,7 +150,7 @@ public sealed class ChatService(IAppDbContext db, ITableNotifier notifier, IDice
         return (gm, views);
     }
 
-    /// <summary>The line as <paramref name="viewer"/> reads it (null viewer: the GM); null when they may not.</summary>
+    // viewer null = GM; returns null when they can't read it
     private static TableMessageDto? View(TableMessage m, TableSeat? viewer, IReadOnlyDictionary<int, string> colors)
     {
         var mine = viewer is not null && m.AuthorSeatId == viewer.Id;
@@ -187,7 +175,7 @@ public sealed class ChatService(IAppDbContext db, ITableNotifier notifier, IDice
             m.AuthorSeatId is { } seat ? colors.GetValueOrDefault(seat) : null, m.Kind, m.Visibility, m.TargetSeatId, m.Text, roll, concealed, attack);
     }
 
-    /// <summary>The roller's dice color: the seat's choice, else the seat's color; for the GM, the GM's choice (or none).</summary>
+    // seat choice, else seat color. GM: their choice or nothing.
     private async Task<string?> DiceColorAsync(TableSeat? seat, CancellationToken ct)
     {
         if (seat is null) return await settings.GetAsync(TableSettingsService.GmDiceColor, ct);

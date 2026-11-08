@@ -3,11 +3,8 @@ using System.Runtime.InteropServices;
 
 namespace CyberpunkDb.Api.Desktop;
 
-/// <summary>
-/// A Windows Job Object that kills its processes when its last handle closes. The app holds the handle, so a child
-/// (cloudflared) ends with the app however the app ends: closed window, Task Manager or crash, where no shutdown code
-/// runs. Elsewhere it does nothing and the normal shutdown stops the child.
-/// </summary>
+// Windows Job Object that kills its processes when the last handle closes, so cloudflared dies with the app
+// even on a crash or Task Manager kill. No-op on other platforms.
 public sealed class ChildProcessJob : IDisposable
 {
     private const int ExtendedLimitInformation = 9;
@@ -34,7 +31,7 @@ public sealed class ChildProcessJob : IDisposable
         }
     }
 
-    /// <summary>Puts a started process in the job; false where jobs are unavailable.</summary>
+    // false where jobs aren't available
     public bool Add(Process process) => _handle != IntPtr.Zero && AssignProcessToJobObject(_handle, process.Handle);
 
     public void Dispose()

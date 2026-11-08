@@ -3,7 +3,7 @@ using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.Npcs;
 
-/// <summary>Shape checks of a save request. Game rules live in <see cref="Validation.NpcValidator"/>.</summary>
+// shape only, game rules are in NpcValidator
 public sealed class NpcSaveRequestValidator : AbstractValidator<NpcSaveRequest>
 {
     public NpcSaveRequestValidator()

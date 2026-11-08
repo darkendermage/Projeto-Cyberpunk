@@ -6,7 +6,7 @@ using CyberpunkDb.Domain.Enums;
 
 namespace CyberpunkDb.Application.Catalog;
 
-/// <summary>Single entry point to the category definitions. Adding a category = adding one definition here.</summary>
+// new category = add its definition here
 public sealed class CategoryRegistry : ISearchTextBuilder
 {
     private readonly Dictionary<string, ICategoryDefinition> _byKey;
@@ -31,7 +31,7 @@ public sealed class CategoryRegistry : ISearchTextBuilder
     public ICategoryDefinition Get(string key)
     {
         if (_byKey.TryGetValue(key, out var def)) return def;
-        // Also accept the enum name ("Weapon") which is what imports and the Items table store.
+        // also accept the enum name ("Weapon"), that's what imports store
         if (Enum.TryParse<ItemCategory>(key, true, out var category) && _byCategory.TryGetValue(category, out def)) return def;
         throw new NotFoundException($"Categoria '{key}' não existe.");
     }

@@ -6,10 +6,7 @@ namespace CyberpunkDb.Application.Npcs.Validation;
 [JsonConverter(typeof(JsonStringEnumConverter))]
 public enum NpcIssueSeverity { Error, Warning, Info }
 
-/// <summary>
-/// One finding. <see cref="Key"/> identifies the violation (code plus target) and is what a GM exception
-/// references. Only <see cref="Overridable"/> errors accept an exception; structural errors never do.
-/// </summary>
+// Key (code + target) is what a GM exception references. Only Overridable errors take an exception.
 public sealed record NpcIssue(
     string Code,
     string Key,
@@ -24,7 +21,7 @@ public sealed record NpcIssue(
     public string? Justification { get; init; }
 }
 
-/// <summary>Budget usage. <see cref="Total"/> null means unlimited.</summary>
+// Total null = unlimited
 public sealed record BudgetLine(int Used, int? Total, string Source)
 {
     public int? Remaining => Total - Used;

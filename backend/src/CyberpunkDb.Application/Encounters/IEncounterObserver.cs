@@ -1,6 +1,6 @@
 namespace CyberpunkDb.Application.Encounters;
 
-/// <summary>Told about every saved change to a fight, so open screens (the virtual table) can follow it live.</summary>
+// so open screens (the table) can follow the fight live
 public interface IEncounterObserver
 {
     Task ChangedAsync(EncounterDetailDto detail, CancellationToken ct);

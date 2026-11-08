@@ -7,15 +7,11 @@ using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.Characters.Operations;
 
-/// <summary>
-/// Installing, removing and replacing cyberware, and Humanity therapy. Every check (money, slots, prerequisites,
-/// body capacity, pairs, requirements) runs before anything changes; a refused operation leaves the sheet untouched.
-/// </summary>
+// All checks run before anything changes, so a refused operation leaves the sheet as it was.
 public sealed class CyberwareOperations(CharacterRuleBook rules, CyberwareInstaller installer, CharacterCalculator calculator, IDiceRoller dice)
 {
-    // ------------------------------------------------------------ preview
+    // preview
 
-    /// <summary>What an installation would do, without doing it: pieces, price, budget after, Humanity range, warnings.</summary>
     public InstallPreviewDto Preview(CharacterSheet sheet, InstallCyberwareRequest request, NpcCatalog catalog)
     {
         if (request.Replacing is { } replaced)
@@ -72,12 +68,9 @@ public sealed class CyberwareOperations(CharacterRuleBook rules, CyberwareInstal
         new(false, error, [], 0, BudgetPool.Balance, 0, 0, report.Humanity.Current, 0, 0, false,
             report.Humanity.EmpEffective, report.Humanity.EmpEffective, report.Humanity.TherapyCap, [], []);
 
-    // ------------------------------------------------------------ install
+    // install
 
-    /// <summary>
-    /// Installs a piece bought now or taken from the inventory. Foundational pieces the planner adds are charged too;
-    /// requirements that exist only as text must be confirmed. Humanity Loss is preset during creation and rolled after.
-    /// </summary>
+    // Foundations added by the planner are charged too. Humanity Loss is preset during creation, rolled after.
     public CharacterSheet Install(CharacterSheet sheet, InstallCyberwareRequest request, CharacterChange change)
     {
         var (item, fromInventory) = Resolve(sheet, request, change.Catalog);
@@ -126,12 +119,9 @@ public sealed class CyberwareOperations(CharacterRuleBook rules, CyberwareInstal
         };
     }
 
-    // ------------------------------------------------------------ remove and replace
+    // remove and replace
 
-    /// <summary>
-    /// Takes a piece out, with every option installed in it. The Humanity it cost does not come back: removing only
-    /// raises the ceiling that therapy can restore (CP:R p.230). Removed pieces go back to the inventory.
-    /// </summary>
+    // Options come out with it. Humanity doesn't come back, it only raises the therapy cap (CP:R p.230).
     public CharacterSheet Remove(CharacterSheet sheet, RemoveCyberwareRequest request, CharacterChange change)
     {
         if (!sheet.Creation.Finalized) throw CharacterChange.Refuse("creation", L.T("Durante a criação, desfaça a compra em vez de remover.", "During creation, undo the purchase instead of removing."));
@@ -165,7 +155,7 @@ public sealed class CyberwareOperations(CharacterRuleBook rules, CyberwareInstal
         return sheet;
     }
 
-    /// <summary>Removes one piece and installs another as a single operation: if the new one can't go in, nothing changes.</summary>
+    // atomic: if the new one can't go in, nothing changes
     public CharacterSheet Replace(CharacterSheet sheet, ReplaceCyberwareRequest request, CharacterChange change)
     {
         var removed = Remove(sheet, new RemoveCyberwareRequest(request.Version, request.InstanceId, request.Keep), change);
@@ -174,12 +164,9 @@ public sealed class CyberwareOperations(CharacterRuleBook rules, CyberwareInstal
             request.Acknowledge, Side: request.Side), change);
     }
 
-    // ------------------------------------------------------------ therapy
+    // therapy
 
-    /// <summary>
-    /// One week of therapy (CP:R p.229–230): recovers 2d6 or 4d6 Humanity, never above the ceiling set by the cyberware
-    /// still installed. Paid at a clinic (full price), by a Medtech (materials only) or free by GM ruling.
-    /// </summary>
+    // One week (CP:R p.229-230): 2d6 or 4d6, capped by the installed cyberware.
     public CharacterSheet Therapy(CharacterSheet sheet, TherapyRequest request, CharacterChange change)
     {
         if (!sheet.Creation.Finalized) throw CharacterChange.Refuse("creation", L.T("Conclua a criação antes de fazer terapia.", "Finish creation before doing therapy."));
@@ -210,7 +197,7 @@ public sealed class CyberwareOperations(CharacterRuleBook rules, CyberwareInstal
         return sheet with { Humanity = sheet.Humanity with { Recovered = sheet.Humanity.Recovered + gained } };
     }
 
-    // ------------------------------------------------------------ helpers
+    // helpers
 
     private (CatalogItem Item, InventoryEntry? FromInventory) Resolve(CharacterSheet sheet, InstallCyberwareRequest request, NpcCatalog catalog)
     {
@@ -233,10 +220,7 @@ public sealed class CyberwareOperations(CharacterRuleBook rules, CyberwareInstal
     private static InstallOptions Options(InstallCyberwareRequest r, bool creating, bool roll) =>
         new() { MeatLimb = r.MeatLimb, HostInstanceId = r.HostInstanceId, AtCreation = creating, Roll = roll, Side = r.Side };
 
-    /// <summary>
-    /// The plan's price. A piece taken from the inventory is already owned, so one copy of it is not charged again
-    /// (a pair still pays for the second copy).
-    /// </summary>
+    // From the inventory: that copy is already paid for (a pair still pays the second one).
     private static int Price(InstallPlan plan, CatalogItem item, bool fromInventory) =>
         Math.Max(0, plan.Price - (fromInventory ? item.Price ?? 0 : 0));
 

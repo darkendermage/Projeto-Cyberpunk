@@ -3,10 +3,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace CyberpunkDb.Infrastructure.Media;
 
-/// <summary>
-/// Uploaded images as files named by their id, in Media:Root (%LOCALAPPDATA% style variables expand). Keeping them out
-/// of the database keeps the SQLite file small and its backups fast.
-/// </summary>
+// Files named by id under Media:Root. Kept out of the DB so the SQLite file and its backups stay small.
 public sealed class DiskMediaStore(IConfiguration configuration) : IMediaStore
 {
     private string Root

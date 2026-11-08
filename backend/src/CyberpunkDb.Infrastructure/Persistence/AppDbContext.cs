@@ -31,7 +31,7 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options, ISearch
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
-        // Enums are stored as their names: readable in SQL and safe when members are reordered.
+        // enums as names: readable in SQL and safe to reorder
         foreach (var enumType in typeof(Item).Assembly.GetTypes().Where(t => t.IsEnum))
             configurationBuilder.Properties(enumType).HaveConversion<string>().HaveMaxLength(40);
     }
@@ -51,7 +51,7 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options, ISearch
         return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
     }
 
-    /// <summary>Maintains timestamps and the denormalized search text of items touched in this unit of work.</summary>
+    // timestamps + search text
     private void BeforeSave()
     {
         ChangeTracker.DetectChanges();

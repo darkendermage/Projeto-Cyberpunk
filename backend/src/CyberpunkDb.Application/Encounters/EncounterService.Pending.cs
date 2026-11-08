@@ -7,17 +7,12 @@ using CyberpunkDb.Domain.Enums;
 
 namespace CyberpunkDb.Application.Encounters;
 
-/// <summary>
-/// Attacks that wait on a person: a target with REF 8+ chooses whether to dodge a shot (CP:R p.172: their Evasion roll
-/// becomes the DV), and the attacker rolls the Critical Injury when two or more damage dice come up 6 (CP:R p.187).
-/// Each step fixes one more die in the stored request; once nothing is missing the attack is applied as usual.
-/// </summary>
+// Attacks that wait on a person: a REF 8+ target choosing to dodge (Evasion becomes the DV, CP:R p.172) and the
+// attacker rolling the crit when two 6s come up (p.187). Each step fixes one more die in the stored request.
 public sealed partial class EncounterService
 {
-    /// <summary>
-    /// Fixes the attack's dice step by step and stops at the first decision someone must take; applies the attack when
-    /// none is left. <paramref name="decided"/> lists the targets whose dodge choice is made.
-    /// </summary>
+    // Stops at the first decision someone has to make, applies the attack when there's none.
+    // decided = targets that already chose about dodging.
     private async Task<EncounterState> ContinueAttackAsync(EncounterState s, Encounter e, List<string> notices, Dictionary<string, FighterView> fighters,
         AttackRequest r, List<string> decided, CancellationToken ct)
     {
@@ -27,26 +22,26 @@ public sealed partial class EncounterService
         if (weapon?.Jammed == true)
             throw RequestValidationException.For("weapon", L.T($"{weapon.Name} está travada: gaste uma Ação para destravar (CP:R p.344).", $"{weapon.Name} is jammed: spend an Action to unjam (CP:R p.344)."));
 
-        // An empty magazine refuses before anyone is asked anything.
+        // empty mag refuses before asking anyone anything
         if (weapon is { Magazine: not null, Melee: false } && (weapon.Rounds ?? 0) <= 0)
             throw RequestValidationException.For("weapon", L.T($"{weapon.Name} está sem munição; recarregue.", $"{weapon.Name} is out of ammo; reload."));
 
-        // The attack roll first, with the extra d10 of a natural 10 or 1 (CP:R p.130), so it never changes afterwards.
+        // attack roll first (with the extra d10, CP:R p.130) so it never changes afterwards
         r = r with { AttackRoll = r.AttackRoll ?? dice.Roll(10) };
         if (r.AttackRoll is 10 or 1 && r.AttackExtra is null) r = r with { AttackExtra = dice.Roll(10) };
         var seq = s.AttackSeq + 1;
-        // Everything the attack itself refuses (range, rounds, a thrown weapon, the aimed ROF…) refuses now, before
-        // anyone is asked to dodge an attack that could never resolve. The result is discarded.
+        // Dry run so whatever the attack itself refuses (range, rounds, aimed ROF...) fails now, before asking anyone
+        // to dodge something that can't happen. Result is thrown away.
         resolver.Resolve(r, attacker, targets, dice);
 
         foreach (var t in targets)
             if (!decided.Contains(t.Id) && NeedsDefense(weapon, r, t))
                 return s with { Pending = new PendingAttack(seq, r, t.Id, PendingStep.Defense, decided) };
 
-        // Every defense is known: preview the attack to fix the damage and the defense rolls left to the dice.
+        // all defenses known: preview to fix damage and the remaining defense rolls
         var plan = resolver.Resolve(r, attacker, targets, dice);
         var defenses = new Dictionary<string, int>(r.DefenseRolls ?? []);
-        // Suppressive Fire's "defense roll" is the whole WILL check, not a d10: it can't be fixed as a die (and has no damage).
+        // Suppressive Fire's "defense" is the whole WILL check, not a die
         if (plan.Mode != AttackMode.Suppressive)
             foreach (var hit in plan.Hits.Where(h => h.DefenseRoll is not null)) defenses[hit.TargetId] = hit.DefenseRoll!.Value;
         r = r with
@@ -60,7 +55,7 @@ public sealed partial class EncounterService
         return await ApplyAttackAsync(s, e, notices, fighters, r, ct);
     }
 
-    /// <summary>A ranged shot (not an area attack) at a target with REF 8+ that hasn't chosen yet (CP:R p.172).</summary>
+    // ranged, not area, REF 8+, hasn't chosen yet (CP:R p.172)
     private bool NeedsDefense(WeaponView? weapon, AttackRequest r, FighterView target) =>
         !(weapon?.Melee ?? false)
         && r.Mode is not (AttackMode.Explosive or AttackMode.Suppressive or AttackMode.ShotgunShell)
@@ -69,7 +64,6 @@ public sealed partial class EncounterService
         && !(r.DodgeTargets?.Contains(target.Id) ?? false)
         && !(r.DefenseRolls?.ContainsKey(target.Id) ?? false);
 
-    /// <summary>The target dodges (their Evasion roll becomes the DV) or takes the range DV; the attack goes on.</summary>
     public Task<EncounterDetailDto> AnswerDefenseAsync(int id, PendingDefenseRequest req, CancellationToken ct) =>
         MutateAsync(id, req.Version, async (s, e, notices) =>
         {
@@ -90,7 +84,7 @@ public sealed partial class EncounterService
             return await ContinueAttackAsync(s, e, notices, fighters, r, [.. p.Decided, p.TargetId], ct);
         }, ct, allowPending: true);
 
-    /// <summary>The attacker rolls the Critical Injury's 2d6 (CP:R p.187); the attack is then applied.</summary>
+    // CP:R p.187
     public Task<EncounterDetailDto> RollPendingCriticalAsync(int id, PendingCriticalRequest req, CancellationToken ct) =>
         MutateAsync(id, req.Version, async (s, e, notices) =>
         {
@@ -102,7 +96,7 @@ public sealed partial class EncounterService
             return await ContinueAttackAsync(s with { Pending = null }, e, notices, fighters, r, p.Decided, ct);
         }, ct, allowPending: true);
 
-    /// <summary>The GM drops a pending attack: nothing was spent or applied.</summary>
+    // nothing was spent or applied
     public Task<EncounterDetailDto> CancelPendingAsync(int id, EncounterVersionRequest r, CancellationToken ct) =>
         MutateAsync(id, r.Version, (s, _, _) =>
         {
@@ -110,7 +104,7 @@ public sealed partial class EncounterService
             return Task.FromResult(Log(s with { Pending = null }, null, "cancel", L.T("Ataque pendente cancelado pelo mestre.", "Pending attack cancelled by the GM.")));
         }, ct, allowPending: true);
 
-    /// <summary>The pending attack as the screens show it (no attack total: the target decides without it).</summary>
+    // no attack total: the target decides without it
     private PendingView? PendingViewOf(PendingAttack? p, Dictionary<string, FighterView> fighters)
     {
         if (p is null || !fighters.TryGetValue(p.Request.AttackerId, out var attacker) || !fighters.TryGetValue(p.TargetId, out var target)) return null;

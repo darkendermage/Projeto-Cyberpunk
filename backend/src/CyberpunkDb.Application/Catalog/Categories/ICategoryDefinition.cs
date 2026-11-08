@@ -6,11 +6,11 @@ using CyberpunkDb.Domain.Enums;
 
 namespace CyberpunkDb.Application.Catalog.Categories;
 
-/// <summary>Non-generic view of a category so services can dispatch on a runtime category key.</summary>
+// non-generic so services can dispatch on the category key
 public interface ICategoryDefinition
 {
     ItemCategory Category { get; }
-    /// <summary>URL-friendly key ("weapons", "cyberware"...).</summary>
+    // "weapons", "cyberware"...
     string Key { get; }
     string Label { get; }
     string? Sublabel { get; }
@@ -29,6 +29,6 @@ public interface ICategoryDefinition
     string BuildSearchText(Item item);
 
     Item CreateEntity();
-    /// <summary>Applies attribute values and runs field + cross-field validation. Returns errors keyed by field.</summary>
+    // errors keyed by field
     Dictionary<string, string[]> ApplyAttributes(Item item, IReadOnlyDictionary<string, JsonElement> attributes, bool isCreate);
 }

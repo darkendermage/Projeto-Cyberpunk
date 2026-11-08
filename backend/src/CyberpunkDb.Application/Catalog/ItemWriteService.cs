@@ -10,10 +10,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CyberpunkDb.Application.Catalog;
 
-/// <summary>Write side of the catalog: imports the seed compendium into the database.</summary>
+// imports the seed into the DB
 public sealed class ItemWriteService(IAppDbContext db, CategoryRegistry registry)
 {
-    /// <summary>Upserts items by slug. Valid rows are saved even if others fail; errors are reported per row.</summary>
+    // by slug; valid rows are saved even when others fail
     public async Task<ImportResult> ImportAsync(IReadOnlyList<ItemUpsertDto> rows, CancellationToken ct)
     {
         int created = 0, updated = 0;
@@ -34,7 +34,7 @@ public sealed class ItemWriteService(IAppDbContext db, CategoryRegistry registry
                 if (existingId is not null && registry.For(item) != def)
                     throw RequestValidationException.For("category", $"O item '{slug}' já existe em outra categoria.");
 
-                // References to other items may point to rows later in the file, so they are resolved at the end.
+                // references can point to rows further down, resolve them at the end
                 var reference = TakeReference(dto);
                 await ApplyAsync(def, item, dto, existingId is null, DataOrigin.Custom, ct);
                 if (reference is not null && item is CyberwareItem cyber) deferredReferences.Add((cyber, reference, index));
@@ -70,7 +70,7 @@ public sealed class ItemWriteService(IAppDbContext db, CategoryRegistry registry
         return new ImportResult(created, updated, errors.Count, errors);
     }
 
-    // ------------------------------------------------------------------ helpers
+    // helpers
 
     private async Task<Item> LoadTrackedAsync(int id, CancellationToken ct)
     {
@@ -172,13 +172,13 @@ public sealed class ItemWriteService(IAppDbContext db, CategoryRegistry registry
     private async Task<SourceBook?> FindOrCreateSourceAsync(string? name, RuleSystem system, CancellationToken ct)
     {
         if (string.IsNullOrWhiteSpace(name)) return null;
-        // "Black Chrome+" is its own book, not "Black Chrome": the plus has to survive the slug.
+        // "Black Chrome+" is its own book, keep the plus in the slug
         var slug = SourceSlug(name);
         var existing = db.SourceBooks.Local.FirstOrDefault(s => s.Slug == slug)
                        ?? await db.SourceBooks.FirstOrDefaultAsync(s => s.Slug == slug, ct);
         if (existing is not null)
         {
-            // Older catalogs filed the "+" books under the base slug; the next import puts the right name back.
+            // older catalogs filed the "+" books under the base slug
             if (existing.Name != name.Trim()) existing.Name = name.Trim();
             return existing;
         }

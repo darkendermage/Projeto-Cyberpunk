@@ -31,7 +31,7 @@ public interface IAppDbContext
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }
 
-/// <summary>Builds the normalized search text of an item. Called by the persistence layer on save.</summary>
+// called by persistence on save
 public interface ISearchTextBuilder
 {
     string Build(Item item);

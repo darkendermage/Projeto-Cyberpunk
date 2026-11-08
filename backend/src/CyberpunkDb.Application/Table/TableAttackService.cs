@@ -10,20 +10,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CyberpunkDb.Application.Table;
 
-/// <summary>A quick attack from the cards under the map: the weapon, the mode and who it is aimed at.</summary>
 public sealed record QuickAttackRequest(string Weapon, AttackMode Mode, List<string> TargetIds);
 
-/// <summary>The GM's quick attack: any fighter of the scene's fight.</summary>
+// any fighter in the scene's fight
 public sealed record GmQuickAttackRequest(string AttackerId, string Weapon, AttackMode Mode, List<string> TargetIds);
 
-/// <summary>
-/// Attacks made from the virtual table. The fight resolves them as on the combat table, with the server rolling every
-/// die; the distance comes from the map, measured between the two tokens like the ruler does. Area attacks (suppressive
-/// fire, explosives) need a template and stay on the combat table's full form.
-/// </summary>
+// Resolved like on the combat table; distance comes from the map. Area attacks need a template, so they stay on
+// the combat page.
 public sealed class TableAttackService(IAppDbContext db, EncounterService encounters)
 {
-    /// <summary>A player's attack with their own character, on their own Turn, at fighters they can see.</summary>
+    // own character, own Turn, only visible targets
     public async Task<QuickAttackResult> PlayerAttackAsync(TableSeat seat, QuickAttackRequest r, CancellationToken ct)
     {
         var scene = await db.Scenes.AsNoTracking().FirstOrDefaultAsync(s => s.Active, ct)
@@ -39,7 +35,7 @@ public sealed class TableAttackService(IAppDbContext db, EncounterService encoun
         return result with { Attack = result.Attack is { } a ? TableAttacks.ForSeat(a) : null };
     }
 
-    /// <summary>The GM's attack with any fighter of the scene's fight, Turn or not.</summary>
+    // any fighter, Turn or not
     public async Task<QuickAttackResult> GmAttackAsync(int sceneId, GmQuickAttackRequest r, CancellationToken ct)
     {
         var scene = await db.Scenes.AsNoTracking().FirstOrDefaultAsync(s => s.Id == sceneId, ct)
@@ -75,12 +71,12 @@ public sealed class TableAttackService(IAppDbContext db, EncounterService encoun
             range = (int)Math.Round(TableAttacks.Meters(state.Grid, from, to));
         }
 
-        // The table's attacks wait for the target's dodge (REF 8+) and the attacker's Critical Injury roll.
+        // waits for dodge (REF 8+) and the crit roll
         var after = await encounters.AttackAsync(detail.Id, new AttackRequest(detail.Version, attackerId, targetIds, weapon, mode, range, Interactive: true), ct);
         return after.LastAttack is { } done ? new QuickAttackResult(TableAttacks.From(after, done), null) : new QuickAttackResult(null, after.Pending);
     }
 
-    /// <summary>The fighter's token: linked to the combatant, or a PC's token linked to the sheet.</summary>
+    // linked to the combatant, or a PC token linked to the sheet
     private static SceneToken? TokenOf(SceneState state, FighterView f) =>
         state.Tokens.FirstOrDefault(t => t.CombatantId == f.Id)
         ?? (f.CharacterId is { } id ? state.Tokens.FirstOrDefault(t => t.CharacterId == id) : null);

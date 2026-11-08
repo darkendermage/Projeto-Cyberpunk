@@ -2,10 +2,9 @@ using System.Text.RegularExpressions;
 
 namespace CyberpunkDb.Application.Characters.Operations;
 
-/// <summary>Dice rolls for the operations the server resolves (template rows, STATs, Humanity Loss, Death Saves).</summary>
+// template rows, STATs, Humanity Loss, Death Saves
 public interface IDiceRoller
 {
-    /// <summary>1 to <paramref name="sides"/>.</summary>
     int Roll(int sides);
 }
 
@@ -16,10 +15,7 @@ public sealed class RandomDiceRoller : IDiceRoller
 
 public static partial class Dice
 {
-    /// <summary>
-    /// Rolls an expression like "2d6", "4d6" or "1d6/2" (halved, rounded up, as the Humanity Loss table prints it,
-    /// CP:R p.111). Returns null when the expression is not understood.
-    /// </summary>
+    // "2d6", "4d6" or "1d6/2" (halved, rounded up, like the HL table, CP:R p.111). Null if it can't parse it.
     public static int? Roll(string? expression, IDiceRoller roller)
     {
         if (string.IsNullOrWhiteSpace(expression)) return null;
@@ -32,7 +28,7 @@ public static partial class Dice
         return total;
     }
 
-    /// <summary>Lowest and highest result of an expression, for previews before rolling.</summary>
+    // for previews
     public static (int Min, int Max)? Range(string? expression)
     {
         if (string.IsNullOrWhiteSpace(expression)) return null;

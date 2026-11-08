@@ -3,10 +3,7 @@ using CyberpunkDb.Domain.Enums;
 
 namespace CyberpunkDb.Application.Npcs.Rules;
 
-/// <summary>
-/// Effective construction parameters for one level, with Hardening already applied.
-/// <see cref="CyberwareBudget"/> null means unlimited (Hardened Boss).
-/// </summary>
+// Hardening already applied. CyberwareBudget null = unlimited (Hardened Boss).
 public sealed record NpcTemplate(
     NpcLevel Level,
     bool Hardened,
@@ -27,11 +24,10 @@ public sealed record NpcTemplate(
 {
     public string DisplayName => Hardened ? $"{Label} Hardened" : Label;
 
-    /// <summary>Highest Role Rank the guidelines mention for this template.</summary>
     public int MaxRoleRank => Math.Max(RoleRank.Value.Rank, HardenedRoleRank?.Value.Rank ?? 0);
 }
 
-/// <summary>The loaded <c>npc-rules.json</c>: templates, skills, profiles, gangs and cyberware rules. Singleton.</summary>
+// npc-rules.json. Singleton.
 public sealed class NpcRuleBook
 {
     private const string ResourceName = "CyberpunkDb.Application.Npcs.Rules.npc-rules.json";
@@ -78,7 +74,7 @@ public sealed class NpcRuleBook
 
     public string? SkillIdFor(WeaponSkill skill) => Document.WeaponSkillMap.GetValueOrDefault(skill);
 
-    /// <summary>Free skill levels of DGD p.151, resolved for this NPC's native language and home.</summary>
+    // DGD p.151
     public Dictionary<string, int> FreeSkillLevels(string nativeLanguage, string home)
     {
         var levels = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);

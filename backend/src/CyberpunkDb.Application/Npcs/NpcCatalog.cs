@@ -13,13 +13,13 @@ public sealed record WeaponInfo(
 public sealed record ArmorInfo(
     ArmorType Type, int? Sp, int RefPenalty, int DexPenalty, int MovePenalty, int? BodyValue, bool Implanted, string? Requirements);
 
-/// <summary>Cyberware (Fashionware included) and Implanted Linear Frames: everything paid from the cyberware budget.</summary>
+// everything paid from the cyberware budget (Fashionware and Linear Frames included)
 public sealed record CyberInfo(
     CyberwareType? Type, BodyLocation? Location, bool Foundational, int? SlotsProvided, int? SlotsRequired,
     int? RequiresItemId, bool RequiresPair, InstallLocation? Install, string? Requirements,
     int? HumanityLoss = null, string? HumanityLossDice = null, string? Effect = null)
 {
-    /// <summary>Counts against the Fashion budget of a Complete Package (CP:R p.105).</summary>
+    // Complete Package fashion budget (CP:R p.105)
     public bool IsFashionware => Type == CyberwareType.Fashionware;
 }
 
@@ -27,17 +27,15 @@ public sealed record AmmoInfo(AmmoKind Kind, AmmoEffect Effect, IReadOnlyList<Ca
 
 public sealed record GearInfo(GearType Type, string? Subtype);
 
-/// <summary>Weapon attachment, Rebuild or Tech Upgrade: where it fits and how many Attachment Slots it takes.</summary>
 public sealed record AttachmentInfo(
     WeaponAttachmentType Type, int SlotsRequired, bool ExoticAllowed, IReadOnlyList<WeaponClass> Classes, string? Conditions);
 
-/// <summary>Light, EF-free view of a catalog item, enough to build and validate an NPC.</summary>
+// lightweight, no EF, enough to build and validate an NPC
 public sealed record CatalogItem(
     int Id, string Slug, string Name, ItemCategory Category, int? Price, string? SourceBook, int? Page,
     WeaponInfo? Weapon = null, ArmorInfo? Armor = null, CyberInfo? Cyber = null, AmmoInfo? Ammo = null, GearInfo? Gear = null,
     AttachmentInfo? Attachment = null)
 {
-    /// <summary>Paid from the cyberware budget and listed in the sheet's cyberware section.</summary>
     public bool IsCyberwareBudget => Cyber is not null;
 }
 
@@ -60,10 +58,7 @@ public sealed class NpcCatalog
     public CatalogItem? Find(string slug) => BySlug.GetValueOrDefault(slug);
 }
 
-/// <summary>
-/// Loads the catalog snapshot used by the NPC services. The snapshot is cached and reloaded only when
-/// the catalog changes (item count or latest UpdatedAt).
-/// </summary>
+// Cached, reloaded only when the catalog changes (item count or latest UpdatedAt).
 public sealed class NpcCatalogProvider(IAppDbContext db, NpcCatalogCache cache)
 {
     public async Task<NpcCatalog> GetAsync(CancellationToken ct)
@@ -119,7 +114,7 @@ public sealed class NpcCatalogProvider(IAppDbContext db, NpcCatalogCache cache)
                 Attachment: new AttachmentInfo(x.AttachmentType, x.SlotsRequired ?? 0, x.ExoticAllowed,
                     x.CompatibleClasses.Select(c => c.WeaponClass).ToList(), x.EligibleWeapons)));
 
-        // Remaining categories (drugs, vehicles...) can be carried as plain gear.
+        // drugs, vehicles... just plain gear
         var known = new[] { ItemCategory.Weapon, ItemCategory.Armor, ItemCategory.Cyberware, ItemCategory.Ammunition, ItemCategory.Gear, ItemCategory.WeaponAttachment };
         foreach (var o in await db.Items.AsNoTracking().Where(i => !known.Contains(i.Category))
                      .Select(i => new { i.Id, i.Slug, i.Name, i.Category, i.PriceEb, i.SourceBookId, i.Page }).ToListAsync(ct))

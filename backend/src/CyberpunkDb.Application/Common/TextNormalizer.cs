@@ -6,7 +6,7 @@ namespace CyberpunkDb.Application.Common;
 
 public static partial class TextNormalizer
 {
-    /// <summary>Lowercase, strip diacritics and collapse whitespace so "Escopeta Pesada" matches "escopeta".</summary>
+    // lowercase, no accents, single spaces: "Escopeta Pesada" matches "escopeta"
     public static string Normalize(string? value)
     {
         if (string.IsNullOrWhiteSpace(value)) return string.Empty;

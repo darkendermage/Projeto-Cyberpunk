@@ -7,26 +7,22 @@ using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.Characters.Calculation;
 
-/// <summary>A body region of the cyberware screen with the slots it has and uses.</summary>
 public sealed record CyberRegionReport(
     string Key,
     string Label,
     BodySide? Side,
-    // Foundational piece (Neural Link, Cybereye, Cyberarm...) or null for pools and meat limbs.
+    // null for pools and meat limbs
     string? FoundationInstanceId,
     string? FoundationName,
-    // Option Slots: of the foundation, of the pool, or 1 for a meat limb (a single piece, CP:R p.115).
+    // 1 for a meat limb (CP:R p.115)
     int? SlotsTotal,
     int SlotsUsed,
     bool MeatLimb,
     IReadOnlyList<string> Pieces,
     string? Source);
 
-/// <summary>
-/// Places installed cyberware on the body: which region each piece belongs to (by its root foundational piece or its
-/// standalone category) and which side eyes, arms and legs are on. Grouping follows the book's categories (CP:R
-/// p.110–117), not biological systems.
-/// </summary>
+// Region by root foundation or standalone category, plus the side of eyes/arms/legs. Follows the book's
+// categories (CP:R p.110-117), not biology.
 public static class CyberwareAnatomy
 {
     public static readonly (string Key, string Label)[] Regions =
@@ -42,7 +38,6 @@ public static class CyberwareAnatomy
 
     public enum Limb { Eye, Arm, Leg }
 
-    /// <summary>The paired body part a piece occupies on its own (foundation or meat-limb piece), if any.</summary>
     public static Limb? LimbOf(CatalogItem item, bool meatLimb)
     {
         if (item.Cyber is not { } c) return null;
@@ -52,10 +47,7 @@ public static class CyberwareAnatomy
         return null;
     }
 
-    /// <summary>
-    /// Free side for a new eye, arm or leg: the preferred one when free, otherwise left, then right; null when both
-    /// are taken.
-    /// </summary>
+    // preferred side if free, else left, then right; null when both are taken
     public static BodySide? FreeSide(IEnumerable<CharacterCyberware> installed, NpcCatalog catalog, Limb limb, BodySide? preferred = null)
     {
         var taken = installed
@@ -66,7 +58,6 @@ public static class CyberwareAnatomy
         return !taken.Contains(BodySide.Left) ? BodySide.Left : !taken.Contains(BodySide.Right) ? BodySide.Right : null;
     }
 
-    /// <summary>Region key of a piece: the region of its root foundation, or its standalone category.</summary>
     public static string RegionOf(CharacterCyberware piece, IReadOnlyList<CharacterCyberware> all, NpcCatalog catalog)
     {
         var root = piece;

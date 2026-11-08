@@ -1,10 +1,7 @@
 namespace CyberpunkDb.Application.Table;
 
-/// <summary>
-/// The entrance of the general link: whether it is open, and which seats someone already holds. It lives in memory on
-/// purpose: the tunnel address (and with it every key a phone remembered) changes when the app restarts, so a fresh
-/// start frees every seat and keeps the entrance closed until the GM opens it.
-/// </summary>
+// In memory on purpose: the tunnel address (and every key a phone remembered) changes on restart, so a fresh
+// start frees every seat and keeps the lobby closed until the GM opens it.
 public sealed class TableLobby
 {
     private readonly Lock _gate = new();
@@ -20,13 +17,13 @@ public sealed class TableLobby
         lock (_gate) return _claimed.Contains(seatId);
     }
 
-    /// <summary>Takes a free seat; false when someone already holds it.</summary>
+    // false when it's taken
     public bool TryClaim(int seatId)
     {
         lock (_gate) return _claimed.Add(seatId);
     }
 
-    /// <summary>Records that someone entered the seat (e.g. by its individual link). True when it was free before.</summary>
+    // e.g. through its own link; true if it was free
     public bool MarkClaimed(int seatId)
     {
         lock (_gate) return _claimed.Add(seatId);

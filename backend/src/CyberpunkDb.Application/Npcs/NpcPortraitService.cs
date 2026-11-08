@@ -9,13 +9,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CyberpunkDb.Application.Npcs;
 
-/// <summary>
-/// Images of saved NPCs and of the compendium's named NPCs, with the same rules as a character's portrait. The
-/// virtual table's tokens of that NPC show it, so a change goes out to the scenes that use it.
-/// </summary>
+// Same rules as character portraits. Tokens show them, so changes go out to the scenes that use them.
 public sealed class NpcPortraitService(IAppDbContext db, NpcCompendium compendium, SceneService scenes)
 {
-    // ------------------------------------------------------------------ saved NPCs
+    // saved NPCs
 
     public async Task<IReadOnlyDictionary<int, DateTime>> SavedStampsAsync(CancellationToken ct) =>
         await db.NpcPortraits.AsNoTracking().Select(p => new { p.NpcId, p.UpdatedAt }).ToDictionaryAsync(p => p.NpcId, p => p.UpdatedAt, ct);
@@ -50,7 +47,7 @@ public sealed class NpcPortraitService(IAppDbContext db, NpcCompendium compendiu
         await scenes.RepublishTokensOfAsync(t => t.NpcId == npcId, ct);
     }
 
-    // ------------------------------------------------------------------ compendium
+    // compendium
 
     public async Task<IReadOnlyDictionary<string, DateTime>> CompendiumStampsAsync(CancellationToken ct) =>
         await db.CompendiumPortraits.AsNoTracking().Select(p => new { p.CompendiumId, p.UpdatedAt }).ToDictionaryAsync(p => p.CompendiumId, p => p.UpdatedAt, ct);

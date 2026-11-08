@@ -3,10 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CyberpunkDb.Api.Controllers;
 
-/// <summary>
-/// The combat table (Friday Night Firefight, CP:R p.168-188): encounters, the Initiative Queue, attacks, damage, Death
-/// Saves and cover. Every change is a command validated on the server and answered with the updated encounter.
-/// </summary>
+// Friday Night Firefight (CP:R p.168-188). Commands answer with the updated encounter.
 [ApiController]
 [Route("api/encounters")]
 public sealed class EncountersController(EncounterService encounters) : ControllerBase
@@ -69,16 +66,14 @@ public sealed class EncountersController(EncounterService encounters) : Controll
     [HttpPost("{id:int}/attack")]
     public Task<EncounterDetailDto> Attack(int id, AttackRequest request, CancellationToken ct) => encounters.AttackAsync(id, request, ct);
 
-    /// <summary>Puts back what the last attack changed, while nothing else happened since.</summary>
-    /// <summary>A pending attack's dodge choice, answered by the GM (any target).</summary>
+    // GM answers for any target
     [HttpPost("{id:int}/pending/defense")]
     public Task<EncounterDetailDto> PendingDefense(int id, PendingDefenseRequest r, CancellationToken ct) => encounters.AnswerDefenseAsync(id, r, ct);
 
-    /// <summary>A pending attack's Critical Injury, rolled by the GM.</summary>
     [HttpPost("{id:int}/pending/critical")]
     public Task<EncounterDetailDto> PendingCritical(int id, PendingCriticalRequest r, CancellationToken ct) => encounters.RollPendingCriticalAsync(id, r, ct);
 
-    /// <summary>Drops a pending attack: nothing is spent or applied.</summary>
+    // nothing is spent or applied
     [HttpPost("{id:int}/pending/cancel")]
     public Task<EncounterDetailDto> PendingCancel(int id, EncounterVersionRequest r, CancellationToken ct) => encounters.CancelPendingAsync(id, r, ct);
 

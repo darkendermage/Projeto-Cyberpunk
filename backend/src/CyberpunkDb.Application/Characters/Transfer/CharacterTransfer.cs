@@ -6,12 +6,8 @@ using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.Characters.Transfer;
 
-/// <summary>
-/// A file that carries one character between installations: the stored sheet, its history and its portrait. Derived
-/// values are never exported; the importing server recalculates them. The sheet points to catalog items by numeric
-/// id, which can differ between databases (the catalog is editable), so the file also maps every id it uses to the
-/// item's slug, and importing finds the items again by slug.
-/// </summary>
+// Moves one character between installs: sheet, history and portrait (derived values get recomputed). Item ids
+// differ between databases, so the file maps each id to its slug and the import matches by slug.
 public sealed record CharacterExportFile
 {
     public const string FormatName = "night-city-character";
@@ -21,7 +17,6 @@ public sealed record CharacterExportFile
     public int FormatVersion { get; init; }
     public DateTime ExportedAt { get; init; }
     public CharacterSheet? Sheet { get; init; }
-    /// <summary>Catalog items referenced by the sheet, keyed by the id the sheet uses.</summary>
     public Dictionary<int, ExportedItem>? Items { get; init; }
     public List<ExportedEvent>? History { get; init; }
     public ExportedPortrait? Portrait { get; init; }
@@ -32,15 +27,13 @@ public sealed record ExportedItem(string Slug, string Name);
 public sealed record ExportedEvent(
     CharacterEventKind Kind, string? Action, int? Amount, string? Before, string? After, string? Description, bool IsManual, DateTime CreatedAt);
 
-/// <summary>Portrait image, base64-encoded.</summary>
 public sealed record ExportedPortrait(string ContentType, string Data);
 
 public static partial class CharacterTransfer
 {
-    /// <summary>History entries kept on import (the most recent ones).</summary>
+    // keeps the most recent ones
     public const int MaxHistory = 5000;
 
-    /// <summary>Slug and name of every catalog item the sheet points to, by the id it uses.</summary>
     public static Dictionary<int, ExportedItem> ReferencedItems(CharacterSheet sheet, NpcCatalog catalog) =>
         sheet.Inventory.Select(e => e.ItemId)
             .Concat(sheet.Cyberware.Select(c => c.ItemId))
@@ -50,10 +43,7 @@ public static partial class CharacterTransfer
             .OfType<CatalogItem>()
             .ToDictionary(i => i.Id, i => new ExportedItem(i.Slug, i.Name));
 
-    /// <summary>
-    /// Points the sheet to this catalog's ids. An item this catalog doesn't have is left out, together with the
-    /// cyberware options installed in it, rather than matched to some other item; each one is reported.
-    /// </summary>
+    // Items missing here are dropped (with their options) and reported, never matched to something else.
     public static (CharacterSheet Sheet, List<string> Missing) Rebind(CharacterSheet sheet, IReadOnlyDictionary<int, ExportedItem> items, NpcCatalog catalog)
     {
         var missing = new List<string>();
@@ -102,7 +92,7 @@ public static partial class CharacterTransfer
         }, missing);
     }
 
-    /// <summary>"Suzu-Neon.cyberpunk.json": name and handle without accents or symbols.</summary>
+    // "Suzu-Neon.cyberpunk.json", no accents or symbols
     public static string FileName(CharacterIdentity identity)
     {
         static string Part(string? s) => NonAlphanumeric().Replace(TextNormalizer.Normalize(s), "-").Trim('-');

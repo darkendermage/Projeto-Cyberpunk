@@ -12,25 +12,19 @@ namespace CyberpunkDb.Api.Desktop;
 [JsonConverter(typeof(JsonStringEnumConverter))]
 public enum TunnelState { Missing, Downloading, Stopped, Starting, Running, Failed }
 
-/// <summary>
-/// The tunnel as the GM's panel shows it; <see cref="Url"/> is the public address while it runs, <see cref="LocalUrl"/>
-/// the players' port on this machine (for testing a link without the tunnel).
-/// </summary>
+// LocalUrl is the players' port on this machine, handy to test a link without the tunnel.
 public sealed record TunnelStatus(TunnelState State, string? Url, string? Error, string? LocalUrl = null);
 
-/// <summary>
-/// Puts the players' port on the internet through a Cloudflare Quick Tunnel: no account, no router setup. It runs
-/// cloudflared (found in Table:Cloudflared, the tools folder or the PATH, or downloaded from Cloudflare's official
-/// GitHub release on the GM's request) and reads the random https://*.trycloudflare.com address it prints. The address
-/// changes every time the tunnel opens, and the tunnel closes with the app.
-/// </summary>
+// Cloudflare Quick Tunnel for the players' port (no account, no router setup). Runs cloudflared (from
+// Table:Cloudflared, the tools folder or PATH, or downloaded from the official GitHub release) and reads the
+// trycloudflare address it prints. New address every time, closes with the app.
 public sealed partial class TunnelService(IOptions<TableOptions> table, IConfiguration configuration, ILogger<TunnelService> logger) : IDisposable
 {
     public const string DownloadUrl = "https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-windows-amd64.exe";
     private static readonly TimeSpan StartTimeout = TimeSpan.FromSeconds(40);
 
     private readonly Lock _gate = new();
-    /// <summary>Ends cloudflared with the app even when no shutdown code runs (window closed, crash).</summary>
+    // kills cloudflared with the app even on a crash or closed window
     private readonly ChildProcessJob _job = new();
     private Process? _process;
     private TunnelState _state = TunnelState.Stopped;
@@ -50,7 +44,7 @@ public sealed partial class TunnelService(IOptions<TableOptions> table, IConfigu
         }
     }
 
-    /// <summary>Opens the tunnel (or returns the one already open) and waits for its public address.</summary>
+    // or returns the one already open
     public async Task<TunnelStatus> StartAsync(CancellationToken ct)
     {
         if (table.Value.PlayerPort is not { } port)
@@ -94,7 +88,7 @@ public sealed partial class TunnelService(IOptions<TableOptions> table, IConfigu
         return Status();
     }
 
-    /// <summary>Downloads cloudflared from Cloudflare's official GitHub release into the tools folder.</summary>
+    // official GitHub release, into the tools folder
     public async Task<TunnelStatus> DownloadAsync(CancellationToken ct)
     {
         if (!OperatingSystem.IsWindows())
@@ -111,7 +105,7 @@ public sealed partial class TunnelService(IOptions<TableOptions> table, IConfigu
             await using (var source = await http.GetStreamAsync(DownloadUrl, ct))
             await using (var file = File.Create(temp))
                 await source.CopyToAsync(file, ct);
-            // A Windows executable starts with "MZ"; anything else is an error page, not cloudflared.
+            // Windows exes start with "MZ"; anything else is an error page
             await using (var check = File.OpenRead(temp))
             {
                 var header = new byte[2];
@@ -130,7 +124,6 @@ public sealed partial class TunnelService(IOptions<TableOptions> table, IConfigu
         return Status();
     }
 
-    /// <summary>The trycloudflare address in a line of cloudflared's log, if any.</summary>
     public static string? ParseUrl(string? line)
     {
         if (line is null) return null;
@@ -228,7 +221,7 @@ public sealed partial class TunnelService(IOptions<TableOptions> table, IConfigu
         process.Dispose();
     }
 
-    /// <summary>Table:Cloudflared when set (and present); otherwise the tools folder, then the PATH.</summary>
+    // Table:Cloudflared, then the tools folder, then PATH
     private string? Executable()
     {
         var configured = configuration["Table:Cloudflared"];

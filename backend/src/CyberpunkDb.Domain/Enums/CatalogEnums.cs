@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CyberpunkDb.Domain.Enums;
 
-/// <summary>Top-level catalog categories. Each maps to one entity type (TPT table).</summary>
+// each one is its own TPT table
 public enum ItemCategory
 {
     [Display(Name = "Armas")] Weapon,
@@ -24,7 +24,7 @@ public enum RuleSystem
     [Display(Name = "Cyberpunk RED")] CyberpunkRed,
 }
 
-/// <summary>Where a record came from. Shown on every card so demo data is never mistaken for book data.</summary>
+// shown on every card so demo data never passes for book data
 public enum DataOrigin
 {
     [Display(Name = "Compêndio importado (não verificado)")] Compendium,
@@ -33,7 +33,6 @@ public enum DataOrigin
     [Display(Name = "Conferido com PDF oficial")] Verified,
 }
 
-/// <summary>Cyberpunk RED price categories.</summary>
 public enum PriceCategory
 {
     [Display(Name = "Cheap (10eb)")] Cheap,

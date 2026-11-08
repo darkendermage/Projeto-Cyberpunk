@@ -4,11 +4,8 @@ using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.Npcs.Generation;
 
-/// <summary>
-/// Builds the cyberware section: keeps locked implants, installs the required ones (with the foundational
-/// pieces they depend on), then adds optional implants that fit the profile. Never installs a forbidden item,
-/// never exceeds slots, body capacity, exclusive groups or the budget.
-/// </summary>
+// Locked implants stay, required ones go in (with their foundations), then optional ones that fit the profile.
+// Never forbidden items, never past slots, capacity, exclusive groups or budget.
 public sealed class CyberwarePlanner(NpcMechanics mechanics, NpcCatalog catalog)
 {
     private readonly NpcRuleBook _rules = mechanics.Rules;
@@ -27,14 +24,13 @@ public sealed class CyberwarePlanner(NpcMechanics mechanics, NpcCatalog catalog)
 
     public void AddLocked(IEnumerable<NpcCyberwareEntry> locked) => AddExisting(locked.Select(e => e with { Locked = true }));
 
-    /// <summary>Starts from implants already on the sheet, keeping their flags.</summary>
     public void AddExisting(IEnumerable<NpcCyberwareEntry> entries)
     {
         _entries.AddRange(entries);
         _nextId = _entries.Count;
     }
 
-    /// <summary>Installs an item and any missing foundational pieces. Returns an explanation on failure.</summary>
+    // returns why it failed, or null
     public string? TryInstall(CatalogItem item, int? budget)
     {
         if (_forbidden.Contains(item.Id)) return L.T($"{item.Name} está proibido.", $"{item.Name} is forbidden.");
@@ -50,7 +46,7 @@ public sealed class CyberwarePlanner(NpcMechanics mechanics, NpcCatalog catalog)
 
     public bool Contains(int itemId) => _entries.Any(e => e.ItemId == itemId);
 
-    /// <summary>Adds optional implants weighted by the profile until the spending target is reached.</summary>
+    // until the spending target
     public void FillOptional(NpcProfile profile, int? budget, int target, Random rng)
     {
         foreach (var slug in profile.SignatureCyberware)
@@ -73,11 +69,11 @@ public sealed class CyberwarePlanner(NpcMechanics mechanics, NpcCatalog catalog)
         }
     }
 
-    /// <summary>Items whose prerequisites exist only as free text are never chosen automatically.</summary>
+    // free-text prerequisites are never picked automatically
     public bool AutoEligible(CatalogItem item) =>
         !_rules.Document.Cyberware.AutoPickExcludesFreeTextRequirements.Value || mechanics.FreeTextRequirement(item, catalog) is null;
 
-    // ------------------------------------------------------------ planning
+    // planning
 
     private string? Plan(CatalogItem item, List<NpcCyberwareEntry> plan, int depth)
     {

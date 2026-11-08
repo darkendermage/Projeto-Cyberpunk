@@ -6,14 +6,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CyberpunkDb.Application.Table;
 
-/// <summary>Maps and token images of the virtual table. The browser shrinks big images before sending them.</summary>
+// Maps and token images. The browser shrinks big images before sending.
 public sealed class MediaService(IAppDbContext db, IMediaStore store)
 {
     public const long MaxBytes = 15 * 1024 * 1024;
 
     public static string UrlOf(Guid id) => $"/api/table/media/{id:N}";
 
-    /// <summary>A player's image over the map (round 5): smaller, the browser already shrank it.</summary>
+    // player images over the map are smaller, the browser already shrank them
     public const long PlayerMaxBytes = 2 * 1024 * 1024;
 
     public async Task<MediaDto> UploadAsync(Stream content, long length, CancellationToken ct, long maxBytes = MaxBytes)
@@ -40,7 +40,7 @@ public sealed class MediaService(IAppDbContext db, IMediaStore store)
         return stream is null ? throw new NotFoundException(L.T("Imagem não encontrada.", "Image not found.")) : (stream, asset!.ContentType);
     }
 
-    /// <summary>The image type read from the file's first bytes, never from what the browser claims.</summary>
+    // from the first bytes, never trust what the browser says
     public static string? Sniff(ReadOnlySpan<byte> b)
     {
         if (b.Length >= 8 && b[..8].SequenceEqual(new byte[] { 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A })) return "image/png";

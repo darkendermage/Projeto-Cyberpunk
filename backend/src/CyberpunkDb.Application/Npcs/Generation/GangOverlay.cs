@@ -3,10 +3,8 @@ using CyberpunkDb.Domain.Enums;
 
 namespace CyberpunkDb.Application.Npcs.Generation;
 
-/// <summary>
-/// Lays a gang over a profile: the result is still that profile (same Id, same role and key skills), with the
-/// gang's weights added to it. The planners only ever see a profile, so they need no gang logic of their own.
-/// </summary>
+// The result is still the same profile (same Id, role, key skills) with the gang's weights added, so the
+// planners don't need any gang logic.
 public static class GangOverlay
 {
     public static NpcProfile Apply(NpcProfile profile, NpcGang gang)
@@ -31,7 +29,7 @@ public static class GangOverlay
         };
     }
 
-    /// <summary>The weapon skill each class is fired with, as in the catalog (SMGs use Handgun, Shotguns Shoulder Arms).</summary>
+    // as in the catalog (SMGs use Handgun, Shotguns Shoulder Arms)
     public static WeaponSkill SkillOf(WeaponClass weaponClass) => weaponClass switch
     {
         WeaponClass.MediumPistol or WeaponClass.HeavyPistol or WeaponClass.VeryHeavyPistol
@@ -42,10 +40,7 @@ public static class GangOverlay
         _ => WeaponSkill.MeleeWeapon,
     };
 
-    /// <summary>
-    /// Favored classes the profile's skill can fire go to the front (the planner weighs classes by order);
-    /// forbidden ones are dropped unless nothing would be left.
-    /// </summary>
+    // Favored classes go first (the planner weighs by order); forbidden ones drop unless nothing would be left.
     private static WeaponPreference? Weapons(WeaponPreference? pref, GangBias bias)
     {
         if (pref is null) return null;

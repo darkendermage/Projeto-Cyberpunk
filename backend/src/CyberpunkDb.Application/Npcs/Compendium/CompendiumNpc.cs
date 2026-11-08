@@ -5,22 +5,20 @@ namespace CyberpunkDb.Application.Npcs.Compendium;
 
 public enum CompendiumKind
 {
-    /// <summary>The book prints a stat block.</summary>
     Sheet,
-    /// <summary>The book only describes the character.</summary>
+    // no stat block, just a description
     Profile,
 }
 
-/// <summary>Book and printed page (not the PDF page) an entry was taken from.</summary>
+// printed page, not the PDF page
 public sealed record CompendiumSource(string Book, int Page);
 
-/// <summary>A text we write in both languages; <see cref="Current"/> follows the request language.</summary>
+// Current follows the request language
 public sealed record LocalizedText(string Pt, string En)
 {
     public string Current => L.T(Pt, En);
 }
 
-/// <summary>One named NPC of the books, with the stat block when the book prints one.</summary>
 public sealed record CompendiumNpc
 {
     public string Id { get; init; } = "";
@@ -33,25 +31,25 @@ public sealed record CompendiumNpc
     public string? Affiliation { get; init; }
     public List<CompendiumSource> Sources { get; init; } = [];
     public LocalizedText Summary { get; init; } = new("", "");
-    /// <summary>Set when more than one book prints a sheet and they differ.</summary>
+    // books disagree on the sheet
     public LocalizedText? SheetNote { get; init; }
     public CompendiumSheet? Sheet { get; init; }
 }
 
-/// <summary>The printed stat block. Values are copied as printed; a "—" in the book is null.</summary>
+// copied as printed, "—" is null
 public sealed record CompendiumSheet
 {
     public int Hp { get; init; }
     public int? SeriouslyWounded { get; init; }
     public int? DeathSave { get; init; }
     public Dictionary<string, int?> Stats { get; init; } = [];
-    /// <summary>Stats with the armor penalty, from values printed like REF 8(6). Empty when the book has none.</summary>
+    // from values like REF 8(6)
     public Dictionary<string, int> ArmoredStats { get; init; } = [];
     public List<CompendiumWeapon> Weapons { get; init; } = [];
     public List<CompendiumArmor> Armor { get; init; } = [];
-    /// <summary>Printed Skill Bases (STAT + skill + bonus), not recalculated.</summary>
+    // as printed, not recalculated
     public Dictionary<string, int> Skills { get; init; } = [];
-    /// <summary>Skill Bases with the armor penalty, from values printed like Athletics 13 (11). Empty when the book has none.</summary>
+    // from values like Athletics 13 (11)
     public Dictionary<string, int> ArmoredSkills { get; init; } = [];
     public List<string> Gear { get; init; } = [];
     public List<string> Cyberware { get; init; } = [];
@@ -62,24 +60,23 @@ public sealed record CompendiumWeapon
 {
     public string Name { get; init; } = "";
     public string Skill { get; init; } = "";
-    /// <summary>Printed attack total (STAT + skill + bonus).</summary>
+    // as printed
     public int AttackBase { get; init; }
     public string Damage { get; init; } = "";
     public int Rof { get; init; }
     public int? Magazine { get; init; }
-    /// <summary>Printed "Autofire (xN)" multiplier, or the one of the weapon's Core class (Autofire 3 for SMGs, 4 for Assault Rifles); null when it has no Autofire.</summary>
+    // printed "Autofire (xN)" or the Core class default (3 for SMGs, 4 for ARs)
     public int? AutofireMultiplier { get; init; }
-    /// <summary>The book prints "Autofire only"; null otherwise.</summary>
     public bool? AutofireOnly { get; init; }
-    /// <summary>The sheet's own "DV based on range" table: 8 bands (0-6 to 401-800 m/yds), null where the book prints "—".</summary>
+    // 8 bands (0-6 to 401-800 m/yds), null where the book prints "—"
     public int?[]? RangeDv { get; init; }
-    /// <summary>Null for weapons outside the catalog classes (a borg's fists).</summary>
+    // null outside the catalog classes (a borg's fists)
     public WeaponClass? Class { get; init; }
     public bool Melee { get; init; }
     public string? Notes { get; init; }
 }
 
-/// <summary>SpVsMelee is the printed "SP vs Melee/Charged Tech Weapons" column; null when the book has none.</summary>
+// SpVsMelee: the "SP vs Melee/Charged Tech Weapons" column
 public sealed record CompendiumArmor(string Location, string Name, int Sp, int? SpVsMelee = null);
 
 public sealed record CompendiumSpecial(string Name, LocalizedText Text);

@@ -5,17 +5,15 @@ using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.Npcs.Rules;
 
-/// <summary>
-/// A configured value and where it comes from: a book page (<see cref="Source"/>) or a rule adopted by the
-/// application (<see cref="Complementary"/>). Never both empty — see <see cref="NpcRuleBook"/> load checks.
-/// </summary>
+// A value plus where it comes from: a book page (Source) or a house rule (Complementary).
+// NpcRuleBook refuses to load one with neither.
 public sealed record Ruled<T>
 {
     public T Value { get; init; } = default!;
     public string? Source { get; init; }
     public bool Complementary { get; init; }
     public string? Note { get; init; }
-    /// <summary>Only for budgets: no limit at all (Hardened Boss cyberware).</summary>
+    // budgets only (Hardened Boss cyberware)
     public bool Unlimited { get; init; }
 
     public string Reference => Source ?? (Complementary ? L.T($"Regra complementar da aplicação{(Note is null ? "" : $": {Note}")}", $"Complementary rule of the app{(Note is null ? "" : $": {L.D(Note)}")}") : "");
@@ -98,7 +96,7 @@ public sealed record SkillDefinition
 {
     public string Id { get; init; } = "";
     public string Name { get; init; } = "";
-    /// <summary>Portuguese label shown on character sheets; <see cref="Name"/> keeps the book's English name.</summary>
+    // Name keeps the book's English name
     public string? NamePt { get; init; }
     public string Stat { get; init; } = "";
     public string Category { get; init; } = "";
@@ -181,7 +179,7 @@ public sealed record GeneratorRules
     public Ruled<double> GearSpendFloor { get; init; } = new();
     public Ruled<double> CoreBookWeight { get; init; } = new();
     public Ruled<double> ExoticWeaponWeight { get; init; } = new();
-    /// <summary>Chance of taking the handle from the gang's own list instead of the general one.</summary>
+    // chance of using the gang's handle list instead of the general one
     public Ruled<double> GangHandleChance { get; init; } = new();
     public string[] Languages { get; init; } = [];
     public string[] Homes { get; init; } = [];
@@ -219,20 +217,17 @@ public sealed record NpcProfile
     public ArmorStyle ArmorStyle { get; init; }
     public Dictionary<string, double> Cyberware { get; init; } = [];
     public Dictionary<string, double> Gear { get; init; } = [];
-    /// <summary>Gear of which the generator buys at most one, first (a Netrunner's Cyberdeck, a Tech's bag).</summary>
+    // bought first, at most one (Netrunner's Cyberdeck, Tech's bag)
     public string[] SignatureGear { get; init; } = [];
-    /// <summary>Implants installed first when the budget allows (a Netrunner's Neural Link and Interface Plugs).</summary>
+    // installed first if the budget allows (Neural Link + Interface Plugs)
     public string[] SignatureCyberware { get; init; } = [];
 }
 
-/// <summary>
-/// How a gang bends a profile. Weights are added to the profile's own (STAT weights are multiplied); weapon
-/// classes the gang favors move to the front when the profile's weapon skill can use them. All of it is the
-/// application's reading of the gang's description, so the whole block is complementary.
-/// </summary>
+// Weights add to the profile's (STAT weights multiply). Favored weapon classes go first when the profile's
+// skill can use them. This is our reading of the gang descriptions, so it's all complementary.
 public sealed record GangBias
 {
-    /// <summary>Weights of the profiles drawn when the profile is left random.</summary>
+    // used when the profile is random
     public Dictionary<string, double> Profiles { get; init; } = [];
     public Dictionary<string, double> StatWeights { get; init; } = [];
     public Dictionary<string, double> SecondarySkills { get; init; } = [];
@@ -241,30 +236,29 @@ public sealed record GangBias
     public WeaponClass[] WeaponClasses { get; init; } = [];
     public WeaponClass[] ForbiddenWeaponClasses { get; init; } = [];
     public ArmorStyle? ArmorStyle { get; init; }
-    /// <summary>Replaces <see cref="GeneratorRules.CyberwareSpendRange"/> for this gang.</summary>
+    // overrides GeneratorRules.CyberwareSpendRange
     public IntRangeF? CyberwareSpendRange { get; init; }
-    /// <summary>Never picked by the generator for this gang; the user's required implants still win.</summary>
+    // the user's required implants still win
     public string[] ForbiddenCyberware { get; init; } = [];
     public bool AllCyberwareForbidden { get; init; }
 }
 
-/// <summary>A Night City gang laid over a profile: identity, look and the gear it favors.</summary>
 public sealed record NpcGang
 {
     public string Id { get; init; } = "";
     public string Label { get; init; } = "";
-    /// <summary>"2045" (Time of the Red) or "2077" (Edgerunners Mission Kit).</summary>
+    // "2045" (Time of the Red) or "2077" (Edgerunners Mission Kit)
     public string Era { get; init; } = "";
     public string Kind { get; init; } = "";
     public Ruled<string> Description { get; init; } = new();
     public Ruled<string> Aesthetic { get; init; } = new();
-    /// <summary>Districts from <see cref="GeneratorRules.Homes"/>; empty means the gang has no fixed turf.</summary>
+    // empty = no fixed turf
     public Ruled<string[]> Territory { get; init; } = new();
-    /// <summary>Native language weights; empty keeps the general list.</summary>
+    // empty = general list
     public Ruled<Dictionary<string, double>> Languages { get; init; } = new();
-    /// <summary>Themed handles, mixed with the general list.</summary>
+    // mixed with the general list
     public Ruled<string[]> Handles { get; init; } = new();
-    /// <summary>What the books say the gang carries (encounter tables, member stat blocks).</summary>
+    // encounter tables, member stat blocks
     public Ruled<string>[] Loadout { get; init; } = [];
     public Ruled<GangBias> Bias { get; init; } = new();
 }
@@ -276,7 +270,6 @@ public sealed record EmpGuideline
     public Ruled<int> PiecesPerPoint { get; init; } = new();
 }
 
-/// <summary>Root of <c>npc-rules.json</c>.</summary>
 public sealed record NpcRulesDocument
 {
     public string About { get; init; } = "";

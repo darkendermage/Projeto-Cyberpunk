@@ -5,11 +5,8 @@ using Microsoft.Extensions.Primitives;
 
 namespace CyberpunkDb.Api.Desktop;
 
-/// <summary>
-/// Files embedded in the executable by the desktop build (MSBuild property DesktopBundle=true):
-/// frontend (bundle/wwwroot/...), seed catalog (bundle/seed/...) and configuration (bundle/appsettings*.json).
-/// Outside that build there are no resources and everything comes from disk as usual.
-/// </summary>
+// Files embedded by the desktop build (DesktopBundle=true): frontend, seed catalog and appsettings.
+// Outside that build there are no resources and everything comes from disk.
 public static class EmbeddedBundle
 {
     public const string WebRootPrefix = "bundle/wwwroot/";
@@ -17,7 +14,7 @@ public static class EmbeddedBundle
 
     private static readonly Assembly Assembly = typeof(EmbeddedBundle).Assembly;
 
-    // On Windows MSBuild writes "\" in resource names built from RecursiveDir; normalize to "/".
+    // MSBuild writes "\" in names built from RecursiveDir on Windows
     private static readonly Dictionary<string, string> Names = Assembly.GetManifestResourceNames()
         .Where(n => n.Replace('\\', '/').StartsWith("bundle/", StringComparison.Ordinal))
         .ToDictionary(n => n.Replace('\\', '/'), n => n, StringComparer.OrdinalIgnoreCase);
@@ -30,7 +27,6 @@ public static class EmbeddedBundle
         Names.TryGetValue(name.Replace('\\', '/'), out var actual) ? Assembly.GetManifestResourceStream(actual) : null;
 }
 
-/// <summary>Seed catalog read from the resources embedded in the executable.</summary>
 public sealed class EmbeddedSeedSource : ISeedSource
 {
     public IReadOnlyList<SeedFile> GetFiles() => EmbeddedBundle.All
@@ -40,7 +36,7 @@ public sealed class EmbeddedSeedSource : ISeedSource
         .ToList();
 }
 
-/// <summary>Serves the embedded frontend as if it were the wwwroot folder.</summary>
+// serves the embedded frontend as wwwroot
 public sealed class EmbeddedWebRootProvider : IFileProvider
 {
     private static readonly DateTimeOffset BuildTime = File.GetLastWriteTimeUtc(Environment.ProcessPath ?? AppContext.BaseDirectory);

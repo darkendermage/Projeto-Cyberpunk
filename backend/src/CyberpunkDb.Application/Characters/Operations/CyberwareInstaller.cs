@@ -8,34 +8,26 @@ using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.Characters.Operations;
 
-/// <summary>How a piece goes in: on a meat limb, on a chosen host limb, at creation (preset HL) or with dice.</summary>
 public sealed record InstallOptions
 {
-    /// <summary>Only piece of cyberware in a meat arm or leg (CP:R p.115–116).</summary>
+    // CP:R p.115-116
     public bool MeatLimb { get; init; }
-    /// <summary>Host limb for options of "a Cyberarm or Cyberleg" (coverings, Hardened Shielding).</summary>
+    // for coverings and Hardened Shielding
     public string? HostInstanceId { get; init; }
-    /// <summary>Character Generation: Humanity Loss is preset (CP:R p.110).</summary>
+    // preset HL (CP:R p.110)
     public bool AtCreation { get; init; }
-    /// <summary>Roll the HL dice now; previews leave this off and show the range.</summary>
+    // previews leave it off and show the range
     public bool Roll { get; init; } = true;
-    /// <summary>Preferred side for new eyes and limbs, and for the host an option goes into.</summary>
     public BodySide? Side { get; init; }
 }
 
-/// <summary>
-/// A cyberware installation planned but not applied: every piece it adds with its Humanity Loss, the range the dice
-/// could give, and requirements that exist only as text and must be confirmed by the player.
-/// </summary>
+// Not applied yet. Includes the HL range and the text-only requirements the player has to confirm.
 public sealed record InstallPlan(
     IReadOnlyList<CharacterCyberware> Pieces, int Price, int HumanityLoss, int HumanityLossMin, int HumanityLossMax,
     IReadOnlyList<string> TextRequirements);
 
-/// <summary>
-/// Plans cyberware with the same planner as the NPC generator (foundational pieces added when missing, Option Slots,
-/// pairs, body capacity, exclusive Speedware), plus what only player characters need: meat-limb pieces, options of
-/// "a Cyberarm or Cyberleg", body sides, and the Full Body Conversion exceptions (Interface RED 3 p.93).
-/// </summary>
+// Same planner as the NPC generator, plus PC-only stuff: meat limbs, limb options, body sides and the FBC
+// exceptions (Interface RED 3 p.93).
 public sealed class CyberwareInstaller(CharacterRuleBook rules, IDiceRoller dice)
 {
     public NpcMechanics Mechanics(CharacterSheet sheet, NpcCatalog catalog) =>
@@ -55,8 +47,7 @@ public sealed class CyberwareInstaller(CharacterRuleBook rules, IDiceRoller dice
 
         added = AssignSides(sheet, catalog, added!, options.Side);
 
-        // Full Body Conversion: the listed foundations cost no Humanity in an FBC body (IR3 p.93). The body itself
-        // counts too when it is part of this installation.
+        // Listed foundations cost no Humanity in an FBC body (IR3 p.93), including when the body is part of this install.
         var fbc = rules.InFbc(sheet, catalog) || added.Any(p => catalog.Find(p.ItemId) is { } i && rules.IsFbcBody(i));
         var pieces = new List<CharacterCyberware>();
         int min = 0, max = 0;
@@ -70,7 +61,7 @@ public sealed class CyberwareInstaller(CharacterRuleBook rules, IDiceRoller dice
                 pieces.Add(p with { HumanityLossApplied = 0 });
                 continue;
             }
-            // HL is preset at Character Generation and rolled afterwards (CP:R p.110).
+            // preset at creation, rolled afterwards (CP:R p.110)
             var range = options.AtCreation ? null : Dice.Range(expression);
             min += range?.Min ?? fixedLoss;
             max += range?.Max ?? fixedLoss;
@@ -88,12 +79,12 @@ public sealed class CyberwareInstaller(CharacterRuleBook rules, IDiceRoller dice
             min, max, requirements), null);
     }
 
-    // ------------------------------------------------------------ placement strategies
+    // placement strategies
 
     private static (List<CharacterCyberware>?, string?) WithPlanner(
         CharacterSheet sheet, NpcCatalog catalog, NpcMechanics mechanics, CatalogItem item, BodySide? side)
     {
-        // The planner takes the first compatible host with free slots, so hosts on the chosen side are listed first.
+        // the planner takes the first host with free slots, so put the chosen side first
         var ordered = side is null ? sheet.Cyberware : sheet.Cyberware.OrderBy(c => c.Side == side ? 0 : 1).ToList();
         var planner = new CyberwarePlanner(mechanics, catalog);
         planner.AddExisting(ordered.Select(c => new NpcCyberwareEntry { InstanceId = c.InstanceId, ItemId = c.ItemId, ParentInstanceId = c.ParentInstanceId }));
@@ -117,7 +108,7 @@ public sealed class CyberwareInstaller(CharacterRuleBook rules, IDiceRoller dice
         return ([new CharacterCyberware { InstanceId = NextId(sheet), ItemId = item.Id, MeatLimb = true, Side = side }], null);
     }
 
-    /// <summary>Coverings and Hardened Shielding go on a Cyberarm or Cyberleg; coverings take no slot (CP:R p.116).</summary>
+    // coverings take no slot (CP:R p.116)
     private (List<CharacterCyberware>?, string?) OnLimb(
         CharacterSheet sheet, NpcCatalog catalog, NpcMechanics mechanics, CatalogItem item, AnyLimbOption option, string? hostId, BodySide? preferred)
     {
@@ -156,7 +147,7 @@ public sealed class CyberwareInstaller(CharacterRuleBook rules, IDiceRoller dice
         return ([new CharacterCyberware { InstanceId = NextId(sheet), ItemId = item.Id, ParentInstanceId = chosen.InstanceId, Side = chosen.Side }], null);
     }
 
-    /// <summary>New eyes, arms and legs take the first free side; options follow the side of their host.</summary>
+    // options follow their host's side
     private static List<CharacterCyberware> AssignSides(CharacterSheet sheet, NpcCatalog catalog, List<CharacterCyberware> added, BodySide? preferred)
     {
         var placed = new List<CharacterCyberware>(sheet.Cyberware);

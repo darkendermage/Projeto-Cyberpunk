@@ -25,7 +25,7 @@ public static class FilterOps
     public static readonly string[] Text = [Contains, IsNull, NotNull];
 }
 
-/// <summary>One filter criterion. Criteria are combined with AND; values inside "in" are OR-ed.</summary>
+// criteria are ANDed, values inside "in" are ORed
 public sealed class FilterCriterion
 {
     public string Field { get; set; } = string.Empty;
@@ -96,7 +96,7 @@ public sealed class ItemDetailDto
 
 public sealed record GlobalSearchGroup(string Category, string Label, int Total, IReadOnlyList<ItemDto> Items);
 
-// ---------- schema ----------
+// schema
 
 public sealed class FieldDescriptorDto
 {
@@ -118,7 +118,7 @@ public sealed class FieldDescriptorDto
     public IReadOnlyList<OptionDto>? Options { get; init; }
     public double? Min { get; init; }
     public double? Max { get; init; }
-    /// <summary>Distinct values of small numeric domains (ROF, dice, ranges), used for min/max pickers.</summary>
+    // small numeric domains (ROF, dice, ranges) for the min/max pickers
     public IReadOnlyList<double>? Values { get; init; }
 }
 
@@ -144,7 +144,7 @@ public sealed class CategorySchemaDto
 
 public sealed record CategorySummaryDto(string Key, string Category, string Label, string? Sublabel, string Icon, int ItemCount);
 
-// ---------- write model (also the import/export format) ----------
+// write model (also the import/export format)
 
 public sealed class ItemUpsertDto
 {

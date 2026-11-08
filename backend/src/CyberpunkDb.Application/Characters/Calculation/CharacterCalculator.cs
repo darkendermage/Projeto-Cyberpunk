@@ -6,11 +6,7 @@ using CyberpunkDb.Application.Localization;
 
 namespace CyberpunkDb.Application.Characters.Calculation;
 
-/// <summary>
-/// Computes every derived value of a character from its sheet: effective STATs, HP and Wound State, Death Save,
-/// Humanity and therapy cap, armor SP and penalty, and Skill Bases. Pure: the sheet is never modified, so base
-/// values are never overwritten by modifiers.
-/// </summary>
+// All derived values of a character (STATs, HP, Death Save, Humanity, armor, Skill Bases). Never mutates the sheet.
 public sealed class CharacterCalculator(CharacterRuleBook rules)
 {
     private const string Luck = "LUCK";
@@ -22,7 +18,7 @@ public sealed class CharacterCalculator(CharacterRuleBook rules)
         var effects = CyberwareEffects.Active(rules, sheet, catalog);
         var body = StatWithCyberware(sheet, catalog, effects, "BODY");
 
-        // HP depends on BODY and WILL, which armor never penalizes; MOVE penalties from wounds need the HP first.
+        // HP uses BODY and WILL (armor never penalizes them), and wound MOVE penalties need HP first
         var will = StatWithCyberware(sheet, catalog, effects, "WILL").Value;
         var maxHp = HitPoints(body.Value, will);
         var health = ComputeHealth(sheet, maxHp, body.Value, body.CyberSource, injuries);
@@ -64,12 +60,9 @@ public sealed class CharacterCalculator(CharacterRuleBook rules)
             WearableCyberware.Lines(rules, sheet, catalog));
     }
 
-    // ------------------------------------------------------------ housing and lifestyle
+    // housing and lifestyle
 
-    /// <summary>
-    /// Monthly cost and payment status. Unpaid lifestyle has a one-week grace before daily Death Saves (CP:R p.377);
-    /// the sheet only reports it, it never charges or penalizes on its own.
-    /// </summary>
+    // Unpaid lifestyle: one week of grace, then daily Death Saves (CP:R p.377). We only report it, nothing is charged.
     public HousingReport ComputeHousing(CharacterSheet sheet, DateOnly today)
     {
         var h = sheet.Housing;
@@ -93,7 +86,7 @@ public sealed class CharacterCalculator(CharacterRuleBook rules)
             rent, h.RentOverride is null, lifestyle?.Monthly ?? 0, monthly, h.PaidUntil, overdue, status, source);
     }
 
-    // ------------------------------------------------------------ item lines shown on the sheet
+    // item lines shown on the sheet
 
     private List<InventoryLine> InventoryLines(CharacterSheet sheet, NpcCatalog catalog) =>
         sheet.Inventory.Select(e =>
@@ -114,7 +107,7 @@ public sealed class CharacterCalculator(CharacterRuleBook rules)
     private List<WeaponLine> WeaponLines(CharacterSheet sheet, NpcCatalog catalog, List<CharacterSkillLine> skills)
     {
         var lines = new List<WeaponLine>();
-        // A Smartgun works through a Neural Link with Interface Plugs or a Subdermal Grip (smartgun-link's description).
+        // needs a Neural Link with Interface Plugs or a Subdermal Grip
         var cyber = sheet.Cyberware.Select(c => catalog.Find(c.ItemId)?.Slug).OfType<string>().ToHashSet(StringComparer.OrdinalIgnoreCase);
         var smartUser = cyber.Contains("neural-link") && (cyber.Contains("interface-plugs") || cyber.Contains("subdermal-grip"));
         var slots = rules.Document.Combat.AttachmentSlots.Value;
@@ -131,13 +124,13 @@ public sealed class CharacterCalculator(CharacterRuleBook rules)
                 .ToList();
             var ranged = w.Calibers.Count > 0;
             var bonuses = new List<ValuePart>();
-            // CP:R p.344: an Excellent Quality weapon adds +1 to attack Checks.
+            // Excellent Quality: +1 to attack (CP:R p.344)
             if ((e.Quality ?? w.Quality) == WeaponQuality.Excellent) bonuses.Add(new ValuePart(L.T("Qualidade Excellent (CP:R p.344)", "Excellent Quality (CP:R p.344)"), 1));
-            // smartgun-link: a Smartgun adds +1 to Ranged Attack Checks.
+            // smartgun-link: +1 to Ranged Attack
             var linked = state.Attachments.Any(id => sheet.Inventory.FirstOrDefault(i => i.InstanceId == id) is { } a
                                                      && catalog.Find(a.ItemId)?.Slug.Equals("smartgun-link", StringComparison.OrdinalIgnoreCase) == true);
             if (ranged && linked && smartUser) bonuses.Add(new ValuePart("Smartgun Link", 1));
-            // CP:R p.146: the Solo's Precision Attack, 3/6/9 points of Combat Awareness give +1/+2/+3 to attacks.
+            // Precision Attack (CP:R p.146)
             if (PrecisionAttack(sheet) is > 0 and var precision) bonuses.Add(new ValuePart("Precision Attack", precision));
             lines.Add(new WeaponLine(
                 e.InstanceId, e.ItemId, item.Name, w.Class, skillId, skill?.NamePt ?? skill?.Name,
@@ -149,11 +142,11 @@ public sealed class CharacterCalculator(CharacterRuleBook rules)
         return lines;
     }
 
-    /// <summary>The Solo's Precision Attack bonus (CP:R p.146): +1 per 3 points of Combat Awareness, up to +3.</summary>
+    // +1 per 3 points of Combat Awareness, max +3
     public static int PrecisionAttack(CharacterSheet sheet) =>
         Math.Min(3, (sheet.Roles.FirstOrDefault(r => r.Role.Equals("Solo", StringComparison.OrdinalIgnoreCase))?.Split.GetValueOrDefault("precisionAttack") ?? 0) / 3);
 
-    /// <summary>Slot rules for this character: doubled in a Full Body Conversion body (Interface RED 3 p.93).</summary>
+    // doubled slots in a Full Body Conversion (Interface RED 3 p.93)
     private NpcMechanics Mechanics(CharacterSheet sheet, NpcCatalog catalog) =>
         new(rules.Shared, rules.InFbc(sheet, catalog) ? rules.Document.Cyberware.Fbc.Value.SlotMultiplier : 1);
 
@@ -175,7 +168,7 @@ public sealed class CharacterCalculator(CharacterRuleBook rules)
         }).ToArray();
     }
 
-    // ------------------------------------------------------------ STATs
+    // STATs
 
     private List<StatLine> ComputeStats(
         CharacterSheet sheet, NpcCatalog catalog, List<ActiveCyberwareEffect> effects,
@@ -206,7 +199,7 @@ public sealed class CharacterCalculator(CharacterRuleBook rules)
 
             if (key.Equals("MOVE", StringComparison.OrdinalIgnoreCase))
             {
-                // Wound and injury MOVE penalties never take MOVE below 1 (CP:R p.186–187); armor alone can.
+                // wounds never take MOVE below 1 (CP:R p.186-187), armor alone can
                 var floor = rules.Document.Derived.MortallyWounded.Value.MoveMinimum;
                 var limited = new List<ValuePart>();
                 if (health.WoundMovePenalty != 0) limited.Add(new ValuePart(WoundLabel(health.WoundState), health.WoundMovePenalty));
@@ -222,7 +215,7 @@ public sealed class CharacterCalculator(CharacterRuleBook rules)
 
             if (key.Equals("EMP", StringComparison.OrdinalIgnoreCase) && humanity.EmpEffective != baseValue)
             {
-                // EMP follows the tens place of the current Humanity (CP:R p.80); modifiers don't raise it above that.
+                // EMP follows the tens of current Humanity (CP:R p.80)
                 parts.Add(new ValuePart("Humanidade", humanity.EmpEffective - baseValue));
                 effective = humanity.EmpEffective;
             }
@@ -232,11 +225,8 @@ public sealed class CharacterCalculator(CharacterRuleBook rules)
         return lines;
     }
 
-    /// <summary>
-    /// A STAT before armor and wounds: base + active modifiers + cyberware bonuses (Grafted Muscle and Bone Lace, up to
-    /// its cap, CP:R p.363) and, for BODY, an Implanted Linear Frame when it is higher (CP:R p.367). The base is never
-    /// changed. <c>CyberSource</c> names the implants that raised it.
-    /// </summary>
+    // Before armor and wounds: base + modifiers + cyberware (Grafted Muscle, Bone Lace, capped, CP:R p.363).
+    // For BODY, an Implanted Linear Frame wins if higher (p.367).
     private static (int Value, List<ValuePart> Parts, string? CyberSource) StatWithCyberware(
         CharacterSheet sheet, NpcCatalog catalog, List<ActiveCyberwareEffect> effects, string key)
     {
@@ -269,16 +259,16 @@ public sealed class CharacterCalculator(CharacterRuleBook rules)
         return (value, parts, raisedBy.Count > 0 ? string.Join(", ", raisedBy) : null);
     }
 
-    // ------------------------------------------------------------ HP, wounds, Death Save
+    // HP, wounds, Death Save
 
-    /// <summary>HP = 10 + 5 × ceil((BODY + WILL) / 2) (CP:R p.79).</summary>
+    // 10 + 5 * ceil((BODY + WILL) / 2), CP:R p.79
     public int HitPoints(int body, int will)
     {
         var d = rules.Shared.Document.Derived;
         return d.HpBase.Value + d.HpPerAverage.Value * (int)Math.Ceiling((body + will) / 2.0);
     }
 
-    /// <summary>Half of max HP, rounded up (CP:R p.79).</summary>
+    // half of max HP, rounded up
     public int SeriouslyWoundedThreshold(int maxHp)
     {
         var r = rules.Document.Derived.SeriouslyWounded.Value;
@@ -330,7 +320,7 @@ public sealed class CharacterCalculator(CharacterRuleBook rules)
         _ => L.T("Sem ferimentos", "Unhurt"),
     };
 
-    // ------------------------------------------------------------ Humanity
+    // Humanity
 
     private HumanityReport ComputeHumanity(CharacterSheet sheet, NpcCatalog catalog)
     {
@@ -347,7 +337,7 @@ public sealed class CharacterCalculator(CharacterRuleBook rules)
             var item = catalog.Find(c.ItemId);
             var zeroLoss = c.HumanityLossApplied == 0 && (item?.Cyber?.HumanityLoss ?? 0) == 0;
             if (zeroLoss && t.ZeroLossPiecesExempt.Value) continue;
-            // In an FBC body these foundations don't depress the maximum Humanity (Interface RED 3 p.93).
+            // Interface RED 3 p.93
             if (fbc && item is not null && rules.IsFbcExempt(item.Slug)) continue;
             if (item?.Cyber?.Type == CyberwareType.Borgware) borgware++;
             else pieces++;
@@ -358,7 +348,7 @@ public sealed class CharacterCalculator(CharacterRuleBook rules)
             empEffective, current < rules.Document.Derived.CyberpsychosisBelow.Value);
     }
 
-    // ------------------------------------------------------------ armor
+    // armor
 
     private ArmorReport ComputeArmor(CharacterSheet sheet, NpcCatalog catalog)
     {
@@ -376,7 +366,7 @@ public sealed class CharacterCalculator(CharacterRuleBook rules)
 
         ArmorLocationReport Location(ArmorSlot slot)
         {
-            // SP doesn't stack: only the highest source in a location counts (CP:R p.184).
+            // SP doesn't stack, highest wins (CP:R p.184)
             var candidates = worn.Where(x => x.Entry.Worn == slot)
                 .Select(x => new ArmorLocationReport(slot, x.Entry.CurrentSp ?? x.Item!.Armor!.Sp ?? 0, x.Item!.Armor!.Sp,
                     x.Entry.InstanceId, x.Item.Name, false))
@@ -385,7 +375,7 @@ public sealed class CharacterCalculator(CharacterRuleBook rules)
             return candidates.MaxBy(c => c.Sp) ?? new ArmorLocationReport(slot, 0, null, null, null, false);
         }
 
-        // The most punishing penalty among worn armor, taken once (CP:R p.184).
+        // worst penalty, applied once
         var refP = worn.Select(x => x.Item!.Armor!.RefPenalty).DefaultIfEmpty(0).Max();
         var dexP = worn.Select(x => x.Item!.Armor!.DexPenalty).DefaultIfEmpty(0).Max();
         var moveP = worn.Select(x => x.Item!.Armor!.MovePenalty).DefaultIfEmpty(0).Max();
@@ -398,7 +388,7 @@ public sealed class CharacterCalculator(CharacterRuleBook rules)
         return new ArmorReport(Location(ArmorSlot.Head), Location(ArmorSlot.Body), new ArmorPenalty(refP, dexP, moveP), heaviest);
     }
 
-    // ------------------------------------------------------------ skills
+    // skills
 
     private List<CharacterSkillLine> ComputeSkills(
         CharacterSheet sheet, Dictionary<string, int> effectiveStats, int actionPenalty, List<ActiveCyberwareEffect> effects)
@@ -432,10 +422,10 @@ public sealed class CharacterCalculator(CharacterRuleBook rules)
                     .Where(m => m.Active && m.Target == ModifierTarget.Skill
                                 && (m.Key.Equals(key, StringComparison.OrdinalIgnoreCase) || m.Key.Equals(def.Id, StringComparison.OrdinalIgnoreCase)))
                     .Select(m => new ValuePart(m.Source, m.Value)).ToList();
-                // Cyberware: an unconditional bonus joins the Base; a situational one ("for Checks which include sight") is only noted.
+                // situational bonuses ("Checks which include sight") are only noted, not added
                 var forSkill = effects.Where(a => a.Effect.Skills.Contains(def.Id, StringComparer.OrdinalIgnoreCase)).ToList();
                 modifierParts.AddRange(forSkill.Where(a => a.Effect.Condition is null).Select(a => new ValuePart(a.Label, a.Bonus)));
-                // Role Abilities that add to Skills (Moto, Field Expertise, Threat Detection).
+                // Moto, Field Expertise, Threat Detection
                 if (roleBonuses.TryGetValue(def.Id, out var fromRoles)) modifierParts.AddRange(fromRoles);
                 var situational = forSkill.Where(a => a.Effect.Condition is not null)
                     .Select(a => $"+{a.Bonus} {a.Effect.Condition} ({a.Label})").ToList();
@@ -452,10 +442,7 @@ public sealed class CharacterCalculator(CharacterRuleBook rules)
         return lines;
     }
 
-/// <summary>
-    /// What each Role of the sheet adds to Skills, by skill id: the Rank ("Moto (Rank 4)") or a part of the Rank's split
-    /// ("Field Expertise 2"), as character-rules.json lists under <c>ability.skillBonuses</c>.
-    /// </summary>
+// e.g. "Moto (Rank 4)" or "Field Expertise 2", from ability.skillBonuses
     private Dictionary<string, List<ValuePart>> RoleSkillBonuses(CharacterSheet sheet)
     {
         var result = new Dictionary<string, List<ValuePart>>(StringComparer.OrdinalIgnoreCase);
@@ -487,7 +474,7 @@ public sealed class CharacterCalculator(CharacterRuleBook rules)
         return result;
     }
 
-        // ------------------------------------------------------------ roles and injuries
+        // roles and injuries
 
     private List<RoleLine> ComputeRoles(CharacterSheet sheet) =>
         sheet.Roles.Select((r, i) =>
@@ -499,7 +486,7 @@ public sealed class CharacterCalculator(CharacterRuleBook rules)
 
     private sealed record ActiveInjury(CriticalInjuryRecord Record, CriticalInjuryDefinition? Definition);
 
-    /// <summary>Injuries whose effect currently applies: Active only. A Quick Fix suspends the effect (CP:R p.222).</summary>
+    // Quick Fix suspends the effect (CP:R p.222)
     private List<ActiveInjury> ActiveInjuries(CharacterSheet sheet) =>
         sheet.Injuries.Where(i => i.Status == InjuryStatus.Active)
             .Select(i => new ActiveInjury(i, rules.FindCriticalInjury(i.Location, i.Name)))

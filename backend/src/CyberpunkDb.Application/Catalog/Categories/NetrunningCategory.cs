@@ -4,7 +4,7 @@ using CyberpunkDb.Domain.Enums;
 
 namespace CyberpunkDb.Application.Catalog.Categories;
 
-/// <summary>Cyberdecks, Programs, Black ICE and Cyberdeck Hardware (CP:R p.196-208; Interface RED 3).</summary>
+// CP:R p.196-208; Interface RED 3
 public sealed class NetrunningCategory : CategoryDefinition<NetrunningItem>
 {
     private static readonly Enum[] Programs = [NetItemType.Program, NetItemType.BlackIce];
