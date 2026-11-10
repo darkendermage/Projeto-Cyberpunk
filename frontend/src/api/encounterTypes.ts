@@ -30,10 +30,57 @@ export interface WeaponView {
   jammed?: boolean;
   /** How attackTotal is made: the skill, then each bonus. */
   attackParts?: { label: string; value: number }[] | null;
-  /** Attacks only by throwing (the Ranger boomerang). */
+  /** This mode attacks by throwing and leaves the hand (the Ranger boomerang, "Throw" on melee weapons). */
   thrownOnly?: boolean;
   /** Out of hand after a throw: back with a Targeting Scope, or picked up. */
   thrown?: boolean;
+  /** Catalog slug: weapons with their own rules in weapon-rules.json. */
+  slug?: string | null;
+  /** Which mode this view is (null when the weapon has a single one). */
+  modeId?: string | null;
+  modeLabel?: string | null;
+  /** 'free' = picked on each attack; 'action' | 'move' | 'minute' = stays on the weapon until switched. */
+  modeSwitch?: string | null;
+  /** Free modes are always usable; a switched mode only while it's on. */
+  modeActive?: boolean;
+  /** Every mode of the weapon (the view itself is the current/default one). */
+  modes?: WeaponView[] | null;
+  /** Main magazine (id null) plus extra ones: Tommyknocker shells, Crowd Buster battery... */
+  magazines?: MagazineView[] | null;
+  /** Extra magazine this mode fires from; null = the main one. */
+  magazineId?: string | null;
+  /** Destroyed beyond repair: can't attack. */
+  destroyed?: boolean;
+  /** Bolt action: "jammed" after every shot until the bolt is worked (an Action). */
+  bolt?: boolean;
+  traits?: WeaponTraits | null;
+}
+
+export interface MagazineView { id: string | null; label: string; rounds: number; capacity: number; refill: boolean }
+
+/** weapon-rules.json for the mode in use; missing = the book's default. */
+export interface WeaponTraits {
+  source?: string | null;
+  maxRange?: number | null;
+  ignoreArmorBelow?: number | null;
+  ablation?: number | null;
+  knockout?: boolean;
+  noCrit?: boolean;
+  noAimed?: boolean;
+  perShot?: number | null;
+  minRounds?: number | null;
+  allRounds?: boolean;
+  autofireBullets?: number | null;
+  /** 'only' or 'none' (Shotgun Shell). */
+  shells?: string | null;
+  shellDamage?: string | null;
+  explosive?: boolean;
+  aimedDamage?: string | null;
+  /** Melee swings that still use a charge (the Bouncer's stun baton). */
+  meleeCharges?: boolean;
+  /** No damage on a hit: what the target has to do instead. */
+  effect?: string | null;
+  notes?: string[];
 }
 
 export interface InjuryView {

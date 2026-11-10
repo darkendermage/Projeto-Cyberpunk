@@ -5,6 +5,7 @@ import type { ArmorLocation, RollKind, TableVisibility, TokenView, PlayerCharact
 import { Badge, Button, IconButton, Segmented } from '../../components/ui/ui';
 import { skillName, t } from '../../i18n';
 import { WOUND_LABEL, WOUND_TONE } from '../combat/combat';
+import { WeaponExtras } from '../combat/WeaponExtras';
 import { ArmorControl } from './ArmorControl';
 import { NumField } from './NumField';
 import { damageFormula } from './tokens';
@@ -18,7 +19,7 @@ const signed = (n: number) => (n >= 0 ? `+${n}` : `${n}`);
 
 // Numbers, weapons and skills (each one click from a server roll) and token facing. In a fight the numbers
 // come from the combat table, otherwise from the sheet.
-export function CharacterPanel({ character, encounter, token, onRoll, onTurn, onArmor, onAim, onReload, onUnjam, onPickUp, onImport, busy }: {
+export function CharacterPanel({ character, encounter, token, onRoll, onTurn, onArmor, onAim, onReload, onUnjam, onPickUp, onSwitch, onImport, busy }: {
   character: PlayerCharacter | null;
   encounter: PlayerEncounter | null;
   token: TokenView | undefined;
@@ -28,8 +29,10 @@ export function CharacterPanel({ character, encounter, token, onRoll, onTurn, on
   onArmor?: (location: ArmorLocation, delta: number) => void;
   /** In a fight: aim with this weapon, as the strip's weapon chips do (target, mode, aimed shot). */
   onAim?: (weapon: WeaponView, mode: AttackMode) => void;
-  /** Reloads a weapon by its key (an Action on the player's Turn in a fight). */
-  onReload?: (weaponKey: string) => void;
+  /** Reloads a weapon by its key, or one of its extra magazines (an Action on the player's Turn in a fight). */
+  onReload?: (weaponKey: string, magazine?: string) => void;
+  /** Switches a mode that stays on the weapon (an Action on the player's Turn in a fight). */
+  onSwitch?: (weaponKey: string, mode: string) => void;
   /** Imports the player's own sheet when the seat has none. */
   onImport?: (file: File) => void;
   /** Clears a jammed weapon (an Action on the player's Turn). */
@@ -157,12 +160,19 @@ export function CharacterPanel({ character, encounter, token, onRoll, onTurn, on
                       {t('Pegar do chão', 'Pick up')}
                     </Button>
                   )}
-                  {onUnjam && fightWeapon?.jammed && (
+                  {onUnjam && fightWeapon?.jammed && !fightWeapon.destroyed && (
                     <Button variant="danger" disabled={busy || encounter?.activeId !== fighter!.id}
-                      title={t('Travada (Poor Quality): destravar gasta uma Ação (CP:R p.344).', 'Jammed (Poor Quality): unjamming takes an Action (CP:R p.344).')}
+                      title={fightWeapon.bolt ? t('Ferrolho: uma Ação para preparar o próximo tiro.', 'Bolt action: an Action to chamber the next round.')
+                        : t('Travada (Poor Quality): destravar gasta uma Ação (CP:R p.344).', 'Jammed (Poor Quality): unjamming takes an Action (CP:R p.344).')}
                       onClick={() => onUnjam(w.key)}>
-                      {t('Destravar', 'Unjam')}
+                      {fightWeapon.bolt ? t('Ferrolho', 'Work bolt') : t('Destravar', 'Unjam')}
                     </Button>
+                  )}
+                  {fightWeapon && (
+                    <WeaponExtras weapon={fightWeapon} chipClass={styles.weaponChip}
+                      blocked={busy ? t('Aguarde…', 'Wait…') : encounter?.activeId !== fighter!.id ? t('Aguarde seu turno: é uma Ação.', 'Wait for your Turn: it takes an Action.') : null}
+                      onSwitch={onSwitch ? (mode) => onSwitch(w.key, mode) : undefined}
+                      onReload={onReload ? (magazine) => onReload(w.key, magazine) : undefined} />
                   )}
                   {onReload && w.magazine != null && (
                     <Button variant="ghost" icon={<RefreshCw size={14} />}

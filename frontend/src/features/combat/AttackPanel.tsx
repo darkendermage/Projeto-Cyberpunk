@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Crosshair } from 'lucide-react';
 import type { AttackMode, AttackResult, EncounterDetail, EncounterRules, FighterView } from '../../api/encounterTypes';
 import { Badge, Button, Checkbox, Field, NumberInput, Select, Switch } from '../../components/ui/ui';
-import { diceCount, isArea, MODE_LABEL, modesFor, needsRange, parseDice, THROWN } from './combat';
+import { expectedDiceFor, isArea, MODE_LABEL, modesFor, needsRange, parseDice, SWITCH_COST, switchedModes, THROWN, usableModes, weaponName } from './combat';
 import type { QuickPick, Run } from './EncounterView';
 import styles from './Combat.module.css';
 import { t, tv } from '../../i18n';
@@ -14,6 +14,8 @@ export function AttackPanel({ detail, rules, attacker, busy, run, preset }: {
   preset?: QuickPick | null;
 }) {
   const [weaponKey, setWeaponKey] = useState(preset?.weaponKey ?? '');
+  // weapon-rules.json mode picked for this attack (Slug/Shell, Burst, Throw...)
+  const [weaponMode, setWeaponMode] = useState<string | null>(null);
   const [mode, setMode] = useState<AttackMode>('Single');
   const [targets, setTargets] = useState<string[]>(preset?.targetId ? [preset.targetId] : []);
   const [range, setRange] = useState<number | null>(10);
@@ -26,20 +28,24 @@ export function AttackPanel({ detail, rules, attacker, busy, run, preset }: {
 
   if (!attacker) return null;
   const thrown = weaponKey === THROWN;
-  const weapon = thrown ? null : attacker.weapons.find((w) => w.key === weaponKey) ?? attacker.weapons[0] ?? null;
+  const base = thrown ? null : attacker.weapons.find((w) => w.key === weaponKey) ?? attacker.weapons[0] ?? null;
+  const usable = base ? usableModes(base) : [];
+  const weapon = base ? usable.find((m) => m.modeId === weaponMode) ?? base : null;
+  const inactive = base ? switchedModes(base).filter((m) => !m.modeActive) : [];
   const modes = modesFor(weapon, thrown);
   const currentMode = modes.includes(mode) ? mode : modes[0];
   const area = isArea(currentMode);
   const others = detail.queue.filter((f) => f.id !== attacker.id);
   const chosen = area ? targets.filter((entry) => others.some((o) => o.id === entry)) : targets.slice(0, 1).filter((entry) => others.some((o) => o.id === entry));
   const target = chosen.length > 0 ? chosen : others.length > 0 && !area ? [others.find((o) => o.side !== attacker.side)?.id ?? others[0].id] : [];
-  const expectedDice = currentMode === 'Autofire' ? 2 : currentMode === 'ShotgunShell' ? 3 : diceCount(thrown ? thrownDamage || '1d6' : weapon?.damage ?? '');
+  const expectedDice = expectedDiceFor(weapon, currentMode, thrownDamage);
   const total = currentMode === 'Autofire' || currentMode === 'Suppressive' ? weapon?.autofireTotal : thrown ? attacker.athletics : weapon?.attackTotal;
 
   const submit = () => run('attack', {
     attackerId: attacker.id,
     targetIds: target,
     weapon: thrown ? THROWN : weapon?.key,
+    weaponMode: thrown ? null : weapon?.modeId ?? null,
     mode: currentMode,
     range: needsRange(weapon, currentMode, thrown) ? range : null,
     dodge,
@@ -60,11 +66,18 @@ export function AttackPanel({ detail, rules, attacker, busy, run, preset }: {
       </div>
       <div className={styles.formGrid}>
         <Field label={t('Arma', 'Weapon')} htmlFor="atk-weapon" hint={weapon ? t(`Ataque ${total ?? '—'} + d10 · dano ${tv(weapon.damage)}${weapon.rounds != null ? ` · ${weapon.rounds}/${weapon.magazine} balas` : ''}`, `Attack ${total ?? '—'} + d10 · damage ${tv(weapon.damage)}${weapon.rounds != null ? ` · ${weapon.rounds}/${weapon.magazine} rounds` : ''}`) : thrown ? `DEX + Athletics ${attacker.athletics} + d10 (${rules.rules.thrown.source})` : undefined}>
-          <Select id="atk-weapon" value={thrown ? THROWN : weapon?.key ?? ''} onChange={(e) => setWeaponKey(e.target.value)}>
-            {attacker.weapons.map((w) => <option key={w.key} value={w.key}>{tv(w.name)} ({tv(w.damage)}{w.halvesArmor ? t(', metade do SP', ', half SP') : ''})</option>)}
+          <Select id="atk-weapon" value={thrown ? THROWN : weapon?.key ?? ''} onChange={(e) => { setWeaponKey(e.target.value); setWeaponMode(null); }}>
+            {attacker.weapons.filter((w) => !w.destroyed).map((w) => <option key={w.key} value={w.key}>{weaponName(w)} ({tv(w.damage)}{w.halvesArmor ? t(', metade do SP', ', half SP') : ''})</option>)}
             <option value={THROWN}>{t('Arremessar objeto ou granada', 'Throw an object or grenade')}</option>
           </Select>
         </Field>
+        {usable.length > 1 && weapon && (
+          <Field label={t('Modo da arma', 'Weapon mode')} htmlFor="atk-weapon-mode">
+            <Select id="atk-weapon-mode" value={weapon.modeId ?? ''} onChange={(e) => setWeaponMode(e.target.value)}>
+              {usable.map((m) => <option key={m.modeId} value={m.modeId ?? ''}>{m.modeLabel}</option>)}
+            </Select>
+          </Field>
+        )}
         <Field label={t('Modo', 'Mode')} htmlFor="atk-mode">
           <Select id="atk-mode" value={currentMode} onChange={(e) => setMode(e.target.value as AttackMode)}>
             {modes.map((m) => <option key={m} value={m}>{MODE_LABEL[m]}</option>)}
@@ -114,6 +127,19 @@ export function AttackPanel({ detail, rules, attacker, busy, run, preset }: {
           {t('Atacar', 'Attack')}
         </Button>
       </div>
+      {base && inactive.length > 0 && (
+        <div className={styles.row}>
+          <span className={styles.label}>{t(`Modo ligado: ${base.modeLabel}`, `Mode on: ${base.modeLabel}`)}</span>
+          {inactive.map((m) => (
+            <Button key={m.modeId} variant="ghost" disabled={busy}
+              onClick={() => run(`combatants/${attacker.id}/mode`, { weapon: base.key, mode: m.modeId }, t('Modo trocado.', 'Mode switched.'))}>
+              {t(`Trocar para ${m.modeLabel} (${SWITCH_COST[m.modeSwitch ?? 'action']})`, `Switch to ${m.modeLabel} (${SWITCH_COST[m.modeSwitch ?? 'action']})`)}
+            </Button>
+          ))}
+        </div>
+      )}
+      {weapon?.traits?.effect && <span className={styles.source}>{weapon.traits.effect}{weapon.traits.source ? ` (${weapon.traits.source})` : ''}</span>}
+      {weapon?.traits?.notes?.map((n) => <span key={n} className={styles.source}>{n}{weapon.traits?.source ? ` (${weapon.traits.source})` : ''}</span>)}
       {currentMode.startsWith('Aimed') && (
         <span className={styles.source}>{tv(rules.rules.aimedEffects.value.find((e) => e.mode === currentMode)?.effect)} ({rules.rules.aimedShot.source})</span>
       )}

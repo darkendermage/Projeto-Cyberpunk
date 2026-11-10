@@ -14,8 +14,8 @@ public sealed record PlayerReloadResult(PlayerEncounterDto? Encounter, PlayerCha
 
 public sealed record PlayerDefenseRequest(bool Dodge);
 
-// inventory copy for PCs
-public sealed record PlayerWeaponRequest(string Weapon);
+// inventory copy for PCs. Magazine: an extra one (reload); Mode: the mode to switch to.
+public sealed record PlayerWeaponRequest(string Weapon, string? Magazine = null, string? Mode = null);
 
 // Everything a player does in the live fight besides attacking: end turn, reload, unjam, pick up.
 public sealed class TableTurnService(IAppDbContext db, EncounterService encounters, Characters.CharacterService characters)
@@ -43,12 +43,29 @@ public sealed class TableTurnService(IAppDbContext db, EncounterService encounte
         if (await InFightAsync(characterId, ct))
         {
             var (detail, own, state) = await OwnFighterAsync(seat, ownTurn: true, ct);
-            var after = await encounters.ReloadAsync(detail.Id, own.Id, new ReloadCombatantRequest(detail.Version, r.Weapon), ct);
+            var after = await encounters.ReloadAsync(detail.Id, own.Id, new ReloadCombatantRequest(detail.Version, r.Weapon, r.Magazine), ct);
             return new PlayerReloadResult(PlayerEncounters.For(after, seat, state), null);
         }
         var sheet = await characters.GetAsync(characterId, ct);
-        var reloaded = await characters.ReloadAsync(characterId, new Characters.ReloadRequest(sheet.Version, r.Weapon), ct);
+        var reloaded = await characters.ReloadAsync(characterId, new Characters.ReloadRequest(sheet.Version, r.Weapon, Magazine: r.Magazine), ct);
         return new PlayerReloadResult(null, PlayerCharacters.From(reloaded));
+    }
+
+    // Like a reload: an Action on its own Turn in a fight, any time outside one.
+    public async Task<PlayerReloadResult> SwitchModeAsync(TableSeat seat, PlayerWeaponRequest r, CancellationToken ct)
+    {
+        if (seat.CharacterId is not { } characterId)
+            throw RequestValidationException.For("weapon", L.T("Este convite não tem personagem.", "This invite has no character."));
+        var mode = r.Mode ?? throw RequestValidationException.For("mode", L.T("Escolha o modo.", "Pick the mode."));
+        if (await InFightAsync(characterId, ct))
+        {
+            var (detail, own, state) = await OwnFighterAsync(seat, ownTurn: true, ct);
+            var after = await encounters.SwitchModeAsync(detail.Id, own.Id, new WeaponModeSwitchRequest(detail.Version, r.Weapon, mode), ct);
+            return new PlayerReloadResult(PlayerEncounters.For(after, seat, state), null);
+        }
+        var sheet = await characters.GetAsync(characterId, ct);
+        var switched = await characters.SetWeaponModeAsync(characterId, new Characters.WeaponModeRequest(sheet.Version, r.Weapon, mode), ct);
+        return new PlayerReloadResult(null, PlayerCharacters.From(switched));
     }
 
     // Action on its own Turn (CP:R p.344)

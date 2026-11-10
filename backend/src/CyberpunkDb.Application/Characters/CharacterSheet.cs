@@ -216,8 +216,14 @@ public sealed record WeaponState
     public int? LoadedAmmoItemId { get; init; }
     // CP:R p.95
     public List<string> Attachments { get; init; } = [];
-    // Poor Quality weapon jammed on a natural 1 (CP:R p.344)
+    // Poor Quality weapon jammed on a natural 1 (CP:R p.344), or a bolt action waiting for its Action
     public bool Jammed { get; init; }
+    // mode switched on with an Action (weapon-rules.json), null = the first one
+    public string? Mode { get; init; }
+    // extra magazines declared in weapon-rules.json: rounds and the ammo item loaded in each
+    public Dictionary<string, int> Magazines { get; init; } = [];
+    public Dictionary<string, int> MagazineAmmo { get; init; } = [];
+    public bool Destroyed { get; init; }
 }
 
 // Worn, not implanted: no Humanity cost, and they only work while the host is equipped.

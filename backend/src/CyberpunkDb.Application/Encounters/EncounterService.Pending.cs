@@ -17,13 +17,14 @@ public sealed partial class EncounterService
         AttackRequest r, List<string> decided, CancellationToken ct)
     {
         var (attacker, targets) = Participants(fighters, r);
-        var weapon = r.Weapon == AttackResolver.Thrown ? null : attacker.Weapon(r.Weapon)
-            ?? throw RequestValidationException.For("weapon", L.T($"{attacker.Name} não tem essa arma pronta.", $"{attacker.Name} doesn't have that weapon ready."));
+        var weapon = r.Weapon == AttackResolver.Thrown ? null : AttackResolver.SelectWeapon(attacker, r.Weapon, r.WeaponMode);
         if (weapon?.Jammed == true)
-            throw RequestValidationException.For("weapon", L.T($"{weapon.Name} está travada: gaste uma Ação para destravar (CP:R p.344).", $"{weapon.Name} is jammed: spend an Action to unjam (CP:R p.344)."));
+            throw RequestValidationException.For("weapon", weapon.Bolt
+                ? L.T($"{weapon.Name}: gaste uma Ação para manobrar o ferrolho antes do próximo tiro.", $"{weapon.Name}: spend an Action to work the bolt before the next shot.")
+                : L.T($"{weapon.Name} está travada: gaste uma Ação para destravar (CP:R p.344).", $"{weapon.Name} is jammed: spend an Action to unjam (CP:R p.344)."));
 
         // empty mag refuses before asking anyone anything
-        if (weapon is { Magazine: not null, Melee: false } && (weapon.Rounds ?? 0) <= 0)
+        if (weapon is { UsesAmmo: true } && (weapon.Rounds ?? 0) <= 0)
             throw RequestValidationException.For("weapon", L.T($"{weapon.Name} está sem munição; recarregue.", $"{weapon.Name} is out of ammo; reload."));
 
         // attack roll first (with the extra d10, CP:R p.130) so it never changes afterwards

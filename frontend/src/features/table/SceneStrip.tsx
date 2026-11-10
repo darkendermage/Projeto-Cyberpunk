@@ -2,7 +2,8 @@ import { Crosshair, FileText, RefreshCw, X } from 'lucide-react';
 import type { AttackMode, WeaponView } from '../../api/encounterTypes';
 import { Button, Select } from '../../components/ui/ui';
 import { t, tv } from '../../i18n';
-import { MODE_LABEL, WOUND_LABEL } from '../combat/combat';
+import { MODE_LABEL, reloadsMain, usableModes, WOUND_LABEL } from '../combat/combat';
+import { WeaponExtras } from '../combat/WeaponExtras';
 import { attackBreakdown, cannotFire, canReload, quickModes, weaponLabel, type Aim } from './aim';
 import { ArmorControl } from './ArmorControl';
 import type { StripEntry } from './strip';
@@ -14,15 +15,17 @@ export interface CardWeapons { weapons: WeaponView[]; blocked: string | null }
 
 // One card per character/fighter under the map (NPCs only show the Wound State to players). Click selects the
 // token, or picks the target while aiming. Cards of whoever can shoot list their weapons.
-export function SceneStrip({ entries, selected, onPick, weaponsOf, aim, onWeapon, onReload, onUnjam, onPickUp, sheetOf }: {
+export function SceneStrip({ entries, selected, onPick, weaponsOf, aim, onWeapon, onReload, onUnjam, onPickUp, onSwitch, sheetOf }: {
   entries: StripEntry[];
   selected: readonly string[];
   onPick: (entry: StripEntry) => void;
   weaponsOf?: (entry: StripEntry) => CardWeapons | null;
   aim?: Aim | null;
   onWeapon?: (entry: StripEntry, weapon: WeaponView) => void;
-  /** Reloads a weapon with a magazine (an Action in a fight). */
-  onReload?: (entry: StripEntry, weapon: WeaponView) => void;
+  /** Reloads a weapon's main magazine, or an extra one by id (an Action in a fight). */
+  onReload?: (entry: StripEntry, weapon: WeaponView, magazine?: string) => void;
+  /** Switches a mode that stays on the weapon (Hypurrburst, AVAR railgun...). */
+  onSwitch?: (entry: StripEntry, weapon: WeaponView, mode: string) => void;
   /** Clears a jammed weapon (an Action). */
   onUnjam?: (entry: StripEntry, weapon: WeaponView) => void;
   /** Picks a thrown weapon up. */
@@ -90,13 +93,16 @@ export function SceneStrip({ entries, selected, onPick, weaponsOf, aim, onWeapon
                           {t('Pegar', 'Pick up')}
                         </button>
                       )}
-                      {onUnjam && w.jammed && (
+                      {onUnjam && w.jammed && !w.destroyed && (
                         <button type="button" className={styles.weaponChip} disabled={!!armed.blocked}
-                          title={armed.blocked ?? t('Destravar (uma Ação)', 'Unjam (an Action)')} onClick={() => onUnjam(e, w)}>
-                          {t('Destravar', 'Unjam')}
+                          title={armed.blocked ?? (w.bolt ? t('Manobrar o ferrolho (uma Ação)', 'Work the bolt (an Action)') : t('Destravar (uma Ação)', 'Unjam (an Action)'))} onClick={() => onUnjam(e, w)}>
+                          {w.bolt ? t('Ferrolho', 'Work bolt') : t('Destravar', 'Unjam')}
                         </button>
                       )}
-                      {onReload && w.magazine != null && !w.melee && (
+                      <WeaponExtras weapon={w} chipClass={styles.weaponChip} blocked={armed.blocked ?? (e.dead ? t('Morto não age.', "The dead don't act.") : null)}
+                        onSwitch={onSwitch ? (mode) => onSwitch(e, w, mode) : undefined}
+                        onReload={onReload ? (magazine) => onReload(e, w, magazine) : undefined} />
+                      {onReload && reloadsMain(w) && !w.destroyed && (
                         <button type="button" className={styles.weaponChip} disabled={!!reloadWhy}
                           aria-label={t(`Recarregar ${tv(w.name)}`, `Reload ${tv(w.name)}`)}
                           title={reloadWhy ?? t(`Recarregar (${w.rounds ?? 0}/${w.magazine}) — uma Ação em combate`, `Reload (${w.rounds ?? 0}/${w.magazine}) — an Action in a fight`)}
@@ -117,15 +123,18 @@ export function SceneStrip({ entries, selected, onPick, weaponsOf, aim, onWeapon
 }
 
 /** The aiming bar over the cards: the weapon, its mode, the target picked and the shot. */
-export function AimBar({ aim, targetName, busy, onMode, onFire, onCancel }: {
+export function AimBar({ aim, targetName, busy, onMode, onWeaponMode, onFire, onCancel }: {
   aim: Aim;
   targetName: string | null;
   busy: boolean;
   onMode: (mode: AttackMode) => void;
+  /** Another mode of the weapon (Slug/Shell, Burst, Throw...). */
+  onWeaponMode?: (modeId: string) => void;
   onFire: () => void;
   onCancel: () => void;
 }) {
   const modes = quickModes(aim.weapon);
+  const weaponModes = usableModes(aim.base);
   return (
     <div className={styles.aimBar} role="region" aria-label={t('Mira', 'Aim')}>
       <Crosshair size={16} className={styles.aimIcon} aria-hidden />
@@ -134,6 +143,11 @@ export function AimBar({ aim, targetName, busy, onMode, onFire, onCancel }: {
         {' → '}
         {targetName ? <strong>{targetName}</strong> : <span className={styles.muted}>{t('clique no alvo no mapa ou num cartão', 'click the target on the map or on a card')}</span>}
       </span>
+      {onWeaponMode && weaponModes.length > 1 && (
+        <Select aria-label={t('Modo da arma', 'Weapon mode')} value={aim.weapon.modeId ?? ''} onChange={(e) => onWeaponMode(e.target.value)}>
+          {weaponModes.map((m) => <option key={m.modeId} value={m.modeId ?? ''}>{m.modeLabel}</option>)}
+        </Select>
+      )}
       {modes.length > 1 && (
         <Select aria-label={t('Modo de ataque', 'Attack mode')} value={aim.mode} onChange={(e) => onMode(e.target.value as AttackMode)}>
           {modes.map((m) => <option key={m} value={m}>{MODE_LABEL[m]}</option>)}

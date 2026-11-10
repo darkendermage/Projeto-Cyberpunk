@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { WeaponView } from '../../api/encounterTypes';
 import type { TableAttack } from '../../api/tableTypes';
-import { aimAt, attackBreakdown, attackSummary, cannotFire, canReload, quickModes, startAim, weaponLabel } from './aim';
+import { aimAt, aimWith, attackBreakdown, attackSummary, cannotFire, canReload, quickModes, startAim, weaponLabel } from './aim';
 
 const rifle: WeaponView = {
   key: 'w1', name: 'Assault Rifle', class: 'AssaultRifle', skill: 'shoulder-arms', attackTotal: 14, autofireTotal: 12, damage: '5d6',
@@ -12,6 +12,21 @@ describe('aim', () => {
   it('offers the weapon modes without the area ones', () => {
     expect(quickModes(rifle)).toEqual(['Single', 'Autofire', 'AimedHead', 'AimedHand', 'AimedLeg']);
     expect(quickModes({ ...rifle, class: 'GrenadeLauncher', autofireMultiplier: null })).not.toContain('Explosive');
+  });
+
+  it('switches to another mode of the weapon and resets the attack mode', () => {
+    const slug = { ...rifle, class: 'Shotgun', autofireMultiplier: null, modeId: 'slug', modeLabel: 'Slug', modeSwitch: 'free', modeActive: true };
+    const knife = { ...rifle, class: 'HeavyMelee', melee: true, magazine: null, rounds: null, autofireMultiplier: null, modeId: 'throw', modeLabel: 'Arremessar', modeSwitch: 'free', modeActive: true };
+    const aim = startAim('C1', 'Kaze', { ...slug, modes: [slug, knife] });
+    const thrown = aimWith({ ...aim, mode: 'ShotgunShell' }, 'throw');
+    expect(thrown.weapon.modeId).toBe('throw');
+    expect(thrown.mode).toBe('Single');
+    expect(thrown.base.modes).toHaveLength(2);
+  });
+
+  it('refuses destroyed weapons and asks for the bolt', () => {
+    expect(cannotFire({ ...rifle, destroyed: true })).toMatch(/Destruída|Destroyed/);
+    expect(cannotFire({ ...rifle, jammed: true, bolt: true })).toMatch(/Ferrolho|Bolt/);
   });
 
   it('starts without a target and never aims at the shooter', () => {

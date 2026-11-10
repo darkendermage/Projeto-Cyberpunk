@@ -9,13 +9,18 @@ namespace CyberpunkDb.Application.Encounters.Combat;
 
 public sealed record DamageOutcome(Combatant Combatant, int Sp, int Through, WoundState Before, WoundState After, IReadOnlyList<string> Notes);
 
+// weapon-rules.json on a hit: Unconscious at 1 HP instead of lower, no Critical Injury, no ablation or a different one
+public sealed record HitRules(bool Knockout, bool NoCrit, bool NoAblation, int? Ablation);
+
 // NPC side of damage/crits/Death Saves/healing. Same math (DamageMath) and tables as the sheet (CP:R p.186-188).
 public sealed class NpcCombat(CharacterRuleBook rules, CharacterCalculator calculator)
 {
+    public const string Unconscious = "Inconsciente";
+
     public WoundState Wound(Combatant c) => calculator.WoundStateFor(c.Hp, c.Snapshot!.MaxHp);
 
     // CP:R p.186
-    public DamageOutcome Damage(Combatant c, int amount, InjuryLocation location, bool halveArmor, bool bypassArmor, bool fromAttack)
+    public DamageOutcome Damage(Combatant c, int amount, InjuryLocation location, bool halveArmor, bool bypassArmor, bool fromAttack, HitRules? hitRules = null)
     {
         var notes = new List<string>();
         var before = Wound(c);
@@ -25,9 +30,14 @@ public sealed class NpcCombat(CharacterRuleBook rules, CharacterCalculator calcu
         var cracked = c.Injuries.Any(i => i.Name.Equals("Cracked Skull", StringComparison.OrdinalIgnoreCase));
         var through = DamageMath.Through(amount, sp, head, cracked);
         var next = c with { Hp = Math.Max(0, c.Hp - through), Stabilized = c.Stabilized && c.Hp - through >= 1 };
-        if (through > 0 && !bypassArmor)
+        if (hitRules?.Knockout == true && c.Hp >= 1 && c.Hp - through < 1)
         {
-            var ablation = rules.Document.Combat.AblationPerDamagingHit.Value;
+            next = next with { Hp = 1, Conditions = c.Conditions.Append(Unconscious).Distinct().ToList() };
+            notes.Add(L.T($"{c.Name} cai Inconsciente com 1 HP.", $"{c.Name} drops Unconscious at 1 HP."));
+        }
+        if (through > 0 && !bypassArmor && hitRules?.NoAblation != true)
+        {
+            var ablation = hitRules?.Ablation ?? rules.Document.Combat.AblationPerDamagingHit.Value;
             next = head ? next with { SpHead = Math.Max(0, next.SpHead - ablation) } : next with { SpBody = Math.Max(0, next.SpBody - ablation) };
         }
         if (fromAttack && before == WoundState.Mortally && through > 0)

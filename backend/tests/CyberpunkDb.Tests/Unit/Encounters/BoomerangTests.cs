@@ -27,8 +27,8 @@ public class BoomerangTests
     [Fact]
     public void The_rules_list_the_boomerang()
     {
-        var rule = Rules.Document.SpecialWeapons.Value["ranger-combat-boomerang"];
-        rule.ThrownOnly.Should().BeTrue();
+        var rule = WeaponRuleBook.Embedded.For("ranger-combat-boomerang")!.Throw!;
+        rule.Only.Should().BeTrue();
         rule.HalvesArmor.Should().BeTrue();
         rule.ReturnsWith.Should().Be("targeting-scope");
     }

@@ -67,6 +67,10 @@ public sealed record Combatant
     public List<string> Jammed { get; init; } = [];
     // Ranger boomerang etc, until it comes back or gets picked up
     public List<string> Thrown { get; init; } = [];
+    // weapon key -> mode switched on with an Action (Hypurrburst, AVAR railgun...). PCs keep this on the sheet.
+    public Dictionary<string, string> Modes { get; init; } = [];
+    // destroyed beyond repair (GunMart Special on a natural 1, Teen Dreem...). PCs keep this on the sheet.
+    public List<string> Destroyed { get; init; } = [];
     // "spotWeakness", "damageDeflection"; cleared each Round
     public List<string> RoundFlags { get; init; } = [];
 }
@@ -112,6 +116,9 @@ public sealed record CombatWeapon
     public bool? HalvesArmor { get; init; }
     // generic enemies: STAT + skill, without the d10
     public int? AttackBase { get; init; }
+    // catalog weapons: weapon-rules.json entry and BODY requirement
+    public string? Slug { get; init; }
+    public int? MinBody { get; init; }
 }
 
 public sealed record CombatInjury(string Name, InjuryLocation Location, string Effect, bool DeathSave, int? ActionPenalty, int? MovePenalty);

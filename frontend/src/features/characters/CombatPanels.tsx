@@ -186,7 +186,10 @@ export function WeaponsPanel({ detail, run, busy, locked }: Props) {
                 <Fragment key={w.instanceId}>
                 <tr className={w.equipped ? undefined : styles.dim}>
                   <td>
-                    <div>{tv(w.name)}{w.quality !== 'Standard' && <span className={styles.tag} title={QUALITY_LABEL[w.quality]}>{w.quality === 'Excellent' ? 'Excellent' : 'Poor'}</span>}</div>
+                    <div>
+                      {tv(w.name)}{w.quality !== 'Standard' && <span className={styles.tag} title={QUALITY_LABEL[w.quality]}>{w.quality === 'Excellent' ? 'Excellent' : 'Poor'}</span>}
+                      {w.destroyed && <span className={styles.tag}>{t('Destruída', 'Destroyed')}</span>}
+                    </div>
                     <div className={styles.source}>
                       {w.skillName}{w.autofireMultiplier ? ` · Autofire ${w.autofireMultiplier} (base ${w.autofireTotal})` : ''}
                       {w.attachmentSlots > 0 ? t(` · anexos ${w.attachments.length}/${w.attachmentSlots}`, ` · attachments ${w.attachments.length}/${w.attachmentSlots}`) : ''}
@@ -213,6 +216,25 @@ export function WeaponsPanel({ detail, run, busy, locked }: Props) {
                         <IconButton label={t(`Recarregar ${tv(w.name)}`, `Reload ${tv(w.name)}`)} disabled={busy || (w.magazine != null && w.loadedRounds >= w.magazine)}
                           onClick={() => run('weapons/reload', { instanceId: w.instanceId })}><RotateCcw size={14} /></IconButton>
                         {w.loadedAmmo && <span className={styles.source}>{w.loadedAmmo}</span>}
+                        {(w.extraMagazines ?? []).map((m) => (
+                          <Button key={m.id} variant="ghost" icon={<RotateCcw size={14} />} disabled={busy || m.rounds >= m.capacity}
+                            title={m.refill ? t('Recarregar a bateria (sem gastar item)', 'Recharge (no item spent)') : t('Recarregar com a munição do inventário', 'Reload from the inventory ammo')}
+                            onClick={() => run('weapons/reload', { instanceId: w.instanceId, magazine: m.id })}>
+                            {m.label} {m.rounds}/{m.capacity}
+                          </Button>
+                        ))}
+                      </div>}
+                      {(w.switchModes || w.destroyed) && <div className={styles.row}>
+                        {w.switchModes && (
+                          <Select aria-label={t(`Modo de ${tv(w.name)}`, `${tv(w.name)} mode`)} disabled={busy} value={w.mode ?? w.switchModes[0].id}
+                            onChange={(e) => run('weapons/mode', { instanceId: w.instanceId, mode: e.target.value })}>
+                            {w.switchModes.map((m) => <option key={m.id} value={m.id}>{m.label}</option>)}
+                          </Select>
+                        )}
+                        {w.destroyed && (
+                          <Button variant="ghost" disabled={busy} title={t('A arma foi refeita ou substituída', 'The weapon was rebuilt or replaced')}
+                            onClick={() => run('weapons/repair', { instanceId: w.instanceId })}>{t('Marcar como consertada', 'Mark as repaired')}</Button>
+                        )}
                       </div>}
                     </td>
                   </tr>

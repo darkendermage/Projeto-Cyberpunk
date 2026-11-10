@@ -105,6 +105,12 @@ public sealed class CharactersController(CharacterService characters, EncounterS
     [HttpPost("{id:int}/weapons/reload")]
     public Task<CharacterDetailDto> Reload(int id, ReloadRequest r, CancellationToken ct) => characters.ReloadAsync(id, r, ct);
 
+    [HttpPost("{id:int}/weapons/mode")]
+    public Task<CharacterDetailDto> WeaponMode(int id, WeaponModeRequest r, CancellationToken ct) => characters.SetWeaponModeAsync(id, r, ct);
+
+    [HttpPost("{id:int}/weapons/repair")]
+    public Task<CharacterDetailDto> RepairWeapon(int id, WeaponRepairRequest r, CancellationToken ct) => characters.RepairWeaponAsync(id, r, ct);
+
     [HttpPost("{id:int}/balance")]
     public Task<CharacterDetailDto> AdjustBalance(int id, AdjustBalanceRequest r, CancellationToken ct) => characters.AdjustBalanceAsync(id, r, ct);
 

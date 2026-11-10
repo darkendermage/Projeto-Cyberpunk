@@ -1,6 +1,7 @@
 using CyberpunkDb.Application.Characters.Creation;
 using CyberpunkDb.Application.Characters.Rules;
 using CyberpunkDb.Application.Characters.Validation;
+using CyberpunkDb.Application.Encounters.Rules;
 using CyberpunkDb.Application.Npcs;
 using CyberpunkDb.Domain.Enums;
 using CyberpunkDb.Application.Localization;
@@ -247,25 +248,38 @@ public sealed class InventoryOperations(CharacterRuleBook rules, CyberwareOperat
 
     // weapons
 
-    // Autofire / Suppressive Fire cost 10 bullets (CP:R p.173-174)
+    // Autofire / Suppressive Fire cost 10 bullets (CP:R p.173-174) unless the combat table says how many the attack
+    // used. Magazine: an extra one from weapon-rules.json.
     public CharacterSheet Fire(CharacterSheet sheet, FireRequest request, CharacterChange change)
     {
         var entry = Find(sheet, request.InstanceId);
         var item = change.Item(entry.ItemId);
         if (item.Weapon is not { } w || w.Calibers.Count == 0) throw CharacterChange.Refuse("instanceId", L.T($"{item.Name} não usa munição.", $"{item.Name} doesn't use ammo."));
         var state = entry.Weapon ?? new WeaponState();
+        var weaponRule = WeaponRuleBook.Embedded.For(item.Slug);
 
         int rounds;
         if (request.Mode == FireMode.Single)
             rounds = request.Rounds ?? 1;
         else
         {
-            if (w.AutofireMultiplier is null)
+            // a mode can add Autofire (ModFire 10X as an SMG)
+            if (w.AutofireMultiplier is null && weaponRule?.Modes.Any(m => m.AutofireMultiplier is not null) != true)
                 throw CharacterChange.Refuse("mode", L.T($"{item.Name} não tem Autofire, então não faz {ModeLabel(request.Mode)}.", $"{item.Name} has no Autofire, so it can't do {ModeLabel(request.Mode)}."));
             var rule = request.Mode == FireMode.Autofire ? rules.Document.Combat.Autofire : null;
-            rounds = rule?.Value.Bullets ?? rules.Document.Combat.SuppressiveFire.Value.Bullets;
+            rounds = request.Rounds ?? rule?.Value.Bullets ?? rules.Document.Combat.SuppressiveFire.Value.Bullets;
         }
         if (rounds < 1) throw CharacterChange.Refuse("rounds", L.T("Informe quantas balas foram usadas.", "Enter how many rounds were used."));
+        if (request.Magazine is { } magazineId)
+        {
+            var magazine = WeaponRuleBook.Embedded.Magazine(item.Slug, magazineId)
+                           ?? throw CharacterChange.Refuse("magazine", L.T($"{item.Name} não tem esse pente.", $"{item.Name} has no such magazine."));
+            var have = ExtraRounds(state, magazine);
+            if (have < rounds)
+                throw CharacterChange.Refuse("rounds", L.T($"{item.Name} ({magazine.Label}): precisa de {rounds}, há {have}.", $"{item.Name} ({magazine.Label}): needs {rounds}, there are {have}."));
+            change.Log(CharacterEventKind.Combat, "fire", $"{item.Name} ({magazine.Label}): {ModeLabel(request.Mode)} ({rounds}).", -rounds, have.ToString(), (have - rounds).ToString());
+            return Replace(sheet, entry with { Weapon = state with { Magazines = new Dictionary<string, int>(state.Magazines) { [magazineId] = have - rounds } } });
+        }
         if (state.LoadedRounds < rounds)
             throw CharacterChange.Refuse("rounds", L.T($"{ModeLabel(request.Mode)} precisa de {rounds} bala(s); há {state.LoadedRounds} no pente ", $"{ModeLabel(request.Mode)} needs {rounds} round(s); there are {state.LoadedRounds} in the magazine ") +
                                                    $"({(request.Mode == FireMode.Single ? "CP:R p.170" : rules.Document.Combat.Autofire.Reference)}).");
@@ -288,6 +302,36 @@ public sealed class InventoryOperations(CharacterRuleBook rules, CyberwareOperat
         return Replace(sheet, entry with { Quality = request.Quality });
     }
 
+    // batteries and nets come full, ammo magazines start empty
+    private static int ExtraRounds(WeaponState state, MagazineRule magazine) =>
+        state.Magazines.TryGetValue(magazine.Id, out var rounds) ? rounds : magazine.Refill ? magazine.Capacity : 0;
+
+    // weapon-rules.json modes that stay on the weapon (Hypurrburst, AVAR railgun...)
+    public static CharacterSheet SetMode(CharacterSheet sheet, string instanceId, string mode, CharacterChange change)
+    {
+        var entry = Find(sheet, instanceId);
+        var item = change.Item(entry.ItemId);
+        var rule = WeaponRuleBook.Embedded.For(item.Slug)?.Modes.FirstOrDefault(m => m.Id == mode && m.Switch is not (null or "free"))
+                   ?? throw CharacterChange.Refuse("mode", L.T($"{item.Name} não tem o modo '{mode}' para ligar.", $"{item.Name} has no '{mode}' mode to switch to."));
+        var state = entry.Weapon ?? new WeaponState();
+        if (state.Mode == mode) return sheet;
+        var label = rule.Label?.ToString() ?? mode;
+        change.Log(CharacterEventKind.Combat, "weapon-mode", L.T($"{item.Name}: modo {label}.", $"{item.Name}: {label} mode."), null, state.Mode, mode);
+        return Replace(sheet, entry with { Weapon = state with { Mode = mode } });
+    }
+
+    public static CharacterSheet SetDestroyed(CharacterSheet sheet, string instanceId, bool destroyed, CharacterChange change)
+    {
+        var entry = Find(sheet, instanceId);
+        var item = change.Item(entry.ItemId);
+        if (item.Weapon is null) throw CharacterChange.Refuse("instanceId", L.T($"{item.Name} não é uma arma.", $"{item.Name} isn't a weapon."));
+        var state = entry.Weapon ?? new WeaponState();
+        if (state.Destroyed == destroyed) return sheet;
+        change.Log(CharacterEventKind.Combat, destroyed ? "weapon-destroyed" : "weapon-repaired",
+            destroyed ? L.T($"{item.Name} foi destruída.", $"{item.Name} was destroyed.") : L.T($"{item.Name} consertada.", $"{item.Name} repaired."));
+        return Replace(sheet, entry with { Weapon = state with { Destroyed = destroyed, Jammed = destroyed && state.Jammed } });
+    }
+
     public static CharacterSheet SetJammed(CharacterSheet sheet, string instanceId, bool jammed, CharacterChange change)
     {
         var entry = Find(sheet, instanceId);
@@ -303,12 +347,16 @@ public sealed class InventoryOperations(CharacterRuleBook rules, CyberwareOperat
     {
         var entry = Find(sheet, request.InstanceId);
         var item = change.Item(entry.ItemId);
+        if (request.Magazine is { } extra) return ReloadExtra(sheet, entry, item, request, extra, change);
         if (item.Weapon is not { } w || w.Calibers.Count == 0 || w.Magazine is not { } magazine)
             throw CharacterChange.Refuse("instanceId", L.T($"{item.Name} não tem pente para recarregar.", $"{item.Name} has no magazine to reload."));
 
+        // calibers an extra magazine takes (Tommyknocker shells) don't go in the main one
+        var claimed = WeaponRuleBook.Embedded.For(item.Slug)?.Magazines.SelectMany(m => m.Calibers).ToHashSet() ?? [];
+        var calibers = w.Calibers.Where(c => !claimed.Contains(c)).ToList() is { Count: > 0 } own ? own : w.Calibers.ToList();
         var compatible = sheet.Inventory
             .Where(e => e.Rounds > 0 && change.Catalog.Find(e.ItemId)?.Ammo is { } a
-                        && (e.Caliber is { } c ? w.Calibers.Contains(c) : a.Calibers.Any(w.Calibers.Contains)))
+                        && (e.Caliber is { } c ? calibers.Contains(c) : a.Calibers.Any(calibers.Contains)))
             .ToList();
         var ammo = request.AmmoInstanceId is { } id
             ? compatible.FirstOrDefault(e => e.InstanceId == id) ?? throw CharacterChange.Refuse("ammoInstanceId", L.T($"Essa munição não serve em {item.Name}.", $"That ammo doesn't fit {item.Name}."))
@@ -331,6 +379,52 @@ public sealed class InventoryOperations(CharacterRuleBook rules, CyberwareOperat
         return Replace(sheet, Find(sheet, entry.InstanceId) with
         {
             Weapon = state with { LoadedRounds = state.LoadedRounds + take, LoadedAmmoItemId = ammo.ItemId },
+        });
+    }
+
+    // Extra magazine from weapon-rules.json: a battery (or nets) just refills, ammo comes from the inventory.
+    private static CharacterSheet ReloadExtra(CharacterSheet sheet, InventoryEntry entry, CatalogItem item, ReloadRequest request, string id, CharacterChange change)
+    {
+        var magazine = WeaponRuleBook.Embedded.Magazine(item.Slug, id)
+                       ?? throw CharacterChange.Refuse("magazine", L.T($"{item.Name} não tem esse pente.", $"{item.Name} has no such magazine."));
+        var state = entry.Weapon ?? new WeaponState();
+        var have = ExtraRounds(state, magazine);
+        if (have >= magazine.Capacity)
+            throw CharacterChange.Refuse("magazine", L.T($"{item.Name}: {magazine.Label} já está cheio.", $"{item.Name}: {magazine.Label} is already full."));
+        if (magazine.Refill)
+        {
+            change.Log(CharacterEventKind.Combat, "reload", L.T($"{item.Name}: {magazine.Label} recarregada.", $"{item.Name}: {magazine.Label} reloaded."),
+                magazine.Capacity - have, have.ToString(), magazine.Capacity.ToString());
+            return Replace(sheet, entry with { Weapon = state with { Magazines = new Dictionary<string, int>(state.Magazines) { [id] = magazine.Capacity } } });
+        }
+
+        var compatible = sheet.Inventory
+            .Where(e => e.Rounds > 0 && change.Catalog.Find(e.ItemId)?.Ammo is { } a
+                        && (e.Caliber is { } c ? magazine.Calibers.Contains(c) : a.Calibers.Any(magazine.Calibers.Contains)))
+            .ToList();
+        var loadedItem = state.MagazineAmmo.TryGetValue(id, out var loadedId) ? loadedId : (int?)null;
+        var ammo = request.AmmoInstanceId is { } ammoId
+            ? compatible.FirstOrDefault(e => e.InstanceId == ammoId) ?? throw CharacterChange.Refuse("ammoInstanceId", L.T($"Essa munição não serve em {item.Name} ({magazine.Label}).", $"That ammo doesn't fit {item.Name} ({magazine.Label})."))
+            : compatible.OrderByDescending(e => e.ItemId == loadedItem).ThenByDescending(e => e.Rounds).FirstOrDefault()
+              ?? throw CharacterChange.Refuse("ammoInstanceId", L.T($"Sem munição para {item.Name} ({magazine.Label}) no inventário.", $"No ammo for {item.Name} ({magazine.Label}) in the inventory."));
+        if (have > 0 && loadedItem is { } previous && previous != ammo.ItemId)
+        {
+            sheet = ReturnRounds(sheet, previous, ammo.Caliber, have, change);
+            have = 0;
+            ammo = sheet.Inventory.First(e => e.InstanceId == ammo.InstanceId);
+        }
+        var take = Math.Min(magazine.Capacity - have, ammo.Rounds ?? 0);
+        sheet = Replace(sheet, ammo with { Rounds = ammo.Rounds - take });
+        change.Log(CharacterEventKind.Combat, "reload", L.T($"{item.Name} ({magazine.Label}) recarregada com {take} de {change.Item(ammo.ItemId).Name}.", $"{item.Name} ({magazine.Label}) reloaded with {take} of {change.Item(ammo.ItemId).Name}."),
+            take, have.ToString(), (have + take).ToString());
+        var current = Find(sheet, entry.InstanceId).Weapon ?? state;
+        return Replace(sheet, Find(sheet, entry.InstanceId) with
+        {
+            Weapon = current with
+            {
+                Magazines = new Dictionary<string, int>(current.Magazines) { [id] = have + take },
+                MagazineAmmo = new Dictionary<string, int>(current.MagazineAmmo) { [id] = ammo.ItemId },
+            },
         });
     }
 

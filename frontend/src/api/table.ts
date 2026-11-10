@@ -139,8 +139,11 @@ export function playerApi(seat: string) {
     /** The attacker's player rolls the pending Critical Injury. */
     critical: () => request<PlayerEncounter>('/table/play/critical', { method: 'POST', headers }),
     /** Reloads one of the seat's character's weapons (on its Turn when it is in the fight). */
-    reload: (weapon: string) => request<{ encounter: PlayerEncounter | null; character: PlayerCharacter | null }>
-        ('/table/play/reload', { method: 'POST', body: json({ weapon }), headers }),
+    reload: (weapon: string, magazine?: string | null) => request<{ encounter: PlayerEncounter | null; character: PlayerCharacter | null }>
+        ('/table/play/reload', { method: 'POST', body: json({ weapon, magazine: magazine ?? null }), headers }),
+    /** Switches a mode that stays on the weapon (an Action on its Turn when it is in the fight). */
+    switchMode: (weapon: string, mode: string) => request<{ encounter: PlayerEncounter | null; character: PlayerCharacter | null }>
+        ('/table/play/mode', { method: 'POST', body: json({ weapon, mode }), headers }),
     /** The player's own sheet, exported on their PC, for a seat without a character. */
     importCharacter: (file: unknown) => request<PlayerSeat>('/table/play/character/import', { method: 'POST', body: json(file), headers }),
     /** A player's image for the map (up to 2 MB, shrunk by prepareImage). */

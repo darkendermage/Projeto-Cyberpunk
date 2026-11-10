@@ -15,7 +15,8 @@ import { EmbeddedCharacter, type CharacterTab } from '../characters/CharacterPag
 import page from '../../styles/Page.module.css';
 import { AddCombatantsDialog } from './AddCombatantsDialog';
 import { AttackPanel, AttackResultView } from './AttackPanel';
-import { CONDITIONS, hpPercent, WOUND_LABEL, WOUND_TONE } from './combat';
+import { CONDITIONS, hpPercent, reloadsMain, weaponName, WOUND_LABEL, WOUND_TONE } from './combat';
+import { WeaponExtras } from './WeaponExtras';
 import { FighterSheet } from './FighterSheet';
 import { PendingCard } from '../table/PendingCard';
 import styles from './Combat.module.css';
@@ -191,9 +192,10 @@ function Table({ detail, rules }: { detail: EncounterDetail; rules: EncounterRul
                         {f.weapons.map((w) => (
                           <span key={w.key} className={styles.weaponChipGroup}>
                             <button type="button" className={clsx(styles.weaponChip, pick?.attackerId === f.id && pick.weaponKey === w.key && styles.weaponChipOn)}
+                              disabled={w.destroyed}
                               title={t('Atacar com esta arma: depois clique no alvo na fila', 'Attack with this weapon: then click the target in the queue')}
                               onClick={() => { setSelectedId(f.id); setPick({ attackerId: f.id, weaponKey: w.key, targetId: null }); }}>
-                              <Crosshair size={11} aria-hidden /> {tv(w.name)} +{w.attackTotal} · {tv(w.damage)}{w.rounds != null ? ` · ${w.rounds}/${w.magazine}` : ''}
+                              <Crosshair size={11} aria-hidden /> {weaponName(w)} +{w.attackTotal} · {tv(w.damage)}{w.rounds != null ? ` · ${w.rounds}/${w.magazine}` : ''}
                             </button>
                             {w.thrown && (
                               <button type="button" className={styles.weaponChip} title={t('Arremessada: pegar do chão', 'Thrown: pick it up')}
@@ -201,13 +203,17 @@ function Table({ detail, rules }: { detail: EncounterDetail; rules: EncounterRul
                                 {t('Pegar do chão', 'Pick up')}
                               </button>
                             )}
-                            {w.jammed && (
-                              <button type="button" className={styles.weaponChip} title={t('Travada: destravar gasta uma Ação (CP:R p.344)', 'Jammed: unjamming takes an Action (CP:R p.344)')}
-                                onClick={() => run(`combatants/${f.id}/unjam`, { weapon: w.key }, t('Destravada.', 'Unjammed.'))}>
-                                {t('Destravar', 'Unjam')}
+                            {w.jammed && !w.destroyed && (
+                              <button type="button" className={styles.weaponChip}
+                                title={w.bolt ? t('Ferrolho: uma Ação para preparar o próximo tiro', 'Bolt action: an Action to chamber the next round') : t('Travada: destravar gasta uma Ação (CP:R p.344)', 'Jammed: unjamming takes an Action (CP:R p.344)')}
+                                onClick={() => run(`combatants/${f.id}/unjam`, { weapon: w.key }, w.bolt ? t('Ferrolho pronto.', 'Bolt worked.') : t('Destravada.', 'Unjammed.'))}>
+                                {w.bolt ? t('Ferrolho', 'Work bolt') : t('Destravar', 'Unjam')}
                               </button>
                             )}
-                            {w.magazine != null && !w.melee && (
+                            <WeaponExtras weapon={w} chipClass={styles.weaponChip}
+                              onSwitch={(mode) => run(`combatants/${f.id}/mode`, { weapon: w.key, mode }, t('Modo trocado.', 'Mode switched.'))}
+                              onReload={(magazine) => run(`combatants/${f.id}/reload`, { weapon: w.key, magazine }, t('Recarregada.', 'Reloaded.'))} />
+                            {reloadsMain(w) && !w.destroyed && w.magazine != null && (
                               <button type="button" className={styles.weaponChip} disabled={(w.rounds ?? 0) >= w.magazine}
                                 aria-label={t(`Recarregar ${tv(w.name)}`, `Reload ${tv(w.name)}`)}
                                 title={(w.rounds ?? 0) >= w.magazine ? t('Pente cheio.', 'Full magazine.') : t('Recarregar (uma Ação)', 'Reload (an Action)')}

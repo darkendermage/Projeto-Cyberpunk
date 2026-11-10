@@ -337,6 +337,13 @@ export interface WeaponLine {
   attackBonuses?: { label: string; value: number }[] | null;
   /** Skill total plus the bonuses. */
   attackTotal?: number;
+  /** weapon-rules.json: the mode switched on (null = the first one) and the modes that stay on the weapon. */
+  mode?: string | null;
+  switchModes?: { id: string; label: string; switch: string }[] | null;
+  /** Extra magazines: Tommyknocker shells, Crowd Buster battery... */
+  extraMagazines?: { id: string; label: string; rounds: number; capacity: number; refill: boolean }[] | null;
+  /** Destroyed beyond repair (a GunMart Special's natural 1...). */
+  destroyed?: boolean;
 }
 
 export interface CyberLine {

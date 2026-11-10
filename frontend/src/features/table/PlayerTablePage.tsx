@@ -154,7 +154,7 @@ export function PlayerTablePage() {
   const queue = useMemo(() => encounter.data?.queue ?? [], [encounter.data]);
   const own = queue.find((f) => f.own) ?? null;
   const quick = useQuickAttack(
-    (aim, targetId) => api.attack({ weapon: aim.weapon.key, mode: aim.mode, targetIds: [targetId] }),
+    (aim, targetId) => api.attack({ weapon: aim.weapon.key, mode: aim.mode, targetIds: [targetId], weaponMode: aim.weapon.modeId ?? null }),
     (result) => toast.notify(result.attack ? attackSummary(result.attack)
       : result.pending?.step === 'Defense' ? t(`${result.pending.targetName} decide se esquiva…`, `${result.pending.targetName} chooses whether to dodge…`)
       : t('Dois 6! Falta rolar a Critical Injury.', 'Two 6s! The Critical Injury roll is next.')),
@@ -251,11 +251,19 @@ export function PlayerTablePage() {
   };
 
   // A reload: the fight (in one) or the character's weapons (out of one) come back from the server.
-  const reloadWeapon = (weapon: string) => void run(async () => {
-    const result = await api.reload(weapon);
+  const reloadWeapon = (weapon: string, magazine?: string) => void run(async () => {
+    const result = await api.reload(weapon, magazine);
     if (result.encounter) client.setQueryData(tableKeys.playerEncounter(token), result.encounter);
     if (result.character) client.setQueryData(tableKeys.playerCharacter(token), result.character);
     toast.notify(t('Recarregada.', 'Reloaded.'));
+  });
+
+  // Same as a reload: an Action on its Turn in a fight.
+  const switchMode = (weapon: string, mode: string) => void run(async () => {
+    const result = await api.switchMode(weapon, mode);
+    if (result.encounter) client.setQueryData(tableKeys.playerEncounter(token), result.encounter);
+    if (result.character) client.setQueryData(tableKeys.playerCharacter(token), result.character);
+    toast.notify(t('Modo trocado.', 'Mode switched.'));
   });
 
   // A roll with LUCK spends it on the sheet: the panel's LUCK left follows.
@@ -339,7 +347,7 @@ export function PlayerTablePage() {
           )}
           {scene && quick.aim && (
             <AimBar aim={quick.aim} busy={quick.busy} targetName={queue.find((f) => f.id === quick.aim!.targetId)?.name ?? null}
-              onMode={quick.mode} onFire={() => void quick.shoot()} onCancel={quick.cancel} />
+              onMode={quick.mode} onWeaponMode={quick.weaponMode} onFire={() => void quick.shoot()} onCancel={quick.cancel} />
           )}
           {scene && (
             <SceneStrip entries={strip} selected={selection.tokens} aim={quick.aim}
@@ -349,7 +357,8 @@ export function PlayerTablePage() {
                 ? { weapons: own.weapons ?? [], blocked: encounter.data?.activeId === own.id ? null : t('Aguarde seu turno para atacar.', 'Wait for your Turn to attack.') }
                 : null}
               onWeapon={(_e, w) => { if (own) quick.start(startAim(own.id, own.name, w)); }}
-              onReload={(_e, w) => reloadWeapon(w.key)}
+              onReload={(_e, w, magazine) => reloadWeapon(w.key, magazine)}
+              onSwitch={(_e, w, mode) => switchMode(w.key, mode)}
               onUnjam={(_e, w) => void run(async () => { client.setQueryData(tableKeys.playerEncounter(token), await api.unjam(w.key)); })}
               onPickUp={(_e, w) => void run(async () => { client.setQueryData(tableKeys.playerEncounter(token), await api.pickUp(w.key)); })} />
           )}
@@ -366,6 +375,7 @@ export function PlayerTablePage() {
             <CharacterPanel character={character.data ?? null} encounter={encounter.data ?? null} token={myToken} onRoll={roll} busy={armorBusy}
               onAim={(w, mode) => { if (own) quick.start({ ...startAim(own.id, own.name, w), mode }); }}
               onReload={reloadWeapon}
+              onSwitch={switchMode}
               onImport={(file) => void run(async () => {
                 // The file exported on the player's PC; the server checks the format and links it to this seat.
                 const content = await readCharacterFile(file);

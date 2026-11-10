@@ -418,6 +418,26 @@ public sealed class CharacterService(
         return await MutateAsync(id, version, c => InventoryOperations.SetJammed(c.Sheet, instanceId, jammed, c), ct);
     }
 
+    // weapon-rules.json modes that stay on the weapon
+    public Task<CharacterDetailDto> SetWeaponModeAsync(int id, WeaponModeRequest r, CancellationToken ct) =>
+        MutateAsync(id, r.Version, c => InventoryOperations.SetMode(c.Sheet, r.InstanceId, r.Mode, c), ct);
+
+    // called by the combat table, which checked the turn
+    internal async Task<CharacterDetailDto> SetWeaponModeAsync(int id, string instanceId, string mode, CancellationToken ct)
+    {
+        var version = (await SnapshotAsync(id, ct)).Version;
+        return await MutateAsync(id, version, c => InventoryOperations.SetMode(c.Sheet, instanceId, mode, c), ct);
+    }
+
+    internal async Task<CharacterDetailDto> SetWeaponDestroyedAsync(int id, string instanceId, bool destroyed, CancellationToken ct)
+    {
+        var version = (await SnapshotAsync(id, ct)).Version;
+        return await MutateAsync(id, version, c => InventoryOperations.SetDestroyed(c.Sheet, instanceId, destroyed, c), ct);
+    }
+
+    public Task<CharacterDetailDto> RepairWeaponAsync(int id, WeaponRepairRequest r, CancellationToken ct) =>
+        MutateAsync(id, r.Version, c => InventoryOperations.SetDestroyed(c.Sheet, r.InstanceId, false, c), ct);
+
     public Task<CharacterDetailDto> SetWeaponQualityAsync(int id, WeaponQualityRequest r, CancellationToken ct) =>
         MutateAsync(id, r.Version, c => InventoryOperations.SetQuality(c.Sheet, r, c), ct);
 

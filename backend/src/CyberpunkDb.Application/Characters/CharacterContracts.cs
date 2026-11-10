@@ -112,7 +112,9 @@ public sealed record EquipRequest(int Version, string InstanceId, ItemState Stat
 // HalveArmor: melee and Martial Arts (CP:R p.176)
 public sealed record DamageRequest(
     int Version, int Amount, InjuryLocation Location = InjuryLocation.Body, bool BypassArmor = false, string? Description = null,
-    bool HalveArmor = false);
+    bool HalveArmor = false,
+    // weapon-rules.json: Unconscious at 1 HP instead of lower, no ablation, ablation other than 1
+    bool Knockout = false, bool NoAblation = false, int? Ablation = null);
 
 public sealed record HealRequest(int Version, int Amount, string? Description = null);
 
@@ -131,14 +133,21 @@ public sealed record UpdateInjuryRequest(int Version, InjuryStatus Status, strin
 [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.JsonStringEnumConverter))]
 public enum FireMode { Single, Autofire, Suppressive }
 
-public sealed record FireRequest(int Version, string InstanceId, FireMode Mode = FireMode.Single, int? Rounds = null);
+// Rounds wins over the mode's default (the combat table sends what the attack used). Magazine: an extra one.
+public sealed record FireRequest(int Version, string InstanceId, FireMode Mode = FireMode.Single, int? Rounds = null, string? Magazine = null);
+
+// weapon-rules.json modes that stay on the weapon
+public sealed record WeaponModeRequest(int Version, string InstanceId, string Mode);
+
+// clears Destroyed once the weapon has been rebuilt (or replaced)
+public sealed record WeaponRepairRequest(int Version, string InstanceId);
 
 public sealed record RoleSplitRequest(int Version, string Role, Dictionary<string, int> Split);
 
 // CP:R p.344
 public sealed record WeaponQualityRequest(int Version, string InstanceId, WeaponQuality Quality);
 
-public sealed record ReloadRequest(int Version, string InstanceId, string? AmmoInstanceId = null);
+public sealed record ReloadRequest(int Version, string InstanceId, string? AmmoInstanceId = null, string? Magazine = null);
 
 public sealed record AdjustBalanceRequest(int Version, int Amount, string Reason);
 

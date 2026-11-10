@@ -148,11 +148,24 @@ public sealed record WeaponLine(
     bool Jammed = false,
     // Excellent quality, working Smartgun...
     IReadOnlyList<ValuePart>? AttackBonuses = null,
-    // for weapons with their own rules (combat-rules.json specialWeapons)
-    string? Slug = null)
+    // for weapons with their own rules (weapon-rules.json)
+    string? Slug = null,
+    // mode switched on, extra magazines (id -> rounds), destroyed, BODY needed to fire it
+    string? Mode = null,
+    IReadOnlyDictionary<string, int>? Magazines = null,
+    bool Destroyed = false,
+    int? MinBody = null,
+    // weapon-rules.json, spelled out for the sheet: extra magazines and the modes that stay on the weapon
+    IReadOnlyList<SheetMagazine>? ExtraMagazines = null,
+    IReadOnlyList<SheetWeaponMode>? SwitchModes = null)
 {
     public int AttackTotal => SkillTotal + (AttackBonuses?.Sum(p => p.Value) ?? 0);
 }
+
+public sealed record SheetMagazine(string Id, string Label, int Rounds, int Capacity, bool Refill);
+
+// Switch: "action", "move" or "minute"
+public sealed record SheetWeaponMode(string Id, string Label, string Switch);
 
 public sealed record CyberLine(
     string InstanceId,

@@ -38,7 +38,9 @@ public sealed record AttackRequest(
     // the crit 2d6 when rolled step by step (CritRoll is the sum)
     List<int>? CritDice = null,
     // wait for dodge / crit roll instead of rolling them right away
-    bool Interactive = false);
+    bool Interactive = false,
+    // weapon-rules.json mode (Slug/Shell, Burst, Throw...); null = the weapon's current one
+    string? WeaponMode = null);
 
 public sealed record ManualDamageRequest(
     int Version, int Amount, InjuryLocation Location = InjuryLocation.Body, bool BypassArmor = false, bool HalveArmor = false,
@@ -47,8 +49,10 @@ public sealed record EnvironmentDamageRequest(int Version, string EnvironmentId,
 public sealed record HealCombatantRequest(int Version, int Amount);
 // an Action (CP:R p.344)
 public sealed record UnjamRequest(int Version, string Weapon);
-// an Action (CP:R p.171)
-public sealed record ReloadCombatantRequest(int Version, string Weapon);
+// an Action (CP:R p.171). Magazine: an extra one from weapon-rules.json, null = the main one.
+public sealed record ReloadCombatantRequest(int Version, string Weapon, string? Magazine = null);
+// modes that stay on the weapon (Hypurrburst, AVAR railgun...): an Action, a Move Action or a minute
+public sealed record WeaponModeSwitchRequest(int Version, string Weapon, string Mode);
 // ablate or repair, within full SP
 public sealed record CombatantArmorRequest(int Version, Npcs.ArmorSlot Location, int Delta);
 public sealed record DeathSaveCombatantRequest(int Version, int? Roll = null);

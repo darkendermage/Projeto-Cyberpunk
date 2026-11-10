@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { QuickAttackResult } from '../../api/tableTypes';
-import { aimAt, type Aim } from './aim';
+import { aimAt, aimWith, type Aim } from './aim';
 
 // fire sends it (player or GM route); results and errors go back to the page.
 export function useQuickAttack(fire: (aim: Aim, targetId: string) => Promise<QuickAttackResult>, onDone: (result: QuickAttackResult) => void, onError: (error: unknown) => void) {
@@ -24,6 +24,7 @@ export function useQuickAttack(fire: (aim: Aim, targetId: string) => Promise<Qui
     start: (next: Aim) => setAim(next),
     target: (fighterId: string | null) => setAim((a) => (a ? aimAt(a, fighterId) : a)),
     mode: (mode: Aim['mode']) => setAim((a) => (a ? { ...a, mode } : a)),
+    weaponMode: (modeId: string) => setAim((a) => (a ? aimWith(a, modeId) : a)),
     cancel: () => setAim(null),
   };
 }

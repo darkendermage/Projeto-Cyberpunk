@@ -10,10 +10,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CyberpunkDb.Application.Table;
 
-public sealed record QuickAttackRequest(string Weapon, AttackMode Mode, List<string> TargetIds);
+// WeaponMode: weapon-rules.json mode (Slug/Shell, Burst, Throw...), null = the weapon's current one
+public sealed record QuickAttackRequest(string Weapon, AttackMode Mode, List<string> TargetIds, string? WeaponMode = null);
 
 // any fighter in the scene's fight
-public sealed record GmQuickAttackRequest(string AttackerId, string Weapon, AttackMode Mode, List<string> TargetIds);
+public sealed record GmQuickAttackRequest(string AttackerId, string Weapon, AttackMode Mode, List<string> TargetIds, string? WeaponMode = null);
 
 // Resolved like on the combat table; distance comes from the map. Area attacks need a template, so they stay on
 // the combat page.
@@ -31,7 +32,7 @@ public sealed class TableAttackService(IAppDbContext db, EncounterService encoun
         var visible = PlayerEncounters.For(detail, seat, state).Queue.Select(f => f.Id).ToHashSet();
         if (r.TargetIds.Any(id => !visible.Contains(id)))
             throw RequestValidationException.For("targetIds", L.T("Escolha um alvo que você vê no mapa.", "Pick a target you can see on the map."));
-        var result = await AttackAsync(detail, state, own.Id, r.Weapon, r.Mode, r.TargetIds, ct);
+        var result = await AttackAsync(detail, state, own.Id, r.Weapon, r.Mode, r.TargetIds, r.WeaponMode, ct);
         return result with { Attack = result.Attack is { } a ? TableAttacks.ForSeat(a) : null };
     }
 
@@ -41,7 +42,7 @@ public sealed class TableAttackService(IAppDbContext db, EncounterService encoun
         var scene = await db.Scenes.AsNoTracking().FirstOrDefaultAsync(s => s.Id == sceneId, ct)
                     ?? throw new NotFoundException(L.T("Cena não encontrada.", "Scene not found."));
         var (detail, state) = await FightAsync(scene, ct);
-        return await AttackAsync(detail, state, r.AttackerId, r.Weapon, r.Mode, r.TargetIds, ct);
+        return await AttackAsync(detail, state, r.AttackerId, r.Weapon, r.Mode, r.TargetIds, r.WeaponMode, ct);
     }
 
     private async Task<(EncounterDetailDto, SceneState)> FightAsync(Scene scene, CancellationToken ct)
@@ -54,13 +55,13 @@ public sealed class TableAttackService(IAppDbContext db, EncounterService encoun
     }
 
     private async Task<QuickAttackResult> AttackAsync(EncounterDetailDto detail, SceneState state, string attackerId, string weapon, AttackMode mode,
-        List<string> targetIds, CancellationToken ct)
+        List<string> targetIds, string? weaponMode, CancellationToken ct)
     {
         if (mode is AttackMode.Suppressive or AttackMode.Explosive)
             throw RequestValidationException.For("mode", L.T("Ataques em área ficam no formulário completo da tela de combate.", "Area attacks stay on the combat table's full form."));
         if (targetIds.Count == 0) throw RequestValidationException.For("targetIds", L.T("Escolha o alvo.", "Pick the target."));
         var attacker = detail.Queue.FirstOrDefault(f => f.Id == attackerId) ?? throw new NotFoundException(L.T("Atacante não está no combate.", "The attacker isn't in the fight."));
-        var view = attacker.Weapon(weapon) ?? throw RequestValidationException.For("weapon", L.T("Arma não encontrada.", "Weapon not found."));
+        var view = AttackResolver.SelectWeapon(attacker, weapon, weaponMode);
 
         int? range = null;
         if (!view.Melee)
@@ -72,7 +73,7 @@ public sealed class TableAttackService(IAppDbContext db, EncounterService encoun
         }
 
         // waits for dodge (REF 8+) and the crit roll
-        var after = await encounters.AttackAsync(detail.Id, new AttackRequest(detail.Version, attackerId, targetIds, weapon, mode, range, Interactive: true), ct);
+        var after = await encounters.AttackAsync(detail.Id, new AttackRequest(detail.Version, attackerId, targetIds, weapon, mode, range, Interactive: true, WeaponMode: weaponMode), ct);
         return after.LastAttack is { } done ? new QuickAttackResult(TableAttacks.From(after, done), null) : new QuickAttackResult(null, after.Pending);
     }
 

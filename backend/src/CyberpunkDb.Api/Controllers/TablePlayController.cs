@@ -170,6 +170,10 @@ public sealed class TablePlayController(
     [HttpPost("reload")]
     public async Task<PlayerReloadResult> Reload(PlayerWeaponRequest request, CancellationToken ct) => await turns.ReloadAsync(await SeatAsync(ct), request, ct);
 
+    // modes that stay on the weapon: an Action (or what the rule says) on its Turn in a fight
+    [HttpPost("mode")]
+    public async Task<PlayerReloadResult> Mode(PlayerWeaponRequest request, CancellationToken ct) => await turns.SwitchModeAsync(await SeatAsync(ct), request, ct);
+
     // costs an Action
     [HttpPost("unjam")]
     public async Task<PlayerEncounterDto> Unjam(PlayerWeaponRequest request, CancellationToken ct) => await turns.UnjamAsync(await SeatAsync(ct), request, ct);

@@ -24,6 +24,9 @@ public sealed class CombatOperations(CharacterRuleBook rules, CharacterCalculato
 
         var hp = before.Health.CurrentHp;
         var after = Math.Max(0, hp - through);
+        // stun weapons: Unconscious at 1 HP instead of lower
+        var knockedOut = request.Knockout && hp >= 1 && hp - through < 1;
+        if (knockedOut) after = 1;
         var where = slot == ArmorSlot.Head ? L.T("cabeça", "head") : "corpo";
         change.Log(CharacterEventKind.Combat, "damage",
             (request.Description is { Length: > 0 } d ? d + ": " : "") +
@@ -32,6 +35,11 @@ public sealed class CombatOperations(CharacterRuleBook rules, CharacterCalculato
 
         // natural healing only starts after stabilizing (CP:R p.222)
         var combat = sheet.Combat with { CurrentHp = after, Stabilized = through == 0 && sheet.Combat.Stabilized };
+        if (knockedOut)
+        {
+            combat = combat with { Conditions = combat.Conditions.Append("Inconsciente").Distinct().ToList() };
+            change.Notices.Add(L.T("Inconsciente com 1 HP (dano não letal).", "Unconscious at 1 HP (non-lethal damage)."));
+        }
         if (before.Health.WoundState == WoundState.Mortally && through > 0)
         {
             // Mortally Wounded + hit = crit and +1 Death Save Penalty (CP:R p.187)
@@ -42,8 +50,8 @@ public sealed class CombatOperations(CharacterRuleBook rules, CharacterCalculato
         }
         sheet = sheet with { Combat = combat };
 
-        if (through > 0 && !request.BypassArmor)
-            sheet = Ablate(sheet, slot, rules.Document.Combat.AblationPerDamagingHit.Value, L.T("dano que passou do SP", "damage that got past SP"), change);
+        if (through > 0 && !request.BypassArmor && !request.NoAblation)
+            sheet = Ablate(sheet, slot, request.Ablation ?? rules.Document.Combat.AblationPerDamagingHit.Value, L.T("dano que passou do SP", "damage that got past SP"), change);
 
         var now = calculator.WoundStateFor(after, before.Health.MaxHp);
         if (now != before.Health.WoundState)

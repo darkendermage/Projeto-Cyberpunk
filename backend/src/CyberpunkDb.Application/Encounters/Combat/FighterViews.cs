@@ -20,8 +20,24 @@ public sealed record WeaponView(
     WeaponQuality Quality = WeaponQuality.Standard, bool Jammed = false,
     // e.g. "Handgun 12", "Precision Attack +1", "Excellent +1"
     IReadOnlyList<ValuePart>? AttackParts = null,
-    // Ranger boomerang
-    bool ThrownOnly = false, bool Thrown = false, string? ReturnsWith = null);
+    // attacks by throwing and leaves the hand (Ranger boomerang, the Throw mode of melee weapons)
+    bool ThrownOnly = false, bool Thrown = false, string? ReturnsWith = null,
+    // weapon-rules.json: catalog slug, which mode this is, every mode, every magazine
+    string? Slug = null, string? ModeId = null, string? ModeLabel = null, string? ModeSwitch = null, bool ModeActive = true,
+    IReadOnlyList<WeaponView>? Modes = null, IReadOnlyList<MagazineView>? Magazines = null,
+    // extra magazine this mode fires from (null = the main one)
+    string? MagazineId = null,
+    bool Destroyed = false,
+    // bolt action: "jammed" after every shot until the bolt is worked
+    bool Bolt = false,
+    WeaponTraits? Traits = null)
+{
+    // null when the weapon has no such mode
+    public WeaponView? Pick(string? modeId) =>
+        modeId is null || (Modes is null && ModeId == modeId) ? this with { Modes = null } : Modes?.FirstOrDefault(m => m.ModeId == modeId);
+
+    public bool UsesAmmo => Magazine is not null && (!Melee || Traits?.MeleeCharges == true);
+}
 
 public sealed record InjuryView(string Name, InjuryLocation Location, string? Effect, bool DeathSave);
 
@@ -60,21 +76,6 @@ public sealed class FighterViews(CharacterRuleBook characterRules, CharacterCalc
 
     // player characters
 
-    // combat-rules.json specialWeapons. The boomerang is thrown, never swung, still halves SP.
-    private WeaponView Special(WeaponView v, string? slug, Combatant c)
-    {
-        if (slug is null || combatRules.Document.SpecialWeapons.Value?.GetValueOrDefault(slug) is not { } rule) return v;
-        return v with
-        {
-            Melee = rule.ThrownOnly ? false : v.Melee,
-            HalvesArmor = rule.HalvesArmor || v.HalvesArmor,
-            Rof = rule.Rof ?? v.Rof,
-            ThrownOnly = rule.ThrownOnly,
-            Thrown = c.Thrown.Contains(v.Key),
-            ReturnsWith = rule.ReturnsWith,
-        };
-    }
-
     public FighterView ForPc(Combatant c, CharacterDetailDto detail)
     {
         var r = detail.Report;
@@ -83,15 +84,20 @@ public sealed class FighterViews(CharacterRuleBook characterRules, CharacterCalc
         var body = r.Health.BodyForDerived;
         var cyberarm = r.Cyberware.Any(x => x.Slug.Equals("cyberarm", StringComparison.OrdinalIgnoreCase));
 
+        string SkillLabel(string id) => r.Skills.FirstOrDefault(s => s.SkillId == id && s.Specialization is null) is { } line ? L.SkillName(line.Name, line.NamePt) : id;
         var weapons = r.Weapons.Where(w => w.Equipped).Select(w =>
         {
             var bonus = w.AttackBonuses?.Sum(p => p.Value) ?? 0;
-            return new WeaponView(
+            var view = new WeaponView(
                 w.InstanceId, w.Name, w.Class, w.SkillId ?? "", w.AttackTotal, w.AutofireTotal + bonus, w.Damage ?? "", w.Rof ?? 1,
                 w.Magazine is null ? null : w.LoadedRounds, w.Magazine, w.AutofireMultiplier, w.SkillId == "melee-weapon", w.SkillId == "melee-weapon",
-                Quality: w.Quality, Jammed: w.Jammed,
+                Quality: w.Quality, Jammed: w.Jammed, Thrown: c.Thrown.Contains(w.InstanceId),
                 AttackParts: [new ValuePart(w.SkillName ?? w.SkillId ?? w.Name, w.SkillTotal), .. w.AttackBonuses ?? []]);
-        }).Select(v => Special(v, r.Weapons.First(x => x.InstanceId == v.Key).Slug, c)).ToList();
+            var bonuses = (w.AttackBonuses ?? []).Where(p => !p.Label.StartsWith(L.T("Qualidade Excellent", "Excellent Quality"), StringComparison.Ordinal)).ToList();
+            var context = new WeaponContext(id => Skill(id, SkillStat(id)), SkillLabel, body, bonuses, w.Mode,
+                id => w.Magazines?.TryGetValue(id, out var n) == true ? n : null, false, w.Destroyed, w.MinBody);
+            return WeaponModes.Build(view, w.Slug, context, WeaponRuleBook.Embedded);
+        }).ToList();
         var unarmed = Unarmed(body, cyberarm, Skill(Brawling, "DEX"),
             r.Skills.Where(s => s.SkillId == MartialArtsPrefix && s.Level > 0).Select(s => (s.Key, s.Specialization ?? "", s.Total)));
         // Precision Attack (CP:R p.146): sheet weapons already have it, unarmed attacks get it here.
@@ -145,11 +151,17 @@ public sealed class FighterViews(CharacterRuleBook characterRules, CharacterCalc
             _ => null,
         };
 
-        var weapons = s.Weapons.Select(w => new WeaponView(
-            w.Key, w.Name, w.Class, w.Skill, (w.AttackBase ?? Skill(w.Skill)) + (w.AttackBase is null ? 0 : penalty),
-            w.AutofireMultiplier is null ? null : Skill("autofire"), w.Damage, w.Rof,
-            w.Magazine is null ? null : c.Ammo.GetValueOrDefault(w.Key, w.Magazine.Value), w.Magazine, w.AutofireMultiplier, w.Melee, w.HalvesArmor ?? w.Melee, w.RangeDv, w.AutofireOnly,
-            Jammed: c.Jammed.Contains(w.Key))).ToList();
+        var weapons = s.Weapons.Select(w =>
+        {
+            var view = new WeaponView(
+                w.Key, w.Name, w.Class, w.Skill, (w.AttackBase ?? Skill(w.Skill)) + (w.AttackBase is null ? 0 : penalty),
+                w.AutofireMultiplier is null ? null : Skill("autofire"), w.Damage, w.Rof,
+                w.Magazine is null ? null : c.Ammo.GetValueOrDefault(w.Key, w.Magazine.Value), w.Magazine, w.AutofireMultiplier, w.Melee, w.HalvesArmor ?? w.Melee, w.RangeDv, w.AutofireOnly,
+                Jammed: c.Jammed.Contains(w.Key), Thrown: c.Thrown.Contains(w.Key));
+            var context = new WeaponContext(Skill, SkillLabel, s.Body, [], c.Modes.GetValueOrDefault(w.Key),
+                id => c.Ammo.TryGetValue(ExtraAmmoKey(w.Key, id), out var n) ? n : null, true, c.Destroyed.Contains(w.Key), w.MinBody);
+            return WeaponModes.Build(view, w.Slug, context, WeaponRuleBook.Embedded);
+        }).ToList();
         weapons.AddRange(Unarmed(s.Body, s.Cyberarm, Skill(Brawling),
             s.Skills.Keys.Where(k => k.StartsWith(MartialArtsPrefix + ":", StringComparison.OrdinalIgnoreCase)).Select(k => (k, k.Split(':')[1], Skill(k)))));
 
@@ -167,6 +179,12 @@ public sealed class FighterViews(CharacterRuleBook characterRules, CharacterCalc
             s.Stats.Select(x => new NamedValueDto(x.Key, x.Key.ToUpperInvariant(), x.Value)).ToList(),
             s.Skills.Select(x => new NamedValueDto(x.Key, SkillLabel(x.Key), Skill(x.Key))).OrderBy(x => x.Label, StringComparer.OrdinalIgnoreCase).ToList());
     }
+
+    // NPC ammo for an extra magazine (Tommyknocker shotgun, Crowd Buster battery...)
+    public static string ExtraAmmoKey(string weaponKey, string magazine) => $"{weaponKey}#{magazine}";
+
+    // the skill's own STAT for PCs without the skill
+    private string SkillStat(string id) => npcRules.FindSkill(id)?.Stat ?? "DEX";
 
     private string SkillLabel(string key)
     {
@@ -197,6 +215,7 @@ public sealed class FighterViews(CharacterRuleBook characterRules, CharacterCalc
             {
                 Key = $"w{line.Index}", Name = line.Name, Class = w.Class, Skill = skill, Damage = w.Damage ?? "1d6", Rof = w.Rof ?? 1,
                 Magazine = w.Magazine, AutofireMultiplier = w.AutofireMultiplier, Melee = w.Skill == WeaponSkill.MeleeWeapon,
+                Slug = catalog.Find(line.ItemId)?.Slug, MinBody = w.MinBody,
             });
         }
         var d = report.Derived;

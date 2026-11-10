@@ -1,0 +1,653 @@
+{
+  "about": "Armas que fogem do perfil padrão do livro, pela slug do catálogo. Cada modo herda o perfil do catálogo (e o 'base' da arma) e muda só o que declara. Modos 'free' são escolhidos a cada ataque; 'action', 'move' e 'minute' ficam ligados na arma até trocar de novo.",
+
+  "classFallbacks": {
+    "source": "Interface 5 p.116-119 (as metralhadoras citam tabelas de alcance e de Autofire que não estão no livro básico)",
+    "value": {
+      "MachineGun": {
+        "row": "assaultRifle", "autofireDv": "AssaultRifle",
+        "note": { "pt": "Metralhadora: alcance e Autofire pela tabela do Rifle de Assalto, como aproximação (as tabelas próprias são do Interface RED 5).", "en": "Machine gun: range and Autofire use the Assault Rifle table as an approximation (its own tables are in Interface RED 5)." }
+      }
+    }
+  },
+
+  "weapons": {
+    "air-pistol": {
+      "source": "CP:R p.347",
+      "base": {
+        "noCrit": true,
+        "effect": { "pt": "Sem dano: bola de tinta. Com tinta ácida, a SP da armadura no local atingido cai 1 a cada acerto.", "en": "No damage: a paint ball. Filled with acid, the SP of the armor in the location hit drops by 1 with each hit." }
+      }
+    },
+    "hello-cutie-modball-gun": {
+      "source": "12 Days of Cutiemas p.5",
+      "base": {
+        "effect": { "pt": "Efeito da ModBall carregada: Dazzle Dazzle age como Flashbang (só no alvo), Ouchie como Poison, Mega Ouchie como Biotoxin (CP:R p.345-346).", "en": "Effect of the loaded ModBall: Dazzle Dazzle acts as Flashbang (that target only), Ouchie as Poison, Mega Ouchie as Biotoxin (CP:R p.345-346)." }
+      },
+      "notes": [{ "pt": "Pode misturar até 5 ModBalls no tambor e escolher qual sai a cada tiro.", "en": "Up to 5 different ModBalls can be loaded; pick which one fires with each shot." }]
+    },
+    "duel-caster": {
+      "source": "Interface 3 p.73",
+      "notes": [{ "pt": "ROF 3 só se for a única arma disparada na Rodada; senão ROF 2. Com cartas comuns funciona como Poor Quality.", "en": "ROF 3 only if it's the only weapon fired this Round; otherwise ROF 2. Loaded with plain playing cards it acts as Poor Quality." }]
+    },
+    "faisal-s-escape-plan": {
+      "source": "Toggle's Temple p.3",
+      "notes": [{ "pt": "Puxar a lingueta (sem Ação) transforma a arma numa Smoke Grenade que precisa ser arremessada até o fim do turno.", "en": "Pulling the tab (no Action) turns it into a Smoke Grenade that must be thrown by the end of the Turn." }]
+    },
+    "micro-cutie-sanroo": {
+      "source": "Danger Gal Dossier p.145",
+      "modes": [
+        { "id": "normal", "label": { "pt": "Normal", "en": "Normal" }, "switch": "action", "damage": "2d6" },
+        {
+          "id": "hypurrburst", "label": { "pt": "Hypurrburst", "en": "Hypurrburst" }, "switch": "action",
+          "damage": "4d6", "rof": 1, "allRounds": true, "minRounds": 4, "noAimed": true,
+          "notes": [{ "pt": "Hypurrburst: gasta todas as balas do pente num tiro só e desliga com menos de 4 balas.", "en": "Hypurrburst: drains every round in the magazine into one shot and switches off below 4 rounds." }]
+        }
+      ]
+    },
+    "ps-e-tack-rapid-responder": {
+      "source": "12 Days of REDmas p.3",
+      "modes": [
+        { "id": "single", "label": { "pt": "Tiro único", "en": "Single shot" }, "switch": "free", "damage": "2d6" },
+        {
+          "id": "burst", "label": { "pt": "Burst (3 balas)", "en": "Burst (3 rounds)" }, "switch": "free",
+          "damage": "3d6", "rounds": 3, "ablation": 2,
+          "notes": [{ "pt": "Burst: dano de Pistola Pesada e a munição comum conta como Armor Piercing (ablação 2). Desliga com menos de 3 balas.", "en": "Burst: Heavy Pistol damage and basic ammo counts as Armor Piercing (ablates 2). Off below 3 rounds." }]
+        }
+      ]
+    },
+    "constitutional-arms-unity": {
+      "source": "Edgerunners Mission Kit p.32",
+      "base": { "aimedDamage": "4d6" }
+    },
+    "e-tack-public-defender": {
+      "source": "Black Chrome p.115",
+      "magazines": [{ "id": "battery", "label": { "pt": "Bateria", "en": "Battery" }, "capacity": 8, "refill": true }],
+      "modes": [
+        { "id": "lethal", "label": { "pt": "Letal", "en": "Lethal" }, "switch": "free" },
+        {
+          "id": "stun", "label": { "pt": "Menos que letal", "en": "Less-than-lethal" }, "switch": "free", "magazine": "battery", "nonLethal": true
+        }
+      ],
+      "notes": [{ "pt": "Sem gatilho: só funciona conectada a um Subdermal Grip.", "en": "No trigger: it only works connected to a Subdermal Grip." }]
+    },
+    "gunmart-smart-special": {
+      "source": "Black Chrome p.108",
+      "onFumble": "destroy",
+      "notes": [{ "pt": "Desarmada enquanto conectada aos Interface Plugs: a arma é destruída.", "en": "Disarmed while plugged into Interface Plugs: the weapon is destroyed." }]
+    },
+    "gunmart-special": { "source": "Black Chrome p.108", "onFumble": "destroy" },
+    "hello-cutie-gun-gun-friend-friend": {
+      "source": "12 Days of Cutiemas p.4",
+      "notes": [{ "pt": "Com a arma de uma mão instalada levantada, o gatilho dispara a arma instalada.", "en": "With the installed one-handed weapon popped up, the trigger fires the installed weapon instead." }]
+    },
+    "militech-fox-dual-ammo": {
+      "source": "Black Chrome p.113",
+      "magazines": [{ "id": "b", "label": { "pt": "Pente B", "en": "Magazine B" }, "capacity": 10, "calibers": ["HeavyPistol"] }],
+      "modes": [
+        { "id": "a", "label": { "pt": "Pente A", "en": "Magazine A" }, "switch": "free" },
+        { "id": "b", "label": { "pt": "Pente B", "en": "Magazine B" }, "switch": "free", "magazine": "b" }
+      ]
+    },
+    "militech-m-76e-omaha": {
+      "source": "Edgerunners Mission Kit p.33",
+      "modes": [
+        { "id": "normal", "label": { "pt": "Normal", "en": "Normal" }, "switch": "move" },
+        {
+          "id": "charged", "label": { "pt": "Carregada", "en": "Charged" }, "switch": "move", "rounds": 3, "minRounds": 1,
+          "notes": [{ "pt": "Carregada (Tech Rebuild): gasta até 3 balas por tiro e continua carregada até o fim do turno em que atirou.", "en": "Charged (Tech Rebuild): spends up to 3 rounds per shot and stays charged until the end of the Turn it fired." }]
+        }
+      ]
+    },
+    "militech-tactical-umbrella": {
+      "source": "Interface 2 p.20",
+      "modes": [
+        { "id": "pistol", "label": { "pt": "Pistola", "en": "Pistol" }, "switch": "free", "damage": "3d6" },
+        {
+          "id": "melee", "label": { "pt": "Corpo a corpo", "en": "Melee" }, "switch": "free",
+          "skill": "melee-weapon", "class": "HeavyMelee", "melee": true, "damage": "3d6", "rof": 2, "quality": "Excellent"
+        }
+      ]
+    },
+    "modfire-10x": {
+      "source": "Black Chrome p.114",
+      "modes": [
+        { "id": "pistol", "label": { "pt": "Pistola Pesada", "en": "Heavy Pistol" }, "switch": "minute", "damage": "3d6", "rof": 2, "noAutofire": true },
+        { "id": "smg", "label": { "pt": "SMG", "en": "SMG" }, "switch": "minute", "class": "Smg", "damage": "2d6", "rof": 1, "autofireMultiplier": 3, "magazine": "smg" },
+        { "id": "rifle", "label": { "pt": "Rifle de Assalto", "en": "Assault Rifle" }, "switch": "minute", "class": "AssaultRifle", "skill": "shoulder-arms", "damage": "5d6", "rof": 1, "autofireMultiplier": 4, "magazine": "rifle" }
+      ],
+      "magazines": [
+        { "id": "smg", "label": { "pt": "Pente de SMG", "en": "SMG magazine" }, "capacity": 30, "calibers": ["MediumPistol"] },
+        { "id": "rifle", "label": { "pt": "Pente de rifle", "en": "Rifle magazine" }, "capacity": 25, "calibers": ["Rifle"] }
+      ],
+      "notes": [{ "pt": "Trocar de configuração leva 1 minuto, sem teste, com as peças do estojo. Os pentes próprios usam a capacidade padrão de SMG e Rifle de Assalto (o livro não diz).", "en": "Switching configuration takes 1 minute, no Check, with the parts from the case. Its own magazines use the standard SMG and Assault Rifle capacity (the book doesn't say)." }]
+    },
+    "overlord-handcannon": {
+      "source": "Black Chrome p.106",
+      "notes": [{ "pt": "+1 em Facedown ao ameaçar com ela (a menos que o outro saiba que é uma arma ruim).", "en": "+1 to a Facedown when threatening with it (unless the other side knows it's a crap gun)." }]
+    },
+    "stun-gun": { "source": "CP:R p.349", "base": { "nonLethal": true } },
+    "con-arms-multi-ammo-pistol": {
+      "source": "12 Days of Gunmas p.3",
+      "notes": [{ "pt": "Pode misturar até 5 tipos de munição e escolher qual sai a cada tiro.", "en": "Up to 5 ammo types can be loaded; pick which one fires with each shot." }]
+    },
+    "hello-cutie-janus-hex": {
+      "source": "12 Days of Cutiemas p.5",
+      "notes": [{ "pt": "Alvo com olhos de carne: Resist Torture/Drugs DV15 ou −3 em ataques e Percepção visual por 1 hora (−1 se passar).", "en": "Target with meat eyes: Resist Torture/Drugs DV15 or −3 to attacks and visual Perception for 1 hour (−1 on a success)." }]
+    },
+    "magnum-opus-hellbringer": {
+      "source": "12 Days of Gunmas p.4",
+      "minBodyEffect": "jam",
+      "minBodyNote": { "pt": "Sem BODY 10, a Hellbringer trava depois de cada tiro (uma Ação para destravar).", "en": "Without BODY 10, the Hellbringer jams after every shot (an Action to unjam)." }
+    },
+    "malorian-arms-3516": {
+      "source": "CP:R p.348",
+      "notes": [{ "pt": "Só dispara conectada pelo Smartgun Link (Interface Plugs ou Subdermal Grip).", "en": "Only fires connected through its Smartgun Link (Interface Plugs or Subdermal Grip)." }]
+    },
+    "microwaver": {
+      "source": "CP:R p.348",
+      "base": {
+        "noCrit": true,
+        "effect": { "pt": "Sem dano: o alvo testa Cybertech DV15; se falhar, o Mestre desliga dois cyberwares ou eletrônicos por 1 minuto.", "en": "No damage: the target rolls Cybertech DV15; on a failure the GM shuts down two pieces of cyberware or electronics for a minute." }
+      }
+    },
+    "militech-big-boomer": {
+      "source": "Interface 5 p.123",
+      "base": { "autofire": { "dv": "Smg" } },
+      "notes": [{ "pt": "Tabelas 'Snubnose Pistol' e Autofire 'Machine Pistol' do Interface RED 5: aproximadas pela Pistola e pelo SMG.", "en": "Interface RED 5 'Snubnose Pistol' range and 'Machine Pistol' Autofire tables: approximated by the Pistol and SMG ones." }]
+    },
+    "militech-crusher": { "source": "12 Days of Gunmas p.4", "base": { "shells": "only" } },
+    "militech-crusher-207x": { "source": "Edgerunners Mission Kit p.32", "base": { "shells": "only" } },
+    "militech-perseus": {
+      "source": "Black Chrome p.112",
+      "notes": [{ "pt": "Se disparou na Rodada anterior, vira ROF 2.", "en": "If it was fired during the previous Round, it's ROF 2." }]
+    },
+    "nat-s-long-barreled-pistol": {
+      "source": "12 Days of REDmas p.3",
+      "notes": [{ "pt": "Tem tabela de alcance própria (Rusted Chrome); aqui usa a da Pistola como aproximação.", "en": "Has its own range table (Rusted Chrome); the Pistol table is used here as an approximation." }]
+    },
+    "pursuit-security-bouncer": {
+      "source": "Black Chrome p.97",
+      "modes": [
+        {
+          "id": "baton", "label": { "pt": "Stun baton", "en": "Stun baton" }, "switch": "free",
+          "skill": "melee-weapon", "class": "MediumMelee", "melee": true, "damage": "2d6", "rof": 2, "nonLethal": true, "meleeCharges": true
+        },
+        {
+          "id": "microwaver", "label": { "pt": "Microwaver", "en": "Microwaver" }, "switch": "free", "rof": 1, "noCrit": true,
+          "effect": { "pt": "Sem dano: o alvo testa Cybertech DV15; se falhar, o Mestre desliga dois cyberwares ou eletrônicos por 1 minuto.", "en": "No damage: the target rolls Cybertech DV15; on a failure the GM shuts down two pieces of cyberware or electronics for a minute." }
+        }
+      ],
+      "notes": [{ "pt": "Os dois lados gastam carga da mesma bateria de 8.", "en": "Both sides drain the same 8-charge battery." }]
+    },
+    "sanroo-hello-cutie-ultra-k8": {
+      "source": "Black Chrome p.118",
+      "modes": [
+        { "id": "pistol", "label": { "pt": "Pistola Muito Pesada", "en": "Very Heavy Pistol" }, "switch": "action", "damage": "4d6", "rof": 1, "noAutofire": true },
+        { "id": "smg", "label": { "pt": "SMG Pesada", "en": "Heavy SMG" }, "switch": "action", "class": "HeavySmg", "damage": "3d6", "rof": 1, "autofireMultiplier": 3 }
+      ]
+    },
+    "scrambler": {
+      "source": "Tales of the RED p.110",
+      "base": {
+        "noCrit": true,
+        "effect": { "pt": "Sem dano: desliga um Biodrone por completo (Biodrone+, Biodrone DJ e não-Biodrones não são afetados).", "en": "No damage: shuts a Biodrone down completely (Biodrone+, Biodrone DJ and non-Biodrones are unaffected)." }
+      }
+    },
+    "shrieker": {
+      "source": "CP:R p.349",
+      "base": {
+        "noCrit": true,
+        "effect": { "pt": "Sem dano: o alvo testa Resist Torture/Drugs DV15; se falhar, sofre Damaged Ear.", "en": "No damage: the target rolls Resist Torture/Drugs DV15; on a failure they suffer Damaged Ear." }
+      },
+      "notes": [{ "pt": "Quem dispara sem proteção auditiva sofre Damaged Ear.", "en": "Firing it without ear protection gives the user Damaged Ear." }]
+    },
+    "techtronika-rt-46-burya": {
+      "source": "Edgerunners Mission Kit p.33",
+      "notes": [{ "pt": "Sem Muscle & Bone Lace ou Cyberarm, quem dispara sofre Broken Arm. O Tech Rebuild carrega sem Move Action.", "en": "Without Muscle & Bone Lace or a Cyberarm, the shooter suffers Broken Arm. Its Tech Rebuild charges without a Move Action." }]
+    },
+    "tommyknocker": {
+      "source": "Black Chrome p.123",
+      "magazines": [{ "id": "shotgun", "label": { "pt": "Escopeta", "en": "Shotgun" }, "capacity": 2, "calibers": ["Slug", "ShotgunShell"] }],
+      "modes": [
+        { "id": "pistol", "label": { "pt": "Pistola", "en": "Pistol" }, "switch": "free", "damage": "4d6" },
+        { "id": "shotgun", "label": { "pt": "Escopeta", "en": "Shotgun" }, "switch": "free", "class": "Shotgun", "skill": "shoulder-arms", "damage": "5d6", "quality": "Poor", "magazine": "shotgun" }
+      ],
+      "minBodyNote": { "pt": "Sem BODY 10 e segurando com uma mão só, a Tommyknocker voa 6 m depois do tiro, para onde o Mestre escolher.", "en": "Without BODY 10 and held in one hand, the Tommyknocker flies 6 m away after the shot, wherever the GM chooses." }
+    },
+    "ww1-rifle-pistol-conversion": { "source": "Black Chrome+ p.4", "afterShot": "bolt" },
+    "fire-extinguisher": {
+      "source": "Hope Reborn p.34",
+      "base": {
+        "maxRange": 6, "noCrit": true,
+        "effect": { "pt": "Sem dano em pessoas: um tiro apaga a condição On Fire; contra um incêndio, causa dano ao fogo.", "en": "No damage to people: one shot ends the On Fire condition; against a blaze, it damages the fire." }
+      }
+    },
+
+    "arasaka-hjke-11-yukimura": {
+      "source": "Edgerunners Mission Kit p.31",
+      "base": { "rounds": 3, "minRounds": 1, "shortDamage": "2d6" },
+      "notes": [{ "pt": "Smart Rebuild: tiro de ricochete com −4 (o tiro mirado ignora esse −4).", "en": "Smart Rebuild: ricochet shots at −4 (an Aimed Shot ignores that −4)." }]
+    },
+    "arasaka-tki-20-shingen": {
+      "source": "Edgerunners Mission Kit p.32",
+      "base": { "rounds": 3, "minRounds": 1, "shortDamage": "2d6" }
+    },
+    "big-dreem": {
+      "source": "Black Chrome+ p.3",
+      "notes": [{ "pt": "Depois de disparar, continua em Autofire nos 2 turnos seguintes (mesmo largada): sem uma Ação para mirar, usa base 10 e o Mestre escolhe os alvos.", "en": "Once fired, it keeps Autofiring for the next 2 turns (even if dropped): unless an Action aims it, it uses a base of 10 and the GM picks the targets." }]
+    },
+    "fed-arms-pepper-shaker": {
+      "source": "Black Chrome p.105",
+      "base": { "noAimed": true, "autofire": { "bullets": 6 } }
+    },
+    "malorian-sub-flechette-gun": { "source": "12 Days of Gunmas p.4", "base": { "ablation": 4 } },
+    "militech-mastiff-smg": {
+      "source": "Black Chrome p.113",
+      "magazines": [{ "id": "shotgun", "label": { "pt": "Escopeta", "en": "Shotgun" }, "capacity": 3, "calibers": ["Slug", "ShotgunShell"] }],
+      "modes": [
+        { "id": "smg", "label": { "pt": "SMG", "en": "SMG" }, "switch": "free", "damage": "2d6" },
+        { "id": "shotgun", "label": { "pt": "Escopeta", "en": "Shotgun" }, "switch": "free", "class": "Shotgun", "skill": "shoulder-arms", "damage": "5d6", "noAutofire": true, "magazine": "shotgun" }
+      ]
+    },
+    "mustang-arms-rodeo": {
+      "source": "Toggle's Temple p.7",
+      "base": { "damage": "3d6", "autofire": { "check": { "skill": "handgun", "dv": 15, "failMultiplier": 2 } } }
+    },
+    "teen-dreem": {
+      "source": "12 Days of Gunmas p.6",
+      "base": { "autofire": { "allRounds": true, "minRounds": 2, "destroys": true } },
+      "notes": [{ "pt": "Autofire e Suppressive Fire esvaziam o pente e destroem a arma.", "en": "Autofire and Suppressive Fire empty the magazine and destroy the weapon." }]
+    },
+    "arasaka-takanami-smg": {
+      "source": "Interface 5 p.116",
+      "notes": [{ "pt": "Tabela 'Subcompact SMG' do Interface RED 5: aproximada pela do SMG.", "en": "Interface RED 5 'Subcompact SMG' table: approximated by the SMG one." }]
+    },
+    "scatter-ratter": {
+      "source": "Interface 5 p.118",
+      "base": { "row": "smg", "autofire": { "dv": "Smg" } },
+      "notes": [{ "pt": "Não faz tiro único se usou Autofire no turno anterior; se fez tiro único no turno anterior, conta como Excellent Quality.", "en": "Can't fire a Single Shot if it Autofired the previous Turn; after a Single Shot the previous Turn it counts as Excellent Quality." }]
+    },
+
+    "arasaka-neo-rapid-assault-16": {
+      "source": "Interface 5 p.116",
+      "base": { "autofire": { "dv": "Smg" } },
+      "notes": [{ "pt": "Autofire 'Machine Pistol' do Interface RED 5: aproximado pela tabela do SMG.", "en": "Interface RED 5 'Machine Pistol' Autofire: approximated by the SMG table." }]
+    },
+    "budget-arms-carnage": {
+      "source": "Edgerunners Mission Kit p.32",
+      "minBodyNote": { "pt": "Sem BODY 10, quem dispara sofre Torn Muscle (se ainda não tiver).", "en": "Without BODY 10, the shooter suffers Torn Muscle (if they don't have it yet)." }
+    },
+    "con-arms-hurricane-assault": {
+      "source": "CP:R p.348",
+      "base": { "noAimed": true },
+      "notes": [{ "pt": "Recarregar leva duas Ações (dois turnos).", "en": "Reloading takes two Actions (two Turns)." }]
+    },
+    "faisal-s-dead-or-alive": {
+      "source": "Black Chrome p.104",
+      "magazines": [{ "id": "net", "label": { "pt": "Redes", "en": "Nets" }, "capacity": 2, "refill": true }],
+      "modes": [
+        { "id": "shotgun", "label": { "pt": "Escopeta", "en": "Shotgun" }, "switch": "free", "damage": "5d6" },
+        {
+          "id": "net", "label": { "pt": "Lança-redes", "en": "Net launcher" }, "switch": "free", "magazine": "net", "rof": 1, "maxRange": 25, "shells": "none", "noCrit": true,
+          "effect": { "pt": "Rede (15 HP): o alvo fica preso, sem Move Action, sem armas de duas mãos e com −2 em ações físicas. Sair: Contortionist DV13 (o preso) ou Brawling DV13 (qualquer um).", "en": "Net (15 HP): the target is grappled, no Move Action, no two-handed weapons and −2 to physical Actions. Escape: Contortionist DV13 (the target) or Brawling DV13 (anyone)." }
+        }
+      ]
+    },
+    "faisal-s-onlychance": {
+      "source": "Toggle's Temple p.8",
+      "notes": [{ "pt": "Vem carregada e não pode ser recarregada.", "en": "Comes loaded and can't be reloaded." }]
+    },
+    "flamethrower": {
+      "source": "CP:R p.348",
+      "base": { "shells": "only", "noCrit": true, "noAimed": true },
+      "notes": [{ "pt": "Quem é atingido pega fogo: 4 de dano no HP no fim de cada turno até gastar uma Ação para se apagar.", "en": "Targets hit are set on fire: 4 damage to HP at the end of each of their Turns until they spend an Action to put it out." }]
+    },
+    "kendachi-dragon": {
+      "source": "12 Days of Gunmas p.3",
+      "base": { "shells": "only", "noCrit": true, "noAimed": true },
+      "notes": [{ "pt": "Quem é atingido pega fogo: 4 de dano no HP no fim de cada turno até gastar uma Ação para se apagar.", "en": "Targets hit are set on fire: 4 damage to HP at the end of each of their Turns until they spend an Action to put it out." }]
+    },
+    "urbantech-burst-flamethrower": {
+      "source": "Woodchipper's Garage p.5",
+      "modes": [
+        {
+          "id": "flame", "label": { "pt": "Lança-chamas", "en": "Flamethrower" }, "switch": "free", "shells": "only", "noCrit": true, "noAimed": true,
+          "notes": [{ "pt": "Quem é atingido pega fogo: 4 de dano no HP no fim de cada turno até gastar uma Ação para se apagar.", "en": "Targets hit are set on fire: 4 damage to HP at the end of each of their Turns until they spend an Action to put it out." }]
+        },
+        {
+          "id": "fireball", "label": { "pt": "Bola de fogo", "en": "Fireball" }, "switch": "free",
+          "class": "GrenadeLauncher", "row": "grenadeLauncher", "damage": "6d6", "explosive": true, "allRounds": true, "minRounds": 1, "shells": "none", "noAimed": true,
+          "notes": [{ "pt": "Bola de fogo: esvazia o pente, explode como granada incendiária e quem dispara pega fogo na hora (Deadly).", "en": "Fireball: drains the magazine, explodes like an incendiary grenade and the shooter immediately catches fire (Deadly)." }]
+        }
+      ]
+    },
+    "gunmart-bubba-buster": {
+      "source": "Black Chrome p.106",
+      "notes": [{ "pt": "Três tiros em 1 minuto (20 Rodadas) entortam o cano e destroem a arma.", "en": "Three shots within 1 minute (20 Rounds) warp the barrel and destroy the weapon." }]
+    },
+    "hello-cutie-my-friend-ocelot": {
+      "source": "12 Days of Cutiemas p.6",
+      "base": { "shells": "none", "autofire": { "bullets": 4, "dv": "Smg" } },
+      "notes": [{ "pt": "Só recarrega quem tem a chave biométrica (fazer carinho, uma Ação).", "en": "Only a user with the biometric key can reload it (petting it, an Action)." }]
+    },
+    "kang-tao-l-69-zhuo": {
+      "source": "Edgerunners Mission Kit p.32",
+      "base": { "shells": "only", "shellDamage": "4d6", "rounds": 8 }
+    },
+    "ktech-techhammer": {
+      "source": "Black Chrome p.110",
+      "modes": [
+        { "id": "shotgun", "label": { "pt": "Escopeta", "en": "Shotgun" }, "switch": "free", "damage": "5d6" },
+        {
+          "id": "rocket", "label": { "pt": "Smart Rocket", "en": "Smart Rocket" }, "switch": "free",
+          "class": "RocketLauncher", "skill": "heavy-weapons", "row": "rocketLauncher", "damage": "8d6", "explosive": true, "shells": "none"
+        }
+      ],
+      "notes": [{ "pt": "O pente leva 4 slugs/shells ou 2 Smart Rockets; o laser dispensa o Targeting Scope.", "en": "The magazine holds 4 slugs/shells or 2 Smart Rockets; the laser replaces the Targeting Scope." }]
+    },
+    "militech-aegis": {
+      "source": "Woodchipper's Garage p.4",
+      "base": { "shells": "only", "shellDamage": "4d6", "nonLethal": true }
+    },
+    "midnight-arms-beast": {
+      "source": "Black Chrome p.111",
+      "minBodyNote": { "pt": "Sem BODY 10 (e sem estar montada), quem dispara sofre Broken Arm.", "en": "Without BODY 10 (and not mounted), the shooter suffers Broken Arm." },
+      "notes": [{ "pt": "Recarregar leva duas Ações (dois turnos).", "en": "Reloading takes two Actions (two Turns)." }]
+    },
+    "nomad-air-cannon": {
+      "source": "Woodchipper's Garage p.4",
+      "base": {
+        "shells": "only", "noCrit": true,
+        "effect": { "pt": "Sem dano: cobre os alvos com o líquido. Ácido tira 1 de SP de toda armadura; veneno ou biotoxina pede o teste de Resist Torture/Drugs da munição.", "en": "No damage: coats the targets in the liquid. Acid removes 1 SP from all armor; poison or biotoxin calls for that ammo's Resist Torture/Drugs Check." }
+      }
+    },
+    "rostovic-ulicni-unistitelj": {
+      "source": "Black Chrome p.117",
+      "modes": [
+        { "id": "shells", "label": { "pt": "Shells", "en": "Shells" }, "switch": "free", "shells": "only" },
+        {
+          "id": "scrap", "label": { "pt": "Com sucata", "en": "With scrap" }, "switch": "free", "shells": "only", "shellDamage": "4d6",
+          "notes": [{ "pt": "Encher os canos de sucata é uma Ação antes do tiro; o tiro limpa os três canos.", "en": "Stuffing the barrels with scrap is an Action before the shot; the shot clears all three barrels." }]
+        }
+      ]
+    },
+    "hello-cutie-fisher-kitty": {
+      "source": "12 Days of Cutiemas p.3",
+      "base": { "maxRange": 50, "noCrit": true },
+      "notes": [{ "pt": "O arpão fica preso mesmo sem passar da armadura. Como Ação, eletrifica: 2d6 direto no HP com 2 arpões presos, 3d6 com 3 ou mais.", "en": "The harpoon sticks even without getting past armor. As an Action it electrifies: 2d6 straight to HP with 2 harpoons in, 3d6 with 3 or more." }]
+    },
+
+    "arasaka-hjsh-18-masamune": {
+      "source": "Edgerunners Mission Kit p.32",
+      "base": { "rounds": 3, "minRounds": 1, "shortDamage": "4d6" }
+    },
+    "avar-prototype-arasaka": {
+      "source": "Black Chrome p.102",
+      "magazines": [{ "id": "battery", "label": { "pt": "Bateria", "en": "Battery" }, "capacity": 8, "refill": true }],
+      "modes": [
+        { "id": "standard", "label": { "pt": "Padrão", "en": "Standard" }, "switch": "action" },
+        {
+          "id": "railgun", "label": { "pt": "Railgun", "en": "Railgun" }, "switch": "action",
+          "noAutofire": true, "noAimed": true, "ignoreArmorBelow": 7, "drains": "battery",
+          "notes": [{ "pt": "Railgun: ignora armadura abaixo de SP7 e gasta uma carga da bateria além da bala. Pode trocar sem Ação antes da Iniciativa.", "en": "Railgun: ignores armor below SP7 and drains a battery charge on top of the round. Can switch for free before Initiative." }]
+        }
+      ]
+    },
+    "eagletech-survivalist": {
+      "source": "Black Chrome p.103",
+      "magazines": [{ "id": "crossbow", "label": { "pt": "Besta", "en": "Crossbow" }, "capacity": 1, "calibers": ["Arrow"] }],
+      "modes": [
+        { "id": "rifle", "label": { "pt": "Rifle", "en": "Rifle" }, "switch": "free", "skill": "archery", "damage": "5d6", "noAutofire": true },
+        { "id": "crossbow", "label": { "pt": "Besta", "en": "Crossbow" }, "switch": "free", "skill": "archery", "class": "Crossbow", "row": "bow", "damage": "4d6", "noAutofire": true, "magazine": "crossbow" }
+      ]
+    },
+    "everest-kodiak-hunter": { "source": "Toggle's Temple p.10", "afterShot": "bolt" },
+    "techtronika-spt32-grad": { "source": "Edgerunners Mission Kit p.33", "afterShot": "bolt" },
+    "metacorp-chaingun-victoria": {
+      "source": "Interface 5 p.116",
+      "base": { "autofire": { "bullets": 20 } },
+      "notes": [{ "pt": "Recarregar leva duas Ações.", "en": "Reloading takes two Reload Actions." }]
+    },
+    "midnight-arms-dawnmaker-amr": {
+      "source": "Interface 5 p.117",
+      "notes": [{ "pt": "Tabela 'Anti-materiel Rifle' do Interface RED 5: aproximada pela do Rifle de Precisão.", "en": "Interface RED 5 'Anti-materiel Rifle' table: approximated by the Sniper Rifle one." }]
+    },
+    "militech-mk-27-lmg": {
+      "source": "Interface 5 p.117",
+      "notes": [{ "pt": "Recarregar leva duas Ações.", "en": "Reloading takes two Reload Actions." }]
+    },
+    "militech-mountain-goat": {
+      "source": "Interface 5 p.117",
+      "notes": [{ "pt": "Tabela 'Battle Rifle' do Interface RED 5: aproximada pela do Rifle de Assalto.", "en": "Interface RED 5 'Battle Rifle' table: approximated by the Assault Rifle one." }]
+    },
+    "pursuit-security-crowd-buster": {
+      "source": "Black Chrome p.116",
+      "magazines": [{ "id": "battery", "label": { "pt": "Bateria", "en": "Battery" }, "capacity": 8, "refill": true }],
+      "modes": [
+        { "id": "rifle", "label": { "pt": "Rifle", "en": "Rifle" }, "switch": "free", "damage": "5d6" },
+        {
+          "id": "shrieker", "label": { "pt": "Shrieker", "en": "Shrieker" }, "switch": "free", "magazine": "battery", "noAutofire": true, "noAimed": true, "noCrit": true,
+          "effect": { "pt": "Sem dano: o alvo testa Resist Torture/Drugs DV15; se falhar, sofre Damaged Ear.", "en": "No damage: the target rolls Resist Torture/Drugs DV15; on a failure they suffer Damaged Ear." },
+          "notes": [{ "pt": "Sem proteção auditiva, quem dispara o shrieker sofre Damaged Ear (a arma vem com protetores).", "en": "Without ear protection, the shooter suffers Damaged Ear (ear protectors come with the weapon)." }]
+        }
+      ]
+    },
+    "rhinemetall-emg-86-railgun": {
+      "source": "CP:R p.349",
+      "base": { "noAimed": true, "ignoreArmorBelow": 11 },
+      "notes": [{ "pt": "Recarregar leva duas Ações (dois turnos).", "en": "Reloading takes two Actions (two Turns)." }]
+    },
+    "stolbovoy-st-5": {
+      "source": "12 Days of Gunmas p.6",
+      "notes": [{ "pt": "Travada: atirar tem 50% de chance de funcionar normalmente; de qualquer jeito a trava sai.", "en": "While jammed, firing has a 50% chance to work normally; either way the jam clears." }]
+    },
+    "techtronika-bmg-500": {
+      "source": "Black Chrome p.122",
+      "notes": [{ "pt": "Como Ação, o bipé apoiado conta como arma montada até mover.", "en": "As an Action, the deployed bipod makes it count as mounted until moved." }]
+    },
+    "tsunami-arms-helix": {
+      "source": "CP:R p.349",
+      "base": { "noAimed": true, "autofire": { "bullets": 20 } },
+      "notes": [{ "pt": "Recarregar leva duas Ações (dois turnos).", "en": "Reloading takes two Actions (two Turns)." }]
+    },
+    "tsunami-arms-helix-citrus": {
+      "source": "Interface 5 p.118",
+      "base": { "noAimed": true, "autofire": { "dv": "Smg" } },
+      "notes": [{ "pt": "Tabelas 'Carbine' e Autofire 'Machine Pistol' do Interface RED 5: aproximadas pelo Rifle de Assalto e pelo SMG. Recarregar leva duas Ações.", "en": "Interface RED 5 'Carbine' and 'Machine Pistol' Autofire tables: approximated by the Assault Rifle and SMG ones. Reloading takes two Reload Actions." }]
+    },
+    "tsunami-arms-nekomata": {
+      "source": "Edgerunners Mission Kit p.34",
+      "notes": [{ "pt": "Carregada (Tech Rebuild): vê contornos dos alvos e atira através de cobertura fina e grossa.", "en": "Charged (Tech Rebuild): sees target outlines and fires through Thin and Thick Cover." }]
+    },
+    "tsunami-arms-deathwind-railgun": {
+      "source": "Interface 5 p.119",
+      "base": { "noAimed": true, "ignoreArmorBelow": 12 },
+      "notes": [{ "pt": "A cada 3 tiros em 10 Rodadas vira Poor Quality até ser ventilada (uma Ação). Tabela 'Scout Rifle' aproximada pela do Rifle de Precisão.", "en": "Every third shot within 10 Rounds drops it to Poor Quality until vented (an Action). 'Scout Rifle' table approximated by the Sniper Rifle one." }]
+    },
+    "midnight-assault-hb": {
+      "source": "Interface 5 p.117",
+      "notes": [{ "pt": "Pode disparar sem BODY 11 se estiver Prone. Tabela 'Marksman Rifle' aproximada pela do Rifle de Assalto.", "en": "Can be fired without BODY 11 while Prone. 'Marksman Rifle' table approximated by the Assault Rifle one." }]
+    },
+    "sternmeyer-m-04-variable": {
+      "source": "Black Chrome p.119",
+      "magazines": [{ "id": "grenade", "label": { "pt": "Lança-granadas", "en": "Grenade launcher" }, "capacity": 2, "calibers": ["Grenade"] }],
+      "modes": [
+        { "id": "rifle", "label": { "pt": "Rifle", "en": "Rifle" }, "switch": "free", "damage": "5d6" },
+        {
+          "id": "grenade", "label": { "pt": "Lança-granadas", "en": "Grenade launcher" }, "switch": "free",
+          "class": "GrenadeLauncher", "skill": "heavy-weapons", "row": "grenadeLauncher", "damage": "6d6", "explosive": true, "noAutofire": true, "magazine": "grenade"
+        }
+      ],
+      "notes": [{ "pt": "Se um lado trava, os dois param até destravar.", "en": "When one side jams, neither can fire until it's unjammed." }]
+    },
+    "budgetarms-triple-threat": {
+      "source": "Woodchipper's Garage p.3",
+      "magazines": [{ "id": "grenade", "label": { "pt": "Lança-granadas", "en": "Grenade launcher" }, "capacity": 2, "calibers": ["Grenade"] }],
+      "modes": [
+        { "id": "rocket", "label": { "pt": "Foguete", "en": "Rocket" }, "switch": "free", "damage": "8d6" },
+        { "id": "grenade", "label": { "pt": "Lança-granadas", "en": "Grenade launcher" }, "switch": "free", "class": "GrenadeLauncher", "row": "grenadeLauncher", "damage": "6d6", "magazine": "grenade" }
+      ]
+    },
+    "biotechnica-enviro-launcher": {
+      "source": "Woodchipper's Garage p.3",
+      "notes": [{ "pt": "Um tiro só; depois, como Ação, a arma se decompõe em 1 hora.", "en": "Fires only once; afterwards, as an Action, it decomposes within an hour." }]
+    },
+    "flare-gun": {
+      "source": "Woodchipper's Garage p.3",
+      "modes": [
+        { "id": "grenade", "label": { "pt": "Granada", "en": "Grenade" }, "switch": "free", "damage": "6d6" },
+        {
+          "id": "flare", "label": { "pt": "Sinalizador", "en": "Flare" }, "switch": "free", "noCrit": true,
+          "effect": { "pt": "Sinalizador: não explode nem causa dano; visto a até 3 milhas no ar e depois funciona como road flare.", "en": "Flare: doesn't explode or deal damage; seen up to 3 miles away in the air, then works as a road flare." }
+        }
+      ]
+    },
+    "gunmart-engage": {
+      "source": "Black Chrome p.107",
+      "onFumble": "explode",
+      "fumbleNote": { "pt": "O foguete explode na própria arma, centrado em quem dispara.", "en": "The rocket detonates in the weapon, centered on the shooter." }
+    },
+    "hd-stickybomb-launcher": {
+      "source": "Interface 5 p.122",
+      "base": {
+        "noCrit": true,
+        "effect": { "pt": "A carga Mini C9 gruda no alvo e arma em 10 Rodadas; depois, detonar à distância é uma Ação.", "en": "The Mini C9 charge sticks to the target and arms in 10 Rounds; after that, remote detonation is an Action." }
+      }
+    },
+    "midnight-arms-sdf-45": {
+      "source": "Woodchipper's Garage p.3",
+      "base": { "maxRange": 400 },
+      "notes": [{ "pt": "Dispara dois foguetes e o Mestre escolhe onde caem (até 50 m do alvo, 10 m entre si). Esquivar: Evasion DV15, só quem esquiva de balas.", "en": "Fires two rockets and the GM picks where they land (within 50 m of the target, 10 m apart). Dodging: Evasion DV15, only for those who can dodge bullets." }]
+    },
+    "militech-archimedes": { "source": "Woodchipper's Garage p.4", "requires": "targeting-scope" },
+    "militech-cowboy-u-56": {
+      "source": "CP:R p.349",
+      "notes": [{ "pt": "Recarregar leva duas Ações (dois turnos).", "en": "Reloading takes two Actions (two Turns)." }]
+    },
+    "militech-growler": {
+      "source": "Tales of the RED p.71",
+      "base": {
+        "noCrit": true,
+        "effect": { "pt": "Sem dano: quem tem cérebro orgânico na área testa Resist Torture/Drugs DV19 ou sofre Brain Injury.", "en": "No damage: anyone with an organic brain in the area rolls Resist Torture/Drugs DV19 or suffers Brain Injury." }
+      }
+    },
+    "pursuit-security-tearjerker": {
+      "source": "Woodchipper's Garage p.4",
+      "base": {
+        "noCrit": true,
+        "effect": { "pt": "Sem dano: só dispara granadas de fumaça ou gás lacrimogêneo (efeito da granada).", "en": "No damage: only fires smoke or teargas grenades (the grenade's effect)." }
+      }
+    },
+
+    "arasaka-weeping-reaver-katana": {
+      "source": "Black Chrome p.91",
+      "notes": [{ "pt": "Uma vez por minuto, como Ação, cobre a lâmina: Fire (incendeia, 2 por turno), Acid (ablação 2), Wound Salt (rola outra Critical Injury além de Foreign Object).", "en": "Once per minute, as an Action, coats the blade: Fire (ignites, 2 per Turn), Acid (ablates 2), Wound Salt (rolls another Critical Injury besides Foreign Object)." }]
+    },
+    "captain-cuddlefish-snag-em": {
+      "source": "12 Days of Cutiemas p.3",
+      "notes": [{ "pt": "Ataca a até 10 m. Tiro mirado no item da mão com −6 em vez de −8, sem precisar de dano, e o item vem para a sua mão.", "en": "Attacks from up to 10 m. A Held Item Aimed Shot is at −6 instead of −8, doesn't need to deal damage, and the item lands in your hand." }]
+    },
+    "ce-thermal-dagger": {
+      "source": "12 Days of REDmas p.2",
+      "notes": [{ "pt": "Quem é atingido fica Strongly On Fire.", "en": "Anyone hit is Strongly On Fire." }]
+    },
+    "faisal-s-magna-knuckles": {
+      "source": "Black Chrome p.96",
+      "notes": [{ "pt": "Atingido duas vezes no mesmo turno: Cybertech DV15 ou o Mestre desliga dois cyberwares por 1 minuto (gasta 1 das 8 cargas).", "en": "Hit twice in the same Turn: Cybertech DV15 or the GM shuts down two pieces of cyberware for a minute (uses 1 of 8 charges)." }]
+    },
+    "hello-cutie-hypurr-hammer": {
+      "source": "12 Days of Cutiemas p.4",
+      "base": { "halvesArmor": false, "bodyDamage": { "body": 9, "damage": "5d6" } },
+      "notes": [{ "pt": "Com BODY 9+, a Critical Injury é rolada duas vezes e quem atacou escolhe.", "en": "With BODY 9+, the Critical Injury is rolled twice and the attacker picks." }]
+    },
+    "hello-cutie-thundercat-bat": { "source": "12 Days of Cutiemas p.6", "base": { "nonLethal": true } },
+    "imi-chainknife": {
+      "source": "12 Days of Gunmas p.3",
+      "modes": [
+        { "id": "off", "label": { "pt": "Desligada", "en": "Off" }, "switch": "action", "damage": "2d6", "rof": 1 },
+        { "id": "revved", "label": { "pt": "Ligada", "en": "Revved" }, "switch": "action", "class": "VeryHeavyMelee", "damage": "4d6", "rof": 1, "quality": "Excellent" }
+      ]
+    },
+    "kendachi-mono-guard": {
+      "source": "Black Chrome p.96",
+      "notes": [{ "pt": "Foreign Object vira outra Critical Injury: role de novo até sair uma diferente.", "en": "Foreign Object becomes another Critical Injury: reroll until it's a different one." }]
+    },
+    "kendachi-mono-katana": {
+      "source": "Black Chrome p.92",
+      "base": { "ignoreArmorBelow": 7 },
+      "notes": [{ "pt": "Só com a chave biométrica certa; sem ela, é uma Very Heavy Melee comum.", "en": "Only with the right biometric key; without it, it's a plain Very Heavy Melee Weapon." }]
+    },
+    "kendachi-mono-wakizashi": {
+      "source": "Black Chrome p.93",
+      "base": { "ignoreArmorBelow": 7 },
+      "notes": [{ "pt": "Só com a chave biométrica certa; sem ela, é uma Heavy Melee comum.", "en": "Only with the right biometric key; without it, it's a plain Heavy Melee Weapon." }]
+    },
+    "kendachi-mono-three": {
+      "source": "CP:R p.348",
+      "base": { "ignoreArmorBelow": 11 },
+      "notes": [{ "pt": "Só com a chave biométrica certa; sem ela, é uma Very Heavy Melee Excellent comum.", "en": "Only with the right biometric key; without it, it's a plain Excellent Very Heavy Melee Weapon." }]
+    },
+    "kendachi-mono-star": {
+      "source": "Black Chrome p.101",
+      "base": { "skill": "melee-weapon", "melee": true },
+      "throw": { "halvesArmor": true, "rof": 2 },
+      "notes": [{ "pt": "Arremessada: Foreign Object traz mais uma Critical Injury (role até sair outra).", "en": "Thrown: Foreign Object brings one more Critical Injury (reroll until it's another one)." }]
+    },
+    "ranger-combat-boomerang": {
+      "source": "Black Chrome p.100",
+      "throw": { "only": true, "halvesArmor": true, "rof": 2, "returnsWith": "targeting-scope" }
+    },
+    "rostovic-kleaver": {
+      "source": "Black Chrome p.94",
+      "modes": [
+        { "id": "cold", "label": { "pt": "Descarregada", "en": "Uncharged" }, "switch": "minute", "damage": "4d6" },
+        {
+          "id": "charged", "label": { "pt": "Carregada", "en": "Charged" }, "switch": "minute", "damage": "5d6", "ignoreArmorBelow": 11,
+          "notes": [{ "pt": "Carregada (1 minuto de aquecimento, dura 5 minutos): quem é atingido fica Mildly On Fire.", "en": "Charged (1 minute to heat up, lasts 5 minutes): anyone hit is Mildly On Fire." }]
+        }
+      ]
+    },
+    "slamdance-fangfist": {
+      "source": "Black Chrome p.98",
+      "modes": [
+        { "id": "normal", "label": { "pt": "Normal", "en": "Normal" }, "switch": "free", "damage": "2d6" },
+        { "id": "deploy", "label": { "pt": "Turno em que saca", "en": "Turn it's drawn" }, "switch": "free", "class": "VeryHeavyMelee", "damage": "4d6", "rof": 1 }
+      ]
+    },
+    "stickball-stick": { "source": "Interface 4 p.34", "base": { "nonLethal": true } },
+    "stun-baton": { "source": "CP:R p.349", "base": { "nonLethal": true } },
+    "sword-of-arvish": {
+      "source": "Interface 3 p.73",
+      "onFumble": "note",
+      "fumbleNote": { "pt": "Num 1 natural, em vez de travar, quem ataca sofre Crushed Fingers na mão da espada.", "en": "On a natural 1, instead of malfunctioning, the wielder suffers Crushed Fingers on the sword hand." }
+    },
+    "utility-tomahawk": { "source": "Black Chrome p.101", "throw": { "halvesArmor": true } },
+    "white-hornet-tanto": {
+      "source": "Black Chrome p.93",
+      "modes": [
+        { "id": "normal", "label": { "pt": "Normal", "en": "Normal" }, "switch": "free" },
+        { "id": "knockout", "label": { "pt": "Choque (nocaute)", "en": "Shock (knockout)" }, "switch": "free", "knockout": true }
+      ]
+    },
+    "zhirafa-rhinocefist": {
+      "source": "Black Chrome p.95",
+      "modes": [
+        { "id": "weapon", "label": { "pt": "Arma (Very Heavy Melee)", "en": "Weapon (Very Heavy Melee)" }, "switch": "action", "quality": "Excellent" },
+        { "id": "fist", "label": { "pt": "Punho (Brawling 4d6)", "en": "Fist (Brawling 4d6)" }, "switch": "action", "skill": "brawling", "halvesArmor": false, "damage": "4d6", "rof": 2 }
+      ],
+      "notes": [{ "pt": "Precisa estar conectada pelos Interface Plugs.", "en": "Must be connected through Interface Plugs." }]
+    },
+    "slamdance-ballistic-harpoon": {
+      "source": "Woodchipper's Garage p.5",
+      "modes": [
+        { "id": "melee", "label": { "pt": "Corpo a corpo", "en": "Melee" }, "switch": "free" },
+        {
+          "id": "fire", "label": { "pt": "Disparar", "en": "Fire" }, "switch": "free",
+          "skill": "heavy-weapons", "class": "Bow", "row": "bow", "melee": false, "thrown": true, "halvesArmor": true,
+          "notes": [{ "pt": "Disparado, o arpão fica no chão: recuperar e recarregar o lançador é uma Ação.", "en": "Once fired, the harpoon lies on the ground: recovering it and reloading the housing is an Action." }]
+        }
+      ]
+    }
+  }
+}

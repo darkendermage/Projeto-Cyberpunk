@@ -160,7 +160,7 @@ export function GmTablePage() {
   const live = view?.active ?? false;
   const queue = useMemo(() => (encounter.data?.status === 'Active' ? encounter.data.queue : []), [encounter.data]);
   const quick = useQuickAttack(
-    (aim, targetId) => tableApi.attack(view!.id, { attackerId: aim.attackerId, weapon: aim.weapon.key, mode: aim.mode, targetIds: [targetId] }),
+    (aim, targetId) => tableApi.attack(view!.id, { attackerId: aim.attackerId, weapon: aim.weapon.key, mode: aim.mode, targetIds: [targetId], weaponMode: aim.weapon.modeId ?? null }),
     (result) => toast.notify(result.attack ? attackSummary(result.attack)
       : result.pending?.step === 'Defense' ? t(`${result.pending.targetName} decide se esquiva…`, `${result.pending.targetName} chooses whether to dodge…`)
       : t('Dois 6! Falta rolar a Critical Injury.', 'Two 6s! The Critical Injury roll is next.')),
@@ -318,7 +318,7 @@ export function GmTablePage() {
         )}
         {view && quick.aim && (
           <AimBar aim={quick.aim} busy={quick.busy} targetName={queue.find((f) => f.id === quick.aim!.targetId)?.name ?? null}
-            onMode={quick.mode} onFire={() => void quick.shoot()} onCancel={quick.cancel} />
+            onMode={quick.mode} onWeaponMode={quick.weaponMode} onFire={() => void quick.shoot()} onCancel={quick.cancel} />
         )}
         {view && (
           <SceneStrip entries={strip} selected={selection.tokens} aim={quick.aim}
@@ -335,10 +335,15 @@ export function GmTablePage() {
               if (id) command.mutate({ path: `combatants/${id}/unjam`, body: { weapon: w.key } },
                 { onSuccess: () => toast.notify(t('Destravada.', 'Unjammed.')), onError: (err) => toast.notify(problemMessage(err), 'error') });
             }}
-            onReload={(e, w) => {
+            onReload={(e, w, magazine) => {
               const id = fighterIdOf(e, queue);
-              if (id) command.mutate({ path: `combatants/${id}/reload`, body: { weapon: w.key } },
+              if (id) command.mutate({ path: `combatants/${id}/reload`, body: { weapon: w.key, magazine: magazine ?? null } },
                 { onSuccess: () => toast.notify(t('Recarregada.', 'Reloaded.')), onError: (err) => toast.notify(problemMessage(err), 'error') });
+            }}
+            onSwitch={(e, w, mode) => {
+              const id = fighterIdOf(e, queue);
+              if (id) command.mutate({ path: `combatants/${id}/mode`, body: { weapon: w.key, mode } },
+                { onSuccess: () => toast.notify(t('Modo trocado.', 'Mode switched.')), onError: (err) => toast.notify(problemMessage(err), 'error') });
             }} />
         )}
       </section>

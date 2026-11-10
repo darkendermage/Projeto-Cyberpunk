@@ -100,6 +100,10 @@ public sealed class EncountersController(EncounterService encounters) : Controll
     public Task<EncounterDetailDto> Unjam(int id, string combatantId, UnjamRequest r, CancellationToken ct) =>
         encounters.UnjamAsync(id, combatantId, r, ct);
 
+    [HttpPost("{id:int}/combatants/{combatantId}/mode")]
+    public Task<EncounterDetailDto> SwitchMode(int id, string combatantId, WeaponModeSwitchRequest r, CancellationToken ct) =>
+        encounters.SwitchModeAsync(id, combatantId, r, ct);
+
     [HttpPost("{id:int}/combatants/{combatantId}/pick-up")]
     public Task<EncounterDetailDto> PickUp(int id, string combatantId, UnjamRequest r, CancellationToken ct) =>
         encounters.PickUpAsync(id, combatantId, r, ct);

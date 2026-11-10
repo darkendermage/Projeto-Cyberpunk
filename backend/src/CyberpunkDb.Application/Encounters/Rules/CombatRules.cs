@@ -30,8 +30,6 @@ public sealed record CombatRulesDocument
     public Ruled<bool> MartialArtsHalvesArmor { get; init; } = new();
     public Ruled<string> Grapple { get; init; } = new();
     public Ruled<ThrownRule> Thrown { get; init; } = new();
-    // by catalog slug (Ranger Combat Boomerang)
-    public Ruled<Dictionary<string, SpecialWeaponRule>> SpecialWeapons { get; init; } = new();
     public Ruled<ShotgunShellRule> ShotgunShell { get; init; } = new();
     public Ruled<string> Explosives { get; init; } = new();
     public Ruled<SuppressiveRule> Suppressive { get; init; } = new();
@@ -129,12 +127,3 @@ public sealed class CombatRuleBook
     private static int DiceCount(string dice) => int.TryParse(dice.Split('d')[0], out var n) ? n : 0;
 }
 
-// ThrownOnly: DEX + Athletics, thrown row of the range table. Still halves armor when thrown, and comes back
-// at the start of the thrower's next Turn if they have the ReturnsWith cyberware.
-public sealed record SpecialWeaponRule
-{
-    public bool ThrownOnly { get; init; }
-    public bool HalvesArmor { get; init; }
-    public int? Rof { get; init; }
-    public string? ReturnsWith { get; init; }
-}

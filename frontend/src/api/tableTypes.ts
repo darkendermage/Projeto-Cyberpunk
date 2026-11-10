@@ -380,7 +380,8 @@ export interface TableAttack {
 /** A quick attack's answer: the attack, or the step it waits on. */
 export interface QuickAttackResult { attack: TableAttack | null; pending: PendingView | null }
 
-export interface QuickAttack { weapon: string; mode: AttackMode; targetIds: string[] }
+/** weaponMode: weapon-rules.json mode (Slug/Shell, Burst, Throw...); null = the weapon's current one. */
+export interface QuickAttack { weapon: string; mode: AttackMode; targetIds: string[]; weaponMode?: string | null }
 
 export interface SendMessage { text: string; visibility?: TableVisibility; targetSeatId?: number | null }
 export interface RollRequest {

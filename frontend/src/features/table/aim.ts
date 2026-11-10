@@ -1,13 +1,16 @@
 import type { AttackMode, WeaponView } from '../../api/encounterTypes';
 import type { TableAttack } from '../../api/tableTypes';
 import { t } from '../../i18n';
-import { modesFor } from '../combat/combat';
+import { modesFor, pickMode, reloadsMain, weaponName } from '../combat/combat';
 
 /** A quick attack being aimed from the cards under the map: who shoots, with what, how, and at whom. */
 export interface Aim {
   attackerId: string;
   attackerName: string;
+  /** The weapon mode in use (Slug, Shell, Throw...): what the shot works with. */
   weapon: WeaponView;
+  /** The weapon with every mode, for the mode picker. */
+  base: WeaponView;
   mode: AttackMode;
   targetId: string | null;
 }
@@ -16,7 +19,13 @@ export interface Aim {
 export const quickModes = (weapon: WeaponView): AttackMode[] => modesFor(weapon).filter((m) => m !== 'Explosive' && m !== 'Suppressive');
 
 export function startAim(attackerId: string, attackerName: string, weapon: WeaponView): Aim {
-  return { attackerId, attackerName, weapon, mode: quickModes(weapon)[0] ?? 'Single', targetId: null };
+  return { attackerId, attackerName, weapon, base: weapon, mode: quickModes(weapon)[0] ?? 'Single', targetId: null };
+}
+
+/** Another mode of the same weapon; the attack mode goes back to its first one. */
+export function aimWith(aim: Aim, modeId: string): Aim {
+  const weapon = pickMode(aim.base, modeId);
+  return { ...aim, weapon, mode: quickModes(weapon)[0] ?? 'Single' };
 }
 
 /** The target picked on the map or on a card; the shooter can't aim at themselves. */
@@ -25,12 +34,13 @@ export const aimAt = (aim: Aim, targetId: string | null): Aim => (targetId == nu
 /** A weapon as a button reads: name, attack total, damage and ammo. */
 export function weaponLabel(w: WeaponView): string {
   const ammo = w.rounds != null && w.magazine != null ? ` · ${w.rounds}/${w.magazine}` : '';
-  return `${w.name} +${w.attackTotal} · ${w.damage}${ammo}`;
+  return `${weaponName(w)} +${w.attackTotal} · ${w.damage}${ammo}`;
 }
 
 /** Why a weapon can't fire right now, or null when it can. */
 export function cannotFire(w: WeaponView): string | null {
-  if (w.jammed) return t('Travada: gaste uma Ação para destravar.', 'Jammed: spend an Action to unjam.');
+  if (w.destroyed) return t('Destruída: não dá mais para usar.', "Destroyed: it can't be used anymore.");
+  if (w.jammed) return w.bolt ? t('Ferrolho: gaste uma Ação para preparar o próximo tiro.', 'Bolt action: spend an Action to chamber the next round.') : t('Travada: gaste uma Ação para destravar.', 'Jammed: spend an Action to unjam.');
   if (w.thrown) return t('Arremessada: pegue do chão (ou espere o Targeting Scope trazê-la).', 'Thrown: pick it up (or wait for the Targeting Scope to bring it back).');
   if (!w.melee && w.magazine != null && (w.rounds ?? 0) <= 0) return t('Sem munição: recarregue.', 'Out of ammo: reload.');
   return null;
@@ -45,7 +55,7 @@ export function attackBreakdown(w: WeaponView): string {
 
 /** Why a weapon can't be reloaded, or null when it can (a magazine that isn't full). */
 export function canReload(w: WeaponView): string | null {
-  if (w.melee || w.magazine == null) return t('Sem pente.', 'No magazine.');
+  if (!reloadsMain(w) || w.magazine == null) return t('Sem pente.', 'No magazine.');
   if ((w.rounds ?? 0) >= w.magazine) return t('Pente cheio.', 'Full magazine.');
   return null;
 }

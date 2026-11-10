@@ -306,10 +306,11 @@ public sealed partial class EncounterService(
 
         // ammo first: if the magazine can't pay, nothing happens
         s = await SpendAmmoAsync(s, attacker, plan, r.Mode, ct);
-        // CP:R p.344
+        // CP:R p.344, or the bolt waiting for its Action
         if (plan.Jammed) s = await SetJammedAsync(s, attacker, plan.WeaponKey, true, ct);
-        // thrown-only weapons leave the hand (Black Chrome p.100)
-        if (attacker.Weapon(plan.WeaponKey)?.ThrownOnly == true && s.Find(attacker.Id) is { } thrower)
+        if (plan.Destroyed) s = await SetDestroyedAsync(s, attacker, plan.WeaponKey, ct);
+        // thrown weapons leave the hand (CP:R p.177, Black Chrome p.100)
+        if (plan.LeavesHand && s.Find(attacker.Id) is { } thrower)
             s = Replace(s, thrower with { Thrown = [.. thrower.Thrown.Where(k => k != plan.WeaponKey), plan.WeaponKey] });
 
         var results = new List<TargetResult>();
@@ -325,7 +326,7 @@ public sealed partial class EncounterService(
             sheets[i] = sheets[i] with { Version = (await characters.SnapshotAsync(sheets[i].CharacterId, ct)).Version };
         var seq = s.AttackSeq + 1;
         s = s with { AttackSeq = seq, Undo = new AttackUndo(seq, e.Version + 1, before, sheets) };
-        var melee = attacker.Weapon(plan.WeaponKey)?.Melee ?? false;
+        var melee = attacker.Weapon(plan.WeaponKey)?.Pick(plan.ModeId)?.Melee ?? false;
         var attack = new AttackResult(attacker.Name, plan.WeaponName, plan.Mode, plan.AttackRoll, plan.AttackTotal, results, plan.Notes, attacker.Id, seq, melee,
             plan.AttackExtra, r.CritDice);
         _lastAttack = attack;
@@ -389,8 +390,38 @@ public sealed partial class EncounterService(
             var weapon = fighter.Weapon(r.Weapon) ?? throw RequestValidationException.For("weapon", L.T("Arma não encontrada.", "Weapon not found."));
             if (!weapon.Jammed) throw RequestValidationException.For("weapon", L.T($"{weapon.Name} não está travada.", $"{weapon.Name} isn't jammed."));
             s = await SetJammedAsync(s, fighter, weapon.Key, false, ct);
-            return Log(s, c.Id, "unjam", L.T($"{c.Name} destrava {weapon.Name} (Ação).", $"{c.Name} unjams {weapon.Name} (Action)."));
+            return Log(s, c.Id, "unjam", weapon.Bolt
+                ? L.T($"{c.Name} manobra o ferrolho de {weapon.Name} (Ação).", $"{c.Name} works the bolt of {weapon.Name} (Action).")
+                : L.T($"{c.Name} destrava {weapon.Name} (Ação).", $"{c.Name} unjams {weapon.Name} (Action)."));
         }, ct);
+
+    // Modes that stay on the weapon (weapon-rules.json): an Action, a Move Action or a minute, as the rule says.
+    public Task<EncounterDetailDto> SwitchModeAsync(int id, string combatantId, WeaponModeSwitchRequest r, CancellationToken ct) =>
+        MutateAsync(id, r.Version, async (s, _, _) =>
+        {
+            var c = Require(s, combatantId);
+            var fighter = (await ViewsAsync(s, ct))[c.Id];
+            var weapon = fighter.Weapon(r.Weapon) ?? throw RequestValidationException.For("weapon", L.T("Arma não encontrada.", "Weapon not found."));
+            var mode = weapon.Modes?.FirstOrDefault(m => m.ModeId == r.Mode && m.ModeSwitch is not (null or WeaponModes.Free))
+                       ?? throw RequestValidationException.For("mode", L.T($"{weapon.Name} não tem o modo '{r.Mode}' para ligar.", $"{weapon.Name} has no '{r.Mode}' mode to switch to."));
+            if (mode.ModeActive) throw RequestValidationException.For("mode", L.T($"{weapon.Name} já está em {mode.ModeLabel}.", $"{weapon.Name} is already in {mode.ModeLabel}."));
+            if (fighter.Kind == CombatantKind.Pc && fighter.CharacterId is { } characterId)
+                await characters.SetWeaponModeAsync(characterId, weapon.Key, r.Mode, ct);
+            else s = Replace(s, c with { Modes = new Dictionary<string, string>(c.Modes) { [weapon.Key] = r.Mode } });
+            var cost = AttackResolver.SwitchCost(mode.ModeSwitch);
+            return Log(s, c.Id, "mode", L.T($"{c.Name} passa {weapon.Name} para {mode.ModeLabel} ({cost}).", $"{c.Name} switches {weapon.Name} to {mode.ModeLabel} ({cost})."));
+        }, ct);
+
+    private async Task<EncounterState> SetDestroyedAsync(EncounterState s, FighterView fighter, string weaponKey, CancellationToken ct)
+    {
+        if (fighter.Kind == CombatantKind.Pc && fighter.CharacterId is { } characterId)
+        {
+            await characters.SetWeaponDestroyedAsync(characterId, weaponKey, true, ct);
+            return s;
+        }
+        var c = Require(s, fighter.Id);
+        return Replace(s, c with { Destroyed = [.. c.Destroyed.Where(k => k != weaponKey), weaponKey] });
+    }
 
     private async Task<EncounterState> SetJammedAsync(EncounterState s, FighterView fighter, string weaponKey, bool jammed, CancellationToken ct)
     {
@@ -436,21 +467,34 @@ public sealed partial class EncounterService(
         return detail;
     }
 
+    // From the magazine the mode fires from, plus a charge from the one it drains (AVAR railgun battery)
     private async Task<EncounterState> SpendAmmoAsync(EncounterState s, FighterView attacker, PlannedAttack plan, AttackMode mode, CancellationToken ct)
     {
         var weapon = attacker.Weapon(plan.WeaponKey);
-        if (weapon is null || weapon.Magazine is null || weapon.Melee) return s;
+        if (weapon is null || !plan.UsesAmmo) return s;
         if (attacker.Kind == CombatantKind.Pc)
         {
-            var sheet = await characters.GetAsync(attacker.CharacterId!.Value, ct);
+            var id = attacker.CharacterId!.Value;
+            var sheet = await characters.GetAsync(id, ct);
             var fireMode = mode switch { AttackMode.Autofire => FireMode.Autofire, AttackMode.Suppressive => FireMode.Suppressive, _ => FireMode.Single };
-            await characters.FireAsync(attacker.CharacterId.Value, new FireRequest(sheet.Version, weapon.Key, fireMode, plan.Rounds), ct);
+            var after = await characters.FireAsync(id, new FireRequest(sheet.Version, weapon.Key, fireMode, plan.Rounds, plan.MagazineId), ct);
+            if (plan.Drains is { } drained) await characters.FireAsync(id, new FireRequest(after.Version, weapon.Key, FireMode.Single, 1, drained), ct);
             return s;
         }
         var c = Require(s, attacker.Id);
-        var left = c.Ammo.GetValueOrDefault(weapon.Key, weapon.Magazine.Value);
-        if (left < plan.Rounds) throw RequestValidationException.For("weapon", L.T($"{weapon.Name} tem {left} bala(s); recarregue.", $"{weapon.Name} has {left} round(s); reload."));
-        return Replace(s, c with { Ammo = new Dictionary<string, int>(c.Ammo) { [weapon.Key] = left - plan.Rounds } });
+        var ammo = new Dictionary<string, int>(c.Ammo);
+        void Take(string? magazine, int rounds)
+        {
+            var key = magazine is null ? weapon.Key : FighterViews.ExtraAmmoKey(weapon.Key, magazine);
+            var full = magazine is null ? weapon.Magazines?.FirstOrDefault(m => m.Id is null)?.Capacity ?? weapon.Magazine ?? 0
+                : weapon.Magazines?.FirstOrDefault(m => m.Id == magazine)?.Capacity ?? 0;
+            var left = ammo.GetValueOrDefault(key, full);
+            if (left < rounds) throw RequestValidationException.For("weapon", L.T($"{weapon.Name} tem {left} bala(s); recarregue.", $"{weapon.Name} has {left} round(s); reload."));
+            ammo[key] = left - rounds;
+        }
+        Take(plan.MagazineId, plan.Rounds);
+        if (plan.Drains is { } drain) Take(drain, 1);
+        return Replace(s, c with { Ammo = ammo });
     }
 
     private async Task<(EncounterState, TargetResult)> ApplyHitAsync(EncounterState s, FighterView target, PlannedHit hit, AttackRequest r,
@@ -479,8 +523,13 @@ public sealed partial class EncounterService(
                     null, 0, false, null, target.WoundState.ToString(), notes));
         }
 
-        var (next, sp, through, after, crit) = await DamageAsync(s, target, amount, hit.Location, hit.HalveArmor, false, hit.Critical, r.CritRoll,
-            $"{ModeLabel(hit.Mode)}", fromAttack: true, notes, notices, ct);
+        // railguns and monoblades ignore armor under a given SP (weapon-rules.json)
+        var targetSp = hit.Location == InjuryLocation.Head ? target.SpHead : target.SpBody;
+        var bypass = hit.IgnoreArmorBelow is { } below && targetSp < below;
+        if (bypass) notes.Add(L.T($"SP {targetSp} abaixo de {hit.IgnoreArmorBelow}: a armadura é ignorada.", $"SP {targetSp} is below {hit.IgnoreArmorBelow}: the armor is ignored."));
+        var hitRules = new HitRules(hit.Knockout, hit.NoCrit, hit.NoAblation, hit.Ablation);
+        var (next, sp, through, after, crit) = await DamageAsync(s, target, amount, hit.Location, hit.HalveArmor, bypass, hit.Critical, r.CritRoll,
+            $"{ModeLabel(hit.Mode)}", fromAttack: true, notes, notices, ct, hitRules);
         s = next;
 
         // aimed shots at a hand or a leg (CP:R p.170)
@@ -526,18 +575,20 @@ public sealed partial class EncounterService(
 
     private async Task<(EncounterState State, int? Sp, int Through, WoundState After, string? Critical)> DamageAsync(
         EncounterState s, FighterView target, int amount, InjuryLocation location, bool halve, bool bypass, bool critical, int? critRoll,
-        string description, bool fromAttack, List<string> notes, List<string> notices, CancellationToken ct)
+        string description, bool fromAttack, List<string> notes, List<string> notices, CancellationToken ct, HitRules? rules = null)
     {
+        var noCrit = rules?.NoCrit == true;
         if (target.Kind == CombatantKind.Pc)
         {
             var id = target.CharacterId!.Value;
             var before = await characters.GetAsync(id, ct);
             var wasMortal = before.Report.Health.WoundState == WoundState.Mortally;
             var sp = DamageMath.EffectiveSp(location == InjuryLocation.Head ? before.Report.Armor.Head.Sp : before.Report.Armor.Body.Sp, halve, bypass);
-            var after = await characters.DamageAsync(id, new DamageRequest(before.Version, amount, location, bypass, description, halve), ct);
+            var after = await characters.DamageAsync(id, new DamageRequest(before.Version, amount, location, bypass, description, halve,
+                rules?.Knockout ?? false, rules?.NoAblation ?? false, rules?.Ablation), ct);
             var through = before.Report.Health.CurrentHp - after.Report.Health.CurrentHp;
             string? crit = null;
-            if (critical || (fromAttack && wasMortal && through > 0))
+            if (!noCrit && (critical || (fromAttack && wasMortal && through > 0)))
             {
                 var active = after.Sheet.Injuries.Where(i => i.Status != InjuryStatus.Healed && i.Location == location).Select(i => i.Name);
                 var def = npcCombat.RollCritical(location, active, critRoll, dice);
@@ -550,11 +601,11 @@ public sealed partial class EncounterService(
         }
 
         var c = Require(s, target.Id);
-        var outcome = npcCombat.Damage(c, amount, location, halve, bypass, fromAttack);
+        var outcome = npcCombat.Damage(c, amount, location, halve, bypass, fromAttack, rules);
         notes.AddRange(outcome.Notes);
         var updated = outcome.Combatant;
         string? critName = null;
-        if (critical || (fromAttack && outcome.Before == WoundState.Mortally && outcome.Through > 0))
+        if (!noCrit && (critical || (fromAttack && outcome.Before == WoundState.Mortally && outcome.Through > 0)))
         {
             var def = npcCombat.RollCritical(location, updated.Injuries.Where(i => i.Location == location).Select(i => i.Name), critRoll, dice);
             updated = npcCombat.AddCritical(updated, def, location);
@@ -593,17 +644,24 @@ public sealed partial class EncounterService(
             var c = Require(s, combatantId);
             var fighters = await ViewsAsync(s, ct);
             var weapon = fighters[c.Id].Weapon(r.Weapon) ?? throw RequestValidationException.For("weapon", L.T("Arma não encontrada.", "Weapon not found."));
-            if (weapon.Magazine is not { } magazine || weapon.Melee)
-                throw RequestValidationException.For("weapon", L.T($"{weapon.Name} não tem pente.", $"{weapon.Name} has no magazine."));
-            if ((weapon.Rounds ?? 0) >= magazine)
-                throw RequestValidationException.For("weapon", L.T($"{weapon.Name} já está com o pente cheio.", $"{weapon.Name} already has a full magazine."));
+            // main magazine, or an extra one (Tommyknocker shotgun, Crowd Buster battery...)
+            var magazine = weapon.Magazines?.FirstOrDefault(m => m.Id == r.Magazine)
+                           ?? (r.Magazine is null && weapon.Magazine is { } capacity ? new MagazineView(null, L.T("Pente", "Magazine"), weapon.Rounds ?? 0, capacity, false) : null)
+                           ?? throw RequestValidationException.For("weapon", L.T($"{weapon.Name} não tem esse pente.", $"{weapon.Name} has no such magazine."));
+            if (magazine.Rounds >= magazine.Capacity)
+                throw RequestValidationException.For("weapon", L.T($"{weapon.Name}: {magazine.Label} já está cheio.", $"{weapon.Name}: {magazine.Label} is already full."));
             if (c.Kind == CombatantKind.Pc)
             {
                 var sheet = await characters.GetAsync(c.CharacterId!.Value, ct);
-                notices.AddRange((await characters.ReloadAsync(c.CharacterId.Value, new ReloadRequest(sheet.Version, weapon.Key), ct)).Notices);
+                notices.AddRange((await characters.ReloadAsync(c.CharacterId.Value, new ReloadRequest(sheet.Version, weapon.Key, Magazine: r.Magazine), ct)).Notices);
             }
-            else s = Replace(s, c with { Ammo = new Dictionary<string, int>(c.Ammo) { [weapon.Key] = magazine } });
-            return Log(s, c.Id, "reload", L.T($"{c.Name} recarrega {weapon.Name} (Ação).", $"{c.Name} reloads {weapon.Name} (Action)."));
+            else
+            {
+                var key = r.Magazine is null ? weapon.Key : FighterViews.ExtraAmmoKey(weapon.Key, r.Magazine);
+                s = Replace(s, c with { Ammo = new Dictionary<string, int>(c.Ammo) { [key] = magazine.Capacity } });
+            }
+            var what = r.Magazine is null ? weapon.Name : $"{weapon.Name} ({magazine.Label})";
+            return Log(s, c.Id, "reload", L.T($"{c.Name} recarrega {what} (Ação).", $"{c.Name} reloads {what} (Action)."));
         }, ct);
 
     public Task<EncounterDetailDto> HealAsync(int id, string combatantId, HealCombatantRequest r, CancellationToken ct) =>

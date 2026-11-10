@@ -123,6 +123,11 @@ public sealed class CharacterCalculator(CharacterRuleBook rules)
                 .Select(i => i is null ? "?" : catalog.Find(i.ItemId)?.Name ?? "?")
                 .ToList();
             var ranged = w.Calibers.Count > 0;
+            var weaponRule = Encounters.Rules.WeaponRuleBook.Embedded.For(item.Slug);
+            var extraMagazines = weaponRule?.Magazines.Select(m => new SheetMagazine(m.Id, m.Label.ToString(),
+                state.Magazines.TryGetValue(m.Id, out var loaded) ? loaded : m.Refill ? m.Capacity : 0, m.Capacity, m.Refill)).ToList();
+            var switchModes = weaponRule?.Modes.Where(m => m.Switch is not (null or "free"))
+                .Select(m => new SheetWeaponMode(m.Id, m.Label?.ToString() ?? m.Id, m.Switch!)).ToList();
             var bonuses = new List<ValuePart>();
             // Excellent Quality: +1 to attack (CP:R p.344)
             if ((e.Quality ?? w.Quality) == WeaponQuality.Excellent) bonuses.Add(new ValuePart(L.T("Qualidade Excellent (CP:R p.344)", "Excellent Quality (CP:R p.344)"), 1));
@@ -137,7 +142,9 @@ public sealed class CharacterCalculator(CharacterRuleBook rules)
                 skill?.Total ?? 0, w.Damage, w.Rof, w.Magazine, state.LoadedRounds, state.LoadedAmmoItemId,
                 state.LoadedAmmoItemId is { } ammo ? catalog.Find(ammo)?.Name : null,
                 w.AutofireMultiplier, autofire?.Total, w.Calibers, w.Exotic,
-                ranged && !w.Exotic ? slots : 0, attachments, e.State == ItemState.Equipped, e.Quality ?? w.Quality, state.Jammed, bonuses, item.Slug));
+                ranged && !w.Exotic ? slots : 0, attachments, e.State == ItemState.Equipped, e.Quality ?? w.Quality, state.Jammed, bonuses, item.Slug,
+                state.Mode, state.Magazines, state.Destroyed, w.MinBody,
+                extraMagazines is { Count: > 0 } ? extraMagazines : null, switchModes is { Count: > 0 } ? switchModes : null));
         }
         return lines;
     }
