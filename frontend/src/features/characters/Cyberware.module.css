@@ -1,144 +1,255 @@
-/* Cyberware tab (reference image 3): region panels around an anatomical figure, the clinic catalog on the right
-   and the item details below. */
+/* Cyberware tab: region list, anatomical figure (or implant list), the selected region with the item details, and
+   the clinic; effects, therapy and history below. Columns stretch to the same height. */
+
+/* status cards */
 
 .status {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 10px;
 }
+@media (max-width: 1100px) { .status { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 600px) { .status { grid-template-columns: minmax(0, 1fr); } }
 .statusItem {
   display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 10px 12px;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 14px;
   background: var(--panel);
   border: 1px solid var(--red-line);
+  min-width: 0;
 }
+.statusIcon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  color: var(--red-bright);
+  background: var(--red-haze);
+  border: 1px solid var(--red-line);
+}
+.statusBody { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 0; }
 .statusLabel {
   font-family: var(--font-display);
-  font-size: 11.5px;
-  letter-spacing: 0.14em;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--text-2);
 }
 .statusValue {
   font-family: var(--font-mono);
   font-size: 24px;
+  line-height: 1.1;
   color: var(--red-bright);
 }
-.statusValue small { font-size: 14px; color: var(--text-muted); }
+.statusValue small { font-size: 13px; color: var(--text-muted); }
+
+/* layout */
 
 .layout {
   display: grid;
-  grid-template-columns: minmax(220px, 1fr) minmax(280px, 400px) minmax(220px, 1fr) minmax(340px, 430px);
+  grid-template-columns: minmax(210px, 0.8fr) minmax(280px, 1fr) minmax(320px, 1.15fr) minmax(300px, 1fr);
   gap: 12px;
-  align-items: start;
+  align-items: stretch;
 }
+.col { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+/* the last panel of a column grows so all columns end on the same line */
+.fill { flex: 1; }
+.clinic { flex: none; }
 @media (max-width: 1500px) {
-  .layout { grid-template-columns: minmax(220px, 1fr) minmax(260px, 360px) minmax(220px, 1fr); }
-  .clinic { grid-column: 1 / -1; }
+  .layout { grid-template-columns: minmax(200px, 0.8fr) minmax(260px, 1fr) minmax(300px, 1.2fr); }
+  .layout > :last-child { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: stretch; }
 }
-@media (max-width: 900px) {
-  .layout { grid-template-columns: 1fr; }
-  .figureWrap { order: -1; max-width: 360px; margin: 0 auto; }
-}
-
-.regions {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+@media (max-width: 1000px) {
+  .layout { grid-template-columns: minmax(0, 1fr); }
+  .layout > :last-child { grid-template-columns: minmax(0, 1fr); }
+  .figureCol { order: -1; }
 }
 
-/* region panel */
+.seal {
+  padding: 2px 8px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-2);
+  background: var(--bg-3);
+  border: 1px solid var(--line-strong);
+  white-space: nowrap;
+}
 
-.region {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  padding: 8px 10px 10px;
+/* region list */
+
+.regionList { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.regionItem {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 7px 10px;
   text-align: left;
-  color: inherit;
-  background: var(--panel);
-  border: 1px solid var(--red-line);
-  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%);
+  color: var(--text-2);
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  cursor: pointer;
+  font: inherit;
 }
-.regionActive {
+.regionItem:hover { color: var(--text); border-color: var(--red-line); }
+.regionItemFilled { color: var(--text); }
+.regionItemActive, .regionItemActive:hover {
+  color: var(--text);
   border-color: var(--red);
-  background: linear-gradient(135deg, var(--red-haze), transparent 70%), var(--panel);
-  box-shadow: inset 0 0 0 1px var(--red);
+  background: linear-gradient(90deg, var(--red-haze), transparent 80%), var(--bg-2);
+  box-shadow: inset 0 0 0 1px var(--red), var(--glow-sm);
 }
-.regionHead {
+.regionItemIcon { display: inline-flex; color: var(--red-bright); }
+.regionItemLabel { font-size: 15px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.regionItemLabel small { font-weight: 400; color: var(--text-muted); }
+.regionItemSlots { font-family: var(--font-mono); font-size: 13px; color: var(--text-muted); }
+.regionItemFilled .regionItemSlots { color: var(--text); }
+
+/* view toggle and implant list */
+
+.viewToggle { display: flex; justify-content: center; }
+.viewToggle button {
+  padding: 6px 22px;
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-2);
+  background: var(--bg-2);
+  border: 1px solid var(--line-strong);
+  cursor: pointer;
+}
+.viewToggle button + button { border-left: 0; }
+.viewToggle .viewOn { color: var(--text); background: var(--red-haze); border-color: var(--red); }
+.figureHint { margin: 0; font-size: 12px; text-align: center; color: var(--text-faint); }
+
+.implantList { display: flex; flex-direction: column; gap: 10px; }
+.implantGroup header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 6px;
-  cursor: pointer;
-  background: none;
-  border: none;
-  padding: 0;
-  color: inherit;
-  text-align: left;
-}
-.regionTitle {
+  padding-bottom: 4px;
   font-family: var(--font-display);
-  font-size: 13.5px;
+  font-size: 13px;
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--red-bright);
+  border-bottom: 1px solid var(--line);
+}
+.implantGroup header span:last-child { margin-left: auto; font-family: var(--font-mono); font-weight: 400; }
+.implantGroup ul { list-style: none; margin: 4px 0 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+.implantGroup button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 5px 6px;
+  text-align: left;
+  color: var(--text);
+  background: none;
+  border: 1px solid transparent;
+  cursor: pointer;
+  font: inherit;
+  font-size: 14px;
+}
+.implantGroup button svg { color: var(--cyan); flex-shrink: 0; }
+.implantGroup button small { margin-left: auto; font-family: var(--font-mono); color: var(--text-muted); }
+.implantGroup button:hover { border-color: var(--line-strong); }
+.implantGroup .implantActive { border-color: var(--cyan); background: rgba(61, 224, 255, 0.06); }
+
+/* pieces of the selected region */
+
+.pieceList { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.pieceRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  background: var(--bg-2);
+  border: 1px solid var(--line-strong);
+}
+.pieceRowFoundation { border-color: rgba(61, 224, 255, 0.45); }
+.pieceRowSelected { border-color: var(--cyan); box-shadow: inset 0 0 0 1px var(--cyan); }
+.pieceMain {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  text-align: left;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  font: inherit;
+}
+.pieceIcon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 36px;
+  color: var(--text-2);
+  background: var(--bg-1);
+  border: 1px solid var(--line);
+}
+.pieceText { display: flex; flex-direction: column; min-width: 0; }
+.pieceText strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
+.pieceText small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: var(--font-mono); font-size: 12px; color: var(--text-muted); }
+.installedTag {
+  flex-shrink: 0;
+  padding: 2px 7px;
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--green);
+  border: 1px solid rgba(61, 255, 154, 0.4);
+  background: rgba(61, 255, 154, 0.08);
+}
+.clinicSearch { flex: none; }
+.pieceMain:hover strong { color: var(--red-bright); }
+
+.regionEffects {
+  padding: 8px 10px;
+  border: 1px solid var(--red-line);
+  background: linear-gradient(135deg, var(--red-haze), transparent 70%);
+}
+.regionEffectsTitle {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--red-bright);
 }
-.regionSlots {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  color: var(--text-muted);
-}
-.slots {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-.piece {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  min-width: 96px;
-  max-width: 100%;
-  padding: 5px 8px;
-  font-size: 12.5px;
-  line-height: 1.2;
-  text-align: left;
-  color: var(--text);
-  background: var(--bg-2);
-  border: 1px solid rgba(61, 224, 255, 0.45);
-  box-shadow: inset 0 0 8px rgba(61, 224, 255, 0.12);
-  cursor: pointer;
-}
-.piece small { color: var(--text-muted); font-family: var(--font-mono); }
-.pieceSelected { border-color: var(--cyan); box-shadow: 0 0 0 1px var(--cyan), inset 0 0 10px rgba(61, 224, 255, 0.25); }
-.pieceFoundation { border-color: rgba(61, 224, 255, 0.8); font-weight: 600; }
-.emptySlot {
-  display: grid;
-  place-items: center;
-  width: 40px;
-  height: 34px;
-  color: var(--text-muted);
-  background: var(--bg-1);
-  border: 1px dashed var(--line-strong);
-  cursor: pointer;
-}
-.emptySlot:hover { color: var(--red-bright); border-color: var(--red); }
+.regionEffects ul { margin: 6px 0 0; padding-left: 16px; display: flex; flex-direction: column; gap: 2px; font-size: 13.5px; }
+.regionEffects li::marker { content: "+ "; color: var(--red-bright); }
 
 /* figure */
 
 .figureWrap {
   position: relative;
-  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+  padding: 10px;
   background:
     radial-gradient(ellipse at 50% 35%, rgba(255, 42, 61, 0.14), transparent 60%),
     radial-gradient(ellipse at 50% 90%, rgba(61, 224, 255, 0.08), transparent 55%);
   border: 1px solid var(--line);
 }
-.figure { width: 100%; height: auto; display: block; }
+/* centered in the free height of the column (auto margins split it) */
+.figure { width: 100%; height: auto; display: block; margin-block: auto; }
 .bones path, .bones circle, .bones rect {
   fill: none;
   stroke: url(#boneStroke);
@@ -162,9 +273,6 @@
 .limbChrome, .limbChrome path { fill: url(#chrome); fill-opacity: 0.38; stroke: var(--cyan); stroke-width: 1.2; stroke-opacity: 0.8; }
 .limbSelected, .limbSelected:hover { stroke: var(--red-bright); stroke-width: 2.4; filter: drop-shadow(0 0 5px var(--red)); }
 .ring { fill: none; stroke: var(--cyan); stroke-opacity: 0.35; stroke-width: 1; }
-.leader { fill: none; stroke: var(--red-line); stroke-width: 1; }
-.leaderOn { stroke: rgba(61, 224, 255, 0.55); }
-.leaderActive { stroke: var(--red-bright); stroke-width: 1.6; }
 .hotspot { cursor: pointer; outline: none; }
 .hotspot:focus-visible .hotRing { stroke: var(--amber); stroke-width: 2.5; }
 .hotRing { fill: rgba(5, 6, 7, 0.65); stroke: var(--red); stroke-width: 1.2; stroke-dasharray: 3 3; }
@@ -173,32 +281,27 @@
 .hotDotOn { fill: var(--cyan); }
 .hotCount { fill: var(--cyan); font-family: var(--font-mono); font-size: 13px; }
 
+.callout { pointer-events: none; }
+.calloutLine { fill: none; stroke: var(--red-bright); stroke-width: 1.4; }
+.calloutBox { fill: rgba(8, 9, 12, 0.92); stroke: var(--red-bright); stroke-width: 1.4; filter: drop-shadow(0 0 5px var(--red)); }
+.calloutTitle { fill: var(--text); font-family: var(--font-ui); font-size: 16px; font-weight: 600; }
+.calloutSlots { fill: var(--text-2); font-family: var(--font-mono); font-size: 13px; }
+
 /* clinic */
 
-/* Search above, category below, both full width: a long "Todas de ..." label never pushes the layout around. */
 .clinicToolbar {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 8px;
 }
-.clinicToolbar > * { width: 100%; flex: none; min-height: 36px; }
-.clinicToolbar select { width: 100%; }
-
-.clinic {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.catalogList {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
+.clinicToolbar select { width: 100%; min-width: 0; }
+.catalogList { display: flex; flex-direction: column; gap: 6px; }
 .catalogItem {
   display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 6px 10px;
-  padding: 8px 10px;
+  grid-template-columns: 34px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 2px 10px;
+  padding: 7px 10px;
   text-align: left;
   color: inherit;
   background: var(--bg-2);
@@ -207,21 +310,48 @@
 }
 .catalogItem:hover { border-color: var(--red-line); }
 .catalogItemActive { border-color: var(--red); background: linear-gradient(135deg, var(--red-haze), transparent 70%), var(--bg-2); }
-.catalogName { font-family: var(--font-display); font-weight: 700; color: var(--red-bright); }
-.catalogMeta { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px; font-size: 12.5px; color: var(--text-2); }
-.price { font-family: var(--font-mono); color: var(--cyan); text-align: right; }
+.catalogIcon { grid-row: span 2; display: grid; place-items: center; color: var(--text-2); }
+.catalogName { font-family: var(--font-display); font-weight: 700; color: var(--red-bright); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.catalogMeta { grid-column: 2 / -1; display: flex; flex-wrap: wrap; gap: 6px; font-size: 12.5px; color: var(--text-2); }
+.price { font-family: var(--font-mono); color: var(--cyan); text-align: right; white-space: nowrap; }
 
-/* details */
+/* item details */
 
-.details {
+.itemHeader { display: grid; grid-template-columns: 112px minmax(0, 1fr); gap: 12px; align-items: start; }
+.itemArt { min-width: 0; }
+/* square thumbnail: overrides the art's banner ratio */
+.itemArt > * { aspect-ratio: 1 / 1; }
+.clamp { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+.itemHeaderText { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.itemTags { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.detailTitle { font-family: var(--font-display); font-size: 18px; font-weight: 700; }
+.detailActions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; }
+.detailActions > button { flex: 1; }
+.validateButton { min-height: 52px; font-size: 16px; }
+
+/* bottom row */
+
+.bottom {
   display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) minmax(260px, 0.8fr);
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
   gap: 12px;
+  align-items: stretch;
 }
-@media (max-width: 1100px) { .details { grid-template-columns: 1fr; } }
-.detailTitle {
-  font-family: var(--font-display);
-  font-size: 18px;
-  font-weight: 700;
+.therapyRow { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) 72px; gap: 8px; }
+@media (max-width: 600px) { .therapyRow { grid-template-columns: minmax(0, 1fr); } }
+
+.history { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.history li {
+  display: grid;
+  grid-template-columns: 10px auto minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 13.5px;
 }
-.validateButton { min-height: 64px; font-size: 16px; }
+.history li:last-child { border-bottom: 0; }
+.historyDot { width: 9px; height: 9px; border-radius: 50%; background: var(--text-faint); }
+.historyDotUp { background: var(--green); box-shadow: 0 0 6px var(--green); }
+.historyDate { font-family: var(--font-mono); font-size: 12px; color: var(--text-muted); white-space: nowrap; }
+.historyText { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

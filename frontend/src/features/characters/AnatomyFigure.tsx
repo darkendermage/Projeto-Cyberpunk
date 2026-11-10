@@ -1,5 +1,5 @@
 import type { CyberRegionReport } from '../../api/characterTypes';
-import { HOTSPOTS, type RegionKey } from './anatomy';
+import { calloutBox, HOTSPOTS, regionSlotsLabel, type RegionKey } from './anatomy';
 import styles from './Cyberware.module.css';
 import { t, tv } from '../../i18n';
 
@@ -177,18 +177,14 @@ export function AnatomyFigure({ regions, selected, onSelect, fbc }: {
         </g>
       ))}
 
-      {/* leader lines and hotspots */}
+      {/* hotspots */}
       {(Object.keys(HOTSPOTS) as RegionKey[]).map((key) => {
         const h = HOTSPOTS[key];
         const r = byKey.get(key);
         const count = r?.pieces.length ?? 0;
-        const edge = h.panel === 'left' ? 0 : W;
-        const elbow = h.panel === 'left' ? Math.min(h.x - 24, 60) : Math.max(h.x + 24, W - 60);
         const active = selected === key;
         return (
           <g key={key}>
-            <polyline points={`${h.x},${h.y} ${elbow},${h.y} ${edge},${h.y}`}
-              className={`${styles.leader} ${count > 0 ? styles.leaderOn : ''} ${active ? styles.leaderActive : ''}`} />
             <g role="button" tabIndex={0} className={styles.hotspot}
               aria-label={t(`${tv(r?.label) ?? key}: ${count} peça(s)${r?.slotsTotal != null ? `, ${r.slotsUsed} de ${r.slotsTotal} slots` : ''}`, `${tv(r?.label) ?? key}: ${count} piece(s)${r?.slotsTotal != null ? `, ${r.slotsUsed} of ${r.slotsTotal} slots` : ''}`)}
               aria-pressed={active}
@@ -201,7 +197,29 @@ export function AnatomyFigure({ regions, selected, onSelect, fbc }: {
           </g>
         );
       })}
+      {selected && <Callout spot={HOTSPOTS[selected]} region={byKey.get(selected)} />}
     </svg>
+  );
+}
+
+const CALLOUT_W = 150;
+
+/** Name and slots of the selected region in a box beside its hotspot. */
+function Callout({ spot, region }: { spot: (typeof HOTSPOTS)[RegionKey]; region: CyberRegionReport | undefined }) {
+  if (!region) return null;
+  const box = calloutBox(spot, CALLOUT_W, W);
+  const toLeft = box.x + CALLOUT_W / 2 < spot.x;
+  const anchorX = toLeft ? box.x + CALLOUT_W : box.x;
+  const slots = regionSlotsLabel(region);
+  return (
+    <g className={styles.callout} aria-hidden>
+      <polyline points={`${spot.x},${spot.y} ${anchorX},${box.y + 24}`} className={styles.calloutLine} />
+      <rect x={box.x} y={box.y} width={CALLOUT_W} height={48} rx={3} className={styles.calloutBox} />
+      <text x={box.x + 10} y={box.y + 20} className={styles.calloutTitle}>{tv(region.label)}</text>
+      <text x={box.x + 10} y={box.y + 38} className={styles.calloutSlots}>
+        {region.slotsTotal != null ? `${slots} slots` : slots === '—' ? t('vazio', 'empty') : t(`${slots} peça(s)`, `${slots} piece(s)`)}
+      </text>
+    </g>
   );
 }
 
