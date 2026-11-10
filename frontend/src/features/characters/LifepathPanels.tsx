@@ -1,15 +1,17 @@
 // Lifepath panels shared by the Caminho de Vida tab and the Lifepath step of character creation.
-import { Briefcase, Dices, Plus, Trash2, Users } from 'lucide-react';
-import type { CharacterRules, Relationship } from '../../api/characterTypes';
-import { Button, ComboBox, IconButton, Select } from '../../components/ui/ui';
+import { useState, type ReactNode } from 'react';
+import { Briefcase, Dices, Pencil, Plus, Trash2, Users } from 'lucide-react';
+import type { CharacterRules, Relationship, RelationshipKind } from '../../api/characterTypes';
+import { Button, ComboBox, IconButton, Modal, Select } from '../../components/ui/ui';
 import { useToast } from '../../state/ToastContext';
 import { SheetPanel } from './CharacterUi';
 import {
-  LIFEPATH_GROUPS, RELATIONSHIP_SECTIONS, rollMissing, rollOption, rollRelationship, rollRelationshipCount, STYLE_TABLES, tempId,
-  visibleQuestions,
+  LIFEPATH_GROUPS, RELATIONSHIP_SECTIONS, relationSummary, rollMissing, rollOption, rollRelationship, rollRelationshipCount, STYLE_TABLES,
+  tempId, visibleQuestions, type LifepathGroupId,
 } from './lifepath';
 import type { SheetEditor } from './useSheetEditor';
 import styles from './Characters.module.css';
+import lp from './Lifepath.module.css';
 import { lang, t, tv } from '../../i18n';
 
 // a table answer: pick, roll or write
@@ -30,22 +32,30 @@ export function TableField({ id, label, options, value, onChange, dice, hint }: 
   );
 }
 
-export function TablesPanel({ rules, editor }: { rules: CharacterRules; editor: SheetEditor }) {
+/** The tables of one Lifepath group, without a panel around them. */
+export function TableGroupFields({ rules, editor, group }: { rules: CharacterRules; editor: SheetEditor; group: LifepathGroupId }) {
   const answers = editor.draft.lifepath.answers;
   const set = (id: string, value: string) =>
     editor.update((s) => ({ ...s, lifepath: { ...s.lifepath, answers: { ...s.lifepath.answers, [id]: value } } }));
+  const g = LIFEPATH_GROUPS.find((x) => x.id === group);
+  return (
+    <div className={styles.fieldGrid}>
+      {g?.tables.map((id) => {
+        const entry = rules.lifepathTables.find((x) => x.id === id);
+        if (!entry) return null;
+        return <TableField key={id} id={`lp-${id}`} label={lang === 'pt' ? entry.labelPt : entry.label} hint={lang === 'pt' ? `${entry.label} · CP:R p.${entry.page}` : `CP:R p.${entry.page}`} dice={entry.dice}
+          options={entry.options} value={answers[id]} onChange={(v) => set(id, v)} />;
+      })}
+    </div>
+  );
+}
+
+export function TablesPanel({ rules, editor }: { rules: CharacterRules; editor: SheetEditor }) {
   return (
     <>
       {LIFEPATH_GROUPS.map((g) => (
-        <SheetPanel key={g.title} title={tv(g.title)} actions={<span className={styles.source}>{rules.relations.source}</span>}>
-          <div className={styles.fieldGrid}>
-            {g.tables.map((id) => {
-              const entry = rules.lifepathTables.find((x) => x.id === id);
-              if (!entry) return null;
-              return <TableField key={id} id={`lp-${id}`} label={lang === 'pt' ? entry.labelPt : entry.label} hint={lang === 'pt' ? `${entry.label} · CP:R p.${entry.page}` : `CP:R p.${entry.page}`} dice={entry.dice}
-                options={entry.options} value={answers[id]} onChange={(v) => set(id, v)} />;
-            })}
-          </div>
+        <SheetPanel key={g.id} title={tv(g.title)} actions={<span className={styles.source}>{rules.relations.source}</span>}>
+          <TableGroupFields rules={rules} editor={editor} group={g.id} />
         </SheetPanel>
       ))}
     </>
@@ -54,28 +64,41 @@ export function TablesPanel({ rules, editor }: { rules: CharacterRules; editor: 
 
 // relationships
 
-export function RelationsPanel({ rules, editor }: { rules: CharacterRules; editor: SheetEditor }) {
+const ROLLABLE_KINDS: RelationshipKind[] = ['Friend', 'Enemy', 'Lover'];
+
+/** Friends, lovers and enemies: rolls 1d10 − 7 of them and appends them, or tells the player it came out zero. */
+function useRelationRoll(rules: CharacterRules, editor: SheetEditor) {
   const toast = useToast();
+  return (section: (typeof RELATIONSHIP_SECTIONS)[number]) => {
+    const n = rollRelationshipCount();
+    if (n === 0) return toast.notify(t(`${section.title}: 1d10 − 7 deu zero desta vez.`, `${section.title}: 1d10 − 7 came out zero this time.`), 'info');
+    editor.update((s) => ({
+      ...s,
+      lifepath: { ...s.lifepath, relationships: [...s.lifepath.relationships, ...Array.from({ length: n }, () => rollRelationship(section.kind, rules.relations))] },
+    }));
+  };
+}
+
+function RollRelationsButton({ onClick }: { onClick: () => void }) {
+  return (
+    <Button variant="ghost" icon={<Dices size={14} />} title={t('Rola 1d10 − 7 (mínimo 0) e sorteia cada um', 'Rolls 1d10 − 7 (minimum 0) and draws each one')}
+      onClick={onClick}>{t('Rolar', 'Roll')}</Button>
+  );
+}
+
+export function RelationsPanel({ rules, editor }: { rules: CharacterRules; editor: SheetEditor }) {
+  const roll = useRelationRoll(rules, editor);
   const all = editor.draft.lifepath.relationships;
-  const r = rules.relations;
   const setAll = (next: Relationship[]) => editor.update((s) => ({ ...s, lifepath: { ...s.lifepath, relationships: next } }));
   return (
     <SheetPanel title={t('Relações', 'Relationships')} icon={<Users size={16} />} actions={<span className={styles.source}>CP:R p.51–52</span>}>
       {RELATIONSHIP_SECTIONS.map((section) => {
         const list = all.filter((x) => x.kind === section.kind);
-        const canRoll = section.kind === 'Friend' || section.kind === 'Enemy' || section.kind === 'Lover';
         return (
           <div key={section.kind} className={styles.column} style={{ gap: 6 }}>
             <div className={styles.row}>
               <h4 className={`${styles.idLabel} ${styles.grow}`} style={{ margin: 0 }}>{tv(section.title)} ({list.length})</h4>
-              {canRoll && (
-                <Button variant="ghost" icon={<Dices size={14} />} title={t('Rola 1d10 − 7 (mínimo 0) e sorteia cada um', 'Rolls 1d10 − 7 (minimum 0) and draws each one')}
-                  onClick={() => {
-                    const n = rollRelationshipCount();
-                    if (n === 0) return toast.notify(t(`${section.title}: 1d10 − 7 deu zero desta vez.`, `${section.title}: 1d10 − 7 came out zero this time.`), 'info');
-                    setAll([...all, ...Array.from({ length: n }, () => rollRelationship(section.kind, r))]);
-                  }}>{t('Rolar', 'Roll')}</Button>
-              )}
+              {ROLLABLE_KINDS.includes(section.kind) && <RollRelationsButton onClick={() => roll(section)} />}
               <IconButton label={t(`Adicionar em ${tv(section.title)}`, `Add to ${tv(section.title)}`)} onClick={() => setAll([...all, { id: tempId(), kind: section.kind, name: '' }])}><Plus size={14} /></IconButton>
             </div>
             {list.length === 0 && <span className={`${styles.small} ${styles.muted}`}>{section.empty}</span>}
@@ -87,6 +110,71 @@ export function RelationsPanel({ rules, editor }: { rules: CharacterRules; edito
           </div>
         );
       })}
+    </SheetPanel>
+  );
+}
+
+// The overview's relationship list: one tab per kind, one line per relationship, edited in a dialog.
+export function CompactRelationsPanel({ rules, editor, kinds, title, icon }: {
+  rules: CharacterRules; editor: SheetEditor; kinds: RelationshipKind[]; title: string; icon: ReactNode;
+}) {
+  const roll = useRelationRoll(rules, editor);
+  const all = editor.draft.lifepath.relationships;
+  const sections = RELATIONSHIP_SECTIONS.filter((s) => kinds.includes(s.kind));
+  const [activeKind, setActiveKind] = useState<RelationshipKind>(sections[0]?.kind ?? 'Friend');
+  const [editing, setEditing] = useState<string | null>(null);
+  const section = sections.find((s) => s.kind === activeKind) ?? sections[0];
+  if (!section) return null;
+  const list = all.filter((x) => x.kind === section.kind);
+  const editingRel = all.find((x) => x.id === editing) ?? null;
+  const setAll = (next: Relationship[]) => editor.update((s) => ({ ...s, lifepath: { ...s.lifepath, relationships: next } }));
+  const add = () => {
+    const rel: Relationship = { id: tempId(), kind: section.kind, name: '' };
+    setAll([...all, rel]);
+    setEditing(rel.id);
+  };
+  return (
+    <SheetPanel title={`${title} (${sections.length > 1 ? all.filter((x) => kinds.includes(x.kind)).length : list.length})`} icon={icon}
+      actions={(
+        <>
+          {ROLLABLE_KINDS.includes(section.kind) && (
+            <IconButton label={t(`Rolar ${tv(section.title)}: 1d10 − 7 (mínimo 0)`, `Roll ${tv(section.title)}: 1d10 − 7 (minimum 0)`)} onClick={() => roll(section)}>
+              <Dices size={14} />
+            </IconButton>
+          )}
+          <IconButton label={t(`Adicionar em ${tv(section.title)}`, `Add to ${tv(section.title)}`)} onClick={add}><Plus size={14} /></IconButton>
+        </>
+      )}>
+      {sections.length > 1 && (
+        <div className={lp.kindTabs} role="tablist" aria-label={title}>
+          {sections.map((s) => (
+            <button key={s.kind} type="button" role="tab" aria-selected={s.kind === section.kind}
+              className={`${lp.kindTab} ${s.kind === section.kind ? lp.kindTabActive : ''}`} onClick={() => setActiveKind(s.kind)}>
+              {tv(s.title)} ({all.filter((x) => x.kind === s.kind).length})
+            </button>
+          ))}
+        </div>
+      )}
+      {list.length === 0 && <span className={`${styles.small} ${styles.muted}`}>{section.empty}</span>}
+      <ul className={lp.relationList}>
+        {list.map((rel) => (
+          <li key={rel.id} className={lp.relationRow} data-kind={rel.kind}>
+            <span className={lp.relationText} title={rel.notes ?? undefined}>{relationSummary(rel)}</span>
+            <IconButton label={t('Editar', 'Edit')} onClick={() => setEditing(rel.id)}><Pencil size={14} /></IconButton>
+            <IconButton label={t(`Remover ${tv(rel.name) || 'registro'}`, `Remove ${tv(rel.name) || 'entry'}`)} onClick={() => setAll(all.filter((x) => x.id !== rel.id))}>
+              <Trash2 size={14} />
+            </IconButton>
+          </li>
+        ))}
+      </ul>
+      <Modal open={editingRel !== null} onClose={() => setEditing(null)}
+        title={editingRel ? tv(RELATIONSHIP_SECTIONS.find((s) => s.kind === editingRel.kind)?.title ?? '') : ''}>
+        {editingRel && (
+          <RelationshipCard rel={editingRel} rules={rules}
+            onChange={(next) => setAll(all.map((x) => (x.id === next.id ? next : x)))}
+            onRemove={() => { setEditing(null); setAll(all.filter((x) => x.id !== editingRel.id)); }} />
+        )}
+      </Modal>
     </SheetPanel>
   );
 }

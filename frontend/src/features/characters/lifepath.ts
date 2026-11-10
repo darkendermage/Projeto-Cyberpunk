@@ -1,7 +1,7 @@
 // Narrative Lifepath helpers. The tables come from the API (CP:R p.45–69); rolling on them is a narrative aid,
 // so it happens here and the player can always pick or write something else (the book says "roll or choose").
 import type { CharacterRules, CharacterSheet, LifepathQuestion, Relationship, RelationshipKind } from '../../api/characterTypes';
-import { t } from '../../i18n';
+import { t, tv } from '../../i18n';
 
 export type Rng = () => number;
 
@@ -43,12 +43,42 @@ export const RELATIONSHIP_SECTIONS: { kind: RelationshipKind; title: string; emp
   { kind: 'Contact', title: t('Contatos', 'Contacts'), empty: t('Nenhum contato registrado.', 'No contacts recorded.') },
 ];
 
+export type LifepathGroupId = 'personality' | 'motivations' | 'family';
+
 /** General Lifepath tables grouped as on the reference sheet. Style tables are kept in the style section. */
-export const LIFEPATH_GROUPS: { title: string; tables: string[] }[] = [
-  { title: t('Personalidade', 'Personality'), tables: ['personality'] },
-  { title: t('Motivações', 'Motivations'), tables: ['valueMost', 'feelAboutPeople', 'valuedPerson', 'valuedPossession'] },
-  { title: t('Origem e família', 'Origin and family'), tables: ['familyBackground', 'childhoodEnvironment', 'familyCrisis', 'lifeGoal'] },
+export const LIFEPATH_GROUPS: { id: LifepathGroupId; title: string; subtitle: string; tables: string[] }[] = [
+  { id: 'personality', title: t('Personalidade', 'Personality'), subtitle: t('Traços de comportamento', 'Behaviour traits'), tables: ['personality'] },
+  {
+    id: 'motivations', title: t('Motivações', 'Motivations'), subtitle: t('Valores, pessoas e objetos', 'Values, people and possessions'),
+    tables: ['valueMost', 'feelAboutPeople', 'valuedPerson', 'valuedPossession'],
+  },
+  {
+    id: 'family', title: t('Origem e família', 'Origin and family'), subtitle: t('História familiar e infância', 'Family history and childhood'),
+    tables: ['familyBackground', 'childhoodEnvironment', 'familyCrisis', 'lifeGoal'],
+  },
 ];
+
+export interface HeroChip { key: 'identity' | 'personality' | 'motivation' | 'goal'; label: string; value: string | null }
+
+/** The four answers shown in the Lifepath header; `null` when not answered yet. */
+export function heroChips(sheet: CharacterSheet): HeroChip[] {
+  const a = sheet.lifepath.answers;
+  const value = (v: string | null | undefined) => (v && v.trim() ? v : null);
+  return [
+    { key: 'identity', label: t('Identidade', 'Identity'), value: value(sheet.lifepath.culturalRegion) },
+    { key: 'personality', label: t('Personalidade', 'Personality'), value: value(a.personality) },
+    { key: 'motivation', label: t('Motivação', 'Motivation'), value: value(a.valueMost) },
+    { key: 'goal', label: t('Objetivo', 'Goal'), value: value(a.lifeGoal) },
+  ];
+}
+
+/** One line for a relationship in the compact list: "Name — relation", else the first thing written about it. */
+export function relationSummary(rel: Relationship): string {
+  const name = rel.name.trim();
+  const detail = [rel.relation, rel.outcome, rel.description, rel.notes].find((x) => x && x.trim())?.trim();
+  if (name && detail) return `${name} — ${tv(detail)}`;
+  return name || (detail ? tv(detail) : t('Sem descrição', 'No description'));
+}
 
 /** Tables whose answers live in the style section of the sheet (clothing, hair, signature affectation). */
 export const STYLE_TABLES = ['clothingStyle', 'hairstyle', 'affectation'] as const;

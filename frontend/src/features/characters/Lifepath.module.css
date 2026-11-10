@@ -1,0 +1,335 @@
+/* Caminho de Vida tab: hero, overview grid, collapsible sections and the compact relationship list.
+   Kept apart from Characters.module.css so editing it doesn't change the class hashes of the other sheet tabs. */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+.seal {
+  flex-shrink: 0;
+  padding: 2px 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  background: var(--bg-3);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  white-space: nowrap;
+}
+
+.empty { color: var(--text-faint); }
+
+/* hero */
+
+.hero {
+  display: grid;
+  grid-template-columns: 132px minmax(0, 1fr) auto;
+  gap: 18px;
+  align-items: center;
+  padding: 10px 16px 10px 10px;
+  background: linear-gradient(90deg, rgba(255, 42, 61, 0.1), transparent 55%), var(--panel);
+  border: 1px solid var(--red-line);
+  clip-path: polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, var(--cut) 100%, 0 calc(100% - var(--cut)));
+}
+.heroPortrait { width: 132px; }
+.heroMain {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+.heroTitleRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.heroTitle {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--red-bright);
+  text-shadow: var(--text-glow);
+}
+.heroRole { color: var(--text); text-shadow: none; }
+.heroActions { display: flex; gap: 8px; }
+
+/* "Aparência e roupas" inside Moda e estilo, closed by default */
+.more { border-top: 1px solid var(--line); padding-top: 8px; }
+.more > summary {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-2);
+  cursor: pointer;
+  list-style: none;
+}
+.more > summary::-webkit-details-marker { display: none; }
+.more > summary:hover { color: var(--text); }
+.more > summary svg { color: var(--red); transition: transform var(--t-fast) var(--ease); }
+.more[open] > summary svg { transform: rotate(180deg); }
+.moreBody { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
+.heroLine {
+  margin: 0;
+  max-width: 62ch;
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--text-2);
+}
+.heroLine strong { color: var(--text); font-weight: 600; }
+
+.heroChips {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(120px, 170px));
+  margin: 0;
+}
+.heroChip {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 6px 14px;
+  border-left: 1px solid var(--red-line);
+  min-width: 0;
+}
+.heroChipIcon { flex-shrink: 0; color: var(--red); margin-top: 2px; }
+.heroChip dt {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.heroChip dd {
+  margin: 2px 0 0;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--text);
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 1400px) {
+  .hero { grid-template-columns: 112px minmax(0, 1fr); }
+  .heroPortrait { width: 112px; }
+  .heroChips { grid-column: 1 / -1; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .heroChip:first-child { border-left: 0; padding-left: 0; }
+}
+@media (max-width: 700px) {
+  .hero { grid-template-columns: 84px minmax(0, 1fr); gap: 12px; }
+  .heroPortrait { width: 84px; }
+  .heroTitle { font-size: 18px; }
+  .heroChips { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 8px; }
+  .heroChip:nth-child(odd) { border-left: 0; padding-left: 0; }
+}
+
+/* layouts */
+
+.overview {
+  display: grid;
+  grid-template-columns: minmax(240px, 0.8fr) minmax(0, 1.6fr) minmax(260px, 1fr);
+  gap: 12px;
+  align-items: start;
+}
+@media (max-width: 1400px) {
+  .overview { grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); }
+  .overview > :last-child { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); align-items: start; }
+}
+@media (max-width: 900px) {
+  .overview { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* quick profile and condition */
+
+.profile {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+}
+.profileRow {
+  padding: 7px 0;
+  border-bottom: 1px solid var(--line);
+}
+.profileRow:last-child { border-bottom: 0; }
+.profileRow dt { font-size: 12px; color: var(--text-muted); }
+.profileRow dd { margin: 2px 0 0; font-size: 15px; font-weight: 600; color: var(--text); }
+
+.condition {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.conditionHead {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: var(--text-2);
+}
+.conditionHead strong { color: var(--text); }
+
+.stylePortrait { width: 110px; flex-shrink: 0; }
+
+/* collapsible sections */
+
+.accordion {
+  background: var(--panel);
+  border: 1px solid var(--red-line);
+}
+.accordion[data-open] { border-color: rgba(255, 42, 61, 0.5); }
+.accordionHeading { margin: 0; }
+.accordionHead {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 12px;
+  text-align: left;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+.accordionHead:hover { background: var(--red-haze); }
+.accordionHead:focus-visible { outline: 1px solid var(--red); outline-offset: -1px; }
+.accordionIcon { display: inline-flex; color: var(--red); }
+.accordionTitle {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--red-bright);
+}
+.accordionSubtitle {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: right;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+.accordionChevron {
+  flex-shrink: 0;
+  color: var(--red);
+  transition: transform var(--t-fast) var(--ease);
+}
+.accordion[data-open] .accordionChevron { transform: rotate(180deg); }
+.accordionBody {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px 12px 14px;
+  border-top: 1px solid var(--line);
+}
+@media (max-width: 700px) {
+  .accordionSubtitle { display: none; }
+  .accordionTitle { flex: 1; }
+}
+
+/* housing */
+
+.housing {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(150px, 1fr);
+  gap: 14px;
+  align-items: start;
+}
+.housingFields {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 10px;
+}
+.housingTotals {
+  padding-left: 14px;
+  border-left: 1px solid var(--line);
+}
+@media (max-width: 700px) {
+  .housing { grid-template-columns: minmax(0, 1fr); }
+  .housingTotals { padding-left: 0; border-left: 0; }
+}
+
+/* compact relationships */
+
+.kindTabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.kindTab {
+  padding: 3px 9px;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-2);
+  background: var(--bg-2);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+.kindTab:hover { color: var(--text); }
+.kindTabActive {
+  color: var(--text);
+  background: var(--red-strong);
+  border-color: var(--red);
+}
+
+.relationList {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.relationRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 4px 4px 10px;
+  background: var(--bg-2);
+  border-left: 2px solid var(--red-line);
+}
+.relationRow[data-kind='Enemy'] { border-left-color: var(--red); }
+.relationRow[data-kind='Friend'], .relationRow[data-kind='Ally'] { border-left-color: var(--cyan); }
+.relationText {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 14px;
+}
+
+/* active effects */
+
+.effects {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.effects li {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+  font-size: 13px;
+  color: var(--text-2);
+}
+.effects li:last-child { border-bottom: 0; padding-bottom: 0; }
+.effects strong { font-size: 14px; color: var(--text); font-weight: 600; }

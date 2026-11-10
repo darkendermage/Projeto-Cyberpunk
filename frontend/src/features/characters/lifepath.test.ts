@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import type { CharacterRules, CharacterSheet, LifepathQuestion } from '../../api/characterTypes';
-import { rollIndex, rollMissing, rollOption, rollRelationshipCount, visibleQuestions } from './lifepath';
+import type { CharacterRules, CharacterSheet, LifepathQuestion, Relationship } from '../../api/characterTypes';
+import { heroChips, relationSummary, rollIndex, rollMissing, rollOption, rollRelationshipCount, visibleQuestions } from './lifepath';
 
 const q = (id: string, showIfQuestion: string | null = null, showIfValue: string | null = null): LifepathQuestion =>
   ({ id, label: id, labelPt: id, dice: '1d6', options: ['a', 'b'], showIfQuestion, showIfValue });
@@ -75,5 +75,26 @@ describe('lifepath helpers', () => {
       expect(again.sheet.lifepath.relationships).toHaveLength(0);
       expect(again.filled).toBe(0);
     });
+  });
+});
+
+describe('lifepath header and compact relationships', () => {
+  const sheet = (lifepath: Partial<CharacterSheet['lifepath']>) =>
+    ({ lifepath: { culturalRegion: null, answers: {}, relationships: [], ...lifepath } } as unknown as CharacterSheet);
+
+  it('shows the four defining answers and leaves blanks empty', () => {
+    const chips = heroChips(sheet({ culturalRegion: 'East Asian', answers: { personality: 'Shy', valueMost: '  ', lifeGoal: 'Get rich' } }));
+    expect(chips.map((c) => [c.key, c.value])).toEqual([
+      ['identity', 'East Asian'], ['personality', 'Shy'], ['motivation', null], ['goal', 'Get rich'],
+    ]);
+  });
+
+  it('sums up a relationship in one line', () => {
+    const rel = (r: Partial<Relationship>): Relationship => ({ id: 'x', kind: 'Friend', name: '', ...r });
+    expect(relationSummary(rel({ name: 'Rita', relation: 'Old partner' }))).toBe('Rita — Old partner');
+    expect(relationSummary(rel({ name: 'Rita' }))).toBe('Rita');
+    expect(relationSummary(rel({ kind: 'Lover', outcome: 'Vanished' }))).toBe('Vanished');
+    expect(relationSummary(rel({ notes: 'Met in Watson' }))).toBe('Met in Watson');
+    expect(relationSummary(rel({ relation: '  ' }))).toBe('No description');
   });
 });
