@@ -69,6 +69,9 @@ namespace CyberpunkDb.Migrations.Sqlite.Migrations
                         .HasMaxLength(40)
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid?>("Uid")
+                        .HasColumnType("TEXT");
+
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("TEXT");
 
@@ -77,6 +80,9 @@ namespace CyberpunkDb.Migrations.Sqlite.Migrations
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Uid")
+                        .IsUnique();
 
                     b.HasIndex("UpdatedAt");
 

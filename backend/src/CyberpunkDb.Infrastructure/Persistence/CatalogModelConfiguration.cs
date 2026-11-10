@@ -231,6 +231,7 @@ internal static class CatalogModelConfiguration
             e.HasMany(x => x.Events).WithOne().HasForeignKey(x => x.CharacterId).OnDelete(DeleteBehavior.Cascade);
             e.HasOne(x => x.Portrait).WithOne().HasForeignKey<CharacterPortrait>(x => x.CharacterId).OnDelete(DeleteBehavior.Cascade);
             e.HasIndex(x => x.UpdatedAt);
+            e.HasIndex(x => x.Uid).IsUnique();
         });
 
         b.Entity<NightMarket>(e =>

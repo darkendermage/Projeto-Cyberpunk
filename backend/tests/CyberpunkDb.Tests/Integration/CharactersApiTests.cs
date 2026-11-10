@@ -165,6 +165,53 @@ public class CharactersApiTests(ApiFactory factory)
         second.Sheet.Identity.Name.Should().Be("Exportado (importado 2)");
     }
 
+    private async Task<CharacterExportFile> Export(int id) =>
+        (await _client.GetFromJsonAsync<CharacterExportFile>($"/api/characters/{id}/export", Json))!;
+
+    [Fact]
+    public async Task Import_with_update_overwrites_the_sheet_with_the_same_uid_and_a_copy_gets_a_new_one()
+    {
+        var c = await FinalizedSolo("Atualizavel");
+        var file = await Export(c.Id);
+        file.Uid.Should().NotBeNull();
+        (await _client.GetFromJsonAsync<CharacterMatchDto>($"/api/characters/by-uid/{file.Uid}", Json))!.Id.Should().Be(c.Id);
+        (await _client.GetAsync($"/api/characters/by-uid/{Guid.NewGuid()}")).StatusCode.Should().Be(HttpStatusCode.NotFound);
+
+        // the copy here moves on; the file brings it back
+        c = await Post(c, "balance", new AdjustBalanceRequest(c.Version, 500, "Bônus do mestre"));
+        var count = (await _client.GetFromJsonAsync<List<CharacterSummaryDto>>("/api/characters", Json))!.Count;
+
+        var updated = await Send(HttpMethod.Post, "/api/characters/import?mode=update", file);
+        updated.Id.Should().Be(c.Id);
+        updated.Version.Should().BeGreaterThan(c.Version);
+        updated.Sheet.Wallet.Balance.Should().Be(c.Sheet.Wallet.Balance - 500);
+        updated.Sheet.Identity.Name.Should().Be("Atualizavel", "a mesma ficha não ganha \"(importado)\"");
+        (await _client.GetFromJsonAsync<List<CharacterSummaryDto>>("/api/characters", Json))!.Count.Should().Be(count);
+        var history = (await _client.GetFromJsonAsync<List<CharacterEventDto>>($"/api/characters/{c.Id}/events", Json))!;
+        history.Should().Contain(e => e.Action == "import-update").And.Contain(e => e.Description == "Bônus do mestre", "o histórico daqui fica");
+
+        var copy = await Send(HttpMethod.Post, "/api/characters/import?mode=new", file, HttpStatusCode.Created);
+        copy.Id.Should().NotBe(c.Id);
+        (await Export(copy.Id)).Uid.Should().NotBe(file.Uid!.Value);
+    }
+
+    [Fact]
+    public async Task Duplicate_gets_its_own_uid_and_an_unknown_uid_is_kept_on_import()
+    {
+        var c = await FinalizedSolo("Original com UID");
+        var dup = await Send(HttpMethod.Post, $"/api/characters/{c.Id}/duplicate", expected: HttpStatusCode.Created);
+        var file = await Export(c.Id);
+        (await Export(dup.Id)).Uid.Should().NotBe(file.Uid!.Value);
+
+        var fresh = Guid.NewGuid();
+        var created = await Send(HttpMethod.Post, "/api/characters/import?mode=update", file with { Uid = fresh }, HttpStatusCode.Created);
+        (await Export(created.Id)).Uid.Should().Be(fresh, "o próximo import encontra a mesma ficha");
+
+        // files from older versions have no uid
+        var legacy = await Send(HttpMethod.Post, "/api/characters/import?mode=update", file with { Uid = null }, HttpStatusCode.Created);
+        (await Export(legacy.Id)).Uid.Should().NotBeNull().And.NotBe(file.Uid.Value);
+    }
+
     [Fact]
     public async Task Import_refuses_files_that_are_not_characters_or_come_from_a_newer_version()
     {

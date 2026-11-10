@@ -16,6 +16,8 @@ public sealed record CharacterExportFile
     public string Format { get; init; } = "";
     public int FormatVersion { get; init; }
     public DateTime ExportedAt { get; init; }
+    // same character on another install; absent in files from older versions
+    public Guid? Uid { get; init; }
     public CharacterSheet? Sheet { get; init; }
     public Dictionary<int, ExportedItem>? Items { get; init; }
     public List<ExportedEvent>? History { get; init; }

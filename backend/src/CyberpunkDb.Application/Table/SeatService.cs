@@ -1,5 +1,7 @@
 using System.Security.Cryptography;
 using CyberpunkDb.Application.Abstractions;
+using CyberpunkDb.Application.Characters;
+using CyberpunkDb.Application.Characters.Transfer;
 using CyberpunkDb.Application.Common;
 using CyberpunkDb.Application.Localization;
 using CyberpunkDb.Domain.Entities;
@@ -9,7 +11,7 @@ namespace CyberpunkDb.Application.Table;
 
 // A seat is a secret link: whoever has the token plays it until the GM revokes it. Claiming or releasing a seat
 // changes its key, so only one device ever has it.
-public sealed class SeatService(IAppDbContext db, TableLobby lobby, ITableNotifier notifier)
+public sealed class SeatService(IAppDbContext db, TableLobby lobby, ITableNotifier notifier, CharacterService characters)
 {
     private static readonly string[] Palette = ["#00f0ff", "#ff2a6d", "#f5e663", "#05ffa1", "#b967ff", "#ff9f1c", "#4d9de0", "#ff6ec7"];
 
@@ -121,20 +123,39 @@ public sealed class SeatService(IAppDbContext db, TableLobby lobby, ITableNotifi
         return ToDto(seat);
     }
 
-    // 409: an imported sheet never replaces one
+    // 409: a new sheet never replaces the one already on the seat
     public static void RequireNoCharacter(TableSeat seat)
     {
         if (seat.CharacterId is not null)
             throw new ConflictException(L.T("Este lugar já tem um personagem. Peça ao mestre para desligá-lo antes de importar outro.", "This seat already has a character. Ask the GM to unlink it before importing another."));
     }
 
-    public async Task<PlayerSeatDto> LinkImportedAsync(TableSeat seat, int characterId, CancellationToken ct)
+    // The player's own file. A sheet the GM already has (same Uid) is overwritten and linked here, unless another
+    // seat plays it; an unknown one is created, but only on a seat without a character.
+    public async Task<(PlayerSeatDto Seat, bool Created)> ImportAsync(TableSeat seat, CharacterExportFile file, CancellationToken ct)
     {
         var tracked = await FindAsync(seat.Id, ct);
+        if (await characters.IdByUidAsync(file.Uid, ct) is { } existing)
+        {
+            if (await db.TableSeats.AnyAsync(s => s.CharacterId == existing && s.Id != tracked.Id, ct))
+                throw new ConflictException(L.T("Essa ficha pertence a outro lugar da mesa.", "That sheet belongs to another seat at the table."));
+            if (tracked.CharacterId is not null && tracked.CharacterId != existing) RequireNoCharacter(tracked);
+            await characters.ImportAsync(file, ImportMode.Update, ct);
+            return (await LinkAsync(tracked, existing, ct), false);
+        }
         RequireNoCharacter(tracked);
-        tracked.CharacterId = characterId;
-        await db.SaveChangesAsync(ct);
-        await notifier.SeatsAsync(ct);
+        var created = await characters.ImportAsync(file, ImportMode.New, ct);
+        return (await LinkAsync(tracked, created.Id, ct), true);
+    }
+
+    private async Task<PlayerSeatDto> LinkAsync(TableSeat tracked, int characterId, CancellationToken ct)
+    {
+        if (tracked.CharacterId != characterId)
+        {
+            tracked.CharacterId = characterId;
+            await db.SaveChangesAsync(ct);
+            await notifier.SeatsAsync(ct);
+        }
         await notifier.PartyAsync(characterId, ct);
         return ToPlayer(tracked);
     }

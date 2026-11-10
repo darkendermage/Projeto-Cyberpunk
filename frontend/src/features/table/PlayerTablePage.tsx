@@ -377,11 +377,15 @@ export function PlayerTablePage() {
               onReload={reloadWeapon}
               onSwitch={switchMode}
               onImport={(file) => void run(async () => {
-                // The file exported on the player's PC; the server checks the format and links it to this seat.
+                // The file exported on the player's PC; the server checks the format, overwrites the GM's copy when
+                // it has the same uid and links it to this seat.
+                const hadSheet = character.data != null;
                 const content = await readCharacterFile(file);
                 await api.importCharacter(content);
                 await client.invalidateQueries({ queryKey: ['table', 'player', token] });
-                toast.notify(t('Ficha importada e ligada ao seu lugar.', 'Sheet imported and linked to your seat.'));
+                toast.notify(hadSheet
+                  ? t('Ficha atualizada pelo seu arquivo.', 'Sheet updated from your file.')
+                  : t('Ficha importada e ligada ao seu lugar.', 'Sheet imported and linked to your seat.'));
               })}
               onPickUp={(weapon) => void run(async () => { client.setQueryData(tableKeys.playerEncounter(token), await api.pickUp(weapon)); })}
               onUnjam={(weapon) => void run(async () => { client.setQueryData(tableKeys.playerEncounter(token), await api.unjam(weapon)); toast.notify(t('Destravada.', 'Unjammed.')); })}

@@ -38,6 +38,7 @@ public sealed class DatabaseInitializer(
     {
         if (db.Database.IsSqlite()) BackupSqliteBeforeMigration();
         await db.Database.MigrateAsync(ct);
+        await GiveCharactersUidsAsync(ct);
 
         if (!options.Value.Enabled) return;
         var files = seedSource.GetFiles();
@@ -79,6 +80,16 @@ public sealed class DatabaseInitializer(
             stored.Value = hash;
         }
         await db.SaveChangesAsync(ct);
+    }
+
+    // sheets created before the Uid column; done here so it's the same on both providers
+    private async Task GiveCharactersUidsAsync(CancellationToken ct)
+    {
+        var missing = await db.Characters.Where(c => c.Uid == null).ToListAsync(ct);
+        if (missing.Count == 0) return;
+        foreach (var c in missing) c.Uid = Guid.NewGuid();
+        await db.SaveChangesAsync(ct);
+        db.ChangeTracker.Clear();
     }
 
     private sealed record MovedItem(string Slug, DateTime? FavoritedAt, List<GearListEntry> Entries);

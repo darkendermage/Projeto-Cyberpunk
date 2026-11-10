@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { API_BASE, ApiError, request, seatContext } from './client';
 import type {
   CharacterDetail, CharacterEvent, CharacterEventKind, CharacterRules, CharacterSheet, CharacterSummary,
-  CreateCharacterRequest, InstallPreview, InstallRequestBody, StorePage,
+  CharacterMatch, CreateCharacterRequest, ImportMode, InstallPreview, InstallRequestBody, StorePage,
 } from './characterTypes';
 import { locale, t } from '../i18n';
 
@@ -25,8 +25,17 @@ export const characterApi = {
   create: (body: CreateCharacterRequest) => post<CharacterDetail>('/characters', body),
   duplicate: (id: number) => request<CharacterDetail>(`/characters/${id}/duplicate`, { method: 'POST' }),
   exportUrl: (id: number) => `${API_BASE}/characters/${id}/export`,
-  /** Creates a new character from the content of an exported file. */
-  importFile: (content: unknown) => post<CharacterDetail>('/characters/import', content),
+  /** From the content of an exported file: 'update' overwrites the sheet with the file's uid, 'new' always creates. */
+  importFile: ({ content, mode = 'new' }: { content: unknown; mode?: ImportMode }) => post<CharacterDetail>(`/characters/import?mode=${mode}`, content),
+  /** The sheet this install already has with that uid, or null. */
+  byUid: async (uid: string): Promise<CharacterMatch | null> => {
+    try {
+      return await request<CharacterMatch>(`/characters/by-uid/${encodeURIComponent(uid)}`);
+    } catch (error) {
+      if (error instanceof ApiError && error.status === 404) return null;
+      throw error;
+    }
+  },
   remove: (id: number) => request<void>(`/characters/${id}`, { method: 'DELETE' }),
   save: (id: number, version: number, sheet: CharacterSheet, manualReason?: string) =>
     request<CharacterDetail>(`/characters/${id}`, { method: 'PUT', body: json({ version, sheet, manualReason }) }),
@@ -120,6 +129,12 @@ export function downloadCharacter(id: number) {
   document.body.appendChild(link);
   link.click();
   link.remove();
+}
+
+/** The stable id an exported file carries (files from older versions have none). */
+export function fileUid(content: unknown): string | null {
+  const uid = (content as { uid?: unknown } | null)?.uid;
+  return typeof uid === 'string' && uid.length > 0 ? uid : null;
 }
 
 /** Reads a chosen file as JSON, refusing what is clearly not an export before it reaches the server. */

@@ -52,14 +52,19 @@ public sealed class CharactersController(CharacterService characters, EncounterS
         return File(content, "application/json", fileName);
     }
 
-    // never overwrites anything
+    // mode=update overwrites the sheet with the file's Uid (200); otherwise a new one is created (201)
     [HttpPost("import")]
     [RequestSizeLimit(CharacterService.ImportMaxBytes)]
-    public async Task<ActionResult<CharacterDetailDto>> Import(CharacterExportFile file, CancellationToken ct)
+    public async Task<ActionResult<CharacterDetailDto>> Import(CharacterExportFile file, [FromQuery] ImportMode mode, CancellationToken ct)
     {
-        var created = await characters.ImportAsync(file, ct);
-        return CreatedAtAction(nameof(Get), new { id = created.Id }, created);
+        var existed = mode == ImportMode.Update && file.Uid is { } uid && await characters.ExistsAsync(uid, ct);
+        var result = await characters.ImportAsync(file, mode, ct);
+        return existed ? Ok(result) : CreatedAtAction(nameof(Get), new { id = result.Id }, result);
     }
+
+    // lets the import ask "update or copy?" before sending the file
+    [HttpGet("by-uid/{uid:guid}")]
+    public Task<CharacterMatchDto> ByUid(Guid uid, CancellationToken ct) => characters.FindByUidAsync(uid, ct);
 
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete(int id, CancellationToken ct)

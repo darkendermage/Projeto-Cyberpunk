@@ -37,6 +37,11 @@ public sealed record CreateCharacterRequest
 }
 
 // see CharacterService.SaveSheetAsync
+// New = always a new sheet (a copy when the Uid is taken); Update = overwrite the sheet with the file's Uid
+public enum ImportMode { New, Update }
+
+public sealed record CharacterMatchDto(int Id, string Name, string? Handle, DateTime UpdatedAt);
+
 public sealed record SaveSheetRequest(int Version, CharacterSheet Sheet, string? ManualReason = null);
 
 public sealed record VersionRequest(int Version);

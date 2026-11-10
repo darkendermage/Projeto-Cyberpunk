@@ -191,15 +191,14 @@ public sealed class TablePlayController(
     [HttpPut("dice-color")]
     public async Task<PlayerSeatDto> DiceColor(DiceColorRequest request, CancellationToken ct) => await seats.SetDiceColorAsync(await SeatAsync(ct), request, ct);
 
-    // Player imports their own sheet (exported from their copy of the app). Only for seats without a character.
+    // Player imports their own sheet (exported from their copy of the app): 200 when it updated the GM's copy,
+    // 201 when it created one
     [HttpPost("character/import")]
     [RequestSizeLimit(CharacterService.ImportMaxBytes)]
     public async Task<ActionResult<PlayerSeatDto>> ImportCharacter(CyberpunkDb.Application.Characters.Transfer.CharacterExportFile file, CancellationToken ct)
     {
-        var seat = await SeatAsync(ct);
-        SeatService.RequireNoCharacter(seat);
-        var created = await characters.ImportAsync(file, ct);
-        return StatusCode(StatusCodes.Status201Created, await seats.LinkImportedAsync(seat, created.Id, ct));
+        var (seat, created) = await seats.ImportAsync(await SeatAsync(ct), file, ct);
+        return created ? StatusCode(StatusCodes.Status201Created, seat) : Ok(seat);
     }
 
     // 2 MB max, the browser shrinks it first

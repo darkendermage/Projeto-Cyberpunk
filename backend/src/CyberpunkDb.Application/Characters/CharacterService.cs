@@ -195,7 +195,7 @@ public sealed class CharacterService(
         var sheet = creation.NewDraft(request, change).Normalize();
         change.Log(CharacterEventKind.Edit, "create", L.T($"Personagem criado ({request.Method}, {request.Role}).", $"Character created ({request.Method}, {request.Role})."));
 
-        var entity = new Character { CreatedAt = now };
+        var entity = new Character { CreatedAt = now, Uid = Guid.NewGuid() };
         Apply(entity, sheet, catalog, now);
         AddEvents(entity, change.Events, now);
         db.Characters.Add(entity);
@@ -211,7 +211,8 @@ public sealed class CharacterService(
         var sheet = Deserialize(source.SheetJson);
         sheet = sheet with { Identity = sheet.Identity with { Name = L.T($"{sheet.Identity.Name} (cópia)", $"{sheet.Identity.Name} (copy)").Trim() } };
 
-        var copy = new Character { CreatedAt = now };
+        // a copy is a different character: it never keeps the Uid
+        var copy = new Character { CreatedAt = now, Uid = Guid.NewGuid() };
         Apply(copy, sheet, catalog, now);
         if (source.Portrait is { } p)
             copy.Portrait = new CharacterPortrait { ContentType = p.ContentType, Data = p.Data, UpdatedAt = now };
@@ -228,7 +229,12 @@ public sealed class CharacterService(
 
     public async Task<(byte[] Content, string FileName)> ExportAsync(int id, CancellationToken ct)
     {
-        var entity = await db.Characters.AsNoTracking().Include(c => c.Portrait).FirstOrDefaultAsync(c => c.Id == id, ct) ?? throw NotFound(id);
+        var entity = await db.Characters.Include(c => c.Portrait).FirstOrDefaultAsync(c => c.Id == id, ct) ?? throw NotFound(id);
+        if (entity.Uid is null)
+        {
+            entity.Uid = Guid.NewGuid();
+            await db.SaveChangesAsync(ct);
+        }
         var sheet = Deserialize(entity.SheetJson);
         var history = await db.CharacterEvents.AsNoTracking().Where(e => e.CharacterId == id)
             .OrderBy(e => e.CreatedAt).ThenBy(e => e.Id)
@@ -239,6 +245,7 @@ public sealed class CharacterService(
             Format = CharacterExportFile.FormatName,
             FormatVersion = CharacterExportFile.CurrentVersion,
             ExportedAt = DateTime.UtcNow,
+            Uid = entity.Uid,
             Sheet = sheet,
             Items = CharacterTransfer.ReferencedItems(sheet, await catalogs.GetAsync(ct)),
             History = history,
@@ -249,9 +256,45 @@ public sealed class CharacterService(
 
     private static readonly JsonSerializerOptions ExportJson = new(SheetJson) { WriteIndented = true };
 
-    // Always creates a new character. Items are matched by slug and the missing ones are reported. A hand-edited
-    // file goes through normal validation, so it comes in with its problems listed instead of being refused.
-    public async Task<CharacterDetailDto> ImportAsync(CharacterExportFile file, CancellationToken ct)
+    public async Task<CharacterMatchDto> FindByUidAsync(Guid uid, CancellationToken ct) =>
+        await db.Characters.AsNoTracking().Where(c => c.Uid == uid)
+            .Select(c => new CharacterMatchDto(c.Id, c.Name, c.Handle, c.UpdatedAt)).FirstOrDefaultAsync(ct)
+        ?? throw new NotFoundException(L.T("Nenhuma ficha com essa identidade.", "No sheet with that identity."));
+
+    public async Task<bool> ExistsAsync(Guid uid, CancellationToken ct) => await db.Characters.AnyAsync(c => c.Uid == uid, ct);
+
+    internal async Task<int?> IdByUidAsync(Guid? uid, CancellationToken ct) =>
+        uid is { } u ? await db.Characters.Where(c => c.Uid == u).Select(c => (int?)c.Id).FirstOrDefaultAsync(ct) : null;
+
+    // New always creates: it keeps the file's Uid when this install doesn't have it yet (so the next import finds
+    // it), otherwise it's a copy with a fresh one. Update overwrites the character with the file's Uid, or creates
+    // it when there's none. Items are matched by slug and the missing ones are reported. A hand-edited file goes
+    // through normal validation, so it comes in with its problems listed instead of being refused.
+    public async Task<CharacterDetailDto> ImportAsync(CharacterExportFile file, ImportMode mode, CancellationToken ct)
+    {
+        var read = await ReadImportAsync(file, ct);
+        var existing = file.Uid is { } uid ? await db.Characters.Include(c => c.Portrait).FirstOrDefaultAsync(c => c.Uid == uid, ct) : null;
+        return mode == ImportMode.Update && existing is not null
+            ? await ReplaceAsync(existing, file, read, ct)
+            : await CreateFromFileAsync(file, read, existing is null ? file.Uid : null, ct);
+    }
+
+    private sealed record ImportRead(CharacterSheet Sheet, List<string> Missing, ExportedPortrait? Portrait, byte[]? PortraitData, NpcCatalog Catalog)
+    {
+        public List<string> Notices()
+        {
+            var notices = Missing.Select(m => L.T($"Fora do catálogo deste banco, não importado: {m}.", $"Not in this database's catalog, not imported: {m}.")).ToList();
+            if (Portrait is not null && PortraitData is null)
+                notices.Add(L.T("O retrato do arquivo é inválido e ficou de fora.", "The file's portrait is invalid and was left out."));
+            return notices;
+        }
+
+        public string MissingSuffix() => Missing.Count > 0
+            ? L.T($" Fora do catálogo, não importado: {string.Join(", ", Missing)}.", $" Not in the catalog, not imported: {string.Join(", ", Missing)}.")
+            : "";
+    }
+
+    private async Task<ImportRead> ReadImportAsync(CharacterExportFile file, CancellationToken ct)
     {
         if (file.Format != CharacterExportFile.FormatName)
             throw RequestValidationException.For("format", L.T("Este arquivo não é um personagem exportado por este aplicativo.", "This file isn't a character exported by this app."));
@@ -261,11 +304,24 @@ public sealed class CharacterService(
         if (file.Sheet is null) throw RequestValidationException.For("sheet", L.T("O arquivo não traz a ficha do personagem.", "The file doesn't contain the character sheet."));
 
         var catalog = await catalogs.GetAsync(ct);
-        var now = DateTime.UtcNow;
         var (sheet, missing) = CharacterTransfer.Rebind(file.Sheet.Normalize(), file.Items ?? [], catalog);
         if (sheet.Roles.Count == 0) throw RequestValidationException.For("sheet", L.T("A ficha não tem Role.", "The sheet has no Role."));
         if (sheet.Roles.FirstOrDefault(r => rules.FindRole(r.Role) is null) is { } unknown)
             throw RequestValidationException.For("sheet", L.T($"Role desconhecida na ficha: {unknown.Role}.", $"Unknown Role on the sheet: {unknown.Role}."));
+
+        byte[]? data = null;
+        if (file.Portrait is { } portrait)
+        {
+            try { data = Convert.FromBase64String(portrait.Data ?? ""); } catch (FormatException) { }
+            if (data is not { Length: > 0 and <= PortraitMaxBytes } || !PortraitTypes.Contains(portrait.ContentType, StringComparer.OrdinalIgnoreCase)) data = null;
+        }
+        return new ImportRead(sheet, missing, file.Portrait, data, catalog);
+    }
+
+    private async Task<CharacterDetailDto> CreateFromFileAsync(CharacterExportFile file, ImportRead read, Guid? uid, CancellationToken ct)
+    {
+        var now = DateTime.UtcNow;
+        var sheet = read.Sheet;
 
         // "(importado)", "(importado 2)"... so duplicates can be told apart
         var name = string.IsNullOrWhiteSpace(sheet.Identity.Name) ? L.T("Sem nome", "Unnamed") : sheet.Identity.Name;
@@ -277,18 +333,10 @@ public sealed class CharacterService(
             sheet = sheet with { Identity = sheet.Identity with { Name = renamed } };
         }
 
-        var notices = missing.Select(m => L.T($"Fora do catálogo deste banco, não importado: {m}.", $"Not in this database's catalog, not imported: {m}.")).ToList();
-        var entity = new Character { CreatedAt = now };
-        Apply(entity, sheet, catalog, now);
-
-        if (file.Portrait is { } portrait)
-        {
-            byte[]? data = null;
-            try { data = Convert.FromBase64String(portrait.Data ?? ""); } catch (FormatException) { }
-            if (data is { Length: > 0 and <= PortraitMaxBytes } && PortraitTypes.Contains(portrait.ContentType, StringComparer.OrdinalIgnoreCase))
-                entity.Portrait = new CharacterPortrait { ContentType = portrait.ContentType, Data = data, UpdatedAt = now };
-            else notices.Add(L.T("O retrato do arquivo é inválido e ficou de fora.", "The file's portrait is invalid and was left out."));
-        }
+        var entity = new Character { CreatedAt = now, Uid = uid ?? Guid.NewGuid() };
+        Apply(entity, sheet, read.Catalog, now);
+        if (read.PortraitData is { } data)
+            entity.Portrait = new CharacterPortrait { ContentType = read.Portrait!.ContentType, Data = data, UpdatedAt = now };
 
         foreach (var e in (file.History ?? []).TakeLast(CharacterTransfer.MaxHistory))
             entity.Events.Add(new CharacterEvent
@@ -298,12 +346,40 @@ public sealed class CharacterService(
                 CreatedAt = e.CreatedAt.Kind == DateTimeKind.Unspecified ? DateTime.SpecifyKind(e.CreatedAt, DateTimeKind.Utc) : e.CreatedAt.ToUniversalTime(),
             });
         AddEvents(entity, [new PendingEvent(CharacterEventKind.Edit, "import",
-            L.T($"Importado de arquivo exportado em {file.ExportedAt:dd/MM/yyyy}.", $"Imported from a file exported on {file.ExportedAt:yyyy-MM-dd}.") +
-            (missing.Count > 0 ? L.T($" Fora do catálogo, não importado: {string.Join(", ", missing)}.", $" Not in the catalog, not imported: {string.Join(", ", missing)}.") : ""), null, null, null, false)], now);
+            L.T($"Importado de arquivo exportado em {file.ExportedAt:dd/MM/yyyy}.", $"Imported from a file exported on {file.ExportedAt:yyyy-MM-dd}.") + read.MissingSuffix(),
+            null, null, null, false)], now);
 
         db.Characters.Add(entity);
         await db.SaveChangesAsync(ct);
-        return Detail(entity, sheet, catalog, entity.Portrait is not null, notices);
+        return Detail(entity, sheet, read.Catalog, entity.Portrait is not null, read.Notices());
+    }
+
+    // Same Id, so seats, tokens and fights stay linked. The history here is kept (the file's isn't copied) and the
+    // portrait only changes when the file brings a valid one.
+    private async Task<CharacterDetailDto> ReplaceAsync(Character entity, CharacterExportFile file, ImportRead read, CancellationToken ct)
+    {
+        var now = DateTime.UtcNow;
+        Apply(entity, read.Sheet, read.Catalog, now);
+        if (read.PortraitData is { } data)
+        {
+            entity.Portrait ??= new CharacterPortrait();
+            entity.Portrait.ContentType = read.Portrait!.ContentType;
+            entity.Portrait.Data = data;
+            entity.Portrait.UpdatedAt = now;
+        }
+        AddEvents(entity, [new PendingEvent(CharacterEventKind.Edit, "import-update",
+            L.T($"Ficha atualizada a partir de arquivo exportado em {file.ExportedAt:dd/MM/yyyy}.", $"Sheet updated from a file exported on {file.ExportedAt:yyyy-MM-dd}.") + read.MissingSuffix(),
+            null, null, null, false)], now);
+        try
+        {
+            await db.SaveChangesAsync(ct);
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            throw new ConflictException(L.T("Esta ficha foi alterada ao mesmo tempo em outra janela. Tente de novo.", "This sheet was changed at the same time in another window. Try again."));
+        }
+        await observer.ChangedAsync(entity.Id, ct);
+        return Detail(entity, read.Sheet, read.Catalog, entity.Portrait is not null, read.Notices());
     }
 
     public async Task DeleteAsync(int id, CancellationToken ct)

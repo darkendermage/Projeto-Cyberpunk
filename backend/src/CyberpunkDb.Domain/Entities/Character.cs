@@ -6,6 +6,8 @@ namespace CyberpunkDb.Domain.Entities;
 public class Character
 {
     public int Id { get; set; }
+    // stable identity across installs; goes in the exported file so a re-import updates instead of duplicating
+    public Guid? Uid { get; set; }
     public string Name { get; set; } = string.Empty;
     public string? Handle { get; set; }
     public string? Role { get; set; }

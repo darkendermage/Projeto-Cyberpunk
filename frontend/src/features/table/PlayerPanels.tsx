@@ -33,7 +33,7 @@ export function CharacterPanel({ character, encounter, token, onRoll, onTurn, on
   onReload?: (weaponKey: string, magazine?: string) => void;
   /** Switches a mode that stays on the weapon (an Action on the player's Turn in a fight). */
   onSwitch?: (weaponKey: string, mode: string) => void;
-  /** Imports the player's own sheet when the seat has none. */
+  /** Imports the player's own sheet: creates it on an empty seat, or updates the GM's copy (same uid). */
   onImport?: (file: File) => void;
   /** Clears a jammed weapon (an Action on the player's Turn). */
   onUnjam?: (weaponKey: string) => void;
@@ -214,6 +214,15 @@ export function CharacterPanel({ character, encounter, token, onRoll, onTurn, on
             })}
           </div>
         </div>
+      )}
+      {character && onImport && (
+        // same uid as the GM's copy: the server overwrites it instead of creating another
+        <label className={styles.muted} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, alignSelf: 'flex-start', cursor: busy ? 'default' : 'pointer' }}
+          title={t('Substitui a ficha do mestre pela do arquivo exportado do seu aplicativo.', 'Replaces the GM\'s copy with the file exported from your app.')}>
+          <Upload size={13} /> {t('Atualizar minha ficha (.json)', 'Update my sheet (.json)')}
+          <input type="file" accept="application/json,.json" hidden disabled={busy}
+            onChange={(e) => { const f = e.target.files?.[0]; if (f) onImport(f); e.target.value = ''; }} />
+        </label>
       )}
     </div>
   );

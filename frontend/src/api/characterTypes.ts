@@ -527,6 +527,17 @@ export interface CharacterDetail {
   notices: string[];
 }
 
+/** How an import treats a file whose uid this install already has. */
+export type ImportMode = 'new' | 'update';
+
+/** A sheet found by its uid (GET /characters/by-uid). */
+export interface CharacterMatch {
+  id: number;
+  name: string;
+  handle: string | null;
+  updatedAt: string;
+}
+
 export interface CharacterSummary {
   id: number;
   name: string;

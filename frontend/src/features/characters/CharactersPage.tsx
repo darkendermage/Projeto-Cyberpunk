@@ -1,10 +1,11 @@
 import { useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
-import { Copy, Download, HeartPulse, Plus, Trash2, Upload, UserRound, Users, Wallet } from 'lucide-react';
+import { Copy, Download, HeartPulse, Plus, RefreshCw, Trash2, Upload, UserRound, Users, Wallet } from 'lucide-react';
 import {
-  characterApi, downloadCharacter, problemMessage, readCharacterFile, useCharacterLibrary, useCharacterRules, useCharacters,
+  characterApi, downloadCharacter, fileUid, problemMessage, readCharacterFile, useCharacterLibrary, useCharacterRules, useCharacters,
 } from '../../api/characters';
-import type { CharacterSummary, CreationMethod } from '../../api/characterTypes';
+import { ApiError } from '../../api/client';
+import type { CharacterMatch, CharacterSummary, CreationMethod, ImportMode } from '../../api/characterTypes';
 import { Button, EmptyState, ErrorState, Field, IconButton, Modal, Select, Spinner } from '../../components/ui/ui';
 import { formatEb } from '../../lib/format';
 import { focusStyle } from '../../lib/portraitFocus';
@@ -53,25 +54,25 @@ export function CharactersPage() {
   );
 }
 
-/** Picks an exported file and creates a new character from it; nothing existing is overwritten. */
+/**
+ * Picks an exported file. When this install already has the same character (same uid) it asks whether to update
+ * that sheet or create a copy; otherwise it creates a new one.
+ */
 function ImportButton() {
   const toast = useToast();
   const navigate = useNavigate();
   const { importFile } = useCharacterLibrary();
   const input = useRef<HTMLInputElement>(null);
+  const [pending, setPending] = useState<{ content: unknown; match: CharacterMatch } | null>(null);
+  const [checking, setChecking] = useState(false);
 
-  const pick = async (file: File | undefined) => {
-    if (!file) return;
-    let content: unknown;
-    try {
-      content = await readCharacterFile(file);
-    } catch (error) {
-      toast.notify((error as Error).message, 'error');
-      return;
-    }
-    importFile.mutate(content, {
+  const send = (content: unknown, mode: ImportMode) => {
+    importFile.mutate({ content, mode }, {
       onSuccess: (d) => {
-        toast.notify(t(`${d.sheet.identity.name} importado como personagem novo.`, `${d.sheet.identity.name} imported as a new character.`));
+        setPending(null);
+        toast.notify(mode === 'update'
+          ? t(`Ficha de ${d.sheet.identity.name} atualizada pelo arquivo.`, `${d.sheet.identity.name}'s sheet updated from the file.`)
+          : t(`${d.sheet.identity.name} importado como personagem novo.`, `${d.sheet.identity.name} imported as a new character.`));
         if (d.notices.length > 0) toast.notify(d.notices.join(' '), 'info');
         navigate(`/characters/${d.id}`);
       },
@@ -79,12 +80,52 @@ function ImportButton() {
     });
   };
 
+  const pick = async (file: File | undefined) => {
+    if (!file) return;
+    let content: unknown;
+    let match: CharacterMatch | null = null;
+    setChecking(true);
+    try {
+      content = await readCharacterFile(file);
+      const uid = fileUid(content);
+      if (uid) match = await characterApi.byUid(uid);
+    } catch (error) {
+      toast.notify(error instanceof ApiError ? problemMessage(error) : (error as Error).message, 'error');
+      return;
+    } finally {
+      setChecking(false);
+    }
+    if (match) setPending({ content, match });
+    else send(content, 'new');
+  };
+
+  const busy = importFile.isPending || checking;
   return (
     <>
       <input ref={input} type="file" accept=".json,application/json" hidden aria-hidden
         onChange={(e) => { void pick(e.target.files?.[0]); e.target.value = ''; }} />
-      <Button icon={<Upload size={16} />} disabled={importFile.isPending} title={t('Criar um personagem a partir de um arquivo exportado', 'Create a character from an exported file')}
+      <Button icon={<Upload size={16} />} disabled={busy} title={t('Criar ou atualizar um personagem a partir de um arquivo exportado', 'Create or update a character from an exported file')}
         onClick={() => input.current?.click()}>{t('Importar', 'Import')}</Button>
+      <Modal open={pending !== null} onClose={() => setPending(null)} title={t('Personagem já existe', 'Character already here')}>
+        {pending && (
+          <div className={styles.panel} style={{ clipPath: 'none', border: 'none' }}>
+            <p>
+              {t('Este arquivo é de ', 'This file is ')}<strong>{tv(pending.match.name)}</strong>
+              {t(', que já está aqui (alterado em ', ', who is already here (changed on ')}{formatDate(pending.match.updatedAt)}).
+            </p>
+            <p className={styles.small}>
+              {t('Atualizar substitui a ficha atual pela do arquivo e mantém o histórico daqui. Criar uma cópia deixa as duas.', 'Updating replaces the current sheet with the file\'s and keeps the history here. Creating a copy keeps both.')}
+            </p>
+            <div className={styles.row}>
+              <Button variant="primary" icon={<RefreshCw size={16} />} data-autofocus disabled={importFile.isPending}
+                onClick={() => send(pending.content, 'update')}>{t('Atualizar a existente', 'Update the existing one')}</Button>
+              <Button icon={<Copy size={16} />} disabled={importFile.isPending}
+                onClick={() => send(pending.content, 'new')}>{t('Criar como cópia', 'Create as a copy')}</Button>
+              <Button variant="ghost" onClick={() => setPending(null)}>{t('Cancelar', 'Cancel')}</Button>
+            </div>
+          </div>
+        )}
+      </Modal>
     </>
   );
 }
