@@ -28,7 +28,7 @@ internal static class CharacterTestData
         Armor: new ArmorInfo(ArmorType.LinearFrame, null, 0, 0, 0, 12, true, "BODY 6"),
         Cyber: new CyberInfo(CyberwareType.Borgware, BodyLocation.FullBody, false, null, null, null, false, InstallLocation.Hospital, "BODY 6", 14, "4d6")));
     public static readonly CatalogItem LeisureTop = Add(new CatalogItem(++_id, "roupa-leisurewear-top", "Leisurewear Top", ItemCategory.Armor, 20, Core, 102,
-        Armor: new ArmorInfo(ArmorType.Clothing, null, 0, 0, 0, null, false, null)));
+        Armor: new ArmorInfo(ArmorType.Clothing, null, 0, 0, 0, null, false, null, ClothingSlot.Top)));
     public static readonly CatalogItem Agent = Add(new CatalogItem(++_id, "agent", "Agent", ItemCategory.Gear, 100, Core, 352, Gear: new GearInfo(GearType.Tool, null)));
 
     public static readonly CatalogItem NeuralLink = Cyber("neural-link", 500, CyberwareType.Neuralware, BodyLocation.NervousSystem, 7, "2d6", foundational: true, provides: 5);

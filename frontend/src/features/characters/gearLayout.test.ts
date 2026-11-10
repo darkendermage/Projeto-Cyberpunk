@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { InventoryLine, WearableLine } from '../../api/characterTypes';
-import { bodySlots, filterStored, gearTag, paginate, splitGear } from './gearLayout';
+import { filterStored, gearTag, paginate, splitGear, wornSlots } from './gearLayout';
 
 const line = (instanceId: string, category: string, change: Partial<InventoryLine> = {}): InventoryLine => ({
   instanceId, itemId: 1, name: instanceId, slug: instanceId, category, quantity: 1, state: 'Stored', worn: null, caliber: null, rounds: null,
@@ -56,11 +56,28 @@ describe('gearTag', () => {
   });
 });
 
-describe('bodySlots', () => {
-  it('marks eyes, ears and hands by the worn wearables, and the body by body armor', () => {
-    const slots = bodySlots([wearable('Cybereye', true), wearable('Cyberaudio', false), wearable('Cyberarm', true)],
-      [line('jack', 'Armor', { sp: 11, state: 'Equipped', worn: 'Body' })]);
+describe('wornSlots', () => {
+  const filled = (slots: ReturnType<typeof wornSlots>) => Object.fromEntries(slots.filter((s) => s.filled).map((s) => [s.key, s.names]));
 
-    expect(slots.map((s) => [s.key, s.filled])).toEqual([['eyes', true], ['ears', false], ['hands', true], ['body', true]]);
+  it('shows the twelve places in grid order', () => {
+    expect(wornSlots([], []).map((s) => s.key)).toEqual(['head', 'hat', 'eyes', 'ears', 'jewelry', 'top', 'jacket', 'body', 'hands', 'bottom', 'feet', 'outfit']);
+  });
+
+  it('fills clothes by catalog slot, armor by where it is worn and eyes / ears / hands by worn wearables', () => {
+    const slots = wornSlots([wearable('Cybereye', true), wearable('Cyberaudio', false), wearable('Cyberarm', true)], [
+      line('jack', 'Armor', { sp: 11, state: 'Equipped', worn: 'Body' }),
+      line('helmet', 'Armor', { sp: 11, state: 'Equipped', worn: 'Head' }),
+      line('jacket', 'Armor', { fashion: true, state: 'Equipped', clothingSlot: 'Jacket' }),
+      line('shades', 'Armor', { fashion: true, state: 'Equipped', clothingSlot: 'Eyewear' }),
+    ]);
+    expect(filled(slots)).toEqual({ head: ['helmet'], eyes: ['shades', 'Cybereye'], jacket: ['jacket'], body: ['jack'], hands: ['Cyberarm'] });
+  });
+
+  it('leaves carried and stored clothes out', () => {
+    const slots = wornSlots([], [
+      line('boots', 'Armor', { fashion: true, state: 'Carried', clothingSlot: 'Footwear' }),
+      line('top', 'Armor', { fashion: true, clothingSlot: 'Top' }),
+    ]);
+    expect(filled(slots)).toEqual({});
   });
 });

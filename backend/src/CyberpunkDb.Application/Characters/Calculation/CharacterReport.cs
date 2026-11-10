@@ -118,7 +118,9 @@ public sealed record InventoryLine(
     bool Fashion,
     string? Notes,
     // weapons only
-    WeaponQuality? Quality = null);
+    WeaponQuality? Quality = null,
+    // clothing only: where it is worn (top, jacket, footwear...)
+    ClothingSlot? ClothingSlot = null);
 
 public sealed record WeaponLine(
     string InstanceId,

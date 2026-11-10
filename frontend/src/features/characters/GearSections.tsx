@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import {
-  Anchor, AudioLines, Binoculars, Box, Cpu, Crosshair, Ear, EllipsisVertical, Flashlight, Glasses, Hand,
-  Laptop, Package, Pill, Plus, Radio, RadioTower, Search, Shield, Shirt, Smartphone, Syringe, Video, Wrench,
+  Anchor, AudioLines, Binoculars, Box, Columns2, Cpu, Crosshair, Crown, Ear, EllipsisVertical, Flashlight, Footprints, Gem,
+  Glasses, Hand, HardHat, Laptop, Layers, Package, PersonStanding, Pill, Plus, Radio, RadioTower, Search, Shield, Shirt,
+  Smartphone, Syringe, Video, Wrench,
 } from 'lucide-react';
 import type { CharacterDetail, InventoryLine } from '../../api/characterTypes';
 import { ItemDetailModal } from '../catalog/ItemDetailModal';
@@ -9,7 +10,7 @@ import { formatEb } from '../../lib/format';
 import { t, tv } from '../../i18n';
 import { CATEGORY_LABEL, QUALITY_LABEL } from './characterLabels';
 import type { Run } from './CombatPanels';
-import { bodySlots, filterStored, gearTag, paginate, splitGear, type BodySlot, type GearFilter } from './gearLayout';
+import { filterStored, gearTag, GROUP_PAGE_SIZE, paginate, splitGear, wornSlots, type GearFilter, type WornSlotKey } from './gearLayout';
 import { groupInventory } from './inventoryGroups';
 import { Pager } from './Pager';
 import styles from './Characters.module.css';
@@ -163,22 +164,22 @@ function SectionHead({ index, title, count }: { index: string; title: string; co
   );
 }
 
-function BodyStrip({ slots }: { slots: BodySlot[] }) {
-  const icon = { eyes: <Glasses size={16} />, ears: <Ear size={16} />, hands: <Hand size={16} />, body: <Shirt size={16} /> };
+/** One kind of item under "Equipados", with its own pages so a long wardrobe doesn't push everything down. */
+function EquippedGroup({ label, items, actions }: { label: string; items: InventoryLine[]; actions: GearActions }) {
+  const [page, setPage] = useState(0);
+  const p = paginate(items, page, GROUP_PAGE_SIZE);
   return (
-    <div className={styles.bodyStrip}>
-      {slots.map((s) => (
-        <span key={s.key} className={`${styles.bodySlot} ${s.filled ? styles.bodySlotOn : ''}`} title={s.filled ? s.names.join(', ') : t('Vazio', 'Empty')}>
-          {icon[s.key]}
-          <span>{s.label}</span>
-          <span aria-label={s.filled ? t('ocupado', 'filled') : t('vazio', 'empty')}>{s.filled ? '✓' : '+'}</span>
-        </span>
-      ))}
+    <div className={styles.gearGroup}>
+      <div className={styles.gearGroupHead}><span>{label}</span><span className={styles.muted}>{String(items.length).padStart(2, '0')}</span></div>
+      <ul className={styles.gearList}>{p.rows.map((i) => <GearRow key={i.instanceId} item={i} actions={actions} />)}</ul>
+      {p.pages > 1 && (
+        <Pager page={p.page} pages={p.pages} rows={p.rows.length} total={items.length} noun={label.toLowerCase()} onPage={setPage} size={GROUP_PAGE_SIZE} />
+      )}
     </div>
   );
 }
 
-/** 01 / Equipados: what the character has on them, by kind, and the worn places. */
+/** 01 / Equipados: what the character has on them, by kind. */
 export function EquippedSection({ detail, actions }: { detail: CharacterDetail; actions: GearActions }) {
   const { onPerson } = splitGear(detail.report.inventory);
   const g = groupInventory(onPerson);
@@ -186,16 +187,40 @@ export function EquippedSection({ detail, actions }: { detail: CharacterDetail; 
     [t('Armas', 'Weapons'), g.weapons], [t('Armaduras', 'Armor'), g.armor], [t('Roupas', 'Clothing'), g.clothing], [t('Itens diversos', 'Misc items'), g.misc],
   ];
   return (
-    <section className={styles.gearPanel} aria-label={t('Equipados', 'Equipped')}>
+    <section className={`${styles.gearPanel} ${styles.gearFill}`} aria-label={t('Equipados', 'Equipped')}>
       <SectionHead index="01" title={t('Equipados', 'Equipped')} count={onPerson.length} />
       {onPerson.length === 0 && <p className={`${styles.small} ${styles.muted}`}>{t('Nada com o personagem. Use o ⋮ de um item guardado para equipar ou levar.', 'Nothing on the character. Use a stored item\'s ⋮ to equip or carry it.')}</p>}
-      {groups.filter(([, items]) => items.length > 0).map(([label, items]) => (
-        <div key={label} className={styles.gearGroup}>
-          <div className={styles.gearGroupHead}><span>{label}</span><span className={styles.muted}>{String(items.length).padStart(2, '0')}</span></div>
-          <ul className={styles.gearList}>{items.map((i) => <GearRow key={i.instanceId} item={i} actions={actions} />)}</ul>
-        </div>
-      ))}
-      <BodyStrip slots={bodySlots(detail.report.wearables, detail.report.inventory)} />
+      {groups.filter(([, items]) => items.length > 0).map(([label, items]) => <EquippedGroup key={label} label={label} items={items} actions={actions} />)}
+    </section>
+  );
+}
+
+const WORN_ICON: Record<WornSlotKey, ReactNode> = {
+  head: <HardHat size={18} />, hat: <Crown size={18} />, eyes: <Glasses size={18} />, ears: <Ear size={18} />,
+  jewelry: <Gem size={18} />, top: <Shirt size={18} />, jacket: <Layers size={18} />, body: <Shield size={18} />,
+  hands: <Hand size={18} />, bottom: <Columns2 size={18} />, feet: <Footprints size={18} />, outfit: <PersonStanding size={18} />,
+};
+
+/** Vestindo agora: every place on the body and what is worn there (equip clothes with "Vestir" in the ⋮). */
+export function WornSection({ detail }: { detail: CharacterDetail }) {
+  const slots = wornSlots(detail.report.wearables, detail.report.inventory);
+  const filled = slots.filter((s) => s.filled).length;
+  return (
+    <section className={styles.gearPanel} aria-label={t('Vestindo agora', 'Wearing now')}>
+      <header className={styles.gearHead}>
+        <h3 className={styles.gearTitle}>{t('Vestindo agora', 'Wearing now')}</h3>
+        <span className={styles.gearCount}>{filled}/{slots.length}</span>
+      </header>
+      <ul className={styles.wornGrid}>
+        {slots.map((s) => (
+          <li key={s.key} className={`${styles.wornSlot} ${s.filled ? styles.wornSlotOn : ''}`}
+            title={`${s.label} · ${s.hint}${s.filled ? `: ${s.names.join(', ')}` : ''}`}>
+            <span className={styles.wornIcon} aria-hidden>{WORN_ICON[s.key]}</span>
+            <span className={styles.wornLabel}>{s.label}</span>
+            <span className={styles.wornItem}>{s.filled ? s.names.join(', ') : <span aria-label={t('vazio', 'empty')}>+</span>}</span>
+          </li>
+        ))}
+      </ul>
     </section>
   );
 }

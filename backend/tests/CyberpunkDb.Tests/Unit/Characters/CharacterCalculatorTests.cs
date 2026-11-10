@@ -1,6 +1,7 @@
 using CyberpunkDb.Application.Characters;
 using CyberpunkDb.Application.Characters.Calculation;
 using CyberpunkDb.Application.Npcs;
+using CyberpunkDb.Domain.Enums;
 using FluentAssertions;
 using static CyberpunkDb.Tests.Unit.Characters.CharacterTestData;
 
@@ -12,6 +13,24 @@ public class CharacterCalculatorTests
 
     private static CharacterSheet WithStat(CharacterSheet s, string key, int value) =>
         s with { Stats = new Dictionary<string, int>(s.Stats, StringComparer.OrdinalIgnoreCase) { [key] = value } };
+
+    // inventory lines
+
+    [Fact]
+    public void Clothing_line_says_where_it_is_worn()
+    {
+        var sheet = CompletePackage() with
+        {
+            Inventory =
+            [
+                new InventoryEntry { InstanceId = "t", ItemId = LeisureTop.Id, State = ItemState.Equipped },
+                new InventoryEntry { InstanceId = "a", ItemId = Agent.Id },
+            ],
+        };
+        var lines = Calc(sheet).Inventory;
+        lines.Single(i => i.InstanceId == "t").ClothingSlot.Should().Be(ClothingSlot.Top);
+        lines.Single(i => i.InstanceId == "a").ClothingSlot.Should().BeNull();
+    }
 
     // HP after BODY or WILL changes
 

@@ -304,7 +304,11 @@ export interface InventoryLine {
   notes: string | null;
   /** Weapons only: the copy's quality. */
   quality?: WeaponQuality | null;
+  /** Clothing only: where it is worn. */
+  clothingSlot?: ClothingSlot | null;
 }
+
+export type ClothingSlot = 'Top' | 'Bottom' | 'Jacket' | 'Footwear' | 'Jewelry' | 'Eyewear' | 'Headwear' | 'FullOutfit';
 
 /** Weapon quality (CP:R p.344): Excellent +1 to attacks, Poor jams on a natural 1. */
 export type WeaponQuality = 'Poor' | 'Standard' | 'Excellent';

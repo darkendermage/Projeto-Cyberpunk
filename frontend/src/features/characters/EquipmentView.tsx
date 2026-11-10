@@ -7,7 +7,7 @@ import { formatEb } from '../../lib/format';
 import { useToast } from '../../state/ToastContext';
 import { formatDate, signed } from './characterLabels';
 import { SheetPanel, StateTag } from './CharacterUi';
-import { EquippedSection, GearStats, InventorySection, ItemPage, type GearActions } from './GearSections';
+import { EquippedSection, GearStats, InventorySection, ItemPage, WornSection, type GearActions } from './GearSections';
 import { paginate } from './gearLayout';
 import { Pager } from './Pager';
 import { Attachments, type Run } from './CombatPanels';
@@ -42,8 +42,8 @@ export function EquipmentView({ detail, editor }: Props) {
   const [opened, setOpened] = useState<InventoryLine | null>(null);
   const actions: GearActions = { run, busy, finalized, onOpen: setOpened, onRemove: setRemoving };
 
-  // the money on top, then the totals; what the character has on them on the left, and on the right what
-  // is stored (paged) with the weapon and wearable upgrades under it.
+  // the money on top, then the totals; what the character has on them on the left, and on the right what is
+  // worn place by place, what is stored (paged) and the upgrades. Both columns stretch to the same height.
   return (
     <div className={styles.gear}>
       <FinancePanel detail={detail} run={run} busy={busy} onStore={setStore} />
@@ -51,8 +51,9 @@ export function EquipmentView({ detail, editor }: Props) {
       <div className={styles.gearColumns}>
         <EquippedSection detail={detail} actions={actions} />
         <div className={styles.gearStack}>
+          <WornSection detail={detail} />
           <InventorySection detail={detail} actions={actions} onAdd={finalized ? () => setStore('buy') : undefined} />
-          <section className={styles.gearPanel} aria-label={t('Modificações', 'Upgrades')}>
+          <section className={`${styles.gearPanel} ${styles.gearFill}`} aria-label={t('Modificações', 'Upgrades')}>
             <header className={styles.gearHead}>
               <h3 className={styles.gearTitle}><span>03 /</span> {t('Modificações', 'Upgrades')}</h3>
               <span className={styles.muted}>{t('upgrades das armas e vestíveis', 'weapon and wearable upgrades')}</span>

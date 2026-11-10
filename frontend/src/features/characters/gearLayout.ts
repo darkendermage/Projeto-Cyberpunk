@@ -1,4 +1,4 @@
-import type { InventoryLine, WearableLine } from '../../api/characterTypes';
+import type { ClothingSlot, InventoryLine, WearableLine } from '../../api/characterTypes';
 import { t, tv } from '../../i18n';
 import { groupInventory } from './inventoryGroups';
 
@@ -7,6 +7,9 @@ export type GearFilter = 'all' | 'weapons' | 'clothing' | 'other';
 
 /** Items per page of the inventory list. */
 export const PAGE_SIZE = 10;
+
+/** Items per page of each group under "Equipados" (weapons, armor, clothing, misc). */
+export const GROUP_PAGE_SIZE = 4;
 
 /** With the character (equipped or carried) for "Equipped", stored for "Inventory". */
 export function splitGear(items: readonly InventoryLine[]): { onPerson: InventoryLine[]; stored: InventoryLine[] } {
@@ -40,17 +43,36 @@ export function gearTag(i: InventoryLine): { label: string; tone: 'ok' | 'info' 
   return { label: t('Guardado', 'Stored'), tone: 'muted' };
 }
 
-export interface BodySlot { key: 'eyes' | 'ears' | 'hands' | 'body'; label: string; filled: boolean; names: string[] }
+export type WornSlotKey = 'head' | 'hat' | 'eyes' | 'ears' | 'jewelry' | 'top' | 'jacket' | 'body' | 'hands' | 'bottom' | 'feet' | 'outfit';
 
-/** The strip of worn places: eyes, ears and hands by the wearables with slots, the body by armor worn on it. */
-export function bodySlots(wearables: readonly WearableLine[], items: readonly InventoryLine[]): BodySlot[] {
-  const worn = (accepts: WearableLine['accepts']) => wearables.filter((w) => w.worn && w.accepts === accepts).map((w) => tv(w.name));
-  const body = items.filter((i) => i.state === 'Equipped' && i.worn === 'Body').map((i) => tv(i.name));
-  const slot = (key: BodySlot['key'], label: string, names: string[]): BodySlot => ({ key, label, filled: names.length > 0, names });
+export interface WornSlot { key: WornSlotKey; label: string; hint: string; filled: boolean; names: string[] }
+
+// What the character is wearing, place by place. Clothes by their catalog slot, armor by where it was put on,
+// eyes / ears / hands also by the wearables with Option Slots (Smart Glasses, Smart Ears, gloves).
+// Only equipped items count: carried clothes are in the bag, not on the body.
+export function wornSlots(wearables: readonly WearableLine[], items: readonly InventoryLine[]): WornSlot[] {
+  const equipped = items.filter((i) => i.state === 'Equipped');
+  const clothes = (slot: ClothingSlot) => equipped.filter((i) => i.clothingSlot === slot).map((i) => tv(i.name));
+  const armor = (where: 'Body' | 'Head') => equipped.filter((i) => i.worn === where).map((i) => tv(i.name));
+  const wearable = (accepts: WearableLine['accepts']) => wearables.filter((w) => w.worn && w.accepts === accepts).map((w) => tv(w.name));
+  const slot = (key: WornSlotKey, label: string, hint: string, names: string[]): WornSlot => {
+    const unique = [...new Set(names)];
+    return { key, label, hint, filled: unique.length > 0, names: unique };
+  };
+  const armorHint = t('Armadura', 'Armor');
+  const clothingHint = t('Roupa', 'Clothing');
   return [
-    slot('eyes', t('Óculos', 'Eyes'), worn('Cybereye')),
-    slot('ears', t('Orelhas', 'Ears'), worn('Cyberaudio')),
-    slot('hands', t('Mãos', 'Hands'), worn('Cyberarm')),
-    slot('body', t('Corpo', 'Body'), body),
+    slot('head', t('Cabeça', 'Head'), armorHint, armor('Head')),
+    slot('hat', t('Chapéu', 'Hat'), clothingHint, clothes('Headwear')),
+    slot('eyes', t('Óculos', 'Eyewear'), t('Roupa ou vestível', 'Clothing or wearable'), [...clothes('Eyewear'), ...wearable('Cybereye')]),
+    slot('ears', t('Orelhas', 'Ears'), t('Vestível', 'Wearable'), wearable('Cyberaudio')),
+    slot('jewelry', t('Acessórios', 'Accessories'), t('Joias e acessórios', 'Jewelry and accessories'), clothes('Jewelry')),
+    slot('top', t('Parte de cima', 'Top'), clothingHint, clothes('Top')),
+    slot('jacket', t('Jaqueta', 'Jacket'), clothingHint, clothes('Jacket')),
+    slot('body', t('Corpo', 'Body'), armorHint, armor('Body')),
+    slot('hands', t('Mãos', 'Hands'), t('Vestível', 'Wearable'), wearable('Cyberarm')),
+    slot('bottom', t('Parte de baixo', 'Bottom'), clothingHint, clothes('Bottom')),
+    slot('feet', t('Calçado', 'Footwear'), clothingHint, clothes('Footwear')),
+    slot('outfit', t('Traje completo', 'Full outfit'), clothingHint, clothes('FullOutfit')),
   ];
 }

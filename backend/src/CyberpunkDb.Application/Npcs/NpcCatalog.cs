@@ -11,7 +11,8 @@ public sealed record WeaponInfo(
     int? AutofireMultiplier = null);
 
 public sealed record ArmorInfo(
-    ArmorType Type, int? Sp, int RefPenalty, int DexPenalty, int MovePenalty, int? BodyValue, bool Implanted, string? Requirements);
+    ArmorType Type, int? Sp, int RefPenalty, int DexPenalty, int MovePenalty, int? BodyValue, bool Implanted, string? Requirements,
+    ClothingSlot? ClothingSlot = null);
 
 // everything paid from the cyberware budget (Fashionware and Linear Frames included)
 public sealed record CyberInfo(
@@ -89,7 +90,7 @@ public sealed class NpcCatalogProvider(IAppDbContext db, NpcCatalogCache cache)
             var implanted = a.ArmorType == ArmorType.LinearFrame && a.InstallLocation is not null;
             items.Add(new CatalogItem(a.Id, a.Slug, a.Name, a.Category, a.PriceEb, Book(a.SourceBookId), a.Page,
                 Armor: new ArmorInfo(a.ArmorType, a.StoppingPower, a.RefPenalty ?? 0, a.DexPenalty ?? 0, a.MovePenalty ?? 0,
-                    a.BodyValue, implanted, a.Requirements),
+                    a.BodyValue, implanted, a.Requirements, a.ClothingSlot),
                 Cyber: implanted
                     ? new CyberInfo(CyberwareType.Borgware, BodyLocation.FullBody, false, null, null, null, false, a.InstallLocation, a.Requirements,
                         a.HumanityLoss, a.HumanityLossDice, a.Effect)

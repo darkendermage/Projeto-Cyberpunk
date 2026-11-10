@@ -806,7 +806,7 @@
 .gearStats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
 .gearStat { display: flex; flex-direction: column; gap: 2px; padding: 10px 12px; background: var(--bg-2); border: 1px solid var(--line); border-left: 3px solid var(--red-line); }
 .gearStat strong { font-family: var(--font-display); font-size: 24px; line-height: 1.1; }
-.gearColumns { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; align-items: start; }
+.gearColumns { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; align-items: stretch; }
 .gearPanel {
   position: relative; display: flex; flex-direction: column; gap: 10px; padding: 12px 14px 14px; min-width: 0;
   background: linear-gradient(180deg, rgba(255, 42, 61, 0.05), transparent 120px), var(--panel); border: 1px solid var(--red-line);
@@ -826,7 +826,7 @@
 .gearName strong { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .gearName > span { max-width: 100%; font-size: 12.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .gearName:hover strong { color: var(--red-bright); text-decoration: underline; text-underline-offset: 3px; }
-.gearTag { padding: 1px 8px; font-size: 11.5px; font-family: var(--font-mono); white-space: nowrap; border: 1px solid; }
+.gearTag { padding: 2px 8px; font-family: var(--font-display); font-size: 11.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap; border: 1px solid; }
 .gearTag_ok { color: var(--green); border-color: color-mix(in srgb, var(--green) 40%, transparent); background: color-mix(in srgb, var(--green) 10%, transparent); }
 .gearTag_info { color: var(--cyan); border-color: color-mix(in srgb, var(--cyan) 40%, transparent); background: color-mix(in srgb, var(--cyan) 10%, transparent); }
 .gearTag_muted { color: var(--text-muted); border-color: var(--line-strong); }
@@ -840,9 +840,14 @@
 .gearMenuList button { padding: 6px 10px; text-align: left; background: none; border: 0; color: var(--text); cursor: pointer; font: inherit; font-size: 13.5px; }
 .gearMenuList button:hover { background: var(--red-haze); color: var(--red-bright); }
 .gearMenuLabel { padding: 6px 10px 2px; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-faint); border-top: 1px solid var(--line); }
-.bodyStrip { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; padding-top: 8px; border-top: 1px solid var(--line); }
-.bodySlot { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px 4px; font-size: 12.5px; color: var(--text-faint); background: var(--bg-2); border: 1px solid var(--line); }
-.bodySlotOn { color: var(--green); border-color: color-mix(in srgb, var(--green) 35%, transparent); }
+.wornGrid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+.wornSlot { display: flex; flex-direction: column; align-items: center; gap: 3px; min-width: 0; padding: 8px 6px; text-align: center; color: var(--text-faint); background: var(--bg-2); border: 1px solid var(--line); }
+.wornSlotOn { color: var(--green); border-color: color-mix(in srgb, var(--green) 35%, transparent); background: color-mix(in srgb, var(--green) 6%, var(--bg-2)); }
+.wornIcon { display: inline-flex; }
+.wornLabel { font-size: 12.5px; font-weight: 600; }
+.wornItem { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; color: var(--text-muted); }
+.wornSlotOn .wornItem { color: var(--text); }
+@media (max-width: 700px) { .wornGrid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 .gearAdd { display: grid; place-items: center; width: 26px; height: 26px; padding: 0; color: var(--red-bright); background: none; border: 1px solid var(--red-line); border-radius: 50%; cursor: pointer; }
 .gearAdd:hover { background: var(--red-haze); }
 .gearSearch { display: flex; align-items: center; gap: 8px; padding: 0 10px; background: var(--bg-2); border: 1px solid var(--line); color: var(--text-muted); }
@@ -855,6 +860,8 @@
 .gearPage { display: grid; place-items: center; width: 26px; height: 26px; padding: 0; background: var(--bg-3); border: 1px solid var(--line-strong); color: var(--text); cursor: pointer; }
 .gearPage:disabled { opacity: 0.35; cursor: not-allowed; }
 .gearStack { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+/* The last panel of a column grows so both columns end on the same line. */
+.gearFill { flex: 1; }
 .gearMods { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; align-items: start; }
 .gearFinance { flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: space-between; }
 .gearFinanceTitle { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-display); font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }

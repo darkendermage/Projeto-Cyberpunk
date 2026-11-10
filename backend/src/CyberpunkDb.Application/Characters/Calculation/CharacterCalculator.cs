@@ -101,7 +101,8 @@ public sealed class CharacterCalculator(CharacterRuleBook rules)
                 isShield ? e.CurrentHp ?? shieldMax : null, shieldMax,
                 item?.Price, e.PricePaid, e.Origin, e.PaidFrom,
                 item is not null && Validation.CharacterValidator.IsFashion(item), e.Notes,
-                item?.Weapon is { } weapon ? e.Quality ?? weapon.Quality : null);
+                item?.Weapon is { } weapon ? e.Quality ?? weapon.Quality : null,
+                item?.Armor?.ClothingSlot);
         }).ToList();
 
     private List<WeaponLine> WeaponLines(CharacterSheet sheet, NpcCatalog catalog, List<CharacterSkillLine> skills)
