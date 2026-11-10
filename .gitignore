@@ -28,3 +28,7 @@ tools/npc-compendium/out/
 # Planos e specs de trabalho (ficam só na máquina)
 docs/superpowers/
 .superpowers/
+
+# Notas e mapa do projeto para o Claude (só na máquina)
+CLAUDE.md
+docs/MAP.md
