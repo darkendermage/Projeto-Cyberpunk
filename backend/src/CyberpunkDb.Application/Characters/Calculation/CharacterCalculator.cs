@@ -143,7 +143,7 @@ public sealed class CharacterCalculator(CharacterRuleBook rules)
                 skill?.Total ?? 0, w.Damage, w.Rof, w.Magazine, state.LoadedRounds, state.LoadedAmmoItemId,
                 state.LoadedAmmoItemId is { } ammo ? catalog.Find(ammo)?.Name : null,
                 w.AutofireMultiplier, autofire?.Total, w.Calibers, w.Exotic,
-                ranged && !w.Exotic ? slots : 0, attachments, e.State == ItemState.Equipped, e.Quality ?? w.Quality, state.Jammed, bonuses, item.Slug,
+                Encounters.Rules.WeaponRuleBook.Embedded.AttachmentSlots(item.Slug, ranged, w.Exotic, slots), attachments, e.State == ItemState.Equipped, e.Quality ?? w.Quality, state.Jammed, bonuses, item.Slug,
                 state.Mode, state.Magazines, state.Destroyed, w.MinBody,
                 extraMagazines is { Count: > 0 } ? extraMagazines : null, switchModes is { Count: > 0 } ? switchModes : null));
         }

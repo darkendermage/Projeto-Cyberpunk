@@ -2561,7 +2561,7 @@
   },
   {
     "slug": "gorilla-arm",
-    "name": "Gorilla Arm",
+    "name": "Gorilla Arm (2077)",
     "category": "cyberware",
     "manufacturer": null,
     "ruleSystem": "CyberpunkRed",
@@ -2757,7 +2757,7 @@
   },
   {
     "slug": "mantis-blade",
-    "name": "Mantis Blade",
+    "name": "Mantis Blade (2077)",
     "category": "cyberware",
     "manufacturer": null,
     "ruleSystem": "CyberpunkRed",
@@ -2813,7 +2813,7 @@
   },
   {
     "slug": "monowire",
-    "name": "Monowire",
+    "name": "Monowire (2077)",
     "category": "cyberware",
     "manufacturer": null,
     "ruleSystem": "CyberpunkRed",
@@ -4909,14 +4909,13 @@
     "manufacturer": "Sanroo",
     "ruleSystem": "CyberpunkRed",
     "dataOrigin": "Verified",
-    "description": "An Excellent Quality Exotic Medium Pistol with a magazine size of 10. As an Action you can activate or deactivate Hypurrburst™. While in Hypurrburst™, the MicroCutie is ROF1, purrs audibly, and deals 4d6 damage but drains all remaining bullets from the magazine to fire once. The gun automatically disables Hypurrburst™ while there are fewer than 4 bullets in the magazine. Hypurrburst™ cannot be used to make Aimed Shots.",
-    "notes": "Conferido com Danger Gal Dossier, p. 145. Reimpressão do Micro Chrome (o compêndio citava o Black Chrome, que não tem a arma). Corrigido: pente 10 (não 12).",
+    "description": "An Excellent Quality Medium Pistol with a magazine size of 10. As an Action you can activate or deactivate Hypurrburst™. While in Hypurrburst™, the MicroCutie is ROF1, purrs audibly, and deals 4d6 damage but drains all remaining bullets from the magazine to fire once. The gun automatically disables Hypurrburst™ while there are fewer than 4 bullets in the magazine. Hypurrburst™ cannot be used to make Aimed Shots.",
+    "notes": "Conferido com Danger Gal Dossier, p. 145. Reimpressão do Micro Chrome (o compêndio citava o Black Chrome, que não tem a arma). Corrigido: pente 10 (não 12). Weapon Rebalance, p. 2: deixou de ser Exótica.",
     "price": 1000,
     "priceCategory": "VeryExpensive",
     "source": "Danger Gal Dossier",
     "tags": [
-      "Qualidade Excelente",
-      "Exótica"
+      "Qualidade Excelente"
     ],
     "attributes": {
       "weaponClass": "MediumPistol",
@@ -4929,7 +4928,7 @@
       "hands": 1,
       "concealable": true,
       "quality": "Excellent",
-      "exotic": true,
+      "exotic": false,
       "calibers": [
         "MediumPistol"
       ]
@@ -5104,7 +5103,7 @@
   },
   {
     "slug": "constitutional-arms-unity",
-    "name": "Constitutional Arms Unity",
+    "name": "Constitutional Arms Unity (2077)",
     "category": "weapons",
     "manufacturer": "Constitutional Arms",
     "ruleSystem": "CyberpunkRed",
@@ -5379,7 +5378,7 @@
   },
   {
     "slug": "militech-m-10af-lexington",
-    "name": "Militech M-10AF Lexington",
+    "name": "Militech M-10AF Lexington (2077)",
     "category": "weapons",
     "manufacturer": "Militech",
     "ruleSystem": "CyberpunkRed",
@@ -5413,7 +5412,7 @@
   },
   {
     "slug": "militech-m-76e-omaha",
-    "name": "Militech M-76e Omaha",
+    "name": "Militech M-76e Omaha (2077)",
     "category": "weapons",
     "manufacturer": "Militech",
     "ruleSystem": "CyberpunkRed",
@@ -5789,13 +5788,12 @@
     "manufacturer": "Constitutional Arms",
     "ruleSystem": "CyberpunkRed",
     "dataOrigin": "Verified",
-    "description": "Designed by Constitutional Arms in the 2020s to take advantage of advances in the field of ordnance technology, this revolver was designed to offer the user a choice between lethal and non-lethal response to a situation. The Multiple Ammunition Pistol is equipped with a rapid selector switch and a readout display under the rear sight, which informs the user of the round selected.\n\nThe Constitutional Arms Multiple Ammunition Pistol is a Exotic Very Heavy Pistol with a 5 shot capacity. Unlike other weapons, you can load this weapon with a mix of up to five different kinds of Very Heavy Pistol Ammunition and select which ammunition you want to fire with each shot.",
-    "notes": "Conferido com 12 Days of Gunmas, p. 3 e tabela da p. 7.",
+    "description": "Designed by Constitutional Arms in the 2020s to take advantage of advances in the field of ordnance technology, this revolver was designed to offer the user a choice between lethal and non-lethal response to a situation. The Multiple Ammunition Pistol is equipped with a rapid selector switch and a readout display under the rear sight, which informs the user of the round selected.\n\nThe Constitutional Arms Multiple Ammunition Pistol is a Very Heavy Pistol with a 5 shot capacity. Unlike other weapons, you can load this weapon with a mix of up to five different kinds of Very Heavy Pistol Ammunition and select which ammunition you want to fire with each shot. Incompatible with capacity modifying attachments.",
+    "notes": "Conferido com 12 Days of Gunmas, p. 3 e tabela da p. 7. Weapon Rebalance, p. 2: deixou de ser Exótica e não aceita acessórios que mudam a capacidade (pente estendido e de tambor).",
     "price": 500,
     "priceCategory": "Expensive",
     "source": "12 Days of Gunmas",
     "tags": [
-      "Exótica",
       "Revólver"
     ],
     "attributes": {
@@ -5809,7 +5807,7 @@
       "hands": 1,
       "concealable": false,
       "quality": "Standard",
-      "exotic": true,
+      "exotic": false,
       "calibers": [
         "VeryHeavyPistol"
       ]
@@ -6128,14 +6126,12 @@
     "manufacturer": "Militech",
     "ruleSystem": "CyberpunkRed",
     "dataOrigin": "Verified",
-    "description": "This pistol-sized shotgun was developed during the second Central American Conflict for close combat and roomsweeping duties. Since then, the Crusher's whippet silhouette and box magazine have cemented themselves as an iconic piece of gun culture – one that won't be going out of style anytime soon.\n\nThe Militech Crusher is a Exotic Very Heavy Pistol with a 6 shot capacity that can only fire Shotgun Shell Ammunition.",
-    "notes": "Conferido com 12 Days of Gunmas, p. 4-5 e tabela da p. 7. A tabela lista o dano como N/A (depende da munição); o compêndio dava 3d6/5d6 e incluía slugs, que a arma não dispara.",
+    "description": "This pistol-sized shotgun was developed during the second Central American Conflict for close combat and roomsweeping duties. Since then, the Crusher's whippet silhouette and box magazine have cemented themselves as an iconic piece of gun culture – one that won't be going out of style anytime soon.\n\nThe Militech Crusher is a Very Heavy Pistol with a 6 shot capacity that can only fire Shotgun Shell Ammunition.",
+    "notes": "Conferido com 12 Days of Gunmas, p. 4-5 e tabela da p. 7. A tabela lista o dano como N/A (depende da munição); o compêndio dava 3d6/5d6 e incluía slugs, que a arma não dispara. Weapon Rebalance, p. 2: deixou de ser Exótica.",
     "price": 500,
     "priceCategory": "Expensive",
     "source": "12 Days of Gunmas",
-    "tags": [
-      "Exótica"
-    ],
+    "tags": [],
     "attributes": {
       "weaponClass": "VeryHeavyPistol",
       "skill": "Handgun",
@@ -6147,7 +6143,7 @@
       "hands": 1,
       "concealable": false,
       "quality": "Standard",
-      "exotic": true,
+      "exotic": false,
       "calibers": [
         "ShotgunShell"
       ]
@@ -6156,7 +6152,7 @@
   },
   {
     "slug": "militech-crusher-207x",
-    "name": "Militech Crusher (circa 207X)",
+    "name": "Militech Crusher (2077)",
     "category": "weapons",
     "manufacturer": "Militech",
     "ruleSystem": "CyberpunkRed",
@@ -6558,7 +6554,7 @@
   },
   {
     "slug": "techtronika-rt-46-burya",
-    "name": "Techtronika RT-46 Burya",
+    "name": "Techtronika RT-46 Burya (2077)",
     "category": "weapons",
     "manufacturer": "Techtronika",
     "ruleSystem": "CyberpunkRed",
@@ -6764,7 +6760,7 @@
   },
   {
     "slug": "arasaka-hjke-11-yukimura",
-    "name": "Arasaka HJKE-11 Yukimura",
+    "name": "Arasaka HJKE-11 Yukimura (2077)",
     "category": "weapons",
     "manufacturer": "Arasaka",
     "ruleSystem": "CyberpunkRed",
@@ -6907,7 +6903,7 @@
   },
   {
     "slug": "arasaka-tki-20-shingen",
-    "name": "Arasaka TKI-20 Shingen",
+    "name": "Arasaka TKI-20 Shingen (2077)",
     "category": "weapons",
     "manufacturer": "Arasaka",
     "ruleSystem": "CyberpunkRed",
@@ -7304,13 +7300,12 @@
     "manufacturer": "Mustang Arms",
     "ruleSystem": "CyberpunkRed",
     "dataOrigin": "Verified",
-    "description": "In 2020, the ARS-5 was the hot new gun for the young Corps and popular among law enforcement agencies and corporate armies. Nowadays, those young Corps have moved on to newer shinier weapons platforms, and what original ARS-5s remain have since been passed down into younger, greasier, second hands. Time to print some new ones!\n\nThe Mustang Arms ARS-5 Submachine Gun is a Exotic Heavy SMG with a Smartgun Link, Infrared Nightvision Scope, and a Sniping Scope.",
-    "notes": "Conferido com 12 Days of Gunmas, p. 5 e tabela da p. 7. A arma é Exótica.",
+    "description": "In 2020, the ARS-5 was the hot new gun for the young Corps and popular among law enforcement agencies and corporate armies. Nowadays, those young Corps have moved on to newer shinier weapons platforms, and what original ARS-5s remain have since been passed down into younger, greasier, second hands. Time to print some new ones!\n\nThe Mustang Arms ARS-5 Submachine Gun is a Heavy SMG with a Smartgun Link, Infrared Nightvision Scope, and a Sniping Scope. These Attachments cannot be removed.",
+    "notes": "Conferido com 12 Days of Gunmas, p. 5 e tabela da p. 7. Weapon Rebalance, p. 2: deixou de ser Exótica; Smartgun Link, Infrared Nightvision Scope e Sniping Scope vêm instalados, ocupam os slots e não podem ser removidos.",
     "price": 1000,
     "priceCategory": "VeryExpensive",
     "source": "12 Days of Gunmas",
     "tags": [
-      "Exótica",
       "Smartgun",
       "Autofire",
       "Mira acoplada"
@@ -7327,7 +7322,7 @@
       "hands": 1,
       "concealable": false,
       "quality": "Standard",
-      "exotic": true,
+      "exotic": false,
       "calibers": [
         "HeavyPistol"
       ]
@@ -7612,7 +7607,7 @@
   },
   {
     "slug": "budget-arms-carnage",
-    "name": "Budget Arms Carnage",
+    "name": "Budget Arms Carnage (2077)",
     "category": "weapons",
     "manufacturer": "Budget Arms",
     "ruleSystem": "CyberpunkRed",
@@ -7961,7 +7956,7 @@
   },
   {
     "slug": "kang-tao-l-69-zhuo",
-    "name": "Kang Tao L-69 Zhuo",
+    "name": "Kang Tao L-69 Zhuo (2077)",
     "category": "weapons",
     "manufacturer": "Kang Tao",
     "ruleSystem": "CyberpunkRed",
@@ -8235,7 +8230,7 @@
   },
   {
     "slug": "rostovic-db-2-satara",
-    "name": "Rostović DB-2 Satara",
+    "name": "Rostović DB-2 Satara (2077)",
     "category": "weapons",
     "manufacturer": "Rostović",
     "ruleSystem": "CyberpunkRed",
@@ -8434,7 +8429,7 @@
   },
   {
     "slug": "arasaka-hjsh-18-masamune",
-    "name": "Arasaka HJSH-18 Masamune",
+    "name": "Arasaka HJSH-18 Masamune (2077)",
     "category": "weapons",
     "manufacturer": "Arasaka",
     "ruleSystem": "CyberpunkRed",
@@ -8506,13 +8501,12 @@
     "manufacturer": "Arasaka",
     "ruleSystem": "CyberpunkRed",
     "dataOrigin": "Verified",
-    "description": "A bullpup assault rifle that was standard issue for Arasaka soldiers in the 2020s. Tough, reliable, and chipped for smartgun use.\n\nThe Arasaka WAA Bullpup Assault Weapon is a Exotic Assault Rifle with a 30 shot capacity and a Smartgun Link. Despite being an Exotic weapon, it is still capable of loading Non-Basic Ammunition.",
-    "notes": "Conferido com 12 Days of Gunmas, p. 3 e tabela da p. 7. A arma é Exótica de qualidade padrão; o compêndio a listava como Qualidade Excelente.",
+    "description": "A bullpup assault rifle that was standard issue for Arasaka soldiers in the 2020s. Tough, reliable, and chipped for smartgun use.\n\nThe Arasaka WAA Bullpup Assault Weapon is an Assault Rifle with a 35 shot capacity and a Smartgun Link.",
+    "notes": "Conferido com 12 Days of Gunmas, p. 3 e tabela da p. 7 (qualidade padrão; o compêndio a listava como Qualidade Excelente). Weapon Rebalance, p. 2: deixou de ser Exótica e o pente subiu de 30 para 35.",
     "price": 1000,
     "priceCategory": "VeryExpensive",
     "source": "12 Days of Gunmas",
     "tags": [
-      "Exótica",
       "Smartgun",
       "Autofire"
     ],
@@ -8523,12 +8517,12 @@
       "damageDice": 5,
       "rof": 1,
       "autofire": 4,
-      "magazine": 30,
+      "magazine": 35,
       "maxRange": 800,
       "hands": 2,
       "concealable": false,
       "quality": "Standard",
-      "exotic": true,
+      "exotic": false,
       "calibers": [
         "Rifle"
       ]
@@ -9730,7 +9724,7 @@
     "manufacturer": "Sternmeyer",
     "ruleSystem": "CyberpunkRed",
     "dataOrigin": "Verified",
-    "description": "This is one of the most reliable workhorses I sell. A single drum can take you through an entire gang war if you’re lucky. Love how it mints return customers too, because this special kitten is real finicky about its food.\n\nAn Exotic Assault Rifle incapable of Autofire and Suppressive Fire. It is fired with the Heavy Weapons Skill instead of the Shoulder Arms Skill and has a 80 shot capacity. This weapon fires its own proprietary tround ammunition, which costs 500eb (Expensive) for a drum of 80 Armor Piercing shots and is the only type of ammunition this weapon can fire.",
+    "description": "This is one of the most reliable workhorses I sell. A single drum can take you through an entire gang war if you’re lucky. Love how it mints return customers too, because this special kitten is real finicky about its food.\n\nAn Exotic Assault Rifle incapable of Autofire and Suppressive Fire. It is fired with the Heavy Weapons Skill instead of the Shoulder Arms Skill and has a 80 shot capacity. This weapon fires its own proprietary tround ammunition, which costs 500eb (Expensive) for a drum of 80 Armor Piercing shots and is the only type of ammunition this weapon can fire. Despite being an Exotic Weapon, it has 2 Attachment slots that can only be used for scope attachments.",
     "price": 1000,
     "priceCategory": "VeryExpensive",
     "source": "Woodchipper's Garage",
@@ -9754,7 +9748,7 @@
       ]
     },
     "page": 5,
-    "notes": "Conferido com Woodchipper's Garage, p. 5 e tabela da p. 6. O pente de 80 é o padrão da arma, não um pente estendido. Usa munição própria, por isso a munição compatível é 'Especial'."
+    "notes": "Conferido com Woodchipper's Garage, p. 5 e tabela da p. 6. O pente de 80 é o padrão da arma, não um pente estendido. Usa munição própria, por isso a munição compatível é 'Especial'. Weapon Rebalance, p. 2: continua Exótica, mas tem 2 slots de acessório só para miras."
   },
   {
     "slug": "sternmeyer-m-95a4",
@@ -9800,14 +9794,13 @@
     "manufacturer": "Stolbovoy",
     "ruleSystem": "CyberpunkRed",
     "dataOrigin": "Verified",
-    "description": "In the 2020s, Stolbovoy created a weapon that could operate reliably under the most adverse conditions, including heat, cold, mud, dampness, sand and grit, lubricant contamination, and corrosive environments. It isn't a surprise that most ST-5s issued are still in service today.\n\nThe Stolbovoy ST-5 is a Poor Quality Exotic Assault Rifle with a 20 shot capacity. While jammed, firing the weapon has a 50% chance of still working as normal, which also clears the jam. If you lose the coin flip, the weapon fails to fire and your Action is used, but the jam is still cleared. Despite being an Exotic Weapon, it is still capable of loading Non-Basic Ammunition.",
-    "notes": "Conferido com 12 Days of Gunmas, p. 6 e tabela da p. 7. A arma é Exótica.",
+    "description": "In the 2020s, Stolbovoy created a weapon that could operate reliably under the most adverse conditions, including heat, cold, mud, dampness, sand and grit, lubricant contamination, and corrosive environments. It isn't a surprise that most ST-5s issued are still in service today.\n\nThe Stolbovoy ST-5 is a Poor Quality Assault Rifle with a 20 shot capacity. While jammed, firing the weapon has a 50% chance of still working as normal, which also clears the jam. If you lose the coin flip, the weapon fails to fire and your Action is used, but the jam is still cleared.",
+    "notes": "Conferido com 12 Days of Gunmas, p. 6 e tabela da p. 7. Weapon Rebalance, p. 2: deixou de ser Exótica.",
     "price": 100,
     "priceCategory": "Premium",
     "source": "12 Days of Gunmas",
     "tags": [
       "Baixa Qualidade",
-      "Exótica",
       "Autofire"
     ],
     "attributes": {
@@ -9822,7 +9815,7 @@
       "hands": 2,
       "concealable": false,
       "quality": "Poor",
-      "exotic": true,
+      "exotic": false,
       "calibers": [
         "Rifle"
       ]
@@ -9938,7 +9931,7 @@
   },
   {
     "slug": "techtronika-spt32-grad",
-    "name": "Techtronika SPT32 Grad",
+    "name": "Techtronika SPT32 Grad (2077)",
     "category": "weapons",
     "manufacturer": "Techtronika",
     "ruleSystem": "CyberpunkRed",
@@ -10044,7 +10037,7 @@
   },
   {
     "slug": "tsunami-arms-nekomata",
-    "name": "Tsunami Arms Nekomata",
+    "name": "Tsunami Arms Nekomata (2077)",
     "category": "weapons",
     "manufacturer": "Tsunami Arms",
     "ruleSystem": "CyberpunkRed",
@@ -10644,14 +10637,13 @@
     "manufacturer": "Pursuit Security",
     "ruleSystem": "CyberpunkRed",
     "dataOrigin": "Verified",
-    "description": "Lança-granadas Exótico de Qualidade Excelente com 3 tiros. Mesmo sendo Exótico, só dispara munição Smoke ou Teargas.",
-    "notes": "Conferido com Woodchipper's Garage, p. 4 e tabela da p. 6.",
+    "description": "Lança-granadas de Qualidade Excelente com 3 tiros. Só dispara munição Smoke ou Teargas.",
+    "notes": "Conferido com Woodchipper's Garage, p. 4 e tabela da p. 6. Weapon Rebalance, p. 2: deixou de ser Exótico.",
     "price": 500,
     "priceCategory": "Expensive",
     "source": "Woodchipper's Garage",
     "tags": [
-      "Qualidade Excelente",
-      "Exótica"
+      "Qualidade Excelente"
     ],
     "attributes": {
       "weaponClass": "GrenadeLauncher",
@@ -10663,7 +10655,7 @@
       "hands": 2,
       "concealable": false,
       "quality": "Excellent",
-      "exotic": true,
+      "exotic": false,
       "calibers": [
         "Grenade"
       ]
@@ -21940,7 +21932,7 @@
     "manufacturer": null,
     "category": "gear",
     "slug": "gorilla-arm-hydraulic-ram",
-    "name": "Hydraulic Ram (Gorilla Arm)",
+    "name": "Hydraulic Ram (Gorilla Arm) (2077)",
     "page": 2,
     "price": 1000,
     "description": "A state-of-the-art piston system makes light work of tough demolition jobs.\n\nGorilla Arm Cyberware Enhancement. The piston systems of the Gorilla Arm enhance the damage done to cover (and only cover), adding 3d6 to the weapon’s base damage roll.",
@@ -21963,7 +21955,7 @@
     "manufacturer": null,
     "category": "gear",
     "slug": "gorilla-arm-pneumatic-actuation",
-    "name": "Pneumatic Actuation (Gorilla Arm)",
+    "name": "Pneumatic Actuation (Gorilla Arm) (2077)",
     "page": 2,
     "price": 1000,
     "description": "A series of rotary pneumatic actuators improve range of motion for delicate tasks of intense violence.\n\nGorilla Arm Cyberware Enhancement. The pneumatic actuators of the Gorilla Arm enhance the user’s ability to pinpoint damage. When this weapon causes a Critical Injury, that Critical Injury’s Bonus Damage is increased by 5.",
@@ -21986,7 +21978,7 @@
     "manufacturer": null,
     "category": "gear",
     "slug": "gorilla-arm-tungsten-reinforcement",
-    "name": "Tungsten Reinforcement (Gorilla Arm)",
+    "name": "Tungsten Reinforcement (Gorilla Arm) (2077)",
     "page": 2,
     "price": 500,
     "description": "Careful application of tungsten enhances the Gorilla Arm’s knuckles and internal structure, making them perfect for military and police applications.\n\nGorilla Arm Cyberware Enhancement. The additional reinforcement of the Gorilla Arm transforms it into a Combination weapon, giving it two modes: an Excellent Quality Heavy Melee Weapon (ROF 2, 3d6 DMG) and an Excellent Quality Very Heavy Melee Weapon (ROF 1, 4d6 DMG). The user must decide what mode to use when attacking with the weapon. Switching between modes does not require an Action.\n\nSimple efficiency to defeat complex problems. Enhanced Mantis Blades are the solution to every Gordian knot.",
@@ -22009,7 +22001,7 @@
     "manufacturer": null,
     "category": "gear",
     "slug": "mantis-blade-double-edged",
-    "name": "Double-Edged (Mantis Blade)",
+    "name": "Double-Edged (Mantis Blade) (2077)",
     "page": 3,
     "price": 1000,
     "description": "With a second edge to work with, you can cut deeper than ever before.\n\nMantis Blade Cyberware Enhancement. The extra cutting edge increases the chances of inflicting a nasty wound on an opponent. Whenever this weapon causes a Critical Injury, the user rolls twice on the Critical Injury table and chooses their favorite option for the victim to suffer.",
@@ -22032,7 +22024,7 @@
     "manufacturer": null,
     "category": "gear",
     "slug": "mantis-blade-monomolecular-edge",
-    "name": "Monomolecular Edge (Mantis Blade)",
+    "name": "Monomolecular Edge (Mantis Blade) (2077)",
     "page": 3,
     "price": 1000,
     "description": "A monomolecular edge is affixed to the blade, making it a true mono-katana.\n\nMantis Blade Cyberware Enhancement. The monomolecular edge allows the Mantis Blade to slice through lowlevel armor. Any damage dealt by this weapon ignores the target’s armor entirely if it is lower than SP7 (before halving). Armor with SP7 or higher is still interacted with as normal.",
@@ -22055,7 +22047,7 @@
     "manufacturer": null,
     "category": "gear",
     "slug": "mantis-blade-streamlined",
-    "name": "Streamlined (Mantis Blade)",
+    "name": "Streamlined (Mantis Blade) (2077)",
     "page": 3,
     "price": 1000,
     "description": "The blade is slimmed down to reduce drag, making it perfect for the speedware-enhanced individual.\n\nMantis Blade Cyberware Enhancement. Cyberneticallyenhanced users reap significant benefits from the lighter, faster blade. Whenever the user is actively using Speedware and spends at least one point of Luck on an Attack made using this weapon, they add +1 to their Check. This is in addition to any other bonuses received, including the bonus gained from spending Luck.\n\nYou need a sleek, compact, efficient solution without sacrificing effectiveness. Anything less would introduce unnecessary risk into your plans.",
@@ -22078,7 +22070,7 @@
     "manufacturer": null,
     "category": "gear",
     "slug": "monowire-barbed-line",
-    "name": "Barbed Line (Monowire)",
+    "name": "Barbed Line (Monowire) (2077)",
     "page": 3,
     "price": 1000,
     "description": "Flesh-ripping monomolecular barbs are implanted along the length of the wire.\n\nMonowire Cyberware Enhancement. Monomolecular barbs embedded in the wire enhance the possibility of inflicting a truly nasty injury. Whenever this weapon causes a Critical Injury, the user rolls thrice on the Critical Injury table (instead of twice) and chooses their favorite option for the victim to suffer.",
@@ -22101,7 +22093,7 @@
     "manufacturer": null,
     "category": "gear",
     "slug": "monowire-electroshock",
-    "name": "Electroshock (Monowire)",
+    "name": "Electroshock (Monowire) (2077)",
     "page": 3,
     "price": 500,
     "description": "Shock nodules are implanted into the wire, allowing it to be used in less-lethal applications.\n\nMonowire Cyberware Enhancement. Power pulses through the shock nodules of the wire, transforming it into a taser. If damage dealt by this weapon would reduce a target to under 1 HP, the user can choose to leave their target Unconscious at 1 HP instead.",
@@ -22124,7 +22116,7 @@
     "manufacturer": null,
     "category": "gear",
     "slug": "monowire-thermal-bladed",
-    "name": "Thermal-Bladed (Monowire)",
+    "name": "Thermal-Bladed (Monowire) (2077)",
     "page": 3,
     "price": 1000,
     "description": "The wire is studded with superheated blades to improve effectiveness against armor.\n\nMonowire Cyberware Enhancement. The superheated wire slices more cleanly through armor. Whenever this weapon ablates armor, it ablates 1 additional point of SP.",
@@ -22223,7 +22215,7 @@
     "tags": [],
     "manufacturer": null,
     "slug": "berserk-implant",
-    "name": "Berserk Implant",
+    "name": "Berserk Implant (2077)",
     "category": "cyberware",
     "page": 34,
     "price": 1000,
@@ -22251,7 +22243,7 @@
     "tags": [],
     "manufacturer": null,
     "slug": "davids-experimental-sandevistan",
-    "name": "David's Experimental Sandevistan",
+    "name": "David's Experimental Sandevistan (2077)",
     "category": "cyberware",
     "page": 34,
     "price": 250000,
@@ -22279,7 +22271,7 @@
     "tags": [],
     "manufacturer": null,
     "slug": "ex-disk",
-    "name": "Ex-Disk",
+    "name": "Ex-Disk (2077)",
     "category": "cyberware",
     "page": 35,
     "price": 1000,
@@ -22306,7 +22298,7 @@
     "tags": [],
     "manufacturer": null,
     "slug": "neuroport",
-    "name": "Neuroport",
+    "name": "Neuroport (2077)",
     "category": "cyberware",
     "page": 35,
     "price": 1000,
@@ -22333,7 +22325,7 @@
     "tags": [],
     "manufacturer": null,
     "slug": "neuroport-cyberdeck-port",
-    "name": "Neuroport Cyberdeck Port",
+    "name": "Neuroport Cyberdeck Port (2077)",
     "category": "cyberware",
     "page": 36,
     "price": 100,
@@ -22360,7 +22352,7 @@
     "tags": [],
     "manufacturer": null,
     "slug": "projectile-launch-system",
-    "name": "Projectile Launch System",
+    "name": "Projectile Launch System (2077)",
     "category": "cyberware",
     "page": 36,
     "price": 1000,
@@ -22388,7 +22380,7 @@
     "tags": [],
     "manufacturer": null,
     "slug": "self-ice",
-    "name": "Self-ICE",
+    "name": "Self-ICE (2077)",
     "category": "cyberware",
     "page": 36,
     "price": 500,
@@ -22415,7 +22407,7 @@
     "tags": [],
     "manufacturer": null,
     "slug": "power-rebuild",
-    "name": "Power Rebuild",
+    "name": "Power Rebuild (2077)",
     "category": "weapon-attachments",
     "page": 30,
     "price": 1000,
@@ -22453,7 +22445,7 @@
     "tags": [],
     "manufacturer": null,
     "slug": "smart-rebuild",
-    "name": "Smart Rebuild",
+    "name": "Smart Rebuild (2077)",
     "category": "weapon-attachments",
     "page": 30,
     "price": 1000,
@@ -22491,7 +22483,7 @@
     "tags": [],
     "manufacturer": null,
     "slug": "tech-rebuild",
-    "name": "Tech Rebuild",
+    "name": "Tech Rebuild (2077)",
     "category": "weapon-attachments",
     "page": 30,
     "price": 1000,
@@ -22527,7 +22519,7 @@
     "tags": [],
     "manufacturer": null,
     "slug": "improved-smart-ammunition",
-    "name": "Improved Smart Ammunition",
+    "name": "Improved Smart Ammunition (2077)",
     "category": "ammunition",
     "page": 31,
     "price": 50,
@@ -22559,7 +22551,7 @@
     "tags": [],
     "manufacturer": null,
     "slug": "improved-smart-ammunition-explosive",
-    "name": "Improved Smart Ammunition (Granada/Foguete)",
+    "name": "Improved Smart Ammunition (Granada/Foguete) (2077)",
     "category": "ammunition",
     "page": 31,
     "price": 500,
@@ -22586,7 +22578,7 @@
     "tags": [],
     "manufacturer": null,
     "slug": "immunoblockers",
-    "name": "Immunoblockers",
+    "name": "Immunoblockers (2077)",
     "category": "drugs",
     "page": 30,
     "price": 100,

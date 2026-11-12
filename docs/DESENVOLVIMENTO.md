@@ -627,11 +627,52 @@ O conversor aplica depois as erratas de `data/source/errata/`, um arquivo JSON p
 - `move` passa um item para outra categoria: troca `category` e `attributes` inteiros e mantém slug, textos e fonte. Ao reimportar, a aplicação recria esses itens na tabela nova e reaponta favoritos e entradas de lista.
 - `source`, no topo do arquivo, vale para toda entrada que não informe a própria fonte.
 
-Os arquivos `zz-*` rodam por último e documentam mudanças que cruzam vários livros: `zz-move-fashionware.json` e `zz-move-netrunning.json` (mudança de categoria, com os atributos conferidos), `zz-nomad-access.json` (rank de Moto dos veículos) e `zz-weapon-compatibility.json` (tags "Compatível com" dos upgrades de armas). O campo `about` de cada um diz as páginas usadas.
+Os arquivos `zz-*` rodam por último e documentam mudanças que cruzam vários livros: `zz-move-fashionware.json` e `zz-move-netrunning.json` (mudança de categoria, com os atributos conferidos), `zz-nomad-access.json` (rank de Moto dos veículos) `zz-weapon-compatibility.json` (tags "Compatível com" dos upgrades de armas) e `zz-weapon-rebalance.json` (errata Weapon Rebalance: armas que deixaram de ser Exóticas; as regras de acessório ficam em `attachments` no `weapon-rules.json`). O campo `about` de cada um diz as páginas usadas.
+
+Itens do Edgerunners Mission Kit e do Cyberware Enhancements (era 207X) ganham " (2077)" no fim do nome no `convert.mjs`, para não confundir com as versões de 2045; a slug não muda.
 
 Todo item tocado pela errata recebe a origem `Verified`. As notas de cada um dizem a página do PDF e o que estava errado.
 
 Ao reimportar um catálogo atualizado, a aplicação apaga os itens que vieram de um seed anterior e não estão mais no atual (origens `Compendium`, `Verified` e `Demo`). Itens `Custom` nunca são apagados.
+
+### Livros e DLCs que faltam
+
+Conferido em 2026-11-12 contra a página oficial (https://rtalsoriangames.com/downloadable-content/) e o *Cyberpunk RED Checklist* v1.15 (julho de 2026). "PDF" diz se o arquivo já está em `Downloads\Cyberpunk PDFs`.
+
+Já estão na ferramenta: Weapon Rebalance (2026-11-12, só falta a parte do Black Chrome, que manda para o Black Chrome Changelog), Core, Black Chrome, Danger Gal Dossier, Tales of the RED, Hope Reborn, Interface RED 1 a 5 (com todas as DLCs que eles reúnem: Old Guns Never Die, Single Shot Pack, Cyberchairs, Elflines, Hardened Mooks/Lieutenants/Mini Bosses, Night City Weather, Cargo Containers, 12 Days of Gunmas/Cybermas/Gearmas/REDmas, Woodchipper's Garage, Midnight with the Upload, Must Have Cyberware Deals, Spinning Your Wheels, Hornet's Pharmacy, Black Chrome+, Stickball, Dreaded Punknaught, Corporate Conapts, All About Agents, Toggle's Temple, Your New Best Friend etc.), Edgerunners Mission Kit, Karaoke Night, Cyberware Enhancements e as DLCs avulsas Tales of the RED+, Danger Gal Dossier+, Hope Reborn+, Mixing Drinks–Changing Lives, No Place Like Home, 12 Days of Cutiemas e Vehiclemas, Going Quiet, Segotari Power e Invented Tech Upgrades.
+
+**Livros pagos que faltam**
+
+| Livro | O que traria | PDF |
+|---|---|---|
+| Night City 2045 (CR3141, digital abr/2026) | 600+ locais, 99 fichas de NPC, 73 organizações; maior lacuna (Compêndio de NPCs, gangues, itens) | não |
+| Single Player Mode (CR3121, set/2025) + DLC Single Player Mode+ | tabelas de jogo solo e geradores de trama/pessoas, combate e Netrunning abreviados | não |
+| Data Pack (CR3021) | 6 missões screamsheet e 6 listas "20 things" (pessoas, lugares, itens) | não |
+| Jumpstart Kit (CR3000) | regras antigas, missões já convertidas pela DLC Jumpstart Kit Conversion Guide; prioridade baixa | não |
+| Easy Mode | quickstart que repete o Core; prioridade baixa | não |
+
+GM Screen, Netrunning Deck e Trauma Deck só repetem regras do Core, e os 4 itens do Micro Chrome foram reimpressos em outros livros: nada a importar.
+
+**DLCs fora de qualquer Interface RED e fora da ferramenta**
+
+| DLC | O que traria | PDF |
+|---|---|---|
+| Night Market Index v1.24 | lista oficial de todos os itens com preço e fonte; o `night-market-index.json` local veio da v1.1, então diferenças apontam itens faltando | não (só v1.1) |
+| Night City Gang Guide (jun/2026) | gangues para o gerador (§5 do MAP tem 23) | não |
+| Everyday People (jan/2026) | NPCs comuns para o Compêndio e o gerador | não |
+| Night City Tarot (out/2021) | lesões críticas alternativas para `/tables` | não |
+| Hot Pursuit (mai/2024) | regras de perseguição para combate e Mesa | não |
+| The Sawtooth (dez/2023) | veículo do crossover com Car Wars; está no Night Market Index, falta no catálogo (sumiu da página de DLCs) | não |
+| Rockerboy Index (jun/2025) | índice de material de Rockerboy; avaliar o que é novo | não |
+| So, You Missed Gen Con (ago/2025) | fichas prontas / NPCs | não |
+| Elflines Online: Magic Returns (mai/2025) | terceira DLC de ELO (as duas primeiras vieram pelo Interface 1) | não |
+| Seeing Double (fev/2026), Night City Hook Book (mai/2026) | missão e ganchos; conferir NPCs e itens | não |
+| Night City Nightmares v1.1, Con Jobs 2026 partes 1 e 2 | novas depois do checklist v1.15; conferir NPCs e itens | não |
+| Rules FAQ v1.3 | respostas oficiais de regras para conferir com os JSON de regras | não |
+
+Opcionais (assets, sem dados de jogo): Night City Atlas e Megatoken Pack (mapas e tokens para a Mesa), Night City Gang Logos e 100 Logos (gangues), Nomad Presents Radio. Sem nada a importar: Listen Up! (JonJonTheWise e Rob Mulligan), Edgerunners Folio e fichas, Screamsheet Kit, Fossilized Violence e as fichas de actual play (Fin Diesel & Lucky, High Shelf Gaming, Dark Future Dice).
+
+Regras dos Interface que entraram só como itens, sem tela própria: Digital Dating (Date Path), Salvaging Night City, Breaking Your Stuff, Chasing the Rabbit, Achievements and Loot Boxes, Did Someone Say Murder?, Screamsheet Generator e Elflines Online the TCG.
 
 ## Idiomas
 

@@ -1,0 +1,44 @@
+{
+  "about": "Conferido com o PDF Weapon Rebalance v1.0 (julho de 2026, p. 2), errata que tira a tag Exótica de armas do Danger Gal Dossier, do 12 Days of Gunmas e do Woodchipper's Garage. Roda depois das erratas de cada livro. O texto em inglês de cada arma (book-descriptions.json) segue a errata. As regras de acessórios (slots só para miras, acessórios fixos, sem pentes) ficam em weapon-rules.json. O Black Chrome manda para o Black Chrome Changelog, que não está no PDF.",
+  "updates": {
+    "micro-cutie-sanroo": {
+      "notes": "Conferido com Danger Gal Dossier, p. 145. Reimpressão do Micro Chrome (o compêndio citava o Black Chrome, que não tem a arma). Corrigido: pente 10 (não 12). Weapon Rebalance, p. 2: deixou de ser Exótica.",
+      "tags": ["Qualidade Excelente"],
+      "attributes": { "exotic": false }
+    },
+    "arasaka-waa-bullpup": {
+      "notes": "Conferido com 12 Days of Gunmas, p. 3 e tabela da p. 7 (qualidade padrão; o compêndio a listava como Qualidade Excelente). Weapon Rebalance, p. 2: deixou de ser Exótica e o pente subiu de 30 para 35.",
+      "tags": ["Smartgun", "Autofire"],
+      "attributes": { "exotic": false, "magazine": 35 }
+    },
+    "con-arms-multi-ammo-pistol": {
+      "notes": "Conferido com 12 Days of Gunmas, p. 3 e tabela da p. 7. Weapon Rebalance, p. 2: deixou de ser Exótica e não aceita acessórios que mudam a capacidade (pente estendido e de tambor).",
+      "tags": ["Revólver"],
+      "attributes": { "exotic": false }
+    },
+    "militech-crusher": {
+      "notes": "Conferido com 12 Days of Gunmas, p. 4-5 e tabela da p. 7. A tabela lista o dano como N/A (depende da munição); o compêndio dava 3d6/5d6 e incluía slugs, que a arma não dispara. Weapon Rebalance, p. 2: deixou de ser Exótica.",
+      "tags": [],
+      "attributes": { "exotic": false }
+    },
+    "mustang-arms-ars-5-smg": {
+      "notes": "Conferido com 12 Days of Gunmas, p. 5 e tabela da p. 7. Weapon Rebalance, p. 2: deixou de ser Exótica; Smartgun Link, Infrared Nightvision Scope e Sniping Scope vêm instalados, ocupam os slots e não podem ser removidos.",
+      "tags": ["Smartgun", "Autofire", "Mira acoplada"],
+      "attributes": { "exotic": false }
+    },
+    "stolbovoy-st-5": {
+      "notes": "Conferido com 12 Days of Gunmas, p. 6 e tabela da p. 7. Weapon Rebalance, p. 2: deixou de ser Exótica.",
+      "tags": ["Baixa Qualidade", "Autofire"],
+      "attributes": { "exotic": false }
+    },
+    "pursuit-security-tearjerker": {
+      "description": "Lança-granadas de Qualidade Excelente com 3 tiros. Só dispara munição Smoke ou Teargas.",
+      "notes": "Conferido com Woodchipper's Garage, p. 4 e tabela da p. 6. Weapon Rebalance, p. 2: deixou de ser Exótico.",
+      "tags": ["Qualidade Excelente"],
+      "attributes": { "exotic": false }
+    },
+    "sternmeyer-m-02-heavy": {
+      "notes": "Conferido com Woodchipper's Garage, p. 5 e tabela da p. 6. O pente de 80 é o padrão da arma, não um pente estendido. Usa munição própria, por isso a munição compatível é 'Especial'. Weapon Rebalance, p. 2: continua Exótica, mas tem 2 slots de acessório só para miras."
+    }
+  }
+}

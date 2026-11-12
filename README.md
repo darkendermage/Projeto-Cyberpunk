@@ -228,7 +228,7 @@ Por enquanto, só no Windows 10 e 11.
 
 ## ▓▒░ LIVROS COBERTOS
 
-*Cyberpunk RED Core Rulebook* · *Black Chrome* · *Black Chrome+* · *Interface RED* 1 a 5 · *Danger Gal Dossier* · *Danger Gal Dossier+* · *Hope Reborn+* · *Tales of the RED+* · *Night City Weather* · *Edgerunners Mission Kit* · *Tales of the RED* · a série *12 Days of...* · *Woodchipper's Garage* · *Toggle's Temple* · *Hornet's Pharmacy* · *All About Agents* · *Segotari Power* · *Going Quiet* · *Cyberware Enhancements* · *No Place Like Home* · *Mixing Drinks–Changing Lives* · *Invented Tech Upgrades*
+*Cyberpunk RED Core Rulebook* · *Black Chrome* · *Black Chrome+* · *Interface RED* 1 a 5 · *Danger Gal Dossier* · *Danger Gal Dossier+* · *Hope Reborn+* · *Tales of the RED+* · *Night City Weather* · *Edgerunners Mission Kit* · *Tales of the RED* · *Tales of the RED: Hope Reborn* · a série *12 Days of...* · *Woodchipper's Garage* · *Toggle's Temple* · *Hornet's Pharmacy* · *All About Agents* · *Segotari Power* · *Going Quiet* · *Cyberware Enhancements* · *No Place Like Home* · *Mixing Drinks–Changing Lives* · *Invented Tech Upgrades*
 
 Cada item mostra o livro e a página de onde veio, para você conferir na fonte.
 

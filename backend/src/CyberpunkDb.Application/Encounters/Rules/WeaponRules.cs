@@ -41,7 +41,20 @@ public sealed record WeaponRule
     // cyberware slug the weapon won't work without
     public string? Requires { get; init; }
     public ThrowRule? Throw { get; init; }
+    public AttachmentRule? Attachments { get; init; }
     public List<Text> Notes { get; init; } = [];
+}
+
+// Attachment slots that differ from the default: 3 on non-exotic ranged weapons, none on exotics (CP:R p.95).
+public sealed record AttachmentRule
+{
+    public string Source { get; init; } = "";
+    // null keeps the default count
+    public int? Slots { get; init; }
+    // only these types fit, even on an exotic weapon (empty = the usual check)
+    public List<WeaponAttachmentType> Types { get; init; } = [];
+    public List<WeaponAttachmentType> ForbidTypes { get; init; } = [];
+    public Text? Note { get; init; }
 }
 
 // Melee weapons can be thrown (CP:R p.177). Only = it can't be swung at all (Ranger boomerang).
@@ -157,6 +170,19 @@ public sealed class WeaponRuleBook
 
     public ClassFallback? Fallback(WeaponClass? weaponClass) =>
         weaponClass is { } c ? Document.ClassFallbacks.Value?.GetValueOrDefault(c) : null;
+
+    public int AttachmentSlots(string? slug, bool ranged, bool exotic, int defaultSlots) =>
+        For(slug)?.Attachments?.Slots ?? (ranged && !exotic ? defaultSlots : 0);
+
+    // Whether the attachment can go on the weapon at all; free slots are checked when installing.
+    public bool AttachmentFits(string? slug, bool exotic, WeaponAttachmentType type, bool exoticAllowed, int slotsRequired)
+    {
+        var rule = For(slug)?.Attachments;
+        if (rule is null) return !exotic || exoticAllowed;
+        if (rule.ForbidTypes.Contains(type)) return false;
+        if (rule.Slots is { } slots && slotsRequired > slots) return false;
+        return rule.Types.Count > 0 ? rule.Types.Contains(type) : !exotic || exoticAllowed;
+    }
 
     // the catalog's magazine plus the extra ones the rule declares
     public MagazineRule? Magazine(string? slug, string? id) =>

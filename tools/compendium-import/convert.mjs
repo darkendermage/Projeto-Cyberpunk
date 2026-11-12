@@ -821,6 +821,13 @@ for (const file of readdirSync(ERRATA_DIR).filter((f) => f.endsWith('.json')).so
   }
 }
 
+// Gear from the Edgerunners Mission Kit and its DLC is from the 207X era: the suffix keeps it apart from the
+// 2045 items (the book itself calls one weapon "Militech Crusher (circa 207X)").
+const ERA_2077 = new Set(['Edgerunners Mission Kit', 'Cyberware Enhancements']);
+for (const item of all) {
+  if (ERA_2077.has(item.source)) item.name = `${item.name.replace(/ \(circa 207X\)$/, '')} (2077)`;
+}
+
 // Each item's own text from the official books (English) replaces the summary in the description field.
 // The Portuguese summaries stay in the errata files.
 const bookText = JSON.parse(readFileSync(BOOK_TEXT, 'utf8')).descriptions;

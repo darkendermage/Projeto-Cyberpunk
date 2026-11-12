@@ -249,4 +249,34 @@ public class CatalogApiTests(ApiFactory factory)
         var upgrades = detail!["relations"]!.AsArray().First(r => r!["key"]!.GetValue<string>() == "compatibleUpgrades")!;
         upgrades["items"]!.AsArray().Select(i => i!["slug"]!.GetValue<string>()).Should().Contain("pistol-autosear");
     }
+
+    [Fact]
+    public async Task Weapon_rebalance_removes_the_exotic_tag_and_changes_compatible_upgrades()
+    {
+        foreach (var slug in new[] { "micro-cutie-sanroo", "arasaka-waa-bullpup", "con-arms-multi-ammo-pistol", "militech-crusher",
+                     "mustang-arms-ars-5-smg", "stolbovoy-st-5", "pursuit-security-tearjerker" })
+            (await Item(slug))["item"]!["attributes"]!["exotic"]!.GetValue<bool>().Should().BeFalse(slug);
+        (await Item("arasaka-waa-bullpup"))["item"]!["attributes"]!["magazine"]!.GetValue<int>().Should().Be(35);
+
+        var m02 = await Item("sternmeyer-m-02-heavy");
+        m02["item"]!["attributes"]!["exotic"]!.GetValue<bool>().Should().BeTrue();
+        Upgrades(m02).Should().Contain(["sniping-scope", "infrared-nightvision-scope"]).And.NotContain(["silencer", "smartgun-link"]);
+        Upgrades(await Item("con-arms-multi-ammo-pistol")).Should().Contain("silencer").And.NotContain(["extended-magazine", "drum-magazine"]);
+        Upgrades(await Item("mustang-arms-ars-5-smg")).Should().NotContain(["silencer", "sniping-scope"]);
+    }
+
+    [Theory]
+    [InlineData("gorilla-arm", "Gorilla Arm (2077)")]
+    [InlineData("mantis-blade", "Mantis Blade (2077)")]
+    [InlineData("militech-crusher-207x", "Militech Crusher (2077)")]
+    [InlineData("gorilla-arm-hydraulic-ram", "Hydraulic Ram (Gorilla Arm) (2077)")]
+    [InlineData("militech-crusher", "Militech Crusher")]
+    public async Task Edgerunners_era_items_carry_2077_after_the_name(string slug, string name) =>
+        (await Item(slug))["item"]!["name"]!.GetValue<string>().Should().Be(name);
+
+    private async Task<JsonNode> Item(string slug) => (await _client.GetFromJsonAsync<JsonNode>($"/api/items/by-slug/{slug}"))!;
+
+    private static List<string> Upgrades(JsonNode item) =>
+        item["relations"]!.AsArray().FirstOrDefault(r => r!["key"]!.GetValue<string>() == "compatibleUpgrades")?["items"]!.AsArray()
+            .Select(i => i!["slug"]!.GetValue<string>()).ToList() ?? [];
 }

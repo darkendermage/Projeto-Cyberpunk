@@ -1,6 +1,7 @@
 using CyberpunkDb.Application.Abstractions;
 using CyberpunkDb.Application.Catalog.Contracts;
 using CyberpunkDb.Application.Catalog.Schema;
+using CyberpunkDb.Application.Encounters.Rules;
 using CyberpunkDb.Domain.Entities;
 using CyberpunkDb.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
@@ -39,12 +40,15 @@ public sealed class WeaponAttachmentCategory : CategoryDefinition<WeaponAttachme
     {
         var classes = item.CompatibleClasses.Select(c => c.WeaponClass).ToList();
         if (classes.Count == 0) return [];
-        var weapons = await db.Set<Weapon>().AsNoTracking()
-            .Where(w => classes.Contains(w.WeaponClass) && (item.ExoticAllowed || !w.IsExotic))
+        var candidates = await db.Set<Weapon>().AsNoTracking()
+            .Where(w => classes.Contains(w.WeaponClass))
             .OrderBy(w => w.WeaponClass).ThenBy(w => w.Name)
-            .Take(60)
-            .Select(w => new ItemSummaryDto(w.Id, w.Slug, w.Name, "weapons", w.PriceEb, null))
+            .Select(w => new { w.IsExotic, Summary = new ItemSummaryDto(w.Id, w.Slug, w.Name, "weapons", w.PriceEb, null) })
             .ToListAsync(ct);
+        var weaponRules = WeaponRuleBook.Embedded;
+        var weapons = candidates
+            .Where(w => weaponRules.AttachmentFits(w.Summary.Slug, w.IsExotic, item.AttachmentType, item.ExoticAllowed, item.SlotsRequired ?? 0))
+            .Take(60).Select(w => w.Summary).ToList();
         return weapons.Count == 0 ? [] : [new RelationGroupDto("compatibleWeapons", "Armas compatíveis", weapons)];
     }
 }

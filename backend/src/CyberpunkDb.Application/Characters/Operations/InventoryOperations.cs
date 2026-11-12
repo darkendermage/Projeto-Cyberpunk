@@ -111,6 +111,7 @@ public sealed class InventoryOperations(CharacterRuleBook rules, CyberwareOperat
     // weapon attachments
 
     // Exotic weapons only take attachments that allow them; other ranged weapons have 3 slots (CP:R p.95).
+    // weapon-rules.json overrides both for a few weapons (Weapon Rebalance).
     public CharacterSheet Attach(CharacterSheet sheet, AttachRequest request, CharacterChange change)
     {
         var weaponEntry = Find(sheet, request.WeaponInstanceId);
@@ -124,15 +125,18 @@ public sealed class InventoryOperations(CharacterRuleBook rules, CyberwareOperat
 
         if (a.Classes.Count > 0 && !a.Classes.Contains(w.Class))
             throw CharacterChange.Refuse("attachmentInstanceId", L.T($"{item.Name} não serve em {weapon.Name}: só em {string.Join(", ", a.Classes)}.", $"{item.Name} doesn't fit {weapon.Name}: only {string.Join(", ", a.Classes)}."));
-        if (w.Exotic && !a.ExoticAllowed)
-            throw CharacterChange.Refuse("attachmentInstanceId", L.T($"{weapon.Name} é exótica e {item.Name} não pode ser instalado nela.", $"{weapon.Name} is exotic and {item.Name} can't be installed on it."));
+        var weaponRules = WeaponRuleBook.Embedded;
+        if (!weaponRules.AttachmentFits(weapon.Slug, w.Exotic, a.Type, a.ExoticAllowed, a.SlotsRequired))
+            throw CharacterChange.Refuse("attachmentInstanceId", weaponRules.For(weapon.Slug)?.Attachments is { Note: { } note } rule
+                ? L.T($"{item.Name} não serve em {weapon.Name}: {note.Pt} ({rule.Source}).", $"{item.Name} doesn't fit {weapon.Name}: {note.En} ({rule.Source}).")
+                : L.T($"{weapon.Name} é exótica e {item.Name} não pode ser instalado nela.", $"{weapon.Name} is exotic and {item.Name} can't be installed on it."));
 
         var state = weaponEntry.Weapon ?? new WeaponState();
         var installed = state.Attachments.Select(id => sheet.Inventory.FirstOrDefault(e => e.InstanceId == id))
             .Where(e => e is not null).Select(e => change.Item(e!.ItemId)).ToList();
         if (installed.Any(i => i.Id == item.Id))
             throw CharacterChange.Refuse("attachmentInstanceId", L.T($"{weapon.Name} já tem {item.Name}.", $"{weapon.Name} already has {item.Name}."));
-        var capacity = w.Calibers.Count > 0 && !w.Exotic ? rules.Document.Combat.AttachmentSlots.Value : 0;
+        var capacity = weaponRules.AttachmentSlots(weapon.Slug, w.Calibers.Count > 0, w.Exotic, rules.Document.Combat.AttachmentSlots.Value);
         var used = installed.Sum(i => i.Attachment?.SlotsRequired ?? 0);
         if (a.SlotsRequired > 0 && used + a.SlotsRequired > capacity)
             throw CharacterChange.Refuse("attachmentInstanceId",

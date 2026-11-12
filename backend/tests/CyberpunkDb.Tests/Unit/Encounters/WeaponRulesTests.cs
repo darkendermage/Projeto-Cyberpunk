@@ -350,4 +350,23 @@ public class WeaponRulesTests
         boomerang.Modes.Should().BeNull();
         boomerang.Should().Match<WeaponView>(w => w.ThrownOnly && w.HalvesArmor && w.Rof == 2 && w.ReturnsWith == "targeting-scope");
     }
+
+    [Fact]
+    public void Weapon_rebalance_attachment_rules()
+    {
+        // M-02 stays exotic but has two scope-only slots
+        Book.AttachmentSlots("sternmeyer-m-02-heavy", ranged: true, exotic: true, defaultSlots: 3).Should().Be(2);
+        Book.AttachmentFits("sternmeyer-m-02-heavy", true, WeaponAttachmentType.Scope, exoticAllowed: false, slotsRequired: 1).Should().BeTrue();
+        Book.AttachmentFits("sternmeyer-m-02-heavy", true, WeaponAttachmentType.Muzzle, false, 1).Should().BeFalse();
+        // no capacity modifying attachments
+        Book.AttachmentFits("con-arms-multi-ammo-pistol", false, WeaponAttachmentType.Magazine, false, 1).Should().BeFalse();
+        Book.AttachmentFits("con-arms-multi-ammo-pistol", false, WeaponAttachmentType.Muzzle, false, 1).Should().BeTrue();
+        // the fixed attachments fill the ARS-5
+        Book.AttachmentSlots("mustang-arms-ars-5-smg", true, false, 3).Should().Be(0);
+        Book.AttachmentFits("mustang-arms-ars-5-smg", false, WeaponAttachmentType.Scope, false, 1).Should().BeFalse();
+        // everything else keeps CP:R p.95
+        Book.AttachmentSlots("militech-crusher", true, false, 3).Should().Be(3);
+        Book.AttachmentSlots("militech-crusher-207x", true, true, 3).Should().Be(0);
+        Book.AttachmentFits("militech-crusher-207x", true, WeaponAttachmentType.Muzzle, false, 1).Should().BeFalse();
+    }
 }

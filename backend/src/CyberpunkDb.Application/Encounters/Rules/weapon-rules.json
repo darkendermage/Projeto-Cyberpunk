@@ -1,5 +1,5 @@
 {
-  "about": "Armas que fogem do perfil padrão do livro, pela slug do catálogo. Cada modo herda o perfil do catálogo (e o 'base' da arma) e muda só o que declara. Modos 'free' são escolhidos a cada ataque; 'action', 'move' e 'minute' ficam ligados na arma até trocar de novo.",
+  "about": "Armas que fogem do perfil padrão do livro, pela slug do catálogo. Cada modo herda o perfil do catálogo (e o 'base' da arma) e muda só o que declara. Modos 'free' são escolhidos a cada ataque; 'action', 'move' e 'minute' ficam ligados na arma até trocar de novo. 'attachments' troca os slots de acessório padrão (3 nas armas de longo alcance não Exóticas, nenhum nas Exóticas, CP:R p.95).",
 
   "classFallbacks": {
     "source": "Interface 5 p.116-119 (as metralhadoras citam tabelas de alcance e de Autofire que não estão no livro básico)",
@@ -129,7 +129,20 @@
     "stun-gun": { "source": "CP:R p.349", "base": { "nonLethal": true } },
     "con-arms-multi-ammo-pistol": {
       "source": "12 Days of Gunmas p.3",
-      "notes": [{ "pt": "Pode misturar até 5 tipos de munição e escolher qual sai a cada tiro.", "en": "Up to 5 ammo types can be loaded; pick which one fires with each shot." }]
+      "notes": [{ "pt": "Pode misturar até 5 tipos de munição e escolher qual sai a cada tiro.", "en": "Up to 5 ammo types can be loaded; pick which one fires with each shot." }],
+      "attachments": {
+        "source": "Weapon Rebalance p.2 (Incompatible with capacity modifying attachments)",
+        "forbidTypes": ["Magazine"],
+        "note": { "pt": "não aceita acessórios que mudam a capacidade", "en": "takes no capacity modifying attachments" }
+      }
+    },
+    "mustang-arms-ars-5-smg": {
+      "source": "12 Days of Gunmas p.5",
+      "attachments": {
+        "source": "Weapon Rebalance p.2 (These Attachments cannot be removed)",
+        "slots": 0,
+        "note": { "pt": "Smartgun Link e as duas miras vêm instalados e ocupam os slots", "en": "its Smartgun Link and both scopes come installed and fill the slots" }
+      }
     },
     "hello-cutie-janus-hex": {
       "source": "12 Days of Cutiemas p.5",
@@ -437,6 +450,15 @@
       "source": "CP:R p.349",
       "base": { "noAimed": true, "ignoreArmorBelow": 11 },
       "notes": [{ "pt": "Recarregar leva duas Ações (dois turnos).", "en": "Reloading takes two Actions (two Turns)." }]
+    },
+    "sternmeyer-m-02-heavy": {
+      "source": "Woodchipper's Garage p.5",
+      "attachments": {
+        "source": "Weapon Rebalance p.2 (2 Attachment slots that can only be used for scope attachments)",
+        "slots": 2,
+        "types": ["Scope"],
+        "note": { "pt": "só aceita miras", "en": "only takes scopes" }
+      }
     },
     "stolbovoy-st-5": {
       "source": "12 Days of Gunmas p.6",
