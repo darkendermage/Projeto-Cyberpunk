@@ -44,6 +44,12 @@ public sealed record WeaponTraits
     public bool MinBodyJam { get; init; }
     public string? MinBodyNote { get; init; }
     public string? Requires { get; init; }
+    // martial arts strikes (martial-arts-rules.json): lands on the head, Critical Injury / condition on a hit
+    public bool HitsHead { get; init; }
+    public string? InjuryOnHit { get; init; }
+    public string? ConditionOnHit { get; init; }
+    // the target resists with this skill's weapon line (e.g. "brawling") instead of Evasion
+    public string? OpposedBy { get; init; }
     public IReadOnlyList<string> Notes { get; init; } = [];
 }
 

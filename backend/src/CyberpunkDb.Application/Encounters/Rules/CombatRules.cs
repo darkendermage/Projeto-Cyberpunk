@@ -20,6 +20,8 @@ public sealed record CombatRulesDocument
     public Ruled<RangeBand[]> RangeBands { get; init; } = new();
     public Ruled<RangeRow[]> SingleShot { get; init; } = new();
     public Ruled<int> DodgeRef { get; init; } = new();
+    // house rule: each Evasion defense after the first in a Round takes this much off
+    public Ruled<int> DodgePenaltyPerAttempt { get; init; } = new();
     public Ruled<bool> DefenderWinsTies { get; init; } = new();
     public Ruled<AimedShotRule> AimedShot { get; init; } = new();
     public Ruled<AimedEffect[]> AimedEffects { get; init; } = new();

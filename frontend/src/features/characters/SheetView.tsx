@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Brain, Clover, Eye, History, Minus, Plus, RotateCcw, Search, SlidersHorizontal, X } from 'lucide-react';
+import { Brain, Clover, Dices, Eye, History, Minus, Plus, RotateCcw, Search, SlidersHorizontal, X } from 'lucide-react';
 import { problemMessage, useCharacterCommand, useCharacterEvents } from '../../api/characters';
 import type { CharacterDetail, CharacterRules, ModifierTarget, StatModifier } from '../../api/characterTypes';
 import { Button, IconButton, Modal, Segmented, Select } from '../../components/ui/ui';
@@ -8,13 +8,17 @@ import { useToast } from '../../state/ToastContext';
 import {
   filterSkills, formatDate, groupSkills, signed, SKILL_FILTERS, skillLabel, STAT_LABEL, type SkillFilter,
 } from './characterLabels';
+import { BalanceButton } from './BalanceDialog';
+import { HumanityButton } from './HumanityDialog';
 import { CyberEffectsPanel, Portrait, RoleAbilityButton, SheetPanel, StateTag } from './CharacterUi';
 import { ArmorPanel, HealthPanel, InjuriesPanel, type Run, WeaponsPanel } from './CombatPanels';
 import { RoleSplitDialog } from './RoleSplitDialog';
 import { splitTotal } from './roleSplit';
-import { ProgressionPanel } from './ProgressionPanel';
+import { ProgressionButton } from './ProgressionPanel';
 import { paginate } from './gearLayout';
 import { Pager } from './Pager';
+import { useSheetRoll } from './sheetRoll';
+import { PreRollDialog, type PreRollChoice } from './PreRollDialog';
 import type { SheetEditor } from './useSheetEditor';
 import styles from './Characters.module.css';
 import { t, tv } from '../../i18n';
@@ -53,7 +57,6 @@ export function SheetView({ detail, rules, editor }: Props) {
         <ArmorPanel {...props} />
         <WeaponsPanel {...props} />
         <InjuriesPanel {...props} />
-        <ProgressionPanel detail={detail} rules={rules} run={run} busy={command.isPending} />
         <HistoryPanel id={detail.id} run={run} busy={command.isPending} />
       </div>
     </div>
@@ -73,7 +76,7 @@ function IdentityColumn({ detail, rules, editor, run, busy }: { detail: Characte
   return (
     <div className={styles.column}>
       <Portrait detail={detail} onFocus={(portraitFocus) => set({ portraitFocus })} />
-      <WalletBlock detail={detail} />
+      <WalletBlock detail={detail} rules={rules} run={run} busy={busy} />
       <section className={styles.panel}>
         <label className={styles.idField}>
           <span className={styles.idLabel}>{t('Nome', 'Name')}</span>
@@ -105,7 +108,7 @@ function IdentityColumn({ detail, rules, editor, run, busy }: { detail: Characte
         </dl>
       </section>
 
-      <SheetPanel title={t('Humanidade', 'Humanity')} icon={<Brain size={16} />}>
+      <SheetPanel title={t('Humanidade', 'Humanity')} icon={<Brain size={16} />} actions={<HumanityButton detail={detail} run={run} busy={busy} />}>
         <div className={styles.bigNumbers}>
           <strong>{hum.current}</strong><span className={styles.muted}>/ {hum.max}</span>
           <span className={styles.grow} />
@@ -116,6 +119,7 @@ function IdentityColumn({ detail, rules, editor, run, busy }: { detail: Characte
           <dt>{t('EMP efetiva', 'Effective EMP')}</dt><dd>{hum.empEffective} <span className={styles.muted}>(base {hum.empBase})</span></dd>
           <dt>{t('Perdida', 'Lost')}</dt><dd>{hum.lost}</dd>
           <dt>{t('Recuperada', 'Recovered')}</dt><dd>{hum.recovered}</dd>
+          {hum.adjustment !== 0 && <><dt>{t('Ajuste à mão', 'By hand')}</dt><dd>{signed(hum.adjustment)}</dd></>}
           <dt title={t('Máximo que a terapia recupera com o cyberware atual (CP:R p.230)', 'Most that therapy recovers with the current cyberware (CP:R p.230)')}>{t('Teto da terapia', 'Therapy cap')}</dt><dd>{hum.therapyCap}</dd>
         </dl>
       </SheetPanel>
@@ -150,16 +154,22 @@ function RoleSplitButton({ detail, rules, role, rank, run, busy }: { detail: Cha
 }
 
 /** Money and Improvement Points side by side, at the top of the Character tab. */
-function WalletBlock({ detail }: { detail: CharacterDetail }) {
+function WalletBlock({ detail, rules, run, busy }: { detail: CharacterDetail; rules: CharacterRules; run: Run; busy: boolean }) {
   const { ip, ipEarned } = detail.sheet.progress;
   return (
     <section className={`${styles.panel} ${styles.walletBlock}`} aria-label={t('Carteira', 'Wallet')}>
       <div className={styles.walletItem}>
-        <span className={styles.idLabel}>{t('Saldo', 'Balance')}</span>
+        <span className={styles.rowBetween}>
+          <span className={styles.idLabel}>{t('Saldo', 'Balance')}</span>
+          <BalanceButton detail={detail} run={run} busy={busy} compact />
+        </span>
         <strong className={styles.walletValue}>{formatEb(detail.sheet.wallet.balance)}</strong>
       </div>
       <div className={styles.walletItem}>
-        <span className={styles.idLabel}>IP</span>
+        <span className={styles.rowBetween}>
+          <span className={styles.idLabel}>IP</span>
+          <ProgressionButton detail={detail} rules={rules} run={run} busy={busy} />
+        </span>
         <strong className={`${styles.walletValue} ${styles.cyan}`}>{ip}</strong>
         <span className={styles.muted}>{t(`de ${ipEarned} ganhos`, `of ${ipEarned} earned`)}</span>
       </div>
@@ -203,6 +213,18 @@ function SkillsPanel({ detail }: { detail: CharacterDetail }) {
   const [filter, setFilter] = useState<SkillFilter>('all');
   const groups = useMemo(() => groupSkills(filterSkills(detail.report.skills, query, filter)), [detail.report.skills, query, filter]);
   const penalty = detail.report.actionPenalty;
+  const roller = useSheetRoll();
+  const toast = useToast();
+  // a click opens the pre-roll step: situational implant bonuses to tick and LUCK to spend
+  const [preroll, setPreroll] = useState<{ label: string; total: number; situational: { label: string; value: number }[] } | null>(null);
+  const roll = roller && ((label: string, total: number, situational: { label: string; value: number }[]) => setPreroll({ label, total, situational }));
+  const send = async (choice: PreRollChoice) => {
+    if (!roller || !preroll) return;
+    const label = [preroll.label, ...choice.labels].join(' · ');
+    setPreroll(null);
+    try { await roller.rollSkill(label, preroll.total + choice.bonus, choice.luck, choice.reroll); toast.notify(t(`${preroll.label} rolado no chat.`, `${preroll.label} rolled in the chat.`)); }
+    catch (error) { toast.notify(problemMessage(error), 'error'); }
+  };
 
   return (
     <SheetPanel title={t('Perícias', 'Skills')} actions={penalty !== 0 && (
@@ -210,6 +232,10 @@ function SkillsPanel({ detail }: { detail: CharacterDetail }) {
         {signed(penalty)} {t('em todas as Ações', 'to all Actions')}
       </span>
     )}>
+      {preroll && (
+        <PreRollDialog title={t(`Rolar ${preroll.label}`, `Roll ${preroll.label}`)} total={preroll.total} situational={preroll.situational}
+          luckAvailable={detail.report.luckAvailable} onRoll={(c) => void send(c)} onClose={() => setPreroll(null)} />
+      )}
       <div className={styles.skillToolbar}>
         <label className={styles.search}>
           <Search size={15} aria-hidden />
@@ -231,7 +257,10 @@ function SkillsPanel({ detail }: { detail: CharacterDetail }) {
                 {g.lines.map((l) => (
                   <tr key={l.key} className={l.level === 0 ? styles.dim : undefined}>
                     <td title={`${tv(l.name)}${l.specialization ? ` (${l.specialization})` : ''} · CP:R p.${l.page}`}>
-                      {skillLabel(l)} <span className={styles.muted}>({l.stat})</span>
+                      {roll
+                        ? <button type="button" className={styles.skillRoll} onClick={() => roll(skillLabel(l), l.total, l.situationalParts ?? [])}
+                          title={t(`Rolar 1d10 + ${l.total} no chat`, `Roll 1d10 + ${l.total} in the chat`)}><Dices size={13} aria-hidden /> {skillLabel(l)}</button>
+                        : skillLabel(l)} <span className={styles.muted}>({l.stat})</span>
                       {l.doubleCost && <span className={styles.tag} title={t('Custa o dobro para subir', 'Costs double to raise')}>x2</span>}
                       {l.roleSkill && <span className={`${styles.tag} ${styles.tagRole}`} title={t('Perícia da Role', 'Role skill')}>Role</span>}
                       {l.situational.length > 0 && (

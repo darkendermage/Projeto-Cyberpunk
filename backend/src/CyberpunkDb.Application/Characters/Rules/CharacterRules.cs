@@ -516,6 +516,18 @@ public sealed record HousingOption
 
 // cyberware effects on the sheet
 
+// effect: initiative (+add for rounds), ignoreWounds (rounds), top (top of the queue + extra Action, humanity dice lost),
+// chat (a line with what the target rolls, dv). Excludes: pieces that don't stack with it (Speedware).
+public sealed record CyberActivation
+{
+    public string Effect { get; init; } = "chat";
+    public int Add { get; init; }
+    public int? Rounds { get; init; }
+    public string[] Excludes { get; init; } = [];
+    public string? Humanity { get; init; }
+    public int? Dv { get; init; }
+}
+
 public sealed record CyberwareEffectsRules
 {
     public string About { get; init; } = "";
@@ -538,4 +550,15 @@ public sealed record CyberwareEffect
     public string? Condition { get; init; }
     public string? Note { get; init; }
     public string Source { get; init; } = "";
+    // a table effect: initiative, aimed, rangedFar, dodgeAnyRef, ignoreSeriously, noHeadDouble, immune, statMin, wieldBody, shield
+    public string? Kind { get; init; }
+    // rangedFar: minimum meters; statMin: the floor; wieldBody: BODY used; shield: HP
+    public int? Value { get; init; }
+    public string[] Stats { get; init; } = [];
+    public string[] Injuries { get; init; } = [];
+    // the whole effect is off when this STAT reaches the minimum (Neo-Soviet Cyberarm with BODY 8+)
+    public string? UnlessStat { get; init; }
+    public int? UnlessMin { get; init; }
+    // a piece switched on at the table
+    public CyberActivation? Activate { get; init; }
 }

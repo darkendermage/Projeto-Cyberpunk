@@ -261,6 +261,7 @@ internal static class CatalogModelConfiguration
         b.Entity<Scene>(e =>
         {
             e.ToTable("Scenes");
+            e.HasIndex(x => x.SessionId);
             e.Property(x => x.Name).HasMaxLength(80).IsRequired();
             e.Property(x => x.Version).IsConcurrencyToken();
             e.Property(x => x.StateJson).IsRequired();

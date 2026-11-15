@@ -58,16 +58,31 @@ public sealed record FighterView(
     // PCs: Targeting Scope, boomerang return...
     IReadOnlyList<string>? Cyberware = null,
     // used this Round
-    IReadOnlyList<string>? RoundFlags = null)
+    IReadOnlyList<string>? RoundFlags = null,
+    // PCs: LUCK left this session (CP:R p.130)
+    int? LuckAvailable = null,
+    // house rule: -1 per dodge already tried this Round
+    int DodgePenalty = 0,
+    // a held Bulletproof Shield (CP:R p.184)
+    int? ShieldHp = null, int? ShieldHpMax = null,
+    // Kendo's Cut the Bullet, when the fighter meets it: DEX + Martial Arts (Kendo)
+    int? CutTheBullet = null,
+    // PCs: what their implants do at the table, the Initiative bonuses (Kerenzikov, Sandevistan on) and what's switched on
+    IReadOnlyList<CyberTraitLine>? Traits = null, IReadOnlyList<ValuePart>? InitiativeParts = null,
+    bool DodgeAnyRef = false, IReadOnlyDictionary<string, ActiveCyberState>? ActiveCyber = null)
 {
     public bool HasCyberware(string slug) => Cyberware?.Contains(slug, StringComparer.OrdinalIgnoreCase) ?? false;
 
     public int Awareness(string key) => CombatAwareness?.GetValueOrDefault(key) ?? 0;
 
-    public bool CanDodge(int dodgeRef) => Ref >= dodgeRef;
+    // Reflex Co-Processor lets anyone dodge bullets (Black Chrome p.17)
+    public bool CanDodge(int dodgeRef) => Ref >= dodgeRef || DodgeAnyRef;
     public bool CrackedSkull => Injuries.Any(i => i.Name.Equals("Cracked Skull", StringComparison.OrdinalIgnoreCase));
     public WeaponView? Weapon(string key) => Weapons.FirstOrDefault(w => w.Key == key);
 }
+
+// what a Special Move's requirements read: STATs, skill levels and the level in a form (null = unknown, allowed)
+public sealed record MoveCheck(Func<string, int?> Stat, Func<string, int?> Skill, Func<string, int> FormLevel);
 
 public sealed class FighterViews(CharacterRuleBook characterRules, CharacterCalculator calculator, NpcRuleBook npcRules, CombatRuleBook combatRules)
 {
@@ -79,9 +94,18 @@ public sealed class FighterViews(CharacterRuleBook characterRules, CharacterCalc
     public FighterView ForPc(Combatant c, CharacterDetailDto detail)
     {
         var r = detail.Report;
+        var traits = r.CyberTraits ?? [];
+        var on = c.ActiveCyber;
+        // Berserk on (Edgerunners Mission Kit p.36): the Wound State penalty left after Pain Editor stops counting
+        var berserk = traits.FirstOrDefault(t => t.Activate?.Effect == "ignoreWounds" && on.ContainsKey(t.Slug));
+        var painEditor = r.Health.WoundState == WoundState.Seriously && traits.Any(t => t.Kind == "ignoreSeriously");
+        var woundLeft = painEditor ? 0 : r.Health.WoundActionPenalty;
+        var berserkFix = berserk is not null ? -woundLeft : 0;
         int Stat(string key) => r.Stats.FirstOrDefault(s => s.Key == key)?.Effective ?? 0;
-        int Skill(string id, string stat) => r.Skills.FirstOrDefault(s => s.SkillId == id && s.Specialization is null)?.Total ?? Stat(stat) + r.ActionPenalty;
+        int Skill(string id, string stat) => (r.Skills.FirstOrDefault(s => s.SkillId == id && s.Specialization is null)?.Total ?? Stat(stat) + r.ActionPenalty) + berserkFix;
         var body = r.Health.BodyForDerived;
+        // Gorilla Arm: weapons are wielded as BODY 11 (Edgerunners Mission Kit p.35)
+        var wieldBody = traits.Where(t => t.Kind == "wieldBody").Select(t => t.Value ?? 0).DefaultIfEmpty(0).Max();
         var cyberarm = r.Cyberware.Any(x => x.Slug.Equals("cyberarm", StringComparison.OrdinalIgnoreCase));
 
         string SkillLabel(string id) => r.Skills.FirstOrDefault(s => s.SkillId == id && s.Specialization is null) is { } line ? L.SkillName(line.Name, line.NamePt) : id;
@@ -89,28 +113,34 @@ public sealed class FighterViews(CharacterRuleBook characterRules, CharacterCalc
         {
             var bonus = w.AttackBonuses?.Sum(p => p.Value) ?? 0;
             var view = new WeaponView(
-                w.InstanceId, w.Name, w.Class, w.SkillId ?? "", w.AttackTotal, w.AutofireTotal + bonus, w.Damage ?? "", w.Rof ?? 1,
+                w.InstanceId, w.Name, w.Class, w.SkillId ?? "", w.AttackTotal + berserkFix, w.AutofireTotal + bonus + berserkFix, w.Damage ?? "", w.Rof ?? 1,
                 w.Magazine is null ? null : w.LoadedRounds, w.Magazine, w.AutofireMultiplier, w.SkillId == "melee-weapon", w.SkillId == "melee-weapon",
                 Quality: w.Quality, Jammed: w.Jammed, Thrown: c.Thrown.Contains(w.InstanceId),
-                AttackParts: [new ValuePart(w.SkillName ?? w.SkillId ?? w.Name, w.SkillTotal), .. w.AttackBonuses ?? []]);
+                AttackParts: [new ValuePart(w.SkillName ?? w.SkillId ?? w.Name, w.SkillTotal), .. w.AttackBonuses ?? [], .. berserkFix != 0 ? [new ValuePart(berserk!.Label, berserkFix)] : Array.Empty<ValuePart>()]);
             var bonuses = (w.AttackBonuses ?? []).Where(p => !p.Label.StartsWith(L.T("Qualidade Excellent", "Excellent Quality"), StringComparison.Ordinal)).ToList();
-            var context = new WeaponContext(id => Skill(id, SkillStat(id)), SkillLabel, body, bonuses, w.Mode,
+            var context = new WeaponContext(id => Skill(id, SkillStat(id)), SkillLabel, Math.Max(body, wieldBody), bonuses, w.Mode,
                 id => w.Magazines?.TryGetValue(id, out var n) == true ? n : null, false, w.Destroyed, w.MinBody);
             return WeaponModes.Build(view, w.Slug, context, WeaponRuleBook.Embedded);
         }).ToList();
-        var unarmed = Unarmed(body, cyberarm, Skill(Brawling, "DEX"),
-            r.Skills.Where(s => s.SkillId == MartialArtsPrefix && s.Level > 0).Select(s => (s.Key, s.Specialization ?? "", s.Total)));
-        // Precision Attack (CP:R p.146): sheet weapons already have it, unarmed attacks get it here.
+        int? Level(string id) => r.Skills.FirstOrDefault(s => s.SkillId == id && s.Specialization is null)?.Level ?? 0;
+        var forms = r.Skills.Where(s => s.SkillId == MartialArtsPrefix && s.Level > 0).ToList();
+        var check = new MoveCheck(k => Stat(k), Level, form => forms.FirstOrDefault(s => s.Specialization?.Equals(form, StringComparison.OrdinalIgnoreCase) == true)?.Level ?? 0);
+        var unarmed = Unarmed(body, cyberarm, Skill(Brawling, "DEX"), forms.Select(s => (s.Key, s.Specialization ?? "", s.Total + berserkFix)), check);
+        // Precision Attack (CP:R p.146): sheet weapons already have it, unarmed attacks (and their strikes) get it here.
         var awareness = detail.Sheet.Roles.FirstOrDefault(x => x.Role.Equals("Solo", StringComparison.OrdinalIgnoreCase))?.Split;
         var precision = Characters.Calculation.CharacterCalculator.PrecisionAttack(detail.Sheet);
-        weapons.AddRange(precision == 0 ? unarmed : unarmed.Select(w => w with
-        {
-            AttackTotal = w.AttackTotal + precision,
-            AttackParts = [.. w.AttackParts ?? [new ValuePart(w.Name, w.AttackTotal)], new ValuePart("Precision Attack", precision)],
-        }));
+        weapons.AddRange(precision == 0 ? unarmed : unarmed.Select(w => WithPrecision(w, precision)));
+        // the shield in hand: Bulletproof Shield or Popup Shield (CP:R p.184, p.365)
+        var shield = r.Health;
+        // Cut the Bullet needs a melee weapon in hand (Interface RED 4 p.79)
+        var kendo = forms.FirstOrDefault(s => s.Specialization?.Equals("Kendo", StringComparison.OrdinalIgnoreCase) == true);
+        var cut = MartialArtsRuleBook.Embedded.Move("Kendo", "cut-the-bullet")?.Move;
+        int? cutTheBullet = kendo is not null && cut is not null && MartialArtsRuleBook.Meets(cut, k => Stat(k), Level, kendo.Level)
+                            && weapons.Any(w => w.Melee && w.Key != Brawling && !w.Key.StartsWith(MartialArtsPrefix, StringComparison.Ordinal))
+            ? kendo.Total : null;
 
         return new FighterView(c.Id, c.Kind, c.Name, c.Side, c.Initiative,
-            r.Health.CurrentHp, r.Health.MaxHp, r.Health.WoundState, r.ActionPenalty, r.Health.StabilizationDv,
+            r.Health.CurrentHp, r.Health.MaxHp, r.Health.WoundState, r.ActionPenalty + berserkFix, r.Health.StabilizationDv,
             r.Armor.Body.Sp, r.Armor.Head.Sp, r.Armor.Body.MaxSp ?? r.Armor.Body.Sp, r.Armor.Head.MaxSp ?? r.Armor.Head.Sp,
             Stat("REF"), Stat("DEX"), body, Stat("WILL"), Stat("MOVE"),
             Skill("evasion", "DEX"), Skill("athletics", "DEX"), Skill("concentration", "WILL"),
@@ -119,7 +149,18 @@ public sealed class FighterViews(CharacterRuleBook characterRules, CharacterCalc
             [.. detail.Sheet.Combat.Conditions, .. c.Conditions],
             r.Health.DeathSavePenalty, r.Health.DeathSave, r.Health.MustRollDeathSave, detail.Sheet.Combat.Conditions.Contains("Morto"),
             detail.Sheet.Combat.Stabilized, c.CoverId, c.CharacterId, detail.Version, null,
-            CombatAwareness: awareness, Cyberware: r.Cyberware.Select(x => x.Slug).ToList());
+            CombatAwareness: awareness, Cyberware: r.Cyberware.Select(x => x.Slug).ToList(), LuckAvailable: r.LuckAvailable,
+            ShieldHp: shield?.ShieldHp, ShieldHpMax: shield?.ShieldHpMax, CutTheBullet: cutTheBullet,
+            Traits: traits, InitiativeParts: InitiativeParts(traits, on), DodgeAnyRef: traits.Any(t => t.Kind == "dodgeAnyRef"), ActiveCyber: on);
+    }
+
+    // Kerenzikov +2 always; a Speedware switched on (Sandevistan +3) replaces what it excludes (CP:R p.359, Speedware doesn't stack)
+    public static IReadOnlyList<ValuePart> InitiativeParts(IReadOnlyList<CyberTraitLine> traits, IReadOnlyDictionary<string, ActiveCyberState> on)
+    {
+        var active = traits.Where(t => t.Activate?.Effect == "initiative" && on.ContainsKey(t.Slug)).ToList();
+        var excluded = active.SelectMany(t => t.Activate!.Excludes).ToHashSet(StringComparer.OrdinalIgnoreCase);
+        return traits.Where(t => t.Kind == "initiative" && !excluded.Contains(t.Slug)).Select(t => new ValuePart(t.Label, t.Add))
+            .Concat(active.Select(t => new ValuePart(t.Label, t.Activate!.Add))).ToList();
     }
 
     // NPCs and generic enemies
@@ -194,15 +235,54 @@ public sealed class FighterViews(CharacterRuleBook characterRules, CharacterCalc
     }
 
     // damage by BODY (CP:R p.176, p.178)
-    private IEnumerable<WeaponView> Unarmed(int body, bool cyberarm, int brawling, IEnumerable<(string Key, string Form, int Total)> martialArts)
+    private IEnumerable<WeaponView> Unarmed(int body, bool cyberarm, int brawling, IEnumerable<(string Key, string Form, int Total)> martialArts, MoveCheck? check = null)
     {
         var doc = combatRules.Document;
         yield return new WeaponView(Brawling, "Brawling (desarmado)", null, Brawling, brawling, null, combatRules.UnarmedDice(body, cyberarm), 2,
             null, null, null, true, doc.BrawlingHalvesArmor.Value);
         foreach (var (key, form, total) in martialArts)
-            yield return new WeaponView(key, $"Martial Arts ({form})", null, key, total, null, combatRules.UnarmedDice(body, false), 2,
-                null, null, null, true, doc.MartialArtsHalvesArmor.Value);
+            yield return WithStrikes(new WeaponView(key, $"Martial Arts ({form})", null, key, total, null, combatRules.UnarmedDice(body, false), 2,
+                null, null, null, true, doc.MartialArtsHalvesArmor.Value), form, check);
     }
+
+    // The form's attack Special Moves as free modes of its Martial Arts attack: one strike (ROF 1) in place of the two
+    // attacks, with the move's modifier, to the head when it says so, and its Critical Injury on a hit.
+    private static WeaponView WithStrikes(WeaponView basic, string form, MoveCheck? check)
+    {
+        if (MartialArtsRuleBook.Embedded.Form(form) is not { } rule) return basic;
+        var level = check?.FormLevel(form) ?? int.MaxValue;
+        var moves = rule.Moves.Where(m => m.Kind == "attack" && (check is null || MartialArtsRuleBook.Meets(m, check.Stat, check.Skill, level))).ToList();
+        if (moves.Count == 0) return basic;
+        var top = basic with { ModeId = "strike", ModeLabel = L.T("2 ataques", "2 attacks"), ModeSwitch = WeaponModes.Free };
+        var modes = new List<WeaponView> { top };
+        foreach (var move in moves)
+        foreach (var strike in move.Strikes)
+            modes.Add(basic with
+            {
+                ModeId = $"move:{move.Id}:{strike.Id}",
+                ModeLabel = strike.Label is { } label ? $"{move.Name} {label}" : move.Name,
+                ModeSwitch = WeaponModes.Free,
+                Rof = 1,
+                AttackTotal = basic.AttackTotal + strike.Modifier,
+                AttackParts = strike.Modifier == 0 ? basic.AttackParts
+                    : [.. basic.AttackParts ?? [new ValuePart(basic.Name, basic.AttackTotal)], new ValuePart(move.Name, strike.Modifier)],
+                Traits = new WeaponTraits
+                {
+                    Source = MartialArtsRuleBook.Page(rule), NoAimed = true, HitsHead = strike.Head,
+                    InjuryOnHit = strike.Injury, ConditionOnHit = strike.Condition, OpposedBy = strike.Versus,
+                    Effect = strike.NoDamage ? move.Effect.ToString() : null, NoCrit = strike.NoDamage,
+                    Notes = strike.NoDamage ? [] : [move.Effect.ToString()],
+                },
+            });
+        return top with { Modes = modes };
+    }
+
+    private static WeaponView WithPrecision(WeaponView w, int precision) => w with
+    {
+        AttackTotal = w.AttackTotal + precision,
+        AttackParts = [.. w.AttackParts ?? [new ValuePart(w.Name, w.AttackTotal)], new ValuePart("Precision Attack", precision)],
+        Modes = w.Modes?.Select(m => WithPrecision(m, precision)).ToList(),
+    };
 
     public CombatSnapshot Snapshot(NpcSheet sheet, NpcValidationReport report, NpcCatalog catalog, int? npcId, string source)
     {

@@ -56,14 +56,19 @@ public sealed partial class EncounterService
         return await ApplyAttackAsync(s, e, notices, fighters, r, ct);
     }
 
-    // ranged, not area, REF 8+, hasn't chosen yet (CP:R p.172)
+    // ranged, not area, REF 8+ (or able to Cut the Bullet), hasn't chosen yet (CP:R p.172)
     private bool NeedsDefense(WeaponView? weapon, AttackRequest r, FighterView target) =>
         !(weapon?.Melee ?? false)
         && r.Mode is not (AttackMode.Explosive or AttackMode.Suppressive or AttackMode.ShotgunShell)
-        && target.CanDodge(combat.Document.DodgeRef.Value)
+        && (target.CanDodge(combat.Document.DodgeRef.Value) || CanCutTheBullet(r, target))
         && !r.Dodge
         && !(r.DodgeTargets?.Contains(target.Id) ?? false)
-        && !(r.DefenseRolls?.ContainsKey(target.Id) ?? false);
+        && !(r.DefenseRolls?.ContainsKey(target.Id) ?? false)
+        && !(r.CutTheBullet?.ContainsKey(target.Id) ?? false);
+
+    // Kendo against a single shot or a thrown weapon (Interface RED 4 p.79); autofire and shells don't qualify
+    private static bool CanCutTheBullet(AttackRequest r, FighterView target) =>
+        target.CutTheBullet is not null && r.Mode is AttackMode.Single or AttackMode.AimedHead or AttackMode.AimedHand or AttackMode.AimedLeg;
 
     public Task<EncounterDetailDto> AnswerDefenseAsync(int id, PendingDefenseRequest req, CancellationToken ct) =>
         MutateAsync(id, req.Version, async (s, e, notices) =>
@@ -73,6 +78,17 @@ public sealed partial class EncounterService
             var fighters = await ViewsAsync(s, ct);
             var target = fighters[p.TargetId];
             var r = p.Request;
+            if (req.Move == "cut-the-bullet")
+            {
+                if (!CanCutTheBullet(r, target))
+                    throw RequestValidationException.For("move", L.T($"{target.Name} não pode usar Cut the Bullet contra este ataque.", $"{target.Name} can't use Cut the Bullet against this attack."));
+                var roll = dice.Roll(10);
+                r = r with { CutTheBullet = new Dictionary<string, int>(r.CutTheBullet ?? []) { [p.TargetId] = target.CutTheBullet!.Value + roll } };
+                s = Log(s with { Pending = null }, target.Id, "dodge", L.T($"{target.Name} tenta Cut the Bullet: {target.CutTheBullet} + d10 {roll}.", $"{target.Name} tries Cut the Bullet: {target.CutTheBullet} + d10 {roll}."));
+                return await ContinueAttackAsync(s, e, notices, fighters, r, [.. p.Decided, p.TargetId], ct);
+            }
+            if (req.Dodge && !target.CanDodge(combat.Document.DodgeRef.Value))
+                throw RequestValidationException.For("dodge", L.T($"{target.Name} tem REF {target.Ref}: só esquiva de tiros com REF {combat.Document.DodgeRef.Value}+.", $"{target.Name} has REF {target.Ref}: only REF {combat.Document.DodgeRef.Value}+ can dodge bullets."));
             if (req.Dodge)
                 r = r with
                 {
@@ -112,7 +128,8 @@ public sealed partial class EncounterService
         var weapon = p.Request.Weapon == AttackResolver.Thrown ? L.T("Objeto arremessado", "Thrown object") : attacker.Weapon(p.Request.Weapon)?.Name ?? p.Request.Weapon;
         return new PendingView(p.Seq, attacker.Id, attacker.Name, weapon, target.Id, target.Name, p.Step,
             p.Step == PendingStep.Defense ? resolver.RangeDvFor(p.Request, attacker) : null,
-            p.Step == PendingStep.Defense ? target.Evasion : null,
-            attacker.CharacterId, target.CharacterId);
+            p.Step == PendingStep.Defense ? target.Evasion + target.DodgePenalty : null,
+            attacker.CharacterId, target.CharacterId, target.DodgePenalty,
+            target.CanDodge(combat.Document.DodgeRef.Value), p.Step == PendingStep.Defense && CanCutTheBullet(p.Request, target) ? target.CutTheBullet : null);
     }
 }

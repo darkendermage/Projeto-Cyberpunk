@@ -1,13 +1,15 @@
 import { Crosshair, FileText, RefreshCw, X } from 'lucide-react';
 import type { AttackMode, WeaponView } from '../../api/encounterTypes';
-import { Button, Select } from '../../components/ui/ui';
+import { Button, Checkbox, Select } from '../../components/ui/ui';
 import { t, tv } from '../../i18n';
 import { MODE_LABEL, reloadsMain, usableModes, WOUND_LABEL } from '../combat/combat';
 import { WeaponExtras } from '../combat/WeaponExtras';
-import { attackBreakdown, cannotFire, canReload, quickModes, weaponLabel, type Aim } from './aim';
+import { attackBreakdown, cannotFire, canReload, quickModes, strikeModes, weaponLabel, type Aim } from './aim';
 import { ArmorControl } from './ArmorControl';
+import { NumField } from './NumField';
 import type { StripEntry } from './strip';
 import { initials } from './tokens';
+import { hpBar } from '../../lib/hpBar';
 import styles from './Table.module.css';
 
 /** The weapons a card offers to whoever looks at it, and why they can't fire now (not their Turn). */
@@ -21,7 +23,7 @@ export function SceneStrip({ entries, selected, onPick, weaponsOf, aim, onWeapon
   onPick: (entry: StripEntry) => void;
   weaponsOf?: (entry: StripEntry) => CardWeapons | null;
   aim?: Aim | null;
-  onWeapon?: (entry: StripEntry, weapon: WeaponView) => void;
+  onWeapon?: (entry: StripEntry, weapon: WeaponView, modeId?: string | null) => void;
   /** Reloads a weapon's main magazine, or an extra one by id (an Action in a fight). */
   onReload?: (entry: StripEntry, weapon: WeaponView, magazine?: string) => void;
   /** Switches a mode that stays on the weapon (Hypurrburst, AVAR railgun...). */
@@ -37,7 +39,7 @@ export function SceneStrip({ entries, selected, onPick, weaponsOf, aim, onWeapon
   return (
     <div className={styles.strip} role="list" aria-label={t('Na cena', 'On the scene')}>
       {entries.map((e) => {
-        const ratio = e.hp != null && e.maxHp ? Math.max(0, Math.min(1, e.hp / e.maxHp)) : null;
+        const bar = e.hp != null && e.maxHp ? hpBar(e.hp, e.maxHp, e.shieldHp, e.shieldHpMax) : null;
         const armed = e.offScene ? null : weaponsOf?.(e) ?? null;
         const shooter = aim != null && e.combatantId === aim.attackerId;
         const targeted = aim != null && e.combatantId != null && e.combatantId === aim.targetId;
@@ -62,10 +64,13 @@ export function SceneStrip({ entries, selected, onPick, weaponsOf, aim, onWeapon
                   {e.name}
                   {e.offScene && <span className={styles.stripTag}>{t('fora da cena', 'off scene')}</span>}
                 </span>
-                {ratio != null ? (
+                {bar != null ? (
                   <span className={styles.stripHp}>
-                    <span className={styles.meter}><span className={styles.meterFill} style={{ width: `${ratio * 100}%` }} /></span>
-                    <span className={styles.stat}>{e.hp}/{e.maxHp}</span>
+                    <span className={styles.meter}>
+                      <span className={styles.meterFill} style={{ width: `${bar.hpPct}%` }} />
+                      {bar.shieldPct > 0 && <span className={styles.meterShield} style={{ left: `${bar.hpPct}%`, width: `${bar.shieldPct}%` }} title={t(`Escudo: ${e.shieldHp} HP`, `Shield: ${e.shieldHp} HP`)} />}
+                    </span>
+                    <span className={styles.stat}>{e.hp}/{e.maxHp}{e.shieldHp ? ` +${e.shieldHp}` : ''}</span>
                   </span>
                 ) : (
                   <span className={styles.muted}>{e.dead ? t('Morto', 'Dead') : e.woundState ? WOUND_LABEL[e.woundState] : ''}</span>
@@ -87,6 +92,13 @@ export function SceneStrip({ entries, selected, onPick, weaponsOf, aim, onWeapon
                         onClick={() => onWeapon?.(e, w)}>
                         <Crosshair size={11} aria-hidden /> {tv(weaponLabel(w))}
                       </button>
+                      {strikeModes(w).map((m) => (
+                        <button key={m.modeId} type="button" className={`${styles.weaponChip} ${on && aim?.weapon.modeId === m.modeId ? styles.weaponChipOn : ''}`} disabled={!!why}
+                          title={why ?? [t('Golpe especial: escolha o alvo no mapa ou num cartão', 'Special Move: pick the target on the map or on a card'), ...(m.traits?.notes ?? [])].join('\n')}
+                          onClick={() => onWeapon?.(e, w, m.modeId)}>
+                          ⚔ {tv(m.modeLabel ?? '')} +{m.attackTotal}
+                        </button>
+                      ))}
                       {onPickUp && w.thrown && (
                         <button type="button" className={styles.weaponChip} disabled={!!armed.blocked}
                           title={armed.blocked ?? t('Pegar do chão', 'Pick up')} onClick={() => onPickUp(e, w)}>
@@ -123,10 +135,15 @@ export function SceneStrip({ entries, selected, onPick, weaponsOf, aim, onWeapon
 }
 
 /** The aiming bar over the cards: the weapon, its mode, the target picked and the shot. */
-export function AimBar({ aim, targetName, busy, onMode, onWeaponMode, onFire, onCancel }: {
+export function AimBar({ aim, targetName, busy, onMode, onWeaponMode, onFire, onCancel, luckAvailable, onLuck, onReserve }: {
   aim: Aim;
   targetName: string | null;
   busy: boolean;
+  /** The shooter is a PC: LUCK left to add before the roll. */
+  luckAvailable?: number | null;
+  onLuck?: (points: number) => void;
+  /** Reserves 1 more LUCK for a free reroll from the chat. */
+  onReserve?: (on: boolean) => void;
   onMode: (mode: AttackMode) => void;
   /** Another mode of the weapon (Slug/Shell, Burst, Throw...). */
   onWeaponMode?: (modeId: string) => void;
@@ -152,6 +169,18 @@ export function AimBar({ aim, targetName, busy, onMode, onWeaponMode, onFire, on
         <Select aria-label={t('Modo de ataque', 'Attack mode')} value={aim.mode} onChange={(e) => onMode(e.target.value as AttackMode)}>
           {modes.map((m) => <option key={m} value={m}>{MODE_LABEL[m]}</option>)}
         </Select>
+      )}
+      {onLuck && luckAvailable != null && luckAvailable > 0 && (
+        <span className={styles.row} title={t('+1 no ataque por ponto (CP:R p.130)', '+1 to the attack a point (CP:R p.130)')}>
+          <span className={styles.label}>{t('Sorte', 'LUCK')}</span>
+          <NumField label={t('Pontos de Sorte no ataque', 'LUCK points on the attack')} min={0} max={luckAvailable} value={Math.min(aim.luck ?? 0, luckAvailable)} onChange={onLuck} />
+          <span className={styles.muted}>/{luckAvailable}</span>
+          {onReserve && (
+            <Checkbox checked={!!aim.rerollLuck && luckAvailable >= Math.min(aim.luck ?? 0, luckAvailable) + 1}
+              disabled={luckAvailable < Math.min(aim.luck ?? 0, luckAvailable) + 1} onChange={onReserve}
+              label={t('Reservar 1 p/ rerrolar', 'Reserve 1 to reroll')} />
+          )}
+        </span>
       )}
       <Button variant="primary" icon={<Crosshair size={14} />} disabled={!aim.targetId || busy} onClick={onFire}>{t('Disparar', 'Fire')}</Button>
       <Button variant="ghost" icon={<X size={14} />} onClick={onCancel}>{t('Cancelar (Esc)', 'Cancel (Esc)')}</Button>

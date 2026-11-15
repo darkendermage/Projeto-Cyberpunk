@@ -44,6 +44,7 @@
     ]
   },
   "dodgeRef": { "value": 8, "source": "CP:R p.172 (A Defender with a REF 8 or higher can choose to attempt to dodge a Ranged Attack)" },
+  "dodgePenaltyPerAttempt": { "value": 1, "source": "complementary (regra da casa: -1 cumulativo a cada esquiva/defesa com Evasion depois da primeira na mesma Rodada; zera na Rodada seguinte)" },
   "defenderWinsTies": { "value": true, "source": "CP:R p.172 e p.176 (Defender wins in a tie)" },
 
   "aimedShot": {

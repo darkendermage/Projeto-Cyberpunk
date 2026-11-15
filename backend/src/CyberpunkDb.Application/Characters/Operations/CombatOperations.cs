@@ -20,7 +20,10 @@ public sealed class CombatOperations(CharacterRuleBook rules, CharacterCalculato
         var slot = request.Location == InjuryLocation.Head ? ArmorSlot.Head : ArmorSlot.Body;
         var sp = DamageMath.EffectiveSp(slot == ArmorSlot.Head ? before.Armor.Head.Sp : before.Armor.Body.Sp, request.HalveArmor, request.BypassArmor);
         var cracked = sheet.Injuries.Any(i => i.Status == InjuryStatus.Active && i.Name.Equals(Cracked, StringComparison.OrdinalIgnoreCase));
-        var through = DamageMath.Through(request.Amount, sp, slot == ArmorSlot.Head, cracked);
+        // Cyberskull (Interface RED 3 p.91): head hits aren't doubled
+        var skull = slot == ArmorSlot.Head ? before.CyberTraits?.FirstOrDefault(t => t.Kind == "noHeadDouble") : null;
+        if (skull is not null) change.Notices.Add(L.T($"{skull.Label}: dano na cabeça não dobra.", $"{skull.Label}: head damage isn't doubled."));
+        var through = DamageMath.Through(request.Amount, sp, slot == ArmorSlot.Head && skull is null, cracked);
 
         var hp = before.Health.CurrentHp;
         var after = Math.Max(0, hp - through);
@@ -193,12 +196,23 @@ public sealed class CombatOperations(CharacterRuleBook rules, CharacterCalculato
             throw CharacterChange.Refuse("name", L.T($"O personagem já sofre de {def.Name}; role de novo na tabela (CP:R p.187).", $"The character already has {def.Name}; roll again on the table (CP:R p.187)."));
 
         change.Sheet = sheet;
+        // implants that make it impossible (Racer Bracer, Cyberspine, Reinforced limbs): no injury, the bonus damage still lands
+        var immune = calculator.Calculate(sheet, change.Catalog).CyberTraits?
+            .FirstOrDefault(t => t.Kind == "immune" && t.Injuries.Contains(def.Name, StringComparer.OrdinalIgnoreCase));
+        if (immune is not null)
+        {
+            change.Log(CharacterEventKind.Injury, "critical-immune", L.T($"{def.Name} não acontece: {immune.Label}.", $"{def.Name} doesn't happen: {immune.Label}."));
+            change.Notices.Add(L.T($"Imune a {def.Name} ({immune.Label}).", $"Immune to {def.Name} ({immune.Label})."));
+        }
         var record = new CriticalInjuryRecord
         {
             Id = change.NewId("inj"), Name = def.Name, Location = request.Location, Detail = request.Detail, ReceivedAt = change.Now,
         };
-        change.Log(CharacterEventKind.Injury, "critical-injury", $"Critical Injury: {def.Name}. {def.Effect}");
-        sheet = sheet with { Injuries = [.. sheet.Injuries, record] };
+        if (immune is null)
+        {
+            change.Log(CharacterEventKind.Injury, "critical-injury", $"Critical Injury: {def.Name}. {def.Effect}");
+            sheet = sheet with { Injuries = [.. sheet.Injuries, record] };
+        }
 
         if (request.ApplyBonusDamage)
         {

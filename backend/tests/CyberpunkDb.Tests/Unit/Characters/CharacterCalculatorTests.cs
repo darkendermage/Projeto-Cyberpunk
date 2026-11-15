@@ -195,11 +195,19 @@ public class CharacterCalculatorTests
     [Fact]
     public void Every_cyberware_effect_cites_a_page_and_names_known_skills_and_stats()
     {
+        string[] kinds = ["initiative", "aimed", "rangedFar", "dodgeAnyRef", "ignoreSeriously", "noHeadDouble", "immune", "statMin", "wieldBody", "shield"];
+        string[] activations = ["initiative", "ignoreWounds", "top", "chat"];
         foreach (var e in Rules.Document.CyberwareEffects.Effects)
         {
-            e.Source.Should().StartWith("CP:R p.");
+            // the book and page, Core or another one (Black Chrome, Interface RED...)
+            e.Source.Should().MatchRegex(@" p\.\d+");
             (e.Items.Length + e.AllOf.Length).Should().BePositive();
             (e.Stat is not null || e.Skills.Length > 0 || e.Note is not null).Should().BeTrue();
+            if (e.Kind is { } kind) kinds.Should().Contain(kind);
+            if (e.Activate is { } a) activations.Should().Contain(a.Effect);
+            if (e.Kind == "immune")
+                foreach (var injury in e.Injuries)
+                    (Rules.FindCriticalInjury(InjuryLocation.Body, injury) ?? Rules.FindCriticalInjury(InjuryLocation.Head, injury)).Should().NotBeNull(injury);
             if (e.Stat is not null) Rules.StatOrder.Should().Contain(e.Stat);
             foreach (var skill in e.Skills) Rules.FindSkill(skill).Should().NotBeNull(skill);
         }

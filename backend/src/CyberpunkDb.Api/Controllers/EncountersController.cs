@@ -67,6 +67,9 @@ public sealed class EncountersController(EncounterService encounters) : Controll
     public Task<EncounterDetailDto> Attack(int id, AttackRequest request, CancellationToken ct) => encounters.AttackAsync(id, request, ct);
 
     // GM answers for any target
+    [HttpPost("{id:int}/combatants/{combatantId}/cyber")]
+    public Task<EncounterDetailDto> ActivateCyber(int id, string combatantId, CyberActivateRequest r, CancellationToken ct) => encounters.ActivateCyberAsync(id, combatantId, r, ct);
+
     [HttpPost("{id:int}/pending/defense")]
     public Task<EncounterDetailDto> PendingDefense(int id, PendingDefenseRequest r, CancellationToken ct) => encounters.AnswerDefenseAsync(id, r, ct);
 

@@ -1,33 +1,28 @@
 import { useMemo, useState } from 'react';
 import { TrendingUp } from 'lucide-react';
 import type { CharacterDetail, CharacterRules } from '../../api/characterTypes';
-import { Button, ComboBox, Modal, Select } from '../../components/ui/ui';
-import { MARTIAL_ARTS } from '../reference/martialArts';
-import { languagesFor } from './characterLabels';
-import { improvementGroups, specializationChoices } from './skillImprovement';
-import { SheetPanel } from './CharacterUi';
+import { Button, ComboBox, IconButton, Modal, Select } from '../../components/ui/ui';
+import { improvementGroups, specializationChoices, specializationSources } from './skillImprovement';
 import type { Run } from './CombatPanels';
 import styles from './Characters.module.css';
 import { t } from '../../i18n';
 
 // IP (CP:R p.408-410) and multiclassing (p.142). Costs come from the report and the server refuses what
 // the character can't afford.
-export function ProgressionPanel({ detail, rules, run, busy }: { detail: CharacterDetail; rules: CharacterRules; run: Run; busy: boolean }) {
+// Next to the IP in the wallet: awarding and spending IP happen in a window.
+export function ProgressionButton({ detail, rules, run, busy }: { detail: CharacterDetail; rules: CharacterRules; run: Run; busy: boolean }) {
   const [open, setOpen] = useState(false);
-  if (!detail.sheet.creation.finalized) return null;
-  // Compact on the sheet: the IP at a glance; awarding and spending them in a window.
+  const finalized = detail.sheet.creation.finalized;
   return (
-    <SheetPanel title={t('Progressão', 'Progression')} icon={<TrendingUp size={16} />}
-      actions={<Button variant="primary" onClick={() => setOpen(true)}>{t('Distribuir IP', 'Spend IP')}</Button>}>
-      <div className={styles.bigNumbers}>
-        <strong>{detail.sheet.progress.ip}</strong><span className={styles.muted}>{t('IP disponíveis · ', 'IP available · ')}{detail.sheet.progress.ipEarned} {t('ganhos', 'earned')}</span>
-      </div>
+    <>
+      <IconButton label={finalized ? t('Progressão: ganhar e distribuir IP', 'Progression: award and spend IP') : t('A progressão começa depois da criação', 'Progression starts after creation')}
+        disabled={!finalized} onClick={() => setOpen(true)}><TrendingUp size={15} /></IconButton>
       <Modal open={open} onClose={() => setOpen(false)} title={t('Progressão', 'Progression')} wide>
         <div className={styles.panel} style={{ clipPath: 'none', border: 'none' }}>
           <ProgressionForm detail={detail} rules={rules} run={run} busy={busy} />
         </div>
       </Modal>
-    </SheetPanel>
+    </>
   );
 }
 
@@ -43,9 +38,7 @@ function ProgressionForm({ detail, rules, run, busy }: { detail: CharacterDetail
   const groups = useMemo(() => improvementGroups(rules.skills, report.skills), [rules.skills, report.skills]);
   const picked = groups.flatMap((g) => g.options).find((o) => o.value === skill);
   const choices = picked?.isNew
-    ? specializationChoices(picked.skillId, report.skills.map((s) => s.key), {
-      languages: languagesFor(rules, null), homes: rules.homes, martialArts: MARTIAL_ARTS.map((m) => m.name),
-    })
+    ? specializationChoices(picked.skillId, report.skills.map((s) => s.key), specializationSources(rules))
     : null;
   const skillKey = picked?.isNew ? (spec.trim() ? `${picked.skillId}:${spec.trim()}` : '') : picked?.value ?? '';
   const others = rules.roles.filter((r) => !report.roles.some((x) => x.role === r.id));

@@ -12,7 +12,7 @@ namespace CyberpunkDb.Application.Table;
 // the seat's view of the fight if there is one, else the character's numbers
 public sealed record PlayerReloadResult(PlayerEncounterDto? Encounter, PlayerCharacterDto? Character);
 
-public sealed record PlayerDefenseRequest(bool Dodge);
+public sealed record PlayerDefenseRequest(bool Dodge, string? Move = null);
 
 // inventory copy for PCs. Magazine: an extra one (reload); Mode: the mode to switch to.
 public sealed record PlayerWeaponRequest(string Weapon, string? Magazine = null, string? Mode = null);
@@ -82,7 +82,7 @@ public sealed class TableTurnService(IAppDbContext db, EncounterService encounte
         var (detail, own, state) = await OwnFighterAsync(seat, ownTurn: false, ct);
         if (detail.Pending is not { Step: PendingStep.Defense } p || p.TargetId != own.Id)
             throw new ConflictException(L.T("Não há tiro esperando a sua esquiva.", "No shot is waiting for your dodge."));
-        var after = await encounters.AnswerDefenseAsync(detail.Id, new PendingDefenseRequest(detail.Version, own.Id, r.Dodge), ct);
+        var after = await encounters.AnswerDefenseAsync(detail.Id, new PendingDefenseRequest(detail.Version, own.Id, r.Dodge, r.Move), ct);
         return PlayerEncounters.For(after, seat, state);
     }
 

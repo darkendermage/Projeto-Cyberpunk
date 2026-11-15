@@ -23,6 +23,8 @@ internal static class CharacterTestData
     public static readonly CatalogItem MediumArmorjack = Armor("medium-armorjack", 100, 12, penalty: 2);
     public static readonly CatalogItem HeavyArmorjack = Armor("heavy-armorjack", 500, 13, penalty: 2);
     public static readonly CatalogItem Flak = Armor("flak-armor", 500, 15, penalty: 4);
+    public static readonly CatalogItem BulletproofShield = Add(new CatalogItem(++_id, "bulletproof-shield", "Bulletproof Shield", ItemCategory.Armor, 100, Core, 98,
+        Armor: new ArmorInfo(ArmorType.Shield, null, 0, 0, 0, null, false, null)));
     public static readonly CatalogItem ImplantedFrame = Add(new CatalogItem(++_id, "implanted-linear-frame-sigma", "Implanted Linear Frame Sigma",
         ItemCategory.Armor, 1000, Core, 367,
         Armor: new ArmorInfo(ArmorType.LinearFrame, null, 0, 0, 0, 12, true, "BODY 6"),
@@ -52,6 +54,13 @@ internal static class CharacterTestData
     public static readonly CatalogItem Cyberarm = Cyber("cyberarm", 500, CyberwareType.Cyberlimb, BodyLocation.Arm, 7, "2d6", foundational: true, provides: 4);
     public static readonly CatalogItem Cyberleg = Cyber("cyberleg", 100, CyberwareType.Cyberlimb, BodyLocation.Leg, 3, "1d6", foundational: true, provides: 3);
     public static readonly CatalogItem Wolvers = Cyber("wolvers", 500, CyberwareType.LimbOption, BodyLocation.Arm, 7, "2d6", requires: Cyberarm);
+    public static readonly CatalogItem PainEditor = Cyber("pain-editor", 1000, CyberwareType.Neuralware, BodyLocation.NervousSystem, 14, "4d6");
+    public static readonly CatalogItem RacerBracer = Cyber("racer-bracer", 500, CyberwareType.InternalBody, BodyLocation.Internal, 3, "1d6");
+    public static readonly CatalogItem Cyberskull = Cyber("cyberskull", 1000, CyberwareType.InternalBody, BodyLocation.Internal, 7, "2d6");
+    public static readonly CatalogItem Hydraulics = Cyber("internal-hydraulics-upgrade", 500, CyberwareType.InternalBody, BodyLocation.Internal, 7, "2d6");
+    public static readonly CatalogItem ReflexCoProcessor = Cyber("reflex-co-processor", 1000, CyberwareType.Neuralware, BodyLocation.NervousSystem, 7, "2d6");
+    public static readonly CatalogItem PopupShield = Cyber("popup-shield", 500, CyberwareType.LimbOption, BodyLocation.Arm, 7, "2d6");
+    public static readonly CatalogItem ImageEnhanceFree = Cyber("explicit-memory-stimulator", 500, CyberwareType.Neuralware, BodyLocation.NervousSystem, 3, "1d6");
     public static readonly CatalogItem TalonFoot = Cyber("talon-foot", 500, CyberwareType.LimbOption, BodyLocation.Leg, 3, "1d6", requires: Cyberleg);
     public static readonly CatalogItem PlasticCovering = Cyber("plastic-covering", 100, CyberwareType.LimbOption, BodyLocation.Arm, 0, null, slots: 0);
     public static readonly CatalogItem RealskinnCovering = Cyber("realskinn-covering", 500, CyberwareType.LimbOption, BodyLocation.Arm, 0, null, slots: 0);

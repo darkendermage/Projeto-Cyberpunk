@@ -40,7 +40,16 @@ public sealed record AttackRequest(
     // wait for dodge / crit roll instead of rolling them right away
     bool Interactive = false,
     // weapon-rules.json mode (Slug/Shell, Burst, Throw...); null = the weapon's current one
-    string? WeaponMode = null);
+    string? WeaponMode = null,
+    // LUCK a PC spends on the attack before rolling, +1 each (CP:R p.130)
+    int Luck = 0,
+    // Cut the Bullet (Kendo, Interface RED 4 p.79): target -> Resolution total against the attack
+    Dictionary<string, int>? CutTheBullet = null,
+    // 1 more LUCK paid with the attack for one reroll of the attacker's d10 (house rule); RerollOf: the attack it replaces
+    bool RerollLuck = false, int? RerollOf = null);
+
+// the attack (its Seq) whose reserved LUCK pays for the reroll
+public sealed record AttackRerollRequest(int Seq);
 
 public sealed record ManualDamageRequest(
     int Version, int Amount, InjuryLocation Location = InjuryLocation.Body, bool BypassArmor = false, bool HalveArmor = false,
@@ -68,7 +77,8 @@ public sealed record TargetResult(
     int? SpBefore, int? Through, bool Critical, string? CriticalInjury, string? WoundState, IReadOnlyList<string> Notes);
 
 public sealed record AttackResult(string Attacker, string Weapon, AttackMode Mode, int? AttackRoll, int AttackTotal, IReadOnlyList<TargetResult> Targets, IReadOnlyList<string> Notes,
-    string AttackerId = "", int Seq = 0, bool Melee = false, int? AttackExtra = null, IReadOnlyList<int>? CritDice = null);
+    string AttackerId = "", int Seq = 0, bool Melee = false, int? AttackExtra = null, IReadOnlyList<int>? CritDice = null,
+    bool RerollReady = false, int? RerollOf = null);
 
 public sealed record CombatantDto(FighterView View, CombatantKind Kind, bool Active);
 
@@ -82,6 +92,10 @@ public sealed record EncounterSummaryDto(int Id, string Name, EncounterStatus St
 public sealed record EncounterRulesDto(CombatRulesDocument Rules, object CharacterCombat);
 
 // dodge (Evasion roll as DV) or take the range DV
-public sealed record PendingDefenseRequest(int Version, string TargetId, bool Dodge);
+// Move: a defensive Special Move instead ("cut-the-bullet")
+// an implant switched on (character-rules.json cyberwareEffects.activate)
+public sealed record CyberActivateRequest(int Version, string Slug);
+
+public sealed record PendingDefenseRequest(int Version, string TargetId, bool Dodge, string? Move = null);
 
 public sealed record PendingCriticalRequest(int Version, string TargetId);

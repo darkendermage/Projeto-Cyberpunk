@@ -12,6 +12,24 @@ public sealed record WeaponRulesDocument
     public string About { get; init; } = "";
     public Ruled<Dictionary<WeaponClass, ClassFallback>> ClassFallbacks { get; init; } = new();
     public Dictionary<string, WeaponRule> Weapons { get; init; } = [];
+    // implants that are weapons, by cyberware slug
+    public Dictionary<string, CyberWeaponRule> Cyberweapons { get; init; } = [];
+}
+
+// A cyberware piece that attacks (Wolvers, Vampyres, Popup Shotgun...): its weapon profile, since the catalog keeps
+// it as cyberware. Shots: the book's capacity, counted by hand (shown on the attack). Base/Notes as in WeaponRule.
+public sealed record CyberWeaponRule
+{
+    public string Source { get; init; } = "";
+    public WeaponClass Class { get; init; }
+    public string Skill { get; init; } = "melee-weapon";
+    public string Damage { get; init; } = "1d6";
+    public int Rof { get; init; } = 1;
+    public WeaponQuality Quality { get; init; } = WeaponQuality.Standard;
+    public bool Exotic { get; init; }
+    public int? Shots { get; init; }
+    public WeaponModeRule? Base { get; init; }
+    public List<Text> Notes { get; init; } = [];
 }
 
 // Classes the core tables don't list (Interface RED 5 machine guns)
@@ -166,7 +184,13 @@ public sealed class WeaponRuleBook
 
     public WeaponRulesDocument Document { get; }
 
-    public WeaponRule? For(string? slug) => slug is null ? null : Document.Weapons.GetValueOrDefault(slug);
+    // a cyberweapon's traits and notes work like any weapon rule
+    public WeaponRule? For(string? slug) =>
+        slug is null ? null
+        : Document.Weapons.GetValueOrDefault(slug)
+          ?? (Cyber(slug) is { } c ? new WeaponRule { Source = c.Source, Base = c.Base, Notes = c.Notes } : null);
+
+    public CyberWeaponRule? Cyber(string? slug) => slug is null ? null : Document.Cyberweapons.GetValueOrDefault(slug);
 
     public ClassFallback? Fallback(WeaponClass? weaponClass) =>
         weaponClass is { } c ? Document.ClassFallbacks.Value?.GetValueOrDefault(c) : null;

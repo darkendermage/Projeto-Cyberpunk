@@ -14,7 +14,11 @@ public sealed record TableAttackTarget(
 public sealed record TableAttack(
     int EncounterId, int Seq, string AttackerId, string AttackerName, bool AttackerPc, string Weapon, AttackMode Mode, bool Melee,
     int? AttackRoll, int AttackTotal, IReadOnlyList<TableAttackTarget> Targets, bool Undone = false, int? AttackExtra = null,
-    IReadOnlyList<int>? CritDice = null, string? DiceColor = null, IReadOnlyList<string>? Notes = null);
+    IReadOnlyList<int>? CritDice = null, string? DiceColor = null, IReadOnlyList<string>? Notes = null,
+    // what weighs on the attacker (already inside the attack total)
+    IReadOnlyList<RollDebuff>? AttackerDebuffs = null,
+    // RerollReady: LUCK reserved, the chat offers a free reroll; RerollOf: the attack (Seq) this one replaces
+    bool RerollReady = false, int? RerollOf = null);
 
 // either the resolved attack or the step it waits on
 public sealed record QuickAttackResult(TableAttack? Attack, PendingView? Pending);
@@ -28,10 +32,14 @@ public static class TableAttacks
         // Precision Attack goes on the card (already inside the total)
         var attacker = detail.Queue.FirstOrDefault(f => f.Id == a.AttackerId);
         var precision = Math.Min(3, (attacker?.Awareness("precisionAttack") ?? 0) / 3);
-        IReadOnlyList<string> notes = precision > 0 ? [$"Precision Attack +{precision} (CP:R p.146)"] : [];
+        // LUCK spent on the shot goes on the card too (already in the total)
+        IReadOnlyList<string> notes = [.. precision > 0 ? [$"Precision Attack +{precision} (CP:R p.146)"] : Array.Empty<string>(),
+            .. a.Notes.Where(n => n.StartsWith("Sorte:", StringComparison.Ordinal) || n.StartsWith("LUCK:", StringComparison.Ordinal) || n.StartsWith("Cyberware", StringComparison.Ordinal))];
         return new TableAttack(detail.Id, a.Seq, a.AttackerId, a.Attacker, IsPc(a.AttackerId), a.Weapon, a.Mode, a.Melee, a.AttackRoll, a.AttackTotal,
             a.Targets.Select(t => new TableAttackTarget(t.TargetId, t.TargetName, IsPc(t.TargetId), t.Hit, t.Damage, t.Through, t.Location, t.Dv,
-                t.DefenseRoll, t.DamageDice, t.CriticalInjury, AwarenessNotes(t.Notes))).ToList(), AttackExtra: a.AttackExtra, CritDice: a.CritDice, Notes: notes);
+                t.DefenseRoll, t.DamageDice, t.CriticalInjury, AwarenessNotes(t.Notes))).ToList(), AttackExtra: a.AttackExtra, CritDice: a.CritDice, Notes: notes,
+            AttackerDebuffs: attacker is null ? null : RollDebuffs.For(attacker) is { Count: > 0 } debuffs ? debuffs : null,
+            RerollReady: a.RerollReady, RerollOf: a.RerollOf);
     }
 
     // Spot Weakness, Damage Deflection

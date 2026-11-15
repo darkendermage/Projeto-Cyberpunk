@@ -73,7 +73,14 @@ public sealed record Combatant
     public List<string> Destroyed { get; init; } = [];
     // "spotWeakness", "damageDeflection"; cleared each Round
     public List<string> RoundFlags { get; init; } = [];
+    // Evasion defenses already rolled this Round (house rule penalty); cleared each Round
+    public int DodgesThisRound { get; init; }
+    // implants switched on in this fight (Sandevistan, Berserk...): slug -> until when and what it moved
+    public Dictionary<string, ActiveCyberState> ActiveCyber { get; init; } = [];
 }
+
+// UntilRound: last Round it works; InitiativeDelta: what it added to the stored Initiative (given back when it ends)
+public sealed record ActiveCyberState(int UntilRound, int InitiativeDelta = 0);
 
 // taken when the NPC joins
 public sealed record CombatSnapshot
@@ -134,7 +141,8 @@ public sealed record CoverPiece
 }
 
 // Valid while the fight is still at EncounterVersion and each sheet at the version the attack left it.
-public sealed record AttackUndo(int Seq, int EncounterVersion, string State, List<SheetSnapshot> Sheets);
+// Request: the attack with every die fixed, for the LUCK reroll
+public sealed record AttackUndo(int Seq, int EncounterVersion, string State, List<SheetSnapshot> Sheets, AttackRequest? Request = null);
 
 public sealed record SheetSnapshot(int CharacterId, int Version, string SheetJson);
 

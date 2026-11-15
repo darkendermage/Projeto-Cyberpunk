@@ -12,7 +12,9 @@ public sealed record PlannedHit(
     string TargetId, bool Hit, int? Dv, int? DefenseRoll, string Defense, IReadOnlyList<int> Dice, int Damage,
     InjuryLocation Location, bool HalveArmor, bool Critical, AttackMode Mode, bool Explosive, IReadOnlyList<string> Notes,
     // weapon-rules.json: armor under this SP is ignored, Unconscious at 1 HP instead of lower, no crits, ablation
-    int? IgnoreArmorBelow = null, bool Knockout = false, bool NoCrit = false, bool NoAblation = false, int? Ablation = null);
+    int? IgnoreArmorBelow = null, bool Knockout = false, bool NoCrit = false, bool NoAblation = false, int? Ablation = null,
+    // martial arts strikes: Critical Injury (by name, at Location) and condition the target gets on a hit
+    string? InjuryOnHit = null, string? ConditionOnHit = null);
 
 public sealed record PlannedAttack(
     string WeaponName, string WeaponKey, AttackMode Mode, int? AttackRoll, int AttackTotal, int Rounds, IReadOnlyList<PlannedHit> Hits,
@@ -125,13 +127,28 @@ public sealed class AttackResolver(CombatRuleBook combat, CharacterRuleBook char
             throw RequestValidationException.For("weapon", L.T($"{weapon.Name}: {battery.Label} sem carga; recarregue ou troque de modo.", $"{weapon.Name}: {battery.Label} is empty; reload it or switch modes."));
 
         if (aimed) baseTotal += doc.AimedShot.Value.Penalty;
-        // +1 on Aimed Shots
-        if (aimed && attacker.HasCyberware("targeting-scope"))
-        {
-            baseTotal += 1;
-            notes.Add(L.T("Targeting Scope: +1 no tiro mirado.", "Targeting Scope: +1 to the aimed shot."));
-        }
+        // implants (character-rules.json cyberwareEffects): Targeting Scope on aimed shots, TeleOptics at 51 m+; NPCs only have the slugs
+        var aimedBonus = attacker.Traits is { } traits
+            ? traits.Where(x => x.Kind == "aimed").Select(x => (x.Label, x.Add)).ToList()
+            : attacker.HasCyberware("targeting-scope") ? [("Targeting Scope", 1)] : [];
+        if (aimed)
+            foreach (var (bonusLabel, add) in aimedBonus)
+            {
+                baseTotal += add;
+                notes.Add(L.T($"Cyberware — {bonusLabel}: +{add} no tiro mirado.", $"Cyberware — {bonusLabel}: +{add} to the aimed shot."));
+            }
+        if (!weapon.Melee && !thrown && r.Range is { } meters && (aimed || r.Mode == AttackMode.Single))
+            foreach (var far in attacker.Traits?.Where(x => x.Kind == "rangedFar" && meters >= (x.Value ?? int.MaxValue)) ?? [])
+            {
+                baseTotal += far.Add;
+                notes.Add(L.T($"Cyberware — {far.Label}: +{far.Add} (alvo a {meters} m).", $"Cyberware — {far.Label}: +{far.Add} (target at {meters} m)."));
+            }
         baseTotal += r.Modifier;
+        if (r.Luck > 0)
+        {
+            baseTotal += r.Luck;
+            notes.Add(L.T($"Sorte: +{r.Luck} (CP:R p.130).", $"LUCK: +{r.Luck} (CP:R p.130)."));
+        }
 
         var attackRoll = CheckD10(r.AttackRoll, dice, "attackRoll");
         // natural 10 adds another d10, natural 1 subtracts one (CP:R p.130)
@@ -239,18 +256,35 @@ public sealed class AttackResolver(CombatRuleBook combat, CharacterRuleBook char
             int? defenseRoll = null;
             string defense;
             bool hit;
-            if (weapon.Melee)
+            // house rule: -1 per Evasion defense already rolled this Round
+            var evasion = target.Evasion + target.DodgePenalty;
+            var tired = target.DodgePenalty != 0 ? L.T($" ({target.DodgePenalty} por esquivas nesta rodada)", $" ({target.DodgePenalty} for dodges this Round)") : "";
+            if (t.OpposedBy is { } opposed)
+            {
+                // a Special Move resisted by another skill (Commando Disarm: the target's Brawling, Interface RED 4 p.80)
+                var skill = target.Weapon(opposed)?.AttackTotal ?? target.Dex;
+                defenseRoll = CheckD10(TypedDefense(r, target.Id), dice, "defenseRolls");
+                dv = skill + defenseRoll;
+                defense = $"{opposed} {skill} + d10 {defenseRoll} = {dv}";
+            }
+            else if (weapon.Melee)
             {
                 // melee is always opposed (CP:R p.176)
                 defenseRoll = CheckD10(TypedDefense(r, target.Id), dice, "defenseRolls");
-                dv = target.Evasion + defenseRoll;
-                defense = $"Evasion {target.Evasion} + d10 {defenseRoll} = {dv}";
+                dv = evasion + defenseRoll;
+                defense = $"Evasion {evasion}{tired} + d10 {defenseRoll} = {dv}";
+            }
+            else if (r.CutTheBullet?.TryGetValue(target.Id, out var cut) == true)
+            {
+                // Kendo (Interface RED 4 p.79): beat the attack and it is negated; lose and it hits. Not a dodge.
+                dv = cut;
+                defense = L.T($"Cut the Bullet: Resolução {cut}", $"Cut the Bullet: Resolution {cut}");
             }
             else if ((r.Dodge || (r.DodgeTargets?.Contains(target.Id) ?? false)) && target.CanDodge(doc.DodgeRef.Value) && r.Mode != AttackMode.Explosive)
             {
                 defenseRoll = CheckD10(TypedDefense(r, target.Id), dice, "defenseRolls");
-                dv = target.Evasion + defenseRoll;
-                defense = $"esquiva (REF {target.Ref}): Evasion {target.Evasion} + d10 {defenseRoll} = {dv}";
+                dv = evasion + defenseRoll;
+                defense = $"esquiva (REF {target.Ref}): Evasion {evasion}{tired} + d10 {defenseRoll} = {dv}";
             }
             else
             {
@@ -259,12 +293,15 @@ public sealed class AttackResolver(CombatRuleBook combat, CharacterRuleBook char
                 defense = L.T($"DV{dv} pelo alcance", $"DV{dv} from range");
             }
             hit = attackTotal > dv; // defender wins ties (CP:R p.172/176)
+            if (r.CutTheBullet?.ContainsKey(target.Id) == true)
+                targetNotes.Add(hit ? L.T("Cut the Bullet falhou: o ataque acerta.", "Cut the Bullet failed: the attack hits.")
+                    : L.T("Cut the Bullet: o ataque foi cortado no ar.", "Cut the Bullet: the attack was cut out of the air."));
 
             if (r.Mode == AttackMode.Explosive && hit && r.Dodge && target.CanDodge(doc.DodgeRef.Value))
             {
                 // REF 8+ dodges a blast by beating the attack (CP:R p.174)
                 defenseRoll = CheckD10(TypedDefense(r, target.Id), dice, "defenseRolls");
-                var dodge = target.Evasion + defenseRoll.Value;
+                var dodge = evasion + defenseRoll.Value;
                 if (dodge > attackTotal) { hit = false; targetNotes.Add(L.T($"Saiu da área da explosão (Evasion {dodge} contra {attackTotal}).", $"Got out of the blast area (Evasion {dodge} against {attackTotal}).")); }
             }
 
@@ -276,9 +313,9 @@ public sealed class AttackResolver(CombatRuleBook combat, CharacterRuleBook char
             if (hit && effect is not null) targetNotes.Add(Cite(effect));
 
             planned.Add(new PlannedHit(target.Id, hit, dv, defenseRoll, defense, damageDice, hit ? amount : 0,
-                r.Mode == AttackMode.AimedHead ? InjuryLocation.Head : InjuryLocation.Body,
+                r.Mode == AttackMode.AimedHead || t.HitsHead ? InjuryLocation.Head : InjuryLocation.Body,
                 weapon.HalvesArmor, hit && sixes, r.Mode, r.Mode == AttackMode.Explosive, targetNotes,
-                t.IgnoreArmorBelow, t.Knockout, t.NoCrit, t.NoAblation, t.Ablation));
+                t.IgnoreArmorBelow, t.Knockout, t.NoCrit, t.NoAblation, t.Ablation, t.InjuryOnHit, t.ConditionOnHit));
         }
         if (sixes) notes.Add(L.T("Dois ou mais 6 no dano: Critical Injury em quem foi atingido (CP:R p.187).", "Two or more 6s on the damage: Critical Injury to whoever was hit (CP:R p.187)."));
         if (r.Mode == AttackMode.ShotgunShell) notes.Add(L.T($"Shotgun Shell: todos à frente até {doc.ShotgunShell.Value.RangeMeters} m, dano rolado uma vez ({doc.ShotgunShell.Source}).", $"Shotgun Shell: everyone in front up to {doc.ShotgunShell.Value.RangeMeters} m, damage rolled once ({doc.ShotgunShell.Source})."));

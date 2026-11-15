@@ -56,6 +56,17 @@ public class TableMusicApiTests(ApiFactory factory)
     }
 
     [Fact]
+    public async Task Repeat_is_switched_by_the_gm_and_survives_loading_another_track()
+    {
+        await _t.Send<TableMusicStateDto>(_t.Gm, HttpMethod.Put, "/api/table/music", new LoadMusicRequest("https://youtu.be/repeatme001", "Loop"));
+        var on = await _t.Send<TableMusicStateDto>(_t.Gm, HttpMethod.Post, "/api/table/music/repeat", new MusicRepeatRequest(true));
+        on.Music!.Repeat.Should().BeTrue();
+        var next = await _t.Send<TableMusicStateDto>(_t.Gm, HttpMethod.Put, "/api/table/music", new LoadMusicRequest("https://youtu.be/repeatme002", "Outra"));
+        next.Music!.Repeat.Should().BeTrue();
+        (await _t.Send<TableMusicStateDto>(_t.Gm, HttpMethod.Post, "/api/table/music/repeat", new MusicRepeatRequest(false))).Music!.Repeat.Should().BeFalse();
+    }
+
+    [Fact]
     public async Task Bad_link_is_400()
     {
         (await _t.Raw(_t.Gm, HttpMethod.Put, "/api/table/music", new LoadMusicRequest("https://evil.com/x", null))).StatusCode.Should().Be(HttpStatusCode.BadRequest);

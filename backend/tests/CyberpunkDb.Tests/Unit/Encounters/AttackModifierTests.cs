@@ -72,4 +72,28 @@ public class AttackModifierTests
         scopedAimed.Should().Be(plainAimed + 1);
         scopedSingle.Should().Be(14 + 5);
     }
+
+    [Fact]
+    public void Luck_adds_one_a_point_and_shows_on_the_attack()
+    {
+        var shot = new AttackRequest(1, "A", ["B"], "gun", AttackMode.Single, 5, false, 0, 5, null, [1, 1, 1], Luck: 3);
+        var plan = Resolver.Resolve(shot, Shooter(), [Target()], new FixedDice(1));
+
+        plan.AttackTotal.Should().Be(14 + 5 + 3);
+        plan.Notes.Should().Contain(n => n.Contains("+3"));
+    }
+
+    [Fact]
+    public void Each_dodge_already_rolled_this_round_comes_off_the_evasion()
+    {
+        var knife = new WeaponView("knife", "Knife", WeaponClass.MediumMelee, "melee-weapon", 14, null, "2d6", 2, null, null, null, true, true);
+        var strike = new AttackRequest(1, "A", ["B"], "knife", AttackMode.Single, null, false, 0, 5, new Dictionary<string, int> { ["B"] = 5 }, [1, 1]);
+        var shooter = Shooter() with { Weapons = [knife] };
+
+        var fresh = Resolver.Resolve(strike, shooter, [Target()], new FixedDice(1)).Hits.Single();
+        var tired = Resolver.Resolve(strike, shooter, [Target() with { DodgePenalty = -2 }], new FixedDice(1)).Hits.Single();
+
+        tired.Dv.Should().Be(fresh.Dv - 2);
+        tired.Defense.Should().Contain("-2");
+    }
 }

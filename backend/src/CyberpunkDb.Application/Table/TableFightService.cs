@@ -4,6 +4,7 @@ using CyberpunkDb.Application.Encounters;
 using CyberpunkDb.Application.Encounters.Rules;
 using CyberpunkDb.Application.Localization;
 using CyberpunkDb.Application.Npcs.Compendium;
+using CyberpunkDb.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace CyberpunkDb.Application.Table;
@@ -94,6 +95,19 @@ public sealed class TableFightService(IAppDbContext db, SceneService scenes, Enc
             await encounters.DeleteAsync(fight.Id, CancellationToken.None);
             throw;
         }
+    }
+
+    // GM only: an attack still waiting is cancelled, the fight ends (it stays in the combat table's list) and the
+    // scene is free for the next one.
+    public async Task<SceneView> EndAsync(int sceneId, CancellationToken ct)
+    {
+        var scene = await scenes.GetAsync(sceneId, ct);
+        if (scene.EncounterId is not { } encounterId)
+            throw RequestValidationException.For("encounterId", L.T("Esta cena não tem combate.", "This scene has no fight."));
+        var fight = await encounters.GetAsync(encounterId, ct);
+        if (fight.Pending is not null) fight = await encounters.CancelPendingAsync(encounterId, new EncounterVersionRequest(fight.Version), ct);
+        if (fight.Status == EncounterStatus.Active) await encounters.EndAsync(encounterId, new EncounterVersionRequest(fight.Version), ct);
+        return await scenes.UnlinkFightAsync(sceneId, ct);
     }
 
     private AddCombatantsRequest Combatant(int version, CombatSide side, TokenView t, IReadOnlySet<int> savedNpcs) =>

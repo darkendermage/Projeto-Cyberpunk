@@ -1,8 +1,12 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { CyberwareActions } from './CyberwareActions';
+import { MartialMoves } from './MartialMoves';
+import type { SaveStatus } from './saveQueue';
+import { SAVE_STATUS_LABEL, useAutoSave } from './useAutoSave';
 import { Link } from 'react-router';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import {
-  Crosshair, ArrowDown, ArrowUp, Copy, Download, ExternalLink, Plus, Power, Radio, RotateCcw, RotateCw, SkipForward, Swords, Trash2, Upload,
+  Crosshair, ArrowDown, Flag, ArrowUp, Copy, Download, ExternalLink, Plus, Power, Radio, RotateCcw, RotateCw, SkipForward, Swords, Trash2, Upload,
 } from 'lucide-react';
 import { problemMessage, useCharacters } from '../../api/characters';
 import { useEncounterCommand, useEncounterRules, useEncounters } from '../../api/encounters';
@@ -29,7 +33,7 @@ import { sourceFields, tokenInputOf, type TokenSource } from './sources';
 import { DEFAULT_GRID, pxToCell } from './grid';
 import { SHAPE_LABEL } from './templates';
 import styles from './Table.module.css';
-import { cannotFire } from './aim';
+import { strikeModes, cannotFire } from './aim';
 import { AwarenessBlock } from './AwarenessBlock';
 
 export type Act = (fn: () => Promise<SceneView | void>, done?: string) => Promise<void>;
@@ -135,7 +139,11 @@ export function SceneTab({ scene, act, onGridDraft }: { scene: SceneView; act: A
   const [token, setToken] = useState({ label: '', color: '#00f0ff', size: 1, source: null as TokenSource | null, hidden: false });
 
   const editGrid = (change: Partial<SceneGrid>) => { const next = { ...grid, ...change }; setGrid(next); onGridDraft(next); };
-  const gridChanged = JSON.stringify(grid) !== JSON.stringify(scene.grid);
+  // The grid and the name save by themselves; the board keeps the draft preview until the saved grid comes back.
+  const gridStatus = useAutoSave(grid, (g) => act(() => tableApi.updateScene(scene.id, sceneUpdate(scene, { grid: g }))));
+  const savedGrid = JSON.stringify(scene.grid) === JSON.stringify(grid);
+  useEffect(() => { if (savedGrid) onGridDraft(null); }, [savedGrid, onGridDraft]);
+  useAutoSave(name.trim(), (n) => act(() => tableApi.updateScene(scene.id, sceneUpdate(scene, { name: n }))), { enabled: name.trim().length > 0 });
 
   const uploadMap = async (file: File | undefined) => {
     setUploading(true);
@@ -159,10 +167,9 @@ export function SceneTab({ scene, act, onGridDraft }: { scene: SceneView; act: A
 
   return (
     <div className={styles.stack}>
-      <form className={styles.row} onSubmit={(e) => { e.preventDefault(); void act(() => tableApi.updateScene(scene.id, sceneUpdate(scene, { name }))); }}>
+      <div className={styles.row}>
         <input className={styles.grow} aria-label={t('Nome da cena', 'Scene name')} value={name} maxLength={80} onChange={(e) => setName(e.target.value)} />
-        <Button type="submit" disabled={name.trim() === scene.name || !name.trim()}>{t('Renomear', 'Rename')}</Button>
-      </form>
+      </div>
 
       <div className={styles.section}>
         <span className={styles.label}>{t('Mapa', 'Map')}</span>
@@ -195,9 +202,8 @@ export function SceneTab({ scene, act, onGridDraft }: { scene: SceneView; act: A
         </div>
         <span className={styles.muted}>{t('Ajuste a célula e o deslocamento até a grade bater com a do mapa. No Cyberpunk RED, cada quadrado tem 2 m (CP:R p.168).', 'Adjust the cell and offset until the grid matches the map\'s. In Cyberpunk RED each square is 2 m (CP:R p.168).')}</span>
         <div className={styles.row}>
-          <Button variant="primary" disabled={!gridChanged} onClick={() => act(() => tableApi.updateScene(scene.id, sceneUpdate(scene, { grid })), t('Grade salva.', 'Grid saved.'))}>{t('Salvar grade', 'Save grid')}</Button>
-          {gridChanged && <Button variant="ghost" onClick={() => { setGrid(scene.grid); onGridDraft(null); }}>{t('Desfazer', 'Undo')}</Button>}
           <Button variant="ghost" onClick={() => editGrid({ ...DEFAULT_GRID })}>{t('Padrão', 'Default')}</Button>
+          <AutoSaveNote status={gridStatus} />
         </div>
       </div>
 
@@ -256,7 +262,7 @@ export function SceneTab({ scene, act, onGridDraft }: { scene: SceneView; act: A
 export function TokenInspector({ scene, token, seats, encounter, act, onDone, onAim }: {
   scene: SceneView; token: TokenView; seats: Seat[]; encounter: EncounterDetail | undefined; act: Act; onDone: () => void;
   /** Aims an attack with this fighter's weapon, like the scene cards. */
-  onAim?: (fighter: EncounterDetail['queue'][number], weapon: WeaponView) => void;
+  onAim?: (fighter: EncounterDetail['queue'][number], weapon: WeaponView, modeId?: string | null) => void;
 }) {
   const toast = useToast();
   const sources = useTokenSources();
@@ -264,8 +270,8 @@ export function TokenInspector({ scene, token, seats, encounter, act, onDone, on
   const fighter = token.combatantId ? encounter?.queue.find((f) => f.id === token.combatantId) : undefined;
 
   // Position comes from the board, never from this form.
-  const save = (change: Partial<TokenInput> = {}) =>
-    act(() => tableApi.updateToken(scene.id, token.id, { ...form, ...change, x: token.x, y: token.y }), t('Token salvo.', 'Token saved.'));
+  // Position comes from the board at save time (the save callback is always the latest render's).
+  const status = useAutoSave(form, (f) => act(() => tableApi.updateToken(scene.id, token.id, { ...f, x: token.x, y: token.y })));
   const openSeats = seats.filter((s) => !s.revoked);
 
   return (
@@ -280,8 +286,8 @@ export function TokenInspector({ scene, token, seats, encounter, act, onDone, on
         <Field label={t('Altura', 'Height')}><NumField label={t('Altura em células', 'Height in cells')} value={form.height ?? 1} min={0.25} max={20} step={0.25} onChange={(height) => setForm({ ...form, height })} /></Field>
         <Field label={t('Giro (°)', 'Turn (°)')}>
           <span className={styles.row}>
-            <IconButton label={t('Girar −45°', 'Turn −45°')} onClick={() => save({ rotation: ((form.rotation ?? 0) + 315) % 360 }).then(() => setForm((f) => ({ ...f, rotation: ((f.rotation ?? 0) + 315) % 360 })))}><RotateCcw size={14} /></IconButton>
-            <IconButton label={t('Girar +45°', 'Turn +45°')} onClick={() => save({ rotation: ((form.rotation ?? 0) + 45) % 360 }).then(() => setForm((f) => ({ ...f, rotation: ((f.rotation ?? 0) + 45) % 360 })))}><RotateCw size={14} /></IconButton>
+            <IconButton label={t('Girar −45°', 'Turn −45°')} onClick={() => setForm((f) => ({ ...f, rotation: ((f.rotation ?? 0) + 315) % 360 }))}><RotateCcw size={14} /></IconButton>
+            <IconButton label={t('Girar +45°', 'Turn +45°')} onClick={() => setForm((f) => ({ ...f, rotation: ((f.rotation ?? 0) + 45) % 360 }))}><RotateCw size={14} /></IconButton>
           </span>
         </Field>
       </div>
@@ -324,17 +330,17 @@ export function TokenInspector({ scene, token, seats, encounter, act, onDone, on
           <ImagePicker label={t('Imagem', 'Image')} onPick={async (file) => {
             try {
               const media = await pickAndUpload(file);
-              if (media) { setForm((f) => ({ ...f, imageMediaId: media.id })); await save({ imageMediaId: media.id }); }
+              if (media) setForm((f) => ({ ...f, imageMediaId: media.id }));
             } catch (err) { toast.notify(problemMessage(err), 'error'); }
           }} />
-          {form.imageMediaId && <Button variant="ghost" onClick={() => { setForm({ ...form, imageMediaId: null }); void save({ imageMediaId: null }); }}>{t('Tirar imagem', 'Drop image')}</Button>}
+          {form.imageMediaId && <Button variant="ghost" onClick={() => setForm({ ...form, imageMediaId: null })}>{t('Tirar imagem', 'Drop image')}</Button>}
         </div>
       </div>
 
-      {fighter && encounter && <FighterQuick fighter={fighter} encounterId={encounter.id} onAim={onAim ? (w) => onAim(fighter, w) : undefined} />}
+      {fighter && encounter && <FighterQuick fighter={fighter} encounterId={encounter.id} sceneId={scene.id} onAim={onAim ? (w, modeId) => onAim(fighter, w, modeId) : undefined} />}
 
       <div className={styles.rowBetween}>
-        <Button variant="primary" onClick={() => save()}>{t('Salvar', 'Save')}</Button>
+        <AutoSaveNote status={status} />
         <Button variant="danger" icon={<Trash2 size={15} />} onClick={() => act(async () => { const v = await tableApi.removeToken(scene.id, token.id); onDone(); return v; })}>{t('Remover', 'Remove')}</Button>
       </div>
     </div>
@@ -342,12 +348,12 @@ export function TokenInspector({ scene, token, seats, encounter, act, onDone, on
 }
 
 // Head/body armor with +/- (a PC's goes to the sheet) and the weapons, rolled in the chat.
-function FighterQuick({ fighter, encounterId, onAim }: { fighter: EncounterDetail['queue'][number]; encounterId: number; onAim?: (weapon: WeaponView) => void }) {
+function FighterQuick({ fighter, encounterId, sceneId, onAim }: { fighter: EncounterDetail['queue'][number]; encounterId: number; sceneId?: number; onAim?: (weapon: WeaponView, modeId?: string | null) => void }) {
   const toast = useToast();
   const command = useEncounterCommand(encounterId);
   const [secret, setSecret] = useState(false);
   const roll = (formula: string, kind: 'Check' | 'Damage', label: string) =>
-    tableApi.roll({ formula, kind, label: `${fighter.name}: ${label}`, visibility: secret ? 'Secret' : 'Public' }).catch((e) => toast.notify(problemMessage(e), 'error'));
+    tableApi.roll({ formula, kind, label: `${fighter.name}: ${label}`, visibility: secret ? 'Secret' : 'Public', characterId: fighter.characterId, fromSheet: true }).catch((e) => toast.notify(problemMessage(e), 'error'));
   const signed = (n: number) => (n >= 0 ? `+${n}` : `${n}`);
   return (
     <div className={styles.section}>
@@ -361,6 +367,10 @@ function FighterQuick({ fighter, encounterId, onAim }: { fighter: EncounterDetai
       {fighter.weapons.length > 0 && (
         <>
           <Switch checked={secret} onChange={setSecret} label={t('Rolar em segredo', 'Roll in secret')} />
+          <CyberwareActions traits={fighter.traits} active={fighter.activeCyber} blocked={command.isPending ? t('Aguarde…', 'Wait…') : null}
+            onActivate={sceneId ? (slug) => void tableApi.cyber(sceneId, fighter.id, slug).catch((e) => toast.notify(problemMessage(e), 'error')) : undefined} />
+          <MartialMoves inFight={!!onAim} onRoll={(formula, label) => void roll(formula, 'Check', label)}
+            forms={fighter.weapons.filter((w) => w.key.startsWith('martial-arts:')).map((w) => ({ form: w.key.split(':')[1], total: w.attackTotal }))} />
           {fighter.weapons.map((w) => {
             const damage = damageFormula(w.damage);
             return (
@@ -375,7 +385,13 @@ function FighterQuick({ fighter, encounterId, onAim }: { fighter: EncounterDetai
                     <Button icon={<Crosshair size={14} />} disabled={!!(cannotFire(w) ?? (fighter.dead ? t('Morto não ataca.', "The dead don't attack.") : null))}
                       title={cannotFire(w) ?? t('Atacar: escolha o alvo no mapa ou num cartão', 'Attack: pick the target on the map or on a card')}
                       onClick={() => onAim(w)}>{t('Atacar', 'Attack')} {signed(w.attackTotal)}</Button>
-                  ) : (
+                  ) : null}
+                  {onAim && strikeModes(w).map((m) => (
+                    <Button key={m.modeId} variant="ghost" disabled={!!(cannotFire(w) ?? (fighter.dead ? t('Morto não ataca.', "The dead don't attack.") : null))}
+                      title={[t('Golpe especial: escolha o alvo no mapa ou num cartão', 'Special Move: pick the target on the map or on a card'), ...(m.traits?.notes ?? [])].join('\n')}
+                      onClick={() => onAim(w, m.modeId)}>⚔ {tv(m.modeLabel ?? '')} {signed(m.attackTotal)}</Button>
+                  ))}
+                  {!onAim && (
                     <Button onClick={() => void roll(`1d10${signed(w.attackTotal)}`, 'Check', t(`ataque com ${w.name}`, `attack with ${w.name}`))}>{t('Ataque', 'Attack')} {signed(w.attackTotal)}</Button>
                   )}
                   {damage && <Button variant="ghost" onClick={() => void roll(damage, 'Damage', t(`dano de ${w.name}`, `${w.name} damage`))}>{t('Dano', 'Damage')} {w.damage}</Button>}
@@ -390,9 +406,10 @@ function FighterQuick({ fighter, encounterId, onAim }: { fighter: EncounterDetai
 }
 
 export function TemplateInspector({ template, onSave, onRemove, editable }: {
-  template: SceneTemplate; onSave: (input: SceneTemplate) => void; onRemove: () => void; editable: boolean;
+  template: SceneTemplate; onSave: (input: SceneTemplate) => Promise<unknown>; onRemove: () => void; editable: boolean;
 }) {
   const [form, setForm] = useState(template);
+  const status = useAutoSave(form, onSave, { enabled: editable });
   if (!editable) return <span className={styles.muted}>{t('Esta área é de outra pessoa.', 'This area belongs to someone else.')}</span>;
   return (
     <div className={styles.stack}>
@@ -409,11 +426,16 @@ export function TemplateInspector({ template, onSave, onRemove, editable }: {
       <input aria-label={t('Rótulo', 'Label')} value={form.label ?? ''} maxLength={40} placeholder={t('Rótulo (opcional)', 'Label (optional)')} onChange={(e) => setForm({ ...form, label: e.target.value })} />
       <Switch checked={form.locked} onChange={(locked) => setForm({ ...form, locked })} label={t('Travada', 'Locked')} />
       <div className={styles.rowBetween}>
-        <Button variant="primary" onClick={() => onSave(form)}>{t('Salvar', 'Save')}</Button>
+        <AutoSaveNote status={status} />
         <Button variant="danger" icon={<Trash2 size={15} />} onClick={onRemove}>{t('Remover', 'Remove')}</Button>
       </div>
     </div>
   );
+}
+
+function AutoSaveNote({ status }: { status: SaveStatus }) {
+  const [pt, en] = SAVE_STATUS_LABEL[status];
+  return <span className={styles.muted} role="status">{t(pt, en)}</span>;
 }
 
 // combat
@@ -441,14 +463,27 @@ export function CombatTab({ scene, encounter, act, onSelectToken }: { scene: Sce
     });
   const untokened = encounter.queue.some((f) => !scene.tokens.some((tk) => tk.combatantId === f.id));
   const rolled = encounter.queue.some((f) => f.initiative != null);
+  // joined after Initiative was rolled: roll just for them, the others keep their places (CP:R p.168)
+  const newcomers = encounter.queue.filter((f) => f.initiative == null);
+  const end = () => {
+    if (!window.confirm(t('Encerrar o combate? Ele fica salvo na Mesa de Combate e a cena fica livre para outro.', 'End the fight? It stays saved in the combat table and the scene is free for another one.'))) return;
+    void act(() => tableApi.endFight(scene.id), t('Combate encerrado.', 'Fight ended.'));
+  };
   return (
     <div className={styles.stack}>
       <div className={styles.rowBetween}>
         <span className={styles.title}>{tv(encounter.name)}</span>
-        <Badge tone="red">{t(`Rodada ${encounter.round}`, `Round ${encounter.round}`)}</Badge>
+        <span className={styles.row}>
+          <Badge tone="red">{t(`Rodada ${encounter.round}`, `Round ${encounter.round}`)}</Badge>
+          <Button variant="danger" icon={<Flag size={14} />} disabled={command.isPending} onClick={end}>{t('Encerrar combate', 'End fight')}</Button>
+        </span>
       </div>
       <div className={styles.row}>
         <Button disabled={command.isPending} onClick={() => run('initiative')}>{rolled ? t('Rolar iniciativa de novo', 'Re-roll Initiative') : t('Rolar iniciativa', 'Roll Initiative')}</Button>
+        {rolled && newcomers.length > 0 && (
+          <Button disabled={command.isPending} title={newcomers.map((f) => f.name).join(', ')}
+            onClick={() => run('initiative', { only: newcomers.map((f) => f.id) })}>{t(`Rolar só dos novos (${newcomers.length})`, `Roll only the newcomers (${newcomers.length})`)}</Button>
+        )}
         <Button variant="primary" icon={<SkipForward size={15} />} disabled={command.isPending || !rolled || !!encounter.pending} onClick={() => run('next-turn')}>{t('Próximo turno', 'Next turn')}</Button>
       </div>
       <div className={styles.queue}>

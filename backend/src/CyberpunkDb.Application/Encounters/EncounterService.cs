@@ -186,8 +186,11 @@ public sealed partial class EncounterService(
                 var reflex = fighters[c.Id].Ref;
                 // Initiative Reaction, +1 per Combat Awareness point (CP:R p.146)
                 var reaction = fighters[c.Id].Awareness("initiativeReaction");
-                lines.Add($"{c.Name}: REF {reflex} + {roll}{(reaction > 0 ? $" + Initiative Reaction {reaction}" : "")} = {reflex + roll + reaction}");
-                return c with { Initiative = reflex + roll + reaction, TieBreak = 0 };
+                // Kerenzikov, Sandevistan on (CP:R p.359)
+                var cyber = fighters[c.Id].InitiativeParts ?? [];
+                var total = reflex + roll + reaction + cyber.Sum(p => p.Value);
+                lines.Add($"{c.Name}: REF {reflex} + {roll}{(reaction > 0 ? $" + Initiative Reaction {reaction}" : "")}{string.Concat(cyber.Select(p => $" + {p.Label} {p.Value}"))} = {total}");
+                return c with { Initiative = total, TieBreak = 0 };
             }).ToList();
             list = BreakTies(list);
             var next = s with { Combatants = list };
@@ -195,6 +198,59 @@ public sealed partial class EncounterService(
             notices.Add(L.T("Iniciativa rolada.", "Initiative rolled."));
             return Log(next, null, "initiative", $"Iniciativa ({combat.Document.Initiative.Source}): {string.Join("; ", lines)}.");
         }, ct);
+
+    // Implants switched on at the table (character-rules.json cyberwareEffects.activate): Speedware raises the stored
+    // Initiative (without stacking with what it excludes) until it runs out; Berserk drops the wound penalties; David's
+    // Sandevistan jumps to the top and costs Humanity; the rest is a line in the log for the chat.
+    public Task<EncounterDetailDto> ActivateCyberAsync(int id, string combatantId, CyberActivateRequest r, CancellationToken ct) =>
+        MutateAsync(id, r.Version, async (s, _, notices) =>
+        {
+            var c = Require(s, combatantId);
+            var fighters = await ViewsAsync(s, ct);
+            var f = fighters[c.Id];
+            var trait = f.Traits?.FirstOrDefault(t => t.Slug == r.Slug && t.Activate is not null)
+                        ?? throw RequestValidationException.For("slug", L.T("Esse cyberware não é ativável neste personagem.", "That cyberware can't be switched on for this character."));
+            var a = trait.Activate!;
+            if (c.ActiveCyber.ContainsKey(trait.Slug))
+                throw RequestValidationException.For("slug", L.T($"{trait.Label} já está ligado.", $"{trait.Label} is already on."));
+            var until = s.Round + Math.Max(1, a.Rounds ?? 1) - 1;
+            string line;
+            switch (a.Effect)
+            {
+                case "initiative":
+                {
+                    var excluded = (f.Traits ?? []).Where(t => t.Kind == "initiative" && a.Excludes.Contains(t.Slug, StringComparer.OrdinalIgnoreCase)).Sum(t => t.Add);
+                    var delta = c.Initiative is null ? 0 : a.Add - excluded;
+                    c = c with { Initiative = c.Initiative + delta, ActiveCyber = new(c.ActiveCyber) { [trait.Slug] = new ActiveCyberState(until, delta) } };
+                    line = L.T($"+{a.Add} na Iniciativa até o fim da rodada {until}{(excluded > 0 ? $" (não acumula com {excluded:+0})" : "")}.",
+                        $"+{a.Add} to Initiative until the end of Round {until}{(excluded > 0 ? $" (doesn't stack with {excluded:+0})" : "")}.");
+                    break;
+                }
+                case "ignoreWounds":
+                    c = c with { ActiveCyber = new(c.ActiveCyber) { [trait.Slug] = new ActiveCyberState(until) } };
+                    line = L.T($"Ignora as penalidades de ferimento até o fim da rodada {until}.", $"Ignores wound penalties until the end of Round {until}.");
+                    break;
+                case "top":
+                {
+                    var top = s.Combatants.Where(x => x.Id != c.Id && x.Initiative is not null).Select(x => x.Initiative!.Value).DefaultIfEmpty(0).Max();
+                    c = c with { Initiative = top + 1, TieBreak = 0 };
+                    var loss = a.Humanity is { } expr ? Characters.Operations.Dice.Roll(expr, dice) ?? 0 : 0;
+                    if (loss > 0 && c.CharacterId is { } pc) await characters.LoseHumanityAsync(pc, loss, trait.Label, ct);
+                    line = L.T($"Vai ao topo da Iniciativa e ganha uma Ação extra{(loss > 0 ? $"; perde {loss} de Humanidade ({a.Humanity})" : "")}.",
+                        $"Goes to the top of the Initiative and gains an extra Action{(loss > 0 ? $"; loses {loss} Humanity ({a.Humanity})" : "")}.");
+                    break;
+                }
+                default:
+                    line = trait.Note;
+                    break;
+            }
+            s = Replace(s, c);
+            if (s.ActiveId is null && c.Initiative is not null) s = s with { ActiveId = s.Queue.FirstOrDefault()?.Id };
+            return Log(s, c.Id, "cyber", line);
+        }, ct);
+
+    private static string Label(Dictionary<string, FighterView> fighters, string id, string slug) =>
+        fighters.GetValueOrDefault(id)?.Traits?.FirstOrDefault(t => t.Slug == slug)?.Label ?? slug;
 
     public Task<EncounterDetailDto> SetInitiativeAsync(int id, string combatantId, SetInitiativeRequest r, CancellationToken ct) =>
         MutateAsync(id, r.Version, (s, _, _) =>
@@ -255,8 +311,21 @@ public sealed partial class EncounterService(
             if (round != s.Round)
             {
                 // Spot Weakness / Damage Deflection reset every Round
-                next = next with { Combatants = next.Combatants.Select(c => c.RoundFlags.Count == 0 ? c : c with { RoundFlags = [] }).ToList() };
+                next = next with { Combatants = next.Combatants.Select(c => c.RoundFlags.Count == 0 && c.DodgesThisRound == 0 ? c : c with { RoundFlags = [], DodgesThisRound = 0 }).ToList() };
                 next = Log(next, null, "round", $"Rodada {round}.");
+                // implants switched on run out (Sandevistan gives its Initiative back)
+                foreach (var c in next.Combatants.Where(c => c.ActiveCyber.Values.Any(a => a.UntilRound < round)).ToList())
+                {
+                    var ended = c.ActiveCyber.Where(a => a.Value.UntilRound < round).ToList();
+                    var delta = ended.Sum(a => a.Value.InitiativeDelta);
+                    next = Replace(next, c with
+                    {
+                        ActiveCyber = c.ActiveCyber.Where(a => a.Value.UntilRound >= round).ToDictionary(a => a.Key, a => a.Value),
+                        Initiative = c.Initiative is { } init ? init - delta : null,
+                    });
+                    foreach (var (slug, _) in ended)
+                        next = Log(next, c.Id, "cyber", L.T($"{c.Name}: {Label(fighters, c.Id, slug)} desligou.", $"{c.Name}: {Label(fighters, c.Id, slug)} switched off."));
+                }
             }
             var view = fighters[actor.Id];
             // Ranger boomerang comes back to a Targeting Scope (Black Chrome p.100)
@@ -281,6 +350,7 @@ public sealed partial class EncounterService(
         MutateAsync(id, r.Version, async (s, e, notices) =>
         {
             var fighters = await ViewsAsync(s, ct);
+            CheckLuck(fighters, r);
             // From the table the attack waits for the target's dodge and the attacker's Critical Injury roll.
             return r.Interactive
                 ? await ContinueAttackAsync(s, e, notices, fighters, r, [], ct)
@@ -306,6 +376,10 @@ public sealed partial class EncounterService(
 
         // ammo first: if the magazine can't pay, nothing happens
         s = await SpendAmmoAsync(s, attacker, plan, r.Mode, ct);
+        // LUCK goes with the shot, the reserved reroll point too, also on the reroll itself, which put the sheet back
+        // to before the first shot (the sheet snapshot above gives it back on undo)
+        var luck = r.Luck + (r.RerollLuck || r.RerollOf is not null ? 1 : 0);
+        if (luck > 0 && attacker.CharacterId is { } shooter) await characters.SpendLuckAsync(shooter, luck, ct);
         // CP:R p.344, or the bolt waiting for its Action
         if (plan.Jammed) s = await SetJammedAsync(s, attacker, plan.WeaponKey, true, ct);
         if (plan.Destroyed) s = await SetDestroyedAsync(s, attacker, plan.WeaponKey, ct);
@@ -321,14 +395,17 @@ public sealed partial class EncounterService(
             var (state, result) = await ApplyHitAsync(s, fighters[hit.TargetId], hit, r, notices, ct);
             s = state;
             results.Add(result with { Attack = plan.AttackTotal });
+            // every Evasion roll counts towards the next dodge's penalty this Round
+            if (hit.DefenseRoll is not null && plan.Mode != AttackMode.Suppressive && s.Find(hit.TargetId) is { } dodger)
+                s = Replace(s, dodger with { DodgesThisRound = dodger.DodgesThisRound + 1 });
         }
         for (var i = 0; i < sheets.Count; i++)
             sheets[i] = sheets[i] with { Version = (await characters.SnapshotAsync(sheets[i].CharacterId, ct)).Version };
         var seq = s.AttackSeq + 1;
-        s = s with { AttackSeq = seq, Undo = new AttackUndo(seq, e.Version + 1, before, sheets) };
+        s = s with { AttackSeq = seq, Undo = new AttackUndo(seq, e.Version + 1, before, sheets, r) };
         var melee = attacker.Weapon(plan.WeaponKey)?.Pick(plan.ModeId)?.Melee ?? false;
         var attack = new AttackResult(attacker.Name, plan.WeaponName, plan.Mode, plan.AttackRoll, plan.AttackTotal, results, plan.Notes, attacker.Id, seq, melee,
-            plan.AttackExtra, r.CritDice);
+            plan.AttackExtra, r.CritDice, r.RerollLuck, r.RerollOf);
         _lastAttack = attack;
         var summary = plan.Mode == AttackMode.Suppressive
             ? string.Join("; ", results.Select(t => $"{t.TargetName}: {t.Notes.FirstOrDefault()}"))
@@ -436,6 +513,35 @@ public sealed partial class EncounterService(
         return Replace(s, c with { Jammed = list });
     }
 
+    // House rule: the LUCK point reserved with the attack pays for this. The attack goes back and the attacker's d10
+    // is rolled again; the targets' choices and dice stay. Only right after it, like the undo. characterId: a player
+    // may only reroll their own character's attack.
+    public async Task<EncounterDetailDto> RerollAttackAsync(int id, AttackRerollRequest r, int? characterId, CancellationToken ct)
+    {
+        var entity = await FindAsync(id, ct);
+        var current = Deserialize(entity.StateJson);
+        if (current.Undo is not { Request: { RerollLuck: true } request } undo || undo.Seq != r.Seq || undo.EncounterVersion != entity.Version)
+            throw new ConflictException(L.T("Esse ataque não pode mais ser rerrolado: algo mudou no combate depois dele.", "That attack can't be rerolled anymore: something changed in the fight after it."));
+        if (characterId is { } own && current.Find(request.AttackerId)?.CharacterId != own)
+            throw RequestValidationException.For("seq", L.T("Só dá para rerrolar um ataque seu.", "You can only reroll an attack of yours."));
+        foreach (var sheet in undo.Sheets)
+            if ((await characters.SnapshotAsync(sheet.CharacterId, ct)).Version != sheet.Version)
+                throw new ConflictException(L.T("Uma ficha mudou depois do ataque; ele não pode mais ser rerrolado.", "A sheet changed after the attack; it can't be rerolled anymore."));
+        return await MutateAsync(id, entity.Version, async (_, e, notices) =>
+        {
+            foreach (var sheet in undo.Sheets)
+                await characters.RestoreAsync(sheet.CharacterId, sheet.Version, sheet.SheetJson, L.T("Ataque rerrolado com Sorte na mesa.", "Attack rerolled with LUCK on the table."), ct);
+            var s = Deserialize(undo.State) with { AttackSeq = current.AttackSeq, Undo = null };
+            var name = current.Find(request.AttackerId)?.Name ?? request.AttackerId;
+            s = Log(s, request.AttackerId, "reroll", L.T($"{name} rerrola o ataque com a Sorte reservada.", $"{name} rerolls the attack with the reserved LUCK."));
+            var again = request with { AttackRoll = null, AttackExtra = null, RerollLuck = false, RerollOf = undo.Seq };
+            var fighters = await ViewsAsync(s, ct);
+            return again.Interactive
+                ? await ContinueAttackAsync(s, e, notices, fighters, again, [.. again.TargetIds], ct)
+                : await ApplyAttackAsync(s, e, notices, fighters, again, ct);
+        }, ct, undone: undo.Seq);
+    }
+
     // Only right after the attack: anything else done in the fight, or on one of those sheets, closes the undo.
     public async Task<EncounterDetailDto> UndoAttackAsync(int id, EncounterVersionRequest r, CancellationToken ct)
     {
@@ -523,6 +629,19 @@ public sealed partial class EncounterService(
                     null, 0, false, null, target.WoundState.ToString(), notes));
         }
 
+        // A held Bulletproof Shield works like cover (CP:R p.184, p.182): it takes the hit, excess is lost; a blast that
+        // breaks it still hits in full.
+        if (target.Kind == CombatantKind.Pc && target.ShieldHp is > 0 and var shieldHp && target.CharacterId is { } holder)
+        {
+            var taken = Math.Min(shieldHp, amount);
+            var broken = amount >= shieldHp;
+            await characters.DamageShieldAsync(holder, taken, ct);
+            notes.Add(broken ? L.T("O escudo quebrou.", "The shield broke.") : L.T($"O escudo absorveu o golpe ({shieldHp - taken} HP restantes).", $"The shield took the hit ({shieldHp - taken} HP left)."));
+            if (!(hit.Explosive && broken))
+                return (s, new TargetResult(target.Id, target.Name, true, 0, hit.Dv, hit.DefenseRoll, hit.Defense, hit.Dice, amount, Loc(), taken, broken,
+                    null, 0, false, null, target.WoundState.ToString(), notes));
+        }
+
         // railguns and monoblades ignore armor under a given SP (weapon-rules.json)
         var targetSp = hit.Location == InjuryLocation.Head ? target.SpHead : target.SpBody;
         var bypass = hit.IgnoreArmorBelow is { } below && targetSp < below;
@@ -535,6 +654,14 @@ public sealed partial class EncounterService(
         // aimed shots at a hand or a leg (CP:R p.170)
         if (hit.Mode == AttackMode.AimedLeg && through > 0)
             (s, crit) = await AddNamedCriticalAsync(s, target, "Broken Leg", notes, ct, crit);
+        // martial arts strikes: their Critical Injury besides the damage, and conditions like Prone
+        if (hit.InjuryOnHit is { } injury)
+            (s, crit) = await AddNamedCriticalAsync(s, target, injury, notes, ct, crit, hit.Location, L.T("Golpe especial", "Special Move"));
+        if (hit.ConditionOnHit is { } condition && s.Find(target.Id) is { } struck && !struck.Conditions.Contains(condition))
+        {
+            s = Replace(s, struck with { Conditions = [.. struck.Conditions, condition] });
+            notes.Add(L.T($"{target.Name} fica {condition}.", $"{target.Name} is now {condition}."));
+        }
         if (hit.Mode == AttackMode.AimedHand && through > 0) notes.Add(L.T("O alvo derruba um item da mão, à escolha do atacante (CP:R p.170).", "The target drops a held item, of the attacker's choice (CP:R p.170)."));
 
         return (s, new TargetResult(target.Id, target.Name, true, 0, hit.Dv, hit.DefenseRoll, hit.Defense, hit.Dice, amount, Loc(), absorbed, destroyed,
@@ -618,22 +745,26 @@ public sealed partial class EncounterService(
     }
 
     private async Task<(EncounterState, string?)> AddNamedCriticalAsync(EncounterState s, FighterView target, string name, List<string> notes,
-        CancellationToken ct, string? already)
+        CancellationToken ct, string? already, InjuryLocation location = InjuryLocation.Body, string? cause = null)
     {
-        var def = characterRules.FindCriticalInjury(InjuryLocation.Body, name)!;
+        var def = characterRules.FindCriticalInjury(location, name) ?? characterRules.FindCriticalInjury(InjuryLocation.Body, name)
+                  ?? characterRules.FindCriticalInjury(InjuryLocation.Head, name);
+        if (def is null) { notes.Add($"{name}?"); return (s, already); }
+        var where = characterRules.FindCriticalInjury(location, name) is null ? (location == InjuryLocation.Head ? InjuryLocation.Body : InjuryLocation.Head) : location;
         if (target.Kind == CombatantKind.Pc)
         {
             var sheet = await characters.GetAsync(target.CharacterId!.Value, ct);
             if (sheet.Sheet.Injuries.Any(i => i.Status != InjuryStatus.Healed && i.Name == name)) return (s, already);
-            await characters.AddInjuryAsync(target.CharacterId.Value, new AddInjuryRequest(sheet.Version, InjuryLocation.Body, name), ct);
+            await characters.AddInjuryAsync(target.CharacterId.Value, new AddInjuryRequest(sheet.Version, where, name), ct);
         }
         else
         {
             var c = Require(s, target.Id);
             if (c.Injuries.Any(i => i.Name == name)) return (s, already);
-            s = Replace(s, npcCombat.AddCritical(c, def, InjuryLocation.Body));
+            s = Replace(s, npcCombat.AddCritical(c, def, where));
         }
-        notes.Add(L.T($"Tiro na perna: {name}. {def.Effect}", $"Shot to the leg: {name}. {L.D(def.Effect)}"));
+        var what = cause ?? L.T("Tiro na perna", "Shot to the leg");
+        notes.Add(L.T($"{what}: {name}. {def.Effect}", $"{what}: {name}. {L.D(def.Effect)}"));
         return (s, already is null ? name : $"{already}, {name}");
     }
 
@@ -804,7 +935,7 @@ public sealed partial class EncounterService(
     // plumbing
 
     private async Task<EncounterDetailDto> MutateAsync(int id, int version,
-        Func<EncounterState, Encounter, List<string>, Task<EncounterState>> operation, CancellationToken ct, bool allowPending = false)
+        Func<EncounterState, Encounter, List<string>, Task<EncounterState>> operation, CancellationToken ct, bool allowPending = false, int? undone = null)
     {
         var entity = await FindAsync(id, ct);
         if (entity.Version != version)
@@ -830,7 +961,7 @@ public sealed partial class EncounterService(
                 throw new ConflictException(L.T("Este combate foi alterado ao mesmo tempo em outra janela. Recarregue e tente de novo.", "This fight was changed at the same time in another window. Reload and try again."));
             }
         }
-        var detail = await DetailAsync(entity, state, _lastAttack, notices, ct);
+        var detail = await DetailAsync(entity, state, _lastAttack, notices, ct) with { UndoneAttack = undone };
         await observer.ChangedAsync(detail, ct);
         return detail;
     }
@@ -843,16 +974,29 @@ public sealed partial class EncounterService(
             Pending: PendingViewOf(s.Pending, fighters));
     }
 
+    // Only a PC has LUCK, and only what is left this session (CP:R p.130).
+    private static void CheckLuck(Dictionary<string, FighterView> fighters, AttackRequest r)
+    {
+        if (r.Luck == 0 && !r.RerollLuck) return;
+        if (r.Luck < 0) throw RequestValidationException.For("luck", L.T("A Sorte gasta não pode ser negativa.", "LUCK spent can't be negative."));
+        var attacker = fighters.GetValueOrDefault(r.AttackerId);
+        if (attacker?.LuckAvailable is not { } left)
+            throw RequestValidationException.For("luck", L.T("Só personagens de jogador gastam Sorte.", "Only player characters spend LUCK."));
+        if (r.Luck + (r.RerollLuck ? 1 : 0) > left)
+            throw RequestValidationException.For("luck", L.T($"Sorte insuficiente: restam {left} pontos nesta sessão.", $"Not enough LUCK: {left} points left this session."));
+    }
+
     // a PC whose sheet was deleted shows up as a placeholder
     private async Task<Dictionary<string, FighterView>> ViewsAsync(EncounterState s, CancellationToken ct)
     {
         var result = new Dictionary<string, FighterView>();
         foreach (var c in s.Combatants)
         {
-            if (c.Kind != CombatantKind.Pc) { result[c.Id] = views.ForNpc(c); continue; }
+            var dodgePenalty = -c.DodgesThisRound * combat.Document.DodgePenaltyPerAttempt.Value;
+            if (c.Kind != CombatantKind.Pc) { result[c.Id] = views.ForNpc(c) with { DodgePenalty = dodgePenalty }; continue; }
             try
             {
-                result[c.Id] = views.ForPc(c, await characters.GetAsync(c.CharacterId!.Value, ct)) with { RoundFlags = c.RoundFlags };
+                result[c.Id] = views.ForPc(c, await characters.GetAsync(c.CharacterId!.Value, ct)) with { RoundFlags = c.RoundFlags, DodgePenalty = dodgePenalty };
             }
             catch (NotFoundException)
             {

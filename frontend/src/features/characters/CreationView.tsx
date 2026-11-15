@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useId, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { CheckCircle2, Dices, Plus, RotateCcw, Undo2 } from 'lucide-react';
 import { problemMessage, useCharacterCommand } from '../../api/characters';
@@ -11,6 +11,7 @@ import { useToast } from '../../state/ToastContext';
 import { CATEGORY_LABEL, languagesFor, METHOD_LABEL, SKILL_CATEGORIES, STAT_LABEL, withCurrent } from './characterLabels';
 import { BudgetBar, IssueList, NumberStepper, RefundButton, RoleAbilityButton, SheetPanel, SortHeader } from './CharacterUi';
 import { RelationsPanel, RoleLifepathPanels, RollMissingButton, StyleTablesFields, TablesPanel } from './LifepathPanels';
+import { specializationChoices, specializationSources } from './skillImprovement';
 import { sortRows, type SortState } from './sorting';
 import { StorePicker, type PurchaseInput } from './StorePicker';
 import type { SheetEditor } from './useSheetEditor';
@@ -317,9 +318,11 @@ function SkillsStep({ sheet, rules, role, method, editor, run }: {
     return { ...s, skills };
   });
 
+  const sources = specializationSources(rules);
+  const optionsFor = (id: string) => specializationChoices(id, Object.keys(sheet.skills), sources);
   const choices = role.choiceSkills.length > 0 && method !== 'CompletePackage' && (
     <SheetPanel title={t('Especializações do template', 'Template specializations')}>
-      {role.choiceSkills.map((id) => <ChoiceInput key={id} skill={byId.get(id)!} current={sheet.creation.skillChoices[id]}
+      {role.choiceSkills.map((id) => <ChoiceInput key={id} skill={byId.get(id)!} current={sheet.creation.skillChoices[id]} choices={optionsFor(id)}
         onPick={(spec) => run('creation/skill-choice', { skillId: id, specialization: spec })} />)}
     </SheetPanel>
   );
@@ -363,7 +366,7 @@ function SkillsStep({ sheet, rules, role, method, editor, run }: {
           <div key={c.key} className={styles.skillGroup}>
             <SkillTable caption={c.label} keys={keys} sheet={sheet} byId={byId} min={0} max={max} onChange={setLevel}
               basic={rules.basicSkills.map((k) => k.replace('@home', sheet.identity.home))} />
-            {defs.filter((d) => d.specialized).map((d) => <AddSpecialization key={d.id} skill={d} onAdd={(spec) => setLevel(`${d.id}:${spec}`, 1)} />)}
+            {defs.filter((d) => d.specialized).map((d) => <AddSpecialization key={d.id} skill={d} choices={optionsFor(d.id)} onAdd={(spec) => setLevel(`${d.id}:${spec}`, 1)} />)}
           </div>
         );
       })}
@@ -412,23 +415,50 @@ function SkillTable({ keys, sheet, byId, min = 0, max = 6, onChange, readOnly, c
   );
 }
 
-function ChoiceInput({ skill, current, onPick }: { skill: SkillRule; current?: string; onPick: (spec: string) => void }) {
+type SpecChoices = { options: string[]; free: boolean };
+
+// Martial Arts only take a form from the list; the other skills suggest the list and accept anything.
+function SpecField({ choices, value, onChange, placeholder, label, width }: {
+  choices: SpecChoices; value: string; onChange: (v: string) => void; placeholder: string; label: string; width: number;
+}) {
+  const listId = useId();
+  if (!choices.free) {
+    const options = value && !choices.options.includes(value) ? [value, ...choices.options] : choices.options;
+    return (
+      <Select aria-label={label} value={value} onChange={(e) => onChange(e.target.value)}>
+        <option value="">{placeholder}</option>
+        {options.map((o) => <option key={o} value={o}>{o}</option>)}
+      </Select>
+    );
+  }
+  return (
+    <>
+      <input className={styles.input} style={{ maxWidth: width }} value={value} placeholder={placeholder} aria-label={label}
+        list={choices.options.length > 0 ? listId : undefined} onChange={(e) => onChange(e.target.value)} />
+      {choices.options.length > 0 && <datalist id={listId}>{choices.options.map((o) => <option key={o} value={o} />)}</datalist>}
+    </>
+  );
+}
+
+function ChoiceInput({ skill, current, choices, onPick }: { skill: SkillRule; current?: string; choices: SpecChoices; onPick: (spec: string) => void }) {
   const [value, setValue] = useState(current ?? '');
   return (
     <div className={styles.row}>
       <span className={styles.grow}>{skillName(skill.name, skill.namePt)}{lang === 'pt' && skill.namePt && <span className={styles.muted}> ({skill.name})</span>}</span>
-      <input className={styles.input} style={{ maxWidth: 220 }} value={value} placeholder={t('Especialização', 'Specialization')} onChange={(e) => setValue(e.target.value)} />
+      <SpecField choices={choices} value={value} onChange={setValue} width={220} placeholder={t('Especialização', 'Specialization')}
+        label={t(`Especialização de ${tv(skill.name)}`, `${tv(skill.name)} specialization`)} />
       <Button disabled={!value.trim() || value === current} onClick={() => onPick(value.trim())}>{t('Definir', 'Set')}</Button>
     </div>
   );
 }
 
-function AddSpecialization({ skill, onAdd }: { skill: SkillRule; onAdd: (spec: string) => void }) {
+function AddSpecialization({ skill, choices, onAdd }: { skill: SkillRule; choices: SpecChoices; onAdd: (spec: string) => void }) {
   const [value, setValue] = useState('');
   return (
     <div className={styles.row} style={{ marginTop: 6 }}>
-      <input className={styles.input} style={{ maxWidth: 240 }} value={value} placeholder={t(`Nova: ${skillName(skill.name, skill.namePt)}…`, `New: ${skill.name}…`)}
-        aria-label={t(`Adicionar especialização de ${tv(skill.name)}`, `Add a ${tv(skill.name)} specialization`)} onChange={(e) => setValue(e.target.value)} />
+      <SpecField choices={choices} value={value} onChange={setValue} width={240}
+        placeholder={choices.free ? t(`Nova: ${skillName(skill.name, skill.namePt)}…`, `New: ${skill.name}…`) : t(`Escolher: ${skillName(skill.name, skill.namePt)}…`, `Pick: ${skill.name}…`)}
+        label={t(`Adicionar especialização de ${tv(skill.name)}`, `Add a ${tv(skill.name)} specialization`)} />
       <IconButton label={t('Adicionar', 'Add')} disabled={!value.trim()} onClick={() => { onAdd(value.trim()); setValue(''); }}><Plus size={14} /></IconButton>
     </div>
   );

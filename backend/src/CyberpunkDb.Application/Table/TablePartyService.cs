@@ -13,7 +13,9 @@ namespace CyberpunkDb.Application.Table;
 // One card on the strip under the map.
 public sealed record PartyMemberDto(
     int CharacterId, string Name, int Hp, int MaxHp, WoundState WoundState, int SpHead, int? MaxSpHead, int SpBody, int? MaxSpBody,
-    int SeatId, bool Online, bool InScene, string? ImageUrl);
+    int SeatId, bool Online, bool InScene, string? ImageUrl,
+    // the Bulletproof Shield in hand (CP:R p.184), for the second color on the HP bar
+    int? ShieldHp = null, int? ShieldHpMax = null);
 
 // hub presence
 public interface ITablePresence
@@ -77,7 +79,8 @@ public sealed class TablePartyService(IAppDbContext db, SceneService scenes, Cha
                 members.Add(new PartyMemberDto(c.Id, c.Sheet.Identity.Handle is { Length: > 0 } h ? h : c.Sheet.Identity.Name, r.Health.CurrentHp, r.Health.MaxHp,
                     r.Health.WoundState, r.Armor.Head.Sp, r.Armor.Head.MaxSp, r.Armor.Body.Sp, r.Armor.Body.MaxSp,
                     seatId, seatsOf.Any(s => online.Contains(s.Id)), onScene.Contains(id),
-                    c.HasPortrait ? $"{portrait(id)}{(portrait(id).Contains('?') ? '&' : '?')}v={c.UpdatedAt.Ticks}" : null));
+                    c.HasPortrait ? $"{portrait(id)}{(portrait(id).Contains('?') ? '&' : '?')}v={c.UpdatedAt.Ticks}" : null,
+                    r.Health.ShieldHp, r.Health.ShieldHpMax));
             }
             catch (NotFoundException) { /* a token of a deleted character */ }
         }

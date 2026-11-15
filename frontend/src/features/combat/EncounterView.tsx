@@ -115,6 +115,12 @@ function Table({ detail, rules }: { detail: EncounterDetail; rules: EncounterRul
           <Button icon={<UserPlus size={15} />} onClick={() => setAdding(true)}>{t('Combatentes', 'Combatants')}</Button>
           <Button icon={<Dices size={15} />} disabled={busy || detail.queue.length === 0}
             onClick={() => run('initiative', {}, t('Iniciativa rolada (REF + 1d10).', 'Initiative rolled (REF + 1d10).'))}>{t('Rolar iniciativa', 'Roll initiative')}</Button>
+          {detail.queue.some((f) => f.initiative != null) && detail.queue.some((f) => f.initiative == null) && (
+            <Button disabled={busy} title={detail.queue.filter((f) => f.initiative == null).map((f) => f.name).join(', ')}
+              onClick={() => run('initiative', { only: detail.queue.filter((f) => f.initiative == null).map((f) => f.id) }, t('Iniciativa dos novos rolada.', 'Newcomers\' Initiative rolled.'))}>
+              {t(`Rolar só dos novos (${detail.queue.filter((f) => f.initiative == null).length})`, `Roll only the newcomers (${detail.queue.filter((f) => f.initiative == null).length})`)}
+            </Button>
+          )}
           <Button variant="primary" icon={<SkipForward size={15} />} disabled={busy || detail.queue.every((f) => f.initiative == null)}
             onClick={() => run('next-turn')}>{t('Próximo turno', 'Next turn')}</Button>
           <Button variant="ghost" icon={<Flag size={15} />} disabled={busy} onClick={() => run('end')}>

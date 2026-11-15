@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { FastForward, Pause, Play, Rewind, SkipForward, Square, X } from 'lucide-react';
+import { FastForward, Pause, Play, Repeat1, Rewind, SkipForward, Square, X } from 'lucide-react';
 import { problemMessage } from '../../../api/characters';
 import { tableApi } from '../../../api/table';
 import type { TableMusicState } from '../../../api/tableTypes';
@@ -56,6 +56,9 @@ export function MusicPanel() {
             <IconButton label={t('Avançar 30 s', 'Forward 30 s')} onClick={() => apply(tableApi.seekMusic(now + 30))}><FastForward size={14} /></IconButton>
             {music.playlistId && <IconButton label={t('Próxima da playlist', 'Next in the playlist')} onClick={() => apply(tableApi.nextMusic())}><SkipForward size={14} /></IconButton>}
             <IconButton label={t('Parar para todos', 'Stop for everyone')} onClick={() => apply(tableApi.stopMusic())}><Square size={14} /></IconButton>
+            <Button variant={music.repeat ? 'primary' : 'ghost'} icon={<Repeat1 size={14} />} aria-pressed={!!music.repeat}
+              title={t('Quando a faixa acabar, começa de novo', 'When the track ends, it starts again')}
+              onClick={() => apply(tableApi.repeatMusic(!music.repeat))}>{music.repeat ? t('Repetindo', 'Repeating') : t('Repetir', 'Repeat')}</Button>
           </div>
           <label className={styles.row}>
             <span className={styles.label}>{t('Volume da mesa', 'Table volume')}</span>

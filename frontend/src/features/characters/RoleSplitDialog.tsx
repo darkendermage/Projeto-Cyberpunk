@@ -1,11 +1,11 @@
 import { useState } from 'react';
+import { Minus, Plus } from 'lucide-react';
 import type { RoleSplitRule } from '../../api/characterTypes';
-import { Button, Modal } from '../../components/ui/ui';
+import { Button, IconButton, Modal } from '../../components/ui/ui';
 import { t } from '../../i18n';
 import { NumField } from '../table/NumField';
-import { splitTotal } from './roleSplit';
+import { splitTotal, stepSplit } from './roleSplit';
 import styles from './Characters.module.css';
-
 
 // Tech specialties (two per Rank, CP:R p.147) or Solo Combat Awareness (p.146). The server checks the limits again.
 export function RoleSplitDialog({ open, onClose, role, rank, rule, split, busy, onSave }: {
@@ -30,15 +30,15 @@ export function RoleSplitDialog({ open, onClose, role, rank, rule, split, busy, 
             ? t(`Cada Rank vai para duas especialidades diferentes: ${total} pontos, no máximo ${rank} em cada.`, `Each Rank goes to two different specialties: ${total} points, at most ${rank} in each.`)
             : t(`${total} pontos para dividir.`, `${total} points to divide.`)}
         </p>
-        <dl className={styles.kv}>
+        <dl className={`${styles.kv} ${styles.splitList}`}>
           {rule.keys.map((k) => {
             const allowed = rule.allowed[k.id];
             return (
               <div key={k.id} style={{ display: 'contents' }}>
                 <dt>{t(k.labelPt ?? k.label, k.label)}{allowed ? <span className={styles.muted}> ({allowed.join(t(' ou ', ' or '))})</span> : null}</dt>
                 <dd>
-                  <NumField label={k.label} min={0} max={allowed ? Math.max(...allowed) : perKey} value={draft[k.id] ?? 0}
-                    onChange={(n) => setDraft({ ...draft, [k.id]: Math.max(0, Math.round(n)) })} />
+                  <SplitStepper name={t(k.labelPt ?? k.label, k.label)} value={draft[k.id] ?? 0} max={allowed ? Math.max(...allowed) : perKey}
+                    free={total - used} allowed={allowed} onChange={(n) => setDraft({ ...draft, [k.id]: n })} />
                 </dd>
               </div>
             );
@@ -53,5 +53,20 @@ export function RoleSplitDialog({ open, onClose, role, rank, rule, split, busy, 
         </div>
       </div>
     </Modal>
+  );
+}
+
+/** − value + for one part; the field can still be typed in. */
+function SplitStepper({ name, value, max, free, allowed, onChange }: {
+  name: string; value: number; max: number; free: number; allowed?: number[]; onChange: (n: number) => void;
+}) {
+  const down = stepSplit(value, -1, { max, free, allowed });
+  const up = stepSplit(value, 1, { max, free, allowed });
+  return (
+    <span className={styles.splitStepper}>
+      <IconButton label={t(`Tirar de ${name}`, `Take from ${name}`)} disabled={down === value} onClick={() => onChange(down)}><Minus size={14} /></IconButton>
+      <NumField label={name} min={0} max={max} value={value} className={`${styles.input} ${styles.splitStepperValue}`} onChange={(n) => onChange(Math.max(0, Math.round(n)))} />
+      <IconButton label={t(`Pôr em ${name}`, `Add to ${name}`)} disabled={up === value} onClick={() => onChange(up)}><Plus size={14} /></IconButton>
+    </span>
   );
 }

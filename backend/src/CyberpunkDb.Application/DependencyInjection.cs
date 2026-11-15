@@ -86,6 +86,7 @@ public static class DependencyInjection
         services.AddScoped<TableFightService>();
         services.AddScoped<TableAttackService>();
         services.AddScoped<TableTurnService>();
+        services.AddScoped<TableCyberService>();
         services.AddScoped<TableSessionService>();
         services.AddScoped<TableSettingsService>();
         services.AddScoped<TableMusicService>();

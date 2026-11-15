@@ -27,6 +27,9 @@ export interface StripEntry {
   dead: boolean;
   hp: number | null;
   maxHp: number | null;
+  /** A PC's shield in hand (second color on the HP bar). */
+  shieldHp?: number | null;
+  shieldHpMax?: number | null;
   spHead: number | null;
   maxSpHead: number | null;
   spBody: number | null;
@@ -53,7 +56,7 @@ export function buildStrip(tokens: TokenView[], party: PartyMember[], fighters: 
       seen.add(pc.characterId);
       const f = tk.combatantId ? fighters.get(tk.combatantId) : undefined;
       out.push({ ...base, name: pc.name, woundState: pc.woundState, dead: f?.dead ?? false,
-        hp: pc.hp, maxHp: pc.maxHp, spHead: pc.spHead, maxSpHead: pc.maxSpHead,
+        hp: pc.hp, maxHp: pc.maxHp, shieldHp: pc.shieldHp ?? null, shieldHpMax: pc.shieldHpMax ?? null, spHead: pc.spHead, maxSpHead: pc.maxSpHead,
         spBody: pc.spBody, maxSpBody: pc.maxSpBody, online: pc.online });
       continue;
     }

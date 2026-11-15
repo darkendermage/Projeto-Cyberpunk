@@ -650,6 +650,9 @@ namespace CyberpunkDb.Migrations.Sqlite.Migrations
                         .HasMaxLength(80)
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("SessionId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("SortOrder")
                         .HasColumnType("INTEGER");
 
@@ -665,6 +668,8 @@ namespace CyberpunkDb.Migrations.Sqlite.Migrations
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("SessionId");
 
                     b.HasIndex("SortOrder");
 

@@ -1,6 +1,6 @@
-import type { CharacterSkillLine, SkillRule } from '../../api/characterTypes';
+import type { CharacterRules, CharacterSkillLine, SkillRule } from '../../api/characterTypes';
 import { t } from '../../i18n';
-import { SKILL_CATEGORIES, skillLabel } from './characterLabels';
+import { languagesFor, SKILL_CATEGORIES, skillLabel } from './characterLabels';
 
 /** Prefix of the option that learns a new specialization of a skill ("new:martial-arts"). */
 export const NEW_SPEC = 'new:';
@@ -74,4 +74,13 @@ export function specializationChoices(skillId: string, learnedKeys: string[],
     case 'play-instrument': return { options: pick(INSTRUMENTS), free: true };
     default: return { options: [], free: true };
   }
+}
+
+/** Where the specialization lists come from: the culture languages, the homes and the learnable martial arts forms. */
+export function specializationSources(rules: Pick<CharacterRules, 'culturalOrigins' | 'homes' | 'martialArts'>) {
+  return {
+    languages: languagesFor(rules, null),
+    homes: rules.homes,
+    martialArts: rules.martialArts.filter((f) => !f.innate).map((f) => f.name),
+  };
 }

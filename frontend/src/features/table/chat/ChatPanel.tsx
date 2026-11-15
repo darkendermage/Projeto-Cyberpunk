@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
-import { Dices, EyeOff, Lock, MessageSquareLock, Send } from 'lucide-react';
-import type { RollKind, RollResult, TableAttack, TableMessage, TableVisibility } from '../../../api/tableTypes';
-import { Badge, Button, Select } from '../../../components/ui/ui';
+import { Dices, EyeOff, Lock, MessageSquareLock, RotateCcw, Send } from 'lucide-react';
+import type { RollDebuff, RollKind, RollResult, TableAttack, TableMessage, TableVisibility } from '../../../api/tableTypes';
+import { Badge, Button, Checkbox, Select } from '../../../components/ui/ui';
 import { t, tv } from '../../../i18n';
 import { MODE_LABEL } from '../../combat/combat';
 import { NumField } from '../NumField';
@@ -26,19 +26,23 @@ const KIND_LABEL: Record<RollKind, string> = {
 const QUICK = ['1d10', '1d6', '2d6', '3d6', '4d6', '5d6', '1d100'];
 
 // GM can whisper and apply damage rolls; players pick public, private (with the GM) or secret.
-export function ChatPanel({ messages, gm, targets, onSend, onRoll, renderActions, luckAvailable, mySeatId, onReroll }: {
+export function ChatPanel({ messages, gm, targets, onSend, onRoll, renderActions, luckAvailable, mySeatId, onReroll, onRerollAttack }: {
   messages: TableMessage[];
   gm: boolean;
   /** Seats the GM can whisper to. */
   targets?: ChatTarget[];
   onSend: (text: string, visibility: TableVisibility, target: number | null) => Promise<unknown>;
-  onRoll: (formula: string, kind: RollKind, visibility: TableVisibility, target: number | null, luck: number) => Promise<unknown>;
+  /** reroll: 1 more LUCK paid now for one free reroll of the Check. */
+  onRoll: (formula: string, kind: RollKind, visibility: TableVisibility, target: number | null, luck: number, reroll: boolean) => Promise<unknown>;
   /** Extra controls under a roll card (the GM's "apply damage"). */
   renderActions?: (message: TableMessage) => ReactNode;
-  /** A player with a character: LUCK left this session (spent on Checks, +1 a point; 1 rerolls a Check). */
+  /** A player with a character: LUCK left this session (spent on Checks, +1 a point; 1 more reserves a reroll). */
   luckAvailable?: number;
   mySeatId?: number;
+  /** The free reroll of a Check that reserved LUCK (own lines: the seat's, or the GM's). */
   onReroll?: (messageId: number) => Promise<unknown>;
+  /** The free reroll of an attack that reserved LUCK (the player's own attacks; the GM, any). */
+  onRerollAttack?: (attack: TableAttack) => Promise<unknown>;
 }) {
   const [text, setText] = useState('');
   const [formula, setFormula] = useState('1d10');
@@ -47,12 +51,20 @@ export function ChatPanel({ messages, gm, targets, onSend, onRoll, renderActions
   const [target, setTarget] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [luck, setLuck] = useState(0);
+  const [reserve, setReserve] = useState(false);
   const list = useRef<HTMLDivElement>(null);
   const luckOn = luckAvailable != null;
   const spend = Math.min(luck, luckAvailable ?? 0);
+  const canReserve = (luckAvailable ?? 0) >= spend + 1;
   // LUCK goes on Checks only, and is spent once.
-  const roll = (f: string, k: RollKind) => run(async () => { await onRoll(f, k, visibility, whisperTarget, k === 'Check' ? spend : 0); if (k === 'Check') setLuck(0); });
+  const roll = (f: string, k: RollKind) => run(async () => {
+    const check = k === 'Check';
+    await onRoll(f, k, visibility, whisperTarget, check ? spend : 0, check && reserve && canReserve);
+    if (check) { setLuck(0); setReserve(false); }
+  });
   const replaced = new Set(messages.map((m) => m.roll?.rerollOf).filter((x): x is number => x != null));
+  const rerolledAttacks = new Set(messages.map((m) => (m.attack?.rerollOf != null ? `${m.attack.encounterId}:${m.attack.rerollOf}` : null)).filter((x): x is string => x != null));
+  const mine = (m: TableMessage) => (gm ? m.authorSeatId == null : m.authorSeatId === mySeatId);
 
   useEffect(() => {
     const el = list.current;
@@ -73,12 +85,17 @@ export function ChatPanel({ messages, gm, targets, onSend, onRoll, renderActions
       <div ref={list} className={styles.messages} aria-live="polite">
         {messages.length === 0 && <span className={styles.muted}>{t('Nada por aqui ainda. Role um dado!', 'Nothing here yet. Roll some dice!')}</span>}
         {messages.map((m) => {
-          const canReroll = !!onReroll && m.authorSeatId === mySeatId && m.roll?.kind === 'Check' && !m.concealed && !replaced.has(m.id) && (luckAvailable ?? 0) >= 1;
+          // already paid with the LUCK reserved before the roll: the button itself costs nothing
+          const canReroll = !!onReroll && mine(m) && m.roll?.kind === 'Check' && !!m.roll.rerollReady && !m.concealed && !replaced.has(m.id);
+          const a = m.attack;
+          const rerolled = !!a && rerolledAttacks.has(`${a.encounterId}:${a.seq}`);
+          const canRerollAttack = !!onRerollAttack && !!a?.rerollReady && !a.undone && !rerolled && (gm || m.authorSeatId === mySeatId);
           return (
-            <MessageCard key={m.id} message={m} targets={targets} replaced={replaced.has(m.id)}
+            <MessageCard key={m.id} message={m} targets={targets} replaced={replaced.has(m.id)} rerolled={rerolled}
               actions={<>
                 {renderActions?.(m)}
-                {canReroll && <Button variant="ghost" onClick={() => run(() => onReroll!(m.id))}>{t('Rerrolar (1 Sorte)', 'Reroll (1 LUCK)')}</Button>}
+                {canReroll && <Button variant="ghost" icon={<RotateCcw size={14} />} onClick={() => run(() => onReroll!(m.id))}>{t('Rerrolar (Sorte já paga)', 'Reroll (LUCK already paid)')}</Button>}
+                {canRerollAttack && <Button variant="ghost" icon={<RotateCcw size={14} />} onClick={() => run(() => onRerollAttack!(a!))}>{t('Rerrolar ataque (Sorte já paga)', 'Reroll the attack (LUCK already paid)')}</Button>}
               </>} />
           );
         })}
@@ -97,19 +114,21 @@ export function ChatPanel({ messages, gm, targets, onSend, onRoll, renderActions
           )}
         </div>
 
+        {luckOn && (
+          <div className={styles.row}>
+            <span className={styles.label}>{t('Sorte no próximo teste', 'LUCK on the next Check')}</span>
+            <NumField label={t('Pontos de Sorte a gastar', 'LUCK points to spend')} min={0} max={luckAvailable ?? 0} value={spend} onChange={(n) => setLuck(Math.round(n))} />
+            <span className={styles.muted}>{t(`+1 por ponto · restam ${luckAvailable}`, `+1 a point · ${luckAvailable} left`)}</span>
+            <Checkbox checked={reserve && canReserve} disabled={!canReserve} onChange={setReserve}
+              label={t('Reservar 1 Sorte para rerrolar', 'Reserve 1 LUCK to reroll')} />
+          </div>
+        )}
         <div className={styles.quickDice}>
           {QUICK.map((q) => (
             <Button key={q} variant="ghost" disabled={blocked}
               onClick={() => roll(q, q === '1d10' ? 'Check' : q.endsWith('d6') ? 'Damage' : 'Plain')}>{q}</Button>
           ))}
         </div>
-        {luckOn && (
-          <div className={styles.row}>
-            <span className={styles.label}>{t('Sorte no próximo teste', 'LUCK on the next Check')}</span>
-            <NumField label={t('Pontos de Sorte a gastar', 'LUCK points to spend')} min={0} max={luckAvailable ?? 0} value={spend} onChange={(n) => setLuck(Math.round(n))} />
-            <span className={styles.muted}>{t(`+1 por ponto · restam ${luckAvailable}`, `+1 a point · ${luckAvailable} left`)}</span>
-          </div>
-        )}
         <form className={styles.row} onSubmit={(e) => { e.preventDefault(); if (formula.trim()) roll(formula.trim(), kind); }}>
           <input style={{ flex: '1 1 100%' }} aria-label={t('Fórmula', 'Formula')} value={formula} maxLength={80} onChange={(e) => setFormula(e.target.value)} placeholder="1d10+12" />
           <Select className={styles.grow} aria-label={t('Tipo de rolagem', 'Roll type')} value={kind} onChange={(e) => setKind(e.target.value as RollKind)}>
@@ -135,7 +154,7 @@ export function ChatPanel({ messages, gm, targets, onSend, onRoll, renderActions
   );
 }
 
-function MessageCard({ message: m, targets, actions, replaced }: { message: TableMessage; targets?: ChatTarget[]; actions?: ReactNode; replaced?: boolean }) {
+function MessageCard({ message: m, targets, actions, replaced, rerolled }: { message: TableMessage; targets?: ChatTarget[]; actions?: ReactNode; replaced?: boolean; rerolled?: boolean }) {
   const time = new Date(m.at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   const target = m.targetSeatId != null ? targets?.find((s) => s.id === m.targetSeatId)?.label : null;
   return (
@@ -150,7 +169,7 @@ function MessageCard({ message: m, targets, actions, replaced }: { message: Tabl
         </span>
       </div>
       {m.kind === 'Attack' && m.attack
-        ? <AttackView attack={m.attack} />
+        ? <AttackView attack={m.attack} rerolled={rerolled} />
         : m.kind === 'Roll'
         ? m.concealed
           ? <span className={styles.muted}>{t(`Rolou em segredo: ${m.text}`, `Rolled in secret: ${m.text}`)}</span>
@@ -162,7 +181,7 @@ function MessageCard({ message: m, targets, actions, replaced }: { message: Tabl
 }
 
 /** An attack of the fight: the roll, then each target hit or missed (numbers only where the reader may see them). */
-function AttackView({ attack: a }: { attack: TableAttack }) {
+function AttackView({ attack: a, rerolled }: { attack: TableAttack; rerolled?: boolean }) {
   return (
     <div className={`${styles.attackCard} ${a.undone ? styles.attackUndone : ''}`}>
       <div className={styles.rowBetween}>
@@ -183,6 +202,7 @@ function AttackView({ attack: a }: { attack: TableAttack }) {
         </div>
       ))}
       {(a.notes ?? []).map((n) => <span key={n} className={styles.attackNote}>{n}</span>)}
+      <DebuffBadges debuffs={a.attackerDebuffs} inTotal />
       {a.targets.map((target) => (
         <div key={target.id} className={styles.attackTarget}>
           <Badge tone={target.hit ? 'red' : undefined}>{target.hit ? t('Acertou', 'Hit') : t('Errou', 'Miss')}</Badge>
@@ -195,8 +215,34 @@ function AttackView({ attack: a }: { attack: TableAttack }) {
           {(target.notes ?? []).map((n) => <span key={n} className={styles.attackNote}>{tv(n)}</span>)}
         </div>
       ))}
-      {a.undone && <Badge>{t('Desfeito pelo mestre', 'Undone by the GM')}</Badge>}
+      {a.rerollReady && !a.undone && <Badge tone="cyan">{t('1 Sorte reservada para rerrolar', '1 LUCK reserved to reroll')}</Badge>}
+      {a.rerollOf != null && <Badge>{t('Rerrolado (Sorte reservada)', 'Rerolled (reserved LUCK)')}</Badge>}
+      {a.undone && <Badge>{rerolled ? t('Rerrolado: vale o ataque de baixo', 'Rerolled: the attack below counts') : t('Desfeito pelo mestre', 'Undone by the GM')}</Badge>}
     </div>
+  );
+}
+
+// Debuffs of the roller, loud on the line: penalties say whether they are already in the total.
+function DebuffBadges({ debuffs, inTotal }: { debuffs?: RollDebuff[] | null; inTotal?: boolean }) {
+  if (!debuffs?.length) return null;
+  return (
+    <span className={styles.row} role="list" aria-label={t('Debuffs de quem rolou', 'Roller debuffs')}>
+      {debuffs.map((d) => {
+        const value = d.value != null ? ` ${d.value > 0 ? '+' : '−'}${Math.abs(d.value)}` : '';
+        const where = d.value != null ? (inTotal ? t(' (no total)', ' (in the total)') : t(' (não somado)', ' (not added)')) : '';
+        const title = [
+          d.detail ? tv(d.detail) : null,
+          d.value != null && !inTotal ? t('A fórmula digitada não leva a penalidade: some à mão.', 'A typed formula doesn\'t carry the penalty: add it by hand.') : null,
+        ].filter(Boolean).join('\n');
+        return (
+          <span key={`${d.kind}-${d.label}`} role="listitem">
+            <Badge tone={d.kind === 'injury' ? 'red' : 'amber'} title={title || undefined}>
+              ⚠ {tv(d.label)}{value}{where}
+            </Badge>
+          </span>
+        );
+      })}
+    </span>
   );
 }
 
@@ -221,7 +267,9 @@ function RollView({ label, roll }: { label: string; roll: RollResult | null }) {
         {roll.critical === 'Success' && <Badge tone="cyan">{t('Sucesso crítico! (+1d10)', 'Critical success! (+1d10)')}</Badge>}
         {roll.critical === 'Failure' && <Badge tone="red">{t('Falha crítica! (−1d10)', 'Critical failure! (−1d10)')}</Badge>}
         {!!roll.luck && <Badge tone="cyan">{t(`Sorte +${roll.luck}`, `LUCK +${roll.luck}`)}</Badge>}
-        {roll.rerollOf != null && <Badge>{t('Rerrolada (1 Sorte)', 'Rerolled (1 LUCK)')}</Badge>}
+        {roll.rerollReady && <Badge tone="cyan">{t('1 Sorte reservada para rerrolar', '1 LUCK reserved to reroll')}</Badge>}
+        {roll.rerollOf != null && <Badge>{t('Rerrolada (Sorte reservada)', 'Rerolled (reserved LUCK)')}</Badge>}
+        <DebuffBadges debuffs={roll.debuffs} inTotal={roll.penaltyInTotal} />
         {roll.criticalInjury && <Badge tone="amber">{t('Ferimento Crítico! (dois 6: +5 de dano direto, CP:R p.187)', 'Critical Injury! (two 6s: +5 damage straight to HP, CP:R p.187)')}</Badge>}
       </div>
     </div>

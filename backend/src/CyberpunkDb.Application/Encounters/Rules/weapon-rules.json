@@ -671,5 +671,63 @@
         }
       ]
     }
+  },
+  "cyberweapons": {
+    "vampyres": { "source": "CP:R p.363", "class": "LightMelee", "skill": "melee-weapon", "damage": "1d6", "rof": 2, "quality": "Excellent" },
+    "cybersnake": { "source": "CP:R p.363", "class": "VeryHeavyMelee", "skill": "melee-weapon", "damage": "4d6", "rof": 1 },
+    "combat-jaw": { "source": "Interface RED 5 p.82", "class": "VeryHeavyMelee", "skill": "melee-weapon", "damage": "4d6", "rof": 1 },
+    "combat-tail": { "source": "Interface RED 2 p.72", "class": "HeavyMelee", "skill": "melee-weapon", "damage": "3d6", "rof": 2 },
+    "big-knucks": { "source": "CP:R p.364", "class": "MediumMelee", "skill": "melee-weapon", "damage": "2d6", "rof": 2 },
+    "rippers": { "source": "CP:R p.365", "class": "MediumMelee", "skill": "melee-weapon", "damage": "2d6", "rof": 2 },
+    "scratchers": { "source": "CP:R p.366", "class": "LightMelee", "skill": "melee-weapon", "damage": "1d6", "rof": 2 },
+    "slice-n-dice": { "source": "CP:R p.366", "class": "MediumMelee", "skill": "melee-weapon", "damage": "2d6", "rof": 2 },
+    "wolvers": { "source": "CP:R p.366", "class": "HeavyMelee", "skill": "melee-weapon", "damage": "3d6", "rof": 2 },
+    "talon-foot": { "source": "CP:R p.367", "class": "LightMelee", "skill": "melee-weapon", "damage": "1d6", "rof": 2 },
+    "gorilla-arm": { "source": "Edgerunners Mission Kit p.35", "class": "HeavyMelee", "skill": "melee-weapon", "damage": "3d6", "rof": 2, "quality": "Excellent" },
+    "mantis-blade": { "source": "Edgerunners Mission Kit p.35", "class": "HeavyMelee", "skill": "melee-weapon", "damage": "3d6", "rof": 2, "quality": "Excellent" },
+    "monowire": {
+      "source": "Edgerunners Mission Kit p.35", "class": "HeavyMelee", "skill": "melee-weapon", "damage": "3d6", "rof": 2, "exotic": true,
+      "notes": [{ "pt": "Ataca corpo a corpo de até 6 m/yds (3 quadrados).", "en": "Makes melee attacks from up to 6 m/yds (3 squares) away." }]
+    },
+    "hello-cutie-mono-paw": {
+      "source": "12 Days of Cutiemas p.6", "class": "MediumMelee", "skill": "melee-weapon", "damage": "1d6", "rof": 2, "quality": "Excellent",
+      "base": { "ignoreArmorBelow": 11 }
+    },
+    "chainripp": {
+      "source": "12 Days of Cybermas p.3", "class": "VeryHeavyMelee", "skill": "melee-weapon", "damage": "4d6", "rof": 1, "quality": "Excellent", "exotic": true,
+      "notes": [{ "pt": "Excellent só depois de acelerada (uma Ação); fica acelerada até guardar.", "en": "Excellent only once revved (an Action); stays revved until stowed." }]
+    },
+    "firebreather": {
+      "source": "Interface RED 2 p.73", "class": "Shotgun", "skill": "shoulder-arms", "damage": "5d6", "rof": 1, "exotic": true, "shots": 1,
+      "notes": [{ "pt": "Só carrega um cartucho Incendiary Shell.", "en": "Loads a single Incendiary Shell only." }]
+    },
+    "popup-shotgun": { "source": "Black Chrome p.21", "class": "Shotgun", "skill": "shoulder-arms", "damage": "5d6", "rof": 1, "shots": 2 },
+    "popup-grenade-launcher": { "source": "CP:R p.365", "class": "GrenadeLauncher", "skill": "heavy-weapons", "damage": "6d6", "rof": 1, "shots": 1 },
+    "projectile-launch-system": {
+      "source": "Edgerunners Mission Kit p.36", "class": "RocketLauncher", "skill": "heavy-weapons", "damage": "8d6", "rof": 1, "shots": 1,
+      "notes": [{ "pt": "Lança um foguete (8d6) ou uma granada (6d6): carregue o que for disparar.", "en": "Launches a rocket (8d6) or a grenade (6d6): load whichever you fire." }]
+    },
+    "blitzkrieg-arc-thrower": {
+      "source": "12 Days of Cybermas p.4", "class": "Shotgun", "skill": "heavy-weapons", "damage": "4d6", "rof": 1, "quality": "Poor", "exotic": true, "shots": 32,
+      "base": { "shells": "only", "shellDamage": "4d6" },
+      "notes": [{ "pt": "Gasta uma das 32 cargas da BatteryBrick por disparo.", "en": "Each shot drains one of the BatteryBrick's 32 charges." }]
+    },
+    "pursuit-security-gas-jet": {
+      "source": "Hornet's Pharmacy p.5", "class": "Shotgun", "skill": "shoulder-arms", "damage": "3d6", "rof": 1, "exotic": true, "shots": 1,
+      "base": {
+        "shells": "only",
+        "effect": { "pt": "Sem dano: aplica a droga, Poison ou Biotoxin carregada em quem a nuvem atinge (Nasal Filters anulam).", "en": "No damage: applies the loaded drug, Poison or Biotoxin to whoever the spread hits (Nasal Filters negate it)." }
+      }
+    },
+    "rocklin-mird113-gun-hand": { "source": "Mixing Drinks–Changing Lives p.16", "class": "MediumPistol", "skill": "handgun", "damage": "2d6", "rof": 2, "exotic": true, "shots": 5 },
+    "one-shot-special-cyberfinger": { "source": "Black Chrome p.26", "class": "HeavyPistol", "skill": "handgun", "damage": "3d6", "rof": 1, "exotic": true, "shots": 1 },
+    "dartgun": {
+      "source": "CP:R p.360", "class": "HeavyPistol", "skill": "handgun", "damage": "1d6", "rof": 1, "exotic": true, "shots": 1,
+      "notes": [{ "pt": "Dardo: o efeito vem da munição carregada (Poison, Biotoxin...).", "en": "Dart: the effect comes from the loaded ammo (Poison, Biotoxin...)." }]
+    },
+    "dartgun-cyberfinger": {
+      "source": "Black Chrome p.24", "class": "HeavyPistol", "skill": "handgun", "damage": "1d6", "rof": 1, "exotic": true, "shots": 1,
+      "notes": [{ "pt": "Dardo: o efeito vem da munição carregada (Poison, Biotoxin...).", "en": "Dart: the effect comes from the loaded ammo (Poison, Biotoxin...)." }]
+    }
   }
 }

@@ -3,6 +3,7 @@ using CyberpunkDb.Application.Characters.Calculation;
 using CyberpunkDb.Application.Characters.Operations;
 using CyberpunkDb.Application.Common;
 using CyberpunkDb.Application.Npcs;
+using CyberpunkDb.Domain.Enums;
 using FluentAssertions;
 using static CyberpunkDb.Tests.Unit.Characters.CharacterTestData;
 
@@ -231,6 +232,64 @@ public class CyberwareOperationsTests
         badRoll.Should().Throw<RequestValidationException>("2d6 vai até 12");
         Ops.Therapy(sheet, new TherapyRequest(0, "standard", "medtech", 3), Change(sheet)).Wallet.Balance
             .Should().Be(sheet.Wallet.Balance - 100, "o Medtech paga só os materiais");
+    }
+
+    [Fact]
+    public void An_installed_cyberweapon_is_a_weapon_on_the_sheet()
+    {
+        var sheet = Install(Chromeless(), Wolvers, meatLimb: true);
+        var line = Calc(sheet).Weapons.Single(w => w.Cyberware);
+
+        line.Name.Should().Be(Wolvers.Name);
+        line.Class.Should().Be(WeaponClass.HeavyMelee);
+        line.Damage.Should().Be("3d6");
+        line.Rof.Should().Be(2);
+        line.SkillId.Should().Be("melee-weapon");
+        line.Equipped.Should().BeTrue();
+        line.Magazine.Should().BeNull();
+        Calc(Chromeless()).Weapons.Should().NotContain(w => w.Cyberware);
+    }
+
+    [Fact]
+    public void The_shield_in_hand_loses_hp_breaks_at_zero_and_leaves_the_hand()
+    {
+        var sheet = Chromeless() with
+        {
+            Inventory = [.. Chromeless().Inventory, new InventoryEntry { InstanceId = "sh", ItemId = BulletproofShield.Id, State = ItemState.Equipped }],
+        };
+        Calc(sheet).Inventory.Single(i => i.InstanceId == "sh").ShieldHp.Should().Be(10);
+
+        var hit = Inventory.AdjustShield(sheet, -4, null, Change(sheet));
+        Calc(hit).Inventory.Single(i => i.InstanceId == "sh").ShieldHp.Should().Be(6);
+
+        var broken = Inventory.AdjustShield(hit, -20, null, Change(hit));
+        var line = Calc(broken).Inventory.Single(i => i.InstanceId == "sh");
+        line.ShieldHp.Should().Be(0);
+        line.State.Should().NotBe(ItemState.Equipped);
+
+        var noShield = () => Inventory.AdjustShield(broken, -1, null, Change(broken));
+        noShield.Should().Throw<RequestValidationException>("nothing in hand anymore");
+        Calc(Inventory.AdjustShield(broken, 3, "sh", Change(broken))).Inventory.Single(i => i.InstanceId == "sh").ShieldHp.Should().Be(3);
+    }
+
+    [Fact]
+    public void Humanity_by_hand_can_go_below_zero_and_is_logged()
+    {
+        var sheet = Chromeless();
+        var start = Calc(sheet).Humanity.Current;
+        var change = Change(sheet);
+        var lost = Ops.AdjustHumanity(sheet, new AdjustHumanityRequest(0, -(start + 5), "cena traumática"), change);
+
+        Calc(lost).Humanity.Current.Should().Be(-5);
+        Calc(lost).Humanity.Cyberpsychosis.Should().BeTrue();
+        Calc(lost).Humanity.EmpEffective.Should().Be(0);
+        change.Events.Should().Contain(e => e.Action == "manual-adjustment" && e.Amount == -(start + 5));
+
+        Calc(Ops.AdjustHumanity(lost, new AdjustHumanityRequest(0, 3, "mestre"), Change(lost))).Humanity.Current.Should().Be(-2);
+        var zero = () => Ops.AdjustHumanity(sheet, new AdjustHumanityRequest(0, 0, "x"), Change(sheet));
+        zero.Should().Throw<RequestValidationException>();
+        var noReason = () => Ops.AdjustHumanity(sheet, new AdjustHumanityRequest(0, -2, " "), Change(sheet));
+        noReason.Should().Throw<RequestValidationException>();
     }
 
     // nothing partial

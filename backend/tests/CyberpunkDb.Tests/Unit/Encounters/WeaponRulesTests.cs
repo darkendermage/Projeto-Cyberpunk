@@ -89,6 +89,30 @@ public class WeaponRulesTests
     }
 
     [Fact]
+    public void Every_cyberweapon_is_catalog_cyberware_and_attacks_in_every_mode_it_offers()
+    {
+        using var doc = JsonDocument.Parse(File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "Seed", "01-compendium.json")));
+        var cyberware = doc.RootElement.EnumerateArray().Where(x => x.GetProperty("category").GetString() == "cyberware")
+            .Select(x => x.GetProperty("slug").GetString()!).ToHashSet();
+        var failures = new List<string>();
+        foreach (var (slug, cw) in Book.Document.Cyberweapons)
+        {
+            if (!cyberware.Contains(slug)) failures.Add($"{slug}: not catalog cyberware");
+            if (NpcTestData.Rules.FindSkill(cw.Skill) is null) failures.Add($"{slug}: skill {cw.Skill}");
+            var melee = cw.Skill == "melee-weapon";
+            var view = WeaponModes.Build(new WeaponView("w", slug, cw.Class, cw.Skill, 12, null, cw.Damage, cw.Rof, null, null, null, melee, melee, Quality: cw.Quality),
+                slug, new WeaponContext(_ => 12, id => id, 10, [], null, _ => null, true, false, null), Book);
+            foreach (var mode in (view.Modes ?? [view]).Where(m => m.ModeActive))
+            foreach (var attack in Offered(mode))
+            {
+                try { Shoot(view, attack, mode.Melee ? null : 10, mode.ModeId); }
+                catch (RequestValidationException e) { failures.Add($"{slug} {attack}: {string.Join(" ", e.Errors.SelectMany(x => x.Value))}"); }
+            }
+        }
+        failures.Should().BeEmpty();
+    }
+
+    [Fact]
     public void Every_rule_points_at_a_catalog_weapon()
     {
         var slugs = Catalog.Select(w => w.Slug).ToHashSet();

@@ -2,24 +2,29 @@ import { useState } from 'react';
 import { Crosshair, Dices, HeartPulse, RefreshCw, RotateCcw, RotateCw, SkipForward, Upload } from 'lucide-react';
 import type { AttackMode, WeaponView } from '../../api/encounterTypes';
 import type { ArmorLocation, RollKind, TableVisibility, TokenView, PlayerCharacter, PlayerEncounter } from '../../api/tableTypes';
-import { Badge, Button, IconButton, Segmented } from '../../components/ui/ui';
-import { skillName, t } from '../../i18n';
+import { Badge, Button, Checkbox, IconButton, Segmented } from '../../components/ui/ui';
+import { skillName, t, tv } from '../../i18n';
 import { WOUND_LABEL, WOUND_TONE } from '../combat/combat';
 import { WeaponExtras } from '../combat/WeaponExtras';
 import { ArmorControl } from './ArmorControl';
+import { MartialMoves } from './MartialMoves';
+import { CyberwareActions } from './CyberwareActions';
+import { PreRollDialog } from '../characters/PreRollDialog';
+import { hpBar } from '../../lib/hpBar';
 import { NumField } from './NumField';
 import { damageFormula } from './tokens';
-import { cannotFire, quickModes } from './aim';
+import { cannotFire, quickModes, strikeModes } from './aim';
 import styles from './Table.module.css';
 import { AwarenessBlock } from './AwarenessBlock';
 
-type Roll = (formula: string, kind: RollKind, label: string, visibility: TableVisibility, luck: number) => void;
+// reroll: 1 more LUCK reserved for a free reroll from the chat
+type Roll = (formula: string, kind: RollKind, label: string, visibility: TableVisibility, luck: number, reroll?: boolean) => void;
 
 const signed = (n: number) => (n >= 0 ? `+${n}` : `${n}`);
 
 // Numbers, weapons and skills (each one click from a server roll) and token facing. In a fight the numbers
 // come from the combat table, otherwise from the sheet.
-export function CharacterPanel({ character, encounter, token, onRoll, onTurn, onArmor, onAim, onReload, onUnjam, onPickUp, onSwitch, onImport, busy }: {
+export function CharacterPanel({ character, encounter, token, onRoll, onTurn, onArmor, onAim, onReload, onUnjam, onPickUp, onSwitch, onImport, onCyber, busy }: {
   character: PlayerCharacter | null;
   encounter: PlayerEncounter | null;
   token: TokenView | undefined;
@@ -28,11 +33,13 @@ export function CharacterPanel({ character, encounter, token, onRoll, onTurn, on
   /** The player's own armor up or down (ablation, repair). */
   onArmor?: (location: ArmorLocation, delta: number) => void;
   /** In a fight: aim with this weapon, as the strip's weapon chips do (target, mode, aimed shot). */
-  onAim?: (weapon: WeaponView, mode: AttackMode) => void;
+  onAim?: (weapon: WeaponView, mode: AttackMode, modeId?: string | null) => void;
   /** Reloads a weapon by its key, or one of its extra magazines (an Action on the player's Turn in a fight). */
   onReload?: (weaponKey: string, magazine?: string) => void;
   /** Switches a mode that stays on the weapon (an Action on the player's Turn in a fight). */
   onSwitch?: (weaponKey: string, mode: string) => void;
+  /** switches an implant on (Sandevistan, Berserk...) in the live fight */
+  onCyber?: (slug: string) => void;
   /** Imports the player's own sheet: creates it on an empty seat, or updates the GM's copy (same uid). */
   onImport?: (file: File) => void;
   /** Clears a jammed weapon (an Action on the player's Turn). */
@@ -45,8 +52,12 @@ export function CharacterPanel({ character, encounter, token, onRoll, onTurn, on
   const [luck, setLuck] = useState(0);
   const luckLeft = character?.luckAvailable ?? 0;
   const spend = Math.min(luck, luckLeft);
+  const [reserve, setReserve] = useState(false);
+  const canReserve = luckLeft >= spend + 1;
   // LUCK goes on Checks only (CP:R p.130) and is spent by the roll; Damage and Death Saves take none.
-  const check = (formula: string, label: string) => { onRoll(formula, 'Check', label, visibility, spend); setLuck(0); };
+  const check = (formula: string, label: string) => { onRoll(formula, 'Check', label, visibility, spend, reserve && canReserve); setLuck(0); setReserve(false); };
+  // skills with situational implant bonuses go through the pre-roll step (tick + LUCK); the rest roll at once
+  const [preroll, setPreroll] = useState<{ name: string; total: number; situational: { label: string; value: number }[] } | null>(null);
   const [filter, setFilter] = useState('');
   const fighter = encounter?.queue.find((f) => f.own);
   if (!character && !fighter) return (
@@ -87,7 +98,13 @@ export function CharacterPanel({ character, encounter, token, onRoll, onTurn, on
           <span className={styles.label}>HP</span>
           <span><span className={styles.statBig}>{hp}</span><span className={styles.stat}> / {maxHp}</span></span>
         </span>
-        <div className={styles.meter}><div className={styles.meterFill} style={{ width: `${maxHp > 0 ? Math.max(0, Math.min(100, (hp / maxHp) * 100)) : 0}%` }} /></div>
+        <div className={styles.meter}>
+          <div className={styles.meterFill} style={{ width: `${hpBar(hp, maxHp, fighter?.shieldHp, fighter?.shieldHpMax).hpPct}%` }} />
+          {(fighter?.shieldHp ?? 0) > 0 && (
+            <div className={styles.meterShield} title={t(`Escudo: ${fighter!.shieldHp} HP`, `Shield: ${fighter!.shieldHp} HP`)}
+              style={{ left: `${hpBar(hp, maxHp, fighter?.shieldHp, fighter?.shieldHpMax).hpPct}%`, width: `${hpBar(hp, maxHp, fighter?.shieldHp, fighter?.shieldHpMax).shieldPct}%` }} />
+          )}
+        </div>
       </div>
       {character && <AwarenessBlock characterId={character.id} roundFlags={fighter?.roundFlags} />}
       <div className={styles.row}>
@@ -108,6 +125,7 @@ export function CharacterPanel({ character, encounter, token, onRoll, onTurn, on
           <span className={styles.label}>{t('Sorte no próximo teste', 'LUCK on the next Check')}</span>
           <NumField label={t('Pontos de Sorte a gastar', 'LUCK points to spend')} min={0} max={luckLeft} value={spend} onChange={(n) => setLuck(Math.round(n))} />
           <span className={styles.muted}>{t('+1 por ponto (CP:R p.130)', '+1 a point (CP:R p.130)')}</span>
+          <Checkbox checked={reserve && canReserve} disabled={!canReserve} onChange={setReserve} label={t('Reservar 1 Sorte para rerrolar', 'Reserve 1 LUCK to reroll')} />
         </div>
       )}
       <Segmented size="sm" ariaLabel={t('Quem vê as rolagens', 'Who sees the rolls')} value={visibility} onChange={setVisibility}
@@ -147,6 +165,13 @@ export function CharacterPanel({ character, encounter, token, onRoll, onTurn, on
                     onClick={() => (fightWeapon ? onAim!(fightWeapon, quickModes(fightWeapon)[0] ?? 'Single') : check(`1d10${signed(w.attackTotal)}`, t(`Ataque: ${w.name}`, `Attack: ${w.name}`)))}>
                     {t('Ataque', 'Attack')} {signed(w.attackTotal)}
                   </Button>
+                  {fightWeapon && strikeModes(fightWeapon).map((m) => (
+                    <Button key={m.modeId} variant="ghost" disabled={!!blocked}
+                      title={blocked ?? [t('Golpe especial: escolha o alvo no mapa ou num cartão', 'Special Move: pick the target on the map or on a card'), ...(m.traits?.notes ?? [])].join('\n')}
+                      onClick={() => onAim!(fightWeapon, 'Single', m.modeId)}>
+                      ⚔ {tv(m.modeLabel ?? '')} {signed(m.attackTotal)}
+                    </Button>
+                  ))}
                   {w.autofireTotal != null && (
                     <Button variant="ghost" disabled={!!blocked} title={blocked ?? undefined}
                       onClick={() => (fightWeapon ? onAim!(fightWeapon, 'Autofire') : check(`1d10${signed(w.autofireTotal!)}`, t(`Autofire: ${w.name}`, `Autofire: ${w.name}`)))}>
@@ -196,6 +221,16 @@ export function CharacterPanel({ character, encounter, token, onRoll, onTurn, on
         </div>
       )}
 
+      {fighter && (
+        <CyberwareActions traits={fighter.traits} active={fighter.activeCyber} onActivate={onCyber}
+          blocked={busy ? t('Aguarde…', 'Wait…') : encounter?.activeId !== fighter.id ? t('Aguarde seu turno: ativar é uma Ação.', 'Wait for your Turn: switching on is an Action.') : null} />
+      )}
+
+      {character && (
+        <MartialMoves inFight={!!fighter} onRoll={check}
+          forms={character.skills.filter((s) => s.skillId === 'martial-arts' && s.specialization).map((s) => ({ form: s.specialization!, total: s.total }))} />
+      )}
+
       {character && character.skills.length > 0 && (
         <div className={styles.section}>
           <div className={styles.rowBetween}>
@@ -206,7 +241,7 @@ export function CharacterPanel({ character, encounter, token, onRoll, onTurn, on
             {skills.map((s) => {
               const name = skillName(s.name, s.namePt) + (s.specialization ? ` (${s.specialization})` : '');
               return (
-                <button key={s.key} type="button" className={styles.skillButton} onClick={() => check(`1d10${signed(s.total)}`, name)}>
+                <button key={s.key} type="button" className={styles.skillButton} onClick={() => (s.situationalParts?.length ? setPreroll({ name, total: s.total, situational: s.situationalParts }) : check(`1d10${signed(s.total)}`, name))}>
                   <span>{name}</span>
                   <span className={styles.skillTotal}>{signed(s.total)}</span>
                 </button>
@@ -214,6 +249,11 @@ export function CharacterPanel({ character, encounter, token, onRoll, onTurn, on
             })}
           </div>
         </div>
+      )}
+      {preroll && (
+        <PreRollDialog title={t(`Rolar ${preroll.name}`, `Roll ${preroll.name}`)} total={preroll.total} situational={preroll.situational}
+          luckAvailable={luckLeft} onClose={() => setPreroll(null)}
+          onRoll={(c) => { onRoll(`1d10${signed(preroll.total + c.bonus)}`, 'Check', [preroll.name, ...c.labels].join(' · '), visibility, c.luck, c.reroll); setPreroll(null); setLuck(0); setReserve(false); }} />
       )}
       {character && onImport && (
         // same uid as the GM's copy: the server overwrites it instead of creating another

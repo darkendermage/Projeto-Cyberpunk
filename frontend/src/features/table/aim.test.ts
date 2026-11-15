@@ -1,12 +1,33 @@
 import { describe, expect, it } from 'vitest';
 import type { WeaponView } from '../../api/encounterTypes';
 import type { TableAttack } from '../../api/tableTypes';
-import { aimAt, aimWith, attackBreakdown, attackSummary, cannotFire, canReload, quickModes, startAim, weaponLabel } from './aim';
+import { aimAt, aimFor, aimWith, attackBreakdown, attackSummary, cannotFire, canReload, quickModes, startAim, strikeModes, weaponLabel } from './aim';
 
 const rifle: WeaponView = {
   key: 'w1', name: 'Assault Rifle', class: 'AssaultRifle', skill: 'shoulder-arms', attackTotal: 14, autofireTotal: 12, damage: '5d6',
   rof: 1, rounds: 25, magazine: 25, autofireMultiplier: 4, melee: false, halvesArmor: false,
 };
+
+describe('martial arts strikes', () => {
+  const fist: WeaponView = { ...rifle, key: 'martial-arts:Boxing', name: 'Martial Arts (Boxing)', class: null, skill: 'martial-arts:Boxing', attackTotal: 13,
+    autofireTotal: null, autofireMultiplier: null, damage: '3d6', rof: 2, rounds: null, magazine: null, melee: true, halvesArmor: true };
+  const basic = { ...fist, modeId: 'strike', modeLabel: '2 attacks', modeSwitch: 'free', modeActive: true };
+  const knockout = { ...fist, modeId: 'move:knockout-punch:strike', modeLabel: 'Knockout Punch', modeSwitch: 'free', modeActive: true, rof: 1, attackTotal: 8 };
+  const boxing = { ...basic, modes: [basic, knockout] };
+
+  it('lists only the Special Move modes as their own attacks', () => {
+    expect(strikeModes(boxing).map((m) => m.modeId)).toEqual(['move:knockout-punch:strike']);
+    expect(strikeModes(rifle)).toEqual([]);
+  });
+
+  it('starts the aim already on the strike, keeping every mode to switch back', () => {
+    const aim = aimFor('C1', 'Alita', boxing, 'move:knockout-punch:strike');
+    expect(aim.weapon.modeId).toBe('move:knockout-punch:strike');
+    expect(aim.weapon.attackTotal).toBe(8);
+    expect(aim.base.modes).toHaveLength(2);
+    expect(aimFor('C1', 'Alita', boxing).weapon.modeId).toBe('strike');
+  });
+});
 
 describe('aim', () => {
   it('offers the weapon modes without the area ones', () => {

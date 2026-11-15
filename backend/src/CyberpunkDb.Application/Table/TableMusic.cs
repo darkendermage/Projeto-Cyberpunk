@@ -7,8 +7,9 @@ namespace CyberpunkDb.Application.Table;
 
 // YouTube video and/or playlist, playing or paused at PositionSeconds as of UpdatedAt. Each screen works out
 // where the track should be now.
+// Repeat: when the track ends the GM's screen starts it again instead of moving on.
 public sealed record TableMusic(string? VideoId, string? PlaylistId, string? Title, bool Playing, double PositionSeconds, DateTime UpdatedAt, int Volume,
-    int Index = 0);
+    int Index = 0, bool Repeat = false);
 
 public sealed record RecentMusic(string? VideoId, string? PlaylistId, string? Title);
 
@@ -20,6 +21,8 @@ public sealed record LoadMusicRequest(string Url, string? Title);
 public sealed record MusicPositionRequest(double? PositionSeconds);
 
 public sealed record MusicVolumeRequest(int Volume);
+
+public sealed record MusicRepeatRequest(bool Repeat);
 
 public sealed record ForgetRecentMusicRequest(string? VideoId, string? PlaylistId);
 
@@ -87,10 +90,11 @@ public sealed class TableMusicService(TableSettingsService settings, ITableNotif
     {
         var (video, list) = YouTubeLink.Parse(r.Url);
         var title = string.IsNullOrWhiteSpace(r.Title) ? null : r.Title.Trim()[..Math.Min(80, r.Title.Trim().Length)];
-        var volume = (await CurrentAsync(ct))?.Volume ?? 60;
+        var current = await CurrentAsync(ct);
+        var volume = current?.Volume ?? 60;
         var recent = (await RecentAsync(ct)).Where(x => x.VideoId != video || x.PlaylistId != list).Prepend(new RecentMusic(video, list, title)).Take(RecentMax).ToList();
         await settings.SetAsync(RecentKey, JsonSerializer.Serialize(recent, Json), ct);
-        return await SaveAsync(new TableMusic(video, list, title, false, 0, DateTime.UtcNow, volume), ct);
+        return await SaveAsync(new TableMusic(video, list, title, false, 0, DateTime.UtcNow, volume, Repeat: current?.Repeat ?? false), ct);
     }
 
     public Task<TableMusicStateDto> PlayAsync(MusicPositionRequest r, CancellationToken ct)
@@ -103,6 +107,9 @@ public sealed class TableMusicService(TableSettingsService settings, ITableNotif
 
     public Task<TableMusicStateDto> NextAsync(CancellationToken ct) =>
         ChangeAsync(m => m.PlaylistId is null ? m with { PositionSeconds = 0 } : m with { Index = m.Index + 1, PositionSeconds = 0, Playing = true }, ct);
+
+    public Task<TableMusicStateDto> RepeatAsync(MusicRepeatRequest r, CancellationToken ct) =>
+        ChangeAsync(m => m with { Repeat = r.Repeat, PositionSeconds = Now(m) }, ct);
 
     public Task<TableMusicStateDto> VolumeAsync(MusicVolumeRequest r, CancellationToken ct) =>
         ChangeAsync(m => m with { Volume = Math.Clamp(r.Volume, 0, 100) }, ct);

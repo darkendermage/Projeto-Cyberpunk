@@ -10,11 +10,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CyberpunkDb.Application.Table;
 
-// WeaponMode: weapon-rules.json mode (Slug/Shell, Burst, Throw...), null = the weapon's current one
-public sealed record QuickAttackRequest(string Weapon, AttackMode Mode, List<string> TargetIds, string? WeaponMode = null);
+// WeaponMode: weapon-rules.json mode (Slug/Shell, Burst, Throw...), null = the weapon's current one.
+// RerollLuck: 1 more LUCK paid now for one free reroll of the attack from the chat.
+public sealed record QuickAttackRequest(string Weapon, AttackMode Mode, List<string> TargetIds, string? WeaponMode = null, int Luck = 0, bool RerollLuck = false);
 
 // any fighter in the scene's fight
-public sealed record GmQuickAttackRequest(string AttackerId, string Weapon, AttackMode Mode, List<string> TargetIds, string? WeaponMode = null);
+public sealed record GmQuickAttackRequest(string AttackerId, string Weapon, AttackMode Mode, List<string> TargetIds, string? WeaponMode = null, int Luck = 0, bool RerollLuck = false);
 
 // Resolved like on the combat table; distance comes from the map. Area attacks need a template, so they stay on
 // the combat page.
@@ -32,9 +33,31 @@ public sealed class TableAttackService(IAppDbContext db, EncounterService encoun
         var visible = PlayerEncounters.For(detail, seat, state).Queue.Select(f => f.Id).ToHashSet();
         if (r.TargetIds.Any(id => !visible.Contains(id)))
             throw RequestValidationException.For("targetIds", L.T("Escolha um alvo que você vê no mapa.", "Pick a target you can see on the map."));
-        var result = await AttackAsync(detail, state, own.Id, r.Weapon, r.Mode, r.TargetIds, r.WeaponMode, ct);
+        var result = await AttackAsync(detail, state, own.Id, r.Weapon, r.Mode, r.TargetIds, r.WeaponMode, r.Luck, r.RerollLuck, ct);
         return result with { Attack = result.Attack is { } a ? TableAttacks.ForSeat(a) : null };
     }
+
+    // the reserved LUCK pays for it; only the seat's own character's attack
+    public async Task<QuickAttackResult> PlayerRerollAsync(TableSeat seat, AttackRerollRequest r, CancellationToken ct)
+    {
+        var scene = await db.Scenes.AsNoTracking().FirstOrDefaultAsync(s => s.Active, ct)
+                    ?? throw new ConflictException(L.T("Não há cena aberta na mesa.", "There's no scene open on the table."));
+        if (seat.CharacterId is not { } characterId) throw new ConflictException(L.T("Seu lugar não tem personagem.", "Your seat has no character."));
+        var (detail, _) = await FightAsync(scene, ct);
+        var result = Result(await encounters.RerollAttackAsync(detail.Id, r, characterId, ct));
+        return result with { Attack = result.Attack is { } a ? TableAttacks.ForSeat(a) : null };
+    }
+
+    public async Task<QuickAttackResult> GmRerollAsync(int sceneId, AttackRerollRequest r, CancellationToken ct)
+    {
+        var scene = await db.Scenes.AsNoTracking().FirstOrDefaultAsync(s => s.Id == sceneId, ct)
+                    ?? throw new NotFoundException(L.T("Cena não encontrada.", "Scene not found."));
+        var (detail, _) = await FightAsync(scene, ct);
+        return Result(await encounters.RerollAttackAsync(detail.Id, r, null, ct));
+    }
+
+    private static QuickAttackResult Result(EncounterDetailDto after) =>
+        after.LastAttack is { } done ? new QuickAttackResult(TableAttacks.From(after, done), null) : new QuickAttackResult(null, after.Pending);
 
     // any fighter, Turn or not
     public async Task<QuickAttackResult> GmAttackAsync(int sceneId, GmQuickAttackRequest r, CancellationToken ct)
@@ -42,7 +65,7 @@ public sealed class TableAttackService(IAppDbContext db, EncounterService encoun
         var scene = await db.Scenes.AsNoTracking().FirstOrDefaultAsync(s => s.Id == sceneId, ct)
                     ?? throw new NotFoundException(L.T("Cena não encontrada.", "Scene not found."));
         var (detail, state) = await FightAsync(scene, ct);
-        return await AttackAsync(detail, state, r.AttackerId, r.Weapon, r.Mode, r.TargetIds, r.WeaponMode, ct);
+        return await AttackAsync(detail, state, r.AttackerId, r.Weapon, r.Mode, r.TargetIds, r.WeaponMode, r.Luck, r.RerollLuck, ct);
     }
 
     private async Task<(EncounterDetailDto, SceneState)> FightAsync(Scene scene, CancellationToken ct)
@@ -55,7 +78,7 @@ public sealed class TableAttackService(IAppDbContext db, EncounterService encoun
     }
 
     private async Task<QuickAttackResult> AttackAsync(EncounterDetailDto detail, SceneState state, string attackerId, string weapon, AttackMode mode,
-        List<string> targetIds, string? weaponMode, CancellationToken ct)
+        List<string> targetIds, string? weaponMode, int luck, bool rerollLuck, CancellationToken ct)
     {
         if (mode is AttackMode.Suppressive or AttackMode.Explosive)
             throw RequestValidationException.For("mode", L.T("Ataques em área ficam no formulário completo da tela de combate.", "Area attacks stay on the combat table's full form."));
@@ -73,8 +96,8 @@ public sealed class TableAttackService(IAppDbContext db, EncounterService encoun
         }
 
         // waits for dodge (REF 8+) and the crit roll
-        var after = await encounters.AttackAsync(detail.Id, new AttackRequest(detail.Version, attackerId, targetIds, weapon, mode, range, Interactive: true, WeaponMode: weaponMode), ct);
-        return after.LastAttack is { } done ? new QuickAttackResult(TableAttacks.From(after, done), null) : new QuickAttackResult(null, after.Pending);
+        var after = await encounters.AttackAsync(detail.Id, new AttackRequest(detail.Version, attackerId, targetIds, weapon, mode, range, Interactive: true, WeaponMode: weaponMode, Luck: luck, RerollLuck: rerollLuck), ct);
+        return Result(after);
     }
 
     // linked to the combatant, or a PC token linked to the sheet

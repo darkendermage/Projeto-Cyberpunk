@@ -74,19 +74,28 @@ public class TableLuckAndRulesApiTests(ApiFactory factory)
     }
 
     [Fact]
-    public async Task A_reroll_costs_one_luck_and_happens_once()
+    public async Task Luck_reserved_before_the_check_pays_for_one_free_reroll()
     {
         var (seat, _) = await LuckySeat("Rerrola");
         var other = await Send<SeatDto>(_gm, HttpMethod.Post, "/api/table/seats", new CreateSeatRequest("Outra"), expected: HttpStatusCode.Created);
-        var first = await Send<TableMessageDto>(_player, HttpMethod.Post, "/api/table/play/rolls", new RollRequest("1d10+7", RollKind.Check, "Pistola", Luck: 1), seat.Token);
+        var start = await LuckLeft(_player, seat.Token);
+        var plain = await Send<TableMessageDto>(_player, HttpMethod.Post, "/api/table/play/rolls", new RollRequest("1d10+7", RollKind.Check, "Pistola"), seat.Token);
+        // nothing reserved, no reroll
+        await Send<JsonElement>(_player, HttpMethod.Post, $"/api/table/play/rolls/{plain.Id}/reroll", seat: seat.Token, expected: HttpStatusCode.BadRequest);
+
+        var first = await Send<TableMessageDto>(_player, HttpMethod.Post, "/api/table/play/rolls", new RollRequest("1d10+7", RollKind.Check, "Pistola", Luck: 1, RerollLuck: true), seat.Token);
+        first.Roll!.RerollReady.Should().BeTrue();
+        first.Roll.Total.Should().Be(first.Roll.Terms.Sum(t => t.Value) + 1, "o ponto reservado não soma no teste");
         var before = await LuckLeft(_player, seat.Token);
+        before.Should().Be(start - 2);
 
         var again = await Send<TableMessageDto>(_player, HttpMethod.Post, $"/api/table/play/rolls/{first.Id}/reroll", seat: seat.Token);
 
         again.Roll!.RerollOf.Should().Be(first.Id);
+        again.Roll.RerollReady.Should().BeFalse();
         again.Roll.Luck.Should().Be(1, "a Sorte gasta antes continua valendo");
         again.Roll.Total.Should().Be(again.Roll.Terms.Sum(t => t.Value) + 1);
-        (await LuckLeft(_player, seat.Token)).Should().Be(before - 1);
+        (await LuckLeft(_player, seat.Token)).Should().Be(before, "o rerrolar já foi pago");
         await Send<JsonElement>(_player, HttpMethod.Post, $"/api/table/play/rolls/{first.Id}/reroll", seat: seat.Token, expected: HttpStatusCode.BadRequest);
         await Send<JsonElement>(_player, HttpMethod.Post, $"/api/table/play/rolls/{again.Id}/reroll", seat: other.Token, expected: HttpStatusCode.BadRequest);
     }
@@ -125,5 +134,42 @@ public class TableLuckAndRulesApiTests(ApiFactory factory)
         rules.CoverExamples.Should().NotBeEmpty();
         rules.Notes.Should().OnlyContain(n => n.Source.Contains("CP:R"));
         (await Send<TableRulesDto>(_gm, HttpMethod.Get, "/api/table/rules")).CriticalInjuries.Should().HaveCount(22);
+    }
+    [Fact]
+    public async Task A_wounded_character_rolls_with_its_debuffs_on_the_line()
+    {
+        var (seat, id) = await LuckySeat("Ferida");
+        var healthy = await Send<TableMessageDto>(_player, HttpMethod.Post, "/api/table/play/rolls", new RollRequest("1d10+5", RollKind.Check, "Atletismo"), seat.Token);
+        healthy.Roll!.Debuffs.Should().BeNull();
+
+        // Seriously Wounded: under half the HP, straight through the armor (CP:R p.220)
+        var c = await Send<CharacterDetailDto>(_gm, HttpMethod.Get, $"/api/characters/{id}");
+        c = await Send<CharacterDetailDto>(_gm, HttpMethod.Post, $"/api/characters/{id}/combat/damage",
+            new DamageRequest(c.Version, c.Report.Health.CurrentHp - c.Report.Health.MaxHp / 2 + 1, BypassArmor: true));
+        c.Report.ActionPenalty.Should().BeNegative();
+
+        var typed = await Send<TableMessageDto>(_player, HttpMethod.Post, "/api/table/play/rolls", new RollRequest("1d10+5", RollKind.Check, "Atletismo"), seat.Token);
+        typed.Roll!.Debuffs.Should().Contain(d => d.Kind == "penalty" && d.Value == c.Report.ActionPenalty);
+        typed.Roll.PenaltyInTotal.Should().BeFalse();
+        var fromSheet = await Send<TableMessageDto>(_player, HttpMethod.Post, "/api/table/play/rolls", new RollRequest("1d10+5", RollKind.Check, "Atletismo", FromSheet: true), seat.Token);
+        fromSheet.Roll!.PenaltyInTotal.Should().BeTrue();
+
+        // The GM rolling from that sheet carries them too; a plain GM roll doesn't.
+        (await Send<TableMessageDto>(_gm, HttpMethod.Post, "/api/table/rolls", new RollRequest("1d10+5", RollKind.Check, CharacterId: id))).Roll!.Debuffs.Should().NotBeNullOrEmpty();
+        (await Send<TableMessageDto>(_gm, HttpMethod.Post, "/api/table/rolls", new RollRequest("1d10+5", RollKind.Check))).Roll!.Debuffs.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task The_gm_spends_a_pc_luck_only_when_rolling_from_that_pc_sheet()
+    {
+        var (seat, id) = await LuckySeat("Pela Ficha");
+        var before = await LuckLeft(_player, seat.Token);
+
+        var m = await Send<TableMessageDto>(_gm, HttpMethod.Post, "/api/table/rolls", new RollRequest("1d10+5", RollKind.Check, "Atletismo", Luck: 1, CharacterId: id));
+        m.Roll!.Luck.Should().Be(1);
+        (await LuckLeft(_player, seat.Token)).Should().Be(before - 1);
+
+        await Send<JsonElement>(_gm, HttpMethod.Post, "/api/table/rolls", new RollRequest("1d10+5", RollKind.Check, Luck: 1), expected: HttpStatusCode.BadRequest);
+        await Send<JsonElement>(_gm, HttpMethod.Post, "/api/table/rolls", new RollRequest("1d10+5", RollKind.Check, Luck: before + 5, CharacterId: id), expected: HttpStatusCode.BadRequest);
     }
 }

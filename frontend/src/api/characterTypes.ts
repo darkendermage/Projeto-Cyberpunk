@@ -217,6 +217,11 @@ export interface HealthReport {
   baseDeathSavePenalty: number;
   deathSavePenalty: number;
   mustRollDeathSave: boolean;
+  /** The shield in hand (Bulletproof Shield or Popup Shield). */
+  shieldHp?: number | null;
+  shieldHpMax?: number | null;
+  shieldName?: string | null;
+  shieldInstanceId?: string | null;
 }
 
 export interface HumanityReport {
@@ -230,6 +235,8 @@ export interface HumanityReport {
   borgwareLoweringCap: number;
   empEffective: number;
   cyberpsychosis: boolean;
+  /** Sum of the changes by hand. */
+  adjustment: number;
 }
 
 export interface ArmorLocationReport {
@@ -272,6 +279,8 @@ export interface CharacterSkillLine {
   modifierParts: ValuePart[];
   /** Cyberware bonuses that only apply in a situation (not in the base). */
   situational: string[];
+  /** The same implant bonuses as numbers, ticked before a roll. */
+  situationalParts?: { label: string; value: number }[] | null;
 }
 
 /** What an installed piece of cyberware does to the sheet. */
@@ -344,6 +353,10 @@ export interface WeaponLine {
   /** weapon-rules.json: the mode switched on (null = the first one) and the modes that stay on the weapon. */
   mode?: string | null;
   switchModes?: { id: string; label: string; switch: string }[] | null;
+  /** An implant that attacks (Wolvers, Vampyres, Popup Shotgun...). */
+  cyberware?: boolean;
+  /** The implant's capacity in the book, counted by hand. */
+  shots?: number | null;
   /** Extra magazines: Tommyknocker shells, Crowd Buster battery... */
   extraMagazines?: { id: string; label: string; rounds: number; capacity: number; refill: boolean }[] | null;
   /** Destroyed beyond repair (a GunMart Special's natural 1...). */
@@ -686,7 +699,14 @@ export interface CharacterRules {
     therapyPayments: string[];
     therapySource: string;
   };
+  /** Martial Arts forms and their Special Moves (server rules). */
+  martialArts: MartialArtForm[];
+  sharedMoves: SpecialMove[];
 }
+
+/** kind: attack = one strike at the table; defense = an answer to an attack (Cut the Bullet); check = roll against dv. */
+export interface SpecialMove { id: string; name: string; requirement: string; effect: string; kind: 'attack' | 'defense' | 'check'; dv: number | null }
+export interface MartialArtForm { name: string; source: string; page: number; description: string; innate: boolean; moves: SpecialMove[] }
 
 export interface StoreItem {
   id: number;

@@ -1,11 +1,13 @@
 import type { PendingView } from '../../api/encounterTypes';
 import { t } from '../../i18n';
 
-export type PendingAction = 'dodge' | 'noDodge' | 'critical' | 'cancel';
+export type PendingAction = 'dodge' | 'cut' | 'noDodge' | 'critical' | 'cancel';
 
 // Defender picks dodge or not, attacker rolls the crit, GM can do any step or cancel. Everyone else just waits.
 export function pendingPrompt(p: PendingView, mine: boolean, gm: boolean): { title: string; actions: PendingAction[] } | null {
-  const step: PendingAction[] = p.step === 'Defense' ? ['dodge', 'noDodge'] : ['critical'];
+  // Kendo fighters may Cut the Bullet; without REF 8 that's their only answer besides taking the DV
+  const defense: PendingAction[] = [...(p.canDodge === false ? [] : ['dodge' as const]), ...(p.cutTheBullet != null ? ['cut' as const] : []), 'noDodge'];
+  const step: PendingAction[] = p.step === 'Defense' ? defense : ['critical'];
   const title = p.step === 'Defense'
     ? t(`${p.attackerName} atira em ${p.targetName} com ${p.weapon}`, `${p.attackerName} shoots at ${p.targetName} with ${p.weapon}`)
     : t(`Dois 6 no dano de ${p.attackerName} em ${p.targetName}: Critical Injury!`, `Two 6s on ${p.attackerName}'s damage to ${p.targetName}: Critical Injury!`);

@@ -25,6 +25,8 @@ export function useQuickAttack(fire: (aim: Aim, targetId: string) => Promise<Qui
     target: (fighterId: string | null) => setAim((a) => (a ? aimAt(a, fighterId) : a)),
     mode: (mode: Aim['mode']) => setAim((a) => (a ? { ...a, mode } : a)),
     weaponMode: (modeId: string) => setAim((a) => (a ? aimWith(a, modeId) : a)),
+    luck: (points: number) => setAim((a) => (a ? { ...a, luck: Math.max(0, Math.round(points)) } : a)),
+    reserve: (on: boolean) => setAim((a) => (a ? { ...a, rerollLuck: on } : a)),
     cancel: () => setAim(null),
   };
 }

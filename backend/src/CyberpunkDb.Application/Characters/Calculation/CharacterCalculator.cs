@@ -29,6 +29,10 @@ public sealed class CharacterCalculator(CharacterRuleBook rules)
 
         var actionParts = new List<ValuePart>();
         if (health.WoundActionPenalty != 0) actionParts.Add(new ValuePart(WoundLabel(health.WoundState), health.WoundActionPenalty));
+        // Pain Editor (CP:R p.359): the Seriously Wounded penalty is shown and cancelled
+        if (health.WoundState == WoundState.Seriously && health.WoundActionPenalty != 0
+            && effects.FirstOrDefault(a => a.Effect.Kind == "ignoreSeriously") is { } painEditor)
+            actionParts.Add(new ValuePart(L.T($"{painEditor.Label} (ignora {WoundLabel(health.WoundState)})", $"{painEditor.Label} (ignores {WoundLabel(health.WoundState)})"), -health.WoundActionPenalty));
         foreach (var i in injuries.Where(i => i.Definition?.ActionPenalty is not null))
             actionParts.Add(new ValuePart(i.Record.Name, i.Definition!.ActionPenalty!.Value));
         foreach (var m in sheet.Modifiers.Where(m => m.Active && m.Target == ModifierTarget.AllActions))
@@ -37,6 +41,8 @@ public sealed class CharacterCalculator(CharacterRuleBook rules)
 
         var luck = sheet.Stat(Luck);
         var skills = ComputeSkills(sheet, effective, actionPenalty, effects);
+        var inventoryLines = InventoryLines(sheet, catalog);
+        health = WithShield(health, sheet, catalog, inventoryLines, effects);
         return new CharacterReport(
             stats,
             health,
@@ -50,14 +56,15 @@ public sealed class CharacterCalculator(CharacterRuleBook rules)
             actionPenalty,
             luck,
             Math.Max(0, luck - sheet.Combat.LuckSpent),
-            InventoryLines(sheet, catalog),
+            inventoryLines,
             WeaponLines(sheet, catalog, skills),
             CyberLines(sheet, catalog),
             ComputeHousing(sheet, today ?? DateOnly.FromDateTime(DateTime.UtcNow)),
             CyberwareAnatomy.Describe(sheet, catalog, Mechanics(sheet, catalog)),
             rules.InFbc(sheet, catalog),
             CyberwareEffects.Lines(rules, effects),
-            WearableCyberware.Lines(rules, sheet, catalog));
+            WearableCyberware.Lines(rules, sheet, catalog),
+            CyberwareEffects.Traits(rules, effects, sheet, catalog));
     }
 
     // housing and lifestyle
@@ -147,6 +154,22 @@ public sealed class CharacterCalculator(CharacterRuleBook rules)
                 state.Mode, state.Magazines, state.Destroyed, w.MinBody,
                 extraMagazines is { Count: > 0 } ? extraMagazines : null, switchModes is { Count: > 0 } ? switchModes : null));
         }
+
+        // Implants that attack: one line per kind (a pair of Wolvers is one weapon), always at hand. No magazine on the
+        // sheet: the shots are counted by hand. Poor Quality jams don't apply here (nothing to unjam on the sheet).
+        foreach (var c in sheet.Cyberware.GroupBy(c => c.ItemId).Select(g => g.First()))
+        {
+            if (catalog.Find(c.ItemId) is not { } item || Encounters.Rules.WeaponRuleBook.Embedded.Cyber(item.Slug) is not { } cw) continue;
+            var skill = skills.FirstOrDefault(s => s.Key.Equals(cw.Skill, StringComparison.OrdinalIgnoreCase));
+            var bonuses = new List<ValuePart>();
+            if (cw.Quality == WeaponQuality.Excellent) bonuses.Add(new ValuePart(L.T("Qualidade Excellent (CP:R p.344)", "Excellent Quality (CP:R p.344)"), 1));
+            if (PrecisionAttack(sheet) is > 0 and var precision) bonuses.Add(new ValuePart("Precision Attack", precision));
+            lines.Add(new WeaponLine(
+                c.InstanceId, c.ItemId, item.Name, cw.Class, cw.Skill, skill?.NamePt ?? skill?.Name, skill?.Total ?? 0, cw.Damage, cw.Rof,
+                null, 0, null, null, null, null, [], cw.Exotic, 0, [], true,
+                cw.Quality == WeaponQuality.Poor ? WeaponQuality.Standard : cw.Quality, false, bonuses, item.Slug,
+                Cyberware: true, Shots: cw.Shots));
+        }
         return lines;
     }
 
@@ -221,6 +244,14 @@ public sealed class CharacterCalculator(CharacterRuleBook rules)
                 }
             }
 
+            // Internal Hydraulics (Interface RED 3 p.94): a floor for REF, DEX and MOVE
+            foreach (var floor in effects.Where(a => a.Effect.Kind == "statMin" && a.Effect.Stats.Contains(key, StringComparer.OrdinalIgnoreCase)))
+                if (floor.Effect.Value is { } min && effective < min)
+                {
+                    parts.Add(new ValuePart(L.T($"{floor.Label} (mínimo {min})", $"{floor.Label} (minimum {min})"), min - effective));
+                    effective = min;
+                }
+
             if (key.Equals("EMP", StringComparison.OrdinalIgnoreCase) && humanity.EmpEffective != baseValue)
             {
                 // EMP follows the tens of current Humanity (CP:R p.80)
@@ -231,6 +262,20 @@ public sealed class CharacterCalculator(CharacterRuleBook rules)
             lines.Add(new StatLine(key, baseValue, effective, parts));
         }
         return lines;
+    }
+
+    // The shield in hand: an equipped Bulletproof Shield first, else an installed Popup Shield (CP:R p.365).
+    private static HealthReport WithShield(HealthReport health, CharacterSheet sheet, NpcCatalog catalog, List<InventoryLine> inventory,
+        List<ActiveCyberwareEffect> effects)
+    {
+        if (inventory.FirstOrDefault(i => i.ShieldHpMax is not null && i.State == ItemState.Equipped && i.ShieldHp > 0) is { } held)
+            return health with { ShieldHp = held.ShieldHp, ShieldHpMax = held.ShieldHpMax, ShieldName = held.Name, ShieldInstanceId = held.InstanceId };
+        if (effects.FirstOrDefault(a => a.Effect.Kind == "shield") is not { } popup) return health;
+        var piece = sheet.Cyberware.FirstOrDefault(c => popup.Effect.Items.Contains(catalog.Find(c.ItemId)?.Slug ?? "", StringComparer.OrdinalIgnoreCase));
+        if (piece is null) return health;
+        var max = popup.Effect.Value ?? 10;
+        var hp = piece.CurrentHp ?? max;
+        return hp <= 0 ? health : health with { ShieldHp = hp, ShieldHpMax = max, ShieldName = popup.Label, ShieldInstanceId = piece.InstanceId };
     }
 
     // Before armor and wounds: base + modifiers + cyberware (Grafted Muscle, Bone Lace, capped, CP:R p.363).
@@ -334,7 +379,7 @@ public sealed class CharacterCalculator(CharacterRuleBook rules)
     {
         var empBase = sheet.Stat("EMP");
         var max = empBase * rules.Document.Derived.HumanityPerEmp.Value;
-        var current = max - sheet.Humanity.Lost + sheet.Humanity.Recovered;
+        var current = max - sheet.Humanity.Lost + sheet.Humanity.Recovered + sheet.Humanity.Adjustment;
 
         var t = rules.Document.Therapy;
         var fbc = rules.InFbc(sheet, catalog);
@@ -353,7 +398,7 @@ public sealed class CharacterCalculator(CharacterRuleBook rules)
         var cap = max - pieces * t.MaxHumanityPerPiece.Value - borgware * t.MaxHumanityPerBorgware.Value;
         var empEffective = Math.Max(0, current) / 10;
         return new HumanityReport(empBase, max, current, sheet.Humanity.Lost, sheet.Humanity.Recovered, cap, pieces, borgware,
-            empEffective, current < rules.Document.Derived.CyberpsychosisBelow.Value);
+            empEffective, current < rules.Document.Derived.CyberpsychosisBelow.Value, sheet.Humanity.Adjustment);
     }
 
     // armor
@@ -436,7 +481,7 @@ public sealed class CharacterCalculator(CharacterRuleBook rules)
                 // Moto, Field Expertise, Threat Detection
                 if (roleBonuses.TryGetValue(def.Id, out var fromRoles)) modifierParts.AddRange(fromRoles);
                 var situational = forSkill.Where(a => a.Effect.Condition is not null)
-                    .Select(a => $"+{a.Bonus} {a.Effect.Condition} ({a.Label})").ToList();
+                    .Select(a => $"{(a.Bonus >= 0 ? "+" : "")}{a.Bonus} {a.Effect.Condition} ({a.Label})").ToList();
                 var modifier = modifierParts.Sum(p => p.Value);
                 var baseValue = statValue + level + modifier;
                 lines.Add(new CharacterSkillLine(
@@ -444,7 +489,8 @@ public sealed class CharacterCalculator(CharacterRuleBook rules)
                     actionPenalty, baseValue + actionPenalty, def.DoubleCost, def.Combat,
                     basic.Contains(key), roleSkills.Contains(key) || (spec is null && roleIds.Contains(def.Id)), def.Page,
                     level < rules.Document.Progression.MaxRank.Value ? rules.SkillImprovementCost(def, level + 1) : null,
-                    modifierParts, situational));
+                    modifierParts, situational,
+                    forSkill.Where(a => a.Effect.Condition is not null).Select(a => new ValuePart($"{a.Label}: {L.D(a.Effect.Condition!)}", a.Bonus)).ToList()));
             }
         }
         return lines;

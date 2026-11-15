@@ -31,6 +31,18 @@ export const tableApi = {
   rules: () => request<TableRules>('/table/rules'),
   addEncounterTokens: (id: number) => request<SceneView>(`/table/scenes/${id}/encounter-tokens`, { method: 'POST' }),
   /** A new fight from the chosen tokens, linked to the scene. */
+  /** Switches on an implant of a fighter of the scene's fight (Sandevistan, Berserk...). */
+  cyber: (sceneId: number, combatantId: string, slug: string) =>
+    request<import('./encounterTypes').EncounterDetail>(`/table/scenes/${sceneId}/cyber`, { method: 'POST', body: json({ combatantId, slug }) }),
+  /** A past session's scenes, and copying one into the open session. */
+  sessionScenes: (sessionId: number) => request<SceneSummary[]>(`/table/sessions/${sessionId}/scenes`),
+  copySceneToCurrent: (sceneId: number) => request<SceneView>(`/table/scenes/${sceneId}/copy-to-current`, { method: 'POST' }),
+  /** A past session becomes the open one again (the open one closes). */
+  reopenSession: (sessionId: number) => request<TableSession>(`/table/sessions/${sessionId}/reopen`, { method: 'POST' }),
+  /** Free rerolls already paid with reserved LUCK: a Check made from a PC's sheet, an attack of the scene's fight. */
+  reroll: (messageId: number) => request<TableMessage>(`/table/rolls/${messageId}/reroll`, { method: 'POST' }),
+  rerollAttack: (sceneId: number, seq: number) => request<QuickAttackResult>(`/table/scenes/${sceneId}/attack/reroll`, { method: 'POST', body: json({ seq }) }),
+  endFight: (id: number) => request<SceneView>(`/table/scenes/${id}/fight/end`, { method: 'POST' }),
   startFight: (id: number, body: { name: string | null; tokens: { tokenId: string; side: 'Ally' | 'Enemy' }[] }) =>
     request<SceneView>(`/table/scenes/${id}/fight`, { method: 'POST', body: json(body) }),
   updateToken: (id: number, tokenId: string, token: TokenInput) =>
@@ -71,6 +83,7 @@ export const tableApi = {
   pauseMusic: () => request<TableMusicState>('/table/music/pause', { method: 'POST' }),
   seekMusic: (positionSeconds: number) => request<TableMusicState>('/table/music/seek', { method: 'POST', body: json({ positionSeconds }) }),
   nextMusic: () => request<TableMusicState>('/table/music/next', { method: 'POST' }),
+  repeatMusic: (repeat: boolean) => request<TableMusicState>('/table/music/repeat', { method: 'POST', body: json({ repeat }) }),
   musicVolume: (volume: number) => request<TableMusicState>('/table/music/volume', { method: 'POST', body: json({ volume }) }),
   forgetRecentMusic: (body: { videoId: string | null; playlistId: string | null }) => request<TableMusicState>('/table/music/recent/forget', { method: 'POST', body: json(body) }),
   stopMusic: () => request<TableMusicState>('/table/music', { method: 'DELETE' }),
@@ -134,8 +147,10 @@ export function playerApi(seat: string) {
     reroll: (messageId: number) => request<TableMessage>(`/table/play/rolls/${messageId}/reroll`, { method: 'POST', headers }),
     /** An attack with the seat's own character, on its Turn. */
     attack: (body: QuickAttack) => request<QuickAttackResult>('/table/play/attack', { method: 'POST', body: json(body), headers }),
+    rerollAttack: (seq: number) => request<QuickAttackResult>('/table/play/attack/reroll', { method: 'POST', body: json({ seq }), headers }),
     /** The target's player answers a pending shot: dodge (roll Evasion) or not. */
-    defense: (dodge: boolean) => request<PlayerEncounter>('/table/play/defense', { method: 'POST', body: json({ dodge }), headers }),
+    cyber: (slug: string) => request<PlayerEncounter>('/table/play/cyber', { method: 'POST', body: json({ slug }), headers }),
+    defense: (dodge: boolean, move?: string) => request<PlayerEncounter>('/table/play/defense', { method: 'POST', body: json({ dodge, move }), headers }),
     /** The attacker's player rolls the pending Critical Injury. */
     critical: () => request<PlayerEncounter>('/table/play/critical', { method: 'POST', headers }),
     /** Reloads one of the seat's character's weapons (on its Turn when it is in the fight). */

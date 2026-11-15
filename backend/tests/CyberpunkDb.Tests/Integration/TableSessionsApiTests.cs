@@ -99,4 +99,41 @@ public class TableSessionsApiTests(ApiFactory factory)
         messages.Should().Contain(m => m.Text == "nova").And.NotContain(m => m.Text == "velha");
         (await _t.Raw(_t.Player, HttpMethod.Get, "/api/table/sessions", seat: seat.Token)).StatusCode.Should().Be(HttpStatusCode.NotFound);
     }
+
+    [Fact]
+    public async Task A_new_session_starts_without_scenes_and_can_copy_one_from_an_old_session()
+    {
+        var scene = await _t.Send<SceneView>(_t.Gm, HttpMethod.Post, "/api/table/scenes", new CreateSceneRequest("Afterlife"), expected: System.Net.HttpStatusCode.Created);
+        var old = (await Sessions()).Single(s => s.Open);
+        await _t.Send<TableSessionDto>(_t.Gm, HttpMethod.Post, "/api/table/sessions", new NewSessionRequest("Sessão sem cenas"));
+
+        (await _t.Send<List<SceneSummaryDto>>(_t.Gm, HttpMethod.Get, "/api/table/scenes")).Should().NotContain(s => s.Id == scene.Id);
+        (await _t.Send<List<SceneSummaryDto>>(_t.Gm, HttpMethod.Get, $"/api/table/sessions/{old.Id}/scenes")).Should().Contain(s => s.Id == scene.Id);
+        // nobody is shown the old session's scene, and it can't be put back on directly
+        await _t.Send<object>(_t.Gm, HttpMethod.Post, $"/api/table/scenes/{scene.Id}/activate", expected: System.Net.HttpStatusCode.Conflict);
+
+        var copy = await _t.Send<SceneView>(_t.Gm, HttpMethod.Post, $"/api/table/scenes/{scene.Id}/copy-to-current");
+        copy.Id.Should().NotBe(scene.Id);
+        copy.Name.Should().Be("Afterlife");
+        (await _t.Send<List<SceneSummaryDto>>(_t.Gm, HttpMethod.Get, "/api/table/scenes")).Should().ContainSingle(s => s.Id == copy.Id);
+    }
+
+    [Fact]
+    public async Task A_past_session_can_be_reopened_to_edit_its_scenes()
+    {
+        var scene = await _t.Send<SceneView>(_t.Gm, HttpMethod.Post, "/api/table/scenes", new CreateSceneRequest("Watson"), expected: System.Net.HttpStatusCode.Created);
+        var old = (await Sessions()).Single(s => s.Open);
+        var next = await _t.Send<TableSessionDto>(_t.Gm, HttpMethod.Post, "/api/table/sessions", new NewSessionRequest("Depois"));
+
+        var reopened = await _t.Send<TableSessionDto>(_t.Gm, HttpMethod.Post, $"/api/table/sessions/{old.Id}/reopen");
+
+        reopened.Open.Should().BeTrue();
+        var list = await Sessions();
+        list.Single(s => s.Open).Id.Should().Be(old.Id);
+        list.Single(s => s.Id == next.Id).Open.Should().BeFalse();
+        (await _t.Send<List<SceneSummaryDto>>(_t.Gm, HttpMethod.Get, "/api/table/scenes")).Should().Contain(s => s.Id == scene.Id);
+        // its scene can be edited and shown again
+        await _t.Send<object>(_t.Gm, HttpMethod.Post, $"/api/table/scenes/{scene.Id}/activate");
+        await _t.Send<object>(_t.Gm, HttpMethod.Post, "/api/table/sessions/999999/reopen", expected: System.Net.HttpStatusCode.NotFound);
+    }
 }

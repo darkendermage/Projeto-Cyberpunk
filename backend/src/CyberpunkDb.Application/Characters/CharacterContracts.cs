@@ -155,6 +155,11 @@ public sealed record WeaponQualityRequest(int Version, string InstanceId, Weapon
 public sealed record ReloadRequest(int Version, string InstanceId, string? AmmoInstanceId = null, string? Magazine = null);
 
 public sealed record AdjustBalanceRequest(int Version, int Amount, string Reason);
+// Bulletproof Shield HP by hand (+ repairs, - damage); InstanceId null = the shield in hand
+public sealed record AdjustShieldRequest(int Version, int Amount, string? InstanceId = null);
+
+// Humanity by hand (GM ruling, a scene); negative loses
+public sealed record AdjustHumanityRequest(int Version, int Amount, string Reason);
 
 public sealed record LuckRequest(int Version, int Spent);
 
@@ -192,7 +197,10 @@ public sealed record CharacterRulesDto(
     IReadOnlyList<NamedValueDto> Lifestyles,
     IReadOnlyList<HousingDto> Housing,
     IReadOnlyList<RuleFactDto> Facts,
-    CyberwareRulesDto Cyberware);
+    CyberwareRulesDto Cyberware,
+    // forms and Special Moves (martial-arts-rules.json)
+    IReadOnlyList<Rules.MartialArtFormDto> MartialArts,
+    IReadOnlyList<Rules.SpecialMoveDto> SharedMoves);
 
 public sealed record CreationMethodDto(
     CreationMethod Method, string Label, string Summary, string Source,

@@ -13,6 +13,10 @@ export interface Aim {
   base: WeaponView;
   mode: AttackMode;
   targetId: string | null;
+  /** LUCK the shooter (a PC) spends on this attack, chosen before firing (CP:R p.130). */
+  luck?: number;
+  /** 1 more LUCK paid with the shot for one free reroll from the chat. */
+  rerollLuck?: boolean;
 }
 
 /** Area attacks need a template on the map: they stay on the combat table's full form. */
@@ -21,6 +25,13 @@ export const quickModes = (weapon: WeaponView): AttackMode[] => modesFor(weapon)
 export function startAim(attackerId: string, attackerName: string, weapon: WeaponView): Aim {
   return { attackerId, attackerName, weapon, base: weapon, mode: quickModes(weapon)[0] ?? 'Single', targetId: null };
 }
+
+/** Martial Arts Special Moves offered as their own attacks (Knockout Punch, Commando Disarm...). */
+export const strikeModes = (weapon: WeaponView): WeaponView[] => (weapon.modes ?? []).filter((m) => m.modeId?.startsWith('move:'));
+
+/** Aims with a weapon, already on one of its modes (a Special Move strike) when given. */
+export const aimFor = (attackerId: string, attackerName: string, weapon: WeaponView, modeId?: string | null): Aim =>
+  modeId ? aimWith(startAim(attackerId, attackerName, weapon), modeId) : startAim(attackerId, attackerName, weapon);
 
 /** Another mode of the same weapon; the attack mode goes back to its first one. */
 export function aimWith(aim: Aim, modeId: string): Aim {

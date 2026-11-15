@@ -1,4 +1,4 @@
-import { Dices, ShieldOff, Shield, X } from 'lucide-react';
+import { Dices, ShieldOff, Shield, Swords, X } from 'lucide-react';
 import type { PendingView } from '../../api/encounterTypes';
 import { Button } from '../../components/ui/ui';
 import { t, tv } from '../../i18n';
@@ -11,7 +11,7 @@ export function PendingCard({ pending, mine, gm, busy, onDodge, onCritical, onCa
   mine: boolean;
   gm: boolean;
   busy: boolean;
-  onDodge: (dodge: boolean) => void;
+  onDodge: (dodge: boolean, move?: string) => void;
   onCritical: () => void;
   onCancel?: () => void;
 }) {
@@ -33,12 +33,19 @@ export function PendingCard({ pending, mine, gm, busy, onDodge, onCritical, onCa
       {pending.step === 'Defense' && (
         <span className={styles.muted}>
           {t('REF 8+: esquivar troca o DV pela sua rolagem de Evasion (CP:R p.172).', 'REF 8+: dodging replaces the DV with your Evasion roll (CP:R p.172).')}
+          {!!pending.dodgePenalty && t(` Já inclui ${pending.dodgePenalty} pelas esquivas desta rodada.`, ` Already includes ${pending.dodgePenalty} for this Round's dodges.`)}
         </span>
       )}
       <div className={styles.row}>
         {prompt.actions.includes('dodge') && (
           <Button variant="primary" icon={<Shield size={14} />} disabled={busy} onClick={() => onDodge(true)}>
             {t(`Esquivar (Evasion +${pending.evasion ?? '?'} + d10)`, `Dodge (Evasion +${pending.evasion ?? '?'} + d10)`)}
+          </Button>
+        )}
+        {prompt.actions.includes('cut') && (
+          <Button variant="primary" icon={<Swords size={14} />} disabled={busy} onClick={() => onDodge(false, 'cut-the-bullet')}
+            title={t('Kendo: Resolução contra o ataque; se vencer, o ataque é anulado (Interface RED 4 p.79)', 'Kendo: Resolution against the attack; on a win the attack is negated (Interface RED 4 p.79)')}>
+            {t(`Cut the Bullet (+${pending.cutTheBullet} + d10)`, `Cut the Bullet (+${pending.cutTheBullet} + d10)`)}
           </Button>
         )}
         {prompt.actions.includes('noDodge') && (

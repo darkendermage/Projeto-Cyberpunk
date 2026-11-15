@@ -13,8 +13,12 @@ namespace CyberpunkDb.Application.Table;
 
 public sealed record SendMessageRequest(string Text, TableVisibility Visibility = TableVisibility.Public, int? TargetSeatId = null);
 
-// Luck: points spent on the player's own Check before rolling, +1 each (CP:R p.130)
-public sealed record RollRequest(string Formula, RollKind Kind = RollKind.Plain, string? Label = null, TableVisibility Visibility = TableVisibility.Public, int? TargetSeatId = null, int Luck = 0);
+// Luck: points spent on the player's own Check before rolling, +1 each (CP:R p.130). RerollLuck: 1 more LUCK paid now
+// for one reroll of this Check (house rule).
+// CharacterId: the GM rolling for a PC (sheet popup), whose debuffs go on the roll. FromSheet: a skill/weapon total that
+// already has the action penalties in it.
+public sealed record RollRequest(string Formula, RollKind Kind = RollKind.Plain, string? Label = null, TableVisibility Visibility = TableVisibility.Public, int? TargetSeatId = null, int Luck = 0,
+    int? CharacterId = null, bool FromSheet = false, bool RerollLuck = false);
 
 // Concealed: the author of a secret roll sees that they rolled, not the result.
 public sealed record TableMessageDto(
@@ -58,13 +62,18 @@ public sealed class ChatService(IAppDbContext db, ITableNotifier notifier, IDice
     public async Task<TableMessageDto> RollAsync(TableSeat? author, RollRequest r, CancellationToken ct)
     {
         var roll = TableRoller.Roll(r.Formula, r.Kind, dice);
-        if (r.Luck != 0)
+        if (r.Luck != 0 || r.RerollLuck)
         {
-            if (r.Luck < 0 || author?.CharacterId is not { } characterId || r.Kind != RollKind.Check)
+            // a seat spends its own character's LUCK; the GM, the LUCK of the PC whose sheet it rolls from
+            var owner = author is null ? r.CharacterId : author.CharacterId;
+            if (r.Luck < 0 || owner is not { } characterId || r.Kind != RollKind.Check)
                 throw RequestValidationException.For("luck", L.T("Sorte só vale num teste (1d10) do seu próprio personagem.", "LUCK only goes on a Check (1d10) of your own character."));
-            await characters.SpendLuckAsync(characterId, r.Luck, ct);
-            roll = roll with { Total = roll.Total + r.Luck, Luck = r.Luck };
+            await characters.SpendLuckAsync(characterId, r.Luck + (r.RerollLuck ? 1 : 0), ct);
+            roll = roll with { Total = roll.Total + r.Luck, Luck = r.Luck, RerollReady = r.RerollLuck };
         }
+        // the GM only names a character for a roll made from that sheet; a seat always rolls as its own
+        if ((author is null ? r.CharacterId : author.CharacterId) is { } rollerId && r.Kind != RollKind.Damage)
+            roll = roll with { Debuffs = await DebuffsAsync(rollerId, ct), PenaltyInTotal = r.FromSheet };
         var label = r.Label?.Trim();
         var text = string.IsNullOrEmpty(label) ? roll.Formula : label.Length <= 80 ? label : label[..80];
         // everyone sees these dice in the roller's color
@@ -72,19 +81,33 @@ public sealed class ChatService(IAppDbContext db, ITableNotifier notifier, IDice
         return await PostAsync(author, TableMessageKind.Roll, text, roll, r.Visibility, r.TargetSeatId, ct);
     }
 
-    // House rule: 1 LUCK rerolls a player's own Check, keeping modifiers and LUCK spent. Only once per line.
-    public async Task<TableMessageDto> RerollAsync(TableSeat author, long messageId, CancellationToken ct)
+    private async Task<IReadOnlyList<RollDebuff>?> DebuffsAsync(int characterId, CancellationToken ct)
+    {
+        try
+        {
+            var detail = await characters.GetAsync(characterId, ct);
+            var list = RollDebuffs.For(detail.Report, detail.Sheet.Combat.Conditions);
+            return list.Count == 0 ? null : list;
+        }
+        catch (NotFoundException) { return null; }
+    }
+
+    // House rule: the LUCK point reserved before the Check pays for one reroll, keeping modifiers and LUCK spent.
+    // author null = the GM, rerolling a Check it made from a PC's sheet.
+    public async Task<TableMessageDto> RerollAsync(TableSeat? author, long messageId, CancellationToken ct)
     {
         var m = await db.TableMessages.AsNoTracking().FirstOrDefaultAsync(x => x.Id == messageId, ct);
         var old = m?.RollJson is { } json ? JsonSerializer.Deserialize<RollResult>(json, SceneService.Json) : null;
-        if (m is null || old is null || m.AuthorSeatId != author.Id || old.Kind != RollKind.Check || author.CharacterId is not { } characterId)
+        if (m is null || old is null || m.AuthorSeatId != author?.Id || old.Kind != RollKind.Check)
             throw RequestValidationException.For("messageId", L.T("Só dá para rerrolar um teste seu.", "You can only reroll a Check of yours."));
+        if (!old.RerollReady)
+            throw RequestValidationException.For("messageId", L.T("Esse teste não reservou Sorte para rerrolar.", "That Check didn't reserve LUCK for a reroll."));
         var later = await db.TableMessages.AsNoTracking().Where(x => x.Id > messageId && x.RollJson != null).Select(x => x.RollJson!).ToListAsync(ct);
         if (later.Any(j => JsonSerializer.Deserialize<RollResult>(j, SceneService.Json)?.RerollOf == messageId))
             throw RequestValidationException.For("messageId", L.T("Essa rolagem já foi rerrolada.", "That roll was already rerolled."));
-        await characters.SpendLuckAsync(characterId, 1, ct);
         var again = TableRoller.Roll(old.Formula, RollKind.Check, dice);
-        again = again with { Total = again.Total + old.Luck, Luck = old.Luck, RerollOf = messageId, DiceColor = await DiceColorAsync(author, ct) };
+        again = again with { Total = again.Total + old.Luck, Luck = old.Luck, RerollOf = messageId, DiceColor = await DiceColorAsync(author, ct),
+            Debuffs = author?.CharacterId is { } characterId ? await DebuffsAsync(characterId, ct) : old.Debuffs, PenaltyInTotal = old.PenaltyInTotal };
         var text = $"{m.Text} {L.T("(rerrolada)", "(rerolled)")}";
         return await PostAsync(author, TableMessageKind.Roll, text.Length <= 100 ? text : text[..100], again, m.Visibility, m.TargetSeatId, ct);
     }

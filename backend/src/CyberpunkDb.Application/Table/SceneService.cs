@@ -24,16 +24,62 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
 
     // library
 
-    public async Task<IReadOnlyList<SceneSummaryDto>> ListAsync(CancellationToken ct)
+    // The open session's scenes. Scenes from before sessions owned them are adopted by it, like old chat lines.
+    public async Task<IReadOnlyList<SceneSummaryDto>> ListAsync(CancellationToken ct) => Summaries(await RowsOfAsync(await SessionAsync(ct), ct));
+
+    // a past session's scenes, to copy into the open one
+    public async Task<IReadOnlyList<SceneSummaryDto>> ListOfSessionAsync(int sessionId, CancellationToken ct)
     {
-        var rows = await db.Scenes.AsNoTracking().OrderBy(s => s.SortOrder).ThenBy(s => s.Id).ToListAsync(ct);
-        return rows.Select(s =>
+        await SessionAsync(ct);
+        return Summaries(await RowsOfAsync(sessionId, ct));
+    }
+
+    private async Task<int> SessionAsync(CancellationToken ct)
+    {
+        var current = await sessions.CurrentIdAsync(ct);
+        await db.Scenes.Where(s => s.SessionId == null).ExecuteUpdateAsync(u => u.SetProperty(s => s.SessionId, current), ct);
+        return current;
+    }
+
+    private Task<List<Scene>> RowsOfAsync(int sessionId, CancellationToken ct) =>
+        db.Scenes.AsNoTracking().Where(s => s.SessionId == sessionId).OrderBy(s => s.SortOrder).ThenBy(s => s.Id).ToListAsync(ct);
+
+    // Before a new session opens: the old scenes stay with the old session and nobody is shown one anymore.
+    public async Task CloseSessionScenesAsync(CancellationToken ct)
+    {
+        await SessionAsync(ct);
+        var active = await db.Scenes.Where(s => s.Active).ToListAsync(ct);
+        if (active.Count == 0) return;
+        foreach (var s in active) s.Active = false;
+        await db.SaveChangesAsync(ct);
+        foreach (var s in active) await notifier.SceneRemovedAsync(s.Id, await NoSceneAsync(ct), ct);
+    }
+
+    // A past session's scene into the open one: map, grid, tokens and images, without the fight links. Starts inactive.
+    public async Task<SceneView> CopyToCurrentAsync(int id, CancellationToken ct)
+    {
+        var current = await SessionAsync(ct);
+        var source = await db.Scenes.AsNoTracking().FirstOrDefaultAsync(s => s.Id == id, ct) ?? throw NotFound();
+        var state = Deserialize(source.StateJson);
+        state = state with { Tokens = state.Tokens.Select(t => t.CombatantId is null ? t : t with { CombatantId = null }).ToList() };
+        var now = DateTime.UtcNow;
+        var copy = new Scene
+        {
+            Name = source.Name, SessionId = current, StateJson = Serialize(state),
+            SortOrder = (await db.Scenes.Where(s => s.SessionId == current).MaxAsync(s => (int?)s.SortOrder, ct) ?? 0) + 1, CreatedAt = now, UpdatedAt = now,
+        };
+        db.Scenes.Add(copy);
+        await db.SaveChangesAsync(ct);
+        return await PublishAsync(copy, state, ct);
+    }
+
+    private static List<SceneSummaryDto> Summaries(List<Scene> rows) =>
+        rows.Select(s =>
         {
             var state = Deserialize(s.StateJson);
             return new SceneSummaryDto(s.Id, s.Name, s.Active, s.SortOrder, s.EncounterId,
                 state.Background.MediaId is { } m ? MediaService.UrlOf(m) : null, state.Tokens.Count, s.UpdatedAt);
         }).ToList();
-    }
 
     public async Task<SceneView> GetAsync(int id, CancellationToken ct)
     {
@@ -45,11 +91,14 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
     public async Task<SceneView> CreateAsync(CreateSceneRequest r, CancellationToken ct)
     {
         var now = DateTime.UtcNow;
+        var session = await SessionAsync(ct);
         var scene = new Scene
         {
             Name = RequireName(r.Name),
-            SortOrder = (await db.Scenes.MaxAsync(s => (int?)s.SortOrder, ct) ?? 0) + 1,
-            Active = !await db.Scenes.AnyAsync(ct),
+            SessionId = session,
+            SortOrder = (await db.Scenes.Where(s => s.SessionId == session).MaxAsync(s => (int?)s.SortOrder, ct) ?? 0) + 1,
+            // the session's first scene is the one players see
+            Active = !await db.Scenes.AnyAsync(s => s.Active, ct),
             StateJson = Serialize(new SceneState()),
             CreatedAt = now, UpdatedAt = now,
         };
@@ -86,6 +135,7 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
         var copy = new Scene
         {
             Name = name.Length <= 80 ? name : name[..80], EncounterId = source.EncounterId, StateJson = source.StateJson,
+            SessionId = await SessionAsync(ct),
             SortOrder = (await db.Scenes.MaxAsync(s => (int?)s.SortOrder, ct) ?? 0) + 1, CreatedAt = now, UpdatedAt = now,
         };
         db.Scenes.Add(copy);
@@ -104,8 +154,11 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
 
     public async Task<SceneView> ActivateAsync(int id, CancellationToken ct)
     {
+        var current = await SessionAsync(ct);
         var all = await db.Scenes.ToListAsync(ct);
         var scene = all.FirstOrDefault(s => s.Id == id) ?? throw NotFound();
+        if (scene.SessionId != current)
+            throw new ConflictException(L.T("Essa cena é de outra sessão: copie-a para a sessão atual.", "That scene belongs to another session: copy it into the current one."));
         foreach (var s in all) s.Active = s.Id == id;
         await db.SaveChangesAsync(ct);
         return await PublishAsync(scene, Deserialize(scene.StateJson), ct);
@@ -113,7 +166,8 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
 
     public async Task<IReadOnlyList<SceneSummaryDto>> ReorderAsync(ReorderScenesRequest r, CancellationToken ct)
     {
-        var all = await db.Scenes.ToListAsync(ct);
+        var current = await SessionAsync(ct);
+        var all = await db.Scenes.Where(s => s.SessionId == current).ToListAsync(ct);
         var order = r.Ids.Distinct().ToList();
         foreach (var s in all)
         {
@@ -179,6 +233,14 @@ public sealed class SceneService(IAppDbContext db, SceneLocks locks, ITableNotif
             }
             return state with { Tokens = tokens };
         }, bumpVersion: false, ct);
+
+    // The fight is over: the scene and its tokens let go of it, so a new one can start here.
+    public Task<SceneView> UnlinkFightAsync(int id, CancellationToken ct) =>
+        MutateAsync(id, null, (scene, state) =>
+        {
+            scene.EncounterId = null;
+            return Task.FromResult(state with { Tokens = state.Tokens.Select(t => t.CombatantId is null ? t : t with { CombatantId = null }).ToList() });
+        }, bumpVersion: true, ct);
 
     // token id -> combatant id
     public Task<SceneView> LinkFightAsync(int id, int encounterId, IReadOnlyDictionary<string, string> combatants, CancellationToken ct) =>

@@ -543,6 +543,9 @@
   height: 2px;
   background: linear-gradient(90deg, var(--red), transparent 70%);
 }
+.modalFull {
+  width: min(1680px, 100%);
+}
 .modalWide {
   width: min(1040px, 100%);
 }

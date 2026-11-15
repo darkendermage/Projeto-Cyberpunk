@@ -183,4 +183,93 @@ public class TableQuickAttackApiTests(ApiFactory factory)
         await SetActive(s, s.GangerId);
         await Send<JsonNode>(_gm, HttpMethod.Post, $"/api/encounters/{s.EncounterId}/undo-attack", new { version = V(await Fight(s.EncounterId)) }, expected: HttpStatusCode.Conflict);
     }
+
+    [Fact]
+    public async Task Initiative_can_be_rolled_only_for_who_joined_later()
+    {
+        var s = await FightOnTheTable("Atrasado");
+        var before = await Fight(s.EncounterId);
+        int? InitOf(JsonNode f, string id) => f["queue"]!.AsArray().First(x => x!["id"]!.GetValue<string>() == id)!["initiative"]?.GetValue<int>();
+        var solo = InitOf(before, s.SoloId);
+        var ganger = InitOf(before, s.GangerId);
+
+        var joined = await Send<JsonNode>(_gm, HttpMethod.Post, $"/api/encounters/{s.EncounterId}/combatants",
+            new { version = V(before), side = "Enemy", generic = new { name = "Reforço", attackBase = 10, damage = "2d6", weaponClass = "MediumPistol" } });
+        var newcomer = joined["queue"]!.AsArray().First(f => f!["initiative"] is null)!["id"]!.GetValue<string>();
+        var after = await Send<JsonNode>(_gm, HttpMethod.Post, $"/api/encounters/{s.EncounterId}/initiative", new { version = V(joined), only = new[] { newcomer } });
+
+        InitOf(after, newcomer).Should().NotBeNull();
+        InitOf(after, s.SoloId).Should().Be(solo);
+        InitOf(after, s.GangerId).Should().Be(ganger);
+    }
+
+    [Fact]
+    public async Task The_gm_ends_the_fight_from_the_table_and_the_scene_is_free_again()
+    {
+        var s = await FightOnTheTable("Fim");
+        var scene = await Send<SceneView>(_gm, HttpMethod.Post, $"/api/table/scenes/{s.SceneId}/fight/end");
+
+        scene.EncounterId.Should().BeNull();
+        scene.Tokens.Should().OnlyContain(t => t.CombatantId == null);
+        (await Fight(s.EncounterId))["status"]!.GetValue<string>().Should().Be("Ended");
+        // players have no fight to act in anymore, and the player port can't end one
+        await Send<JsonNode>(_gm, HttpMethod.Post, $"/api/table/scenes/{s.SceneId}/fight/end", expected: HttpStatusCode.BadRequest);
+        (await _player.PostAsync($"/api/table/scenes/{s.SceneId}/fight/end", null)).IsSuccessStatusCode.Should().BeFalse();
+    }
+
+    [Fact]
+    public async Task Luck_is_chosen_before_the_attack_spent_from_the_sheet_and_given_back_on_undo()
+    {
+        var s = await FightOnTheTable("Sortudo");
+        var gun = await GunOf(s);
+        var luckOf = async () => (await Send<CharacterDetailDto>(_gm, HttpMethod.Get, $"/api/characters/{s.CharacterId}")).Report.LuckAvailable;
+        var before = await luckOf();
+        before.Should().BeGreaterThan(1);
+
+        // More than what is left, or LUCK for an NPC: refused before anything is rolled or spent.
+        await Send<JsonNode>(_gm, HttpMethod.Post, $"/api/table/scenes/{s.SceneId}/attack", new GmQuickAttackRequest(s.SoloId, gun, AttackMode.Single, [s.GangerId], Luck: before + 1), expected: HttpStatusCode.BadRequest);
+        var npcWeapon = (await Fight(s.EncounterId))["queue"]!.AsArray().First(f => f!["id"]!.GetValue<string>() == s.GangerId)!["weapons"]!.AsArray()[0]!["key"]!.GetValue<string>();
+        await Send<JsonNode>(_gm, HttpMethod.Post, $"/api/table/scenes/{s.SceneId}/attack", new GmQuickAttackRequest(s.GangerId, npcWeapon, AttackMode.Single, [s.SoloId], Luck: 1), expected: HttpStatusCode.BadRequest);
+        (await luckOf()).Should().Be(before);
+
+        var attack = await Shoot(_gm, $"/api/table/scenes/{s.SceneId}/attack", new GmQuickAttackRequest(s.SoloId, gun, AttackMode.Single, [s.GangerId], Luck: 2), s.EncounterId);
+        (await luckOf()).Should().Be(before - 2);
+        attack.Notes.Should().Contain(n => n.Contains("Sorte: +2"));
+
+        await Send<JsonNode>(_gm, HttpMethod.Post, $"/api/encounters/{s.EncounterId}/undo-attack", new { version = V(await Fight(s.EncounterId)) });
+        (await luckOf()).Should().Be(before);
+    }
+
+    [Fact]
+    public async Task Luck_reserved_with_the_attack_pays_for_one_free_reroll_from_the_chat()
+    {
+        var s = await FightOnTheTable("Segunda chance");
+        await SetActive(s, s.SoloId);
+        var gun = await GunOf(s);
+        var luckOf = async () => (await Send<CharacterDetailDto>(_gm, HttpMethod.Get, $"/api/characters/{s.CharacterId}")).Report.LuckAvailable;
+        var before = await luckOf();
+        var ammo = RoundsOf(await Fight(s.EncounterId), s.SoloId, gun);
+
+        var first = await Shoot(_player, "/api/table/play/attack", new QuickAttackRequest(gun, AttackMode.Single, [s.GangerId], Luck: 1, RerollLuck: true), s.EncounterId, s.Seat.Token);
+        first.RerollReady.Should().BeTrue();
+        (await luckOf()).Should().Be(before - 2, "1 no ataque e 1 reservado para rerrolar");
+
+        // the player's own reroll, already paid
+        var result = await Send<QuickAttackResult>(_player, HttpMethod.Post, "/api/table/play/attack/reroll", new AttackRerollRequest(first.Seq), s.Seat.Token);
+        if (result.Pending is { Step: PendingStep.CriticalInjury } pending)
+            await Send<JsonNode>(_gm, HttpMethod.Post, $"/api/encounters/{s.EncounterId}/pending/critical", new { version = V(await Fight(s.EncounterId)), targetId = pending.TargetId });
+
+        var lines = (await Send<List<TableMessageDto>>(_gm, HttpMethod.Get, "/api/table/messages")).Where(m => m.Kind == TableMessageKind.Attack && m.Attack!.EncounterId == s.EncounterId).ToList();
+        lines.Single(m => m.Attack!.Seq == first.Seq).Attack!.Undone.Should().BeTrue();
+        var again = lines.Last().Attack!;
+        again.RerollOf.Should().Be(first.Seq);
+        again.RerollReady.Should().BeFalse();
+        again.Notes.Should().Contain(n => n.Contains("Sorte: +1"), "a Sorte gasta no ataque continua valendo");
+        (await luckOf()).Should().Be(before - 2, "o rerrolar já foi pago");
+        RoundsOf(await Fight(s.EncounterId), s.SoloId, gun).Should().Be(ammo - 1, "a bala volta e sai de novo");
+
+        // only once
+        await Send<JsonNode>(_player, HttpMethod.Post, "/api/table/play/attack/reroll", new AttackRerollRequest(again.Seq), s.Seat.Token, HttpStatusCode.Conflict);
+        await Send<JsonNode>(_gm, HttpMethod.Post, $"/api/table/scenes/{s.SceneId}/attack/reroll", new AttackRerollRequest(first.Seq), expected: HttpStatusCode.Conflict);
+    }
 }

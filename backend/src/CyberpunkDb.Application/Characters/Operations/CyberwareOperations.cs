@@ -197,6 +197,17 @@ public sealed class CyberwareOperations(CharacterRuleBook rules, CyberwareInstal
         return sheet with { Humanity = sheet.Humanity with { Recovered = sheet.Humanity.Recovered + gained } };
     }
 
+    // Humanity changed by hand: no cap and no floor, so it can go below 0 (Cyberpsychosis, CP:R p.230).
+    public CharacterSheet AdjustHumanity(CharacterSheet sheet, AdjustHumanityRequest request, CharacterChange change)
+    {
+        if (request.Amount == 0) throw CharacterChange.Refuse("amount", L.T("Informe quanto muda.", "Say how much it changes."));
+        if (string.IsNullOrWhiteSpace(request.Reason)) throw CharacterChange.Refuse("reason", L.T("Explique o motivo do ajuste.", "Explain the reason for the adjustment."));
+        var before = calculator.Calculate(sheet, change.Catalog).Humanity.Current;
+        var after = before + request.Amount;
+        change.Log(CharacterEventKind.Humanity, "manual-adjustment", request.Reason.Trim(), request.Amount, before.ToString(), after.ToString(), manual: true);
+        return sheet with { Humanity = sheet.Humanity with { Adjustment = sheet.Humanity.Adjustment + request.Amount } };
+    }
+
     // helpers
 
     private (CatalogItem Item, InventoryEntry? FromInventory) Resolve(CharacterSheet sheet, InstallCyberwareRequest request, NpcCatalog catalog)

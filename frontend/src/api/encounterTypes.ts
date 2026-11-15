@@ -132,7 +132,28 @@ export interface FighterView {
   combatAwareness?: Record<string, number> | null;
   /** Once-a-Round effects already used this Round ("spotWeakness", "damageDeflection"). */
   roundFlags?: string[] | null;
+  /** PCs: LUCK left this session (CP:R p.130). */
+  luckAvailable?: number | null;
+  /** Penalty on the next dodge this Round (house rule, -1 per dodge tried). */
+  dodgePenalty?: number;
+  /** A held Bulletproof Shield's HP (CP:R p.184). */
+  shieldHp?: number | null;
+  shieldHpMax?: number | null;
+  /** PCs: implant effects, the Initiative bonuses from them and what's switched on. */
+  traits?: CyberTrait[] | null;
+  initiativeParts?: { label: string; value: number }[] | null;
+  dodgeAnyRef?: boolean;
+  activeCyber?: Record<string, ActiveCyberState> | null;
 }
+
+/** What an implant does at the table (character-rules.json cyberwareEffects). */
+export interface CyberTrait {
+  slug: string; label: string; kind: string | null; add: number; value: number | null; stats: string[]; injuries: string[];
+  note: string; source: string;
+  activate: { effect: 'initiative' | 'ignoreWounds' | 'top' | 'chat'; add: number; rounds: number | null; excludes: string[]; humanity: string | null; dv: number | null } | null;
+}
+export interface ActiveCyberState { untilRound: number; initiativeDelta: number }
+
 
 export interface NamedValue { id: string; label: string; value: number }
 
@@ -226,6 +247,12 @@ export interface PendingView {
   evasion: number | null;
   attackerCharacterId: number | null;
   targetCharacterId: number | null;
+  /** Already inside evasion: -1 per dodge this Round (house rule). */
+  dodgePenalty?: number;
+  /** REF 8+ (false: only Cut the Bullet or taking the DV). */
+  canDodge?: boolean;
+  /** Kendo's Cut the Bullet Resolution base, when the target can use it against this attack. */
+  cutTheBullet?: number | null;
 }
 
 export interface EncounterSummary {

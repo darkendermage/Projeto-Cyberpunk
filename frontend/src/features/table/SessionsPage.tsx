@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { BookOpen, ExternalLink, Pencil, Play, Plus, Trash2 } from 'lucide-react';
+import { BookOpen, Copy, ExternalLink, FolderOpen, Map as MapIcon, Pencil, Play, Plus, Trash2 } from 'lucide-react';
 import { problemMessage } from '../../api/characters';
 import { tableApi, tableKeys } from '../../api/table';
 import type { TableMessage, TableSession } from '../../api/tableTypes';
@@ -12,6 +12,35 @@ import { t, tv } from '../../i18n';
 import styles from './Table.module.css';
 
 const day = (iso: string) => new Date(iso).toLocaleDateString();
+
+// A past session's scenes: each one can be copied into the open session (map, grid, tokens, without the fight).
+function SessionScenes({ session, onClose }: { session: TableSession; onClose: () => void }) {
+  const toast = useToast();
+  const client = useQueryClient();
+  const scenes = useQuery({ queryKey: ['table', 'session-scenes', session.id], queryFn: () => tableApi.sessionScenes(session.id) });
+  const [copied, setCopied] = useState<number[]>([]);
+  const copy = (id: number, name: string) => tableApi.copySceneToCurrent(id).then(() => {
+    setCopied((c) => [...c, id]);
+    void client.invalidateQueries({ queryKey: tableKeys.scenes });
+    toast.notify(t(`"${name}" copiada para a sessão atual.`, `"${name}" copied into the current session.`));
+  }, (e) => toast.notify(problemMessage(e), 'error'));
+  return (
+    <Modal open onClose={onClose} title={t(`Cenas de ${tv(session.name)}`, `Scenes of ${tv(session.name)}`)}>
+      {scenes.isLoading && <Spinner />}
+      {scenes.data?.length === 0 && <span className={styles.muted}>{t('Esta sessão não tem cenas.', 'This session has no scenes.')}</span>}
+      <ul className={styles.stack}>
+        {(scenes.data ?? []).map((s) => (
+          <li key={s.id} className={styles.rowBetween}>
+            <span><strong>{s.name}</strong> <span className={styles.muted}>· {t(`${s.tokens} tokens`, `${s.tokens} tokens`)}</span></span>
+            <Button variant="ghost" icon={<Copy size={14} />} disabled={copied.includes(s.id)} onClick={() => void copy(s.id, s.name)}>
+              {copied.includes(s.id) ? t('Copiada', 'Copied') : t('Copiar para a sessão atual', 'Copy into the current session')}
+            </Button>
+          </li>
+        ))}
+      </ul>
+    </Modal>
+  );
+}
 
 /** One archived line, read-only: author, text, and the roll's or the attack's result. */
 function ArchivedLine({ m }: { m: TableMessage }) {
@@ -50,8 +79,8 @@ function SessionArchive({ session, onClose }: { session: TableSession; onClose: 
   );
 }
 
-// The table's entry page. "New session" names the new one, closes the open one and goes to the table. Scenes,
-// invites and seats are shared; a session only keeps one night's chat and fights.
+// The table's entry page. "New session" names the new one, closes the open one and goes to the table; "Reopen"
+// brings a past one back. Invites and seats are shared; a session keeps one night's scenes, chat and fights.
 export function SessionsPage() {
   const client = useQueryClient();
   const toast = useToast();
@@ -61,6 +90,7 @@ export function SessionsPage() {
   const [name, setName] = useState('');
   const [busy, setBusy] = useState(false);
   const [reading, setReading] = useState<TableSession | null>(null);
+  const [scenesOf, setScenesOf] = useState<TableSession | null>(null);
   const fail = (e: unknown) => toast.notify(problemMessage(e), 'error');
   const refresh = () => {
     void client.invalidateQueries({ queryKey: tableKeys.sessions });
@@ -79,6 +109,18 @@ export function SessionsPage() {
     const next = window.prompt(t('Novo nome da sessão', 'New session name'), s.name);
     if (next?.trim()) tableApi.renameSession(s.id, { name: next.trim() }).then(refresh, fail);
   };
+  // the past session becomes the open one: its scenes, chat and fights come back to the table to edit and keep playing
+  const reopen = (s: TableSession) => {
+    const msg = open
+      ? t(`Reabrir "${s.name}" para editar? "${open.name}" é encerrada e fica guardada aqui; a mesa volta para as cenas e o chat de "${s.name}".`,
+        `Reopen "${s.name}" to edit it? "${open.name}" ends and stays here; the table goes back to the scenes and chat of "${s.name}".`)
+      : t(`Reabrir "${s.name}" para editar?`, `Reopen "${s.name}" to edit it?`);
+    if (!window.confirm(msg)) return;
+    setBusy(true);
+    tableApi.reopenSession(s.id)
+      .then(() => { refresh(); void client.invalidateQueries({ queryKey: tableKeys.scenes }); navigate('/mesa/jogar'); }, fail)
+      .finally(() => setBusy(false));
+  };
   const remove = (s: TableSession) => {
     if (window.confirm(t(`Apagar "${s.name}" e o chat dela? Os combates continuam na tela de combate.`, `Delete "${s.name}" and its chat? The fights stay on the combat page.`)))
       tableApi.deleteSession(s.id).then(refresh, fail);
@@ -95,7 +137,7 @@ export function SessionsPage() {
       <header className={styles.rowBetween}>
         <div>
           <h1 className="hud-title">{t('Mesa Virtual', 'Virtual Table')}</h1>
-          <p className={page.lead}>{t('Escolha a sessão: continue a de hoje ou comece uma nova. Cenas, convites e lugares valem para todas.', "Pick the session: continue today's or start a new one. Scenes, invites and seats belong to all of them.")}</p>
+          <p className={page.lead}>{t('Escolha a sessão: continue a de hoje, comece uma nova ou reabra uma anterior para editar. Convites e lugares valem para todas; cada sessão tem suas cenas.', "Pick the session: continue today's, start a new one or reopen a past one to edit it. Invites and seats belong to all of them; each session has its own scenes.")}</p>
         </div>
         <Button variant="primary" icon={<Plus size={16} />} onClick={() => setCreating(true)}>{t('Nova sessão', 'New session')}</Button>
       </header>
@@ -134,8 +176,13 @@ export function SessionsPage() {
                 {facts(s)}
                 <div className={styles.row}>
                   <Button variant="ghost" icon={<BookOpen size={14} />} onClick={() => setReading(s)}>{t('Ler', 'Read')}</Button>
+                  <Button variant="ghost" icon={<MapIcon size={14} />} onClick={() => setScenesOf(s)}>{t('Cenas', 'Scenes')}</Button>
+                  <Button variant="ghost" icon={<FolderOpen size={14} />} disabled={busy} onClick={() => reopen(s)}
+                    title={t('Volta a ser a sessão aberta: cenas, chat e combates dela voltam para a mesa', 'Becomes the open session again: its scenes, chat and fights come back to the table')}>
+                    {t('Reabrir para editar', 'Reopen to edit')}
+                  </Button>
                   <IconButton label={t('Renomear', 'Rename')} onClick={() => rename(s)}><Pencil size={14} /></IconButton>
-                  <IconButton label={t('Apagar sessão e seu chat', 'Delete the session and its chat')} onClick={() => remove(s)}><Trash2 size={14} /></IconButton>
+                  <IconButton label={t('Apagar sessão, seu chat e suas cenas', 'Delete the session, its chat and its scenes')} onClick={() => remove(s)}><Trash2 size={14} /></IconButton>
                 </div>
               </li>
             ))}
@@ -149,7 +196,7 @@ export function SessionsPage() {
             value={name} maxLength={80} onChange={(e) => setName(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter' && !busy) start(); }} />
           <span className={styles.muted}>
             {open
-              ? t(`"${open.name}" será encerrada e fica guardada aqui, com o chat e os combates.`, `"${open.name}" ends and stays here, with its chat and fights.`)
+              ? t(`"${open.name}" será encerrada e fica guardada aqui, com o chat e os combates.`, `"${open.name}" ends and stays here, with its chat and fights.`) + " " + t("A nova começa sem cenas: copie as que quiser em Cenas, na sessão antiga.", "The new one starts with no scenes: copy the ones you want from Scenes, on the old session.")
               : t('Sem nome, ela vira "Sessão N".', 'Without a name it becomes "Session N".')}
           </span>
           <div className={styles.rowBetween}>
@@ -160,6 +207,7 @@ export function SessionsPage() {
       </Modal>
 
       {reading && <SessionArchive session={reading} onClose={() => setReading(null)} />}
+      {scenesOf && <SessionScenes session={scenesOf} onClose={() => setScenesOf(null)} />}
     </div>
   );
 }

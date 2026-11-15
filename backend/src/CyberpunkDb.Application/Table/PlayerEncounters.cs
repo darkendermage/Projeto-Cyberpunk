@@ -11,7 +11,10 @@ public sealed record PlayerFighterDto(
     string Id, string Name, CombatSide Side, CombatantKind Kind, int? Initiative, WoundState WoundState, bool Dead,
     bool Stabilized, IReadOnlyList<string> Conditions, IReadOnlyList<string> Injuries, int? CharacterId, bool Own,
     int? Hp, int? MaxHp, int? SpBody, int? SpHead, int? MaxSpBody, int? MaxSpHead, bool? MustDeathSave, int? DeathSaveTarget,
-    IReadOnlyList<WeaponView>? Weapons, IReadOnlyList<string>? RoundFlags = null);
+    IReadOnlyList<WeaponView>? Weapons, IReadOnlyList<string>? RoundFlags = null,
+    int? LuckAvailable = null, int DodgePenalty = 0, int? ShieldHp = null, int? ShieldHpMax = null,
+    // own fighter: implant effects and what's switched on (Sandevistan...)
+    IReadOnlyList<Characters.Calculation.CyberTraitLine>? Traits = null, IReadOnlyDictionary<string, ActiveCyberState>? ActiveCyber = null);
 
 // the combat log stays with the GM
 public sealed record PlayerEncounterDto(int Id, string Name, int Round, string? ActiveId, IReadOnlyList<PlayerFighterDto> Queue,
@@ -49,6 +52,8 @@ public static class PlayerEncounters
             f.Injuries.Select(i => i.Name).ToList(), f.CharacterId, own,
             numbers ? f.Hp : null, numbers ? f.MaxHp : null, numbers ? f.SpBody : null, numbers ? f.SpHead : null,
             numbers ? f.MaxSpBody : null, numbers ? f.MaxSpHead : null, own ? f.MustDeathSave : null, own ? f.DeathSaveTarget : null,
-            own ? f.Weapons : null, own ? f.RoundFlags : null);
+            own ? f.Weapons : null, own ? f.RoundFlags : null,
+            own ? f.LuckAvailable : null, f.DodgePenalty, numbers ? f.ShieldHp : null, numbers ? f.ShieldHpMax : null,
+            own ? f.Traits : null, own ? f.ActiveCyber : null);
     }
 }

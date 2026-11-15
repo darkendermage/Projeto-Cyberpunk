@@ -32,7 +32,7 @@ import { DiceColorPicker } from './DiceColorPicker';
 import { MusicPlayer } from './music/MusicPlayer';
 import { setSeatContext } from '../../api/client';
 import { buildStrip } from './strip';
-import { attackSummary, fighterIdOf, startAim } from './aim';
+import { aimFor, attackSummary, fighterIdOf } from './aim';
 import { useQuickAttack } from './useQuickAttack';
 import { useAttackFx } from './useAttackFx';
 import { useTablePrefs } from './tablePrefs';
@@ -154,7 +154,7 @@ export function PlayerTablePage() {
   const queue = useMemo(() => encounter.data?.queue ?? [], [encounter.data]);
   const own = queue.find((f) => f.own) ?? null;
   const quick = useQuickAttack(
-    (aim, targetId) => api.attack({ weapon: aim.weapon.key, mode: aim.mode, targetIds: [targetId], weaponMode: aim.weapon.modeId ?? null }),
+    (aim, targetId) => api.attack({ weapon: aim.weapon.key, mode: aim.mode, targetIds: [targetId], weaponMode: aim.weapon.modeId ?? null, luck: aim.luck ?? 0, rerollLuck: aim.rerollLuck ?? false }),
     (result) => toast.notify(result.attack ? attackSummary(result.attack)
       : result.pending?.step === 'Defense' ? t(`${result.pending.targetName} decide se esquiva…`, `${result.pending.targetName} chooses whether to dodge…`)
       : t('Dois 6! Falta rolar a Critical Injury.', 'Two 6s! The Critical Injury roll is next.')),
@@ -268,8 +268,8 @@ export function PlayerTablePage() {
 
   // A roll with LUCK spends it on the sheet: the panel's LUCK left follows.
   const refreshLuck = () => void client.invalidateQueries({ queryKey: tableKeys.playerCharacter(token) });
-  const roll = (formula: string, kind: RollKind, label: string | null, visibility: TableVisibility, luck = 0) =>
-    run(async () => { await api.roll({ formula, kind, label, visibility, luck }); if (luck) refreshLuck(); setTab('chat'); });
+  const roll = (formula: string, kind: RollKind, label: string | null, visibility: TableVisibility, luck = 0, rerollLuck = false) =>
+    run(async () => { await api.roll({ formula, kind, label, visibility, luck, fromSheet: true, rerollLuck }); if (luck || rerollLuck) refreshLuck(); setTab('chat'); });
 
   if (state.isLoading) return <div className={styles.gate}><Spinner /></div>;
   if (state.error) {
@@ -342,12 +342,13 @@ export function PlayerTablePage() {
           </div>
           {scene && encounter.data?.pending && (
             <PendingCard pending={encounter.data.pending} mine={encounter.data.pendingMine ?? false} gm={false} busy={pendingBusy}
-              onDodge={(dodge) => answerPending(() => api.defense(dodge))}
+              onDodge={(dodge, move) => answerPending(() => api.defense(dodge, move))}
               onCritical={() => answerPending(() => api.critical())} />
           )}
           {scene && quick.aim && (
             <AimBar aim={quick.aim} busy={quick.busy} targetName={queue.find((f) => f.id === quick.aim!.targetId)?.name ?? null}
-              onMode={quick.mode} onWeaponMode={quick.weaponMode} onFire={() => void quick.shoot()} onCancel={quick.cancel} />
+              onMode={quick.mode} onWeaponMode={quick.weaponMode} onFire={() => void quick.shoot()} onCancel={quick.cancel}
+              luckAvailable={queue.find((f) => f.id === quick.aim!.attackerId)?.luckAvailable ?? null} onLuck={quick.luck} onReserve={quick.reserve} />
           )}
           {scene && (
             <SceneStrip entries={strip} selected={selection.tokens} aim={quick.aim}
@@ -356,7 +357,7 @@ export function PlayerTablePage() {
               weaponsOf={(e) => own && fighterIdOf(e, queue) === own.id
                 ? { weapons: own.weapons ?? [], blocked: encounter.data?.activeId === own.id ? null : t('Aguarde seu turno para atacar.', 'Wait for your Turn to attack.') }
                 : null}
-              onWeapon={(_e, w) => { if (own) quick.start(startAim(own.id, own.name, w)); }}
+              onWeapon={(_e, w, modeId) => { if (own) quick.start(aimFor(own.id, own.name, w, modeId)); }}
               onReload={(_e, w, magazine) => reloadWeapon(w.key, magazine)}
               onSwitch={(_e, w, mode) => switchMode(w.key, mode)}
               onUnjam={(_e, w) => void run(async () => { client.setQueryData(tableKeys.playerEncounter(token), await api.unjam(w.key)); })}
@@ -373,7 +374,7 @@ export function PlayerTablePage() {
           </div>
           {tab === 'character' && (
             <CharacterPanel character={character.data ?? null} encounter={encounter.data ?? null} token={myToken} onRoll={roll} busy={armorBusy}
-              onAim={(w, mode) => { if (own) quick.start({ ...startAim(own.id, own.name, w), mode }); }}
+              onAim={(w, mode, modeId) => { if (own) quick.start(modeId ? aimFor(own.id, own.name, w, modeId) : { ...aimFor(own.id, own.name, w), mode }); }}
               onReload={reloadWeapon}
               onSwitch={switchMode}
               onImport={(file) => void run(async () => {
@@ -389,6 +390,7 @@ export function PlayerTablePage() {
               })}
               onPickUp={(weapon) => void run(async () => { client.setQueryData(tableKeys.playerEncounter(token), await api.pickUp(weapon)); })}
               onUnjam={(weapon) => void run(async () => { client.setQueryData(tableKeys.playerEncounter(token), await api.unjam(weapon)); toast.notify(t('Destravada.', 'Unjammed.')); })}
+              onCyber={(slug) => void run(async () => { client.setQueryData(tableKeys.playerEncounter(token), await api.cyber(slug)); })}
               onArmor={(location, delta) => {
                 setArmorBusy(true);
                 void run(async () => {
@@ -431,14 +433,16 @@ export function PlayerTablePage() {
           {tab === 'chat' && (
             <ChatPanel gm={false} messages={messages.data ?? []}
               onSend={(text, visibility) => api.send({ text, visibility })}
-              onRoll={async (formula, kind, visibility, _target, luck) => { await api.roll({ formula, kind, visibility, luck }); if (luck) refreshLuck(); }}
+              onRoll={async (formula, kind, visibility, _target, luck, rerollLuck) => { await api.roll({ formula, kind, visibility, luck, rerollLuck }); if (luck || rerollLuck) refreshLuck(); }}
               luckAvailable={character.data ? character.data.luckAvailable : undefined} mySeatId={seat?.id}
-              onReroll={async (id) => { await api.reroll(id); refreshLuck(); }} />
+              onReroll={(id) => api.reroll(id)}
+              onRerollAttack={(a) => api.rerollAttack(a.seq)} />
           )}
         </aside>
       </div>
       <RulesDialog open={tablesOpen} onClose={() => setTablesOpen(false)} load={api.rules} />
-      {seat?.characterId != null && <MySheetDialog characterId={seat.characterId} open={sheetOpen} onClose={() => setSheetOpen(false)} />}
+      {seat?.characterId != null && <MySheetDialog characterId={seat.characterId} open={sheetOpen} onClose={() => setSheetOpen(false)}
+        onRoll={async (formula, label, luck, rerollLuck) => { await api.roll({ formula, kind: 'Check', label, visibility: 'Public', fromSheet: true, luck, rerollLuck }); if (luck || rerollLuck) refreshLuck(); }} />}
     </div>
   );
 }

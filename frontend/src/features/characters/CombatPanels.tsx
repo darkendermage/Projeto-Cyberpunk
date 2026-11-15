@@ -7,6 +7,7 @@ import { Button, IconButton, Modal, NumberInput, Select, Switch } from '../../co
 import { INJURY_STATUS_LABEL, signed, WOUND_LABEL, QUALITY_LABEL } from './characterLabels';
 import { SheetPanel, StateTag } from './CharacterUi';
 import { healing } from './healing';
+import { hpBar } from '../../lib/hpBar';
 import styles from './Characters.module.css';
 import { t, tv } from '../../i18n';
 
@@ -27,19 +28,25 @@ export function HealthPanel({ detail, run, busy, locked }: Props) {
   const [dialog, setDialog] = useState<'damage' | 'heal' | null>(null);
   const care = healing(h, detail.sheet.combat.stabilized);
   const healBy = async (amount: number, description?: string) => { if (await run('combat/heal', { amount, description })) { setHeal(null); setDialog(null); } };
-  const pct = Math.max(0, Math.min(100, (h.currentHp / h.maxHp) * 100));
-  const mark = (h.seriouslyWoundedThreshold / h.maxHp) * 100;
+  // a held shield shows after the HP, on the same scale (CP:R p.184)
+  // Bulletproof Shield in hand or a Popup Shield (the report picks it)
+  const shield = h.shieldHp ? { shieldHp: h.shieldHp, shieldHpMax: h.shieldHpMax ?? h.shieldHp, name: h.shieldName ?? '' } : undefined;
+  const bar = hpBar(h.currentHp, h.maxHp, shield?.shieldHp, shield?.shieldHpMax);
+  const scale = h.maxHp + (shield ? shield.shieldHpMax ?? 0 : 0);
+  const mark = (h.seriouslyWoundedThreshold / Math.max(1, scale)) * 100;
   const conditions = detail.sheet.combat.conditions;
 
   return (
     <SheetPanel title={t('Pontos de vida', 'Hit Points')} icon={<HeartPulse size={16} />}>
       <div className={styles.bigNumbers}>
         <strong>{h.currentHp}</strong><span className={styles.muted}>/ {h.maxHp}</span>
+        {shield && <span className={styles.cyan} title={tv(shield.name)}>+{shield.shieldHp} {t('escudo', 'shield')}</span>}
         <span className={styles.grow} />
         <StateTag tone={woundTone(h.woundState)}>{WOUND_LABEL[h.woundState]}</StateTag>
       </div>
       <div className={styles.meter} role="meter" aria-valuemin={0} aria-valuemax={h.maxHp} aria-valuenow={h.currentHp} aria-label={t('Pontos de vida', 'Hit Points')}>
-        <div className={styles.meterFill} style={{ width: `${pct}%` }} />
+        <div className={styles.meterFill} style={{ width: `${bar.hpPct}%` }} />
+        {bar.shieldPct > 0 && <div className={styles.meterShield} style={{ left: `${bar.hpPct}%`, width: `${bar.shieldPct}%` }} title={t(`Escudo: ${shield?.shieldHp} HP`, `Shield: ${shield?.shieldHp} HP`)} />}
         <div className={styles.meterMark} style={{ left: `${mark}%` }} title={t(`Seriously Wounded abaixo de ${h.seriouslyWoundedThreshold}`, `Seriously Wounded below ${h.seriouslyWoundedThreshold}`)} />
       </div>
       <dl className={styles.kv}>
@@ -130,9 +137,14 @@ export function HealthPanel({ detail, run, busy, locked }: Props) {
 }
 
 /** Armor by location with current SP, manual ablation and repair. */
-export function ArmorPanel({ detail, run, busy }: Props) {
+export function ArmorPanel({ detail, run, busy, locked }: Props) {
   const a = detail.report.armor;
-  const shields = detail.report.inventory.filter((i) => i.shieldHpMax != null);
+  const health = detail.report.health;
+  // a Popup Shield isn't in the inventory: its row comes from the report (CP:R p.365)
+  const popup = health.shieldInstanceId && !detail.report.inventory.some((i) => i.instanceId === health.shieldInstanceId)
+    ? { instanceId: health.shieldInstanceId, name: health.shieldName ?? 'Popup Shield', shieldHp: health.shieldHp ?? 0, shieldHpMax: health.shieldHpMax ?? 10 }
+    : null;
+  const shields = [...detail.report.inventory.filter((i) => i.shieldHpMax != null), ...(popup ? [popup] : [])];
   const row = (label: string, slot: 'Head' | 'Body', loc = slot === 'Head' ? a.head : a.body) => (
     <tr key={slot}>
       <td>{label}</td>
@@ -158,7 +170,15 @@ export function ArmorPanel({ detail, run, busy }: Props) {
           {row(t('Cabeça', 'Head'), 'Head')}
           {row(t('Corpo', 'Body'), 'Body')}
           {shields.map((s) => (
-            <tr key={s.instanceId}><td>{t('Escudo', 'Shield')}</td><td className={styles.small}>{tv(s.name)}</td><td className={styles.total}>{s.shieldHp}/{s.shieldHpMax} HP</td><td /></tr>
+            <tr key={s.instanceId}><td>{t('Escudo', 'Shield')}</td><td className={styles.small}>{tv(s.name)}</td><td className={styles.total}>{s.shieldHp}/{s.shieldHpMax} HP</td>
+              <td>
+                {!locked && (
+                  <span className={styles.row} style={{ flexWrap: 'nowrap' }}>
+                    <IconButton label={t('Escudo leva 1 de dano', 'Shield takes 1 damage')} disabled={busy || (s.shieldHp ?? 0) <= 0} onClick={() => run('shield', { amount: -1, instanceId: s.instanceId })}>−</IconButton>
+                    <IconButton label={t('Consertar 1 HP do escudo', 'Repair 1 shield HP')} disabled={busy || (s.shieldHp ?? 0) >= (s.shieldHpMax ?? 0)} onClick={() => run('shield', { amount: 1, instanceId: s.instanceId })}>+</IconButton>
+                  </span>
+                )}
+              </td></tr>
           ))}
         </tbody>
       </table>
@@ -189,6 +209,7 @@ export function WeaponsPanel({ detail, run, busy, locked }: Props) {
                     <div>
                       {tv(w.name)}{w.quality !== 'Standard' && <span className={styles.tag} title={QUALITY_LABEL[w.quality]}>{w.quality === 'Excellent' ? 'Excellent' : 'Poor'}</span>}
                       {w.destroyed && <span className={styles.tag}>{t('Destruída', 'Destroyed')}</span>}
+                      {w.cyberware && <span className={`${styles.tag} ${styles.tagCyber}`} title={t('Implante que ataca: sempre à mão', 'An implant that attacks: always at hand')}>Cyberware</span>}
                     </div>
                     <div className={styles.source}>
                       {w.skillName}{w.autofireMultiplier ? ` · Autofire ${w.autofireMultiplier} (base ${w.autofireTotal})` : ''}
@@ -198,7 +219,9 @@ export function WeaponsPanel({ detail, run, busy, locked }: Props) {
                   <td className={styles.total} title={(w.attackBonuses ?? []).map((p) => `${tv(p.label)} +${p.value}`).join('\n') || undefined}>{w.attackTotal ?? w.skillTotal}</td>
                   <td className={styles.num}>{tv(w.damage)}</td>
                   <td className={styles.num}>{w.rof}</td>
-                  <td className={styles.num} title={w.loadedAmmo ?? undefined}>{ranged ? `${w.loadedRounds}/${w.magazine ?? '—'}` : '—'}</td>
+                  <td className={styles.num} title={w.shots != null ? t('Conte os disparos à mão e recarregue entre combates', 'Count the shots by hand and reload between fights') : w.loadedAmmo ?? undefined}>
+                    {ranged ? `${w.loadedRounds}/${w.magazine ?? '—'}` : w.shots != null ? t(`${w.shots} tiro(s)`, `${w.shots} shot(s)`) : '—'}
+                  </td>
                 </tr>
                 {!locked && (
                   <tr>

@@ -6,6 +6,8 @@ public class Scene
     public int Id { get; set; }
     public string Name { get; set; } = string.Empty;
     public int? EncounterId { get; set; }
+    // the table session it belongs to; a new session starts with none (old ones can be copied over)
+    public int? SessionId { get; set; }
     public bool Active { get; set; }
     public int SortOrder { get; set; }
     // only for settings edits; token moves are last-write-wins

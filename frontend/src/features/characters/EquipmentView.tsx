@@ -5,6 +5,7 @@ import type { CharacterDetail, CharacterRules, InventoryLine, WearableLine } fro
 import { Button, Modal, NumberInput, Select } from '../../components/ui/ui';
 import { formatEb } from '../../lib/format';
 import { useToast } from '../../state/ToastContext';
+import { BalanceButton } from './BalanceDialog';
 import { formatDate, signed } from './characterLabels';
 import { SheetPanel, StateTag } from './CharacterUi';
 import { EquippedSection, GearStats, InventorySection, ItemPage, WornSection, type GearActions } from './GearSections';
@@ -80,8 +81,6 @@ type StoreMode = 'buy' | 'receive';
 function FinancePanel({ detail, run, busy, onStore }: { detail: CharacterDetail; run: Run; busy: boolean; onStore: (mode: StoreMode) => void }) {
   const [history, setHistory] = useState(false);
   const [page, setPage] = useState(0);
-  const [amount, setAmount] = useState('');
-  const [reason, setReason] = useState('');
   const ledger = useCharacterEvents(detail.id);
   const finalized = detail.sheet.creation.finalized;
   const entries = (ledger.data ?? []).filter((e) => e.kind === 'Ledger');
@@ -103,6 +102,7 @@ function FinancePanel({ detail, run, busy, onStore }: { detail: CharacterDetail;
           <Button icon={<Gift size={14} />} disabled={!finalized}
             title={finalized ? t('Troca, presente ou saque: entra sem pagar', 'Trade, gift or loot: comes in without paying') : t('Itens sem custo só entram depois da criação', 'Free items only come in after creation')}
             onClick={() => onStore('receive')}>{t('Receber', 'Receive')}</Button>
+          <BalanceButton detail={detail} run={run} busy={busy} />
           <Button variant="ghost" icon={<History size={14} />} onClick={() => { setPage(0); setHistory(true); }}>{t('Ver histórico', 'View history')}</Button>
         </div>
       </div>
@@ -113,17 +113,6 @@ function FinancePanel({ detail, run, busy, onStore }: { detail: CharacterDetail;
             <strong>{formatEb(detail.sheet.wallet.balance)}</strong>
             <span className={styles.muted}>{t('eurodólares', 'eurodollars')}</span>
           </div>
-          {finalized && (
-            <div className={styles.row}>
-              <input className={`${styles.input} ${styles.inputSmall}`} style={{ width: 90 }} type="number" value={amount} placeholder="± eb"
-                aria-label={t('Valor do ajuste', 'Adjustment amount')} onChange={(e) => setAmount(e.target.value)} />
-              <input className={`${styles.input} ${styles.grow}`} value={reason} placeholder={t('Motivo (pagamento, despesa…)', 'Reason (payment, expense…)')} aria-label={t('Motivo', 'Reason')}
-                onChange={(e) => setReason(e.target.value)} />
-              <Button disabled={busy || !Number(amount) || !reason.trim()} onClick={async () => {
-                if (await run('balance', { amount: Number(amount), reason }, t('Saldo ajustado.', 'Balance adjusted.'))) { setAmount(''); setReason(''); }
-              }}>{t('Lançar', 'Record')}</Button>
-            </div>
-          )}
           {entries.length === 0 && <span className={`${styles.small} ${styles.muted}`}>{t('Nenhuma movimentação.', 'No transactions.')}</span>}
           <ul className={styles.list}>
             {shown.rows.map((e) => (

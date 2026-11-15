@@ -64,10 +64,14 @@ public sealed partial record DiceFormula(IReadOnlyList<DiceTerm> Terms)
 // includes the crit's extra d10
 public sealed record RolledTerm(string Expression, int Sign, IReadOnlyList<int> Dice, int? Extra, int Value);
 
-// Luck is already in Total (+1 each, CP:R p.130). RerollOf: the roll this replaces (1 LUCK reroll, house rule).
+// Luck is already in Total (+1 each, CP:R p.130). RerollOf: the roll this replaces (house rule reroll).
 public sealed record RollResult(
     string Formula, RollKind Kind, IReadOnlyList<RolledTerm> Terms, int Total, CriticalResult? Critical, bool CriticalInjury,
-    int Luck = 0, long? RerollOf = null, string? DiceColor = null);
+    int Luck = 0, long? RerollOf = null, string? DiceColor = null,
+    // the roller's debuffs at roll time; PenaltyInTotal: the formula came from the sheet, penalties already inside
+    IReadOnlyList<RollDebuff>? Debuffs = null, bool PenaltyInTotal = false,
+    // 1 LUCK paid before rolling: the reroll button is free
+    bool RerollReady = false);
 
 // all dice are rolled on the server so nobody can fudge them
 public static class TableRoller

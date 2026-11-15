@@ -87,6 +87,26 @@ public sealed class TableSessionService(IAppDbContext db, ITableNotifier notifie
         return result;
     }
 
+    // Back to a past session: the open one ends (as on "new session") and this one is open again, chat and scenes
+    // included. Reopening the open one changes nothing.
+    public async Task<TableSessionDto> ReopenAsync(int id, CancellationToken ct)
+    {
+        var target = await FindAsync(id, ct);
+        if (target.EndedAt is null) return await DtoAsync(target, ct);
+        var now = DateTime.UtcNow;
+        foreach (var open in await db.TableSessions.Where(s => s.EndedAt == null).ToListAsync(ct))
+        {
+            open.EndedAt = now;
+            if (open.Name.Length == 0) open.Name = L.T($"Sessão de {open.StartedAt:dd/MM/yyyy}", $"Session of {open.StartedAt:yyyy-MM-dd}");
+        }
+        target.EndedAt = null;
+        await db.SaveChangesAsync(ct);
+        await notifier.ChatResetAsync(ct);
+        return await DtoAsync(target, ct);
+    }
+
+    public async Task EnsureExistsAsync(int id, CancellationToken ct) => await FindAsync(id, ct);
+
     public async Task<TableSessionDto> RenameAsync(int id, RenameSessionRequest r, CancellationToken ct)
     {
         var session = await FindAsync(id, ct);
@@ -101,6 +121,8 @@ public sealed class TableSessionService(IAppDbContext db, ITableNotifier notifie
         var session = await FindAsync(id, ct);
         if (session.EndedAt is null) throw new ConflictException(L.T("A sessão aberta não pode ser apagada; comece uma nova antes.", "The open session can't be deleted; start a new one first."));
         await db.TableMessages.Where(m => m.SessionId == id).ExecuteDeleteAsync(ct);
+        // its scenes go with it
+        await db.Scenes.Where(s => s.SessionId == id).ExecuteDeleteAsync(ct);
         await db.Encounters.Where(e => e.SessionId == id).ExecuteUpdateAsync(u => u.SetProperty(e => e.SessionId, (int?)null), ct);
         db.TableSessions.Remove(session);
         await db.SaveChangesAsync(ct);

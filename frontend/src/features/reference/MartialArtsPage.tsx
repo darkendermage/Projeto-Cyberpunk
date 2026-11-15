@@ -3,7 +3,10 @@ import clsx from 'clsx';
 import { Search } from 'lucide-react';
 import page from '../../styles/Page.module.css';
 import refStyles from './ReferencePages.module.css';
-import { MARTIAL_ARTS, SHARED_MOVES, type MartialArtForm, type SpecialMove } from './martialArts';
+import { useCharacterRules } from '../../api/characters';
+import type { MartialArtForm, SpecialMove } from '../../api/characterTypes';
+import { ErrorState, Spinner } from '../../components/ui/ui';
+import { MOVE_KIND_LABEL } from './martialArts';
 import styles from './MartialArtsPage.module.css';
 import { t, tv } from '../../i18n';
 
@@ -16,20 +19,26 @@ const matches = (form: MartialArtForm, q: string) =>
 function Move({ move }: { move: SpecialMove }) {
   return (
     <li className={styles.move}>
-      <strong>{tv(move.name)}</strong>
+      <strong>{tv(move.name)}</strong>{move.kind !== 'check' && <span className={styles.source}> · {MOVE_KIND_LABEL[move.kind]}</span>}{move.dv != null && <span className={styles.source}> · DV{move.dv}</span>}
       <p className={styles.requirement}><span>{t('Requisito', 'Requirement')}</span> {tv(move.requirement)}</p>
       <p>{tv(move.effect)}</p>
     </li>
   );
 }
 
+// The forms come from the server rules (martial-arts-rules.json), the same ones the table uses for the moves.
 export function MartialArtsPage() {
+  const rules = useCharacterRules();
   const [query, setQuery] = useState('');
   const [source, setSource] = useState<string | null>(null);
+  const all = rules.data?.martialArts;
+  const shared = rules.data?.sharedMoves ?? [];
   const forms = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return MARTIAL_ARTS.filter((f) => (!source || f.source === source) && (!q || matches(f, q)));
-  }, [query, source]);
+    return (all ?? []).filter((f) => (!source || f.source === source) && (!q || matches(f, q)));
+  }, [all, query, source]);
+  if (rules.isLoading) return <div className={page.page}><Spinner /></div>;
+  if (rules.error) return <div className={page.page}><ErrorState error={rules.error} onRetry={() => rules.refetch()} /></div>;
 
   return (
     <div className={page.page}>
@@ -49,7 +58,7 @@ export function MartialArtsPage() {
         </table>
         <div className={styles.shared}>
           <h2 className="hud-title">{t('Movimento compartilhado', 'Shared move')}</h2>
-          <ul className={styles.moves}>{SHARED_MOVES.map((m) => <Move key={m.name} move={m} />)}</ul>
+          <ul className={styles.moves}>{shared.map((m) => <Move key={m.id} move={m} />)}</ul>
           <p className={page.note}>{t('Core Rulebook, p. 178-179.', 'Core Rulebook, p. 178-179.')}</p>
         </div>
       </section>
@@ -61,12 +70,12 @@ export function MartialArtsPage() {
         </label>
         <div className={styles.chips} role="group" aria-label={t('Filtrar por livro', 'Filter by book')}>
           <button type="button" className={clsx(styles.chip, !source && styles.chipActive)} aria-pressed={!source} onClick={() => setSource(null)}>
-            {t('Todos ', 'All ')}<span>{MARTIAL_ARTS.length}</span>
+            {t('Todos ', 'All ')}<span>{all?.length ?? 0}</span>
           </button>
           {SOURCES.map((s) => (
             <button key={s} type="button" className={clsx(styles.chip, source === s && styles.chipActive)} aria-pressed={source === s}
               onClick={() => setSource(source === s ? null : s)}>
-              {s} <span>{MARTIAL_ARTS.filter((f) => f.source === s).length}</span>
+              {s} <span>{(all ?? []).filter((f) => f.source === s).length}</span>
             </button>
           ))}
         </div>
@@ -81,7 +90,7 @@ export function MartialArtsPage() {
             </header>
             {form.innate && <p className={styles.innate}>{t('Inata de NPC: não pode ser aprendida.', 'NPC-innate: can\'t be learned.')}</p>}
             <p className={styles.description}>{tv(form.description)}</p>
-            <ul className={styles.moves}>{form.moves.map((m) => <Move key={m.name} move={m} />)}</ul>
+            <ul className={styles.moves}>{form.moves.map((m) => <Move key={m.id} move={m} />)}</ul>
           </article>
         ))}
         {forms.length === 0 && <p className={page.note}>{t('Nenhum estilo encontrado.', 'No form found.')}</p>}

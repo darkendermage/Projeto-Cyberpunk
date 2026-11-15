@@ -4,6 +4,18 @@ import { t } from '../../i18n';
 /** The total a split may use at this Rank: the Rank, or twice it for the Tech's specialties (CP:R p.147). */
 export const splitTotal = (rule: RoleSplitRule, rank: number) => (rule.max === '2xrank' ? rank * 2 : rank);
 
+// The −/+ buttons of a part: one point at a time, or the next allowed value (Fumble Recovery 0 ↔ 4); never below 0,
+// above the part's cap or past the points still free. Returns the current value when it can't move.
+export function stepSplit(current: number, dir: 1 | -1, opts: { max: number; free: number; allowed?: readonly number[] }): number {
+  const ceiling = Math.min(opts.max, current + Math.max(0, opts.free));
+  if (opts.allowed?.length) {
+    const sorted = [...opts.allowed].sort((a, b) => a - b);
+    const next = dir > 0 ? sorted.find((v) => v > current) : [...sorted].reverse().find((v) => v < current);
+    return next === undefined || next > ceiling ? current : next;
+  }
+  return Math.max(0, Math.min(ceiling, current + dir));
+}
+
 /** One Combat Awareness effect as the table shows it; <c>used</c> is set for the once-a-Round ones. */
 export interface AwarenessEffect { key: string; label: string; value: string; detail: string; used?: boolean }
 

@@ -31,7 +31,7 @@ import { MusicPlayer } from './music/MusicPlayer';
 import { MusicPanel } from './music/MusicPanel';
 import { musicKey } from './music/sync';
 import { buildStrip } from './strip';
-import { attackSummary, fighterIdOf, startAim } from './aim';
+import { aimFor, attackSummary, fighterIdOf } from './aim';
 import { useQuickAttack } from './useQuickAttack';
 import { useAttackFx } from './useAttackFx';
 import { useTablePrefs } from './tablePrefs';
@@ -160,7 +160,7 @@ export function GmTablePage() {
   const live = view?.active ?? false;
   const queue = useMemo(() => (encounter.data?.status === 'Active' ? encounter.data.queue : []), [encounter.data]);
   const quick = useQuickAttack(
-    (aim, targetId) => tableApi.attack(view!.id, { attackerId: aim.attackerId, weapon: aim.weapon.key, mode: aim.mode, targetIds: [targetId], weaponMode: aim.weapon.modeId ?? null }),
+    (aim, targetId) => tableApi.attack(view!.id, { attackerId: aim.attackerId, weapon: aim.weapon.key, mode: aim.mode, targetIds: [targetId], weaponMode: aim.weapon.modeId ?? null, luck: aim.luck ?? 0, rerollLuck: aim.rerollLuck ?? false }),
     (result) => toast.notify(result.attack ? attackSummary(result.attack)
       : result.pending?.step === 'Defense' ? t(`${result.pending.targetName} decide se esquiva…`, `${result.pending.targetName} chooses whether to dodge…`)
       : t('Dois 6! Falta rolar a Critical Injury.', 'Two 6s! The Critical Injury roll is next.')),
@@ -304,13 +304,18 @@ export function GmTablePage() {
           )}
           {view && <DiceTray ref={dice} sound={prefs.sound} />}
           <MusicPlayer music={gmMusic.data?.music ?? null} prefs={prefs} onPrefs={setPrefs}
-            onEnded={() => { if (gmMusic.data?.music?.playlistId) void tableApi.nextMusic().then((s) => client.setQueryData(musicKey, s), () => {}); }}
+            onEnded={() => {
+              const current = gmMusic.data?.music;
+              // Repeat starts the same track again for everyone; a playlist moves on otherwise.
+              const next = current?.repeat ? tableApi.playMusic(0) : current?.playlistId ? tableApi.nextMusic() : null;
+              void next?.then((s) => client.setQueryData(musicKey, s), () => {});
+            }}
             onBlocked={() => toast.notify(t('Este vídeo não permite tocar fora do YouTube. Escolha outro link.', "This video can't play outside YouTube. Pick another link."), 'error')} />
           {view && <span className={styles.hint}>{TOOL_HINT[tool]}</span>}
         </div>
         {view && encounter.data?.pending && (
           <PendingCard pending={encounter.data.pending} mine={false} gm busy={command.isPending}
-            onDodge={(dodge) => command.mutate({ path: 'pending/defense', body: { targetId: encounter.data!.pending!.targetId, dodge } },
+            onDodge={(dodge, move) => command.mutate({ path: 'pending/defense', body: { targetId: encounter.data!.pending!.targetId, dodge, move } },
               { onError: (e) => toast.notify(problemMessage(e), 'error') })}
             onCritical={() => command.mutate({ path: 'pending/critical', body: { targetId: encounter.data!.pending!.targetId } },
               { onError: (e) => toast.notify(problemMessage(e), 'error') })}
@@ -318,14 +323,15 @@ export function GmTablePage() {
         )}
         {view && quick.aim && (
           <AimBar aim={quick.aim} busy={quick.busy} targetName={queue.find((f) => f.id === quick.aim!.targetId)?.name ?? null}
-            onMode={quick.mode} onWeaponMode={quick.weaponMode} onFire={() => void quick.shoot()} onCancel={quick.cancel} />
+            onMode={quick.mode} onWeaponMode={quick.weaponMode} onFire={() => void quick.shoot()} onCancel={quick.cancel}
+              luckAvailable={queue.find((f) => f.id === quick.aim!.attackerId)?.luckAvailable ?? null} onLuck={quick.luck} onReserve={quick.reserve} />
         )}
         {view && (
           <SceneStrip entries={strip} selected={selection.tokens} aim={quick.aim}
             sheetOf={(e) => (e.characterId != null ? () => setSheetFor({ id: e.characterId!, name: e.name }) : null)}
             onPick={(e) => { if (quick.aim) quick.target(fighterIdOf(e, queue)); else { selectToken(e.tokenId); setTab('token'); } }}
             weaponsOf={(e) => { const f = queue.find((x) => x.id === fighterIdOf(e, queue)); return f ? { weapons: f.weapons, blocked: null } : null; }}
-            onWeapon={(e, w) => { const f = queue.find((x) => x.id === fighterIdOf(e, queue)); if (f) quick.start(startAim(f.id, f.name, w)); }}
+            onWeapon={(e, w, modeId) => { const f = queue.find((x) => x.id === fighterIdOf(e, queue)); if (f) quick.start(aimFor(f.id, f.name, w, modeId)); }}
             onPickUp={(e, w) => {
               const id = fighterIdOf(e, queue);
               if (id) command.mutate({ path: `combatants/${id}/pick-up`, body: { weapon: w.key } }, { onError: (err) => toast.notify(problemMessage(err), 'error') });
@@ -354,12 +360,12 @@ export function GmTablePage() {
         <div className={styles.tabs} role="tablist">
           {TABS.map((tb) => <Button key={tb.id} role="tab" aria-selected={tab === tb.id} variant={tab === tb.id ? 'primary' : 'ghost'} onClick={() => setTab(tb.id)}>{tb.label}</Button>)}
         </div>
-        {tab === 'scene' && (view ? <SceneTab key={viewKey} scene={view} act={act} onGridDraft={(grid) => setGridDraft(grid ? { key: viewKey, grid } : null)} /> : <span className={styles.muted}>{t('Escolha uma cena.', 'Pick a scene.')}</span>)}
+        {tab === 'scene' && (view ? <SceneTab key={view.id} scene={view} act={act} onGridDraft={(grid) => setGridDraft(grid ? { key: viewKey, grid } : null)} /> : <span className={styles.muted}>{t('Escolha uma cena.', 'Pick a scene.')}</span>)}
         {tab === 'token' && view && (
           token ? <TokenInspector key={token.id} scene={view} token={token} seats={seats.data ?? []} encounter={encounter.data} act={act} onDone={() => selectToken(null)}
-            onAim={(f, w) => quick.start(startAim(f.id, f.name, w))} />
+            onAim={(f, w, modeId) => quick.start(aimFor(f.id, f.name, w, modeId))} />
           : template ? <TemplateInspector key={template.id} template={template} editable
-              onSave={(tpl) => act(() => tableApi.updateTemplate(view.id, tpl.id, tpl), t('Área salva.', 'Area saved.'))}
+              onSave={(tpl) => act(() => tableApi.updateTemplate(view.id, tpl.id, tpl))}
               onRemove={() => act(async () => { const v = await tableApi.removeTemplate(view.id, template.id); setSelection(NO_SELECTION); return v; })} />
           : selectedCount > 1 ? (
             <div className={styles.stack}>
@@ -400,6 +406,8 @@ export function GmTablePage() {
           <ChatPanel gm messages={messages.data ?? []} targets={openSeats.map((s) => ({ id: s.id, label: s.label }))}
             onSend={(text, visibility, targetSeatId) => tableApi.send({ text, visibility, targetSeatId })}
             onRoll={(formula, kind, visibility, targetSeatId) => tableApi.roll({ formula, kind, visibility, targetSeatId })}
+            onReroll={(id) => tableApi.reroll(id)}
+            onRerollAttack={view ? (a) => tableApi.rerollAttack(view.id, a.seq) : undefined}
             renderActions={applyDamage} />
         )}
         {tab === 'chat' && (
@@ -407,7 +415,8 @@ export function GmTablePage() {
         )}
       </aside>
       <RulesDialog open={tablesOpen} onClose={() => setTablesOpen(false)} load={tableApi.rules} />
-      {sheetFor && <MySheetDialog characterId={sheetFor.id} open onClose={() => setSheetFor(null)} title={sheetFor.name} player={false} />}
+      {sheetFor && <MySheetDialog characterId={sheetFor.id} open onClose={() => setSheetFor(null)} title={sheetFor.name} player={false}
+        onRoll={(formula, label, luck, rerollLuck) => tableApi.roll({ formula, kind: 'Check', label: `${sheetFor.name}: ${label}`, visibility: 'Public', characterId: sheetFor.id, fromSheet: true, luck, rerollLuck })} />}
     </div>
   );
 }

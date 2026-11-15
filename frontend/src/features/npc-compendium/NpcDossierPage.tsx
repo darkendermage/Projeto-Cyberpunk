@@ -36,7 +36,7 @@ export function NpcDossierPage() {
   );
 
   return (
-    <div className={page.page}>
+    <div className={`${page.page} ${styles.sheetContainer}`}>
       <div className={styles.topbar}>
         {back}
         <div className={styles.topbarName}>

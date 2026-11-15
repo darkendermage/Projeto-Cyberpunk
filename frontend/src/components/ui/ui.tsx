@@ -327,13 +327,15 @@ export function Tooltip({ content, children }: { content?: ReactNode; children: 
 const openModals: object[] = [];
 
 export function Modal({
-  open, onClose, title, children, wide, labelledBy, variant = 'center',
+  open, onClose, title, children, wide, full, labelledBy, variant = 'center',
 }: {
   open: boolean;
   onClose: () => void;
   title?: ReactNode;
   children: ReactNode;
   wide?: boolean;
+  /** Almost the whole screen (a full character sheet). */
+  full?: boolean;
   labelledBy?: string;
   variant?: 'center' | 'drawer-right' | 'top';
 }) {
@@ -376,7 +378,7 @@ export function Modal({
   if (!open) return null;
   return createPortal(
     <div className={clsx(styles.overlay, styles[`overlay_${variant}`])} onMouseDown={(e) => e.target === e.currentTarget && onClose()}>
-      <div ref={ref} className={clsx(styles.modal, styles[`modal_${variant}`], wide && styles.modalWide)}
+      <div ref={ref} className={clsx(styles.modal, styles[`modal_${variant}`], wide && styles.modalWide, full && styles.modalFull)}
         role="dialog" aria-modal="true" aria-labelledby={title ? titleId : undefined} tabIndex={-1}>
         {title && (
           <header className={styles.modalHeader}>

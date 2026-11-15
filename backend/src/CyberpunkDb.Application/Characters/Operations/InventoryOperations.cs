@@ -447,6 +447,47 @@ public sealed class InventoryOperations(CharacterRuleBook rules, CyberwareOperat
         };
     }
 
+    // Bulletproof Shield (CP:R p.184): 10 HP, works like cover. At 0 it breaks and leaves the hand.
+    public CharacterSheet AdjustShield(CharacterSheet sheet, int amount, string? instanceId, CharacterChange change)
+    {
+        // a Popup Shield lives on the implant (CP:R p.365)
+        var popup = sheet.Cyberware.FirstOrDefault(c => instanceId is null ? IsPopupShield(c, change) : c.InstanceId == instanceId && IsPopupShield(c, change));
+        var heldShield = sheet.Inventory.Any(e => e.State == ItemState.Equipped && change.Catalog.Find(e.ItemId)?.Armor?.Type == ArmorType.Shield);
+        if (popup is not null && (instanceId is not null || !heldShield))
+        {
+            var popMax = PopupShieldHp(change);
+            var popBefore = popup.CurrentHp ?? popMax;
+            var popAfter = Math.Clamp(popBefore + amount, 0, popMax);
+            if (popAfter == popBefore) return sheet;
+            var name = change.Item(popup.ItemId).Name;
+            change.Log(CharacterEventKind.Combat, amount < 0 ? "shield-damage" : "shield-repair",
+                popAfter == 0 ? L.T($"{name} quebrou (0 HP).", $"{name} broke (0 HP).") : L.T($"{name}: {popBefore} → {popAfter} HP.", $"{name}: {popBefore} → {popAfter} HP."),
+                popAfter - popBefore, popBefore.ToString(), popAfter.ToString());
+            return sheet with { Cyberware = sheet.Cyberware.Select(c => c.InstanceId == popup.InstanceId ? c with { CurrentHp = popAfter } : c).ToList() };
+        }
+        var entry = (instanceId is null
+                        ? sheet.Inventory.FirstOrDefault(e => e.State == ItemState.Equipped && change.Catalog.Find(e.ItemId)?.Armor?.Type == ArmorType.Shield)
+                        : sheet.Inventory.FirstOrDefault(e => e.InstanceId == instanceId))
+                    ?? throw CharacterChange.Refuse("instanceId", L.T("Nenhum escudo em mãos.", "No shield in hand."));
+        var item = change.Item(entry.ItemId);
+        if (item.Armor?.Type != ArmorType.Shield) throw CharacterChange.Refuse("instanceId", L.T($"{item.Name} não é um escudo.", $"{item.Name} isn't a shield."));
+        var max = rules.Document.Combat.ShieldHp.Value;
+        var before = entry.CurrentHp ?? max;
+        var after = Math.Clamp(before + amount, 0, max);
+        if (after == before) return sheet;
+        var broken = after == 0;
+        change.Log(CharacterEventKind.Combat, amount < 0 ? "shield-damage" : "shield-repair",
+            broken ? L.T($"{item.Name} quebrou (0 HP).", $"{item.Name} broke (0 HP).") : L.T($"{item.Name}: {before} → {after} HP.", $"{item.Name}: {before} → {after} HP."),
+            after - before, before.ToString(), after.ToString());
+        return Replace(sheet, entry with { CurrentHp = after, State = broken && entry.State == ItemState.Equipped ? ItemState.Carried : entry.State });
+    }
+
+    private bool IsPopupShield(CharacterCyberware c, CharacterChange change) =>
+        rules.Document.CyberwareEffects.Effects.Any(e => e.Kind == "shield" && e.Items.Contains(change.Catalog.Find(c.ItemId)?.Slug ?? "", StringComparer.OrdinalIgnoreCase));
+
+    private int PopupShieldHp(CharacterChange change) =>
+        rules.Document.CyberwareEffects.Effects.FirstOrDefault(e => e.Kind == "shield")?.Value ?? rules.Document.Combat.ShieldHp.Value;
+
     // money and luck
 
     public static CharacterSheet AdjustBalance(CharacterSheet sheet, AdjustBalanceRequest request, CharacterChange change)

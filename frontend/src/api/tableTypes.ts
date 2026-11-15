@@ -1,6 +1,6 @@
 import type { PortraitFocus } from '../lib/portraitFocus';
 /** Types of /api/table and /api/table/play (Application/Table). */
-import type { AttackMode, CombatantKind, CombatSide, PendingView, WeaponView, WoundState } from './encounterTypes';
+import type { ActiveCyberState, AttackMode, CombatantKind, CombatSide, CyberTrait, PendingView, WeaponView, WoundState } from './encounterTypes';
 
 export type GridType = 'Square' | 'None';
 export type TokenVisibility = 'All' | 'Gm' | 'Seats';
@@ -186,6 +186,8 @@ export interface PlayerState { seat: PlayerSeat; scene: SceneView | null; music?
 export interface TableMusic {
   videoId: string | null; playlistId: string | null; title: string | null; playing: boolean; positionSeconds: number; updatedAt: string;
   volume: number; index: number;
+  /** Starts the track again when it ends. */
+  repeat?: boolean;
 }
 
 export interface TableMusicState { music: TableMusic | null; recent: { videoId: string | null; playlistId: string | null; title: string | null }[] }
@@ -220,6 +222,13 @@ export interface PlayerFighter {
   weapons: WeaponView[] | null;
   /** The own fighter's once-a-Round effects already used (Combat Awareness). */
   roundFlags?: string[] | null;
+  luckAvailable?: number | null;
+  /** Penalty on the next dodge this Round (house rule, -1 per dodge tried). */
+  dodgePenalty?: number;
+  shieldHp?: number | null;
+  shieldHpMax?: number | null;
+  traits?: CyberTrait[] | null;
+  activeCyber?: Record<string, ActiveCyberState> | null;
 }
 
 export interface PlayerEncounter {
@@ -229,7 +238,9 @@ export interface PlayerEncounter {
   pendingMine?: boolean;
 }
 
-export interface PlayerSkill { key: string; skillId: string; name: string; namePt: string | null; specialization: string | null; category: string; total: number }
+export interface PlayerSkill { key: string; skillId: string; name: string; namePt: string | null; specialization: string | null; category: string; total: number;
+  /** Implant bonuses that only count in some Checks (ticked before rolling). */
+  situationalParts?: { label: string; value: number }[] | null }
 
 export interface PlayerCharacter {
   id: number;
@@ -287,6 +298,9 @@ export interface PartyMember {
   maxSpHead: number | null;
   spBody: number;
   maxSpBody: number | null;
+  /** The Bulletproof Shield in hand: second color on the HP bar. */
+  shieldHp?: number | null;
+  shieldHpMax?: number | null;
   /** The seat that plays this PC. */
   seatId: number;
   /** Its player is connected now. */
@@ -307,11 +321,19 @@ export interface RollResult {
   criticalInjury: boolean;
   /** LUCK points spent on it, already in the total. */
   luck?: number;
-  /** The roll this one replaces (the 1-LUCK reroll). */
+  /** The roll this one replaces (the reroll paid with reserved LUCK). */
   rerollOf?: number | null;
+  /** 1 LUCK was reserved before rolling: the reroll button is free. */
+  rerollReady?: boolean;
   /** The roller's dice color (#rrggbb); null for the default dice. */
   diceColor?: string | null;
+  /** What weighed on the roller at roll time (Wound State, injuries, conditions). */
+  debuffs?: RollDebuff[] | null;
+  /** The total came from the sheet, so the action penalties are already in it. */
+  penaltyInTotal?: boolean;
 }
+
+export interface RollDebuff { kind: 'penalty' | 'injury' | 'condition'; label: string; value?: number | null; detail?: string | null }
 
 /** A session of the table (its chat and the fights used in it). */
 export interface TableSession {
@@ -375,18 +397,33 @@ export interface TableAttack {
   diceColor?: string | null;
   /** Combat Awareness lines of the attack itself (Precision Attack). */
   notes?: string[] | null;
+  /** What weighed on the attacker (already in the total). */
+  attackerDebuffs?: RollDebuff[] | null;
+  /** 1 LUCK was reserved with the attack: the chat offers a free reroll. */
+  rerollReady?: boolean;
+  /** The attack (seq) this one replaces. */
+  rerollOf?: number | null;
 }
 
 /** A quick attack's answer: the attack, or the step it waits on. */
 export interface QuickAttackResult { attack: TableAttack | null; pending: PendingView | null }
 
 /** weaponMode: weapon-rules.json mode (Slug/Shell, Burst, Throw...); null = the weapon's current one. */
-export interface QuickAttack { weapon: string; mode: AttackMode; targetIds: string[]; weaponMode?: string | null }
+export interface QuickAttack {
+  weapon: string; mode: AttackMode; targetIds: string[]; weaponMode?: string | null;
+  /** LUCK spent before rolling (PCs). */ luck?: number;
+  /** 1 more LUCK paid now for one free reroll from the chat. */ rerollLuck?: boolean }
 
 export interface SendMessage { text: string; visibility?: TableVisibility; targetSeatId?: number | null }
 export interface RollRequest {
   /** LUCK points a player spends on their own Check (+1 each). */
-  luck?: number; formula: string; kind?: RollKind; label?: string | null; visibility?: TableVisibility; targetSeatId?: number | null }
+  luck?: number; formula: string; kind?: RollKind; label?: string | null; visibility?: TableVisibility; targetSeatId?: number | null;
+  /** GM rolls from a PC sheet: the character whose debuffs go on the roll. */
+  characterId?: number | null;
+  /** A skill/weapon total from the sheet: the action penalties are already in it. */
+  fromSheet?: boolean;
+  /** 1 more LUCK paid now for one free reroll of this Check. */
+  rerollLuck?: boolean }
 
 /** Live previews and pings pushed by the hub. */
 export interface TokenDrag { sceneId: number; tokenId: string; x: number; y: number }

@@ -218,6 +218,8 @@
 
 .meter { position: relative; height: 10px; background: var(--bg-4); border: 1px solid var(--line-strong); }
 .meterFill { position: absolute; inset: 0 auto 0 0; background: var(--green); }
+/* a held shield's HP, after the HP on the same scale */
+.meterShield { position: absolute; top: 0; bottom: 0; background: var(--cyan); opacity: 0.85; }
 
 .skillList { display: flex; flex-direction: column; gap: 2px; max-height: 280px; overflow-y: auto; }
 .skillButton {
@@ -395,7 +397,12 @@
 .stripPick { display: flex; align-items: center; gap: 8px; width: 100%; padding: 0; background: none; border: 0; color: inherit; text-align: left; cursor: pointer; font: inherit; }
 .stripTarget { outline: 2px solid var(--red); box-shadow: 0 0 12px var(--red-glow); }
 .stripShooter { outline: 1px dashed var(--amber); }
-.stripWeapons { display: flex; flex-direction: column; gap: 3px; }
+/* about four weapons tall; a longer arsenal scrolls inside the card instead of pushing the map up */
+.stripWeapons {
+  display: flex; flex-direction: column; gap: 3px; flex-shrink: 0;
+  max-height: 116px; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; padding-right: 2px;
+}
+.stripWeapons > * { flex-shrink: 0; }
 .weaponChip {
   display: flex; align-items: center; gap: 4px; width: 100%; padding: 3px 6px; min-height: 26px; text-align: left; cursor: pointer;
   background: var(--bg-1); border: 1px solid var(--line); color: var(--text); font-family: var(--font-mono); font-size: 11px;

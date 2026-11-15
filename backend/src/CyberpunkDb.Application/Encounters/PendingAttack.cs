@@ -12,4 +12,8 @@ public sealed record PendingAttack(int Seq, AttackRequest Request, string Target
 // The attack total stays hidden until it resolves.
 public sealed record PendingView(
     int Seq, string AttackerId, string AttackerName, string Weapon, string TargetId, string TargetName, PendingStep Step,
-    int? RangeDv, int? Evasion, int? AttackerCharacterId, int? TargetCharacterId);
+    int? RangeDv, int? Evasion, int? AttackerCharacterId, int? TargetCharacterId,
+    // already inside Evasion (house rule, -1 per dodge this Round)
+    int DodgePenalty = 0,
+    // REF 8+ can dodge; a Kendo fighter may Cut the Bullet (its Resolution base) even without it
+    bool CanDodge = true, int? CutTheBullet = null);

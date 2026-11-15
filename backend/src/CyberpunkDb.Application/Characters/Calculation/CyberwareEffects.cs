@@ -13,6 +13,11 @@ public sealed record ActiveCyberwareEffect(CyberwareEffect Effect, string Label,
 
 public sealed record CyberEffectLine(string Item, string Description, string Source);
 
+// What an implant does at the table, for fights and rolls. Slug: the first installed piece behind it.
+public sealed record CyberTraitLine(
+    string Slug, string Label, string? Kind, int Add, int? Value, IReadOnlyList<string> Stats, IReadOnlyList<string> Injuries,
+    string Note, string Source, CyberActivation? Activate);
+
 public static class CyberwareEffects
 {
     // Uncovered implants plus options in worn hosts (other inventory items don't count).
@@ -25,6 +30,7 @@ public static class CyberwareEffects
         var active = new List<ActiveCyberwareEffect>();
         foreach (var e in rules.Document.CyberwareEffects.Effects)
         {
+            if (e.UnlessStat is { } gate && sheet.Stat(gate) >= (e.UnlessMin ?? int.MaxValue)) continue;
             if (e.AllOf.Length > 0)
             {
                 if (e.AllOf.All(installed.ContainsKey))
@@ -37,6 +43,16 @@ public static class CyberwareEffects
                 active.Add(new ActiveCyberwareEffect(e, string.Join(" / ", present.Select(s => installed[s].Name)), count));
         }
         return active;
+    }
+
+    public static List<CyberTraitLine> Traits(CharacterRuleBook rules, IEnumerable<ActiveCyberwareEffect> active, CharacterSheet sheet, NpcCatalog catalog)
+    {
+        var slugs = sheet.Cyberware.Select(c => catalog.Find(c.ItemId)?.Slug).OfType<string>().ToHashSet(StringComparer.OrdinalIgnoreCase);
+        return active.Where(a => a.Effect.Kind is not null || a.Effect.Activate is not null)
+            .Select(a => new CyberTraitLine(a.Effect.Items.Concat(a.Effect.AllOf).FirstOrDefault(slugs.Contains) ?? a.Effect.Items.FirstOrDefault() ?? "",
+                a.Label, a.Effect.Kind, a.Effect.Add, a.Effect.Value, a.Effect.Stats, a.Effect.Injuries, Describe(rules, a),
+                CharacterRuleBook.Page(a.Effect.Source), a.Effect.Activate))
+            .ToList();
     }
 
     public static List<CyberEffectLine> Lines(CharacterRuleBook rules, IEnumerable<ActiveCyberwareEffect> active) =>

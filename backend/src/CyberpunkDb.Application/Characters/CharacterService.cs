@@ -517,6 +517,26 @@ public sealed class CharacterService(
     public Task<CharacterDetailDto> SetWeaponQualityAsync(int id, WeaponQualityRequest r, CancellationToken ct) =>
         MutateAsync(id, r.Version, c => InventoryOperations.SetQuality(c.Sheet, r, c), ct);
 
+    public Task<CharacterDetailDto> AdjustShieldAsync(int id, AdjustShieldRequest r, CancellationToken ct) =>
+        MutateAsync(id, r.Version, c => inventory.AdjustShield(c.Sheet, r.Amount, r.InstanceId, c), ct);
+
+    // called by the combat table: the shield in hand takes the hit
+    internal async Task<CharacterDetailDto> DamageShieldAsync(int id, int amount, CancellationToken ct)
+    {
+        var version = (await SnapshotAsync(id, ct)).Version;
+        return await MutateAsync(id, version, c => inventory.AdjustShield(c.Sheet, -amount, null, c), ct);
+    }
+
+    // called by the combat table (David's Sandevistan)
+    internal async Task<CharacterDetailDto> LoseHumanityAsync(int id, int amount, string reason, CancellationToken ct)
+    {
+        var version = (await SnapshotAsync(id, ct)).Version;
+        return await AdjustHumanityAsync(id, new AdjustHumanityRequest(version, -amount, reason), ct);
+    }
+
+    public Task<CharacterDetailDto> AdjustHumanityAsync(int id, AdjustHumanityRequest r, CancellationToken ct) =>
+        MutateAsync(id, r.Version, c => cyberware.AdjustHumanity(c.Sheet, r, c), ct);
+
     public Task<CharacterDetailDto> AdjustBalanceAsync(int id, AdjustBalanceRequest r, CancellationToken ct) =>
         MutateAsync(id, r.Version, c => InventoryOperations.AdjustBalance(c.Sheet, r, c), ct);
 

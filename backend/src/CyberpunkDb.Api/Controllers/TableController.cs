@@ -41,6 +41,10 @@ public sealed class TableController(
     [HttpPost("rolls")]
     public Task<TableMessageDto> Roll(RollRequest request, CancellationToken ct) => chat.RollAsync(null, request, ct);
 
+    // a Check the GM made from a PC's sheet with LUCK reserved
+    [HttpPost("rolls/{messageId:long}/reroll")]
+    public Task<TableMessageDto> Reroll(long messageId, CancellationToken ct) => chat.RerollAsync(null, messageId, ct);
+
     // null = default dice
     [HttpGet("dice-color")]
     public async Task<DiceColorRequest> GmDiceColor(CancellationToken ct) => new(await settings.GetAsync(TableSettingsService.GmDiceColor, ct));
@@ -74,6 +78,9 @@ public sealed class TableController(
     [HttpPost("music/next")]
     public Task<TableMusicStateDto> NextMusic(CancellationToken ct) => music.NextAsync(ct);
 
+    [HttpPost("music/repeat")]
+    public Task<TableMusicStateDto> RepeatMusic(MusicRepeatRequest request, CancellationToken ct) => music.RepeatAsync(request, ct);
+
     [HttpPost("music/volume")]
     public Task<TableMusicStateDto> MusicVolume(MusicVolumeRequest request, CancellationToken ct) => music.VolumeAsync(request, ct);
 
@@ -90,7 +97,27 @@ public sealed class TableController(
 
     // closes the open one with this name and starts an empty chat
     [HttpPost("sessions")]
-    public Task<TableSessionDto> NewSession(NewSessionRequest request, CancellationToken ct) => sessions.StartNewAsync(request, ct);
+    public async Task<TableSessionDto> NewSession(NewSessionRequest request, [FromServices] SceneService scenes, CancellationToken ct)
+    {
+        // the old scenes stay with the old session; the new one starts empty
+        await scenes.CloseSessionScenesAsync(ct);
+        return await sessions.StartNewAsync(request, ct);
+    }
+
+    // a past session becomes the open one again (the open one closes), to edit its scenes and keep playing it
+    [HttpPost("sessions/{id:int}/reopen")]
+    public async Task<TableSessionDto> ReopenSession(int id, [FromServices] SceneService scenes, CancellationToken ct)
+    {
+        await sessions.EnsureExistsAsync(id, ct);
+        await scenes.CloseSessionScenesAsync(ct);
+        return await sessions.ReopenAsync(id, ct);
+    }
+
+    [HttpGet("sessions/{id:int}/scenes")]
+    public Task<IReadOnlyList<SceneSummaryDto>> SessionScenes(int id, [FromServices] SceneService scenes, CancellationToken ct) => scenes.ListOfSessionAsync(id, ct);
+
+    [HttpPost("scenes/{id:int}/copy-to-current")]
+    public Task<SceneView> CopySceneToCurrent(int id, [FromServices] SceneService scenes, CancellationToken ct) => scenes.CopyToCurrentAsync(id, ct);
 
     [HttpGet("sessions/{id:int}/messages")]
     public Task<IReadOnlyList<TableMessageDto>> SessionMessages(int id, CancellationToken ct) => chat.SessionHistoryAsync(id, ct);
@@ -149,9 +176,19 @@ public sealed class TableController(
     [HttpPost("scenes/{id:int}/fight")]
     public Task<SceneView> StartFight(int id, CreateFightRequest request, CancellationToken ct) => fights.StartAsync(id, request, ct);
 
+    [HttpPost("scenes/{id:int}/cyber")]
+    public Task<CyberpunkDb.Application.Encounters.EncounterDetailDto> ActivateCyber(int id, GmCyberRequest request, [FromServices] TableCyberService cyber, CancellationToken ct) => cyber.GmAsync(id, request, ct);
+
+    [HttpPost("scenes/{id:int}/fight/end")]
+    public Task<SceneView> EndFight(int id, CancellationToken ct) => fights.EndAsync(id, ct);
+
     // distance comes from the tokens
     [HttpPost("scenes/{id:int}/attack")]
     public Task<QuickAttackResult> Attack(int id, GmQuickAttackRequest request, CancellationToken ct) => attacks.GmAttackAsync(id, request, ct);
+
+    // paid by the LUCK reserved with the attack
+    [HttpPost("scenes/{id:int}/attack/reroll")]
+    public Task<QuickAttackResult> RerollAttack(int id, CyberpunkDb.Application.Encounters.AttackRerollRequest request, CancellationToken ct) => attacks.GmRerollAsync(id, request, ct);
 
     // one save for the whole selection
     [HttpPost("scenes/{id:int}/batch")]

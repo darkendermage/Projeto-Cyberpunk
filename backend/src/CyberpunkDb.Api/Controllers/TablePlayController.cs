@@ -144,7 +144,7 @@ public sealed class TablePlayController(
         }
     }
 
-    // costs 1 LUCK
+    // paid by the LUCK reserved with the Check
     [HttpPost("rolls/{messageId:long}/reroll")]
     public async Task<TableMessageDto> Reroll(long messageId, CancellationToken ct) => await chat.RerollAsync(await SeatAsync(ct), messageId, ct);
 
@@ -167,6 +167,11 @@ public sealed class TablePlayController(
     public async Task<QuickAttackResult> Attack(QuickAttackRequest request, CancellationToken ct) =>
         await attacks.PlayerAttackAsync(await SeatAsync(ct), request, ct);
 
+    // own attack, paid by the LUCK reserved with it
+    [HttpPost("attack/reroll")]
+    public async Task<QuickAttackResult> RerollAttack(AttackRerollRequest request, CancellationToken ct) =>
+        await attacks.PlayerRerollAsync(await SeatAsync(ct), request, ct);
+
     [HttpPost("reload")]
     public async Task<PlayerReloadResult> Reload(PlayerWeaponRequest request, CancellationToken ct) => await turns.ReloadAsync(await SeatAsync(ct), request, ct);
 
@@ -177,6 +182,10 @@ public sealed class TablePlayController(
     // costs an Action
     [HttpPost("unjam")]
     public async Task<PlayerEncounterDto> Unjam(PlayerWeaponRequest request, CancellationToken ct) => await turns.UnjamAsync(await SeatAsync(ct), request, ct);
+
+    [HttpPost("cyber")]
+    public async Task<PlayerEncounterDto> Cyber(PlayerCyberRequest request, [FromServices] TableCyberService cyber, CancellationToken ct) =>
+        await cyber.PlayerAsync(await SeatAsync(ct), request, ct);
 
     [HttpPost("defense")]
     public async Task<PlayerEncounterDto> Defense(PlayerDefenseRequest request, CancellationToken ct) => await turns.DefenseAsync(await SeatAsync(ct), request, ct);

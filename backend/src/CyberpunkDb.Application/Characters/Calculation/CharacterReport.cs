@@ -33,7 +33,9 @@ public sealed record HealthReport(
     int BaseDeathSavePenalty,
     // base + what piled up since Stabilization
     int DeathSavePenalty,
-    bool MustRollDeathSave);
+    bool MustRollDeathSave,
+    // the shield in hand: a Bulletproof Shield (inventory) or a Popup Shield (cyberware), CP:R p.184/365
+    int? ShieldHp = null, int? ShieldHpMax = null, string? ShieldName = null, string? ShieldInstanceId = null);
 
 public sealed record HumanityReport(
     int EmpBase,
@@ -48,7 +50,9 @@ public sealed record HumanityReport(
     int BorgwareLoweringCap,
     // tens of current Humanity
     int EmpEffective,
-    bool Cyberpsychosis);
+    bool Cyberpsychosis,
+    // sum of the adjustments by hand
+    int Adjustment = 0);
 
 public sealed record ArmorLocationReport(
     ArmorSlot Location,
@@ -90,7 +94,9 @@ public sealed record CharacterSkillLine(
     int? IpToRaise,
     IReadOnlyList<ValuePart> ModifierParts,
     // "+2 for Checks which include sight" etc, not in Base
-    IReadOnlyList<string> Situational);
+    IReadOnlyList<string> Situational,
+    // the same, as numbers to tick before a roll
+    IReadOnlyList<ValuePart>? SituationalParts = null);
 
 public sealed record RoleLine(string Role, int Rank, string Ability, int AbilityPage, bool Current, int IpInvested, int? IpToRaise);
 
@@ -159,7 +165,10 @@ public sealed record WeaponLine(
     int? MinBody = null,
     // weapon-rules.json, spelled out for the sheet: extra magazines and the modes that stay on the weapon
     IReadOnlyList<SheetMagazine>? ExtraMagazines = null,
-    IReadOnlyList<SheetWeaponMode>? SwitchModes = null)
+    IReadOnlyList<SheetWeaponMode>? SwitchModes = null,
+    // an implant that attacks (weapon-rules.json cyberweapons); Shots = the book's capacity, counted by hand
+    bool Cyberware = false,
+    int? Shots = null)
 {
     public int AttackTotal => SkillTotal + (AttackBonuses?.Sum(p => p.Value) ?? 0);
 }
@@ -230,4 +239,6 @@ public sealed record CharacterReport(
     bool FullBodyConversion,
     IReadOnlyList<CyberEffectLine> CyberwareEffects,
     // Smart Glasses, Battleglove, Smart Ears...
-    IReadOnlyList<WearableLine> Wearables);
+    IReadOnlyList<WearableLine> Wearables,
+    // what the implants do at the table (initiative, aimed shots, immunities, activations...)
+    IReadOnlyList<CyberTraitLine>? CyberTraits = null);

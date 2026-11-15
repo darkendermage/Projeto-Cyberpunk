@@ -119,6 +119,12 @@ public sealed class CharactersController(CharacterService characters, EncounterS
     [HttpPost("{id:int}/balance")]
     public Task<CharacterDetailDto> AdjustBalance(int id, AdjustBalanceRequest r, CancellationToken ct) => characters.AdjustBalanceAsync(id, r, ct);
 
+    [HttpPost("{id:int}/shield")]
+    public Task<CharacterDetailDto> AdjustShield(int id, AdjustShieldRequest r, CancellationToken ct) => characters.AdjustShieldAsync(id, r, ct);
+
+    [HttpPost("{id:int}/humanity")]
+    public Task<CharacterDetailDto> AdjustHumanity(int id, AdjustHumanityRequest r, CancellationToken ct) => characters.AdjustHumanityAsync(id, r, ct);
+
     // cyberware
 
     [HttpPost("{id:int}/cyberware/preview")]

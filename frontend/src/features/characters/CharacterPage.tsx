@@ -109,7 +109,7 @@ function CharacterWorkspace({ detail, rules, tab, onTab, player }: {
     );
 
   return (
-    <div className={embedded ? styles.embedded : page.page}>
+    <div className={`${embedded ? styles.embedded : page.page} ${styles.sheetContainer}`}>
       <div className={styles.topbar}>
         {!embedded && <Link to="/characters" className={styles.tab} aria-label={t('Voltar aos personagens', 'Back to characters')}><ArrowLeft size={16} /></Link>}
         <div className={styles.topbarName}>

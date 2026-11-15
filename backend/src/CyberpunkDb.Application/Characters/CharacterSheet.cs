@@ -252,6 +252,8 @@ public sealed record CharacterCyberware
     public bool HumanityLossRolled { get; init; }
     // Subdermal Armor / Skin Weave ablate like worn armor. null = undamaged
     public int? CurrentSp { get; init; }
+    // Popup Shield HP (null = full)
+    public int? CurrentHp { get; init; }
     public ItemOrigin Origin { get; init; } = ItemOrigin.Manual;
     public BudgetPool PaidFrom { get; init; } = BudgetPool.Balance;
     public int? PricePaid { get; init; }
@@ -307,6 +309,8 @@ public sealed record HumanityState
 {
     public int Lost { get; init; }
     public int Recovered { get; init; }
+    // GM/player adjustment by hand, outside cyberware and therapy (can take Humanity below 0)
+    public int Adjustment { get; init; }
 }
 
 // lifepath and style

@@ -5,7 +5,9 @@ namespace CyberpunkDb.Application.Table;
 public sealed record PlayerStatDto(string Key, int Value);
 
 // Total = STAT + level + modifiers + penalties, add 1d10
-public sealed record PlayerSkillDto(string Key, string SkillId, string Name, string? NamePt, string? Specialization, string Category, int Total);
+// SituationalParts: implant bonuses that only count in some Checks, ticked before rolling
+public sealed record PlayerSkillDto(string Key, string SkillId, string Name, string? NamePt, string? Specialization, string Category, int Total,
+    IReadOnlyList<Characters.Calculation.ValuePart>? SituationalParts = null);
 
 // add 1d10
 public sealed record PlayerWeaponDto(string Key, string Name, int AttackTotal, string? Damage, int? Magazine, int Rounds, int? AutofireTotal);
@@ -55,7 +57,7 @@ public static class PlayerCharacters
         return new PlayerCharacterDto(
             c.Id, c.Sheet.Identity.Name, c.Sheet.Identity.Handle, r.Health.CurrentHp, r.Health.MaxHp, r.Luck, r.LuckAvailable, r.Humanity.Current,
             r.Stats.Select(s => new PlayerStatDto(s.Key, s.Effective)).ToList(),
-            r.Skills.Select(s => new PlayerSkillDto(s.Key, s.SkillId, s.Name, s.NamePt, s.Specialization, s.Category, s.Total)).ToList(),
+            r.Skills.Select(s => new PlayerSkillDto(s.Key, s.SkillId, s.Name, s.NamePt, s.Specialization, s.Category, s.Total, s.SituationalParts)).ToList(),
             r.Weapons.Where(w => w.Equipped).Select(w => new PlayerWeaponDto(w.InstanceId, w.Name, w.AttackTotal, w.Damage, w.Magazine, w.LoadedRounds,
                 w.AutofireTotal + (w.AttackBonuses?.Sum(p => p.Value) ?? 0))).ToList(),
             new PlayerArmorDto(r.Armor.Head.Sp, r.Armor.Head.MaxSp, r.Armor.Body.Sp, r.Armor.Body.MaxSp));
