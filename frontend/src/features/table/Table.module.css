@@ -23,7 +23,8 @@
   display: grid;
   grid-template-columns: var(--cols, 190px 10px minmax(0, 1fr) 10px 320px);
   gap: 0;
-  height: calc(100dvh - var(--header-h) - 40px);
+  /* the screen minus the header and the page's top (14px) and bottom (40px) padding */
+  height: calc(100dvh - var(--header-h) - 54px);
   min-height: 560px;
 }
 .playerScreen {
@@ -84,7 +85,9 @@
   .playerBody .stage { height: 65vh; }
 }
 
+/* relative: anything absolute inside stays in the panel's scroll instead of stretching the page */
 .column {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 10px;

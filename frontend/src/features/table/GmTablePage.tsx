@@ -5,7 +5,7 @@ import { encounterKeys, useEncounter, useEncounterCommand } from '../../api/enco
 import type { EncounterDetail, InjuryLocation } from '../../api/encounterTypes';
 import { tableApi, tableKeys } from '../../api/table';
 import type { SceneGrid, SceneView, TableMessage, TableMusicState } from '../../api/tableTypes';
-import { Dices, Trash2, Volume2, VolumeX, History } from 'lucide-react';
+import { Dices, Gift, Trash2, Volume2, VolumeX, History } from 'lucide-react';
 import { useNavigate } from 'react-router';
 import { Button, EmptyState, ErrorState, IconButton, Select, Spinner } from '../../components/ui/ui';
 import { useToast } from '../../state/ToastContext';
@@ -20,6 +20,7 @@ import { CombatTab, InvitesTab, SceneTab, ScenesColumn, TemplateInspector, Token
 import { damageCommand, fromGmFighter } from './tokens';
 import { PanelHandle } from './PanelHandle';
 import { RulesDialog } from './RulesDialog';
+import { RewardDialog } from './RewardDialog';
 import { AimBar, SceneStrip } from './SceneStrip';
 import { PendingCard } from './PendingCard';
 import { MySheetDialog } from './MySheetDialog';
@@ -83,6 +84,7 @@ export function GmTablePage() {
   const [gridDraft, setGridDraft] = useState<{ key: string; grid: SceneGrid } | null>(null);
   const [selection, setSelection] = useState<Selection>(NO_SELECTION);
   const [tablesOpen, setTablesOpen] = useState(false);
+  const [rewardOpen, setRewardOpen] = useState(false);
   const [sheetFor, setSheetFor] = useState<{ id: number; name: string } | null>(null);
   const [imageBusy, setImageBusy] = useState(false);
   const gmDice = useQuery({ queryKey: ['table', 'gm-dice'], queryFn: tableApi.gmDiceColor });
@@ -411,10 +413,14 @@ export function GmTablePage() {
             renderActions={applyDamage} />
         )}
         {tab === 'chat' && (
-          <Button variant="ghost" icon={<History size={15} />} onClick={() => navigate('/mesa')}>{t('Sessões (nova sessão, anteriores)', 'Sessions (new, previous)')}</Button>
+          <div className={styles.row}>
+            <Button icon={<Gift size={15} />} onClick={() => setRewardOpen(true)}>{t('Recompensa da sessão', 'Session reward')}</Button>
+            <Button variant="ghost" icon={<History size={15} />} onClick={() => navigate('/mesa')}>{t('Sessões (nova sessão, anteriores)', 'Sessions (new, previous)')}</Button>
+          </div>
         )}
       </aside>
       <RulesDialog open={tablesOpen} onClose={() => setTablesOpen(false)} load={tableApi.rules} />
+      <RewardDialog open={rewardOpen} seats={seats.data ?? []} onClose={() => setRewardOpen(false)} />
       {sheetFor && <MySheetDialog characterId={sheetFor.id} open onClose={() => setSheetFor(null)} title={sheetFor.name} player={false}
         onRoll={(formula, label, luck, rerollLuck) => tableApi.roll({ formula, kind: 'Check', label: `${sheetFor.name}: ${label}`, visibility: 'Public', characterId: sheetFor.id, fromSheet: true, luck, rerollLuck })} />}
     </div>

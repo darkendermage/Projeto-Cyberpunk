@@ -179,6 +179,10 @@ public sealed class TableController(
     [HttpPost("scenes/{id:int}/cyber")]
     public Task<CyberpunkDb.Application.Encounters.EncounterDetailDto> ActivateCyber(int id, GmCyberRequest request, [FromServices] TableCyberService cyber, CancellationToken ct) => cyber.GmAsync(id, request, ct);
 
+    // end of session: eb and IP to the chosen characters at once
+    [HttpPost("reward")]
+    public Task<TableRewardResult> Reward(TableRewardRequest request, [FromServices] TableRewardService rewards, CancellationToken ct) => rewards.RewardAsync(request, ct);
+
     [HttpPost("scenes/{id:int}/fight/end")]
     public Task<SceneView> EndFight(int id, CancellationToken ct) => fights.EndAsync(id, ct);
 

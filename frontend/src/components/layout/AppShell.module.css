@@ -168,15 +168,16 @@
 
 /* sidebar */
 
-/* Short enough to fit the screen: it stays in view without a scrollbar of its own (the panels open beside it). */
+/* Short enough to fit the screen: it stays in view without a scrollbar of its own (the panels open beside it).
+   Stretched to the body and capped at the screen: a fixed 100vh under the header made every page a header taller
+   than the window, so short pages (the virtual table) scrolled into empty space. */
 .sidebar {
   position: sticky;
   top: 0;
   z-index: 40;
-  align-self: flex-start;
   width: var(--sidebar-w);
   flex: none;
-  height: 100vh;
+  max-height: 100vh;
   display: flex;
   flex-direction: column;
   padding: 18px 12px 12px;
@@ -303,10 +304,12 @@
   border-radius: 10px;
 }
 
+/* Gives way (top first) when the sidebar is shorter than the screen, so the menu never overflows the page. */
 .sidebarArt {
   position: relative;
   margin-top: auto;
-  min-height: 250px;
+  flex: 0 1 250px;
+  min-height: 0;
   padding: 18px 10px 4px;
   overflow: hidden;
   display: flex;

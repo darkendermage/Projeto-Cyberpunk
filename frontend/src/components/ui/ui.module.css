@@ -80,7 +80,9 @@
 
 /* checkbox */
 
+/* relative: the hidden native input is absolute; without an anchor here it escapes scrolling panels and stretches the page */
 .checkbox {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 9px;
@@ -143,6 +145,7 @@
 /* switch */
 
 .switch {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 12px;

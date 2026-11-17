@@ -5,7 +5,7 @@ import type { CharacterDetail, CharacterRules, InventoryLine, WearableLine } fro
 import { Button, Modal, NumberInput, Select } from '../../components/ui/ui';
 import { formatEb } from '../../lib/format';
 import { useToast } from '../../state/ToastContext';
-import { BalanceButton } from './BalanceDialog';
+import { BalanceButtons } from './BalanceDialog';
 import { formatDate, signed } from './characterLabels';
 import { SheetPanel, StateTag } from './CharacterUi';
 import { EquippedSection, GearStats, InventorySection, ItemPage, WornSection, type GearActions } from './GearSections';
@@ -95,14 +95,17 @@ function FinancePanel({ detail, run, busy, onStore }: { detail: CharacterDetail;
         <span className={styles.muted}>{last ? t(`Última movimentação: ${tv(last.description)}`, `Last transaction: ${tv(last.description)}`) : t('Nenhuma movimentação.', 'No transactions.')}</span>
       </div>
       <div className={styles.gearFinanceRight}>
-        <strong className={`${styles.green} ${styles.gearBalance}`}>{formatEb(detail.sheet.wallet.balance)} eb</strong>
+        {/* − and + sit next to the money they change; the buttons below are about items */}
+        <span className={styles.row}>
+          <strong className={`${styles.green} ${styles.gearBalance}`}>{formatEb(detail.sheet.wallet.balance)} eb</strong>
+          <BalanceButtons detail={detail} run={run} busy={busy} />
+        </span>
         <div className={styles.row}>
           <Button icon={<ShoppingBag size={14} />} disabled={!finalized} title={finalized ? t('Comprar com o saldo', 'Buy with the balance') : t('Compras da criação ficam no passo Equipamento', 'Creation purchases are in the Gear step')}
-            onClick={() => onStore('buy')}>{t('Comprar', 'Buy')}</Button>
+            onClick={() => onStore('buy')}>{t('Comprar itens', 'Buy items')}</Button>
           <Button icon={<Gift size={14} />} disabled={!finalized}
             title={finalized ? t('Troca, presente ou saque: entra sem pagar', 'Trade, gift or loot: comes in without paying') : t('Itens sem custo só entram depois da criação', 'Free items only come in after creation')}
-            onClick={() => onStore('receive')}>{t('Receber', 'Receive')}</Button>
-          <BalanceButton detail={detail} run={run} busy={busy} />
+            onClick={() => onStore('receive')}>{t('Receber itens', 'Receive items')}</Button>
           <Button variant="ghost" icon={<History size={14} />} onClick={() => { setPage(0); setHistory(true); }}>{t('Ver histórico', 'View history')}</Button>
         </div>
       </div>

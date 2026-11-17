@@ -576,6 +576,19 @@ public sealed class CharacterService(
     public Task<CharacterDetailDto> AwardIpAsync(int id, AwardIpRequest r, CancellationToken ct) =>
         MutateAsync(id, r.Version, c => progression.AwardIp(c.Sheet, r, c), ct);
 
+    // Session reward from the table: money and IP in one save. Both only add, so it runs on the latest version.
+    internal async Task<CharacterDetailDto> RewardAsync(int id, int money, int ip, string reason, CancellationToken ct)
+    {
+        var version = (await SnapshotAsync(id, ct)).Version;
+        return await MutateAsync(id, version, c =>
+        {
+            var sheet = RequireFinalized(c.Sheet);
+            if (money != 0) sheet = InventoryOperations.AdjustBalance(sheet, new AdjustBalanceRequest(version, money, reason), c);
+            if (ip != 0) sheet = progression.AwardIp(sheet, new AwardIpRequest(version, ip, reason), c);
+            return sheet;
+        }, ct);
+    }
+
     public Task<CharacterDetailDto> ImproveSkillAsync(int id, ImproveSkillRequest r, CancellationToken ct) =>
         MutateAsync(id, r.Version, c => progression.ImproveSkill(c.Sheet, r, c), ct);
 

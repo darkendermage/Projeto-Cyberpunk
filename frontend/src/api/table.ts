@@ -2,7 +2,7 @@ import { API_BASE, ApiError, request } from './client';
 import { locale, t } from '../i18n';
 import type {
   ArmorLocation, ClaimResult, Lobby, MediaInfo, PartyMember, PlayerCharacter, PlayerSheet, PlayerEncounter, PlayerSeat, PlayerState, RollRequest, SceneBatch, SceneGrid, SceneSummary, SceneView, Seat,
-  SendMessage, TableMessage, TableRules, TemplateInput, QuickAttack, BarrierRequest, TokenInput, TokenMove, TunnelStatus, QuickAttackResult, TableSession, TableMusicState, ImageInput,
+  SendMessage, TableMessage, TableRules, TemplateInput, QuickAttack, BarrierRequest, TokenInput, TokenMove, TunnelStatus, QuickAttackResult, TableSession, TableMusicState, ImageInput, TableRewardResult,
 } from './tableTypes';
 
 const json = (body: unknown) => JSON.stringify(body);
@@ -43,6 +43,9 @@ export const tableApi = {
   reroll: (messageId: number) => request<TableMessage>(`/table/rolls/${messageId}/reroll`, { method: 'POST' }),
   rerollAttack: (sceneId: number, seq: number) => request<QuickAttackResult>(`/table/scenes/${sceneId}/attack/reroll`, { method: 'POST', body: json({ seq }) }),
   endFight: (id: number) => request<SceneView>(`/table/scenes/${id}/fight/end`, { method: 'POST' }),
+  /** End of session: the same eb and IP to each chosen character, with one reason. */
+  reward: (body: { characterIds: number[]; money: number; ip: number; reason: string }) =>
+    request<TableRewardResult>('/table/reward', { method: 'POST', body: json(body) }),
   startFight: (id: number, body: { name: string | null; tokens: { tokenId: string; side: 'Ally' | 'Enemy' }[] }) =>
     request<SceneView>(`/table/scenes/${id}/fight`, { method: 'POST', body: json(body) }),
   updateToken: (id: number, tokenId: string, token: TokenInput) =>

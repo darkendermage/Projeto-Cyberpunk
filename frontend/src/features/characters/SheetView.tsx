@@ -8,13 +8,14 @@ import { useToast } from '../../state/ToastContext';
 import {
   filterSkills, formatDate, groupSkills, signed, SKILL_FILTERS, skillLabel, STAT_LABEL, type SkillFilter,
 } from './characterLabels';
-import { BalanceButton } from './BalanceDialog';
+import { BalanceButtons } from './BalanceDialog';
 import { HumanityButton } from './HumanityDialog';
 import { CyberEffectsPanel, Portrait, RoleAbilityButton, SheetPanel, StateTag } from './CharacterUi';
 import { ArmorPanel, HealthPanel, InjuriesPanel, type Run, WeaponsPanel } from './CombatPanels';
 import { RoleSplitDialog } from './RoleSplitDialog';
 import { splitTotal } from './roleSplit';
-import { ProgressionButton } from './ProgressionPanel';
+import { IpButtons, ProgressionButton } from './ProgressionPanel';
+import { lastMove } from './wallet';
 import { paginate } from './gearLayout';
 import { Pager } from './Pager';
 import { useSheetRoll } from './sheetRoll';
@@ -153,25 +154,35 @@ function RoleSplitButton({ detail, rules, role, rank, run, busy }: { detail: Cha
   );
 }
 
-/** Money and Improvement Points side by side, at the top of the Character tab. */
+/** Money and Improvement Points side by side, at the top of the Character tab: − and + on each, the last change under it. */
 function WalletBlock({ detail, rules, run, busy }: { detail: CharacterDetail; rules: CharacterRules; run: Run; busy: boolean }) {
   const { ip, ipEarned } = detail.sheet.progress;
+  const events = useCharacterEvents(detail.id).data;
+  const money = lastMove(events, 'Ledger');
+  const points = lastMove(events, 'Progression');
+  const line = (move: ReturnType<typeof lastMove>, unit: string) => move && (
+    <span className={styles.source} title={tv(move.full)}>
+      <span className={move.amount > 0 ? styles.green : styles.red}>{signed(move.amount)}{unit}</span> · {tv(move.text)}
+    </span>
+  );
   return (
     <section className={`${styles.panel} ${styles.walletBlock}`} aria-label={t('Carteira', 'Wallet')}>
       <div className={styles.walletItem}>
         <span className={styles.rowBetween}>
           <span className={styles.idLabel}>{t('Saldo', 'Balance')}</span>
-          <BalanceButton detail={detail} run={run} busy={busy} compact />
+          <BalanceButtons detail={detail} run={run} busy={busy} />
         </span>
-        <strong className={styles.walletValue}>{formatEb(detail.sheet.wallet.balance)}</strong>
+        <strong className={styles.walletValue}>{formatEb(detail.sheet.wallet.balance)} <span className={styles.muted}>eb</span></strong>
+        {line(money, ' eb')}
       </div>
       <div className={styles.walletItem}>
         <span className={styles.rowBetween}>
           <span className={styles.idLabel}>IP</span>
-          <ProgressionButton detail={detail} rules={rules} run={run} busy={busy} />
+          <IpButtons detail={detail} run={run} busy={busy} />
         </span>
-        <strong className={`${styles.walletValue} ${styles.cyan}`}>{ip}</strong>
-        <span className={styles.muted}>{t(`de ${ipEarned} ganhos`, `of ${ipEarned} earned`)}</span>
+        <strong className={`${styles.walletValue} ${styles.cyan}`}>{ip} <span className={styles.muted}>{t(`de ${ipEarned}`, `of ${ipEarned}`)}</span></strong>
+        {line(points, ' IP')}
+        <ProgressionButton detail={detail} rules={rules} run={run} busy={busy} />
       </div>
     </section>
   );

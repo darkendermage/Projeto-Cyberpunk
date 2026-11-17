@@ -441,3 +441,6 @@ export interface TableRules {
   coverExamplesSource: string;
   notes: RuleNote[];
 }
+
+/** What the end-of-session reward paid (names as shown on the table). */
+export interface TableRewardResult { names: string[]; money: number; ip: number }
