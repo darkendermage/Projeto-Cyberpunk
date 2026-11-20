@@ -361,6 +361,8 @@ export interface WeaponLine {
   extraMagazines?: { id: string; label: string; rounds: number; capacity: number; refill: boolean }[] | null;
   /** Destroyed beyond repair (a GunMart Special's natural 1...). */
   destroyed?: boolean;
+  /** Inside a Popup Melee / Ranged Weapon (its name): always at hand. */
+  hostedIn?: string | null;
 }
 
 export interface CyberLine {
@@ -386,6 +388,12 @@ export interface CyberLine {
   coveredBy?: string | null;
   /** Short effect text from the catalog, shown on hover. */
   effect?: string | null;
+  /** Implant armor on the head (currentSp is the body); null = full. */
+  currentSpHead?: number | null;
+  /** Popup Melee (true) / Ranged (false) Weapon: the weapon inside and the inventory weapons that fit. */
+  popupMelee?: boolean | null;
+  hostedWeaponId?: string | null;
+  popupCandidates?: string[] | null;
 }
 
 export type WearableAccepts = 'Cybereye' | 'Cyberarm' | 'Cyberaudio';

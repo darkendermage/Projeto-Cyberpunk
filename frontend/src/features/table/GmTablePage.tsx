@@ -144,7 +144,12 @@ export function GmTablePage() {
       void client.invalidateQueries({ queryKey: tableKeys.online });
     },
     party: () => void client.invalidateQueries({ queryKey: ['table', 'party'] }),
-    chatReset: () => client.setQueryData<TableMessage[]>(tableKeys.messages, []),
+    // sent when a session starts or reopens: the scene list belongs to the session, so it changes too
+    chatReset: () => {
+      client.setQueryData<TableMessage[]>(tableKeys.messages, []);
+      setChosen(null);
+      void client.invalidateQueries({ queryKey: tableKeys.scenes, exact: true });
+    },
     music: (music) => client.setQueryData<TableMusicState>(musicKey, (old) => ({ music, recent: old?.recent ?? [] })),
     resync: () => void client.invalidateQueries({ queryKey: ['table'] }),
   });

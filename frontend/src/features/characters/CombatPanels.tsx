@@ -156,7 +156,7 @@ export function ArmorPanel({ detail, run, busy, locked }: Props) {
             <ShieldMinus size={14} />
           </IconButton>
           {loc.instanceId && loc.maxSp != null && loc.sp < loc.maxSp && (
-            <IconButton label={t(`Reparar ${tv(loc.name)}`, `Repair ${tv(loc.name)}`)} disabled={busy} onClick={() => run('armor/repair', { instanceId: loc.instanceId })}><Wrench size={14} /></IconButton>
+            <IconButton label={t(`Reparar ${tv(loc.name)}`, `Repair ${tv(loc.name)}`)} disabled={busy} onClick={() => run('armor/repair', { instanceId: loc.instanceId, location: slot })}><Wrench size={14} /></IconButton>
           )}
         </span>
       </td>
@@ -194,8 +194,15 @@ export function ArmorPanel({ detail, run, busy, locked }: Props) {
 /** Equipped and carried weapons: Skill Base, ammunition, fire modes and reload. */
 export function WeaponsPanel({ detail, run, busy, locked }: Props) {
   const weapons = detail.report.weapons;
+  // a popup weapon implant with nothing inside does nothing yet: say where to fix it
+  const emptyPopups = detail.report.cyberware.filter((c) => c.popupMelee != null && !c.hostedWeaponId);
   return (
     <SheetPanel title={t('Armas', 'Weapons')} icon={<Crosshair size={16} />}>
+      {emptyPopups.map((p) => (
+        <p key={p.instanceId} className={`${styles.small} ${styles.amber}`}>
+          {t(`${tv(p.name)} sem arma dentro: escolha a arma na aba Cyberware (detalhes do implante).`, `${tv(p.name)} has no weapon inside: pick it on the Cyberware tab (implant details).`)}
+        </p>
+      ))}
       {weapons.length === 0 ? <p className={styles.muted}>{t('Nenhuma arma.', 'No weapons.')}</p> : (
         <table className={styles.table}>
           <thead><tr><th>{t('Arma', 'Weapon')}</th><th className={styles.num}>Base</th><th className={styles.num}>{t('Dano', 'Damage')}</th><th className={styles.num}>ROF</th><th className={styles.num}>{t('Munição', 'Ammo')}</th></tr></thead>
@@ -210,6 +217,7 @@ export function WeaponsPanel({ detail, run, busy, locked }: Props) {
                       {tv(w.name)}{w.quality !== 'Standard' && <span className={styles.tag} title={QUALITY_LABEL[w.quality]}>{w.quality === 'Excellent' ? 'Excellent' : 'Poor'}</span>}
                       {w.destroyed && <span className={styles.tag}>{t('Destruída', 'Destroyed')}</span>}
                       {w.cyberware && <span className={`${styles.tag} ${styles.tagCyber}`} title={t('Implante que ataca: sempre à mão', 'An implant that attacks: always at hand')}>Cyberware</span>}
+                      {w.hostedIn && <span className={`${styles.tag} ${styles.tagCyber}`} title={t('No braço: sempre à mão, sacar e guardar não gasta Ação (CP:R p.365)', 'In the arm: always at hand, drawing and stowing takes no Action (CP:R p.365)')}>{tv(w.hostedIn)}</span>}
                     </div>
                     <div className={styles.source}>
                       {w.skillName}{w.autofireMultiplier ? ` · Autofire ${w.autofireMultiplier} (base ${w.autofireTotal})` : ''}

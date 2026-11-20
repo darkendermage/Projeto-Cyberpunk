@@ -93,12 +93,14 @@ public sealed class CyberwarePlanner(NpcMechanics mechanics, NpcCatalog catalog)
         if (required?.Cyber is null) return L.T($"{item.Name} depende de uma peça que não está no catálogo.", $"{item.Name} depends on a piece that isn't in the catalog.");
         var (slots, _) = mechanics.SlotsRequired(item);
         var copies = cy.RequiresPair ? 2 : 1;
+        var repeatable = (_rules.Document.Cyberware.RepeatableOptions.Value ?? []).Contains(item.Slug, StringComparer.OrdinalIgnoreCase);
         var hosts = new List<string>();
 
         foreach (var parent in current.Where(e => catalog.Find(e.ItemId) is { } p && NpcMechanics.ParentCompatible(p, required)))
         {
             if (hosts.Count == copies) break;
-            if (current.Any(e => e.ParentInstanceId == parent.InstanceId && e.ItemId == item.Id)) continue;
+            // one of each option per host, except the repeatable ones (Chipware Sockets, CP:R p.359)
+            if (!repeatable && current.Any(e => e.ParentInstanceId == parent.InstanceId && e.ItemId == item.Id)) continue;
             if (FreeSlots(parent, current) >= slots) hosts.Add(parent.InstanceId);
         }
 

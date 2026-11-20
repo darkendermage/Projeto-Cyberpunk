@@ -145,14 +145,17 @@ public sealed class CharacterCalculator(CharacterRuleBook rules)
             if (ranged && linked && smartUser) bonuses.Add(new ValuePart("Smartgun Link", 1));
             // Precision Attack (CP:R p.146)
             if (PrecisionAttack(sheet) is > 0 and var precision) bonuses.Add(new ValuePart("Precision Attack", precision));
+            // a weapon inside a popup is always at hand, whatever its inventory state
+            var host = sheet.Cyberware.FirstOrDefault(c => c.HostedWeaponId == e.InstanceId) is { } h ? catalog.Find(h.ItemId) : null;
             lines.Add(new WeaponLine(
                 e.InstanceId, e.ItemId, item.Name, w.Class, skillId, skill?.NamePt ?? skill?.Name,
                 skill?.Total ?? 0, w.Damage, w.Rof, w.Magazine, state.LoadedRounds, state.LoadedAmmoItemId,
                 state.LoadedAmmoItemId is { } ammo ? catalog.Find(ammo)?.Name : null,
                 w.AutofireMultiplier, autofire?.Total, w.Calibers, w.Exotic,
-                Encounters.Rules.WeaponRuleBook.Embedded.AttachmentSlots(item.Slug, ranged, w.Exotic, slots), attachments, e.State == ItemState.Equipped, e.Quality ?? w.Quality, state.Jammed, bonuses, item.Slug,
+                Encounters.Rules.WeaponRuleBook.Embedded.AttachmentSlots(item.Slug, ranged, w.Exotic, slots), attachments, e.State == ItemState.Equipped || host is not null, e.Quality ?? w.Quality, state.Jammed, bonuses, item.Slug,
                 state.Mode, state.Magazines, state.Destroyed, w.MinBody,
-                extraMagazines is { Count: > 0 } ? extraMagazines : null, switchModes is { Count: > 0 } ? switchModes : null));
+                extraMagazines is { Count: > 0 } ? extraMagazines : null, switchModes is { Count: > 0 } ? switchModes : null,
+                HostedIn: host?.Name));
         }
 
         // Implants that attack: one line per kind (a pair of Wolvers is one weapon), always at hand. No magazine on the
@@ -188,6 +191,7 @@ public sealed class CharacterCalculator(CharacterRuleBook rules)
         return sheet.Cyberware.Select(c =>
         {
             var item = catalog.Find(c.ItemId);
+            var popup = item is null ? null : PopupWeapons.Rule(rules, item.Slug);
             var used = sheet.Cyberware.Where(o => o.ParentInstanceId == c.InstanceId)
                 .Sum(o => catalog.Find(o.ItemId) is { } oi ? mechanics.SlotsRequired(oi).Slots : 1);
             return new CyberLine(
@@ -195,7 +199,8 @@ public sealed class CharacterCalculator(CharacterRuleBook rules)
                 c.ParentInstanceId, c.Side, c.MeatLimb, item?.Cyber?.Foundational ?? false,
                 item is null ? null : mechanics.SlotsProvided(item), used, c.HumanityLossApplied, item?.Cyber?.HumanityLossDice,
                 c.CurrentSp, CyberwareAnatomy.RegionOf(c, sheet.Cyberware, catalog), item?.Price ?? 0,
-                item is null ? null : mechanics.FreeTextRequirement(item, catalog), covered.GetValueOrDefault(c.InstanceId), item?.Cyber?.Effect);
+                item is null ? null : mechanics.FreeTextRequirement(item, catalog), covered.GetValueOrDefault(c.InstanceId), item?.Cyber?.Effect, c.CurrentSpHead,
+                popup?.Melee, popup is null ? null : c.HostedWeaponId, popup is null ? null : PopupWeapons.Candidates(rules, sheet, catalog, c));
         }).ToArray();
     }
 
@@ -423,7 +428,7 @@ public sealed class CharacterCalculator(CharacterRuleBook rules)
             var candidates = worn.Where(x => x.Entry.Worn == slot)
                 .Select(x => new ArmorLocationReport(slot, x.Entry.CurrentSp ?? x.Item!.Armor!.Sp ?? 0, x.Item!.Armor!.Sp,
                     x.Entry.InstanceId, x.Item.Name, false))
-                .Concat(implants.Select(x => new ArmorLocationReport(slot, x.Entry.CurrentSp ?? x.Max, x.Max, x.Entry.InstanceId, x.Item.Name, true)))
+                .Concat(implants.Select(x => new ArmorLocationReport(slot, (slot == ArmorSlot.Head ? x.Entry.CurrentSpHead : x.Entry.CurrentSp) ?? x.Max, x.Max, x.Entry.InstanceId, x.Item.Name, true)))
                 .ToList();
             return candidates.MaxBy(c => c.Sp) ?? new ArmorLocationReport(slot, 0, null, null, null, false);
         }

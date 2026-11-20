@@ -552,6 +552,9 @@ public sealed class CharacterService(
     public Task<CharacterDetailDto> RemoveCyberwareAsync(int id, RemoveCyberwareRequest r, CancellationToken ct) =>
         MutateAsync(id, r.Version, c => cyberware.Remove(c.Sheet, r, c), ct);
 
+    public Task<CharacterDetailDto> HostWeaponAsync(int id, HostWeaponRequest r, CancellationToken ct) =>
+        MutateAsync(id, r.Version, c => cyberware.HostWeapon(c.Sheet, r, c), ct);
+
     public Task<CharacterDetailDto> ReplaceCyberwareAsync(int id, ReplaceCyberwareRequest r, CancellationToken ct) =>
         MutateAsync(id, r.Version, c => cyberware.Replace(c.Sheet, r, c), ct);
 
@@ -646,7 +649,7 @@ public sealed class CharacterService(
         var armor = location == ArmorSlot.Head ? detail.Report.Armor.Head : detail.Report.Armor.Body;
         if (armor.InstanceId is null || armor.MaxSp is not { } max)
             throw RequestValidationException.For("location", L.T("Não há armadura reparável nesse local.", "There is no repairable armor on that location."));
-        return await RepairArmorAsync(id, new RepairArmorRequest(detail.Version, armor.InstanceId, Math.Min(max, armor.Sp + delta)), ct);
+        return await RepairArmorAsync(id, new RepairArmorRequest(detail.Version, armor.InstanceId, Math.Min(max, armor.Sp + delta), location), ct);
     }
 
     public Task<CharacterDetailDto> AddInjuryAsync(int id, AddInjuryRequest r, CancellationToken ct) =>

@@ -213,6 +213,30 @@ function InstallDetails({ detail, rules, selection, run, busy, replacing, side, 
   );
 }
 
+/** The weapon inside a Popup Melee / Ranged Weapon: one of the inventory's one-handed weapons of the right kind (CP:R p.365). */
+function PopupWeaponField({ detail, line, run, busy }: { detail: CharacterDetail; line: CyberLine; run: Run; busy: boolean }) {
+  const names = new Map(detail.report.inventory.map((i) => [i.instanceId, tv(i.name)]));
+  const options = line.popupCandidates ?? [];
+  const pick = (value: string) => run('cyberware/hosted-weapon', { instanceId: line.instanceId, weaponInstanceId: value || null },
+    value ? t(`Arma instalada em ${tv(line.name)}.`, `Weapon installed in ${tv(line.name)}.`) : t('Arma retirada.', 'Weapon taken out.'));
+  return (
+    <label className={base.tableField}>
+      <span className={base.idLabel}>{t('Arma dentro do braço', 'Weapon inside the arm')}</span>
+      <Select value={line.hostedWeaponId ?? ''} disabled={busy} aria-label={t('Arma dentro do braço', 'Weapon inside the arm')} onChange={(e) => void pick(e.target.value)}>
+        <option value="">{t('Nenhuma', 'None')}</option>
+        {options.map((id) => <option key={id} value={id}>{names.get(id) ?? id}</option>)}
+      </Select>
+      <span className={base.source}>
+        {options.length === 0 && !line.hostedWeaponId
+          ? (line.popupMelee
+            ? t('Compre uma arma branca de uma mão (leve, média ou pesada) no Equipamento para pôr aqui.', 'Buy a one-handed Light, Medium or Heavy Melee Weapon on the Gear tab to put here.')
+            : t('Compre uma arma de fogo de uma mão no Equipamento para pôr aqui.', 'Buy a one-handed ranged weapon on the Gear tab to put here.'))
+          : t('A arma fica sempre à mão: sacar e guardar não gasta Ação (CP:R p.365).', 'The weapon is always at hand: drawing and stowing takes no Action (CP:R p.365).')}
+      </span>
+    </label>
+  );
+}
+
 function InstalledDetails({ detail, line, run, busy, creating, onDone, replacing, onReplace, onRemove }: {
   detail: CharacterDetail; line: CyberLine; run: Run; busy: boolean; creating: boolean; onDone: () => void;
   replacing: string | null; onReplace: (id: string | null) => void; onRemove: (line: CyberLine) => void;
@@ -242,8 +266,11 @@ function InstalledDetails({ detail, line, run, busy, creating, onDone, replacing
         {parent && <><dt>{t('Instalado em', 'Installed in')}</dt><dd>{tv(parent.name)}</dd></>}
         {children.length > 0 && <><dt>{t('Opções', 'Options')}</dt><dd>{children.map((c) => tv(c.name)).join(', ')}</dd></>}
         <dt>{t('Pago', 'Paid')}</dt><dd>{formatEb(piece?.pricePaid ?? 0)}</dd>
-        {line.currentSp != null && <><dt>{t('SP atual', 'Current SP')}</dt><dd>{line.currentSp}</dd></>}
+        {(line.currentSp != null || line.currentSpHead != null) && (
+          <><dt>{t('SP atual', 'Current SP')}</dt><dd>{t('corpo', 'body')} {line.currentSp ?? t('cheia', 'full')} · {t('cabeça', 'head')} {line.currentSpHead ?? t('cheia', 'full')}</dd></>
+        )}
       </dl>
+      {line.popupMelee != null && <PopupWeaponField detail={detail} line={line} run={run} busy={busy} />}
       {line.requirements && <span className={`${base.small} ${base.amber}`}>{t('Requisito: ', 'Requirement: ')}{tv(line.requirements)}</span>}
       {line.coveredBy && <span className={`${base.small} ${base.amber}`}>{t('Inacessível enquanto a luva estiver vestida: ', 'Inaccessible while the glove is worn: ')}{line.coveredBy}</span>}
       <div className={styles.detailActions}>

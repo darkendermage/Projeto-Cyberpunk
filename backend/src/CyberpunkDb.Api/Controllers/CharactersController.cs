@@ -136,6 +136,9 @@ public sealed class CharactersController(CharacterService characters, EncounterS
     [HttpPost("{id:int}/cyberware/remove")]
     public Task<CharacterDetailDto> RemoveCyberware(int id, RemoveCyberwareRequest r, CancellationToken ct) => characters.RemoveCyberwareAsync(id, r, ct);
 
+    [HttpPost("{id:int}/cyberware/hosted-weapon")]
+    public Task<CharacterDetailDto> HostWeapon(int id, HostWeaponRequest r, CancellationToken ct) => characters.HostWeaponAsync(id, r, ct);
+
     [HttpPost("{id:int}/cyberware/replace")]
     public Task<CharacterDetailDto> ReplaceCyberware(int id, ReplaceCyberwareRequest r, CancellationToken ct) => characters.ReplaceCyberwareAsync(id, r, ct);
 

@@ -1145,6 +1145,14 @@
   },
 
   "cyberware": {
+    "popupWeapons": {
+      "value": [
+        { "slug": "popup-melee-weapon", "melee": true, "classes": ["LightMelee", "MediumMelee", "HeavyMelee"] },
+        { "slug": "popup-ranged-weapon", "melee": false }
+      ],
+      "source": "CP:R p.365 (Popup Melee Weapon: A One-Handed Light, Medium, or Heavy Melee Weapon... is installed in a Cyberarm; Popup Ranged Weapon: A One-Handed Ranged Weapon... provided by the user is permanently installed into the Cyberarm... can be drawn and stowed without an Action)",
+      "note": "A arma vem do inventário do personagem e passa a contar como empunhada (sempre à mão)."
+    },
     "meatArmOptions": {
       "value": ["big-knucks", "rippers", "scratchers", "slice-n-dice", "subdermal-grip", "tool-hand", "wolvers", "standard-hand"],
       "source": "CP:R p.115 (Can be installed as only piece of Cyberware in a meat arm; Standard Hand can be installed in a meat arm)"

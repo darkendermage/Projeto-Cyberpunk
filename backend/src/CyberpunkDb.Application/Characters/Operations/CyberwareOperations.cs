@@ -167,6 +167,36 @@ public sealed class CyberwareOperations(CharacterRuleBook rules, CyberwareInstal
     // therapy
 
     // One week (CP:R p.229-230): 2d6 or 4d6, capped by the installed cyberware.
+    // Puts an inventory weapon in a Popup Melee / Ranged Weapon (CP:R p.365); null takes it out (it stays in the
+    // inventory). The weapon then counts as at hand.
+    public CharacterSheet HostWeapon(CharacterSheet sheet, HostWeaponRequest request, CharacterChange change)
+    {
+        var popup = sheet.Cyberware.FirstOrDefault(c => c.InstanceId == request.InstanceId)
+                    ?? throw CharacterChange.Refuse("instanceId", L.T("Implante não encontrado.", "Implant not found."));
+        var item = change.Item(popup.ItemId);
+        var rule = PopupWeapons.Rule(rules, item.Slug)
+                   ?? throw CharacterChange.Refuse("instanceId", L.T($"{item.Name} não guarda arma.", $"{item.Name} doesn't hold a weapon."));
+        if (request.WeaponInstanceId is not { } weaponId)
+        {
+            if (popup.HostedWeaponId is null) return sheet;
+            change.Log(CharacterEventKind.Edit, "popup-weapon", $"Arma retirada de {item.Name}.", null, null, null, manual: true);
+            return sheet with { Cyberware = sheet.Cyberware.Select(c => c.InstanceId == popup.InstanceId ? c with { HostedWeaponId = null } : c).ToList() };
+        }
+        if (!PopupWeapons.Candidates(rules, sheet, change.Catalog, popup).Contains(weaponId))
+            throw CharacterChange.Refuse("weaponInstanceId", rule.Melee
+                ? L.T("Escolha uma arma branca de uma mão (leve, média ou pesada) do inventário que não esteja em outro popup (CP:R p.365).", "Pick a one-handed Light, Medium or Heavy Melee Weapon from the inventory that isn't in another popup (CP:R p.365).")
+                : L.T("Escolha uma arma de fogo de uma mão do inventário que não esteja em outro popup (CP:R p.365).", "Pick a one-handed ranged weapon from the inventory that isn't in another popup (CP:R p.365)."));
+        var weapon = sheet.Inventory.First(e => e.InstanceId == weaponId);
+        var weaponName = change.Item(weapon.ItemId).Name;
+        change.Log(CharacterEventKind.Edit, "popup-weapon", $"{weaponName} instalada em {item.Name}.", null, null, null, manual: true);
+        return sheet with
+        {
+            Cyberware = sheet.Cyberware.Select(c => c.InstanceId == popup.InstanceId ? c with { HostedWeaponId = weaponId } : c).ToList(),
+            // drawn and stowed without an Action: it's always at hand
+            Inventory = sheet.Inventory.Select(e => e.InstanceId == weaponId ? e with { State = ItemState.Equipped } : e).ToList(),
+        };
+    }
+
     public CharacterSheet Therapy(CharacterSheet sheet, TherapyRequest request, CharacterChange change)
     {
         if (!sheet.Creation.Finalized) throw CharacterChange.Refuse("creation", L.T("Conclua a criação antes de fazer terapia.", "Finish creation before doing therapy."));

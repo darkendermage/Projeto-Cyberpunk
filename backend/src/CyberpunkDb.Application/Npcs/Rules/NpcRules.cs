@@ -123,7 +123,7 @@ public sealed record WeaponQualityPricing
     public Ruled<string> ExoticRule { get; init; } = new();
 }
 
-public sealed record CyberwareStoppingPower(string Slug, int Sp, string Source);
+public sealed record CyberwareStoppingPower(string Slug, int Sp, string Source, string? Note = null);
 
 public sealed record ArmorRules
 {
@@ -168,6 +168,8 @@ public sealed record CyberwareRules
     public ExclusiveGroup[] ExclusiveGroups { get; init; } = [];
     public CyberwareOverride[] Overrides { get; init; } = [];
     public Ruled<bool> AutoPickExcludesFreeTextRequirements { get; init; } = new();
+    // options that may sit more than once on the same host (Chipware Sockets)
+    public Ruled<string[]> RepeatableOptions { get; init; } = new();
 }
 
 public sealed record GeneratorRules

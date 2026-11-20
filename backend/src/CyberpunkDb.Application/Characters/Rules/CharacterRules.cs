@@ -421,6 +421,8 @@ public sealed record CriticalInjuryDefinition
 
 public sealed record CharacterCyberwareRules
 {
+    // Popup Melee / Ranged Weapon hold a one-handed weapon from the inventory (CP:R p.365)
+    public Ruled<PopupWeaponRule[]> PopupWeapons { get; init; } = new();
     public Ruled<string[]> MeatArmOptions { get; init; } = new();
     public Ruled<string[]> MeatLegOptions { get; init; } = new();
     public Ruled<MeatLimbs> MeatLimbs { get; init; } = new();
@@ -438,6 +440,9 @@ public sealed record CharacterCyberwareRules
 }
 
 public sealed record AnyLimbOption(string Slug, bool Covering);
+
+// Classes: WeaponClass names allowed (null = any ranged class for a ranged popup). Always one-handed.
+public sealed record PopupWeaponRule(string Slug, bool Melee, string[]? Classes = null);
 
 [JsonConverter(typeof(JsonStringEnumConverter))]
 public enum WearableAccepts { Cybereye, Cyberarm, Cyberaudio }

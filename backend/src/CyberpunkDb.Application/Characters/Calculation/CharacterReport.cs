@@ -168,7 +168,9 @@ public sealed record WeaponLine(
     IReadOnlyList<SheetWeaponMode>? SwitchModes = null,
     // an implant that attacks (weapon-rules.json cyberweapons); Shots = the book's capacity, counted by hand
     bool Cyberware = false,
-    int? Shots = null)
+    int? Shots = null,
+    // inside a Popup Melee / Ranged Weapon: always at hand (CP:R p.365)
+    string? HostedIn = null)
 {
     public int AttackTotal => SkillTotal + (AttackBonuses?.Sum(p => p.Value) ?? 0);
 }
@@ -200,7 +202,13 @@ public sealed record CyberLine(
     // glove over the arm (CP:R p.347; BC p.37; IR4 p.67; IR5 p.99)
     string? CoveredBy = null,
     // tooltip
-    string? Effect = null);
+    string? Effect = null,
+    // implant armor on the head (CurrentSp is the body)
+    int? CurrentSpHead = null,
+    // Popup Melee / Ranged Weapon: melee or not, the weapon inside and the inventory weapons that fit
+    bool? PopupMelee = null,
+    string? HostedWeaponId = null,
+    IReadOnlyList<string>? PopupCandidates = null);
 
 public sealed record HousingReport(
     string? HousingId,

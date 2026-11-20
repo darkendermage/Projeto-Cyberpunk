@@ -137,7 +137,7 @@ public sealed class CombatOperations(CharacterRuleBook rules, CharacterCalculato
         return Ablate(sheet, request.Location, request.Amount, request.Description ?? L.T("ablação manual", "manual ablation"), change);
     }
 
-    // everything on the location ablates together, implants included (CP:R p.184)
+    // everything on the location ablates together, implants included (CP:R p.184); an implant only on the location hit
     private CharacterSheet Ablate(CharacterSheet sheet, ArmorSlot slot, int amount, string reason, CharacterChange change)
     {
         var inventory = sheet.Inventory.Select(e =>
@@ -154,11 +154,12 @@ public sealed class CombatOperations(CharacterRuleBook rules, CharacterCalculato
         var cyberware = sheet.Cyberware.Select(c =>
         {
             if (change.Catalog.Find(c.ItemId) is not { } item || rules.Shared.CyberwareStoppingPower(item.Slug) is not { } max) return c;
-            var current = c.CurrentSp ?? max;
+            var head = slot == ArmorSlot.Head;
+            var current = (head ? c.CurrentSpHead : c.CurrentSp) ?? max;
             var next = Math.Max(0, current - amount);
             if (next != current)
-                change.Log(CharacterEventKind.Combat, "ablation", $"{item.Name} ablado ({reason}).", next - current, current.ToString(), next.ToString());
-            return c with { CurrentSp = next };
+                change.Log(CharacterEventKind.Combat, "ablation", $"{item.Name} ablado na {(head ? "cabeça" : "corpo")} ({reason}).", next - current, current.ToString(), next.ToString());
+            return head ? c with { CurrentSpHead = next } : c with { CurrentSp = next };
         }).ToList();
         return sheet with { Inventory = inventory, Cyberware = cyberware };
     }
@@ -178,9 +179,16 @@ public sealed class CombatOperations(CharacterRuleBook rules, CharacterCalculato
         var item = change.Item(piece.ItemId);
         var implantMax = rules.Shared.CyberwareStoppingPower(item.Slug) ?? throw CharacterChange.Refuse("instanceId", L.T("Esse implante não tem SP.", "That implant has no SP."));
         var value = Bounded(request.Sp, implantMax);
-        change.Log(CharacterEventKind.Combat, "repair", $"{item.Name} recuperado.", value - (piece.CurrentSp ?? implantMax),
-            (piece.CurrentSp ?? implantMax).ToString(), value.ToString());
-        return sheet with { Cyberware = sheet.Cyberware.Select(c => c.InstanceId == piece.InstanceId ? c with { CurrentSp = value == implantMax ? null : value } : c).ToList() };
+        int? stored = value == implantMax ? null : value;
+        var before = request.Location == ArmorSlot.Head ? piece.CurrentSpHead ?? implantMax : piece.CurrentSp ?? implantMax;
+        change.Log(CharacterEventKind.Combat, "repair", $"{item.Name} recuperado.", value - before, before.ToString(), value.ToString());
+        var repaired = request.Location switch
+        {
+            ArmorSlot.Head => piece with { CurrentSpHead = stored },
+            ArmorSlot.Body => piece with { CurrentSp = stored },
+            _ => piece with { CurrentSp = stored, CurrentSpHead = stored },
+        };
+        return sheet with { Cyberware = sheet.Cyberware.Select(c => c.InstanceId == piece.InstanceId ? repaired : c).ToList() };
 
         static int Bounded(int? sp, int max) => sp is { } v ? Math.Clamp(v, 0, max) : max;
     }

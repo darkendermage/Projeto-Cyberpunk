@@ -250,10 +250,14 @@ public sealed record CharacterCyberware
     // preset at creation, rolled afterwards (CP:R p.110)
     public int HumanityLossApplied { get; init; }
     public bool HumanityLossRolled { get; init; }
-    // Subdermal Armor / Skin Weave ablate like worn armor. null = undamaged
+    // Subdermal Armor / Skin Weave ablate like worn armor, each location on its own (CP:R p.186: the armor of the
+    // location hit). CurrentSp = body, CurrentSpHead = head; null = undamaged
     public int? CurrentSp { get; init; }
+    public int? CurrentSpHead { get; init; }
     // Popup Shield HP (null = full)
     public int? CurrentHp { get; init; }
+    // Popup Melee / Ranged Weapon: the inventory weapon inside it (CP:R p.365)
+    public string? HostedWeaponId { get; init; }
     public ItemOrigin Origin { get; init; } = ItemOrigin.Manual;
     public BudgetPool PaidFrom { get; init; } = BudgetPool.Balance;
     public int? PricePaid { get; init; }

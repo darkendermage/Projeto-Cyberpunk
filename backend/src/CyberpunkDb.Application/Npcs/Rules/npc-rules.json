@@ -266,7 +266,11 @@
     "oneArmorPerLocation": { "value": true, "complementary": true, "note": "Cada armadura vestida protege um local (corpo ou cabeça); cada local é comprado à parte, como nos blocos do DGD (Kevlar no corpo e na cabeça)." },
     "cyberwareStoppingPower": [
       { "slug": "subdermal-armor", "sp": 11, "source": "CP:R p.358 (SP 11 no corpo e na cabeça)" },
-      { "slug": "skin-weave", "sp": 7, "source": "CP:R p.359 (SP 7 no corpo e na cabeça)" }
+      { "slug": "skin-weave", "sp": 7, "source": "CP:R p.359 (SP 7 no corpo e na cabeça)" },
+      { "slug": "sycust-fleshweave", "sp": 7, "source": "IR3 p.87 (Skinweave. User's body and head are armored at SP7)" },
+      { "slug": "heavy-subdermal-plating", "sp": 13, "source": "IR3 p.107 (The user's body and head are armored at SP 13)", "note": "A Armor Penalty de -2 REF/DEX/MOVE (sem BODY 14) não é aplicada automaticamente." },
+      { "slug": "dragoon-plating", "sp": 15, "source": "IR3 p.105 (SP 15 no corpo e na cabeça)", "note": "A Armor Penalty não é aplicada automaticamente." },
+      { "slug": "dragoon-plating-metalgear", "sp": 18, "source": "IR3 p.105 (body and head are armored at SP 18)", "note": "A Armor Penalty de -3 REF/DEX/MOVE não é aplicada automaticamente." }
     ]
   },
 
@@ -291,8 +295,14 @@
       { "label": "Speedware", "slugs": ["kerenzikov", "sandevistan"], "max": 1, "source": "CP:R p.112 e p.359 (Only 1 piece of Speedware can be installed at a time)" }
     ],
     "overrides": [
-      { "slug": "chipware-socket", "slotsRequired": 1, "slotsProvided": 1, "source": "CP:R p.359 (Neuralware Option; a single socket that allows installation of a single piece of Chipware)", "note": "O catálogo registra 0 slot; a regra do Core prevalece." }
+      { "slug": "chipware-socket", "slotsRequired": 1, "slotsProvided": 1, "source": "CP:R p.359 (Neuralware Option; a single socket that allows installation of a single piece of Chipware)", "note": "O catálogo registra 0 slot; a regra do Core prevalece." },
+      { "slug": "budget-chipware-socket", "slotsRequired": 1, "slotsProvided": 1, "source": "BC p.17 (Neuralware Option. Requires Neural Link. A single socket... allows quick installation of a single piece of Chipware)", "note": "Igual ao Chipware Socket do Core." }
     ],
+    "repeatableOptions": {
+      "value": ["chipware-socket", "budget-chipware-socket"],
+      "source": "CP:R p.359 (Chipware Socket: Multiple sockets may be installed)",
+      "note": "As outras opções valem uma por hospedeiro; estas podem se repetir no mesmo Neural Link (cada uma ocupa 1 slot)."
+    },
     "autoPickExcludesFreeTextRequirements": { "value": true, "complementary": true, "note": "Na geração automática, peças com pré-requisitos só em texto livre (ex.: 'Full Body Conversion', 'BODY 10') não são escolhidas sozinhas, porque o sistema não consegue verificá-los." }
   },
 

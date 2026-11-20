@@ -102,7 +102,7 @@ export function SessionsPage() {
   const start = () => {
     setBusy(true);
     tableApi.newSession({ name: name.trim() || null })
-      .then(() => { refresh(); navigate('/mesa/jogar'); }, fail)
+      .then(() => { refresh(); client.removeQueries({ queryKey: tableKeys.scenes, exact: true }); navigate('/mesa/jogar'); }, fail)
       .finally(() => setBusy(false));
   };
   const rename = (s: TableSession) => {

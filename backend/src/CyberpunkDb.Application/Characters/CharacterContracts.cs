@@ -73,6 +73,9 @@ public sealed record InstallCyberwareRequest(
 
 public sealed record RemoveCyberwareRequest(int Version, string InstanceId, bool Keep = true);
 
+// InstanceId: the Popup Melee / Ranged Weapon; WeaponInstanceId: the inventory weapon to put in it, null takes it out
+public sealed record HostWeaponRequest(int Version, string InstanceId, string? WeaponInstanceId);
+
 public sealed record ReplaceCyberwareRequest(
     int Version, string InstanceId, int ItemId, bool MeatLimb = false, string? HostInstanceId = null, bool Acknowledge = false, bool Keep = true,
     BodySide? Side = null);
@@ -128,7 +131,8 @@ public sealed record DeathSaveRequest(int Version, int? Roll = null);
 
 public sealed record AblateRequest(int Version, ArmorSlot Location, int Amount = 1, string? Description = null);
 
-public sealed record RepairArmorRequest(int Version, string InstanceId, int? Sp = null);
+// Location: for implant armor (Subdermal, Skin Weave), which side to repair; null = both
+public sealed record RepairArmorRequest(int Version, string InstanceId, int? Sp = null, ArmorSlot? Location = null);
 
 public sealed record AddInjuryRequest(
     int Version, InjuryLocation Location, string Name, string? Detail = null, bool ApplyBonusDamage = true);
