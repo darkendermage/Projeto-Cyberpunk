@@ -12,6 +12,8 @@ import { Pagination } from '../catalog/Pagination';
 import { CATEGORY_LABEL } from './characterLabels';
 import { SortHeader } from './CharacterUi';
 import type { SortState } from './sorting';
+import { SkillChipField } from './SkillChipField';
+import { useSkillChip, useSkillChipPrice } from './skillChip';
 import styles from './Characters.module.css';
 import { t, tv } from '../../i18n';
 
@@ -26,6 +28,8 @@ export interface PurchaseInput {
   /** Received without paying (trade between players, gift, loot); only after creation. */
   received?: ItemOrigin | null;
   note?: string | null;
+  /** Skill Chip: the skill it is made for (CP:R p.358). */
+  skillKey?: string | null;
 }
 
 type Received = 'Trade' | 'Gift' | 'Loot';
@@ -120,12 +124,15 @@ function StoreRow({ item, onBuy, busy, creationBudgets, available, creating, rec
   const [worn, setWorn] = useState<ArmorSlot>('Body');
   const [how, setHow] = useState<Received>('Gift');
   const [note, setNote] = useState('');
+  const chip = useSkillChip(item.slug);
+  const [chipSkill, setChipSkill] = useState<string | null>(null);
+  const chipPrice = useSkillChipPrice(chip, chipSkill);
   const free = receiving && !creating;
   const needsCaliber = item.category === 'Ammunition' && item.calibers.length > 1;
   const pool: BudgetPool | null = creationBudgets ? (item.fashion ? 'CreationFashion' : 'CreationGear') : null;
   const budgetNow = pool === 'CreationFashion' ? available.fashion ?? 0 : pool === 'CreationGear' ? available.gear ?? 0 : available.balance;
   const qty = item.cyberware ? 1 : quantity;
-  const total = free ? 0 : (item.price ?? 0) * qty;
+  const total = free ? 0 : (chipPrice ?? item.price ?? 0) * qty;
   const equippable = item.category === 'Weapon' || item.category === 'Armor';
   const isBodyArmor = item.category === 'Armor' && /SP \d+/.test(item.summary ?? '');
 
@@ -173,6 +180,7 @@ function StoreRow({ item, onBuy, busy, creationBudgets, available, creating, rec
                   {item.calibers.map((c) => <option key={c} value={c}>{c}</option>)}
                 </Select>
               )}
+              {chip && <SkillChipField value={chipSkill} onChange={setChipSkill} />}
               {item.cyberware && <Checkbox checked={install} onChange={setInstall} label={t('Instalar agora', 'Install now')} />}
               {equippable && <Checkbox checked={equip} onChange={setEquip} label={t('Equipar', 'Equip')} />}
               {equippable && equip && isBodyArmor && (
@@ -194,7 +202,7 @@ function StoreRow({ item, onBuy, busy, creationBudgets, available, creating, rec
                     <strong className={total > budgetNow ? styles.red : styles.cyan}>{formatEb(budgetNow - total)}</strong>
                   </span>
                 )}
-              <Button variant="primary" disabled={busy || (needsCaliber && !caliber) || total > budgetNow}
+              <Button variant="primary" disabled={busy || (needsCaliber && !caliber) || (!!chip && !chipSkill) || total > budgetNow}
                 title={total > budgetNow ? t('Saldo insuficiente', 'Not enough money') : undefined}
                 onClick={async () => {
                   await onBuy({
@@ -204,6 +212,7 @@ function StoreRow({ item, onBuy, busy, creationBudgets, available, creating, rec
                     worn: equippable && equip && isBodyArmor ? worn : null,
                     received: free ? how : null,
                     note: free && note.trim() ? note.trim() : null,
+                    skillKey: chip ? chipSkill : null,
                   }, item);
                   setOpen(false);
                 }}>{free ? t('Receber', 'Receive') : t('Confirmar', 'Confirm')}</Button>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import type { QuickAttackResult } from '../../api/tableTypes';
 import { aimAt, aimWith, type Aim } from './aim';
 
@@ -6,8 +6,11 @@ import { aimAt, aimWith, type Aim } from './aim';
 export function useQuickAttack(fire: (aim: Aim, targetId: string) => Promise<QuickAttackResult>, onDone: (result: QuickAttackResult) => void, onError: (error: unknown) => void) {
   const [aim, setAim] = useState<Aim | null>(null);
   const [busy, setBusy] = useState(false);
+  // a ref, not the state: two quick clicks both saw busy = false and fired twice
+  const firing = useRef(false);
   const shoot = async () => {
-    if (!aim?.targetId || busy) return;
+    if (!aim?.targetId || firing.current) return;
+    firing.current = true;
     setBusy(true);
     try {
       const attack = await fire(aim, aim.targetId);
@@ -16,6 +19,7 @@ export function useQuickAttack(fire: (aim: Aim, targetId: string) => Promise<Qui
     } catch (e) {
       onError(e);
     } finally {
+      firing.current = false;
       setBusy(false);
     }
   };

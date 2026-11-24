@@ -423,6 +423,8 @@ public sealed record CharacterCyberwareRules
 {
     // Popup Melee / Ranged Weapon hold a one-handed weapon from the inventory (CP:R p.365)
     public Ruled<PopupWeaponRule[]> PopupWeapons { get; init; } = new();
+    // the skill is picked on purchase; its price depends on it (CP:R p.358)
+    public Ruled<SkillChipRule> SkillChip { get; init; } = new();
     public Ruled<string[]> MeatArmOptions { get; init; } = new();
     public Ruled<string[]> MeatLegOptions { get; init; } = new();
     public Ruled<MeatLimbs> MeatLimbs { get; init; } = new();
@@ -440,6 +442,8 @@ public sealed record CharacterCyberwareRules
 }
 
 public sealed record AnyLimbOption(string Slug, bool Covering);
+
+public sealed record SkillChipRule(string Slug, int Level, int Price, int PriceDoubleCost);
 
 // Classes: WeaponClass names allowed (null = any ranged class for a ranged popup). Always one-handed.
 public sealed record PopupWeaponRule(string Slug, bool Melee, string[]? Classes = null);

@@ -71,9 +71,10 @@ public sealed class NpcCombat(CharacterRuleBook rules, CharacterCalculator calcu
     }
 
     // 5 bonus damage straight to HP, ignores SP (CP:R p.187)
-    public Combatant AddCritical(Combatant c, CriticalInjuryDefinition injury, InjuryLocation location)
+    // bonusDamage false: an effect that gives the injury without the hit (a Flashbang's Damaged Eye and Ear)
+    public Combatant AddCritical(Combatant c, CriticalInjuryDefinition injury, InjuryLocation location, bool bonusDamage = true)
     {
-        var bonus = rules.Document.Combat.CriticalInjury.Value.BonusDamage;
+        var bonus = bonusDamage ? rules.Document.Combat.CriticalInjury.Value.BonusDamage : 0;
         var record = new CombatInjury(injury.Name, location, injury.Effect, injury.DeathSave, injury.ActionPenalty, injury.MovePenalty);
         return c with { Injuries = [.. c.Injuries, record], Hp = Math.Max(0, c.Hp - bonus) };
     }

@@ -315,7 +315,12 @@ export interface InventoryLine {
   quality?: WeaponQuality | null;
   /** Clothing only: where it is worn. */
   clothingSlot?: ClothingSlot | null;
+  /** A Skill Chip bought for this skill. */
+  skillKey?: string | null;
 }
+
+/** Skill Chip (CP:R p.358): the skill is picked on purchase; (x2) skills cost more. */
+export interface SkillChipRule { slug: string; level: number; price: number; priceDoubleCost: number }
 
 export type ClothingSlot = 'Top' | 'Bottom' | 'Jacket' | 'Footwear' | 'Jewelry' | 'Eyewear' | 'Headwear' | 'FullOutfit';
 
@@ -473,6 +478,8 @@ export interface InstallRequestBody {
   pool?: BudgetPool | null;
   replacing?: string | null;
   side?: 'Left' | 'Right' | null;
+  /** Skill Chip: the skill it is made for. */
+  skillKey?: string | null;
 }
 
 export interface HousingReport {
@@ -706,6 +713,7 @@ export interface CharacterRules {
     therapies: { id: string; label: string; cost: number; recovery: string; dv: number; materials: number; source: string }[];
     therapyPayments: string[];
     therapySource: string;
+    skillChip?: SkillChipRule | null;
   };
   /** Martial Arts forms and their Special Moves (server rules). */
   martialArts: MartialArtForm[];

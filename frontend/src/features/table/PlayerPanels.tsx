@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Crosshair, Dices, HeartPulse, RefreshCw, RotateCcw, RotateCw, SkipForward, Upload } from 'lucide-react';
+import { Crosshair, Dices, HeartPulse, MapPin, RefreshCw, RotateCcw, RotateCw, SkipForward, Upload } from 'lucide-react';
 import type { AttackMode, WeaponView } from '../../api/encounterTypes';
 import type { ArmorLocation, RollKind, TableVisibility, TokenView, PlayerCharacter, PlayerEncounter } from '../../api/tableTypes';
 import { Badge, Button, Checkbox, IconButton, Segmented } from '../../components/ui/ui';
@@ -24,7 +24,7 @@ const signed = (n: number) => (n >= 0 ? `+${n}` : `${n}`);
 
 // Numbers, weapons and skills (each one click from a server roll) and token facing. In a fight the numbers
 // come from the combat table, otherwise from the sheet.
-export function CharacterPanel({ character, encounter, token, onRoll, onTurn, onArmor, onAim, onReload, onUnjam, onPickUp, onSwitch, onImport, onCyber, busy }: {
+export function CharacterPanel({ character, encounter, token, onRoll, onTurn, onArmor, onAim, onReload, onUnjam, onPickUp, onSwitch, onImport, onCyber, onPlaceToken, busy }: {
   character: PlayerCharacter | null;
   encounter: PlayerEncounter | null;
   token: TokenView | undefined;
@@ -46,6 +46,8 @@ export function CharacterPanel({ character, encounter, token, onRoll, onTurn, on
   onUnjam?: (weaponKey: string) => void;
   /** Picks a thrown weapon up (on the player's Turn). */
   onPickUp?: (weaponKey: string) => void;
+  /** No token of this seat on the scene: put one in the middle of the view. */
+  onPlaceToken?: () => void;
   busy?: boolean;
 }) {
   const [visibility, setVisibility] = useState<TableVisibility>('Public');
@@ -138,6 +140,12 @@ export function CharacterPanel({ character, encounter, token, onRoll, onTurn, on
         </Button>
       )}
 
+      {!token && onPlaceToken && (
+        <Button variant="primary" icon={<MapPin size={15} />} onClick={onPlaceToken}
+          title={t('Põe seu token no meio do mapa; depois é só arrastar', 'Puts your token in the middle of the map; then just drag it')}>
+          {t('Pôr meu token na cena', 'Put my token on the scene')}
+        </Button>
+      )}
       {token && (
         <div className={styles.row}>
           <span className={styles.label}>{t('Token', 'Token')}</span>

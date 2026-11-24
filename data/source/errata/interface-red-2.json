@@ -590,6 +590,27 @@
       },
       "priceCategory": "Everyday",
       "notes": "Conferido com Interface RED Volume 2, p. 37. Artigo Cargo Containers & Cube Hotels. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "slug": "emerald-city",
+      "name": "Emerald City",
+      "category": "drugs",
+      "page": 24,
+      "price": 100,
+      "priceNote": "Por dose",
+      "priceCategory": "Premium",
+      "description": "Droga de rua de Definitely Not Kansas. Efeito primário (8 horas): o usuário ignora os efeitos do estado Seriously Wounded e tem alucinações de vez em quando, sem conseguir distinguir amigo de inimigo. Efeito secundário (DV15): vício; viciado, continua tendo alucinações, mas distingue amigo de inimigo.",
+      "attributes": {
+        "classification": "Combat",
+        "resistDv": 15,
+        "primaryEffect": "Por 8 horas, ignora os efeitos de Seriously Wounded. Alucinações ocasionais: pode não distinguir amigo de inimigo.",
+        "duration": "8 horas",
+        "durationMinutes": 480,
+        "sideEffects": "Efeito secundário (DV15): vício. Viciado, alucinações ocasionais (distingue amigo de inimigo)."
+      },
+      "notes": "Conferido com Interface RED Volume 2, p. 24 (If using Emerald City as a Street Drug, use the following rules)."
     }
   ]
 }

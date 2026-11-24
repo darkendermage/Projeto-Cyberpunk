@@ -208,6 +208,8 @@ public sealed record InventoryEntry
     public BudgetPool PaidFrom { get; init; } = BudgetPool.Balance;
     public int? PricePaid { get; init; }
     public string? Notes { get; init; }
+    // a Skill Chip bought for a skill, before it is installed
+    public string? SkillKey { get; init; }
 }
 
 public sealed record WeaponState
@@ -258,6 +260,8 @@ public sealed record CharacterCyberware
     public int? CurrentHp { get; init; }
     // Popup Melee / Ranged Weapon: the inventory weapon inside it (CP:R p.365)
     public string? HostedWeaponId { get; init; }
+    // Skill Chip: the skill it was made for (CP:R p.358)
+    public string? SkillKey { get; init; }
     public ItemOrigin Origin { get; init; } = ItemOrigin.Manual;
     public BudgetPool PaidFrom { get; init; } = BudgetPool.Balance;
     public int? PricePaid { get; init; }

@@ -22,8 +22,8 @@ public class CyberwareFixesApiTests(ApiFactory factory)
         return await _t.Send<CharacterDetailDto>(_t.Gm, HttpMethod.Post, $"/api/characters/{c.Id}/balance", new AdjustBalanceRequest(c.Version, 50_000, "teste"));
     }
 
-    private Task<CharacterDetailDto> Install(CharacterDetailDto c, int itemId) =>
-        _t.Send<CharacterDetailDto>(_t.Gm, HttpMethod.Post, $"/api/characters/{c.Id}/cyberware/install", new InstallCyberwareRequest(c.Version, itemId, Acknowledge: true));
+    private Task<CharacterDetailDto> Install(CharacterDetailDto c, int itemId, string? skillKey = null) =>
+        _t.Send<CharacterDetailDto>(_t.Gm, HttpMethod.Post, $"/api/characters/{c.Id}/cyberware/install", new InstallCyberwareRequest(c.Version, itemId, Acknowledge: true, SkillKey: skillKey));
 
     [Fact]
     public async Task A_second_chip_gets_its_own_socket_on_the_same_Neural_Link()
@@ -31,8 +31,8 @@ public class CyberwareFixesApiTests(ApiFactory factory)
         var c = await Rich("Chips");
         var chip = await ItemId("skill-chip");
 
-        c = await Install(c, chip);
-        c = await Install(c, chip);
+        c = await Install(c, chip, "handgun");
+        c = await Install(c, chip, "stealth");
         c = await Install(c, await ItemId("pain-editor"));
 
         var lines = c.Report.Cyberware;

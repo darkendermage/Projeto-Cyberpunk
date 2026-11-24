@@ -1145,6 +1145,10 @@
   },
 
   "cyberware": {
+    "skillChip": {
+      "value": { "slug": "skill-chip", "level": 3, "price": 500, "priceDoubleCost": 1000 },
+      "source": "CP:R p.358 (a Skill Chip makes the Skill it was made for trained for the user at +3, unless the user's Skill was already trained higher than +3, in which case it does nothing. Skill Chips for (x2) cost Skills are 1,000eb, chips for all other skills are 500eb)"
+    },
     "popupWeapons": {
       "value": [
         { "slug": "popup-melee-weapon", "melee": true, "classes": ["LightMelee", "MediumMelee", "HeavyMelee"] },

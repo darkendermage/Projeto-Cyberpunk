@@ -126,7 +126,9 @@ public sealed record InventoryLine(
     // weapons only
     WeaponQuality? Quality = null,
     // clothing only: where it is worn (top, jacket, footwear...)
-    ClothingSlot? ClothingSlot = null);
+    ClothingSlot? ClothingSlot = null,
+    // a Skill Chip bought for this skill
+    string? SkillKey = null);
 
 public sealed record WeaponLine(
     string InstanceId,

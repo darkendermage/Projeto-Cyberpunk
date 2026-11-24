@@ -857,6 +857,27 @@ public sealed partial class EncounterService(
             return Log(Replace(s, next), c.Id, "death-save", $"{c.Name}: {text}");
         }, ct);
 
+    // Flashbangs and other effects hand out Critical Injuries without a crit roll: PCs on their sheet, NPCs here.
+    public Task<EncounterDetailDto> InjuryAsync(int id, string combatantId, CombatantInjuryRequest r, CancellationToken ct) =>
+        MutateAsync(id, r.Version, async (s, _, notices) =>
+        {
+            var c = Require(s, combatantId);
+            var def = characterRules.FindCriticalInjury(r.Location, r.Name)
+                      ?? throw RequestValidationException.For("name", L.T($"{r.Name} não está na tabela de Critical Injuries {(r.Location == InjuryLocation.Head ? "da cabeça" : "do corpo")}.", $"{r.Name} isn't on the {(r.Location == InjuryLocation.Head ? "head" : "body")} Critical Injury table."));
+            if (c.Kind == CombatantKind.Pc)
+            {
+                var sheet = await characters.GetAsync(c.CharacterId!.Value, ct);
+                notices.AddRange((await characters.AddInjuryAsync(c.CharacterId.Value, new AddInjuryRequest(sheet.Version, r.Location, def.Name, ApplyBonusDamage: r.BonusDamage), ct)).Notices);
+            }
+            else
+            {
+                if (c.Injuries.Any(i => i.Name.Equals(def.Name, StringComparison.OrdinalIgnoreCase)))
+                    throw RequestValidationException.For("name", L.T($"{c.Name} já sofre de {def.Name}.", $"{c.Name} already has {def.Name}."));
+                s = Replace(s, npcCombat.AddCritical(c, def, r.Location, r.BonusDamage));
+            }
+            return Log(s, c.Id, "injury", L.T($"{c.Name}: Critical Injury {def.Name}{(r.BonusDamage ? " (+5 de dano)" : "")}.", $"{c.Name}: Critical Injury {def.Name}{(r.BonusDamage ? " (+5 damage)" : "")}."));
+        }, ct);
+
     public Task<EncounterDetailDto> ConditionAsync(int id, string combatantId, ConditionRequest r, CancellationToken ct) =>
         MutateAsync(id, r.Version, (s, _, _) =>
         {

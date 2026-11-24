@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Dices } from 'lucide-react';
 import { Button, Checkbox, Modal, NumberInput } from '../../components/ui/ui';
 import { t, tv } from '../../i18n';
@@ -24,6 +24,8 @@ export function PreRollDialog({ title, total, situational, luckAvailable, onRoll
   const [ticked, setTicked] = useState<string[]>([]);
   const [luck, setLuck] = useState<number | null>(0);
   const [reserve, setReserve] = useState(false);
+  // Enter and a click on Roll could both submit before the window closes
+  const sent = useRef(false);
   const spend = Math.min(Math.max(0, luck ?? 0), luckAvailable ?? 0);
   const canReserve = luckAvailable != null && luckAvailable >= spend + 1;
   const chosen = situational.filter((s) => ticked.includes(s.label));
@@ -31,7 +33,7 @@ export function PreRollDialog({ title, total, situational, luckAvailable, onRoll
   return (
     <Modal open onClose={onClose} title={title}>
       <form className={styles.panel} style={{ clipPath: 'none', border: 'none' }}
-        onSubmit={(e) => { e.preventDefault(); onRoll({ bonus, luck: spend, labels: chosen.map((s) => `${tv(s.label)} ${signed(s.value)}`), reroll: reserve && canReserve }); }}>
+        onSubmit={(e) => { e.preventDefault(); if (sent.current) return; sent.current = true; onRoll({ bonus, luck: spend, labels: chosen.map((s) => `${tv(s.label)} ${signed(s.value)}`), reroll: reserve && canReserve }); }}>
         {situational.length > 0 && (
           <div className={styles.column} style={{ gap: 6 }}>
             <span className={styles.idLabel}>{t('Bônus de cyberware que só valem em algumas situações', 'Cyberware bonuses that only count in some situations')}</span>

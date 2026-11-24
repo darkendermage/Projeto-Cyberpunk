@@ -60,7 +60,9 @@ public sealed record SkillChoiceRequest(int Version, string SkillId, string Spec
 public sealed record PurchaseRequest(
     int Version, int ItemId, int Quantity = 1, Caliber? Caliber = null, BudgetPool? Pool = null,
     bool? Install = null, bool MeatLimb = false, string? HostInstanceId = null, bool Acknowledge = false,
-    bool Equip = false, ArmorSlot? Worn = null, ItemOrigin? Received = null, string? Note = null);
+    bool Equip = false, ArmorSlot? Worn = null, ItemOrigin? Received = null, string? Note = null,
+    // Skill Chip: the skill it was made for (CP:R p.358)
+    string? SkillKey = null);
 
 // Acknowledge confirms requirements we can only show as text.
 public sealed record InstallCyberwareRequest(
@@ -69,7 +71,9 @@ public sealed record InstallCyberwareRequest(
     // preview only: pretend this piece was removed first (replacement)
     string? Replacing = null,
     // side picked on the body, pieces on that side come first
-    BodySide? Side = null);
+    BodySide? Side = null,
+    // Skill Chip: the skill it was made for (CP:R p.358)
+    string? SkillKey = null);
 
 public sealed record RemoveCyberwareRequest(int Version, string InstanceId, bool Keep = true);
 
@@ -254,7 +258,9 @@ public sealed record StorePageDto(IReadOnlyList<StoreItemDto> Items, int Total, 
 
 public sealed record CyberwareRulesDto(
     IReadOnlyList<string> MeatArmOptions, IReadOnlyList<string> MeatLegOptions, IReadOnlyList<string> AnyLimbOptions,
-    IReadOnlyList<string> Coverings, IReadOnlyList<TherapyKindDto> Therapies, IReadOnlyList<string> TherapyPayments, string TherapySource);
+    IReadOnlyList<string> Coverings, IReadOnlyList<TherapyKindDto> Therapies, IReadOnlyList<string> TherapyPayments, string TherapySource,
+    // the Skill Chip asks for its skill and costs by it (CP:R p.358)
+    Rules.SkillChipRule? SkillChip = null);
 
 public sealed record TherapyKindDto(string Id, string Label, int Cost, string Recovery, int Dv, int Materials, string Source);
 

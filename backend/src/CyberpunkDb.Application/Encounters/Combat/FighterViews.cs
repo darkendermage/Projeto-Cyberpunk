@@ -298,6 +298,18 @@ public sealed class FighterViews(CharacterRuleBook characterRules, CharacterCalc
                 Slug = catalog.Find(line.ItemId)?.Slug, MinBody = w.MinBody,
             });
         }
+        // implants that attack (Wolvers, Mantis Blades, Popup Shotgun...), always at hand: one weapon per kind, as on the
+        // PC sheet; launchers carry the book's shots as their magazine
+        foreach (var line in report.CyberLines.GroupBy(l => l.Slug, StringComparer.OrdinalIgnoreCase).Select(g => g.First()))
+        {
+            if (WeaponRuleBook.Embedded.Cyber(line.Slug) is not { } cw) continue;
+            weapons.Add(new CombatWeapon
+            {
+                Key = $"cw:{line.Slug}", Name = line.Name, Class = cw.Class, Skill = cw.Skill, Damage = cw.Damage, Rof = cw.Rof,
+                Magazine = cw.Shots, Melee = cw.Class is WeaponClass.LightMelee or WeaponClass.MediumMelee or WeaponClass.HeavyMelee or WeaponClass.VeryHeavyMelee,
+                Slug = line.Slug,
+            });
+        }
         var d = report.Derived;
         return new CombatSnapshot
         {

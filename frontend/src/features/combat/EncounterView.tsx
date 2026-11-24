@@ -18,6 +18,7 @@ import { AttackPanel, AttackResultView } from './AttackPanel';
 import { CONDITIONS, hpPercent, reloadsMain, weaponName, WOUND_LABEL, WOUND_TONE } from './combat';
 import { WeaponExtras } from './WeaponExtras';
 import { FighterSheet } from './FighterSheet';
+import { InjuryPicker } from './InjuryPicker';
 import { PendingCard } from '../table/PendingCard';
 import styles from './Combat.module.css';
 import { t, tv } from '../../i18n';
@@ -402,6 +403,8 @@ function FighterPanel({ f, detail, rules, busy, run, onSheet }: {
             {roll ? t('Registrar', 'Record') : t('Rolar', 'Roll')} Death Save
           </Button>
         </div>
+        <InjuryPicker busy={busy} rowClass={styles.row}
+          onAdd={(where, name, bonusDamage) => run(`${base}/injury`, { location: where, name, bonusDamage })} />
       </div>
 
       <div className={styles.block}>

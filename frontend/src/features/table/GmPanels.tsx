@@ -35,6 +35,7 @@ import { SHAPE_LABEL } from './templates';
 import styles from './Table.module.css';
 import { strikeModes, cannotFire } from './aim';
 import { AwarenessBlock } from './AwarenessBlock';
+import { InjuryPicker } from '../combat/InjuryPicker';
 
 export type Act = (fn: () => Promise<SceneView | void>, done?: string) => Promise<void>;
 
@@ -364,6 +365,10 @@ function FighterQuick({ fighter, encounterId, sceneId, onAim }: { fighter: Encou
       </span>
       <ArmorControl armor={fighter} busy={command.isPending}
         onAdjust={(location, delta) => command.mutate({ path: `combatants/${fighter.id}/armor`, body: { location, delta } }, { onError: (e) => toast.notify(problemMessage(e), 'error') })} />
+      {fighter.injuries.length > 0 && <span className={styles.row}>{fighter.injuries.map((i) => <Badge key={i.name} tone="red">{tv(i.name)}</Badge>)}</span>}
+      <InjuryPicker busy={command.isPending} rowClass={styles.row}
+        onAdd={(location, name, bonusDamage) => command.mutate({ path: `combatants/${fighter.id}/injury`, body: { location, name, bonusDamage } },
+          { onSuccess: () => toast.notify(t(`${fighter.name}: ${tv(name)}.`, `${fighter.name}: ${tv(name)}.`)), onError: (e) => toast.notify(problemMessage(e), 'error') })} />
       {fighter.weapons.length > 0 && (
         <>
           <Switch checked={secret} onChange={setSecret} label={t('Rolar em segredo', 'Roll in secret')} />

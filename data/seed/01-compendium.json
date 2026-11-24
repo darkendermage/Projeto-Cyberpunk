@@ -22621,26 +22621,6 @@
     "tags": [],
     "manufacturer": null,
     "category": "gear",
-    "slug": "branded-jumpsuit",
-    "name": "Branded Jumpsuit",
-    "page": 5,
-    "price": 50,
-    "priceCategory": "Premium",
-    "description": "Forget Ghostsuits. The easiest way to keep invisible in most surroundings is to look like you belong. Get the right color jumpsuit fitted with the proper patches, and most people won’t even give you a second peep.\n\nA jumpsuit or similar uniform identical to those worn by a specific organization’s construction, janitorial, food service, or other crew members. The cost depends on the security of the organization.\n\n• Low Security (convenience store): 50eb (Premium)\n• Moderate Security (construction site or hospital):\n\n• High Security (smaller Corporation): 500eb (Very Expensive)\n• Extreme Security (Megacorporation):",
-    "attributes": {
-      "gearType": "Security",
-      "effect": "Disfarce de funcionário."
-    },
-    "priceNote": "50eb a 1.000eb, conforme a segurança",
-    "notes": "Conferido com Going Quiet, p. 5. O livro dá esta categoria de preço para disponibilidade, diferente da regra geral. Ausente do compêndio.",
-    "dataOrigin": "Verified"
-  },
-  {
-    "ruleSystem": "CyberpunkRed",
-    "source": "Going Quiet",
-    "tags": [],
-    "manufacturer": null,
-    "category": "gear",
     "slug": "concealment-sleeve",
     "name": "Concealment Sleeve",
     "page": 5,
@@ -22875,6 +22855,82 @@
     },
     "priceCategory": "VeryExpensive",
     "notes": "Conferido com Going Quiet, p. 7. Ausente do compêndio.",
+    "dataOrigin": "Verified"
+  },
+  {
+    "ruleSystem": "CyberpunkRed",
+    "source": "Going Quiet",
+    "tags": [],
+    "manufacturer": null,
+    "category": "gear",
+    "slug": "branded-jumpsuit",
+    "name": "Branded Jumpsuit (Low Security)",
+    "page": 5,
+    "price": 50,
+    "priceCategory": "Premium",
+    "description": "Forget Ghostsuits. The easiest way to keep invisible in most surroundings is to look like you belong. Get the right color jumpsuit fitted with the proper patches, and most people won’t even give you a second peep.\n\nA jumpsuit or similar uniform identical to those worn by a specific organization’s construction, janitorial, food service, or other crew members. The cost depends on the security of the organization.\n\n• Low Security (convenience store): 50eb (Premium)\n• Moderate Security (construction site or hospital):\n\n• High Security (smaller Corporation): 500eb (Very Expensive)\n• Extreme Security (Megacorporation):",
+    "attributes": {
+      "gearType": "Security",
+      "effect": "Disfarce de funcionário."
+    },
+    "notes": "Conferido com Going Quiet, p. 5. O preço depende do nível de segurança da organização (baixa 50eb, moderada 100eb, alta 500eb, extrema 1.000eb).",
+    "dataOrigin": "Verified"
+  },
+  {
+    "ruleSystem": "CyberpunkRed",
+    "source": "Going Quiet",
+    "tags": [],
+    "manufacturer": null,
+    "category": "gear",
+    "slug": "branded-jumpsuit-moderate-security",
+    "name": "Branded Jumpsuit (Moderate Security)",
+    "page": 5,
+    "price": 100,
+    "priceCategory": "Expensive",
+    "description": "Macacão ou uniforme idêntico ao de uma equipe (obras, limpeza, comida) de uma organização específica, para passar despercebido. Segurança moderada (obra ou hospital): 100eb.",
+    "attributes": {
+      "gearType": "Security",
+      "effect": "Disfarce de funcionário."
+    },
+    "notes": "Conferido com Going Quiet, p. 5. O preço depende do nível de segurança da organização (baixa 50eb, moderada 100eb, alta 500eb, extrema 1.000eb).",
+    "dataOrigin": "Verified"
+  },
+  {
+    "ruleSystem": "CyberpunkRed",
+    "source": "Going Quiet",
+    "tags": [],
+    "manufacturer": null,
+    "category": "gear",
+    "slug": "branded-jumpsuit-high-security",
+    "name": "Branded Jumpsuit (High Security)",
+    "page": 5,
+    "price": 500,
+    "priceCategory": "VeryExpensive",
+    "description": "Macacão ou uniforme idêntico ao de uma equipe (obras, limpeza, comida) de uma organização específica, para passar despercebido. Segurança alta (Corporação pequena): 500eb.",
+    "attributes": {
+      "gearType": "Security",
+      "effect": "Disfarce de funcionário."
+    },
+    "notes": "Conferido com Going Quiet, p. 5. O preço depende do nível de segurança da organização (baixa 50eb, moderada 100eb, alta 500eb, extrema 1.000eb).",
+    "dataOrigin": "Verified"
+  },
+  {
+    "ruleSystem": "CyberpunkRed",
+    "source": "Going Quiet",
+    "tags": [],
+    "manufacturer": null,
+    "category": "gear",
+    "slug": "branded-jumpsuit-extreme-security",
+    "name": "Branded Jumpsuit (Extreme Security)",
+    "page": 5,
+    "price": 1000,
+    "priceCategory": "Luxury",
+    "description": "Macacão ou uniforme idêntico ao de uma equipe (obras, limpeza, comida) de uma organização específica, para passar despercebido. Segurança extrema (Megacorporação): 1.000eb.",
+    "attributes": {
+      "gearType": "Security",
+      "effect": "Disfarce de funcionário."
+    },
+    "notes": "Conferido com Going Quiet, p. 5. O preço depende do nível de segurança da organização (baixa 50eb, moderada 100eb, alta 500eb, extrema 1.000eb).",
     "dataOrigin": "Verified"
   },
   {
@@ -23732,6 +23788,30 @@
     },
     "priceCategory": "Everyday",
     "notes": "Conferido com Interface RED Volume 2, p. 37. Artigo Cargo Containers & Cube Hotels. Ausente do compêndio.",
+    "dataOrigin": "Verified"
+  },
+  {
+    "ruleSystem": "CyberpunkRed",
+    "source": "Interface 2",
+    "tags": [],
+    "manufacturer": null,
+    "slug": "emerald-city",
+    "name": "Emerald City",
+    "category": "drugs",
+    "page": 24,
+    "price": 100,
+    "priceNote": "Por dose",
+    "priceCategory": "Premium",
+    "description": "Droga de rua de Definitely Not Kansas. Efeito primário (8 horas): o usuário ignora os efeitos do estado Seriously Wounded e tem alucinações de vez em quando, sem conseguir distinguir amigo de inimigo. Efeito secundário (DV15): vício; viciado, continua tendo alucinações, mas distingue amigo de inimigo.",
+    "attributes": {
+      "classification": "Combat",
+      "resistDv": 15,
+      "primaryEffect": "Por 8 horas, ignora os efeitos de Seriously Wounded. Alucinações ocasionais: pode não distinguir amigo de inimigo.",
+      "duration": "8 horas",
+      "durationMinutes": 480,
+      "sideEffects": "Efeito secundário (DV15): vício. Viciado, alucinações ocasionais (distingue amigo de inimigo)."
+    },
+    "notes": "Conferido com Interface RED Volume 2, p. 24 (If using Emerald City as a Street Drug, use the following rules).",
     "dataOrigin": "Verified"
   },
   {

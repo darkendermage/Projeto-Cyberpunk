@@ -1,3 +1,4 @@
+using CyberpunkDb.Application.Characters.Calculation;
 using CyberpunkDb.Application.Characters.Creation;
 using CyberpunkDb.Application.Characters.Rules;
 using CyberpunkDb.Application.Characters.Validation;
@@ -33,7 +34,7 @@ public sealed class InventoryOperations(CharacterRuleBook rules, CyberwareOperat
         var install = item.Cyber is not null && item.Ammo is null && (request.Install ?? creating);
         if (install && received is null)
             return cyberware.Install(sheet, new InstallCyberwareRequest(request.Version, item.Id, null, request.MeatLimb,
-                request.HostInstanceId, request.Acknowledge, request.Pool), change);
+                request.HostInstanceId, request.Acknowledge, request.Pool, SkillKey: request.SkillKey), change);
 
         var pool = received is null ? Payments.PoolFor(rules, sheet, CharacterValidator.IsFashion(item), request.Pool) : BudgetPool.Balance;
 
@@ -44,7 +45,8 @@ public sealed class InventoryOperations(CharacterRuleBook rules, CyberwareOperat
             caliber = request.Caliber ?? (ammo.Calibers.Count == 1 ? ammo.Calibers[0] : null);
             if (ammo.Calibers.Count > 1 && (caliber is null || !ammo.Calibers.Contains(caliber.Value)))
                 throw CharacterChange.Refuse("caliber", L.T($"Escolha o calibre de {item.Name}.", $"Pick the caliber for {item.Name}."));
-            rounds = ammo.Kind == AmmoKind.Round ? (ammo.PerPack ?? 1) * request.Quantity : null;
+            // grenades and rockets load one by one like rounds (CP:R p.345: grenades are ammunition bought per unit)
+            rounds = ammo.Kind is AmmoKind.Round or AmmoKind.Grenade or AmmoKind.Explosive ? (ammo.PerPack ?? 1) * request.Quantity : null;
         }
 
         ArmorSlot? worn = null;
@@ -52,9 +54,11 @@ public sealed class InventoryOperations(CharacterRuleBook rules, CyberwareOperat
         if (equip && item.Armor is { Type: ArmorType.BodyArmor })
             worn = request.Worn ?? throw CharacterChange.Refuse("worn", L.T("Escolha onde vestir a armadura: cabeça ou corpo.", "Pick where to wear the armor: head or body."));
 
-        var what = request.Quantity > 1 ? $"{item.Name} x{request.Quantity}" : item.Name;
+        // a Skill Chip is made for one skill, which sets its price (CP:R p.358)
+        var chip = SkillChips.Resolve(rules, item, request.SkillKey, required: true);
+        var what = (request.Quantity > 1 ? $"{item.Name} x{request.Quantity}" : item.Name) + (chip is null ? "" : $" ({chip.Label})");
         var origin = received ?? ItemOrigin.Purchase;
-        var cost = received is null ? item.Price!.Value * request.Quantity : 0;
+        var cost = received is null ? (chip?.Price ?? item.Price!.Value) * request.Quantity : 0;
         if (received is null) sheet = Payments.Charge(rules, sheet, pool, cost, what, change);
         else
             change.Log(CharacterEventKind.Ledger, "receive", L.T($"{OriginLabel(origin)}: {what}, sem custo", $"{OriginLabel(origin)}: {what}, free") +
@@ -62,7 +66,7 @@ public sealed class InventoryOperations(CharacterRuleBook rules, CyberwareOperat
 
         var inventory = new List<InventoryEntry>(sheet.Inventory);
         var stack = equip || install ? -1 : inventory.FindIndex(e => e.ItemId == item.Id && e.PaidFrom == pool && e.Origin == origin && e.State != ItemState.Equipped
-                                                          && e.Caliber == caliber && item.Weapon is null && item.Armor is null && item.Attachment is null);
+                                                          && e.Caliber == caliber && e.SkillKey == chip?.Key && item.Weapon is null && item.Armor is null && item.Attachment is null);
         if (stack >= 0)
         {
             var e = inventory[stack];
@@ -90,11 +94,12 @@ public sealed class InventoryOperations(CharacterRuleBook rules, CyberwareOperat
                 PaidFrom = pool,
                 PricePaid = cost,
                 Notes = received is not null && request.Note?.Trim() is { Length: > 0 } note ? note : null,
+                SkillKey = chip?.Key,
             });
             // the piece itself is free, but not its Humanity Loss or the foundation it needs
             if (install)
                 return cyberware.Install(sheet with { Inventory = inventory }, new InstallCyberwareRequest(request.Version, null, instanceId,
-                    request.MeatLimb, request.HostInstanceId, request.Acknowledge, request.Pool), change);
+                    request.MeatLimb, request.HostInstanceId, request.Acknowledge, request.Pool, SkillKey: chip?.Key), change);
         }
         if (equip) change.Log(CharacterEventKind.Edit, "equip", $"{item.Name} equipado {(received is null ? "na compra" : "ao receber")}.");
         return sheet with { Inventory = inventory };
@@ -359,13 +364,15 @@ public sealed class InventoryOperations(CharacterRuleBook rules, CyberwareOperat
         var claimed = WeaponRuleBook.Embedded.For(item.Slug)?.Magazines.SelectMany(m => m.Calibers).ToHashSet() ?? [];
         var calibers = w.Calibers.Where(c => !claimed.Contains(c)).ToList() is { Count: > 0 } own ? own : w.Calibers.ToList();
         var compatible = sheet.Inventory
-            .Where(e => e.Rounds > 0 && change.Catalog.Find(e.ItemId)?.Ammo is { } a
+            .Where(e => change.Catalog.Find(e.ItemId)?.Ammo is { } a && Loose(e, a) > 0
                         && (e.Caliber is { } c ? calibers.Contains(c) : a.Calibers.Any(calibers.Contains)))
+            .Select(e => Counted(e, change.Catalog))
             .ToList();
         var ammo = request.AmmoInstanceId is { } id
             ? compatible.FirstOrDefault(e => e.InstanceId == id) ?? throw CharacterChange.Refuse("ammoInstanceId", L.T($"Essa munição não serve em {item.Name}.", $"That ammo doesn't fit {item.Name}."))
             : compatible.OrderByDescending(e => e.ItemId == entry.Weapon?.LoadedAmmoItemId).ThenByDescending(e => e.Rounds).FirstOrDefault()
               ?? throw CharacterChange.Refuse("ammoInstanceId", L.T($"Sem munição compatível com {item.Name} no inventário.", $"No ammo compatible with {item.Name} in the inventory."));
+        sheet = Replace(sheet, ammo);
 
         var state = entry.Weapon ?? new WeaponState();
         if (state.LoadedRounds > 0 && state.LoadedAmmoItemId is { } loaded && loaded != ammo.ItemId)
@@ -403,8 +410,9 @@ public sealed class InventoryOperations(CharacterRuleBook rules, CyberwareOperat
         }
 
         var compatible = sheet.Inventory
-            .Where(e => e.Rounds > 0 && change.Catalog.Find(e.ItemId)?.Ammo is { } a
+            .Where(e => change.Catalog.Find(e.ItemId)?.Ammo is { } a && Loose(e, a) > 0
                         && (e.Caliber is { } c ? magazine.Calibers.Contains(c) : a.Calibers.Any(magazine.Calibers.Contains)))
+            .Select(e => Counted(e, change.Catalog))
             .ToList();
         var loadedItem = state.MagazineAmmo.TryGetValue(id, out var loadedId) ? loadedId : (int?)null;
         var ammo = request.AmmoInstanceId is { } ammoId
@@ -510,6 +518,12 @@ public sealed class InventoryOperations(CharacterRuleBook rules, CyberwareOperat
     }
 
     // helpers
+
+    // Grenades bought before they counted as rounds kept only a quantity: each one is a round.
+    private static int Loose(InventoryEntry e, AmmoInfo ammo) => e.Rounds ?? (ammo.Kind == AmmoKind.Round ? 0 : e.Quantity);
+
+    private static InventoryEntry Counted(InventoryEntry e, NpcCatalog catalog) =>
+        e.Rounds is null && catalog.Find(e.ItemId)?.Ammo is { } a ? e with { Rounds = Loose(e, a), Quantity = 1 } : e;
 
     private static InventoryEntry Find(CharacterSheet sheet, string instanceId) =>
         sheet.Inventory.FirstOrDefault(e => e.InstanceId == instanceId)

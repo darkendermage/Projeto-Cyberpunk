@@ -66,6 +66,9 @@ public sealed record WeaponModeSwitchRequest(int Version, string Weapon, string 
 public sealed record CombatantArmorRequest(int Version, Npcs.ArmorSlot Location, int Delta);
 public sealed record DeathSaveCombatantRequest(int Version, int? Roll = null);
 public sealed record ConditionRequest(int Version, string Condition, bool On);
+
+// a Critical Injury from the tables applied by hand; BonusDamage = the +5 straight to HP of a hit (CP:R p.187)
+public sealed record CombatantInjuryRequest(int Version, InjuryLocation Location, string Name, bool BonusDamage = true);
 public sealed record CoverRequest(int Version, string Label, string Material, bool Thick, int? Hp = null);
 public sealed record TakeCoverRequest(int Version, string? CoverId);
 public sealed record CoverDamageRequest(int Version, int Amount);

@@ -24,23 +24,6 @@
       "tags": [],
       "manufacturer": null,
       "category": "gear",
-      "slug": "branded-jumpsuit",
-      "name": "Branded Jumpsuit",
-      "page": 5,
-      "price": 50,
-      "priceCategory": "Premium",
-      "description": "Macacão ou uniforme idêntico ao de uma equipe (obras, limpeza, comida) de uma organização específica, para passar despercebido. O preço depende da segurança: baixa (loja de conveniência) 50eb; moderada (obra, hospital) 100eb; alta (Corporação pequena) 500eb; extrema (Megacorporação) 1.000eb.",
-      "attributes": {
-        "gearType": "Security",
-        "effect": "Disfarce de funcionário."
-      },
-      "priceNote": "50eb a 1.000eb, conforme a segurança",
-      "notes": "Conferido com Going Quiet, p. 5. O livro dá esta categoria de preço para disponibilidade, diferente da regra geral. Ausente do compêndio."
-    },
-    {
-      "tags": [],
-      "manufacturer": null,
-      "category": "gear",
       "slug": "concealment-sleeve",
       "name": "Concealment Sleeve",
       "page": 5,
@@ -242,6 +225,70 @@
       },
       "priceCategory": "VeryExpensive",
       "notes": "Conferido com Going Quiet, p. 7. Ausente do compêndio."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "branded-jumpsuit",
+      "name": "Branded Jumpsuit (Low Security)",
+      "page": 5,
+      "price": 50,
+      "priceCategory": "Premium",
+      "description": "Macacão ou uniforme idêntico ao de uma equipe (obras, limpeza, comida) de uma organização específica, para passar despercebido. Segurança baixa (loja de conveniência): 50eb.",
+      "attributes": {
+        "gearType": "Security",
+        "effect": "Disfarce de funcionário."
+      },
+      "notes": "Conferido com Going Quiet, p. 5. O preço depende do nível de segurança da organização (baixa 50eb, moderada 100eb, alta 500eb, extrema 1.000eb)."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "branded-jumpsuit-moderate-security",
+      "name": "Branded Jumpsuit (Moderate Security)",
+      "page": 5,
+      "price": 100,
+      "priceCategory": "Expensive",
+      "description": "Macacão ou uniforme idêntico ao de uma equipe (obras, limpeza, comida) de uma organização específica, para passar despercebido. Segurança moderada (obra ou hospital): 100eb.",
+      "attributes": {
+        "gearType": "Security",
+        "effect": "Disfarce de funcionário."
+      },
+      "notes": "Conferido com Going Quiet, p. 5. O preço depende do nível de segurança da organização (baixa 50eb, moderada 100eb, alta 500eb, extrema 1.000eb)."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "branded-jumpsuit-high-security",
+      "name": "Branded Jumpsuit (High Security)",
+      "page": 5,
+      "price": 500,
+      "priceCategory": "VeryExpensive",
+      "description": "Macacão ou uniforme idêntico ao de uma equipe (obras, limpeza, comida) de uma organização específica, para passar despercebido. Segurança alta (Corporação pequena): 500eb.",
+      "attributes": {
+        "gearType": "Security",
+        "effect": "Disfarce de funcionário."
+      },
+      "notes": "Conferido com Going Quiet, p. 5. O preço depende do nível de segurança da organização (baixa 50eb, moderada 100eb, alta 500eb, extrema 1.000eb)."
+    },
+    {
+      "tags": [],
+      "manufacturer": null,
+      "category": "gear",
+      "slug": "branded-jumpsuit-extreme-security",
+      "name": "Branded Jumpsuit (Extreme Security)",
+      "page": 5,
+      "price": 1000,
+      "priceCategory": "Luxury",
+      "description": "Macacão ou uniforme idêntico ao de uma equipe (obras, limpeza, comida) de uma organização específica, para passar despercebido. Segurança extrema (Megacorporação): 1.000eb.",
+      "attributes": {
+        "gearType": "Security",
+        "effect": "Disfarce de funcionário."
+      },
+      "notes": "Conferido com Going Quiet, p. 5. O preço depende do nível de segurança da organização (baixa 50eb, moderada 100eb, alta 500eb, extrema 1.000eb)."
     }
   ]
 }

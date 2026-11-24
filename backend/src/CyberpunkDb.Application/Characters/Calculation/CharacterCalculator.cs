@@ -102,14 +102,14 @@ public sealed class CharacterCalculator(CharacterRuleBook rules)
             var isShield = item?.Armor?.Type == ArmorType.Shield;
             var shieldMax = isShield ? rules.Document.Combat.ShieldHp.Value : (int?)null;
             return new InventoryLine(
-                e.InstanceId, e.ItemId, item?.Name ?? $"Item {e.ItemId}", item?.Slug ?? "", item?.Category ?? ItemCategory.Gear,
+                e.InstanceId, e.ItemId, (item?.Name ?? $"Item {e.ItemId}") + (SkillChips.LabelOf(rules, e.SkillKey) is { } chipFor ? $" ({chipFor})" : ""), item?.Slug ?? "", item?.Category ?? ItemCategory.Gear,
                 e.Quantity, e.State, e.Worn, e.Caliber, e.Rounds,
                 item?.Armor?.Sp, item?.Armor?.Sp is { } sp ? e.CurrentSp ?? sp : null,
                 isShield ? e.CurrentHp ?? shieldMax : null, shieldMax,
                 item?.Price, e.PricePaid, e.Origin, e.PaidFrom,
                 item is not null && Validation.CharacterValidator.IsFashion(item), e.Notes,
                 item?.Weapon is { } weapon ? e.Quality ?? weapon.Quality : null,
-                item?.Armor?.ClothingSlot);
+                item?.Armor?.ClothingSlot, e.SkillKey);
         }).ToList();
 
     private List<WeaponLine> WeaponLines(CharacterSheet sheet, NpcCatalog catalog, List<CharacterSkillLine> skills)
@@ -194,8 +194,10 @@ public sealed class CharacterCalculator(CharacterRuleBook rules)
             var popup = item is null ? null : PopupWeapons.Rule(rules, item.Slug);
             var used = sheet.Cyberware.Where(o => o.ParentInstanceId == c.InstanceId)
                 .Sum(o => catalog.Find(o.ItemId) is { } oi ? mechanics.SlotsRequired(oi).Slots : 1);
+            var name = item?.Name ?? $"Item {c.ItemId}";
+            if (SkillChips.LabelOf(rules, c.SkillKey) is { } chipSkill) name = $"{name} ({chipSkill})";
             return new CyberLine(
-                c.InstanceId, c.ItemId, item?.Name ?? $"Item {c.ItemId}", item?.Slug ?? "", item?.Cyber?.Type, item?.Cyber?.Location,
+                c.InstanceId, c.ItemId, name, item?.Slug ?? "", item?.Cyber?.Type, item?.Cyber?.Location,
                 c.ParentInstanceId, c.Side, c.MeatLimb, item?.Cyber?.Foundational ?? false,
                 item is null ? null : mechanics.SlotsProvided(item), used, c.HumanityLossApplied, item?.Cyber?.HumanityLossDice,
                 c.CurrentSp, CyberwareAnatomy.RegionOf(c, sheet.Cyberware, catalog), item?.Price ?? 0,
@@ -458,6 +460,10 @@ public sealed class CharacterCalculator(CharacterRuleBook rules)
             : new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         var roleIds = roleSkills.Select(k => SkillKey.Parse(k).Id).ToHashSet(StringComparer.OrdinalIgnoreCase);
         var roleBonuses = RoleSkillBonuses(sheet);
+        // installed Skill Chips (CP:R p.358): their skill counts as trained at the chip's level
+        var chipLevel = rules.Document.Cyberware.SkillChip.Value?.Level ?? 3;
+        var chips = sheet.Cyberware.Where(c => c.SkillKey is not null).Select(c => SkillKey.Normalize(c.SkillKey!))
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
         var lines = new List<CharacterSkillLine>();
         foreach (var def in rules.Skills)
@@ -465,6 +471,7 @@ public sealed class CharacterCalculator(CharacterRuleBook rules)
             var keys = def.Specialized
                 ? sheet.Skills.Keys.Where(k => SkillKey.Parse(k).Id.Equals(def.Id, StringComparison.OrdinalIgnoreCase))
                     .Concat(basic.Where(k => SkillKey.Parse(k).Id.Equals(def.Id, StringComparison.OrdinalIgnoreCase)))
+                    .Concat(chips.Where(k => SkillKey.Parse(k).Id.Equals(def.Id, StringComparison.OrdinalIgnoreCase)))
                     .Distinct(StringComparer.OrdinalIgnoreCase)
                     .OrderBy(k => k, StringComparer.OrdinalIgnoreCase)
                     .ToList()
@@ -485,6 +492,7 @@ public sealed class CharacterCalculator(CharacterRuleBook rules)
                 modifierParts.AddRange(forSkill.Where(a => a.Effect.Condition is null).Select(a => new ValuePart(a.Label, a.Bonus)));
                 // Moto, Field Expertise, Threat Detection
                 if (roleBonuses.TryGetValue(def.Id, out var fromRoles)) modifierParts.AddRange(fromRoles);
+                if (chips.Contains(key) && level < chipLevel) modifierParts.Add(new ValuePart($"Skill Chip ({L.T("nível", "level")} {chipLevel})", chipLevel - level));
                 var situational = forSkill.Where(a => a.Effect.Condition is not null)
                     .Select(a => $"{(a.Bonus >= 0 ? "+" : "")}{a.Bonus} {a.Effect.Condition} ({a.Label})").ToList();
                 var modifier = modifierParts.Sum(p => p.Value);

@@ -400,7 +400,11 @@ export function PlayerTablePage() {
                   void client.invalidateQueries({ queryKey: tableKeys.playerEncounter(token) });
                 }).finally(() => setArmorBusy(false));
               }}
-              onTurn={(delta) => { if (myToken) void run(() => api.moveToken(myToken.id, { x: myToken.x, y: myToken.y, rotation: (myToken.rotation + delta + 360) % 360 })); }} />
+              onTurn={(delta) => { if (myToken) void run(() => api.moveToken(myToken.id, { x: myToken.x, y: myToken.y, rotation: (myToken.rotation + delta + 360) % 360 })); }}
+              onPlaceToken={scene && !hasOwnToken ? () => {
+                const centre = board.current?.centerCell() ?? { x: 5, y: 5 };
+                void run(() => api.placeToken(Math.floor(centre.x), Math.floor(centre.y)));
+              } : undefined} />
           )}
           {tab === 'sheet' && (sheet.isLoading ? <Spinner /> : <PlayerSheetPanel sheet={sheet.data ?? null} />)}
           {tab === 'images' && scene && (

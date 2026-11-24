@@ -35,12 +35,22 @@ public sealed class CyberwareOperations(CharacterRuleBook rules, CyberwareInstal
         if (plan is null) return Refused(error!, report);
 
         var pool = Payments.PoolFor(rules, sheet, plan.Pieces.All(p => CharacterValidator.IsFashion(catalog.Find(p.ItemId)!)), request.Pool);
-        var price = Price(plan, item, request.FromInventory is not null);
+        SkillChip? chip;
+        try
+        {
+            chip = SkillChips.Resolve(rules, item, request.SkillKey ?? FromInventory(sheet, request)?.SkillKey, required: false);
+        }
+        catch (Common.RequestValidationException e)
+        {
+            return Refused(e.Errors.Values.SelectMany(v => v).First(), report);
+        }
+        var price = Price(plan, item, request.FromInventory is not null, chip);
         var available = Payments.Available(rules, sheet, pool);
         var after = calculator.Calculate(sheet with { Cyberware = [.. sheet.Cyberware, .. plan.Pieces] }, catalog).Humanity;
         var humanity = report.Humanity.Current;
 
         var warnings = new List<string>();
+        if (SkillChips.Rule(rules, item) is not null && chip is null) warnings.Add(L.T("Escolha a perícia do Skill Chip.", "Pick the Skill Chip's skill."));
         if (humanity - plan.HumanityLossMax < 0) warnings.Add(L.T("No pior resultado dos dados a Humanidade fica abaixo de zero: cyberpsicose (CP:R p.80).", "On the worst dice result Humanity drops below zero: cyberpsychosis (CP:R p.80)."));
         if (price > available) warnings.Add(L.T($"Falta {CharacterValidator.Eb(price - available)} para pagar.", $"{CharacterValidator.Eb(price - available)} short to pay."));
         if (plan.TextRequirements.Count > 0 && !request.Acknowledge)
@@ -50,7 +60,8 @@ public sealed class CyberwareOperations(CharacterRuleBook rules, CyberwareInstal
         var pieces = plan.Pieces.Select(p =>
         {
             var i = catalog.Find(p.ItemId)!;
-            return new PreviewPieceDto(p.InstanceId, i.Name, i.Slug, i.Price ?? 0,
+            return new PreviewPieceDto(p.InstanceId, chip is not null && i.Id == item.Id ? $"{i.Name} ({chip.Label})" : i.Name, i.Slug,
+                chip is not null && i.Id == item.Id ? chip.Price : i.Price ?? 0,
                 p.HumanityLossApplied, creating ? null : i.Cyber?.HumanityLossDice,
                 p.ParentInstanceId is { } parent ? names.GetValueOrDefault(parent) : null, p.Side, p.MeatLimb,
                 CyberwareAnatomy.RegionOf(p, [.. sheet.Cyberware, .. plan.Pieces], catalog));
@@ -81,7 +92,8 @@ public sealed class CyberwareOperations(CharacterRuleBook rules, CyberwareInstal
             throw CharacterChange.Refuse("acknowledge", L.T("Confirme que o personagem cumpre: ", "Confirm the character meets: ") + string.Join("; ", plan.TextRequirements));
 
         var pool = Payments.PoolFor(rules, sheet, plan.Pieces.All(p => CharacterValidator.IsFashion(change.Item(p.ItemId))), request.Pool);
-        var price = Price(plan, item, fromInventory is not null);
+        var chip = SkillChips.Resolve(rules, item, request.SkillKey ?? fromInventory?.SkillKey, required: true);
+        var price = Price(plan, item, fromInventory is not null, chip);
         sheet = Payments.Charge(rules, sheet, pool, price, item.Name, change);
 
         if (fromInventory is not null)
@@ -91,12 +103,14 @@ public sealed class CyberwareOperations(CharacterRuleBook rules, CyberwareInstal
         }
 
         var ownedPiece = fromInventory is null ? null : plan.Pieces.FirstOrDefault(p => p.ItemId == item.Id)?.InstanceId;
+        var chosenPiece = plan.Pieces.LastOrDefault(p => p.ItemId == item.Id)?.InstanceId;
         var pieces = plan.Pieces.Select(p => p with
         {
             Origin = p.InstanceId == ownedPiece ? fromInventory!.Origin : ItemOrigin.Purchase,
             PaidFrom = pool,
-            PricePaid = p.InstanceId == ownedPiece ? 0 : change.Item(p.ItemId).Price ?? 0,
+            PricePaid = p.InstanceId == ownedPiece ? 0 : p.InstanceId == chosenPiece && chip is not null ? chip.Price : change.Item(p.ItemId).Price ?? 0,
             InstalledAt = change.Now,
+            SkillKey = p.InstanceId == chosenPiece ? chip?.Key : null,
         }).ToList();
         foreach (var p in pieces)
         {
@@ -262,8 +276,12 @@ public sealed class CyberwareOperations(CharacterRuleBook rules, CyberwareInstal
         new() { MeatLimb = r.MeatLimb, HostInstanceId = r.HostInstanceId, AtCreation = creating, Roll = roll, Side = r.Side };
 
     // From the inventory: that copy is already paid for (a pair still pays the second one).
-    private static int Price(InstallPlan plan, CatalogItem item, bool fromInventory) =>
-        Math.Max(0, plan.Price - (fromInventory ? item.Price ?? 0 : 0));
+    // a Skill Chip costs by its skill, not the catalog price (CP:R p.358)
+    private static int Price(InstallPlan plan, CatalogItem item, bool fromInventory, SkillChip? chip) =>
+        Math.Max(0, plan.Price - (item.Price ?? 0) + (fromInventory ? 0 : chip?.Price ?? item.Price ?? 0));
+
+    private static InventoryEntry? FromInventory(CharacterSheet sheet, InstallCyberwareRequest request) =>
+        request.FromInventory is { } id ? sheet.Inventory.FirstOrDefault(e => e.InstanceId == id) : null;
 
     private static CharacterSheet TakeFromInventory(CharacterSheet sheet, InventoryEntry entry) =>
         sheet with

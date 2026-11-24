@@ -12,6 +12,8 @@ import { formatEb } from '../../lib/format';
 import { CYBER_TYPE_LABEL, wearableAccepts } from './anatomy';
 import { RefundButton, SheetPanel, StateTag } from './CharacterUi';
 import type { Run } from './CombatPanels';
+import { SkillChipField } from './SkillChipField';
+import { useSkillChip } from './skillChip';
 import base from './Characters.module.css';
 import styles from './Cyberware.module.css';
 import { t, tv } from '../../i18n';
@@ -86,6 +88,10 @@ function InstallDetails({ detail, rules, selection, run, busy, replacing, side, 
   const targets = accepts ? detail.report.wearables.filter((w) => w.accepts === accepts) : [];
   const [target, setTarget] = useState('');
   const wearable = targets.find((w) => w.instanceId === target) ?? null;
+  // a Skill Chip asks for its skill, unless it was bought for one already
+  const chip = useSkillChip(slug);
+  const boughtFor = selection.kind === 'inventory' ? detail.report.inventory.find((i) => i.instanceId === selection.instanceId)?.skillKey ?? null : null;
+  const [chipSkill, setChipSkill] = useState<string | null>(null);
 
   const body: InstallRequestBody = {
     itemId: selection.kind === 'catalog' ? selection.item.id : null,
@@ -93,6 +99,7 @@ function InstallDetails({ detail, rules, selection, run, busy, replacing, side, 
     meatLimb, hostInstanceId: anyLimb && host ? host : null, acknowledge: ack,
     replacing: replacing && selection.kind === 'catalog' ? replacing : null,
     side,
+    skillKey: chip ? chipSkill ?? boughtFor : null,
   };
   const preview = useQuery({
     queryKey: ['cyber-preview', detail.id, detail.version, body],
@@ -142,6 +149,12 @@ function InstallDetails({ detail, rules, selection, run, busy, replacing, side, 
               </option>
             ))}
           </Select>
+        </label>
+      )}
+      {!wearable && chip && !boughtFor && (
+        <label className={base.tableField}>
+          <span className={base.idLabel}>{t('Perícia do chip (fica treinada em +3, CP:R p.358)', 'Chip skill (trained at +3, CP:R p.358)')}</span>
+          <SkillChipField value={chipSkill} onChange={setChipSkill} />
         </label>
       )}
       {!wearable && meatPossible && <Checkbox checked={meatLimb} onChange={setMeatLimb} label={t('Instalar num membro de carne (única peça do membro, CP:R p.115)', 'Install in a meat limb (the limb\'s only piece, CP:R p.115)')} />}
@@ -204,7 +217,7 @@ function InstallDetails({ detail, rules, selection, run, busy, replacing, side, 
           {p?.warnings.map((w) => <span key={w} className={`${base.small} ${base.amber}`}>{w}</span>)}
           {replacedName && <StateTag tone="warn">{t('Substitui ', 'Replaces ')}{replacedName}</StateTag>}
           <Button variant="primary" className={styles.validateButton} icon={<ShieldCheck size={18} />}
-            disabled={busy || !p || !!p.error || (needsAck && !ack)} onClick={install}>
+            disabled={busy || !p || !!p.error || (needsAck && !ack) || (!!chip && !body.skillKey)} onClick={install}>
             {replacedName ? t('Validar e substituir', 'Validate and replace') : t('Validar e instalar', 'Validate and install')}
           </Button>
         </div>

@@ -63,7 +63,7 @@ internal static class CharacterRulesMapper
                 d.Cyberware.AnyLimbOptions.Value.Select(o => o.Slug).ToList(),
                 d.Cyberware.AnyLimbOptions.Value.Where(o => o.Covering).Select(o => o.Slug).ToList(),
                 d.Therapy.Kinds.Select(k => new TherapyKindDto(k.Id, k.Label, k.Cost, k.Recovery, k.Dv, k.Materials, k.Source)).ToList(),
-                d.Therapy.Payment.Value, CharacterRuleBook.Page(d.Therapy.Payment.Reference)),
+                d.Therapy.Payment.Value, CharacterRuleBook.Page(d.Therapy.Payment.Reference), d.Cyberware.SkillChip.Value),
             MartialArtsDtos.Forms(MartialArtsRuleBook.Embedded), MartialArtsDtos.Shared(MartialArtsRuleBook.Embedded));
     }
 

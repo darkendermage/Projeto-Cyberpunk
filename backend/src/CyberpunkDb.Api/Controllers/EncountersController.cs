@@ -123,6 +123,10 @@ public sealed class EncountersController(EncounterService encounters) : Controll
     public Task<EncounterDetailDto> DeathSave(int id, string combatantId, DeathSaveCombatantRequest request, CancellationToken ct) =>
         encounters.DeathSaveAsync(id, combatantId, request, ct);
 
+    [HttpPost("{id:int}/combatants/{combatantId}/injury")]
+    public Task<EncounterDetailDto> Injury(int id, string combatantId, CombatantInjuryRequest request, CancellationToken ct) =>
+        encounters.InjuryAsync(id, combatantId, request, ct);
+
     [HttpPost("{id:int}/combatants/{combatantId}/condition")]
     public Task<EncounterDetailDto> Condition(int id, string combatantId, ConditionRequest request, CancellationToken ct) =>
         encounters.ConditionAsync(id, combatantId, request, ct);
